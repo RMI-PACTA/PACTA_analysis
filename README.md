@@ -17,8 +17,8 @@ Within 1_portfolio_check_initialisation.R there are some lines that should be ed
 project_name <- "TEST"
 twodii_internal <- FALSE 
 
-project_location_ext <- "~/Desktop/ExternalTest"
-data_location_ext <- "~/Desktop/ExternalTest/Inputs"
+project_location_ext <- "/Desktop/ExternalTest"
+data_location_ext <- "/Desktop/ExternalTest/Inputs"
 
 Results files will be written to project_location_ext
 Data files should be added to data_location_ext
