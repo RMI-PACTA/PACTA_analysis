@@ -1,0 +1,100 @@
+---
+title: "SDA approach"
+author: "Klaus Hagedorn"
+date: "10/1/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Sector decarbonization approach (SDA)
+The Sector decarbonization approach (SDA) is a method for setting corporate emission reduction targets in line with climate science. This  method  was  developed  by  Science  Based  Targets,  an  international  initiative  on  science-based  target  setting  for  companies  initiated  by  CDP,  the  United  Nations  Global  Compact,  the  World  Resources  Institute  (WRI),  and  the  World  Wide Fund for Nature (WWF). 
+
+Further information about the initiative can be found here: <https://sciencebasedtargets.org/sda/>
+
+The following section explains first the sector decarbonization aproach as developed by Science-Based-Target initiative as well as the assumptions and adjustments applied in the PACTA framework.
+
+## SBTI SDA: Methods
+Company intensity pathways are derived from the company's base year intensity and the sectoral intensity pathway.
+
+A company's intensity CI in year y can then be expressed as the distance d multiplied by the change in market share m, the index of the sector decarbonization p, which is expressed from 0 to 1 (similar to the "market share rate" used in the PACTA metric) and the target sector intensity SI in 2050 provided by the scenario (currently IEA ETP 2017, as of 10/2019).
+
+$$CI_y=dp_ym_y+SI_{2050}$$
+
+*plot to show the CI for a hypothetical company*
+
+### Company intensity distance from target
+To account for current performance, a factor d is formulated as the distance from the company intensity (CI,) in base year b to the sector intensity (SI) in year 2050:
+
+$$d = CI_b-SI_{2050}$$
+The company intensity in the base year is provided by the company, and the sector intensity provided by an external scenario
+
+### index of the sector decarbonization
+To converge the company's intensity towards the sectoral decarbonization pathway, a decarbonizazion index p is defined as a function of year y, showing the % of effort that still needs to be achieved (Similar to the market share approach[^1] applied in PACTA). Thus it is ranging from 1 in the start year to 0 in the target year 2050.
+
+$$p_y=(SI_y-SI_{2050})/(SI_b-SI_{2050})$$
+All sector intensities in this equation are derived from an existing scenario.
+
+[^1]: Distributing the decarbonization effort to companies depending on their current market share, more details see chapter *???*.
+
+### Market share changes
+In the SDA changes in market share m~y~ of a company are included to adjust the company intensity for each year. m~y~ accounts for changes in market share (the share of company activity CA in sector activity SA):
+$$m_y=(CA_b/SA_b)/(CA_y/SA_y)$$
+The company's activity in the base year and the projected activity of the company
+are provided by the company. The sector activity is retrieved from an external
+scenario. This means that the total sector activity is not the actual activity, but rather the projection from the scenario. Note that the term my is not the change in market share, but rather the inverse, resulting in a decreasing my with increasing market share.
+
+## Application of the SDA in PACTE (by 2dii)
+The SDA is applied in PACTA in line with the SDA by the Science based target initiative with only one assumption and one adjustment to reflect the difference in data scope and emission intenisty calculation methodology. In other words to align the approach with the bottom-up asset level data being used in the PACTA analysis compared to the top-down approach done by SBTI. 
+
+## Assumption: Setting market share changes to 1
+Due to the lack of quantative data on the expected market share changes m is set to 1 for all years.
+Furthermore, while we fully approve the concept of requiring higher intensity reduction ambitions in case the absolute pathway of the sector exceeds the scenario target, applying this at company level seems to be a bit counter intuitive for 3 reasons:
+1) Companies that decrease their market share would be allowed to have a higher CO2-Intensity than the average market actor. 
+2) Companies that are increasing their market share are forced to do more in terms of CO2-Intensity. If a company thus reaches the targeted CO2-Intensity it would not be allowed to increase its share in the market, while this seems to be a desirable outcome.
+3) the way the market share changes are applied (multiplying with the distance d, which declines to 0 in the target year) it doesn't solve for the macro target. An abolute production increase of the sector absolute production over time, will lead to missing the emission target in case the sector CO2-intensity is not adjusted for the target year.
+
+From our view it is necessary to account for "market failure" (i.e. higher expected absolute production of the sector than prescribed in the scenario) in the SDA methodology. However, we think this should be done by distributing the effort equally across all companies and adjusting the targeted CO2-intensity in the given year accordingly so that all companies to be less CO2-intensive to align at sector level and in a way that the micro solves the macro emission target.
+
+The market deviation from the absolute production allowed in the scenario can be calculated as follows. 
+
+$$m_y=(MA_y/SA_y)$$
+
+and then be applied to the company intensity as follows:
+$$CI_y=m_y(dp_y+SI_{2050})$$
+
+Given that m_y is not available at the moment, we set it to 1, which simplyfies the equation to
+$$CI_y=dp_y+SI_{2050}$$
+
+## Adjust sector intensity (SI) in year 2050 to ensure consistent scope and methodology applied to portfolio and benchamrk 
+In the SDA the sector intensity target in 2050 is directly taken from the IEA scenario which covers:
+1. the global economy (top-down) and 
+2. applies a certain emission intensity metric to calculate the emission intenities per year. 
+While the scope in terms of emission scope (scope 1 and scope 2) is the same across both SDA (IEA scenario) and PACTA the calculation of the emissions from the CO2-intense process might differ. In PACTA emission intensities are calculated bottom-up applying the emission intensity calculation rules for each asset as described in chapter *???*. This can result in a different average global CO2-intensity in the start year of the analysis (compared to the scenario). To reflect the differences, we apply the rate of change of the CO2-intesity given by the scenario to the average market CO2-Intensity derived from our bottom-up data and calculation metric. Thus the SDA equation changes to:
+
+$$CI_y=dp_y+SI_{2050}^{PACTA}$$
+
+### CO2-intensity rate of change
+The rate of change r in a specific year y is derived from the average sector CO2-intensity per unit of production in a specific year compared to the base year b.
+
+$$ r_y=SI_y/SI_b$$  
+
+The sector intensities come from the scenario.
+
+### Targeted sector intensity in 2050
+The targeted sector intensity is calculated by applying the rate of change in 2050 to the sector intensity of the sector average based on the bottom-up asset level data universe SI^{ALD}
+
+$$SI_{2050}^{PACTA}=r_{2050}*SI_b^{ALD}$$
+
+The following plot shows the differences in the targeted sector intensity between the 2 approaches for the steel sector: 
+
+*Plot to show the difference*
+
+## Data
+The scenario data used in the SDA (both PACTA as well as SBTI) is coming from the publicly available Energy Technology Perspectives 2017 report from the International Energy Agency (IEA). The Beyond 2 degree scenario (B2DS) of this report is used.
+The sectoral pathways are calculated by dividing annual sectoral emissions (tonnes CO2) by annual sectoral activity, both retrieved from the IEA (*add link and reference*). The IEA provides this data for the years 2014, 2020, 2025, 2030,
+2035, 2040, 2045 and 2050. For the years in between, the values are estimated using linear interpolation. Allowed Scope 2 emissions are calculated for each sector by multiplying modelled sectoral electricity use with the modelled global emission factor of electricity. 
+The asset level data to calculate both the sector intensity as well as the company/portfolio intensity is coming from several sources (one source per sector) - see *cross-reference to asset level data description chapter* for details
+The emission intensity calculation and the used data sets are further explained in the *cross-reference to emission intesity calculation chapter*

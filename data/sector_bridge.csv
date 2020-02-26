@@ -1,0 +1,1056 @@
+industry_classification,source,sector
+3/1 ARM,BCLASS,Other
+5/1 ARM,BCLASS,Other
+7/1 ARM,BCLASS,Other
+Advanced Materials/Prd,BICS,Other
+Advertising Agencies,BICS,Other
+Advertising & Marketing,BICS,Other
+Advertising Sales,BICS,Other
+Advertising Services,BICS,Other
+Aerospace,ICB,Other
+Aerospace & Defense,BICS,Other
+Aerospace/Defense,BICS,Other
+Aerospace/Defense-Equip,BICS,Other
+Agency CMBS,BICS,Other
+Agency Collat IO,BICS,Other
+Agency Collat Other,BICS,Other
+Agency Collat PAC,BICS,Other
+Agency Collat PAC IO,BICS,Other
+Agency Collat PAC PO,BICS,Other
+Agency Collat PAC Support,BICS,Other
+Agency Collat PAC Z,BICS,Other
+Agency Collat PO,BICS,Other
+Agency Collat Residual,BICS,Other
+Agency Collat Sequential,BICS,Other
+Agency Collat Structured,BICS,Other
+Agency Collat Support,BICS,Other
+Agency Collat Support IO,BICS,Other
+Agency Collat Support PO,BICS,Other
+Agency Collat Support Z,BICS,Other
+Agency Collat TAC,BICS,Other
+Agency Collat Z,BICS,Other
+Agency Credit,BCLASS,Other
+Agency MBS Other,BCLASS,Other
+Aggressive Growth,BICS,Other
+Agricultural Biotech,BICS,Other
+Agricultural Chemicals,BICS,Other
+Agricultural Operations,BICS,Other
+Agriculture,BCLASS,Other
+Airlines,ICB,Aviation
+Air Pollution Control Eq,BICS,Other
+Airport Develop/Maint,BICS,Other
+Airports,BCLASS,Other
+Alternative Electricity,ICB,Other
+Alternative Fuels,ICB,Other
+Alternative Waste Tech,BICS,Other
+Aluminum,ICB,Other
+Apartment REITs,BCLASS,Other
+Apparel Manufacturers,BICS,Other
+Apparel Retailers,ICB,Other
+Apparel & Textile Products,BICS,Other
+Appliances,BICS,Other
+Applications Software,BICS,Other
+ARMs,BCLASS,Other
+Asbestos Abatement,BICS,Other
+Asian Pacific Ex Japan,BICS,Other
+Asset Backed Securities,BICS,Other
+Asset Managers,ICB,Other
+Athletic Equipment,BICS,Other
+Athletic Footwear,BICS,Other
+Auction House/Art Dealer,BICS,Other
+Audio/Video Products,BICS,Other
+Auto-Cars/Light Trucks,BICS,Automotive
+Auto Floor Plan Other,BICS,Automotive
+Auto Floor Plan Sequent,BICS,Automotive
+Auto Loan,BCLASS,Other
+Auto-Med&Heavy Duty Trks,BICS,Automotive
+Automobile ABS Other,BICS,Other
+Automobiles,ICB,Automotive
+Automobile Sequential,BICS,Other
+Automobiles Manufacturing,BICS,Other
+Automotive,BCLASS,Other
+Auto Parts,ICB,Other
+Auto Parts Manufacturing,BICS,Other
+Auto Repair Centers,BICS,Other
+Auto/Trk Prts&Equip-Orig,BICS,Other
+Auto/Trk Prts&Equip-Repl,BICS,Other
+Auto-Truck Trailers,BICS,Other
+B2B/E-Commerce,BICS,Other
+Balanced,BICS,Other
+Banking,BCLASS,Other
+Banks,ICB,Other
+Batteries/Battery Sys,BICS,Other
+Beverages-Non-alcoholic,BICS,Other
+Beverages-Wine/Spirits,BICS,Other
+Bicycle Manufacturing,BICS,Other
+Biofuels,BICS,Other
+Biotechnology,ICB,Other
+Bldg Prod-Cement/Aggreg,BICS,Cement
+Bldg-Mobil Home/Mfd Hous,BICS,Other
+Bldg Prod-Air&Heating,BICS,Other
+Bldg&Construct Prod-Misc,BICS,Other
+Bldg Prod-Doors&Windows,BICS,Other
+Bldg Prod-Light Fixtures,BICS,Other
+Bldg Prod-Wood,BICS,Other
+Bldg-Residential/Commer,BICS,Other
+Blood Collection Banking,BICS,Other
+Bloodstock Services,BICS,Other
+Blue Chip,BICS,Other
+Boat Loan Other,BICS,Other
+Brewers,ICB,Other
+Brewery,BICS,Other
+Bridges,BCLASS,Other
+Broadcasting & Entertainment,ICB,Other
+Broadcast Serv/Program,BICS,Other
+Broadline Retailers,ICB,Other
+Brokerage Assetmanagers Exchanges,BCLASS,Other
+Building&Construct-Misc,BICS,Other
+Building-Heavy Construct,BICS,Other
+Building-Maint&Service,BICS,Other
+Building Materials,BCLASS,Other
+Building Materials & Fixtures,ICB,Cement
+Building Societies,BICS,Other
+Building Sub Contractors,BICS,Other
+Business Support Services,ICB,Other
+Business Training Employment Agency,ICB,Other
+Cable Satellite,BCLASS,Other
+Cable & Satellite,BICS,Other
+Cable/Satellite TV,BICS,Other
+Capacitors,BICS,Other
+Capital Goods,BCLASS,Other
+Capital Pools,BICS,Other
+Casino Hotels,BICS,Other
+Casino Services,BICS,Other
+Casinos & Gaming,BICS,Other
+CDO,BCLASS,Other
+Cellular Telecom,BICS,Other
+Central Bank,BICS,Other
+Ceramic Products,BICS,Other
+Charter Schools,BCLASS,Other
+Chemicals,BICS,Other
+Chemicals-Diversified,BICS,Other
+Chemicals-Fibers,BICS,Other
+Chemicals-Other,BICS,Other
+Chemicals-Plastics,BICS,Other
+Chemicals-Specialty,BICS,Other
+Circuit Boards,BICS,Other
+Circuits,BICS,Other
+Civic and Convention Centers,BCLASS,Other
+CLO,BCLASS,Other
+Closed-end Funds,BICS,Other
+Clothing & Accessories,ICB,Other
+CMBS Other,BICS,Other
+CMBS Subordinated,BICS,Other
+CMO,BCLASS,Other
+Coal,ICB,Coal
+Coal Operations,BICS,Coal
+Coatings/Paint,BICS,Other
+Coffee,BICS,Other
+Collectibles,BICS,Other
+Combined Utilities,BCLASS,Other
+Commer Banks-Central US,BICS,Other
+Commer Banks-Eastern US,BICS,Other
+Commer Banks Non-US,BICS,Other
+Commer Banks-Southern US,BICS,Other
+Commer Banks-Western US,BICS,Other
+Commercial Finance,BICS,Other
+Commercial Serv-Finance,BICS,Other
+Commercial Services,BICS,Other
+Commercial Vehicles & Trucks,ICB,Other
+Commodity,BICS,Other
+Commodity Agriculture Fund,BCLASS,Other
+Commodity Chemicals,ICB,Other
+Commodity Energy Fund,BCLASS,Other
+Commodity Industrial Metals Fund,BCLASS,Other
+Commodity Precious Metals Fund,BCLASS,Other
+Communications Equipment,BICS,Other
+Communications Software,BICS,Other
+Computer Aided Design,BICS,Other
+Computer Data Security,BICS,Other
+Computer Graphics,BICS,Other
+Computer Hardware,ICB,Other
+Computers,BICS,Other
+Computer Services,ICB,Other
+Computers-Integrated Sys,BICS,Other
+Computers-Memory Devices,BICS,Other
+Computer Software,BICS,Other
+Computers-Other,BICS,Other
+Computers-Peripher Equip,BICS,Other
+Computers-Voice Recogn,BICS,Other
+Construction Machinery,BCLASS,Other
+Construction Materials Manufacturing,BICS,Other
+Consulting Services,BICS,Other
+Consumer Cyc Services,BCLASS,Other
+Consumer Electronics,ICB,Other
+Consumer Finance,ICB,Other
+Consumer Products,BICS,Other
+Consumer Products-Misc,BICS,Other
+Consumer Services,BICS,Other
+Containers-Metal/Glass,BICS,Other
+Containers & Packaging,ICB,Other
+Containers-Paper/Plastic,BICS,Other
+Contrarian,BICS,Other
+Conventional 10 Yr,BCLASS,Other
+Conventional 15 Yr,BCLASS,Other
+Conventional 20 Yr,BCLASS,Other
+Conventional 30 Yr,BCLASS,Other
+Conventional Balloon,BCLASS,Other
+Conventional Electricity,ICB,Power
+Convertible,BICS,Other
+Cooperative Banks,BICS,Other
+Corporate/Preferred,BICS,Other
+Corp/Pref-High Yield,BICS,Other
+Corp/Pref-Inv Grade,BICS,Other
+Correctional Facilities and Courts,BCLASS,Other
+Cosmetics&Toiletries,BICS,Other
+Country Fund-Australia,BICS,Other
+Country Fund-Austria,BICS,Other
+Country Fund-Brazil,BICS,Other
+Country Fund-Canada,BICS,Other
+Country Fund-China,BICS,Other
+Country Fund-France,BICS,Other
+Country Fund-Germany,BICS,Other
+Country Fund-India,BICS,Other
+Country Fund-Indonesia,BICS,Other
+Country Fund-Italy,BICS,Other
+Country Fund-Japan,BICS,Other
+Country Fund-Korea,BICS,Other
+Country Fund-Malaysia,BICS,Other
+Country Fund-Mexico,BICS,Other
+Country Fund-Netherlands,BICS,Other
+Country Fund-Philippines,BICS,Other
+Country Fund-Russia,BICS,Other
+Country Fund-Singapore,BICS,Other
+Country Fund-Spain,BICS,Other
+Country Fund-Sweden,BICS,Other
+Country Fund-Switzerland,BICS,Other
+Country Fund-Thailand,BICS,Other
+Country Fund-U.K.,BICS,Other
+Country Fund-U.S.,BICS,Other
+Credit Card,BCLASS,Other
+Credit Card Bullet,BICS,Other
+Credit Card Other,BICS,Other
+Cruise Lines,BICS,Other
+Crystal&Giftware,BICS,Other
+Currency,BICS,Other
+Data Processing/Mgmt,BICS,Other
+Decision Support Softwar,BICS,Other
+Defense,ICB,Other
+Delivery Services,ICB,Other
+Dental Supplies&Equip,BICS,Other
+Department Stores,BICS,Other
+Derivative-Asset Alloc,BICS,Other
+Derivative-Asset Allocation,BCLASS,Other
+Derivatives,BICS,Other
+"Design, Manufacturing & Distribution",BICS,Other
+Diagnostic Equipment,BICS,Other
+Diagnostic Kits,BICS,Other
+Dialysis Centers,BICS,Other
+Diamonds & Gemstones,ICB,Other
+Diamonds/Precious Stones,BICS,Other
+Direct Marketing,BICS,Other
+Disposable Medical Prod,BICS,Other
+Distillers & Vintners,ICB,Other
+Distribution/Wholesale,BICS,Other
+Distributors,BCLASS,Other
+Distributors - Consumer Discretionary,BICS,Other
+Diversified Banking Inst,BICS,Other
+Diversified Banks,BICS,Other
+Diversified Finan Serv,BICS,Other
+Diversified Industrials,ICB,Other
+Diversified Manufact Op,BICS,Other
+Diversified Manufacturing,BCLASS,Other
+Diversified Minerals,BICS,Other
+Diversified Operations,BICS,Other
+Diversified REITs,ICB,Other
+Divers Oper/Commer Serv,BICS,Other
+Drug Delivery Systems,BICS,Other
+Drug Detection Systems,BICS,Other
+Drug Retailers,ICB,Other
+Durable Household Products,ICB,Other
+Eastern European,BICS,Other
+E-Commerce/Products,BICS,Other
+E-Commerce/Services,BICS,Other
+Economic Development,BCLASS,Other
+Educational Services,BICS,Other
+Educational Software,BICS,Other
+Elec & Gas Mktg & Trading,BICS,Other
+Electric,BCLASS,Other
+Electrical Components & Equipment,ICB,Other
+Electrical Equipment Manufacturing,BICS,Other
+Electric-Distribution,BICS,Power
+Electric-Generation,BICS,Power
+Electric-Integrated,BICS,Power
+Electricity and Public Power,BCLASS,Power
+Electric Products-Misc,BICS,Power
+Electric-Transmission,BICS,Other
+Electronic Compo-Misc,BICS,Other
+Electronic Compo-Semicon,BICS,Other
+Electronic Connectors,BICS,Other
+Electronic Design Automa,BICS,Other
+Electronic Equipment,ICB,Other
+Electronic Forms,BICS,Other
+Electronic Measur Instr,BICS,Other
+Electronic Office Equipment,ICB,Other
+Electronic Parts Distrib,BICS,Other
+Electronic Secur Devices,BICS,Other
+Electronics-Military,BICS,Other
+E-Marketing/Info,BICS,Other
+Emerging Market-Debt,BICS,Other
+Emerging Market-Equity,BICS,Other
+Emerging Mkt-Asset Alloc,BICS,Other
+Energy-Alternate Sources,BICS,Other
+Energy and Environment,BCLASS,Power
+Engineering/R&D Services,BICS,Other
+Engines-Internal Combust,BICS,Other
+Enterprise Software/Serv,BICS,Other
+Entertainment Content,BICS,Other
+Entertainment Resources,BICS,Other
+Entertainment Software,BICS,Other
+Environ Consulting&Eng,BICS,Other
+Environmental,BCLASS,Other
+Environmentally Friendly,BICS,Other
+Environ Monitoring&Det,BICS,Other
+Eq Directional Long/Shor,BICS,Other
+Eq Fdmntl Mkt Neut,BICS,Other
+Equity Investment Instruments,ICB,Other
+Equity/Islamic,BICS,Other
+E-Services/Consulting,BICS,Other
+Event Driven-Merger Arbi,BICS,Other
+Exploration & Production,ICB,Oil&Gas
+Explosives,BICS,Other
+Export/Import Bank,BICS,Other
+Extended Serv Contracts,BICS,Other
+Farming,ICB,Other
+"Farming, Fishing & Plantations",ICB,Other
+Feminine Health Care Prd,BICS,Other
+FGLMC FHAVA,BICS,Other
+FGLMC Other,BICS,Other
+FGLMC Relocation 15yr,BICS,Other
+FGLMC Relocation 30yr,BICS,Other
+FGLMC Single Family 15yr,BICS,Other
+FGLMC Single Family 20yr,BICS,Other
+FGLMC Single Family 30yr,BICS,Other
+FHLMC ARM,BICS,Other
+FHLMC FHAVA,BICS,Other
+FHLMC Single Family 30yr,BICS,Other
+FI Directional-Asset Bac,BICS,Other
+FI Directional-Fixed Inc,BICS,Other
+Fiduciary Banks,BICS,Other
+Film Processing,BICS,Other
+Filtration/Separat Prod,BICS,Other
+Finance-Auto Loans,BICS,Other
+Finance-Commercial,BICS,Other
+Finance Companies,BCLASS,Other
+Finance-Consumer Loans,BICS,Other
+Finance-Credit Card,BICS,Other
+Finance-Invest Bnkr/Brkr,BICS,Other
+Finance-Investment Fund,BICS,Other
+Finance-Leasing Compan,BICS,Other
+Finance-Mtge Loan/Banker,BICS,Other
+Finance-Other Services,BICS,Other
+Financial Administration,ICB,Other
+Financial Guarantee Ins,BICS,Other
+Financial Services,BICS,Other
+Firearms&Ammunition,BICS,Other
+FI Rel Val-Capital Struc,BICS,Other
+FI Rel Val-Fixed Income,BICS,Other
+Fire Station Equipment,BCLASS,Other
+Fisheries,BICS,Other
+Fixed Line Telecommunications,ICB,Other
+Flexible Portfolio,BICS,Other
+Flood Control and Storm Drain,BCLASS,Other
+FNMA ARM,BICS,Other
+FNMA FHAVA,BICS,Other
+FNMA Other,BICS,Other
+FNMA Relocation 15yr,BICS,Other
+FNMA Relocation 30yr,BICS,Other
+FNMA Single Family 15yr,BICS,Other
+FNMA Single Family 20yr,BICS,Other
+FNMA Single Family 30yr,BICS,Other
+Food and Beverage,BCLASS,Other
+Food-Baking,BICS,Other
+Food & Beverage,BICS,Other
+Food-Canned,BICS,Other
+Food-Catering,BICS,Other
+Food-Confectionery,BICS,Other
+Food-Dairy Products,BICS,Other
+Food-Flour&Grain,BICS,Other
+Food-Meat Products,BICS,Other
+Food-Misc/Diversified,BICS,Other
+Food Products,ICB,Other
+Food-Retail,BICS,Other
+Food Retailers & Wholesalers,ICB,Other
+Food-Wholesale/Distrib,BICS,Other
+Footwear,ICB,Other
+Footwear&Related Apparel,BICS,Other
+Forest & Paper Products Manufacturing,BICS,Other
+Forestry,ICB,Other
+Full Line Insurance,ICB,Other
+Funds & Trusts,BICS,Other
+Funeral Serv&Rel Items,BICS,Other
+Furnishings,ICB,Other
+Gambling,ICB,Other
+Gambling (Non-Hotel),BICS,Other
+Gaming,BCLASS,Other
+Garden Products,BICS,Other
+Gas,BCLASS,Other
+Gas Distribution,ICB,Other
+Gas-Distribution,BICS,Other
+Gas-Transportation,BICS,Other
+General Mining,ICB,Other
+"General Purpose, Public Improvements",BCLASS,Other
+Geo Focus-Debt,BICS,Other
+Geo Focused-Asset Alloc,BICS,Other
+Geo Focus-Equity,BICS,Other
+Global Asset Allocation,BICS,Other
+Global Debt,BICS,Other
+Global Equity,BICS,Other
+Global Macro,BICS,Other
+GNMA 15 Yr,BCLASS,Other
+GNMA2 ARM,BICS,Other
+GNMA2 Mobile Home,BICS,Other
+GNMA2 Other,BICS,Other
+GNMA2 Single Family 15yr,BICS,Other
+GNMA2 Single Family 30yr,BICS,Other
+GNMA 30 Yr,BCLASS,Other
+GNMA Graduated Payment,BICS,Other
+GNMA Project Loan,BICS,Other
+GNMA Single Family 15yr,BICS,Other
+GNMA Single Family 30yr,BICS,Other
+Gold Mining,ICB,Other
+Golf,BICS,Other
+Government Agencies,BICS,Other
+Government/Agency,BICS,Other
+Government/Agency-LT,BICS,Other
+Government and Public Buildings,BCLASS,Other
+Government/Corporate,BICS,Other
+Government Development Banks,BICS,Other
+Government Guaranteed,BCLASS,Other
+"Government Owned, No Guarantee",BCLASS,Other
+Government Regional,BICS,Other
+Government Sponsored,BCLASS,Other
+Govt/Agency-Inter/LT,BICS,Other
+Govt/Agency-Inter Term,BICS,Other
+Govt/Agency-Short Term,BICS,Other
+Govt/Agency-ST/Inter,BICS,Other
+Govt/Agency-Target Term,BICS,Other
+Govt/Corp High Yield,BICS,Other
+Govt/Corp Intermediate,BICS,Other
+Govt/Corp Long Term,BICS,Other
+Govt/Corp Short Term,BICS,Other
+Growth,BICS,Other
+Growth & Income,BICS,Other
+Growth&Income-Large Cap,BICS,Other
+Growth & Income-Mid Cap,BICS,Other
+Growth&Income-Small Cap,BICS,Other
+Growth-Large Cap,BICS,Other
+Growth-Mid Cap,BICS,Other
+Growth-Small Cap,BICS,Other
+Hardware,BICS,Other
+Hazardous Waste Disposal,BICS,Other
+Health & Biotechnology,BICS,Other
+Healthcare,BCLASS,Other
+Health Care Cost Contain,BICS,Other
+Health Care Facilities & Services,BICS,Other
+Health Care Providers,ICB,Other
+Healthcare REITs,BCLASS,Other
+Healthcare Safety Device,BICS,Other
+Health Insurance,BCLASS,Other
+Heart Monitors,BICS,Other
+Heavy Construction,ICB,Other
+Higher Education,BCLASS,Other
+Homebuilders,BICS,Other
+Home Construction,ICB,Other
+Home Decoration Products,BICS,Other
+Home Equity,BCLASS,Other
+Home Equity Other,BICS,Other
+Home Equity Sequential,BICS,Other
+Home Furnishings,BICS,Other
+Home Improvement,BICS,Other
+Home Improvement Retailers,ICB,Other
+Home & Office Products Manufacturing,BICS,Other
+Hospital Beds/Equipment,BICS,Other
+Hospitals,BCLASS,Other
+Hotel & Lodging REITs,ICB,Other
+Hotels,ICB,Other
+Hotels&Motels,BICS,Other
+Housewares,BICS,Other
+Housing Authority,BICS,Other
+Human Resources,BICS,Other
+Hybrid Non-Pfandbriefe,BCLASS,Other
+Identification Sys/Dev,BICS,Other
+Import/Export,BICS,Other
+Inactive/Unknown,BICS,Other
+Income Equity,BICS,Other
+Independent,BCLASS,Other
+Independ Power Producer,BICS,Other
+Index Fund,BICS,Other
+Index Fund-Debt,BICS,Other
+Index Fund-Equity,BCLASS,Other
+Index Fund-Large Cap,BICS,Other
+Index Fund-Mid Cap,BICS,Other
+Index Fund-Small Cap,BICS,Other
+Index Futures,BCLASS,Other
+Indian Subcontinent,BICS,Other
+Industr Audio&Video Prod,BICS,Other
+Industrial Automat/Robot,BICS,Other
+Industrial Development,BCLASS,Other
+Industrial Gases,BICS,Other
+Industrial Machinery,ICB,Other
+Industrial & Office REITs,ICB,Other
+Industrial Other,BICS,Other
+Industrial Suppliers,ICB,Other
+Institutions Only-Natl,BICS,Other
+Institut Only-Second,BICS,Other
+Instruments-Controls,BICS,Other
+Instruments-Scientific,BICS,Other
+Insurance Brokers,ICB,Other
+Integrated,BCLASS,Other
+Integrated Oil & Gas,ICB,Oil&Gas
+Integrated Oils,BICS,Oil&Gas
+Interior Design/Architec,BICS,Other
+International Debt,BICS,Other
+International Equity,BICS,Other
+Internet,ICB,Other
+Internet Applic Sftwr,BICS,Other
+Internet Brokers,BICS,Other
+Internet Connectiv Svcs,BICS,Other
+Internet Content-Entmnt,BICS,Other
+Internet Content-Info/Ne,BICS,Other
+Internet Financial Svcs,BICS,Other
+Internet Gambling,BICS,Other
+Internet Incubators,BICS,Other
+Internet Infrastr Equip,BICS,Other
+Internet Infrastr Sftwr,BICS,Other
+Internet Media,BICS,Other
+Internet Security,BICS,Other
+Internet & Telecom,BICS,Other
+Internet Telephony,BICS,Other
+Intimate Apparel,BICS,Other
+Intl Asset Allocation,BICS,Other
+Invest Comp - Resources,BICS,Other
+Investment Companies,BICS,Other
+Investment Services,ICB,Other
+Invest Mgmnt/Advis Serv,BICS,Other
+Metal-Aluminum,BICS,Other
+Metal-Copper,BICS,Other
+Irrigation,BCLASS,Other
+Land Preservation,BCLASS,Other
+Lasers-Syst/Components,BICS,Other
+Leisure,BCLASS,Other
+Leisure Industry,BICS,Other
+Leisure Products Manufacturing,BICS,Other
+Leisure&Rec/Games,BICS,Other
+Leisure&Rec Products,BICS,Other
+Libraries and Museums,BCLASS,Other
+Life,BCLASS,Other
+Lifecare Retirement Centers,BCLASS,Other
+Life/Health Insurance,BICS,Other
+Life Insurance,ICB,Other
+Lighting Products&Sys,BICS,Other
+Linen Supply&Rel Items,BICS,Other
+Local Authority,BCLASS,Other
+Lodging,BCLASS,Other
+Lottery Services,BICS,Other
+Machinery-Constr&Mining,BICS,Other
+Machinery-Electrical,BICS,Other
+Machinery-Electric Util,BICS,Other
+Machinery-Farm,BICS,Other
+Machinery-General Indust,BICS,Other
+Machinery Manufacturing,BICS,Other
+Machinery-Material Handl,BICS,Other
+Machinery-Print Trade,BICS,Other
+Machinery-Pumps,BICS,Other
+Machinery-Therml Process,BICS,Other
+Mach Tools&Rel Products,BICS,Other
+Malls and Shopping Centers,BCLASS,Other
+Managed Care,BICS,Other
+Manufact Hous ABS Other,BICS,Other
+Manufact Hous Sequential,BICS,Other
+Manufactured Goods,BICS,Other
+Manufactured Housing,BCLASS,Other
+Marine Services,BICS,Other
+Marine Transportation,ICB,Shipping
+Market Neutral-Equity,BICS,Other
+Mass and Rapid Transit,BCLASS,Other
+Mass Merchants,BICS,Other
+Mass & Rapid Transit,BCLASS,Other
+Media Agencies,ICB,Other
+Media Entertainment,BCLASS,Other
+Medical-Biomedical/Gene,BICS,Other
+Medical-Drugs,BICS,Other
+Medical Equipment,ICB,Other
+Medical Equipment & Devices Manufacturing,BICS,Other
+Medical-Generic Drugs,BICS,Other
+Medical-HMO,BICS,Other
+Medical-Hospitals,BICS,Other
+Medical Imaging Systems,BICS,Other
+Medical Information Sys,BICS,Other
+Medical Instruments,BICS,Other
+Medical Labs&Testing Srv,BICS,Other
+Medical Laser Systems,BICS,Other
+Medical-Nursing Homes,BICS,Other
+Medical-Outptnt/Home Med,BICS,Other
+Medical Products,BICS,Other
+Medical Steriliz Product,BICS,Other
+Medical Supplies,ICB,Other
+Medical-Whsle Drug Dist,BICS,Other
+Metal Processors&Fabrica,BICS,Other
+Metal Products-Distrib,BICS,Other
+Metal Products-Fasteners,BICS,Other
+Nonferrous Metals,ICB,Other
+Non-Ferrous Metals,BICS,Other
+Platinum,BICS,Other
+Precious Metals,BICS,Other
+Metals and Mining,BCLASS,Other
+"Metals, Minerals and Materials",BCLASS,Other
+Metals & Mining,BICS,Other
+Metals & Ore Whslrs & Traders,BICS,Other
+Metal Svc Center & Other Whslrs,BICS,Other
+Mgd Futures,BICS,Other
+Midstream,BCLASS,Other
+Military Housing,BCLASS,Other
+Mining Services,BICS,Other
+Miscellaneous Manufactur,BICS,Other
+Mobile Homes,BCLASS,Other
+Mobile Telecommunications,ICB,Other
+Money Center Banks,BICS,Other
+Mortgage Banks,BICS,Other
+Mortgage Finance,ICB,Other
+Mortgage Non Pfandbriefe,BCLASS,Other
+Mortgage REITs,ICB,Other
+Motion Pictures&Services,BICS,Other
+Motorcycle/Motor Scooter,BICS,Other
+MRI Equipment,BICS,Other
+MRI/Medical Diag Imaging,BICS,Other
+Multi-Family Housing,BCLASS,Other
+Multilevel Dir Selling,BICS,Other
+Multi-line Insurance,BICS,Other
+Multimedia,BICS,Other
+Multi-Strat/Style,BICS,Other
+Multiutilities,ICB,Power
+Muni-California,BICS,Other
+Municipal,BICS,Other
+Municipal-City,BICS,Other
+Municipal-County,BICS,Other
+Municipal-Education,BICS,Other
+Municipal-Local Auth,BICS,Other
+Municipal-Title XI,BICS,Other
+Muni-New York,BICS,Other
+Music,BICS,Other
+Mutual Insurance,BICS,Other
+Natural Gas,BCLASS,Oil&Gas
+Networking Products,BICS,Other
+"New, Public Housing",BCLASS,Other
+Night Clubs,BICS,Other
+No Mapping Available,BICS,Other
+Non Agency CMBS,BCLASS,Other
+Non-Captive Consumer Finance,BCLASS,Other
+Non-Captive Diversified Finance,BCLASS,Other
+Nondurable Household Products,ICB,Other
+Nonequity Investment Instruments,ICB,Other
+Quarrying,BICS,Other
+Silver Mining,BICS,Other
+Non-hazardous Waste Disp,BICS,Other
+Non-Profit Charity,BICS,Other
+Non Wood Building Materials,BICS,Other
+Not Classified,BCLASS,Other
+Nursing Homes,BCLASS,Other
+Office Automation&Equip,BICS,Other
+Office Buildings and Land Partners,BCLASS,Other
+Office Furnishings-Orig,BICS,Other
+Office REITs,BCLASS,Other
+Office Supplies&Forms,BICS,Other
+Oil Comp-Explor&Prodtn,BICS,Oil&Gas
+Oil Comp-Integrated,BICS,Oil&Gas
+Oil Equipment & Services,ICB,Other
+Oil Field Mach&Equip,BICS,Other
+Oil Field Services,BCLASS,Other
+Oil-Field Services,BICS,Other
+Oil&Gas Drilling,BICS,Other
+Oil & Gas Services & Equipment,BICS,Other
+Oil Refining&Marketing,BICS,Oil&Gas
+Oil-US Royalty Trusts,BICS,Other
+Open-End Fund,BCLASS,Other
+Optical Recognition Equi,BICS,Other
+Optical Supplies,BICS,Other
+Options,BCLASS,Other
+Other ABS,BICS,Other
+Other Education,BCLASS,Other
+Other Financial,BCLASS,Other
+Other Governmental Public Services,BCLASS,Other
+Other Health Care,BCLASS,Other
+Other Housing,BCLASS,Other
+Other Industrial,BCLASS,Other
+Other Mortgage Secur,BICS,Other
+Other Post-Employment Benefits,BCLASS,Other
+Other Recreation,BCLASS,Other
+Other REITs,BCLASS,Other
+Other Transportation,BCLASS,Other
+Other Utilities,BCLASS,Other
+Other Utility,BCLASS,Other
+Other Wholesalers,BICS,Other
+Packaging,BCLASS,Other
+Paper,ICB,Other
+Paper&Related Products,BICS,Other
+Parking Facilities,BCLASS,Other
+"Parks, Zoos, and Beaches",BCLASS,Other
+Pastoral&Agricultural,BICS,Other
+Patient Monitoring Equip,BICS,Other
+P&C,BCLASS,Other
+Pension Obligations,BCLASS,Other
+Personal Products,ICB,Other
+Petrochemicals,BICS,Oil&Gas
+Pfandbriefe,BCLASS,Other
+Pfandbriefe Jumbo Hypotheken,BCLASS,Other
+Pfandbriefe Jumbo Oeffenliche,BCLASS,Other
+Pfandbriefe Traditional Hypotheken,BCLASS,Other
+Pfandbriefe Traditional Oeffenliche,BCLASS,Other
+Pharmaceuticals,ICB,Other
+Pharmacy Services,BICS,Other
+Photo Equipment&Supplies,BICS,Other
+Phys Practice Mgmnt,BICS,Other
+Phys Therapy/Rehab Cntrs,BICS,Other
+Pipeline,BICS,Other
+Pipelines,ICB,Other
+Iron & Steel,ICB,Steel
+Platinum & Precious Metals,ICB,Other
+Police Station Equipment,BCLASS,Other
+Pollution Control,BICS,Other
+Poultry,BICS,Other
+Power Conv/Supply Equip,BICS,Other
+Power Generation,BICS,Power
+Iron & Steel Foundry,BICS,Steel
+Primary and Secondary Education,BCLASS,Other
+Printing-Commercial,BICS,Other
+Private Equity,BICS,Other
+Private Human Service Providers,BCLASS,Other
+Professional Sports,BICS,Other
+Property/Casualty Ins,BICS,Other
+Property & Casualty Insurance,ICB,Other
+Property Trust,BICS,Other
+Protection-Safety,BICS,Other
+PS Loan Non-Pfandbriefe,BCLASS,Other
+Public Human Service Providers,BCLASS,Other
+Public Thoroughfares,BICS,Other
+Publishing,ICB,Other
+Publishing-Books,BICS,Other
+Publishing & Broadcasting,BICS,Other
+Publishing-Newspapers,BICS,Other
+Publishing-Periodicals,BICS,Other
+Metal-Diversified,BICS,Steel
+Racetracks,BICS,Other
+Radio,BICS,Other
+Railroad,BICS,Other
+Railroad Rolling Stock,BICS,Other
+Railroads,ICB,Other
+Real Estate,BICS,Other
+Real Estate Holding & Development,ICB,Other
+Real Estate Mgmnt/Servic,BICS,Other
+Real Estate Oper/Develop,BICS,Other
+Real Estate Services,ICB,Other
+Recreational Centers,BICS,Other
+Recreational Products,ICB,Other
+Recreational Services,ICB,Other
+Recreational Vehicles,BICS,Other
+Recycling,BICS,Other
+Redevelopment and Land Clearance,BCLASS,Other
+Refining,BCLASS,Other
+Refining & Marketing,BICS,Other
+Regional Agencies,BICS,Other
+Regional Authority,BICS,Other
+Regional Banks-Non US,BICS,Other
+Region Fnd-Asian Pacific,BICS,Other
+Region Fund-African,BICS,Other
+Region Fund-ASEAN,BICS,Other
+Region Fund-EU,BICS,Other
+Region Fund-Euro,BICS,Other
+Region Fund-European,BICS,Other
+Region Fund-Europe Ex UK,BICS,Other
+Region Fund-Iberian,BICS,Other
+Region Fund-Latin Amer,BICS,Other
+Region Fund-NAFTA,BICS,Other
+Region Fund-Nordic,BICS,Other
+Region Fund-North Amer,BICS,Other
+Region Fund-OECD,BICS,Other
+Region Fund-Tiger,BICS,Other
+Reinsurance,ICB,Other
+REITs,BCLASS,Other
+REITS-Apartments,BICS,Other
+REITS-Diversified,BICS,Other
+REITS-Health Care,BICS,Other
+REITS-Hotels,BICS,Other
+REITS-Manufactured Homes,BICS,Other
+REITS-Mortgage,BICS,Other
+REITS-Office Property,BICS,Other
+REITS-Regional Malls,BICS,Other
+REITS-Shopping Centers,BICS,Other
+REITS-Single Tenant,BICS,Other
+REITS-Storage,BICS,Other
+REITS-Warehouse/Industr,BICS,Other
+REITS-Whole Loans,BICS,Other
+Religiously Responsible,BICS,Other
+Remediation Services,BICS,Other
+Renewable Energy,BICS,Power
+Renewable Energy Equipment,ICB,Other
+Renewable Energy Project Dev,BICS,Other
+Rental Auto/Equipment,BICS,Other
+Research&Development,BICS,Other
+Residential Mortgage,BCLASS,Other
+Residential REITs,ICB,Other
+Resorts/Theme Parks,BICS,Other
+Respiratory Products,BICS,Other
+Restaurants,BICS,Other
+Restaurants & Bars,ICB,Other
+Retail-Apparel/Shoe,BICS,Other
+Retail-Appliances,BICS,Other
+Retail-Arts&Crafts,BICS,Other
+Retail-Automobile,BICS,Other
+Retail-Auto Parts,BICS,Other
+Retail-Bedding,BICS,Other
+Retail-Bookstore,BICS,Other
+Retail-Building Products,BICS,Other
+Retail-Catalog Shopping,BICS,Other
+Retail-Computer Equip,BICS,Other
+Retail - Consumer Discretionary,BICS,Other
+Retail-Consumer Electron,BICS,Other
+Retail - Consumer Staples,BICS,Other
+Retail-Convenience Store,BICS,Other
+Retail-Cutlery&Cookware,BICS,Other
+Retail-Discount,BICS,Other
+Retail-Drug Store,BICS,Other
+Retailers,BCLASS,Other
+Retail-Fabric Store,BICS,Other
+Retail-Floor Coverings,BICS,Other
+Retail-Gardening Prod,BICS,Other
+Retail-Hair Salons,BICS,Other
+Retail-Home Furnishings,BICS,Other
+Retail-Hypermarkets,BICS,Other
+Retail-Jewelry,BICS,Other
+Retail-Leisure Products,BICS,Other
+Retail-Mail Order,BICS,Other
+Retail-Major Dept Store,BICS,Other
+Retail-Misc/Diversified,BICS,Other
+Retail-Music Store,BICS,Other
+Retail-Office Supplies,BICS,Other
+Retail-Pawn Shops,BICS,Other
+Retail-Perfume&Cosmetics,BICS,Other
+Retail-Pet Food&Supplies,BICS,Other
+Retail-Petroleum Prod,BICS,Other
+Retail-Photo Studio,BICS,Other
+Retail-Propane Distrib,BICS,Other
+Retail-Pubs,BICS,Other
+Retail-Regnl Dept Store,BICS,Other
+Retail REITs,ICB,Other
+Retail-Restaurants,BICS,Other
+Retail-Science&Nature,BICS,Other
+Retail-Sporting Goods,BICS,Other
+Retail-Sunglasses,BICS,Other
+Retail-Toy Store,BICS,Other
+Retail-Variety Store,BICS,Other
+Retail-Video Rental,BICS,Other
+Retail-Vision Serv Cntr,BICS,Other
+Retail-Vitamins/Nutr Sup,BICS,Other
+Retirement/Aged Care,BICS,Other
+Rubber/Plastic Products,BICS,Other
+Rubber-Tires,BICS,Other
+Rubber&Vinyl,BICS,Other
+Sanitation,BCLASS,Other
+Satellite Telecom,BICS,Other
+Schools,BICS,Other
+Schools-Day Care,BICS,Other
+Seaports and Marine Terminals,BCLASS,Other
+Sector Fund-Asset Alloc,BICS,Other
+Sector Fund-Debt,BICS,Other
+Sector Fund-Energy,BICS,Other
+Sector Fund-Real Estate,BICS,Other
+Sector Fund-Technology,BICS,Other
+Sector Fund-Utility,BICS,Other
+Secured Airlines,BCLASS,Aviation
+Security Services,BICS,Other
+Seismic Data Collection,BICS,Other
+Semicon Compo-Intg Circu,BICS,Other
+Semiconductor Equipment,BICS,Other
+Semiconductors,ICB,Other
+Senior Housing Independent Living,BCLASS,Other
+Shipbuilding,BICS,Other
+Metal-Iron,BICS,Steel
+Single-Family Housing,BCLASS,Other
+"Single, Multi-Family Housing",BCLASS,Other
+S&L/Thrifts-Central US,BICS,Other
+S&L/Thrifts-Eastern US,BICS,Other
+S&L/Thrifts-Southern US,BICS,Other
+S&L/Thrifts-Western US,BICS,Other
+Soap&Cleaning Prepar,BICS,Other
+Socially Responsible,BICS,Other
+Soft Drinks,ICB,Other
+Software,ICB,Other
+Software & Services,BICS,Other
+Software Tools,BICS,Other
+Solid Waste Resource Recovery,BCLASS,Other
+Sovereign,BICS,Other
+Sovereign Agency,BICS,Other
+Sovereigns,BICS,Other
+Specialized Consumer Services,ICB,Other
+Special Purpose Banks,BICS,Other
+Special Purpose Entity,BICS,Other
+Specialty Chemicals,ICB,Other
+Specialty Finance,ICB,Other
+Specialty REITs,ICB,Other
+Specialty Retailers,ICB,Other
+Specified Purpose Acquis,BICS,Other
+Stadiums and Sports Complexes,BCLASS,Other
+Steel Pipe&Tube,BICS,Steel
+Steel-Producers,BICS,Steel
+Steel-Specialty,BICS,Steel
+Stevedoring,BICS,Other
+Storage/Warehousing,BICS,Other
+Stranded Cost Utility,BCLASS,Other
+Student Housing,BCLASS,Other
+Student Loan,BCLASS,Other
+Student Loans,BCLASS,Other
+Sugar,BICS,Other
+Superconductor Prod&Sys,BICS,Other
+Supermarkets,BCLASS,Other
+Supermarkets & Pharmacies,BICS,Other
+Super-Regional Banks-US,BICS,Other
+Supranational,BCLASS,Other
+Supranational Bank,BICS,Other
+Supranationals,BICS,Other
+Tannery,BICS,Other
+Taxable First Tier-MMkt,BICS,Other
+Taxable Govt/Agency-MMkt,BICS,Other
+Taxable Treas 100%-MMkt,BICS,Other
+Taxable Treas/Repo-MMkt,BICS,Other
+Tea,BICS,Other
+Technology,BCLASS,Other
+Telecom Carriers,BICS,Other
+Telecom Eq Fiber Optics,BICS,Other
+Telecommunication Equip,BICS,Other
+Telecommunications Equipment,ICB,Other
+Telecom Services,BICS,Other
+Telephone,BCLASS,Other
+Telephone-Integrated,BICS,Other
+Television,BICS,Other
+Textile-Apparel,BICS,Other
+Textile-Home Furnishings,BICS,Other
+Textile-Products,BICS,Other
+Textiles,BCLASS,Other
+Theaters,BICS,Other
+Therapeutics,BICS,Other
+Tires,ICB,Other
+Tobacco,ICB,Other
+"Toll Roads, Streets, and Highways",BCLASS,Other
+Tools-Hand Held,BICS,Other
+Toys,ICB,Other
+Traffic Management Sys,BICS,Other
+Transactional Software,BICS,Other
+Transit Services,BICS,Other
+Transport-Air Freight,BICS,Aviation
+Transportation & Logistics,BICS,Other
+Transportation Services,ICB,Other
+Transport-Equip&Leasng,BICS,Other
+Transport-Marine,BICS,Shipping
+Transport-Rail,BICS,Other
+Transport-Services,BICS,Other
+Transport-Truck,BICS,Other
+Travel & Lodging,BICS,Other
+Travel Services,BICS,Other
+Travel & Tourism,ICB,Other
+Treasury,BCLASS,Other
+Trucking,ICB,Other
+Trucking&Leasing,BICS,Other
+Ultra Sound Imaging Sys,BICS,Other
+Unclassified,BICS,Other
+Undefined Equity,BICS,Other
+Unknown,BCLASS,Other
+Unsecured Airlines,BCLASS,Other
+US Municipals,BICS,Other
+Utilities,BICS,Other
+Value,BICS,Other
+Value-Large Cap,BICS,Other
+Value-Mid Cap,BICS,Other
+Value-Small Cap,BICS,Other
+Various Assets,BICS,Other
+Venture Capital,BICS,Other
+Veterans,BCLASS,Other
+Veterinary Diagnostics,BICS,Other
+Veterinary Products,BICS,Other
+Virtual Reality Products,BICS,Other
+Vitamins&Nutrition Prod,BICS,Other
+Waste & Disposal Services,ICB,Other
+Waste & Environment Services & Equipment,BICS,Other
+Water,ICB,Other
+Water and Sewer,BCLASS,Other
+Water & Sewer,BCLASS,Other
+Water Treatment Systems,BICS,Other
+Web Hosting/Design,BICS,Other
+Web Portals/ISP,BICS,Other
+Whole Business,BCLASS,Other
+Whsing&Harbor Trans Serv,BICS,Other
+Winding Up Agencies,BICS,Other
+Winding-up Agency,BICS,Other
+Wire&Cable Products,BICS,Other
+Wireless,BCLASS,Other
+Wireless Equipment,BICS,Other
+Wireless Telecommunications Services,BICS,Other
+Wirelines,BCLASS,Other
+Wireline Telecommunications Services,BICS,Other
+WL Collat CMO IO,BICS,Other
+WL Collat CMO Mezzanine,BICS,Other
+WL Collat CMO Other,BICS,Other
+WL Collat CMO PO,BICS,Other
+WL Collat CMO Sequential,BICS,Other
+WL Collat CMO Subordinat,BICS,Other
+WL Collat CMO TAC,BICS,Other
+WL Collat PAC,BICS,Other
+WL Collat PAC IO,BICS,Other
+WL Collat PAC Support,BICS,Other
+WL Collat PAC Z,BICS,Other
+WL Collat Support,BICS,Other
+WL Collat Support PO,BICS,Other
+WL Collat Support Z,BICS,Other
+Wool,BICS,Other
+Workers Comp/Injury Serv,BICS,Other
+Wound/Burn & Skin Care,BICS,Other
+X24,BCLASS,Other
+X28,BCLASS,Other
+X29,BCLASS,Other
+X34,BCLASS,Other
+X38,BCLASS,Other
+X42,BCLASS,Other
+X-Ray Equipment,BICS,Other
+Pipelines,BICS,Other
+Gold Mining,BICS,Other
+Forestry,BICS,Other
+Water,BICS,Other
+Reinsurance,BICS,Other
+Coal,BICS,Coal
+Airlines,BICS,Aviation
+Tobacco,BICS,Other
+Computer Services,BICS,Other
+Insurance Brokers,BICS,Other
+Toys,BICS,Other
+UMBS Single Family 30yr,BICS,Other
+UMBS Single Family 20yr,BICS,Other
+GNMA Buydown,BICS,Other
+Country Fund-Belgium,BICS,Other
+Region Fund-G8 Countries,BICS,Other
+Region Fund-Oceania,BICS,Other
+NA,BICS,Other
+Eq Directional Long Bias,BICS,Other
+Emerg Mkt Eqty,BICS,Other
+Region Fund-Middle East,BICS,Other
+Country Fund-Denmark,BICS,Other
+Gaming & Entertainment,BICS,Other
+UMBS Single Family 15yr,BICS,Other
+UMBS Other,BICS,Other
+Event Driven-Distressed,BICS,Other
+FI Rel Val-Convertible A,BICS,Other
+Emerg Mkt Debt,BICS,Other
+Eq Statistical Arb,BICS,Other
+Ast Alloc/Islamic,BICS,Other
+Debt/Islamic,BICS,Other
+WL Collat CMO Residual,BICS,Other
+Other Mortgage Security,BICS,Other
