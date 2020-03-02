@@ -29,15 +29,15 @@ source("0_reporting_functions.R", encoding = "windows-1252")
 source("0_portfolio_input_check_functions.R", encoding = "windows-1252")
 source("0_global_functions.R", encoding = "windows-1252")
 
-project_name <- "SFC_2019"
-twodii_internal <- TRUE
+project_name <- "PACTA_Test1"
+twodii_internal <- FALSE
 # TRUE or FALSE: TRUE means that the code is running on a 2dii laptop with dropbox connection
 
 #####################################################################
 ###ONLY FOR EXTERNAL PROJECTS (twodii_internal <- FALSE):
 # Variables must exist for internal projects
-project_location_ext <- "C:/Users/clare/Desktop/ExternalTest"
-data_location_ext <- "C:/Users/clare/Desktop/ExternalTest/Inputs"
+project_location_ext <- "C:/WS/PACTA/ExternalTest/Inputs"
+data_location_ext <- "C:/WS/PACTA/Data/02_DataExchange200225/07_AnalysisInputs/2019Q4_250220"
 #####################################################################
 
 create_project_folder(project_name, twodii_internal, project_location_ext)

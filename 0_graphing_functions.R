@@ -98,19 +98,19 @@ set_initial_variables <- function(){
 
 define_peers <- function(){
   
-  eq_peers <<- read_rds(paste0(portcheck_v2_path, "/10_Projects/",project_name,"/40_Results/Equity_results_portfolio.rda")) %>% 
+  eq_peers <<- read_rds(paste0(project_location_ext,"/",project_name,"/40_Results/Equity_results_portfolio.rda")) %>% 
     filter(investor_name == meta_investor_name)
   
-  cb_peers <<- read_rds(paste0(portcheck_v2_path, "/10_Projects/",project_name,"/40_Results/Bonds_results_portfolio.rda")) %>% 
+  cb_peers <<- read_rds(paste0(project_location_ext,"/",project_name,"/40_Results/Bonds_results_portfolio.rda")) %>% 
     filter(investor_name == meta_investor_name)
   
 }
 
 define_benchmarks <- function(){
   
-  eq_market <<- read_rds(path_dropbox_2dii("PortCheck_v2","10_Projects","TEST_NEW_DATASTORE_MARKETS","40_Results","Fake Index","Equity_results_portfolio.rda"))
+  eq_market <<- read_rds(paste0(data_location_ext,"/Fake_Index/Equity_results_portfolio.rda"))
   
-  cb_market <<- read_rds(path_dropbox_2dii("PortCheck_v2","10_Projects","TEST_NEW_DATASTORE_MARKETS","40_Results","Fake Index","Bonds_results_portfolio.rda"))
+  cb_market <<- read_rds(paste0(data_location_ext,"/Fake_Index/Bonds_results_portfolio.rda"))
   
 }
 
@@ -144,7 +144,7 @@ results_call <- function(){
     
     EQportmap <<- EQportmap
     
-    EQTechData <<- read_rds(paste0(analysis_inputs_path, "masterdata_ownership_datastore_technology_type_view.rda"))
+    EQTechData <<- read_rds(paste0(analysis_inputs_path, "/masterdata_ownership_datastore_technology_type_view.rda"))
     
     EQOilShareData <<- EQTechData %>% select(id, ald_sector,technology, technology_type, year, ald_production, ald_production_unit) %>% 
       filter(year %in% seq(start_year,start_year+5,1),
@@ -168,7 +168,7 @@ results_call <- function(){
       
     }
     
-    CBTechData <<- read_rds(paste0(analysis_inputs_path, "masterdata_debt_datastore_technology_type_view.rda"))
+    CBTechData <<- read_rds(paste0(analysis_inputs_path, "/masterdata_debt_datastore_technology_type_view.rda"))
     
     CBOilShareData <<- CBTechData %>% select(id, ald_sector,technology, technology_type, year, ald_production, ald_production_unit) %>% 
       filter(year %in% seq(start_year,start_year+5,1),

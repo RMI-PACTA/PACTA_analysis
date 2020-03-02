@@ -199,6 +199,9 @@ for (i in 1:length(all_investors)){
 }
 
 saveRDS(all_results_cb,paste0(results_path,"/Bonds_results_portfolio.rda"))
+write.csv(all_results_cb,paste0(results_path,"/Bonds_results_portfolio.csv"))
+
 saveRDS(all_results_eq,paste0(results_path,"/Equity_results_portfolio.rda"))
+write.csv(all_results_eq,paste0(results_path,"/Equity_results_portfolio.csv"))
 
 
