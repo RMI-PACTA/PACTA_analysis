@@ -29,7 +29,7 @@ source("0_reporting_functions.R", encoding = "windows-1252")
 source("0_portfolio_input_check_functions.R", encoding = "windows-1252")
 source("0_global_functions.R", encoding = "windows-1252")
 
-project_name <- "PACTA_Test1"
+project_name <- "PACTA_Test3"
 twodii_internal <- FALSE
 # TRUE or FALSE: TRUE means that the code is running on a 2dii laptop with dropbox connection
 
