@@ -3,7 +3,6 @@ default:
   GroupingVariables: 
     - investor_name
     - portfolio_name
-    - country_group
 
   Methodology:
     HasMAP: TRUE
@@ -12,20 +11,20 @@ default:
     
   TimeStamps:
     # setting the dates of the data-input for financial and asset-level data: this identifies the input files
-    FinancialData.Timestamp: 2018Q4
-    ALD.Timestamp: 201812
-    DataStore.Export: 05142019
-    DataPrep.Timestamp: May2019_RefYear2019
+    FinancialData.Timestamp: 2019Q4
+    ALD.Timestamp: 2019Q4
+    DataStore.Export: 240220
+    DataPrep.Timestamp: 2019Q4_250220
   
   AnalysisPeriod:
     # setting the period of time for the analysis: by setting the starting year and the time-horizon 
     Years.Horizon: 5
-    Years.Startyear: 2019
+    Years.Startyear: 2020
   
   ComparisonBenchmarks:
-    CreateMetaPortfolio: FALSE
+    CreateMetaPortfolio: TRUE
     MetaPortfolioName: Meta Portfolio
-    MetaInvestorName: Meta Portfolio
+    MetaInvestorName: Meta Investor
 
   Large.Universe.Filter:
     FINANCIAL.INSTRUMENT.FILTER:
