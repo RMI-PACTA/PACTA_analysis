@@ -164,8 +164,8 @@ if (file.exists(bonds_inputs_file)){
 all_investors <- list.dirs(results_path)
 all_investors <- basename(all_investors)[-1]
 
-all_results_cb <- NA
-all_results_eq <- NA
+all_results_cb <- "NA"
+all_results_eq <- "NA"
 
 
 
@@ -178,7 +178,7 @@ for (i in 1:length(all_investors)){
     
     results_eq <- as.data.frame(read_rds(paste0(results_path_investor,"/Equity_results_portfolio.rda")))
     
-    if (!is.na(all_results_eq)){
+    if (is.data.frame(all_results_eq)){
       all_results_eq <- rbind(all_results_eq, results_eq)
     }else{
       all_results_eq <- results_eq
@@ -190,7 +190,7 @@ for (i in 1:length(all_investors)){
     
     results_cb <- read_rds(paste0(results_path_investor,"Bonds_results_portfolio.rda"))
     
-    if (!is.na(all_results_cb)){
+    if (is.data.frame(all_results_cb)){
       all_results_cb <- rbind(all_results_cb, results_cb)
     }else{
       all_results_cb <- results_cb
@@ -199,6 +199,9 @@ for (i in 1:length(all_investors)){
 }
 
 saveRDS(all_results_cb,paste0(results_path,"/Bonds_results_portfolio.rda"))
+write.csv(all_results_cb,paste0(results_path,"/Bonds_results_portfolio.csv"))
+
 saveRDS(all_results_eq,paste0(results_path,"/Equity_results_portfolio.rda"))
+write.csv(all_results_eq,paste0(results_path,"/Equity_results_portfolio.csv"))
 
 
