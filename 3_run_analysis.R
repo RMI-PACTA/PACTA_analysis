@@ -176,13 +176,14 @@ if (file.exists(bonds_inputs_file)){
 #####################
 
 
+
 ### TODO: Move function to function script in case it suits our needs @Clare, can you check this?
 # Number of Portfolios per file could be set in the parameter file in the 'data_output' section
 gather_and_save_project_results <- function(results_folder_path = results_path, aggregation_level = "portfolio", portfolios_per_file = 500, year_filter = NA, allocation_filter = NA){
   
   all_investors <- list.dirs(results_folder_path)
   all_investors <- basename(all_investors)[-1]
-  
+
   k <- 1
   j <- 1
   
@@ -191,6 +192,7 @@ gather_and_save_project_results <- function(results_folder_path = results_path, 
     investor_name_select <- all_investors[i]
     print(investor_name_select)
     
+
     results_path_investor <- paste0(results_path,"/",investor_name_select,"/")
     
     if(file.exists(paste0(results_path_investor,"/Equity_results_",aggregation_level,".rda"))){
@@ -234,6 +236,7 @@ gather_and_save_project_results <- function(results_folder_path = results_path, 
     }
     
     
+
     if (j==portfolios_per_file){
       if(exists("all_results_cb")){
         saveRDS(all_results_cb,paste0(results_path,"/Bonds_results_",aggregation_level,"_",k,".rda"))
@@ -243,6 +246,7 @@ gather_and_save_project_results <- function(results_folder_path = results_path, 
         rm(all_results_eq)}
       j = 1
       k = k + 1
+
     }else{
       j = j + 1
     }
@@ -256,7 +260,9 @@ gather_and_save_project_results <- function(results_folder_path = results_path, 
 } 
 
 
+
 gather_and_save_project_results(results_path, aggregation_level = "portfolio")
 gather_and_save_project_results(results_path, aggregation_level = "company", year_filter = c(START.YEAR(),START.YEAR()+5), allocation_filter = "portfolio_weight", portfolios_per_file = 250)
+
 
 

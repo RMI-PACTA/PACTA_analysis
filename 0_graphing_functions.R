@@ -175,232 +175,20 @@ get_report_list <- function(Ports.Overview){
 
 define_peers <- function(){
   
-  
-  # If there is no project specific peer group - the funds files are called. 
-  if (grepl("Fund",PeerGroupSelection)){
-    PEER.LOC <- paste0(DROPBOX.PATH,"PortCheck_v2/10_Projects/0_FundPortfolios/40_Results/")
-    EQPeers <<- readRDS(paste0(PEER.LOC,"EquityIndicies/EquityIndicies_Equity_results_portfolio.rda"))
-    CBPeers <<- readRDS(paste0(PEER.LOC,"BondIndicies/BondIndicies_Bonds-PortInput-Port.rda"))
-    
-    if (IncRanking == T){
-      EQPeersSep <- readRDS(paste0(Location,"ReferenceData/Equity-PeerComparison-Port.rda"))
-      EQPeersSep$scenario_geography <- ifelse(EQPeersSep$ald_sector == "Power","GlobalAggregate", EQPeersSep$scenario_geography)
-      EQPeersSep <<- EQPeersSep
-      CBPeersSep <- readRDS(paste0(Location,"ReferenceData/Bonds-PeerComparison-Port.rda"))
-      CBPeersSep$scenario_geography <- ifelse(CBPeersSep$ald_sector == "Power","GlobalAggregate", CBPeersSep$scenario_geography)
-      CBPeersSep <<- CBPeersSep
-    }
-    ##############################
-    # I think this is a fine solution. This is something that could be set up simply for each project if required. 
-    ##############################
-  } else if(project_name == "BlackRock") {
-    CBPeers <<- readRDS(paste0(results_path, "/","BlackRock_BondsPeerComparisonAggregated-Port.rda"))
-    if (IncRanking == T){
-      CBPeersSep <<- read.csv(paste0(results_path, "/","BlackRock_BondsPeerComparisonIndividual-Port.csv"),strip.white = T,stringsAsFactors = F)
-    }
-    ##############################
-  }else if (project_name %in% c("WWF","WWFPeers","WWF2017")){
-    PortfolioList <- Report.List[Report.List$Type %in% c("Portfolio","InvestorSingle"),]
-    InvestorList <- Report.List[Report.List$Type %in% c("InvestorMeta","InvestorSingle"),]    
-    
-    # to call the same comparison files just use the original WWF project set up 
-    RESULTS.PATH <- gsub("Peers","",RESULTS.PATH)
-    RESULTS.PATH <- gsub("2017","",RESULTS.PATH)
-    
-    EQPeers <<- readRDS(paste0(results_path, "/","WWFAGG_Equity_results_portfolio.rda"))
-    CBPeers <<- readRDS(paste0(results_path, "/","WWFAGG_Bonds-PortInput-Port.rda"))    
-    
-    if (IncRanking == T){
-      EQPeersSep <<- readRDS(paste0(results_path, "/","WWF_Equity_results_portfolio.rda"))
-      CBPeersSep <<- readRDS(paste0(results_path, "/","WWF_Bonds-PortInput-Port.rda"))
-      
-      if (InvestorType %in% c("InvestorMeta","InvestorSingle")){
-        EQPeersSep <<- EQPeersSep[EQPeersSep$investor_name %in% InvestorList$investor_name & EQPeersSep$portfolio_name %in% InvestorList$portfolio_name,]
-        CBPeersSep <<- CBPeersSep[CBPeersSep$investor_name %in% InvestorList$investor_name & CBPeersSep$portfolio_name %in% InvestorList$portfolio_name,]
-      }else if(InvestorType  %in% c("Portfolio")){   
-        EQPeersSep <<- EQPeersSep[EQPeersSep$investor_name %in% PortfolioList$investor_name & EQPeersSep$portfolio_name %in% PortfolioList$portfolio_name,]
-        CBPeersSep <<- CBPeersSep[CBPeersSep$investor_name %in% PortfolioList$investor_name & CBPeersSep$portfolio_name %in% PortfolioList$portfolio_name,] 
-        
-      }
-      
-    }
-  }else if(project_name=="CDI2017-Sep"){
-    
-    CBPeers <<- readRDS(paste0(results_path, "/","California Insurers/California Insurers_Bonds-PortInput-Port.rda"))
-    EQPeers <<- readRDS(paste0(results_path, "/","California Insurers/California Insurers_Equity_results_portfolio.rda"))
-    
-    if (IncRanking == T){
-      CBPeersSep <- readRDS(paste0(results_path, "/",project_name,"_Bonds-PortInput-Port.rda"))%>%
-        filter(portfolio_name !="Portfolio")  
-      # CBPeersSep$scenario_geography <-  ifelse(CBPeersSep$ald_sector == "Power","GlobalAggregate","Global")
-      CBPeersSep <<- CBPeersSep
-      EQPeersSep <- readRDS(paste0(results_path, "/",project_name,"_Equity_results_portfolio.rda"))%>%
-        filter(portfolio_name !="Portfolio")
-      # EQPeersSep$scenario_geography <-  ifelse(EQPeersSep$ald_sector == "Power","GlobalAggregate","Global")
-      EQPeersSep <<- EQPeersSep
-    }
-    
-    
-  }else if(grepl("FASECOLDA",project_name)){
-    
-    if(EQPeersRef == "Project"){
-      EQPeers <<- readRDS(paste0(results_path, "/",project_name,"_Equity_results_portfolio.rda")) %>% filter(investor_name == "Meta Portfolio")
-      EQPeersSep <<- readRDS(paste0(results_path, "/",project_name,"_Equity_results_portfolio.rda")) %>% filter(investor_name != "Meta Portfolio")
-    }else{
-      EQPeers <<- readRDS(paste0(PORTV2.PATH,"FASECOLDA_BENCHMARKS/40_Results/FASECOLDA_BENCHMARKS_Equity_results_portfolio.rda"))%>% filter(investor_name == EQPeersRef)
-      if (nrow(EQPeers) == 0){print("No EQ Peers")}
-      # EQPeersSep <<- readRDS(paste0(PORTV2.PATH,"FASECOLDA_BENCHMARKS/40_Results/",EQPeersRef,"/",EQPeersRef,"_Equity_results_portfolio.rda"))%>% filter(investor_name == EQPeersRef)
-      
-      
-    }
-    
-    if(CBPeersRef == "Project"){
-      CBPeers <<- readRDS(paste0(results_path, "/",project_name,"_Bonds-PortInput-Port.rda")) %>% filter(investor_name == "Meta Portfolio")
-      CBPeersSep <<- readRDS(paste0(results_path, "/",project_name,"_Bonds-PortInput-Port.rda")) %>% filter(investor_name != "Meta Portfolio")
-    }else {
-      
-      CBPeers <<- readRDS(paste0(PORTV2.PATH,"FASECOLDA_BENCHMARKS/40_Results/FASECOLDA_BENCHMARKS_Bonds-PortInput-Port.rda")) %>% filter(investor_name == CBPeersRef)
-      if (nrow(CBPeers) == 0){print("No Bond Peers")}
-      
-      
-    }
-    
-    
-    
-    
-  }else {
-    
-    
-    if(CBPeersRef == "Project"){
-      CBPeers <<- readRDS(paste0(results_path, "/",project_name,"_Bonds-PortInput-Port.rda")) %>% filter(investor_name == "Meta Portfolio")
-      CBPeersSep <<- readRDS(paste0(results_path, "/",project_name,"_Bonds-PortInput-Port.rda")) %>% filter(investor_name != "Meta Portfolio")
-      
-    }else {
-      CBPeers <<- readRDS(paste0(results_path, "/",project_name,"_Bonds-PortInput-Port.rda"))
-    }
-    
-    if(EQPeersRef == "Project"){
-      EQPeers <<- readRDS(paste0(results_path, "/",project_name,"_Equity_results_portfolio.rda")) %>% filter(investor_name == "Meta Portfolio")
-      EQPeersSep <<- readRDS(paste0(results_path, "/",project_name,"_Equity_results_portfolio.rda")) %>% filter(investor_name != "Meta Portfolio")
-    }else{
-      EQPeers <<- readRDS(paste0(results_path, "/",project_name,"_Equity_results_portfolio.rda"))
-    }
-    
-    
-    
-    if (IncRanking == T){
-      InvestorList <- Report.List[Report.List$Type %in% c("InvestorMeta","InvestorSingle"),] 
-      PortfolioList <- Report.List[Report.List$Type %in% c("Portfolio"),] 
-      
-      if (InvestorType %in% c("InvestorMeta","InvestorSingle")){
-        EQPeersSep <<- EQPeers[EQPeers$investor_name %in% InvestorList$investor_name & EQPeers$portfolio_name %in% InvestorList$portfolio_name,]
-        CBPeersSep <<- CBPeers[CBPeers$investor_name %in% InvestorList$investor_name & CBPeers$portfolio_name %in% InvestorList$portfolio_name,]
-        if (HasBV){BVPeersSep <<- BVPeers[BVPeers$investor_name %in% InvestorList$investor_name & BVPeers$portfolio_name %in% InvestorList$portfolio_name,]}
-        
-      }else if(InvestorType  %in% c("Portfolio")){   
-        EQPeersSep <<- EQPeers[EQPeers$investor_name %in% PortfolioList$investor_name & EQPeers$portfolio_name %in% PortfolioList$portfolio_name,]
-        CBPeersSep <<- CBPeers[CBPeers$investor_name %in% PortfolioList$investor_name & CBPeers$portfolio_name %in% PortfolioList$portfolio_name,] 
-        if (HasBV){BVPeersSep <<- BVPeers[BVPeers$investor_name %in% PortfolioList$investor_name & BVPeers$portfolio_name %in% PortfolioList$portfolio_name,]}
-      }
-      
-      CBPeers <<- CBPeers[CBPeers$investor_name == META.INVESTOR.NAME,]
-      EQPeers <<- EQPeers[EQPeers$investor_name == META.INVESTOR.NAME,]
-      CBPeersSep <<- CBPeersSep[CBPeersSep$investor_name != META.INVESTOR.NAME,]
-      EQPeersSep <<- EQPeersSep[EQPeersSep$investor_name != META.INVESTOR.NAME,]
-      
-      if (HasBV){BVPeers <<- BVPeers[BVPeers$investor_name == META.INVESTOR.NAME,]}
-    }
-    
-  }
-}
 
-define_benchmarks_new <- function(){
-  EQMarket <<- read_rds(path_dropbox_2dii("PortCheck_v2","10_Projects","TEST_NEW_DATASTORE_MARKETS","40_Results","Fake Index","Equity_results_portfolio.rda"))
-  CBMarket <<- read_rds(path_dropbox_2dii("PortCheck_v2","10_Projects","TEST_NEW_DATASTORE_MARKETS","40_Results","Fake Index","Bonds_results_portfolio.rda"))
+  eq_peers <<- read_rds(paste0(project_location_ext,"/",project_name,"/40_Results/Equity_results_portfolio.rda")) %>% 
+    filter(investor_name == meta_investor_name)
   
-  
+  cb_peers <<- read_rds(paste0(project_location_ext,"/",project_name,"/40_Results/Bonds_results_portfolio.rda")) %>% 
+    filter(investor_name == meta_investor_name)
+
 }
 
 define_benchmarks <- function(){
+
+  eq_market <<- read_rds(paste0(data_location_ext,"/Fake_Index/Equity_results_portfolio.rda"))
   
-  if(RefMarketData == TRUE){
-    
-    EQMarket <- readRDS(paste0(INDEX.RESULTS.DATA.PATH, "Indices_",financial_timestamp,"/Indices_",financial_timestamp,"_Equity_results_portfolio.rda"))
-    EQMarket2 <- readRDS(paste0(analysis_inputs_path,"Equity-Market-Port.rda"))
-    EQMarket <- rbind(EQMarket,EQMarket2)
-    
-    EQMarket <- EQMarket %>% filter(portfolio_name == EQMarketRef)
-    if(data_check(EQMarket) == FALSE){print("No Equity market selected")}
-    
-    
-    CBMarket <- readRDS(paste0(DROPBOX.PATH,"PortCheck_v2/10_Projects/0_MarketPortfolios/40_Results/Market2018Q4/Market2018Q4_Bonds-PortInput-Port.rda"))
-    
-    CBMarket <- CBMarket %>% filter(portfolio_name == CBMarketRef)
-    if(data_check(CBMarket) == FALSE){print("No Debt market selected")}
-    
-    # IndicesComps <- readRDS(paste0(INDEX.RESULTS.DATA.PATH, "Indices_2018Q4/Indices_2018Q4_Equity_results_company.rda"))
-    
-  }else if(grepl("FASECOLDA",project_name)|project_name == "AMIB"|project_name == "SFC"){
-    
-    CBMarket <<- readRDS(paste0(PORTV2.PATH, "FASECOLDA_BENCHMARKS/40_Results/FASECOLDA_BENCHMARKS_Bonds-PortInput-Port.rda")) %>%
-      mutate(portfolio_name = if_else(portfolio_name == "CBIndex","FPCOIPCC10Y de PiP",portfolio_name),
-             investor_name = if_else(investor_name == "CBIndex","FPCOIPCC10Y de PiP",investor_name)
-      ) %>%
-      filter(portfolio_name == CBMarketRef)
-    
-    if(grepl("ACWI",EQMarketRef)){  
-      
-      # EQMarket <<- readRDS(paste0(INDEX.RESULTS.DATA.PATH, "Indices_",financial_timestamp,"/Indices_",financial_timestamp,"_Equity_results_portfolio.rda"))
-      EQMarket <<- readRDS(paste0(analysis_inputs_path, "Equity-Indices-Port.rda"))
-      
-      if(EQMarketRef == "iShares MSCI ACWI ETF"){
-        if(!"iShares MSCI ACWI ETF" %in% unique(EQMarket$portfolio_name)){ EQMarketRef <<- "MSCI ACWI"}
-      }
-      
-      EQMarket <<- EQMarket %>%
-        filter(portfolio_name == EQMarketRef,
-               investor_name == "Indices_2018Q4")
-      
-      
-      
-    } else{
-      EQMarket <<- readRDS(paste0(PORTV2.PATH, "FASECOLDA_BENCHMARKS/40_Results/FASECOLDA_BENCHMARKS_Equity_results_portfolio.rda")) %>%
-        filter(investor_name != "Meta Portfolio",
-               portfolio_name == EQMarketRef)
-    }
-    
-    if(data_check(EQMarket) == FALSE){print("CHECK EQ MARKET in DefineBenchmarket()")}
-    if(data_check(CBMarket) == FALSE){print("CHECK CB MARKET in DefineBenchmarket()")}
-    
-  }else {
-    if(has_equity == TRUE){
-      EQMarket <- readRDS(paste0(results_path, "/",project_name,"/Equity-Market-Port.rda"))
-    }else if (has_debt ==TRUE){
-      CBMarket <- readRDS(paste0(results_path, "/",project_name,"/Bond-Market-Port.rda"))
-    }
-  }
-  
-  EQMarket <- EQMarket %>% mutate(equity_market = gsub("Market","",equity_market))
-  
-  
-  EQMarket.GA <- EQMarket %>% 
-    filter(ald_sector == "Power", year == "2019", portfolio_name == "MSCI World", 
-           equity_market == "Global", scenario_geography == "Global", 
-           scenario == Scenariochoose,
-           allocation == "portfolio_weight") %>% 
-    select(ald_sector, technology,year, portfolio_name, investor_name,equity_market,scenario, scenario_geography,  allocation,plan_carsten) %>% 
-    mutate(scenario_geography = "GlobalAggregate")
-  
-  EQMarket <- merge(EQMarket, EQMarket.GA, by = c("ald_sector", "technology","year", "portfolio_name", "investor_name","equity_market", "scenario","scenario_geography", "allocation"), all.x =T)
-  
-  EQMarket <- EQMarket %>% mutate(
-    plan_carsten.x = if_else(!is.na(plan_carsten.y), plan_carsten.y, plan_carsten.x)
-  ) %>% 
-    rename(plan_carsten = plan_carsten.x) %>% 
-    select(-plan_carsten.y)
-  
-  EQMarket <<- EQMarket
-  CBMarket <<- CBMarket  
+  cb_market <<- read_rds(paste0(data_location_ext,"/Fake_Index/Bonds_results_portfolio.rda"))
 }
 
 results_call <- function(){
@@ -438,6 +226,15 @@ results_call <- function(){
     
     EQportmap <<- EQportmap
     
+
+    EQTechData <<- read_rds(paste0(analysis_inputs_path, "/masterdata_ownership_datastore_technology_type_view.rda"))
+    
+    EQOilShareData <<- EQTechData %>% select(id, ald_sector,technology, technology_type, year, ald_production, ald_production_unit) %>% 
+      filter(year %in% seq(start_year,start_year+5,1),
+             ald_sector == "Oil&Gas") %>% 
+      mutate(technology = if_else(technology == "Oil and Condensate", "Oil", technology))
+    
+
     # EQOilShareData <<- readRDS(paste0(analysis_inputs_path, "oil_and_gas_resource_type_rollup_ownership.rda"))
     # EQOilShareData <<- readRDS(paste0(Location, "ReferenceData/oil_and_gas_resource_type_rollup_ownership.rda"))
   }
@@ -455,11 +252,15 @@ results_call <- function(){
       
     }
     
-    if(has_risk){
-      CBPhysicalRisk <<- readRDS(paste0(results_path, "/",investor_name_select,"/",investor_name_select,"_Bonds-PortInput-Physical-Risk.rda")) 
-      CBPhysicalRisk <<- CBPhysicalRisk[CBPhysicalRisk$portfolio_name == portfolio_name_select,]
-      if(data_check(CBPhysicalRisk)){CBPhysicalRiskAgg <<- PrepPhysicalRiskData("CB",CBPhysicalRisk)}
-    }
+
+    #if(has_risk){
+    #  CBPhysicalRisk <<- readRDS(paste0(results_path, "/",investor_name_select,"/",investor_name_select,"_Bonds-PortInput-Physical-Risk.rda")) 
+    #  CBPhysicalRisk <<- CBPhysicalRisk[CBPhysicalRisk$portfolio_name == portfolio_name_select,]
+    #  if(data_check(CBPhysicalRisk)){CBPhysicalRiskAgg <<- PrepPhysicalRiskData("CB",CBPhysicalRisk)}
+    #}
+
+    CBTechData <<- read_rds(paste0(analysis_inputs_path, "/masterdata_debt_datastore_technology_type_view.rda"))
+
     
     
     # CBOilShareData <<- readRDS(paste0(analysis_inputs_path, "oil_and_gas_resource_type_rollup_debt.rda")) %>%

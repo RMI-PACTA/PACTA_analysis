@@ -16,7 +16,7 @@ if (rstudioapi::isAvailable()) {
   working_location <- getwd()
 }
 
-working_location <- gsub("Â","",working_location)
+working_location <- gsub("Ã‚","",working_location)
 working_location <- paste0(working_location, "/")
 setwd(working_location)
 
@@ -29,15 +29,16 @@ source("0_portfolio_input_check_functions.R", encoding = "windows-1252")
 source("0_global_functions.R", encoding = "windows-1252")
 
 
-project_name <- "NKI_Funds_beta_website"
-twodii_internal <- TRUE
+project_name <- "PROJEKTNAME"
+twodii_internal <- FALSE
+
 # TRUE or FALSE: TRUE means that the code is running on a 2dii laptop with dropbox connection
 
 #####################################################################
 ###ONLY FOR EXTERNAL PROJECTS (twodii_internal <- FALSE):
 # Variables must exist for internal projects
-project_location_ext <- "C:/Users/clare/Desktop/ExternalTest"
-data_location_ext <- "C:/Users/clare/Desktop/ExternalTest/Inputs"
+project_location_ext <- "C:/WS/PACTA/ExternalTest/Inputs"
+data_location_ext <- "C:/WS/PACTA/Data/02_DataExchange200225/07_AnalysisInputs/2019Q4_250220"
 #####################################################################
 
 create_project_folder(project_name, twodii_internal, project_location_ext)
