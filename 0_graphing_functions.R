@@ -48,15 +48,25 @@ set_initial_variables <- function(){
   
   EQCombin <<- NA
   CBCombin <<- NA
+  BVCombin <<- NA
   
   EQCompProdSnapshot <<- NA
   CBCompProdSnapshot <<- NA
+  BVCompProdSnapshot <<- NA  
+  
+  EQPhysicalRisk <<- NA
+  CBPhysicalRisk <<- NA 
+  BVPhysicalRisk <<- NA
+  
+  PhysicalRisk <<- NA
   
   EQportmap <<- NA
   CBportmap <<- NA
+  BVportmap <<-NA
   
-  eq_market <<- NA
-  cb_market <<- NA
+  EQMarket <<- NA
+  CBMarket <<- NA
+  BVMarket <<- NA
   
   has_equity <<- FALSE
   has_debt <<- FALSE
@@ -73,9 +83,11 @@ set_initial_variables <- function(){
   
   HasRenCapCB <<- F
   HasRenCapEQ <<- F
+  HasRenCapBV <<- F
   
   HasCoalCapCB <<- F
   HasCoalCapEQ <<- F
+  HasCoalCapBV <<- F
   
   HasPower <<- FALSE
   HasAuto <<- FALSE
@@ -87,6 +99,11 @@ set_initial_variables <- function(){
   HasOGCB <<- FALSE
   HasCoalCB <<- FALSE
   
+  HasAutoBV <<- FALSE
+  HasCoalBV <<- FALSE
+  HasOGBV <<- FALSE
+  HasPowerBV <<- FALSE
+  
   HasPowerEQ <<- FALSE
   HasAutoEQ <<- FALSE
   HasOGEQ <<- FALSE
@@ -96,22 +113,294 @@ set_initial_variables <- function(){
   
 }
 
+data_check <- function(df){
+  
+  if (is.data.frame(df)){
+    if(nrow(df) > 0){
+      DCheck <- TRUE
+    }else{
+      DCheck <- FALSE
+    }
+  }else{
+    DCheck <- FALSE
+  }
+  
+  return(DCheck)  
+}
+
+set_report_parameters <- function(ParameterFilePath){
+  
+  report_cfg <- config::get(file = ParameterFilePath)
+  
+  Contents <- as_tibble(report_cfg$Contents)
+  for (x in 1:length(Contents)){  
+    assign(colnames(Contents)[x], Contents[[x]], envir = .GlobalEnv)
+  } 
+  
+  
+  ParameterFile <<- as_tibble(report_cfg$Naming)
+  for (x in 1:length(ParameterFile)){  
+    assign(colnames(ParameterFile)[x], ParameterFile[[x]], envir = .GlobalEnv)
+  } 
+  
+  Benchmarks <- as_tibble(report_cfg$Benchmarks)
+  for (x in 1:length(Benchmarks)){  
+    assign(colnames(Benchmarks)[x], Benchmarks[[x]], envir = .GlobalEnv)
+  } 
+  
+  start_year <<- as.numeric(Startyear)
+  no_companies <<- as.numeric(No.Companies)
+  
+  AccountingPrinciple <<- if_else(AccountingPrinciple == "PortfolioWeight","portfolio_weight",AccountingPrinciple)
+  AccountingPrinciple <<- if_else(AccountingPrinciple == "Ownership","ownership_weight",AccountingPrinciple)  
+}
+
+get_report_list <- function(Ports.Overview){
+  
+  port.list <- Ports.Overview %>%
+    select(investor_name,portfolio_name) %>%
+    unique()
+  
+  port.list <- port.list %>%
+    select(investor_name, portfolio_name) %>%
+    group_by(investor_name) %>%
+    mutate(count = n() ) %>%
+    unique()
+  
+  port.list$Type <- ifelse(port.list$count > 1,"Portfolio","InvestorSingle")  
+  port.list$Type <- ifelse(port.list$investor_name == port.list$portfolio_name, "InvestorMeta",port.list$Type) 
+  
+  return(port.list)
+}
+
 define_peers <- function(){
   
-  eq_peers <<- read_rds(paste0(portcheck_v2_path, "/10_Projects/",project_name,"/40_Results/Equity_results_portfolio.rda")) %>% 
-    filter(investor_name == meta_investor_name)
   
-  cb_peers <<- read_rds(paste0(portcheck_v2_path, "/10_Projects/",project_name,"/40_Results/Bonds_results_portfolio.rda")) %>% 
-    filter(investor_name == meta_investor_name)
+  # If there is no project specific peer group - the funds files are called. 
+  if (grepl("Fund",PeerGroupSelection)){
+    PEER.LOC <- paste0(DROPBOX.PATH,"PortCheck_v2/10_Projects/0_FundPortfolios/40_Results/")
+    EQPeers <<- readRDS(paste0(PEER.LOC,"EquityIndicies/EquityIndicies_Equity_results_portfolio.rda"))
+    CBPeers <<- readRDS(paste0(PEER.LOC,"BondIndicies/BondIndicies_Bonds-PortInput-Port.rda"))
+    
+    if (IncRanking == T){
+      EQPeersSep <- readRDS(paste0(Location,"ReferenceData/Equity-PeerComparison-Port.rda"))
+      EQPeersSep$scenario_geography <- ifelse(EQPeersSep$ald_sector == "Power","GlobalAggregate", EQPeersSep$scenario_geography)
+      EQPeersSep <<- EQPeersSep
+      CBPeersSep <- readRDS(paste0(Location,"ReferenceData/Bonds-PeerComparison-Port.rda"))
+      CBPeersSep$scenario_geography <- ifelse(CBPeersSep$ald_sector == "Power","GlobalAggregate", CBPeersSep$scenario_geography)
+      CBPeersSep <<- CBPeersSep
+    }
+    ##############################
+    # I think this is a fine solution. This is something that could be set up simply for each project if required. 
+    ##############################
+  } else if(project_name == "BlackRock") {
+    CBPeers <<- readRDS(paste0(results_path, "/","BlackRock_BondsPeerComparisonAggregated-Port.rda"))
+    if (IncRanking == T){
+      CBPeersSep <<- read.csv(paste0(results_path, "/","BlackRock_BondsPeerComparisonIndividual-Port.csv"),strip.white = T,stringsAsFactors = F)
+    }
+    ##############################
+  }else if (project_name %in% c("WWF","WWFPeers","WWF2017")){
+    PortfolioList <- Report.List[Report.List$Type %in% c("Portfolio","InvestorSingle"),]
+    InvestorList <- Report.List[Report.List$Type %in% c("InvestorMeta","InvestorSingle"),]    
+    
+    # to call the same comparison files just use the original WWF project set up 
+    RESULTS.PATH <- gsub("Peers","",RESULTS.PATH)
+    RESULTS.PATH <- gsub("2017","",RESULTS.PATH)
+    
+    EQPeers <<- readRDS(paste0(results_path, "/","WWFAGG_Equity_results_portfolio.rda"))
+    CBPeers <<- readRDS(paste0(results_path, "/","WWFAGG_Bonds-PortInput-Port.rda"))    
+    
+    if (IncRanking == T){
+      EQPeersSep <<- readRDS(paste0(results_path, "/","WWF_Equity_results_portfolio.rda"))
+      CBPeersSep <<- readRDS(paste0(results_path, "/","WWF_Bonds-PortInput-Port.rda"))
+      
+      if (InvestorType %in% c("InvestorMeta","InvestorSingle")){
+        EQPeersSep <<- EQPeersSep[EQPeersSep$investor_name %in% InvestorList$investor_name & EQPeersSep$portfolio_name %in% InvestorList$portfolio_name,]
+        CBPeersSep <<- CBPeersSep[CBPeersSep$investor_name %in% InvestorList$investor_name & CBPeersSep$portfolio_name %in% InvestorList$portfolio_name,]
+      }else if(InvestorType  %in% c("Portfolio")){   
+        EQPeersSep <<- EQPeersSep[EQPeersSep$investor_name %in% PortfolioList$investor_name & EQPeersSep$portfolio_name %in% PortfolioList$portfolio_name,]
+        CBPeersSep <<- CBPeersSep[CBPeersSep$investor_name %in% PortfolioList$investor_name & CBPeersSep$portfolio_name %in% PortfolioList$portfolio_name,] 
+        
+      }
+      
+    }
+  }else if(project_name=="CDI2017-Sep"){
+    
+    CBPeers <<- readRDS(paste0(results_path, "/","California Insurers/California Insurers_Bonds-PortInput-Port.rda"))
+    EQPeers <<- readRDS(paste0(results_path, "/","California Insurers/California Insurers_Equity_results_portfolio.rda"))
+    
+    if (IncRanking == T){
+      CBPeersSep <- readRDS(paste0(results_path, "/",project_name,"_Bonds-PortInput-Port.rda"))%>%
+        filter(portfolio_name !="Portfolio")  
+      # CBPeersSep$scenario_geography <-  ifelse(CBPeersSep$ald_sector == "Power","GlobalAggregate","Global")
+      CBPeersSep <<- CBPeersSep
+      EQPeersSep <- readRDS(paste0(results_path, "/",project_name,"_Equity_results_portfolio.rda"))%>%
+        filter(portfolio_name !="Portfolio")
+      # EQPeersSep$scenario_geography <-  ifelse(EQPeersSep$ald_sector == "Power","GlobalAggregate","Global")
+      EQPeersSep <<- EQPeersSep
+    }
+    
+    
+  }else if(grepl("FASECOLDA",project_name)){
+    
+    if(EQPeersRef == "Project"){
+      EQPeers <<- readRDS(paste0(results_path, "/",project_name,"_Equity_results_portfolio.rda")) %>% filter(investor_name == "Meta Portfolio")
+      EQPeersSep <<- readRDS(paste0(results_path, "/",project_name,"_Equity_results_portfolio.rda")) %>% filter(investor_name != "Meta Portfolio")
+    }else{
+      EQPeers <<- readRDS(paste0(PORTV2.PATH,"FASECOLDA_BENCHMARKS/40_Results/FASECOLDA_BENCHMARKS_Equity_results_portfolio.rda"))%>% filter(investor_name == EQPeersRef)
+      if (nrow(EQPeers) == 0){print("No EQ Peers")}
+      # EQPeersSep <<- readRDS(paste0(PORTV2.PATH,"FASECOLDA_BENCHMARKS/40_Results/",EQPeersRef,"/",EQPeersRef,"_Equity_results_portfolio.rda"))%>% filter(investor_name == EQPeersRef)
+      
+      
+    }
+    
+    if(CBPeersRef == "Project"){
+      CBPeers <<- readRDS(paste0(results_path, "/",project_name,"_Bonds-PortInput-Port.rda")) %>% filter(investor_name == "Meta Portfolio")
+      CBPeersSep <<- readRDS(paste0(results_path, "/",project_name,"_Bonds-PortInput-Port.rda")) %>% filter(investor_name != "Meta Portfolio")
+    }else {
+      
+      CBPeers <<- readRDS(paste0(PORTV2.PATH,"FASECOLDA_BENCHMARKS/40_Results/FASECOLDA_BENCHMARKS_Bonds-PortInput-Port.rda")) %>% filter(investor_name == CBPeersRef)
+      if (nrow(CBPeers) == 0){print("No Bond Peers")}
+      
+      
+    }
+    
+    
+    
+    
+  }else {
+    
+    
+    if(CBPeersRef == "Project"){
+      CBPeers <<- readRDS(paste0(results_path, "/",project_name,"_Bonds-PortInput-Port.rda")) %>% filter(investor_name == "Meta Portfolio")
+      CBPeersSep <<- readRDS(paste0(results_path, "/",project_name,"_Bonds-PortInput-Port.rda")) %>% filter(investor_name != "Meta Portfolio")
+      
+    }else {
+      CBPeers <<- readRDS(paste0(results_path, "/",project_name,"_Bonds-PortInput-Port.rda"))
+    }
+    
+    if(EQPeersRef == "Project"){
+      EQPeers <<- readRDS(paste0(results_path, "/",project_name,"_Equity_results_portfolio.rda")) %>% filter(investor_name == "Meta Portfolio")
+      EQPeersSep <<- readRDS(paste0(results_path, "/",project_name,"_Equity_results_portfolio.rda")) %>% filter(investor_name != "Meta Portfolio")
+    }else{
+      EQPeers <<- readRDS(paste0(results_path, "/",project_name,"_Equity_results_portfolio.rda"))
+    }
+    
+    
+    
+    if (IncRanking == T){
+      InvestorList <- Report.List[Report.List$Type %in% c("InvestorMeta","InvestorSingle"),] 
+      PortfolioList <- Report.List[Report.List$Type %in% c("Portfolio"),] 
+      
+      if (InvestorType %in% c("InvestorMeta","InvestorSingle")){
+        EQPeersSep <<- EQPeers[EQPeers$investor_name %in% InvestorList$investor_name & EQPeers$portfolio_name %in% InvestorList$portfolio_name,]
+        CBPeersSep <<- CBPeers[CBPeers$investor_name %in% InvestorList$investor_name & CBPeers$portfolio_name %in% InvestorList$portfolio_name,]
+        if (HasBV){BVPeersSep <<- BVPeers[BVPeers$investor_name %in% InvestorList$investor_name & BVPeers$portfolio_name %in% InvestorList$portfolio_name,]}
+        
+      }else if(InvestorType  %in% c("Portfolio")){   
+        EQPeersSep <<- EQPeers[EQPeers$investor_name %in% PortfolioList$investor_name & EQPeers$portfolio_name %in% PortfolioList$portfolio_name,]
+        CBPeersSep <<- CBPeers[CBPeers$investor_name %in% PortfolioList$investor_name & CBPeers$portfolio_name %in% PortfolioList$portfolio_name,] 
+        if (HasBV){BVPeersSep <<- BVPeers[BVPeers$investor_name %in% PortfolioList$investor_name & BVPeers$portfolio_name %in% PortfolioList$portfolio_name,]}
+      }
+      
+      CBPeers <<- CBPeers[CBPeers$investor_name == META.INVESTOR.NAME,]
+      EQPeers <<- EQPeers[EQPeers$investor_name == META.INVESTOR.NAME,]
+      CBPeersSep <<- CBPeersSep[CBPeersSep$investor_name != META.INVESTOR.NAME,]
+      EQPeersSep <<- EQPeersSep[EQPeersSep$investor_name != META.INVESTOR.NAME,]
+      
+      if (HasBV){BVPeers <<- BVPeers[BVPeers$investor_name == META.INVESTOR.NAME,]}
+    }
+    
+  }
+}
+
+define_benchmarks_new <- function(){
+  EQMarket <<- read_rds(path_dropbox_2dii("PortCheck_v2","10_Projects","TEST_NEW_DATASTORE_MARKETS","40_Results","Fake Index","Equity_results_portfolio.rda"))
+  CBMarket <<- read_rds(path_dropbox_2dii("PortCheck_v2","10_Projects","TEST_NEW_DATASTORE_MARKETS","40_Results","Fake Index","Bonds_results_portfolio.rda"))
+  
   
 }
 
 define_benchmarks <- function(){
   
-  eq_market <<- read_rds(path_dropbox_2dii("PortCheck_v2","10_Projects","TEST_NEW_DATASTORE_MARKETS","40_Results","Fake Index","Equity_results_portfolio.rda"))
+  if(RefMarketData == TRUE){
+    
+    EQMarket <- readRDS(paste0(INDEX.RESULTS.DATA.PATH, "Indices_",financial_timestamp,"/Indices_",financial_timestamp,"_Equity_results_portfolio.rda"))
+    EQMarket2 <- readRDS(paste0(analysis_inputs_path,"Equity-Market-Port.rda"))
+    EQMarket <- rbind(EQMarket,EQMarket2)
+    
+    EQMarket <- EQMarket %>% filter(portfolio_name == EQMarketRef)
+    if(data_check(EQMarket) == FALSE){print("No Equity market selected")}
+    
+    
+    CBMarket <- readRDS(paste0(DROPBOX.PATH,"PortCheck_v2/10_Projects/0_MarketPortfolios/40_Results/Market2018Q4/Market2018Q4_Bonds-PortInput-Port.rda"))
+    
+    CBMarket <- CBMarket %>% filter(portfolio_name == CBMarketRef)
+    if(data_check(CBMarket) == FALSE){print("No Debt market selected")}
+    
+    # IndicesComps <- readRDS(paste0(INDEX.RESULTS.DATA.PATH, "Indices_2018Q4/Indices_2018Q4_Equity_results_company.rda"))
+    
+  }else if(grepl("FASECOLDA",project_name)|project_name == "AMIB"|project_name == "SFC"){
+    
+    CBMarket <<- readRDS(paste0(PORTV2.PATH, "FASECOLDA_BENCHMARKS/40_Results/FASECOLDA_BENCHMARKS_Bonds-PortInput-Port.rda")) %>%
+      mutate(portfolio_name = if_else(portfolio_name == "CBIndex","FPCOIPCC10Y de PiP",portfolio_name),
+             investor_name = if_else(investor_name == "CBIndex","FPCOIPCC10Y de PiP",investor_name)
+      ) %>%
+      filter(portfolio_name == CBMarketRef)
+    
+    if(grepl("ACWI",EQMarketRef)){  
+      
+      # EQMarket <<- readRDS(paste0(INDEX.RESULTS.DATA.PATH, "Indices_",financial_timestamp,"/Indices_",financial_timestamp,"_Equity_results_portfolio.rda"))
+      EQMarket <<- readRDS(paste0(analysis_inputs_path, "Equity-Indices-Port.rda"))
+      
+      if(EQMarketRef == "iShares MSCI ACWI ETF"){
+        if(!"iShares MSCI ACWI ETF" %in% unique(EQMarket$portfolio_name)){ EQMarketRef <<- "MSCI ACWI"}
+      }
+      
+      EQMarket <<- EQMarket %>%
+        filter(portfolio_name == EQMarketRef,
+               investor_name == "Indices_2018Q4")
+      
+      
+      
+    } else{
+      EQMarket <<- readRDS(paste0(PORTV2.PATH, "FASECOLDA_BENCHMARKS/40_Results/FASECOLDA_BENCHMARKS_Equity_results_portfolio.rda")) %>%
+        filter(investor_name != "Meta Portfolio",
+               portfolio_name == EQMarketRef)
+    }
+    
+    if(data_check(EQMarket) == FALSE){print("CHECK EQ MARKET in DefineBenchmarket()")}
+    if(data_check(CBMarket) == FALSE){print("CHECK CB MARKET in DefineBenchmarket()")}
+    
+  }else {
+    if(has_equity == TRUE){
+      EQMarket <- readRDS(paste0(results_path, "/",project_name,"/Equity-Market-Port.rda"))
+    }else if (has_debt ==TRUE){
+      CBMarket <- readRDS(paste0(results_path, "/",project_name,"/Bond-Market-Port.rda"))
+    }
+  }
   
-  cb_market <<- read_rds(path_dropbox_2dii("PortCheck_v2","10_Projects","TEST_NEW_DATASTORE_MARKETS","40_Results","Fake Index","Bonds_results_portfolio.rda"))
+  EQMarket <- EQMarket %>% mutate(equity_market = gsub("Market","",equity_market))
   
+  
+  EQMarket.GA <- EQMarket %>% 
+    filter(ald_sector == "Power", year == "2019", portfolio_name == "MSCI World", 
+           equity_market == "Global", scenario_geography == "Global", 
+           scenario == Scenariochoose,
+           allocation == "portfolio_weight") %>% 
+    select(ald_sector, technology,year, portfolio_name, investor_name,equity_market,scenario, scenario_geography,  allocation,plan_carsten) %>% 
+    mutate(scenario_geography = "GlobalAggregate")
+  
+  EQMarket <- merge(EQMarket, EQMarket.GA, by = c("ald_sector", "technology","year", "portfolio_name", "investor_name","equity_market", "scenario","scenario_geography", "allocation"), all.x =T)
+  
+  EQMarket <- EQMarket %>% mutate(
+    plan_carsten.x = if_else(!is.na(plan_carsten.y), plan_carsten.y, plan_carsten.x)
+  ) %>% 
+    rename(plan_carsten = plan_carsten.x) %>% 
+    select(-plan_carsten.y)
+  
+  EQMarket <<- EQMarket
+  CBMarket <<- CBMarket  
 }
 
 results_call <- function(){
@@ -122,13 +411,13 @@ results_call <- function(){
   subgroup_overview <<- portfolio_overview[portfolio_overview$investor_name == investor_name_select & portfolio_overview$portfolio_name == portfolio_name_select & portfolio_overview$valid_input == TRUE,]
   
   
-  define_benchmarks()
+  define_benchmarks_new()
   
-  define_peers()
+  # define_peers()
   
   # RenewableAdditions <<- readRDS(paste0(analysis_inputs_path, "/RenewablesAdditionsData.rda"))
   # CoalRetirements <<- readRDS(paste0(analysis_inputs_path, "/CoalRetirementsData.rda"))
-  # CarbonData <<-  readRDS(paste0(analysis_inputs_path, "/CarbonCapexUpstream.rda"))
+  # CarbonData <<-  readRDS(paste0(Location, "ReferenceData/CarbonCapexUpstream.rda"))
   
   if(has_equity){
     EQCompProdSnapshot <<- read_rds(paste0(results_path, "/",investor_name_select,"/Equity_results_company.rda"))
@@ -139,17 +428,15 @@ results_call <- function(){
       EQportmap <- EQportmap[EQportmap$portfolio_name == portfolio_name_select,]
     }
     
+    if(has_risk){
+      EQPhysicalRisk <<- readRDS(paste0(results_path, "/",investor_name_select,"/",investor_name_select,"_Equity-PortInput-Physical-Risk.rda")) 
+      EQPhysicalRisk <<- EQPhysicalRisk[EQPhysicalRisk$portfolio_name == portfolio_name_select,]
+      
+      if(data_check(EQPhysicalRisk)){EQPhysicalRiskAgg <<- PrepPhysicalRiskData("EQ",EQPhysicalRisk)}}
     
     if(data_check(EQportmap)){EQportmap$scenario_geography <- ifelse(EQportmap$ald_sector == "Power","GlobalAggregate","Global")}
     
     EQportmap <<- EQportmap
-    
-    EQTechData <<- read_rds(paste0(analysis_inputs_path, "masterdata_ownership_datastore_technology_type_view.rda"))
-    
-    EQOilShareData <<- EQTechData %>% select(id, ald_sector,technology, technology_type, year, ald_production, ald_production_unit) %>% 
-      filter(year %in% seq(start_year,start_year+5,1),
-             ald_sector == "Oil&Gas") %>% 
-      mutate(technology = if_else(technology == "Oil and Condensate", "Oil", technology))
     
     # EQOilShareData <<- readRDS(paste0(analysis_inputs_path, "oil_and_gas_resource_type_rollup_ownership.rda"))
     # EQOilShareData <<- readRDS(paste0(Location, "ReferenceData/oil_and_gas_resource_type_rollup_ownership.rda"))
@@ -168,13 +455,17 @@ results_call <- function(){
       
     }
     
-    CBTechData <<- read_rds(paste0(analysis_inputs_path, "masterdata_debt_datastore_technology_type_view.rda"))
+    if(has_risk){
+      CBPhysicalRisk <<- readRDS(paste0(results_path, "/",investor_name_select,"/",investor_name_select,"_Bonds-PortInput-Physical-Risk.rda")) 
+      CBPhysicalRisk <<- CBPhysicalRisk[CBPhysicalRisk$portfolio_name == portfolio_name_select,]
+      if(data_check(CBPhysicalRisk)){CBPhysicalRiskAgg <<- PrepPhysicalRiskData("CB",CBPhysicalRisk)}
+    }
     
-    CBOilShareData <<- CBTechData %>% select(id, ald_sector,technology, technology_type, year, ald_production, ald_production_unit) %>% 
-      filter(year %in% seq(start_year,start_year+5,1),
-             ald_sector == "Oil&Gas") %>% 
-      mutate(technology = if_else(technology == "Oil and Condensate", "Oil", technology))
     
+    # CBOilShareData <<- readRDS(paste0(analysis_inputs_path, "oil_and_gas_resource_type_rollup_debt.rda")) %>%
+    #   mutate(corp_bond_ticker = ticker_symbol,
+    #          year = production_year)
+    # 
   }
   
   if(has_sb){
@@ -308,22 +599,20 @@ filter_by_parameters <- function(df, dfType, byscenario = TRUE, scenario.irrelev
 
 create_test_list <- function() {
   # ID.COLS <- c("PortName","investor_name_select","Type") # removed Type as this is not existing
-  ID.COLS <- c("investor_name", "portfolio_name")
-  ID.COLS.LONG <- c("investor_name", "portfolio_name","year","allocation","ald_sector","technology","scenario_geography")
+  ID.COLS <- c("portfolio_name","investor_name")
+  ID.COLS.LONG <- c("investor_name","portfolio_name","year","allocation","ald_sector","technology","scenario_geography")
   # test_list <- NA
   
   ald_sectors <- c("Automotive","Coal","OilGas","Power")
   
   if (file.exists(paste0(results_path,"/",investor_name_select,"/Equity_results_portfolio.rda"))){ 
-    EQCombin <<- read_rds(paste0(results_path, "/",investor_name_select,"/Equity_results_portfolio.rda"))
-    EQCombin <<- EQCombin %>% filter(portfolio_name == portfolio_name_select) 
-    # EQCombin
+    EQCombin <<- readRDS(paste0(results_path, "/",investor_name_select,"/Equity_results_portfolio.rda"))
+    EQCombin <<- as.data.frame(EQCombin[EQCombin$portfolio_name == portfolio_name_select,])
     
   }
   if(file.exists(paste0(results_path, "/",investor_name_select,"/Bonds_results_portfolio.rda"))){
-    CBCombin <<-  read_rds(paste0(results_path, "/",investor_name_select,"/Bonds_results_portfolio.rda"))
-    CBCombin <<- CBCombin %>% filter(portfolio_name == portfolio_name_select) 
-    
+    CBCombin <<-  readRDS(paste0(results_path, "/",investor_name_select,"/Bonds_results_portfolio.rda"))
+    CBCombin <<- as.data.frame(CBCombin[CBCombin$portfolio_name == portfolio_name_select,])
   }
   
   if (data_check(EQCombin) == T){
@@ -457,7 +746,6 @@ define_test_variables <- function(test_list){
 graph_values <- function(){
   
   textfont <<- "Calibri"
-  windowsFonts(Calibri=windowsFont(textfont))
   
   #orangeish
   RenewablesColour <<- "#feedde"
@@ -578,10 +866,10 @@ graph_values <- function(){
   badtechs <<- c("GasCap","CoalCap","ICE","Gas","Oil","Coal")
   
   ColourPalette <<- data.frame(ald_sector = c("Fossil Fuels","Fossil Fuels","Fossil Fuels",
-                                              "Power","Power","Power","Power","Power",
-                                              "Automotive","Automotive","Automotive",
-                                              "Aviation","Aviation",
-                                              "Shipping","Shipping","Shipping","Shipping","Shipping","Shipping","Shipping"),
+                                          "Power","Power","Power","Power","Power",
+                                          "Automotive","Automotive","Automotive",
+                                          "Aviation","Aviation",
+                                          "Shipping","Shipping","Shipping","Shipping","Shipping","Shipping","Shipping"),
                                technology = technology_order,
                                Colours = c(GasProdColour,OilProdColour,CoalProdColour,
                                            RenewablesColour,HydroColour,NuclearColour,GasCapColour,CoalCapColour,
@@ -644,11 +932,11 @@ set_ald_sector <- function(Tech){
 }
 
 translate_labels <- function(Language){
-  
+
   Translations <- read_excel(paste0("data/TranslationFileUTF8.xlsx"))
   
   Translations <- Translations %>%
-    select(TextLabel, all_of(Language)) %>% as.data.frame()
+    select(TextLabel, Language) %>% as.data.frame()
   
   for( t in 1:nrow(Translations)){
     assign(x = Translations[t,"TextLabel"], value=Translations[t,Language],envir = .GlobalEnv)
@@ -658,6 +946,10 @@ translate_labels <- function(Language){
   
 }
 
+
+###############
+### Reports ###
+###############
 ReportFigures <- function(){
   
   #Introduction
@@ -669,7 +961,11 @@ ReportFigures <- function(){
   CarstenMetricChart("04","EQ")  #
   ScenarioGeographyChoose <- "GlobalAggregate"  
   
-  TechnologyExposure("05","CB","All", start_year+5) #
+  if (templateversion == "WWF"){
+    CompareTechnologyExposure("05","CB","All") #
+  }else{
+    TechnologyExposure("05","CB","All", start_year+5) #
+  }  
   
   if (has_debt) {      
     #5 year Trajectory
@@ -686,7 +982,11 @@ ReportFigures <- function(){
   }
   
   
-  TechnologyExposure("06","EQ","All", start_year+5) #
+  if (templateversion == "WWF"){
+    CompareTechnologyExposure("06","EQ","All") #
+  }else{
+    TechnologyExposure("06","EQ","All", start_year+5) #
+  }  # 
   
   if (has_equity) {
     
@@ -716,6 +1016,7 @@ ReportFigures <- function(){
   }
   
   if (has_debt){
+    if (IncPeersChart){PeerComparison(80,chart_type = "CB")}
     
     CompanyInformation("40", no_companies, "CB", "Power")
     CompanyInformation("41", no_companies, "CB", "Automotive")
@@ -723,10 +1024,16 @@ ReportFigures <- function(){
     OilGasBuildOut("42", no_companies, "CB")
     OilShare("43", no_companies, "CB")
     
-    # if (IncCoalRetirement){
-    #   CoalRetirementChart("62",no_companies,"CB")
-    #   RenewableAdditionsChart("64",no_companies,"CB")
-    # }
+    if (IncCoalRetirement){
+      CoalRetirementChart("62",no_companies,"CB")
+      RenewableAdditionsChart("64",no_companies,"CB")
+    }
+    
+    if (IncPhysicalRisk){
+      WaterStress("70", "CB") #
+      StackedRisk("72", "CB", "flood") #
+      StackedRisk("74", "CB", "wildfire") #
+    }
     
   }
   
@@ -739,18 +1046,450 @@ ReportFigures <- function(){
     OilGasBuildOut("46", no_companies, "EQ")
     OilShare("47", no_companies, "EQ")
     
-    # CarbonBudget("48", no_companies, "EQ")
+    CarbonBudget("48", no_companies, "EQ")
     
-    # if (IncCoalRetirement){
-    #   CoalRetirementChart("63",no_companies,"EQ")
-    #   RenewableAdditionsChart("65",no_companies,"EQ")
-    # }    
+    if (IncCoalRetirement){
+      CoalRetirementChart("63",no_companies,"EQ")
+      RenewableAdditionsChart("65",no_companies,"EQ")
+    }    
     
+    if (IncPhysicalRisk){
+      WaterStress("71", "EQ") #
+      StackedRisk("73", "EQ","flood") #
+      StackedRisk("75", "EQ","wildfire") #
+      
+    }
   }
   
   
 }
 
+ReportData <- function(){
+  
+  company_name <- portfolio_name_select
+  
+  company_name <- gsub("&","\\\\\\\\&",company_name)
+  
+  SizePortfolio <-  subgroup_overview %>%
+    filter(portfolio_name == portfolio_name_select) %>%
+    distinct(portfolio_value_usd)
+  SizeofPortfolio<- SizePortfolio[[1]]
+  
+  
+  SizeofPortfolio <- comprss_long(SizeofPortfolio)
+  TodaysDate <- format(Sys.Date(),format = "%d.%m.%Y")
+  
+  
+  NoPeers <- nrow(test_list)-1
+  
+  if(has_equity & has_debt){AssetClass <- paste0("Listed equity; ",BondReference)
+  }else if(has_equity & !has_debt){AssetClass <- "Listed equity"
+  }else if(!has_equity & has_debt){AssetClass <- BondReference
+  }else if(!has_equity & !has_debt){AssetClass <- "No Climate Relevant Holdings"}
+  
+  scenarioDF <- data.frame("ShortName" = 
+                             c("CPS","NPS","B2DS","BNEF","GPER","SDS"), 
+                           "scenarioText" = 
+                             c("CPS: Current Policy scenario",
+                               "NPS: New Policy scenario",
+                               "B2DS: Beyond 2 Degree scenario",
+                               "BNEF: Bloomberg New Energy Finance",
+                               "GPER: Greenpeace scenario",
+                               "SDS: Sustainable Development scenario"),
+                           "scenarioName" = 
+                             c("Current Policy scenario",
+                               "New Policy scenario",
+                               "Beyond 2 Degree scenario",
+                               "Bloomberg New Energy Finance",
+                               "Greenpeace scenario",
+                               "Sustainable Development scenario"), 
+                           "scenarioDescription" = 
+                             c("The Current Policy scenario (CPS) represents a transition if no changes were made to current policies.", 
+                               "The New Policy scenario (NPS) represents new policies that have been put in place.", 
+                               "The Beyond 2 Degree scenario (B2DS) is consistent with a 50\\\\% chance of limiting average future temperature rise to 1.75\\\\degree C.",
+                               "Bloomberg New Energy Finance scenario (BNEF) is a scenario proposed by Bloomberg.",
+                               "The Greenpeace scenario", 
+                               "The Sustainable Development scenario (SDS) is consistent with a 50\\\\% chance of limiting average future temperature rise to 2\\\\degree C."),
+                           "scenarioTemp" = 
+                             c("6","4","well below 2","2","2","2")
+  )
+  scenarioText <- as.character(scenarioDF$scenarioText[scenarioDF$ShortName %in% Scenariochoose])
+  scenarioTemp <- as.character(scenarioDF$scenarioTemp[scenarioDF$ShortName %in% Scenariochoose])
+  scenarioName <- as.character(scenarioDF$scenarioName[scenarioDF$ShortName %in% Scenariochoose])
+  scenarioDescription <- as.character(scenarioDF$scenarioDescription[scenarioDF$ShortName %in% Scenariochoose])
+  
+  BenchmarkValue <- "market"
+  if (project_name == "BlackRock"){BenchmarkValue <- "LEH CRED"}
+  
+  if(HasSB){
+    SovBondCov <- SB.Values$SBPerc[SB.Values$investor_name == investor_name_select & SB.Values$portfolio_name == portfolio_name_select]
+    SovBondCov <- ifelse(identical(SovBondCov, numeric(0)),0,SovBondCov)  
+    SovBondCov <<- round(SovBondCov*100,1)
+    
+    
+    sb <- read.csv(paste0(SB.DATA.PATH, "Fig.1_2 Credit ratingbycountry_Rev1_5.csv"),strip.white = T, stringsAsFactors = F)
+    sb_countries <- SB.Summary %>% filter(investor_name == investor_name_select, portfolio_name == portfolio_name_select) 
+    downgrade_countries <- sb %>% filter(iso2c %in% sb_countries$country_of_domicile, iso2c != "CO", S.P %in% c("BBB","BBB-") ) 
+    sb_downgrade <- sb_countries %>% filter(country_of_domicile %in% downgrade_countries) %>% summarise(ValUSD = sum(ValueUSD,na.rm = T))
+    sb_downgrade_perc <- sb_downgrade$ValUSD / sum(sb_countries$ValueUSD,na.rm = T)
+    sb_downgrade_perc <- if_else(is.nan(sb_downgrade_perc), 0, sb_downgrade_perc)
+    sb_downgrade_perc <<- sb_downgrade_perc*100
+    
+    if(sb_downgrade_perc > 100){print("Greater than 100% for SB percent")}
+    
+  }
+  
+  
+  ### ald_sector Check
+  ald_sectorCheck <- test_list#[test_list$portfolio_name == portfolio_name_select,]
+  
+  if (data_check(ald_sectorCheck)){
+    HasPower <<- ald_sectorCheck$Power.CB| ald_sectorCheck$Power.EQ
+    HasAuto <<- ald_sectorCheck$Automotive.CB | ald_sectorCheck$Automotive.EQ
+    HasOG <<- ald_sectorCheck$OilGas.CB | ald_sectorCheck$OilGas.EQ
+    HasCoal <<- ald_sectorCheck$Coal.CB | ald_sectorCheck$Coal.EQ
+    HasPowerCB <<- ald_sectorCheck$Power.CB
+    HasAutoCB <<- ald_sectorCheck$Automotive.CB
+    HasOGCB <<- ald_sectorCheck$OilGas.CB
+    HasCoalCB <<- ald_sectorCheck$Coal.CB
+    HasPowerEQ <<- ald_sectorCheck$Power.EQ
+    HasAutoEQ <<- ald_sectorCheck$Automotive.EQ
+    HasOGEQ <<- ald_sectorCheck$OilGas.EQ
+    HasCoalEQ <<- ald_sectorCheck$Coal.EQ
+  }
+  
+  PeerGroupName <- gsub("([a-z])([A-Z])", "\\1 \\2", PeerGroupSelection)
+  
+  ProjectPeersRef = PeerGroupSelection
+  
+  PeerGroupName <- ifelse(EQPeersRef == CBPeersRef & EQPeersRef == "Project",ProjectPeersRef, PeerGroupName)
+  
+  
+  # Check Physical Risk
+  
+  if(data_check(EQPhysicalRisk)){
+    EQPhysicalRiskCheck <- TRUE
+  }else{EQPhysicalRiskCheck <- FALSE}
+  
+  if(data_check(CBPhysicalRisk)){
+    CBPhysicalRiskCheck <-TRUE
+  }  else{CBPhysicalRiskCheck <- FALSE}
+  
+  # if (IsSample == T){     # Only necessary to print an unnamed report ie for sharing with interested partners. 
+  #   investor_name_select <- "Investor"
+  #   portfolio_name_select <- "Sample Portfolio"
+  # }
+  
+  # Underscores break the report hence they are removed from names 
+  portfolio_name_select <- gsub("_"," ", portfolio_name_select)
+  
+  
+  ### MERGE ALL RESULTS ###
+  reportdata <<- data.frame(
+    c("investor_name_select",investor_name_select),
+    c("portfolio_name_select",portfolio_name_select),
+    c("SizeofPortfolio",SizeofPortfolio),
+    c("TodaysDate",TodaysDate),
+    c("PeerGroup",PeerGroupName),
+    c("scenarioText",scenarioText),
+    c("scenarioName",scenarioName),
+    c("scenarioValue",Scenariochoose),
+    c("scenarioDescription",scenarioDescription),
+    c("scenarioTemp", scenarioTemp),
+    c("BenchmarkValue",BenchmarkValue),
+    c("AnalysisCoverage",AnalysisCoverage),
+    c("HasPower",HasPower),
+    c("HasAuto",HasAuto),
+    c("HasOG",HasOG),
+    c("HasCoal",HasCoal),
+    c("HasCarbonBudget",HasCarbonBudget),
+    c("HasPowerCB",HasPowerCB),
+    c("HasAutoCB",HasAutoCB),
+    c("HasOGCB",HasOGCB),
+    c("HasCoalCB",HasCoalCB),
+    c("HasPowerEQ",HasPowerEQ),
+    c("HasAutoEQ",HasAutoEQ),
+    c("HasOGEQ",HasOGEQ),
+    c("HasCoalEQ",HasCoalEQ),
+    c("NoPeers",NoPeers),
+    c("AssetClass", AssetClass)#,
+    # c("SovBondCov", SovBondCov),
+    # c("sbdowngradeperc",sb_downgrade_perc)
+  )
+  
+  colnames(reportdata) <- as.character(unlist(reportdata[1,]))
+  reportdata = reportdata[-1, ]
+  
+  
+  return(reportdata)
+  
+}
+
+ReportGeneration <- function(){
+  
+  reportdata <- ReportData()
+  
+  # Copy in the template for the report
+  text <- as.data.frame(template,stringsAsFactors = FALSE)  
+  colnames(text) <- "text"
+  
+  # Function removes text lines between 
+  # "handlenameS" and "handlenameE" ie CBPowerS, CBPowerE
+  # Need to add these handles into the final doc when ready. Also determine what will be kicked out/what will remain. 
+  
+  # handlename <- "Autoald_sector_CB"
+  
+  
+  removetextlines <- function(handlename){
+    startpage <- which(grepl(paste0(handlename,"S"),text$text))
+    endpage <- which(grepl(paste0(handlename,"E"),text$text))
+    
+    if (length(startpage) == 0|length(endpage) == 0){
+      text <- text
+    }else if (length(startpage) > 0){
+      removelist <- lapply(1:length(startpage), function(x) c(startpage[c(x)]:endpage[c(x)]))
+      removelist <- melt(removelist[1:length(startpage)])
+      text <- as.data.frame(text[-removelist$value,],stringsAsFactors =FALSE)
+      colnames(text) <- "text"
+    }else{
+      removeline <- which(grepl(handlename,text$text))
+      text <- as.data.frame(text[-removeline,],stringsAsFactors =FALSE)
+      colnames(text) <- "text"
+    }
+    return(text)
+  }
+  
+  if (!has_equity){text <- removetextlines("EQSpecific")}
+  
+  if (!has_debt){text <- removetextlines("CBSpecific")}
+  
+  
+  
+  if(!HasAuto){
+    text <- removetextlines("Autoald_sector_ALL")
+  } else {
+    if(!HasAutoCB){
+      text <- removetextlines("Autoald_sector_CB")
+    }
+    if(!HasAutoEQ){
+      text <- removetextlines("Autoald_sector_EQ")
+    }
+  }
+  if(!HasPower){
+    text <- removetextlines("Powerald_sector_ALL")
+  } else {
+    if(!HasPowerCB){
+      text <- removetextlines("Powerald_sector_CB")
+    }
+    if(!HasPowerEQ){
+      text <- removetextlines("Powerald_sector_EQ")
+    }
+  }
+  
+  if(!HasOG  & !HasCoal){
+    text <- removetextlines("FossilFuelald_sector_ALL")
+  } else {
+    if(!HasOGCB & !HasCoalCB){
+      text <- removetextlines("FossilFuelald_sector_CB")
+    }
+    if(!HasOGEQ & !HasCoalEQ){
+      text <- removetextlines("FossilFuelald_sector_EQ")
+    }
+    if(!HasCarbonBudget){
+      text <- removetextlines("CarbonBudget")
+    }
+  }
+  
+  if (!HasCoal){text <- removetextlines("CoalMiningChart")}
+  
+  if(HasOG){
+    if(HasOGCB== F|HasOGEQ == F){
+      text <- removetextlines("FossilFuelOneald_sector")
+    }
+  }
+  
+  if(!(HasCoalCapCB|HasCoalCapEQ)){
+    text <- removetextlines("CoalCapChart")
+  }
+  
+  if (!IncPeersChart){
+    text <- removetextlines("PeerComparison")
+  }
+  
+  # if(!(HasRenCapCB|HasRenCapEQ)){
+  #   text <- removetextlines("RenewableCapChart")
+  # }
+  
+  if(!WithCompanyCharts){
+    text <- removetextlines("CompanyCharts")
+  }
+  
+  if(WithCompanyCharts){
+    a<-0
+    if(has_debt){a <- a+1}
+    if(has_equity){a <- a+1}
+    
+    b<-0
+    if(a == 1){
+      if(HasPower){b<-b+1}
+      if(HasAuto){b<-b+1}
+    }else if(a == 2){
+      text <- removetextlines("PowerAutoTwoald_sectors")
+    }
+    
+    if(b == 2){
+      text <- removetextlines("PowerAutoOneald_sector")
+    }else if(b == 1){
+      text <- removetextlines("PowerAutoTwoald_sectors")
+    }
+  }
+  
+  if(IncAlignment){
+    text <- removetextlines("ExposureExecSummary")
+  }else{
+    text <- removetextlines("AlignmentExecSummary")
+  }
+  
+  if(!IncPhysicalRisk){
+    text <- removetextlines("IncludePhysicalRisk")
+  }
+  
+  if(!IncOtherSectors){
+    text <- removetextlines("OtherSectors")
+  }
+  
+  # text <- removetextlines("IncRanking")
+  if(!IncPRI){text <- removetextlines("UNPRI_Text")}
+  if(!IncWWF){text <- removetextlines("WWFSpecificInclude")}
+  if(IncWWF){text <- removetextlines("WWFSpecificExclude")}
+  
+  # investor_name_select <- clean_punctuation(investor_name_select)
+  # portfolio_name_select <- clean_punctuation(portfolio_name_select)
+  portfolio_name_select <- gsub("_"," ",portfolio_name_select)
+  
+  if (IsSample == T){     # Only necessary to print an unnamed report ie for sharing with interested partners. 
+    investor_name_select <- "Investor"
+    portfolio_name_select <- "Sample Portfolio"
+  }
+  
+  portfolio_name_select <- ifelse(portfolio_name_select == "Investment porftolio", "Investment Portfolio",portfolio_name_select)
+  if(project_name == "CDI2017-Sep" & investor_name_select == "California Insurers"){
+    portfolio_name_select <- "Insurance Companies Operating in California"
+    reportdata$SizeofPortfolio <- "4.25 Trillion"}
+  
+  if (reportdata$PeerGroup == "Pensiones"){reportdata$PeerGroup = "Fondos de pensiones Colombianos"}
+  if (grepl("FASECOLDA", project_name) & reportdata$PeerGroup == "Project"){reportdata$PeerGroup = "Mercado asegurador Colombiano"}
+  
+  reportdata$AssetClass <- BondReferenceLong
+  reportdata$ReportDate <- if(financial_timestamp == "2017Q4"){"31.12.2017"}else if(financial_timestamp == "2018Q4"){"31.12.2018"}else{financial_timestamp}
+  
+  investor_name_selectClean <- gsub("_"," ",investor_name_select)
+  # investor_name_selectClean <- gsub("\("," ",investor_name_selectClean)
+  # investor_name_selectClean <- gsub("/)"," ",investor_name_selectClean)
+  investor_name_selectClean <- wrap_labels(investor_name_selectClean, 20)
+  investor_name_selectClean <- gsub("'","",investor_name_selectClean)
+  
+  portfolio_name_selectClean <- gsub("_"," ",portfolio_name_select)  
+  portfolio_name_selectClean <- wrap_labels(portfolio_name_selectClean, 20)
+  portfolio_name_selectClean <- gsub("#","",portfolio_name_selectClean)
+  portfolio_name_selectClean <- gsub("'","",portfolio_name_selectClean)
+  
+  
+  text$text <- gsub("start_year+10",start_year+10,text$text,fixed=T)
+  text$text <- gsub("start_year+5",start_year+5,text$text,fixed=T)
+  text$text <- gsub("start_year",start_year,text$text)
+  text$text <- gsub("investor_name_select",investor_name_selectClean,text$text)
+  text$text <- gsub("portfolio_name_select",portfolio_name_selectClean,text$text)
+  text$text <- gsub("SizeofPortfolio",paste0("\\\\$",reportdata$SizeofPortfolio),text$text)
+  text$text <- gsub("TodaysDate",reportdata$TodaysDate,text$text)
+  text$text <- gsub("ReportDate",reportdata$ReportDate,text$text)
+  text$text <- gsub("PeerGroup",reportdata$PeerGroup,text$text)
+  text$text <- gsub("AssetClass",reportdata$AssetClass,text$text)
+  text$text <- gsub("AnalysisCoverage",reportdata$AnalysisCoverage,text$text)
+  text$text <- gsub("scenarioText",reportdata$scenarioText,text$text)
+  text$text <- gsub("scenarioName",reportdata$scenarioName,text$text)
+  text$text <- gsub("scenarioValue",reportdata$scenarioValue,text$text)
+  text$text <- gsub("scenarioDescription",reportdata$scenarioDescription,text$text)
+  text$text <- gsub("scenarioTemp",reportdata$scenarioTemp,text$text)
+  text$text <- gsub("BenchmarkValue",reportdata$BenchmarkValue,text$text)
+  text$text <- gsub("EQMarketRef",EQMarketRef, text$text)
+  text$text <- gsub("CBMarketRef",CBMarketRef, text$text)
+  
+  
+  if (HasSB){
+    text$text <- gsub("SovBondCov",SovBondCov, text$text)
+    text$text <- gsub("sbdowngradeperc",sb_downgrade_perc, text$text)
+  }
+  
+  
+  if (data_check(text) == FALSE){
+    NoReport <- paste0( "There is no data to print in a report")
+    cat(NoReport,file="NoReport.txt",sep="\n")
+  }else{
+    
+    
+    
+    # Figures
+    namestring <- graph_name("00",ParameterFile)
+    namestring <- basename(namestring)
+    namestring <- gsub("00_","",namestring)
+    FigNames <- as.data.frame(list.files(paste0(report_path), pattern = paste0(namestring)))
+    colnames(FigNames) <- "Name"
+    FigNames$Fig <- substring(FigNames$Name,1,2)
+    
+    FigureLocation <- "ReportOutputs"
+    if (project_name == "CDI2017-Sep"){FigureLocation <- "CAFigures"}
+    FigNames$Fig <- paste0(FigureLocation,"/Fig",FigNames$Fig)  
+    
+    
+    
+    for (f in 1:nrow(FigNames)){
+      text$text <- gsub(FigNames$Fig[f],FigNames$Name[f],text$text,fixed = TRUE)
+    }
+    
+    
+    ReportName <- paste0("ClimateAlignmentReport_",strtrim(investor_name_select,20),"_",strtrim(portfolio_name_select,20))
+    
+    if (InvestorType %in% c("InvestorSingle","InvestorMeta")){ReportName <- paste0("ClimateAlignmentReport_",investor_name_select)}
+    
+    if(project_name == "CDI2017-Sep"){ ReportName <- paste0("ClimateAlignmentReport_",portfolio_name_select)}    
+    
+    ReportName <- gsub(" ","",ReportName)
+    
+    
+    if(nchar(ReportName)>65){ReportName <- strtrim(ReportName, 65)}
+    
+    if (WithCompanyCharts == F){ReportName <- paste0(ReportName,"_WO_CC")}
+    
+    
+    
+    # Save the template file
+    write.table(text,paste0(report_path,ReportName,".Rnw"),col.names = FALSE,row.names = FALSE,quote=FALSE,fileEncoding = "UTF-8")  
+    
+    # Copy in Report Graphics
+    originalloc <- paste0(dirname(Location),"/Templates/ReportGraphics/")  
+    graphicsloc <- paste0(report_path,"ReportGraphics/")
+    flist <- list.files(originalloc, full.names = TRUE)
+    
+    if(!dir.exists(file.path(graphicsloc))){
+      dir.create(file.path(graphicsloc), showWarnings = TRUE, recursive = FALSE, mode = "0777")
+      for (file in flist){file.copy(file, graphicsloc)}
+    }  
+    
+    owd <- getwd()
+    setwd(report_path)
+    # Create the PDF
+    knit2pdf(paste0(report_path,ReportName,".Rnw"),compiler = "xelatex")
+    
+    # Delete remaining files and ReportGraphics Folder
+    excessfileendings <- c(".Rnw",".tex")
+    file.remove(paste0(ReportName,excessfileendings))
+    unlink(paste0(report_path,"ReportGraphics"),recursive = TRUE)
+    
+    setwd(owd)
+  }
+  return()
+}
 
 ##############
 ### Charts ###
@@ -789,13 +1528,13 @@ PercentageOfPortfolioAssessed <- function(plotnumber){
     # }
     
     over1$financial_sector <- factor(over1$financial_sector, levels=c("Aviation & Shipping", "Cement & Steel",
-                                                                      "Automotive", "Power","Fossil Fuels"), ordered=TRUE) 
+                                                          "Automotive", "Power","Fossil Fuels"), ordered=TRUE) 
     over1$financial_sector <- dplyr::recode(over1$financial_sector, 
-                                            'Fossil Fuels' = wrap_labels(S_FossilFuels, 15), 
-                                            "Power" = wrap_labels(S_Power, 15), 
-                                            "Automotive"  = wrap_labels(S_Automotive, 15), #
-                                            'Cement & Steel' = wrap_labels(S_CementSteel, 15), 
-                                            'Aviation & Shipping'= wrap_labels(S_AviationShipping, 15) ) #
+                                      'Fossil Fuels' = wrap_labels(S_FossilFuels, 15), 
+                                      "Power" = wrap_labels(S_Power, 15), 
+                                      "Automotive"  = wrap_labels(S_Automotive, 15), #
+                                      'Cement & Steel' = wrap_labels(S_CementSteel, 15), 
+                                      'Aviation & Shipping'= wrap_labels(S_AviationShipping, 15) ) #
     
     over_horizontal_perc <- over1 %>% group_by(asset_type) %>% 
       mutate(percfinancial_sector = ValueUSD/sum(ValueUSD)) 
@@ -842,12 +1581,12 @@ TechnologyExposure <- function(plotnumber,chart_type,sector_to_plot,plot_year){ 
   Combin <- data.frame()
   
   if (chart_type == "EQ" & has_equity == TRUE){
-    Peers <- filter_by_parameters(eq_peers,"EQ")
-    Market<- filter_by_parameters(eq_market,"EQ")
+    Peers <- filter_by_parameters(EQPeers,"EQ")
+    Market<- filter_by_parameters(EQMarket,"EQ")
     Combin <- filter_by_parameters(EQCombin,"EQ")
   }else if (chart_type == "CB"& has_debt == TRUE){
-    Peers <- filter_by_parameters(cb_peers,"CB", by_equity_market = FALSE)
-    Market<- filter_by_parameters(cb_market,"CB", by_equity_market = FALSE)
+    Peers <- filter_by_parameters(CBPeers,"CB", by_equity_market = FALSE)
+    Market<- filter_by_parameters(CBMarket,"CB", by_equity_market = FALSE)
     Combin <- filter_by_parameters(CBCombin,"CB", by_equity_market = FALSE)
   }
   if (data_check(Combin) == TRUE){PlotChart<-TRUE}else {PlotChart<-FALSE}
@@ -872,7 +1611,7 @@ TechnologyExposure <- function(plotnumber,chart_type,sector_to_plot,plot_year){ 
     Peer_F <-subset(Peers,(ald_sector == "Coal" & technology %in% c("Coal")) | (ald_sector == "Oil&Gas" & technology %in% c("Oil","Gas")))
     
     Peers <-bind_rows(Peer_F,Peer_A,Peer_P)
-    if (plot_year == start_year+5){
+    if (Plotyear == start_year+5){
       TARGET <- Combin %>%
         ungroup() %>%
         filter(technology != "OilCap" & year == plot_year) %>%
@@ -915,9 +1654,9 @@ TechnologyExposure <- function(plotnumber,chart_type,sector_to_plot,plot_year){ 
     
     #Filter and select
     # print("Filter and select data")
-    if (plot_year == start_year+5){
+    if (Plotyear == start_year+5){
       Production <- bind_rows(Production,Peers,TARGET,Market)
-    }else if (plot_year ==start_year){
+    }else if (Plotyear ==start_year){
       Production <- bind_rows(Production,Peers,Market)
     }
     
@@ -964,11 +1703,11 @@ TechnologyExposure <- function(plotnumber,chart_type,sector_to_plot,plot_year){ 
     Production$ald_sector <- factor(Production$ald_sector, levels = c("Fossil Fuels", "Power", "Automotive","Aviation","Shipping"))
     
     Production$Type <- wrap_labels(Production$Type,20)
-    if (plot_year == start_year+5) {
+    if (Plotyear == start_year+5) {
       Production$Type <- factor(Production$Type, levels=c("Portfolio","Peers","Target","Benchmark"))  
       xlabels = c(Portf, wrap_labels(x_Peers, 10), ifelse(Language %in% c("FR","ES"), paste(Portf, "\n", AlignedFEM), paste(Aligned, "\n", Portf)),  #
                   ifelse(Language %in% c("FR","ES"), paste(AlignMarket, "\n", AlignedMAS), paste(Aligned, "\n", AlignMarket)))   #
-    }else if (plot_year ==start_year){
+    }else if (Plotyear ==start_year){
       Production$Type <- factor(Production$Type, levels=c("Portfolio","Peers","Benchmark"))
       xlabels = c(Portf, wrap_labels(x_Peers, 9),  ifelse(Language %in% c("FR","ES"), paste(AlignMarket, "\n", Aligned), paste(Aligned, "\n", AlignMarket)))  #
     }
@@ -979,7 +1718,7 @@ TechnologyExposure <- function(plotnumber,chart_type,sector_to_plot,plot_year){ 
     Production <- subset(Production, select = c("Type", "ald_sector", "technology", "Value"))
     
     plottheme <- stacked_bar_chart(Production, colours, labels)+
-      ylab(ShareofSectorProduction)+
+      ylab(Shareofald_sectorProduction)+
       scale_x_discrete(labels = xlabels)+
       guides(fill=guide_legend(
         keywidth=0.1,
@@ -1085,24 +1824,25 @@ TechnologyExposure <- function(plotnumber,chart_type,sector_to_plot,plot_year){ 
   
 }
 
-FiveYearGrowthTrend <- function(plotnumber, chart_type, tech_to_plot, LegendOn = FALSE){
+FiveYearGrowthTrend <- function(plotnumber, chart_type, tech_to_plot, LegendOn = FALSE, BV.asset_type = ""){
   
   tech_to_plot <<- tech_to_plot
+  BV.asset_type <<- BV.asset_type
   
   GoodBad <- green_brown(tech_to_plot)
   if (GraphType %in% c("","Report")){LegendOn = FALSE}else{LegendOn = TRUE}
   
-  filternames <- c("Listed Market", "Bond Universe","ListedEquity","MetaPort", meta_investor_name)
+  filternames <- c("Listed Market", "Bond Universe","ListedEquity","MetaPort")
   PortNames <- portfolio_name_select
   
   ### Equity PRODUCTION
   if (chart_type == "EQ") {
-    ALD_Market <- filter_by_parameters(eq_market,"EQ", byscenario = TRUE) %>% distinct()
+    ALD_Market <- filter_by_parameters(EQMarket,"EQ", byscenario = TRUE) %>% distinct()
     ALD <- filter_by_parameters(EQCombin,"EQ", byscenario = FALSE)
     if (data_check(ALD) == TRUE){
       ALD$asset_type <- "Equity"
       ALD_Market <- ALD_Market %>%
-        filter(portfolio_name == eq_market_ref)
+        filter(portfolio_name == EQMarketRef)
       
       if(sum(ALD$plan_alloc_wt_tech_prod)>0){PlotChart <- TRUE}else{PlotChart <- FALSE}
     }
@@ -1110,7 +1850,7 @@ FiveYearGrowthTrend <- function(plotnumber, chart_type, tech_to_plot, LegendOn =
   
   if (chart_type == "CB"){
     # ScenarioGeographyChoose <- "Global"
-    ALD_Market <- filter_by_parameters(cb_market,"CB", byscenario = TRUE, by_equity_market = FALSE)
+    ALD_Market <- filter_by_parameters(CBMarket,"CB", byscenario = TRUE, by_equity_market = FALSE)
     # ScenarioGeographyChoose <- "GlobalAggregate"
     
     ALD <- filter_by_parameters(CBCombin,"CB", byscenario = FALSE, by_equity_market = FALSE) 
@@ -1120,7 +1860,14 @@ FiveYearGrowthTrend <- function(plotnumber, chart_type, tech_to_plot, LegendOn =
     }
   }
   
+  #  Need a solution for no market in a sector .
+  
+  # print(PlotChart) 
+  # Filter down to one scenario to get data. Chosen randomly as the first scenario in the data set. 
   if(PlotChart == TRUE){
+    # ALD_Market <- ALD_Market %>%
+    #   filter(scenario == "SDS")
+    
     
     ALD$plan_alloc_wt_tech_prod <- ifelse(ALD$technology == "Oil", ALD$plan_alloc_wt_tech_prod * (1/6.12), ALD$plan_alloc_wt_tech_prod)
     ALD$plan_alloc_wt_tech_prod <- ifelse(ALD$technology == "Gas", ALD$plan_alloc_wt_tech_prod * (1/0.0372), ALD$plan_alloc_wt_tech_prod)
@@ -1137,7 +1884,7 @@ FiveYearGrowthTrend <- function(plotnumber, chart_type, tech_to_plot, LegendOn =
     TotalProduction <- sum(ALD$plan_tech_prod,na.rm = T)
     
     ALD <- bind_rows(ALD,ALD_Market)
-    ALD <- subset(ALD, year >=start_year & year<=start_year+5)
+    ALD <- subset(ALD, year >=start_year&Year<=start_year+5)
     
     ALD <- ALD[ALD$technology == tech_to_plot,]
     
@@ -1149,7 +1896,7 @@ FiveYearGrowthTrend <- function(plotnumber, chart_type, tech_to_plot, LegendOn =
       select(investor_name, portfolio_name, ald_sector,scenario, year, technology,  plan_alloc_wt_tech_prod) %>%   #Tech.Type,
       distinct() %>%
       rename(Production=plan_alloc_wt_tech_prod) %>% 
-      filter(year %in% seq(start_year,start_year+5),
+      filter(Year %in% seq(start_year,start_year+5),
              scenario == Scenariochoose) %>%
       mutate(Line.Type="CurrentPlan")
     
@@ -1195,6 +1942,8 @@ FiveYearGrowthTrend <- function(plotnumber, chart_type, tech_to_plot, LegendOn =
     ### Remove additional scenarios
     ALD.sc <- as.data.frame(ALD.sc)
     ALD.sc <- ALD.sc[grepl("Scen",ALD.sc[,"scenario"]),]
+    
+    # ALD.sc$scenario
     
     ### Calculate GROWTH
     ALD2 <- bind_rows(ALD.cp, ALD.sc)
@@ -1356,21 +2105,21 @@ FiveYearGrowthTrend <- function(plotnumber, chart_type, tech_to_plot, LegendOn =
         group_by( investor_name, portfolio_name, ald_sector, technology, Line.Type) %>%  #Tech.Type,
         mutate(Green=ifelse(last(Scen2) > last(Scen4), 1, 0))
       if (green_brown(tech_to_plot)=="brown"){
-        if(all(ALD.sc.wide[which(ALD.sc.wide$year!=2018),]$Scen3<ALD.sc.wide[which(ALD.sc.wide$year!=2018),]$Scen4)){
+        if(all(ALD.sc.wide[which(ALD.sc.wide$Year!=2018),]$Scen3<ALD.sc.wide[which(ALD.sc.wide$Year!=2018),]$Scen4)){
           ALD.sc.wide$Scen3<-ALD.sc.wide$Scen3
           ALD.sc.wide$Scen4<-ALD.sc.wide$Scen4
           
-        }else if(all(ALD.sc.wide[which(ALD.sc.wide$year!=2018),]$Scen3>ALD.sc.wide[which(ALD.sc.wide$year!=2018),]$Scen4)){
+        }else if(all(ALD.sc.wide[which(ALD.sc.wide$Year!=2018),]$Scen3>ALD.sc.wide[which(ALD.sc.wide$Year!=2018),]$Scen4)){
           temp<- ALD.sc.wide$Scen3
           ALD.sc.wide$Scen3<-ALD.sc.wide$Scen4
           ALD.sc.wide$Scen4<-temp
         }
       }else if(green_brown(tech_to_plot)=="green"){
-        if(all(ALD.sc.wide[which(ALD.sc.wide$year!=2018),]$Scen3>ALD.sc.wide[which(ALD.sc.wide$year!=2018),]$Scen4)){
+        if(all(ALD.sc.wide[which(ALD.sc.wide$Year!=2018),]$Scen3>ALD.sc.wide[which(ALD.sc.wide$Year!=2018),]$Scen4)){
           ALD.sc.wide$Scen3<-ALD.sc.wide$Scen3
           ALD.sc.wide$Scen4<-ALD.sc.wide$Scen4
           
-        }else if(all(ALD.sc.wide[which(ALD.sc.wide$year!=2018),]$Scen3<ALD.sc.wide[which(ALD.sc.wide$year!=2018),]$Scen4)){
+        }else if(all(ALD.sc.wide[which(ALD.sc.wide$Year!=2018),]$Scen3<ALD.sc.wide[which(ALD.sc.wide$Year!=2018),]$Scen4)){
           temp<- ALD.sc.wide$Scen3
           ALD.sc.wide$Scen3<-ALD.sc.wide$Scen4
           ALD.sc.wide$Scen4<-temp
@@ -1418,7 +2167,7 @@ FiveYearGrowthTrend <- function(plotnumber, chart_type, tech_to_plot, LegendOn =
     
     ALD.sc.tall <- ALD.sc.wide %>%
       select(-grep("Scen",colnames(ALD.sc.wide))) %>%
-      gather(key="Target", value="Value",-investor_name, -portfolio_name, -ald_sector,-technology,-Green, -Line.Type,-year)
+      gather(key="Target", value="Value",-investor_name, -portfolio_name, -ald_sector,-technology,-Green, -Line.Type,-Year)
     
     
     ALD.sc.tall <- ALD.sc.tall %>%
@@ -1458,7 +2207,7 @@ FiveYearGrowthTrend <- function(plotnumber, chart_type, tech_to_plot, LegendOn =
     outputplot <- ggplot(data = subset(ALD.sc.tall, technology == tech_to_plot & ALD.sc.tall$portfolio_name == PortNames )) +
       geom_ribbon(aes(ymin=lower, ymax=Value, x=year,fill=Target),alpha=0.75) +
       scale_fill_manual(labels=eval(parse(text = paste(GoodBad,".labels",sep = ""))), values=eval(parse(text = paste(GoodBad,".fill",sep = "")))) +
-      scale_x_continuous(name=Year, expand=c(0,0),limits=c(start_year, start_year + 5.6)) +
+      scale_x_continuous(name=year, expand=c(0,0),limits=c(start_year, start_year + 5.6)) +
       scale_y_continuous(name=paste0(WeightedProduction," (",eval(parse(text = paste(GoodBad,".unit",sep = "")))[tech_to_plot],")"),
                          expand=c(0,0),
                          breaks=round(seq(round(MIN.Y,digits = round.digits),round(MAX.Y,digits = round.digits),length.out = 5),digits = round.digits)) +
@@ -1595,7 +2344,7 @@ FiveYearGrowthTrend <- function(plotnumber, chart_type, tech_to_plot, LegendOn =
     
   }else{
     
-    Label <- YourportfoliohasnoproductionfortheselectedTechnologyScenarioGeographyandMarket
+    Label <- Yourportfoliohasnoproductionfortheselectedtechnologyscenario_geographyandMarket
     
     outputplot <- no_chart(Label)
     
@@ -1656,11 +2405,11 @@ CO2IntensityTrend <- function(plotnumber, sector_to_plot, LegendOn = TRUE){
     # if(sector_to_plot != "Cement"){ 
     PlotData <- Data %>%
       ungroup() %>%
-      select(portfolio_name,year,technology,plan_sec_emissions_factor,scen_sec_emissions_factor,Type)%>%
+      select(portfolio_name,year,technology,plan_sec_emissions_factor,Scen.Sec.EmissionsFactor,Type)%>%
       group_by(portfolio_name,year,Type)%>%
-      filter(year <= start_year+5) %>%
+      filter(Year <= start_year+5) %>%
       summarise(plan_emission_factor = mean(plan_sec_emissions_factor,na.rm=T),
-                scen_emission_factor = mean(scen_sec_emissions_factor,na.rm=T))
+                scen_emission_factor = mean(Scen.Sec.EmissionsFactor,na.rm=T))
     
     Ref.Data <- PlotData %>% ungroup() %>% filter(year == start_year) %>% rename(Ref.Scen.EF = scen_emission_factor) %>% select(Type, Ref.Scen.EF)
     
@@ -1674,18 +2423,18 @@ CO2IntensityTrend <- function(plotnumber, sector_to_plot, LegendOn = TRUE){
     #     select(portfolio_name,year,technology,plan_emission_factor,scen_emission_factor,Type) %>%
     #     filter(technology != "Grinding Plant") %>% 
     #     group_by(portfolio_name,year,Type) %>%
-    #     filter(year <= start_year+5) %>%
+    #     filter(Year <= start_year+5) %>%
     #     summarise(plan_emission_factor = mean(plan_emission_factor,na.rm=T),
     #               scen_emission_factor = mean(scen_emission_factor,na.rm=T))          
     # }
     
     # print(nrow(PlotData))
-    OtherSectorUnits <- data.frame("ald_sector" = c("Cement","Steel","Aviation"), "Units"= c(paste0("t CO2 / t ", L_Cement),    #
-                                                                                             paste0("t CO2 / t ", L_Steel),     #
-                                                                                             paste0("CO2/", x_passenger, "km")))  #
+    Otherald_sectorUnits <- data.frame("ald_sector" = c("Cement","Steel","Aviation"), "Units"= c(paste0("t CO2 / t ", L_Cement),    #
+                                                                                         paste0("t CO2 / t ", L_Steel),     #
+                                                                                         paste0("CO2/", x_passenger, "km")))  #
     
-    year_lab <- Year  #   "year" #GT["year"][[1]]
-    ylabel <- paste0(EmissionsIntensity, OtherSectorUnits$Units[OtherSectorUnits$ald_sector == sector_to_plot], ")")    #
+    year_lab <- year  #   "Year" #GT["Year"][[1]]
+    ylabel <- paste0(EmissionsIntensity, Otherald_sectorUnits$Units[Otherald_sectorUnits$ald_sector == sector_to_plot], ")")    #
     
     df <-PlotData
     
@@ -1694,14 +2443,14 @@ CO2IntensityTrend <- function(plotnumber, sector_to_plot, LegendOn = TRUE){
     
     outputplot<-ggplot()+
       geom_line(data=df,aes(x=year,y=scen_emission_factor,colour=Type,group=Type),size=1.5,linetype=1,colour = area_2)+
-      annotate(geom = "point",y=df$plan_emission_factor[df$year ==start_year],x=df$year[df$year ==start_year],size=5,colour=unique(df$Colour),fill=unique(df$Colour), shape=22)
+      annotate(geom = "point",y=df$plan_emission_factor[df$year ==start_year],x=df$Year[df$year ==start_year],size=5,colour=unique(df$Colour),fill=unique(df$Colour), shape=22)
     
     outputplot<- outputplot +
       # scale_fill_identity(name = "", guide = 'legend',labels = c("Exposure gap","Current capacity + planned additions")) +
       scale_colour_manual(name="",guide='legend',values= unique(df$Colour),labels=unique(df$Type))  +
       xlab(year_lab) + ylab(ylabel) + # Set axis labels
       # legend(values=legelabels)+
-      scale_x_continuous(breaks=seq(start_year,max(df$year),1),expand=c(0,0))+
+      scale_x_continuous(breaks=seq(start_year,max(df$Year),1),expand=c(0,0))+
       scale_y_continuous(expand=c(0,0))+
       expand_limits(x=c(start_year-0.5,start_year+5.5),y= c(.7*min(df[,c("plan_emission_factor","scen_emission_factor")], na.rm=TRUE),1.3*max(df[,c("scen_emission_factor")], na.rm=TRUE)))+
       theme_linecharts()#+
@@ -1799,20 +2548,26 @@ CO2IntensityTrend <- function(plotnumber, sector_to_plot, LegendOn = TRUE){
   #return()
 }
 
-CompanyInformation <- function(plotnumber, companiestoprint, chart_type, sector_to_plot){
+CompanyInformation <- function(plotnumber, companiestoprint, chart_type, sector_to_plot, BV.asset_type = ""){
   
   sector_to_plot <<- sector_to_plot
+  BV.asset_type <<- BV.asset_type
   PlotChart <- F
   
   if (chart_type == "EQ" & has_equity == T){
-    market <- filter_by_parameters(eq_market,"EQ")
+    market <- filter_by_parameters(EQMarket,"EQ")
     combin <- filter_by_parameters(EQCombin,"EQ")
     CompProdSS <- filter_by_parameters(EQCompProdSnapshot,"EQ", ActorSectorOnly = T) 
   } 
   if(chart_type == "CB" & has_debt == T){
-    market <- filter_by_parameters(cb_market,"CB", by_equity_market = FALSE)
+    market <- filter_by_parameters(CBMarket,"CB", by_equity_market = FALSE)
     combin <- filter_by_parameters(CBCombin,"CB", by_equity_market = FALSE)
     CompProdSS <- filter_by_parameters(CBCompProdSnapshot,"CB", by_equity_market = FALSE, ActorSectorOnly = T) 
+  }
+  if(chart_type == "BV" & HasBV == T){
+    market <- filter_by_parameters(BVMarket,"BV", by_equity_market = FALSE, BV.asset_type = BV.asset_type)
+    combin <- filter_by_parameters(BVCombin,"BV", by_equity_market = FALSE, BV.asset_type = BV.asset_type)
+    CompProdSS <- filter_by_parameters(BVCompProdSnapshot,"BV", by_equity_market = FALSE, ActorSectorOnly = T, BV.asset_type = BV.asset_type) 
   }
   
   if(data_check(CompProdSS) == T){PlotChart = T}
@@ -1820,8 +2575,9 @@ CompanyInformation <- function(plotnumber, companiestoprint, chart_type, sector_
   
   if(PlotChart == TRUE){
     
-    if (!"Entity.Name" %in% colnames(CompProdSS) & chart_type == "CB"){CompProdSS$Entity.Name <- CompProdSS$id}
+    if (!"Entity.Name" %in% colnames(CompProdSS) & chart_type == "CB"){CompProdSS$Entity.Name <- CompProdSS$corp_bond_ticker}
     if (!"Entity.Name" %in% colnames(CompProdSS) & chart_type == "EQ"){CompProdSS$Entity.Name <- CompProdSS$company_name}
+    if (!"Entity.Name" %in% colnames(CompProdSS) & chart_type == "BV"){CompProdSS$Entity.Name <- CompProdSS$company_name}
     
     
     # Portfolio (Weighted by the AUM)
@@ -1859,13 +2615,13 @@ CompanyInformation <- function(plotnumber, companiestoprint, chart_type, sector_
     # PortfolioData <- rbind(Targetmix, Portfoliomix)
     
     # Percentage share of each technology for each company in the portfolio
-    Companies <- subset(CompProdSS,year == start_year+5, select=c("Entity.Name","technology","plan_tech_prod", "plan_sec_prod","port_weight"))
-    Companies <- Companies %>% filter(plan_sec_prod > 0) %>% select(-plan_sec_prod)
+    Companies <- subset(CompProdSS,year == start_year+5, select=c("Entity.Name","technology","plan_tech_prod", "Plan.SecProd","portfolio_weight"))
+    Companies <- Companies %>% filter(Plan.SecProd > 0) %>% select(-Plan.SecProd)
     Companies<- unique(Companies)
     Companies$tech_share <- Companies$plan_tech_prod
     Companies$Classification <- "Companies"
     #Companies$Name <- paste0(substr(Companies$Name, 1, 15),"...")
-    Companies <- subset(Companies, select = c("Entity.Name","Classification","technology","tech_share","port_weight"))
+    Companies <- subset(Companies, select = c("Entity.Name","Classification","technology","tech_share","portfolio_weight"))
     colnames(Companies) <- c("Name","Classification","technology","tech_share","PortWeight")
     Companies$Name <- as.character(Companies$Name)
     Companies$Name  <- ifelse(is.na(Companies$Name),"No Name",Companies$Name)
@@ -2003,30 +2759,31 @@ CompanyInformation <- function(plotnumber, companiestoprint, chart_type, sector_
   BV.asset_type <<- ""
 }
 
-OilShare <- function(plotnumber, companiestoprint, chart_type){
+OilShare <- function(plotnumber, companiestoprint, chart_type, BV.asset_type = ""){
   
   tech_to_plot <<- "Oil"
   chart_type <<- chart_type
+  BV.asset_type <<- BV.asset_type 
   
   OilData <- NA
   
   if (chart_type == "EQ"){
     
     comps <- filter_by_parameters(EQCompProdSnapshot,"EQ") %>% ungroup()
-    # comps$id<-comps$bloomberg_id
-    # comps$bloomberg_id <-NULL
-    # comps$id <-as.integer(comps$id)
+    comps$id<-comps$bloomberg_id
+    comps$bloomberg_id <-NULL
+    comps$id <-as.integer(comps$id)
     
     if(data_check(comps)){
       
       OilData <- EQOilShareData
-      OilData <- OilData[OilData$id %in% comps$id,]
+      OilData <- OilData[OilData$bloomberg_id %in% comps$id,]
       OilData <- OilData[OilData$technology == "Oil",]
       OilData <- OilData[OilData$year == start_year+5,]
       
       OilData <- OilData %>% 
-        group_by(id, year) %>% 
-        mutate(SecOilProd = sum(ald_production)) %>% 
+        group_by(bloomberg_id, company_name, year) %>% 
+        mutate(SecOilProd = sum(company_lvl_production)) %>% 
         filter(SecOilProd > 0) %>% 
         select(-SecOilProd) %>% 
         ungroup()
@@ -2034,11 +2791,8 @@ OilShare <- function(plotnumber, companiestoprint, chart_type){
       
       if (data_check(OilData)){
         OilData$Type <- "equity"
-        OilData$ID <- OilData$id
+        OilData$ID <- OilData$bloomberg_id
         OilData$bloomberg_id <- NULL}
-      
-      OilData<- left_join(comps %>% select(technology, company_name, id, port_weight),OilData,by=c("technology"="technology","id"="ID"))
-      
       
     }
     
@@ -2046,19 +2800,20 @@ OilShare <- function(plotnumber, companiestoprint, chart_type){
   
   if(chart_type == "CB"){
     comps <- filter_by_parameters(CBCompProdSnapshot,"CB", by_equity_market = F)
-    # comps$id <- comps$corp_bond_ticker
+    comps$id <- comps$corp_bond_ticker
     
     if(data_check(comps)){
       
       OilData <- CBOilShareData  %>% 
         ungroup() %>%
+        mutate(id = corp_bond_ticker)%>% 
         filter(technology == "Oil",
                year == start_year+5, 
-               id %in% comps$id)
+               ticker_symbol %in% comps$corp_bond_ticker)
       
       OilData <- OilData %>% 
-        group_by(id, year) %>% 
-        mutate(SecOilProd = sum(ald_production)) %>% 
+        group_by(ticker_symbol,corp_bond_ticker, id, year) %>% 
+        mutate(SecOilProd = sum(production)) %>% 
         filter(SecOilProd > 0) %>% 
         select(-SecOilProd) %>% 
         ungroup()
@@ -2067,27 +2822,53 @@ OilShare <- function(plotnumber, companiestoprint, chart_type){
         
         OilData <- OilData %>% mutate(
           Type = "corporate bond",
-          ID = id,
+          ID = ticker_symbol,
           company_name = ID,
-          company_lvl_production = ald_production
+          company_lvl_production = production
         )
-        
-        OilData<- left_join(comps %>% select(technology, id, port_weight),OilData,by=c("technology"="technology","id"="ID"))
-        
         
       }
     }
   }
   
   
+  if(chart_type == "BV"){
+    comps <- filter_by_parameters(BVCompProdSnapshot,"BV", by_equity_market = F, BV.asset_type = BV.asset_type ) %>% 
+      ungroup() %>%
+      mutate(id = Matching.ID)
+    
+    if(data_check(comps)){
+      OilData <- BVOilShareData %>% 
+        filter(technology == "Oil",
+               year == start_year+5, 
+               ticker_symbol %in% comps$id)
+      
+      if (data_check(OilData)){
+        
+        OilData <- OilData %>% mutate(
+          Type == "corporate bond",
+          ID = ticker_symbol,
+          company_name = ID,
+          company_lvl_production = production
+        )
+        
+      }
+    }
+  }
+  
+  
+  if (data_check(OilData)){
+    OilData<- left_join(comps,OilData,by=c("technology"="technology","id"="ID"))
+  } else {PlotChart<-FALSE}
+  
   if(data_check(OilData)){PlotChart = TRUE}else{PlotChart = FALSE}
   
   if (PlotChart){
-    OilCompanies <- subset(OilData, select=c("ald_production","port_weight","technology_type","company_name"))
+    OilCompanies <- subset(OilData, select=c("company_lvl_production","portfolio_weight","resource_type","company_name"))
     
     OilCompanies1 <- OilCompanies %>%
-      group_by(company_name,technology_type,port_weight) %>%
-      summarise("Oilsum" = sum(ald_production))%>%
+      group_by(company_name,resource_type,portfolio_weight) %>%
+      summarise("Oilsum" = sum(company_lvl_production))%>%
       ungroup() 
     OilCompanies2 <- OilCompanies1 %>%  
       group_by(company_name) %>%
@@ -2099,64 +2880,71 @@ OilShare <- function(plotnumber, companiestoprint, chart_type){
     OilCompanies$Classification <- "Companies"
     
     
-    OilCompanies$technology_type <- ifelse(OilCompanies$technology_type =='Conventional Gas', "Other & Unknown", OilCompanies$technology_type)
-    OilCompanies$technology_type <- ifelse(OilCompanies$technology_type =='Unconventional Gas', "Other & Unknown", OilCompanies$technology_type)
-    OilCompanies$technology_type <- ifelse(OilCompanies$technology_type =='-', "Other & Unknown", OilCompanies$technology_type)
+    OilCompanies$resource_type <- ifelse(OilCompanies$resource_type =='Conventional Gas', "Other & Unknown", OilCompanies$resource_type)
+    OilCompanies$resource_type <- ifelse(OilCompanies$resource_type =='Unconventional Gas', "Other & Unknown", OilCompanies$resource_type)
+    OilCompanies$resource_type <- ifelse(OilCompanies$resource_type =='-', "Other & Unknown", OilCompanies$resource_type)
     
-    OilCompanies$technology_type <- ifelse(OilCompanies$technology_type =='Oil Sands', OilSands, OilCompanies$technology_type)
-    OilCompanies$technology_type <- ifelse(OilCompanies$technology_type =='Heavy Oil', HeavyOil, OilCompanies$technology_type)
-    OilCompanies$technology_type <- ifelse(OilCompanies$technology_type =='Conventional Oil', ConventionalOil, OilCompanies$technology_type)
-    OilCompanies$technology_type <- ifelse(OilCompanies$technology_type =='Unconventional Oil', UnconventionalOil, OilCompanies$technology_type)
-    OilCompanies$technology_type <- ifelse(OilCompanies$technology_type =='Other & Unknown',OtherandUnknown, OilCompanies$technology_type)
+    OilCompanies$resource_type <- ifelse(OilCompanies$resource_type =='Oil Sands', OilSands, OilCompanies$resource_type)
+    OilCompanies$resource_type <- ifelse(OilCompanies$resource_type =='Heavy Oil', HeavyOil, OilCompanies$resource_type)
+    OilCompanies$resource_type <- ifelse(OilCompanies$resource_type =='Conventional Oil', ConventionalOil, OilCompanies$resource_type)
+    OilCompanies$resource_type <- ifelse(OilCompanies$resource_type =='Unconventional Oil', UnconventionalOil, OilCompanies$resource_type)
+    OilCompanies$resource_type <- ifelse(OilCompanies$resource_type =='Other & Unknown',OtherandUnknown, OilCompanies$resource_type)
     
     
     
-    OilCompanies$technology_type <- as.factor(OilCompanies$technology_type)
-    # levels(OilCompanies$technology_type)[levels(OilCompanies$technology_type)=="Conventional Gas"] <- "Other & Unknown"
-    # levels(OilCompanies$technology_type)[levels(OilCompanies$technology_type)=="Unconventional Gas"] <- "Other & Unknown"
-    # levels(OilCompanies$technology_type)[levels(OilCompanies$technology_type)=="-"] <- "Other & Unknown"
+    OilCompanies$resource_type <- as.factor(OilCompanies$resource_type)
+    # levels(OilCompanies$resource_type)[levels(OilCompanies$resource_type)=="Conventional Gas"] <- "Other & Unknown"
+    # levels(OilCompanies$resource_type)[levels(OilCompanies$resource_type)=="Unconventional Gas"] <- "Other & Unknown"
+    # levels(OilCompanies$resource_type)[levels(OilCompanies$resource_type)=="-"] <- "Other & Unknown"
     
     #techorder <- c("Oil Sands","Heavy Oil","Conventional Oil","Unconventional Oil","Other & Unknown")
     techorder <- c(OilSands, HeavyOil, ConventionalOil, UnconventionalOil, OtherandUnknown)
     
     tech_labels <- techorder
+    # OilCompanies$resource_type <- ifelse(OilCompanies$resource_type =='Oil Sands', OilSands, OilCompanies$resource_type)
+    # OilCompanies$resource_type <- ifelse(OilCompanies$resource_type =='Heavy Oil', HeavyOil, OilCompanies$resource_type)
+    # OilCompanies$resource_type <- ifelse(OilCompanies$resource_type =='Conventional Oil', ConventionalOil, OilCompanies$resource_type)
+    # OilCompanies$resource_type <- ifelse(OilCompanies$resource_type =='Unconventional Oil', UnconventionalOil, OilCompanies$resource_type)
+    # OilCompanies$resource_type <- ifelse(OilCompanies$resource_type =='Other & Unknown',OtherandUnknown, OilCompanies$resource_type)
+    
+    # tech_labels
     
     colors <- c("#72755e","#8d9176","#a5a792", "#bcbeae","#d3d5ca")
     
-    OilCompanies$technology_type <- factor(OilCompanies$technology_type, levels=techorder)
+    OilCompanies$resource_type <- factor(OilCompanies$resource_type, levels=techorder)
     
     OilCompanies <- OilCompanies %>% 
-      filter(technology_type %in% techorder) %>%
-      arrange(-port_weight)
+      filter(resource_type %in% techorder) %>%
+      arrange(-portfolio_weight)
     
     #LIne to aggregate to portfolio level
     #aggregated all companies by oil type to get the portfolio oilshare
     # OilCompanies_P<-OilCompanies %>%
-    #   group_by(technology_type) %>%
+    #   group_by(resource_type) %>%
     #   summarise(OilShare=sum(OilShare)) %>%
     #   ungroup()%>%
     #   mutate(company_name="Portfolio",
     #          Classification="Portfolio")
-    # colnames(OilCompanies_P)[which(names(OilCompanies_P) == "technology_type")] <- "Oil.Type"
+    # colnames(OilCompanies_P)[which(names(OilCompanies_P) == "resource_type")] <- "Oil.Type"
     
     OilCompanies <- OilCompanies %>%
       filter(company_name %in% unique(OilCompanies$company_name)[1:min(companiestoprint,length(unique(OilCompanies$company_name)))])
     
-    colnames(OilCompanies)[which(names(OilCompanies) == "technology_type")] <- "Oil.Type"
-    OilCompanies <- subset(OilCompanies,select = c("Oil.Type","company_name","OilShare","Classification","port_weight"))
+    colnames(OilCompanies)[which(names(OilCompanies) == "resource_type")] <- "Oil.Type"
+    OilCompanies <- subset(OilCompanies,select = c("Oil.Type","company_name","OilShare","Classification","portfolio_weight"))
     
     dummy <- data.frame(c("Oil.Type", NA),
                         c("company_name", ""),
                         c("OilShare", 0),
                         c("Classification", NA),
-                        c("port_weight",NA))
+                        c("portfolio_weight",NA))
     colnames(dummy) <- as.character(unlist(dummy[1,]))
     dummy = dummy[-1, ]
     dummy$OilShare <- as.numeric(dummy$OilShare)
     
     OilCompany <- rbind(OilCompanies,dummy)
     OilCompany$Oil.Type <- factor(OilCompany$Oil.Type, levels=techorder)
-    OilCompany$port_weight <-as.numeric(OilCompany$port_weight)
+    OilCompany$portfolio_weight <-as.numeric(OilCompany$portfolio_weight)
     OilCompany<-as.data.frame(OilCompany)
     #OilCompany$company_name <- factor(OilCompany$company_name, levels=(unique(c("",OilCompany$company_name))))
     
@@ -2165,8 +2953,8 @@ OilShare <- function(plotnumber, companiestoprint, chart_type){
     names(tech_labels) <- techorder
     
     # company_labels <- c(trimws(unique(OilCompanies[!is.na(OilCompanies$Oil.Type),]$company_name))," ","Portfolio")
-    Oil <- na.omit(OilCompany[,c("company_name","port_weight")])
-    OilCompany <-OilCompany %>% arrange(port_weight)
+    Oil <- na.omit(OilCompany[,c("company_name","portfolio_weight")])
+    OilCompany <-OilCompany %>% arrange(portfolio_weight)
     company_labels <- trimws(unique(OilCompany[!is.na(OilCompany$Oil.Type),]$company_name))
     
     for (i in 1:length(company_labels)) {
@@ -2180,7 +2968,7 @@ OilShare <- function(plotnumber, companiestoprint, chart_type){
     
     PortPlot <- ggplot(data=OilCompany,
                        show.guide = TRUE)+
-      geom_bar(aes(x=reorder(company_name,port_weight), y=OilShare, #reorder(Name,PortWeightEQYlvl)
+      geom_bar(aes(x=reorder(company_name,portfolio_weight), y=OilShare, #reorder(Name,PortWeightEQYlvl)
                    fill=factor(Oil.Type,levels=techorder)),
                stat = "identity", position = "fill", width = .6)+
       #geom_hline(yintercept = c(.25,.50,.75), color="white")+
@@ -2191,7 +2979,7 @@ OilShare <- function(plotnumber, companiestoprint, chart_type){
       theme_barcharts()+
       geom_text(data = Oil,
                 aes(x = company_name, y = 1),
-                label = perc(Oil$port_weight),
+                label = perc(Oil$portfolio_weight),
                 hjust = -1, color = textcolor, size=8*(5/14),
                 family = textfont)+
       geom_text(aes(x="",y=1),
@@ -2229,10 +3017,11 @@ OilShare <- function(plotnumber, companiestoprint, chart_type){
   BV.asset_type <<- ""
 }
 
-MapChart <- function(plotnumber,chart_type,tech_to_plot,plot_year){
+MapChart <- function(plotnumber,chart_type,tech_to_plot,Plotyear, BV.asset_type = ""){
   
   Power <- data.frame()
   tech_to_plot <<- tech_to_plot
+  BV.asset_type <<- BV.asset_type 
   # ScenarioGeographyChoose <<- "Global"
   
   
@@ -2241,6 +3030,9 @@ MapChart <- function(plotnumber,chart_type,tech_to_plot,plot_year){
   }
   if (chart_type =="CB" & has_debt == TRUE){
     Power <- filter_by_parameters(CBportmap,"CB", byscenario = F, by_equity_market = FALSE)
+  }
+  if (chart_type =="BV" & HasBV == TRUE){
+    Power <- filter_by_parameters(BVportmap,"BV", byscenario = F, by_equity_market = FALSE, BV.asset_type = BV.asset_type)
   }
   
   if(data_check(Power)){PlotChart <- TRUE}else{PlotChart<-FALSE}
@@ -2319,7 +3111,7 @@ MapChart <- function(plotnumber,chart_type,tech_to_plot,plot_year){
     #             axis.text.y=element_blank(),
     #             axis.ticks.y=element_blank())
   }else{
-    Label <- YourportfoliohasnoproductionfortheselectedTechnologyScenarioGeographyandMarket    #
+    Label <- Yourportfoliohasnoproductionfortheselectedtechnologyscenario_geographyandMarket    #
     outputplot <- no_chart(Label)
   }
   
@@ -2339,11 +3131,11 @@ PeerComparison <- function(plotnumber, VariableToPlot = "plan_carsten", Grouping
   
   if (chart_type == "EQ"){
     Title <- PercentofEquityPortfolioValue                                      #
-    Batch <- filter_by_parameters(eq_peersSep,"EQ",scenario.irrelevant = T)
+    Batch <- filter_by_parameters(EQPeersSep,"EQ",scenario.irrelevant = T)
     combin<- filter_by_parameters(EQCombin,"EQ", scenario.irrelevant = T)
   }else if (chart_type == "CB"){ 
     Title <- PercentofCorporateBondsPortfolioValue                              #
-    Batch <- filter_by_parameters(cb_peersSep,"CB", by_equity_market = FALSE,scenario.irrelevant = T)
+    Batch <- filter_by_parameters(CBPeersSep,"CB", by_equity_market = FALSE,scenario.irrelevant = T)
     combin<- filter_by_parameters(CBCombin,"CB", by_equity_market = FALSE,scenario.irrelevant = T)
   }else if (chart_type == "BV"){
     if (BV.asset_type == "BV_Equity"){
@@ -2371,7 +3163,7 @@ PeerComparison <- function(plotnumber, VariableToPlot = "plan_carsten", Grouping
     ID.COLS = Grouping.Level
     
     BarColors <- energy
-    Labels <- FossilFuelsSector    #
+    Labels <- FossilFuelsald_sector    #
     port.value <- sum(filter(df, portfolio_name==portfolio_name_select & investor_name == investor_name_select)[MetricCol])
     portfolio_label <- paste0(ThisPortfolio," ",   #
                               unique(round(100*(port.value),2)),"%")
@@ -2442,12 +3234,12 @@ PeerComparison <- function(plotnumber, VariableToPlot = "plan_carsten", Grouping
   }else{
     
     if (sector_to_plot == "Power") {
-      SectorToInsert <- PowerSector              #
+      ald_sectorToInsert <- Powerald_sector              #
     } else if (sector_to_plot == "Fossil Fuels"){
-      SectorToInsert <- FossilFuelsSector        #
-    } else {SectorToInsert <- " "}
+      ald_sectorToInsert <- FossilFuelsald_sector        #
+    } else {ald_sectorToInsert <- " "}
     
-    Label <- paste0(Yourportfoliocontainsnoholdingsinthe, " ", SectorToInsert, " ", sectorintheselectedMarket)    #
+    Label <- paste0(Yourportfoliocontainsnoholdingsinthe, " ", ald_sectorToInsert, " ", sectorintheselectedMarket)    #
     distribution_plot<- no_chart(Label)
   }
   
@@ -2456,7 +3248,7 @@ PeerComparison <- function(plotnumber, VariableToPlot = "plan_carsten", Grouping
   BV.asset_type <<- ""
 }
 
-ShippingChart <- function(plotnumber,chart_type, plot_year, sector_to_plot = "Shipping"){
+ShippingChart <- function(plotnumber,chart_type, Plotyear, sector_to_plot = "Shipping"){
   
   # print(chart_type)
   # print(sector_to_plot) 
@@ -2467,21 +3259,21 @@ ShippingChart <- function(plotnumber,chart_type, plot_year, sector_to_plot = "Sh
   if(GraphType == "Report"){LegendOn = FALSE}else{LegendOn = TRUE}
   
   if (chart_type == "EQ" & has_equity == TRUE){
-    Peers <- filter_by_parameters(eq_peers,"EQ")
-    Market<- filter_by_parameters(eq_market,"EQ")
+    Peers <- filter_by_parameters(EQPeers,"EQ")
+    Market<- filter_by_parameters(EQMarket,"EQ")
     Combin <- filter_by_parameters(EQCombin,"EQ")
   }else if (chart_type == "CB" & has_debt == TRUE){
-    Peers <- filter_by_parameters(cb_peers,"CB", by_equity_market = FALSE)
-    Market<- filter_by_parameters(cb_market,"CB", by_equity_market = FALSE)
+    Peers <- filter_by_parameters(CBPeers,"CB", by_equity_market = FALSE)
+    Market<- filter_by_parameters(CBMarket,"CB", by_equity_market = FALSE)
     Combin <- filter_by_parameters(CBCombin,"CB", by_equity_market = FALSE)
   } else if(chart_type %in% c("All","")){
     
     sector_to_plot<<-"Shipping"
     
-    Market_e <- filter_by_parameters(eq_market,"EQ")
+    Market_e <- filter_by_parameters(EQMarket,"EQ")
     if(data_check(Market_e) == TRUE){Market_e$Type<- "Equity Market"}
     
-    Market_b<- filter_by_parameters(cb_market,"CB", by_equity_market = FALSE)
+    Market_b<- filter_by_parameters(CBMarket,"CB", by_equity_market = FALSE)
     if(data_check(Market_b) == TRUE){Market_b$Type<- "Bond Market"}
     
     Combin_e <- filter_by_parameters(EQCombin,"EQ")
@@ -2616,7 +3408,7 @@ ShippingChart <- function(plotnumber,chart_type, plot_year, sector_to_plot = "Sh
       xlabels = c(paste0(wrap_labels(BondPortfolio, 10)),   #
                   paste0(wrap_labels(EquityPortfollio, 10)),   #
                   paste0(wrap_labels(BondMarket, 10)),  #
-                  paste0(wrap_labels(EquityMarket, 10)))    #
+                  paste0(wrap_labels(equity_market, 10)))    #
     }
     Production <- subset(Production, select = c("Type", "ald_sector", "technology", "Value"))
     
@@ -2624,7 +3416,7 @@ ShippingChart <- function(plotnumber,chart_type, plot_year, sector_to_plot = "Sh
     
     
     shippingchart <- stacked_bar_chart(Production, colours, labels)+
-      ylab(ShareofSectorProduction)+ #
+      ylab(Shareofald_sectorProduction)+ #
       scale_x_discrete(labels = xlabels, expand = c(0,0))+
       theme(plot.margin=unit(c(0.2,0.2,0.2,0),"cm"))
     
@@ -2689,6 +3481,11 @@ SectorDataAnalysis <- function(){
   over$financial_sector <-ifelse (over$financial_sector %in% c("Steel","Cement", "Cement & Steel"),"Cement & Steel",over$financial_sector)
   over$financial_sector <-ifelse (over$financial_sector %in% c("Other"),"Not Included",over$financial_sector)
   
+  
+  AnalysisCoverage <<-  round(sum(over$valid_value_usd[over$financial_sector !="Not Included"])/sum(over$valid_value_usd)*100,1)
+  # ClimateRelevant <<- round(AnalysisCoverage/100 * sum(filter(over,!financial_sector %in% c("Other ald_sectors", "Excluded") & TwoD.Valid==1)$ValueUSD)/sum(over[which(over$TwoD.Valid==1),]$ValueUSD)*100,1)
+  
+  
   return(over)
 }
 
@@ -2701,8 +3498,8 @@ ScopeOfAnalysis <- function(plotnumber){
   }else {
     wrap_labels(Corporate_Bond_1, 10)       ## place for other category!!!
   }
-  
-  
+ 
+   
   over$asset_type <- gsub("Funds", "Others", over$asset_type) #
   over$asset_type <- gsub("Bonds", Bond_translation, over$asset_type) #
   over$asset_type <- gsub("Equity", EquityTitle, over$asset_type)     #
@@ -2710,6 +3507,8 @@ ScopeOfAnalysis <- function(plotnumber){
   
   
   over$Sector.All <- ifelse(over$financial_sector == "Not Included", "Sectors Not in Scope", "Scope of the Analysis")
+  # over$ald_sector.All <- ifelse(over$financial_sector %in% c("Cement","Steel","Aviation","Shipping","Cement & Steel","Materials"), 
+  #                           "Other Climate ald_sectors", over$ald_sector.All)
   
   over <- over %>%
     ungroup() %>% 
@@ -2794,40 +3593,40 @@ ScopeOfAnalysis <- function(plotnumber){
   
 }
 
-CarstenMetricChart <- function(plotnumber,chart_type){
+CarstenMetricChart <- function(plotnumber,chart_type, BV.asset_type = ""){
   
   PortName_IN <- portfolio_name_select
   
   if (chart_type == "CB" & has_debt == TRUE){
-    market <- filter_by_parameters(cb_market,"CB", by_equity_market = FALSE) 
+    market <- filter_by_parameters(CBMarket,"CB", by_equity_market = FALSE) 
     combin <- filter_by_parameters(CBCombin,"CB", by_equity_market = FALSE)
     
     port <- bind_rows(combin,market)
     
     Type<-"Corporate bond"
     
-    port$portfolio_name <- plyr::mapvalues(port$portfolio_name, c(portfolio_name_select, cb_market_ref), c("Portfolio", cb_market_ref))
+    port$portfolio_name <- plyr::mapvalues(port$portfolio_name, c(portfolio_name_select, CBMarketRef), c("Portfolio", CBMarketRef))
     
-    port$portfolio_name <- factor(port$portfolio_name, levels=c("Portfolio",cb_market_ref), ordered=TRUE)
-    lab <- wrap_labels(cb_market_ref, 12)
-    MarketRef <- cb_market_ref
+    port$portfolio_name <- factor(port$portfolio_name, levels=c("Portfolio",CBMarketRef), ordered=TRUE)
+    lab <- wrap_labels(CBMarketRef, 12)
+    MarketRef <- CBMarketRef
     
   }else if(chart_type == "CB" & has_debt == FALSE){PlotChart <- FALSE}
   
   if (chart_type == "EQ" & has_equity == TRUE){
     # Set as CB to ensure that the PortWeight values are used
-    market <- filter_by_parameters(eq_market,"CB",scenario.irrelevant = TRUE)
+    market <- filter_by_parameters(EQMarket,"CB",scenario.irrelevant = TRUE)
     port <- filter_by_parameters(EQCombin,"CB",scenario.irrelevant = TRUE)
     
     port <- bind_rows(port,market)
     Type<-"equity"
     
-    port <- subset(port,portfolio_name %in% c(portfolio_name_select,eq_market_ref))  #"ListedEquity"
-    port$portfolio_name <- plyr::mapvalues(port$portfolio_name, c(portfolio_name_select,eq_market_ref), c("Portfolio",eq_market_ref))  #"ListedEquity"
-    port$portfolio_name <- factor(port$portfolio_name, levels=c("Portfolio", eq_market_ref), ordered=TRUE)
-    lab<- wrap_labels(eq_market_ref, 10)
+    port <- subset(port,portfolio_name %in% c(portfolio_name_select,EQMarketRef))  #"ListedEquity"
+    port$portfolio_name <- plyr::mapvalues(port$portfolio_name, c(portfolio_name_select,EQMarketRef), c("Portfolio",EQMarketRef))  #"ListedEquity"
+    port$portfolio_name <- factor(port$portfolio_name, levels=c("Portfolio", EQMarketRef), ordered=TRUE)
+    lab<- wrap_labels(EQMarketRef, 10)
     
-    MarketRef <- eq_market_ref
+    MarketRef <- EQMarketRef
     
   }else if(chart_type == "EQ" & has_equity == FALSE){PlotChart <- FALSE}
   
@@ -2838,11 +3637,11 @@ CarstenMetricChart <- function(plotnumber,chart_type){
     
     current.port <- subset(port, year ==start_year & portfolio_name == "Portfolio") %>% 
       mutate(Metric=plan_carsten) 
-    current.market <- subset(port, year ==start_year & portfolio_name %in% c(eq_market_ref, cb_market_ref)) %>% 
+    current.market <- subset(port, year ==start_year & portfolio_name %in% c(EQMarketRef, CBMarketRef)) %>% 
       mutate(Metric=plan_carsten) 
     
     
-    port <- bind_rows(current.port, current.market) %>% select(portfolio_name,ald_sector, technology, Metric)
+    port <- bind_rows(current.port, current.market) %>% select(portfolio_name,ald_sector, technology, Metric, plan_sec_carsten, scen_sec_carsten)
     
     sector_list <- sector_list[sector_list != "Fossil Fuels"]
     tech_list <- tech_list[tech_list != "OilCap"]
@@ -2882,13 +3681,12 @@ CarstenMetricChart <- function(plotnumber,chart_type){
     port$technology <- factor(port$technology, levels = tech.levels, ordered=TRUE)
     
     port$portfolio_name <- dplyr::recode(port$portfolio_name, 
-                                         "Portfolio" = Portf,
-                                         MarketRef = lab)
+                                         "Portfolio" = Portf)
     
-    port$portfolio_name <- factor(port$portfolio_name, levels = c(Portf, MarketRef), ordered=TRUE)
+    port$portfolio_name <- factor(port$portfolio_name, levels = c(Portf, lab), ordered=TRUE)
     
     tech.colors <- c( GasProdColour, OilProdColour, CoalProdColour,RenewablesColour, HydroColour,NuclearColour, GasCapColour, CoalCapColour, ElectricColour, HybridColour,ICEColour)
-    tots <- port %>% group_by(portfolio_name, ald_sector2) %>% summarise(Metric=sum(Metric, na.rm = T))
+    tots <- port %>% group_by(portfolio_name, ald_sector2, plan_sec_carsten, scen_sec_carsten) %>% summarise(Metric=sum(Metric, na.rm = T))
     
     
     
@@ -2898,7 +3696,7 @@ CarstenMetricChart <- function(plotnumber,chart_type){
       scale_x_discrete(name="",labels=c(Portf, lab)) +  #
       scale_y_continuous(name=paste0(wrap_labels(Weightbymarketvalueofissuersexposedtothetechnology, 50), "\n"), labels=percent_format(accuracy = perc.labels.digits), expand=c(0,0), #
                          limits=c(0, max(tots$Metric) + .01)) +
-      scale_fill_manual(name=tech.levels, labels=tech.labels, values=tech.colors) + 
+      scale_fill_manual(name=technology, labels=tech.labels, values=tech.colors) + 
       guides(fill=guide_legend(ncol=1))+
       theme_cdi() +
       facet_wrap(~ ald_sector2, nrow=1,labeller = label_wrap_gen(width=20)) +
@@ -3058,11 +3856,11 @@ carboninoutdata <- function(chart_type){
       CompProdSS <- EQCompProdSnapshot %>%
         ungroup() %>%
         filter(year == start_year +5) %>%
-        select(company_name,port_weight, id) %>%
+        select(company_name,portfolio_weight, bloomberg_id) %>%
         rename(Name =company_name) %>%
         unique()
       CompProdSS <- as.data.frame(CompProdSS)
-      CompProdSS$id <-as.integer(CompProdSS$id)
+      CompProdSS$bloomberg_id <-as.integer(CompProdSS$bloomberg_id)
       ccap<- CarbonData}else{
         PlotChart <- FALSE}
     
@@ -3071,7 +3869,7 @@ carboninoutdata <- function(chart_type){
     if(data_check(CBCompProdSnapshot) == TRUE){
       CompProdSS <- CBCompProdSnapshot %>%
         filter(year == start_year +5) %>%
-        select(port_weight, corp_bond_ticker) %>%
+        select(portfolio_weight, corp_bond_ticker) %>%
         rename(EQY_FUND_TICKER = corp_bond_ticker) %>%
         unique()
     }else{
@@ -3084,16 +3882,16 @@ carboninoutdata <- function(chart_type){
   
   if(data_check(ccap) == TRUE){
     ccap$InsideCarbonBudget <- ccap$TotalCarbonBudget - ccap$OutsideCarbonBudget
-    ccap <- subset(ccap,select= c("id","TotalCarbonBudget","OutsideCarbonBudget","InsideCarbonBudget" ))
+    ccap <- subset(ccap,select= c("bloomberg_id","TotalCarbonBudget","OutsideCarbonBudget","InsideCarbonBudget" ))
     
-    colnames(ccap) <- c("id","TotalCarbonBudget","Outside Carbon Budget","Inside Carbon Budget")
+    colnames(ccap) <- c("bloomberg_id","TotalCarbonBudget","Outside Carbon Budget","Inside Carbon Budget")
     ccap$Inside.Carbon.Budget <- ccap$`Inside Carbon Budget`/ccap$TotalCarbonBudget
     ccap$Outside.Carbon.Budget <- ccap$`Outside Carbon Budget`/ccap$TotalCarbonBudget
     
-    portfolio <- left_join(CompProdSS,ccap, by="id") %>%
-      select(Name,port_weight,Inside.Carbon.Budget,Outside.Carbon.Budget)
+    portfolio <- left_join(CompProdSS,ccap, by="bloomberg_id") %>%
+      select(Name,portfolio_weight,Inside.Carbon.Budget,Outside.Carbon.Budget)
     
-    portfolio1 <- melt(portfolio, id.vars = c( "Name","port_weight"), variable.name = "CarbonBudget")
+    portfolio1 <- melt(portfolio, id.vars = c( "Name","portfolio_weight"), variable.name = "CarbonBudget")
     portfolio1 <- subset(portfolio1, !is.na(value))
     
     if (data_check(portfolio1) == TRUE) {HasCarbonBudget <<- TRUE}else{HasCarbonBudget <<- FALSE}
@@ -3117,14 +3915,14 @@ CarbonBudget <- function(plotnumber, companiestoprint, chart_type){
     portfolio1$CarbonBudget  <- factor(portfolio1$CarbonBudget, levels=carbonorder)
     
     portfolio1 <- portfolio1 %>% 
-      arrange(-port_weight) 
+      arrange(-portfolio_weight) 
     
     portfolio1 <- portfolio1 %>%
       filter(Name %in% unique(portfolio1$Name)[1:min(companiestoprint,length(unique(portfolio1$Name)))])
     
     
     dummy <- data.frame(c("Name", ""),
-                        c("port_weight", NA),
+                        c("portfolio_weight", NA),
                         c("CarbonBudget", NA),
                         c("value", 0))
     colnames(dummy) <- as.character(unlist(dummy[1,]))
@@ -3133,11 +3931,11 @@ CarbonBudget <- function(plotnumber, companiestoprint, chart_type){
     
     portfolio1<-rbind(portfolio1,dummy)
     #portfolio1$Name <- factor(portfolio1$Name, levels=rev(unique(c("",portfolio1$Name))))
-    portfolio1$port_weight<-as.numeric(portfolio1$port_weight)
+    portfolio1$portfolio_weight<-as.numeric(portfolio1$portfolio_weight)
     
     
     portfolio1 <- portfolio1 %>% 
-      arrange(port_weight)
+      arrange(portfolio_weight)
     
     
     company_labels <- trimws(unique(portfolio1[!is.na(portfolio1$CarbonBudget),]$Name))
@@ -3154,13 +3952,13 @@ CarbonBudget <- function(plotnumber, companiestoprint, chart_type){
     
     
     bar_labels <- c(company_labels,'                          ')
-    portfolio1$port_weight <-as.numeric(portfolio1$port_weight)
-    carb<-subset(portfolio1,!is.na(port_weight))
+    portfolio1$portfolio_weight <-as.numeric(portfolio1$portfolio_weight)
+    carb<-subset(portfolio1,!is.na(portfolio_weight))
     carbonorder <- recode( carbonorder, 'Outside Carbon Budget' = OutsideCarbonBudget, 
                            'Inside Carbon Budget'= InsideCarbonBudget)
     names(colors) <- carbonorder
     
-    PortPlot <- ggplot(data=portfolio1, aes(x=reorder(Name,port_weight), y=value,
+    PortPlot <- ggplot(data=portfolio1, aes(x=reorder(Name,portfolio_weight), y=value,
                                             fill=factor(CarbonBudget,levels=c(OutsideCarbonBudget,InsideCarbonBudget))),
                        show.guide = TRUE)+
       geom_bar(stat = "identity", position = "fill", width = .6)+
@@ -3173,7 +3971,7 @@ CarbonBudget <- function(plotnumber, companiestoprint, chart_type){
       theme_barcharts()+
       
       geom_text(data=carb,aes(x = Name, y = 1),
-                label = perc(carb$port_weight),
+                label = perc(carb$portfolio_weight),
                 hjust = -1, color = textcolor, size=textsize*(5/14))+
       geom_text(aes(x="",y=1),
                 label=x_Weight,                                       #
@@ -3216,9 +4014,10 @@ CarbonBudget <- function(plotnumber, companiestoprint, chart_type){
   ggsave(plot = gt,filename =  graph_name(plotnumber,ParameterFile), bg = "white",height=h,width=11,dpi=ppi)
 }
 
-OilGasBuildOut <- function(plotnumber, companiestoprint, chart_type){
+OilGasBuildOut <- function(plotnumber, companiestoprint, chart_type, BV.asset_type = ""){
   
   sector_to_plot <<- "Oil&Gas"
+  BV.asset_type <<- BV.asset_type 
   # chart_type <<- chart_type
   
   if (chart_type == "CB"){
@@ -3226,7 +4025,7 @@ OilGasBuildOut <- function(plotnumber, companiestoprint, chart_type){
     
     if(data_check(comp) == TRUE){
       comp <- subset(comp, portfolio_name == portfolio_name_select & ald_sector=="Oil&Gas")
-      comp$company_name <- comp$id
+      comp$company_name <- comp$corp_bond_ticker
       
       port <- filter_by_parameters(CBCombin,"CB", by_equity_market = F)
       port.targets <- port %>% 
@@ -3313,7 +4112,7 @@ OilGasBuildOut <- function(plotnumber, companiestoprint, chart_type){
     outputplot <- ggplot(comp, aes(x=Ord.Var, y=Plan.Pct, fill=technology)) + 
       geom_bar(stat="identity") +
       geom_hline(data=port.targets, aes(yintercept=Port.Scen.Pct,  
-                                        linetype=paste0(ChangeinPortfolioProductionSpecifiedby, " ", Scenariochoose, " ", Scenariofrom, " ", start_year,"- ",start_year+5)),  #
+                                        linetype=paste0(ChangeinPortfolioProductionSpecifiedby, " ", Scenariochoose, " ", scenariofrom, " ", start_year,"- ",start_year+5)),  #
                  color = area_2,size = 1.5) +
       coord_flip() +
       scale_x_discrete(name="", labels=setNames(comp$Final.Name, as.character(comp$Ord.Var))) + 
@@ -3491,10 +4290,10 @@ CompareTechnologyExposure <-function(plotnumber,chart_type,sector_to_plot){
   Combin <- data.frame()
   
   if (chart_type == "EQ" & has_equity == TRUE){
-    Market<- filter_by_parameters(eq_market,"EQ")
+    Market<- filter_by_parameters(EQMarket,"EQ")
     Combin <- filter_by_parameters(EQCombin,"EQ")
   }else if (chart_type == "CB"& has_debt == TRUE){
-    Market<- filter_by_parameters(cb_market,"CB", by_equity_market = FALSE)
+    Market<- filter_by_parameters(CBMarket,"CB", by_equity_market = FALSE)
     Combin <- filter_by_parameters(CBCombin,"CB", by_equity_market = FALSE)
   }
   if (data_check(Combin) == TRUE){PlotChart<-TRUE}else {PlotChart<-FALSE}
@@ -3598,7 +4397,7 @@ CompareTechnologyExposure <-function(plotnumber,chart_type,sector_to_plot){
     
     levels(Production$ald_sector) <-c("Fossil Fuels Production", "Power Capacity", "Automotive Production","Aviation","Shipping")
     Production$ald_sector <- dplyr::recode( Production$ald_sector, 'Fossil Fuels Production' = wrap_labels(FossilFuelsProduction, 30), 'Power Capacity' = C_Power, #
-                                            'Automotive Production' = AutomotiveProduction, Aviation = Aviation, Shipping = Shipping)          #
+                                        'Automotive Production' = AutomotiveProduction, Aviation = Aviation, Shipping = Shipping)          #
     #Production$technology<-gsub("Cap","",Production$technology)
     Production$technology <- dplyr::recode(Production$technology, Gas = T_GasProd, Oil = T_OilProd, Coal = T_CoalProd, #
                                            RenewablesCap = paste(T_Renewables_1, "\n", T_Renewables_2), HydroCap = T_HydroCap, NuclearCap = T_NuclearCap, GasCap = T_GasCap, CoalCap = T_CoalCap, #
@@ -3790,9 +4589,4 @@ no_chart <- function(Label){
   return(outputplot)
   
 }
-
-
-# og <- read_rds("C:/Users/clare/Dropbox (2° Investing)/PortCheck/00_Data/07_AnalysisInputs/2018Q3_July_EIOPA/oil_and_gas_resource_type_rollup_debt.rda")
-
-
 

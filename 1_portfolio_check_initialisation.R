@@ -1,6 +1,4 @@
 ## Project Initialisation
-rm(list=ls())
-
 options(encoding = "UTF-8") 
 
 library(tidyr)
@@ -9,6 +7,7 @@ library(scales)
 library(reshape2)
 library(tidyverse)
 library(readxl)
+library(tidyselect)
 
 
 if (rstudioapi::isAvailable()) {
@@ -29,7 +28,8 @@ source("0_reporting_functions.R", encoding = "windows-1252")
 source("0_portfolio_input_check_functions.R", encoding = "windows-1252")
 source("0_global_functions.R", encoding = "windows-1252")
 
-project_name <- "SFC_2019"
+
+project_name <- "NKI_Funds_beta_website"
 twodii_internal <- TRUE
 # TRUE or FALSE: TRUE means that the code is running on a 2dii laptop with dropbox connection
 
