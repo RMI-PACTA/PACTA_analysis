@@ -1,6 +1,4 @@
 ## Project Initialisation
-rm(list=ls())
-
 options(encoding = "UTF-8") 
 
 library(tidyr)
@@ -9,6 +7,7 @@ library(scales)
 library(reshape2)
 library(tidyverse)
 library(readxl)
+library(tidyselect)
 
 
 if (rstudioapi::isAvailable()) {
@@ -17,7 +16,7 @@ if (rstudioapi::isAvailable()) {
   working_location <- getwd()
 }
 
-working_location <- gsub("Â","",working_location)
+working_location <- gsub("Ã‚","",working_location)
 working_location <- paste0(working_location, "/")
 setwd(working_location)
 
@@ -29,8 +28,10 @@ source("0_reporting_functions.R", encoding = "windows-1252")
 source("0_portfolio_input_check_functions.R", encoding = "windows-1252")
 source("0_global_functions.R", encoding = "windows-1252")
 
-project_name <- "PACTA_Test3"
+
+project_name <- "PROJEKTNAME"
 twodii_internal <- FALSE
+
 # TRUE or FALSE: TRUE means that the code is running on a 2dii laptop with dropbox connection
 
 #####################################################################

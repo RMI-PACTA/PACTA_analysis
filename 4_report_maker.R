@@ -44,6 +44,9 @@ translate_labels(Language)
 
 if(has_sb){SB.Values = GetSovBondCoverage()}
 
+CBMarketRef = cb_market_ref
+EQMarketRef = eq_market_ref
+
 i=1
 
 for (i in 1:nrow(report_list)){
@@ -71,12 +74,12 @@ for (i in 1:nrow(report_list)){
   
 
   ReportFigures()
-  
+  HasSB<-has_sb
   if(HasSB){
     SovereignBondFigures()    
   }
 
-  # ReportGeneration()
+  ReportGeneration()
   
   
   

@@ -144,7 +144,7 @@ aggregate_company <- function(df) {
       ungroup()
     
   }else{
-    df
+    df <- data.frame()
   }
   
   
@@ -222,7 +222,7 @@ calculate_weights <- function(portfolio, portfolio_type, grouping_variables){
     rename(has_ald = has_ald_in_fin_sector)
   
   port_sub <- portfolio %>% 
-    select(grouping_variables, holding_id,id, id_name, company_name, value_usd, number_of_shares, 
+    select(all_of(grouping_variables), holding_id,id, id_name, company_name, value_usd, number_of_shares, 
            current_shares_outstanding_all_classes, financial_sector, has_ald)
   
   port_sub <- calculate_port_weight(port_sub, grouping_variables)
@@ -251,7 +251,7 @@ merge_in_ald <- function(portfolio, ald_scen){
 
 port_weight_allocation <- function(port_ald, portfolio_type){
   
-  port_ald_pw <- port_ald %>% filter(has_ald == TRUE)
+  port_ald_pw <- port_ald %>% filter(has_ald == TRUE, financial_sector == ald_sector)
   
   if(data_check(port_ald_pw)){
     
@@ -312,4 +312,25 @@ merge_in_geography <- function(portfolio, ald_raw, sectors_for_maps){
   return(company_all_data)
   
   
+}
+
+
+calculate_scenario_alignment <- function(df){
+  
+  browntechs <- c("Oil","Gas","Coal","CoalCap","GasCap","ICE")
+  
+  df$trajectory_deviation <- (df$plan_alloc_wt_tech_prod - df$scen_alloc_wt_tech_prod) / df$scen_alloc_wt_tech_prod
+  df$trajectory_deviation <- ifelse(df$scen_alloc_wt_tech_prod == 0, ifelse(df$plan_alloc_wt_tech_prod == 0, 0, -1), df$trajectory_deviation)
+  
+  df$trajectory_alignment <-  ifelse(!df$technology %in% browntechs, 1 * df$trajectory_deviation, -1 * df$trajectory_deviation)
+  
+  df
+}
+
+calculate_technology_share <- function(df){
+  df <- df %>%
+    ungroup() %>%
+    mutate(plan_tech_share = plan_alloc_wt_tech_prod/plan_alloc_wt_sec_prod,
+           scen_tech_share = scen_alloc_wt_tech_prod/scen_alloc_wt_sec_prod)
+  df
 }
