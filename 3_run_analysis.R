@@ -67,25 +67,16 @@ if(file.exists(equity_input_file)){
       
     } 
     
-    # Technology Share Calculation
-    port_all_eq <- calculate_technology_share(port_all_eq)
-    
-    company_all_eq <- calculate_technology_share(company_all_eq)
-    
-    # Scenario alignment calculations
-    port_all_eq <- calculate_scenario_alignment(port_all_eq)
-    
-    company_all_eq <- calculate_scenario_alignment(company_all_eq)
-    
+    # Missing tech share calculations
     # map needs the "complete" function built in if this is necessary
     
     
     investor_results_path <- paste0(results_path,"/", investor_name_select, "/") 
     if(!dir.exists(investor_results_path)){dir.create(investor_results_path)}
     
-    if(nrow(company_all_eq)>0){ write_rds(company_all_eq, paste0(investor_results_path, "Equity_results_company.rda"))}
-    if(nrow(port_all_eq)>0){write_rds(port_all_eq, paste0(investor_results_path, "Equity_results_portfolio.rda"))}
-    if(has_map){if(nrow(map_eq)>0){write_rds(map_eq, paste0(investor_results_path, "Equity_results_map.rda"))}}
+    write_rds(company_all_eq, paste0(investor_results_path, "Equity_results_company.rda"))
+    write_rds(port_all_eq, paste0(investor_results_path, "Equity_results_portfolio.rda"))
+    write_rds(map_eq, paste0(investor_results_path, "Equity_results_map.rda"))
     
   }
 }
@@ -146,24 +137,16 @@ if (file.exists(bonds_inputs_file)){
       }  
     } 
     
-    # Technology Share Calculation
-    if(nrow(port_all_cb)>0){port_all_cb <- calculate_technology_share(port_all_cb)}
-    
-    if(nrow(company_all_cb)>0){company_all_cb <- calculate_technology_share(company_all_cb)}
-    
-    # Scenario alignment calculations
-    port_all_cb <- calculate_scenario_alignment(port_all_cb)
-
-    company_all_cb <- calculate_scenario_alignment(company_all_cb)
-    
+    # Missing tech share calculations
     # map needs the "complete" function built in if this is necessary
+    
     
     investor_results_path <- paste0(results_path,"/", investor_name_select, "/") 
     if(!dir.exists(investor_results_path)){dir.create(investor_results_path)}
     
-    if(nrow(company_all_cb)>0){ write_rds(company_all_cb, paste0(investor_results_path, "Bonds_results_company.rda"))}
-    if(nrow(port_all_cb)>0){write_rds(port_all_cb, paste0(investor_results_path, "Bonds_results_portfolio.rda"))}
-    if(has_map){if(nrow(map_cb)>0){write_rds(map_cb, paste0(investor_results_path, "Bonds_results_map.rda"))}}
+    write_rds(company_all_cb, paste0(investor_results_path, "Bonds_results_company.rda"))
+    write_rds(port_all_cb, paste0(investor_results_path, "Bonds_results_portfolio.rda"))
+    write_rds(map_cb, paste0(investor_results_path, "Bonds_results_map.rda"))
     
     
   }
@@ -176,93 +159,49 @@ if (file.exists(bonds_inputs_file)){
 #####################
 
 
+### TODO: FUNCTIONALISE
 
-### TODO: Move function to function script in case it suits our needs @Clare, can you check this?
-# Number of Portfolios per file could be set in the parameter file in the 'data_output' section
-gather_and_save_project_results <- function(results_folder_path = results_path, aggregation_level = "portfolio", portfolios_per_file = 500, year_filter = NA, allocation_filter = NA){
+all_investors <- list.dirs(results_path)
+all_investors <- basename(all_investors)[-1]
+
+all_results_cb <- "NA"
+all_results_eq <- "NA"
+
+
+
+for (i in 1:length(all_investors)){
+  investor_name_select <- all_investors[i]
+  print(investor_name_select)
   
-  all_investors <- list.dirs(results_folder_path)
-  all_investors <- basename(all_investors)[-1]
-
-  k <- 1
-  j <- 1
-  
-  for (i in 1:length(all_investors)){
+  results_path_investor <- paste0(results_path,"/",investor_name_select,"/")
+  if(file.exists(paste0(results_path_investor,"/Equity_results_portfolio.rda"))){
     
-    investor_name_select <- all_investors[i]
-    print(investor_name_select)
+    results_eq <- as.data.frame(read_rds(paste0(results_path_investor,"/Equity_results_portfolio.rda")))
     
-
-    results_path_investor <- paste0(results_path,"/",investor_name_select,"/")
-    
-    if(file.exists(paste0(results_path_investor,"/Equity_results_",aggregation_level,".rda"))){
-      
-      results_eq <- as.data.frame(read_rds(paste0(results_path_investor,"/Equity_results_",aggregation_level,".rda")))
-      
-      if(typeof(year_filter) %in% c("integer","double")){
-        results_eq <- results_eq %>% filter(year %in% year_filter)
-      }
-      
-      if(typeof(allocation_filter) %in% c("character")){
-        results_eq <- results_eq %>% filter(allocation %in% allocation_filter)
-      }
-      
-      if(nrow(results_eq)!=0){
-      if (exists("all_results_eq")){
-        all_results_eq <- rbind(all_results_eq, results_eq)
-      }else{
-        all_results_eq <- results_eq
-      }}
-      
-    }
-    
-    if(file.exists(paste0(results_path_investor,"Bonds_results_",aggregation_level,".rda"))){
-      
-      results_cb <- read_rds(paste0(results_path_investor,"Bonds_results_",aggregation_level,".rda"))
-      
-      if(typeof(year_filter) %in% c("integer","double")){
-        results_cb <- results_cb %>% filter(year %in% year_filter)
-      }
-      
-      if(typeof(allocation_filter) %in% c("character")){
-        results_cb <- results_cb %>% filter(allocation %in% allocation_filter)
-      }
-      
-      if (exists("all_results_cb")){
-        all_results_cb <- rbind(all_results_cb, results_cb)
-      }else{
-        all_results_cb <- results_cb
-      }
-    }
-    
-    
-
-    if (j==portfolios_per_file){
-      if(exists("all_results_cb")){
-        saveRDS(all_results_cb,paste0(results_path,"/Bonds_results_",aggregation_level,"_",k,".rda"))
-        rm(all_results_cb)}
-      if(exists("all_results_eq")){
-        saveRDS(all_results_eq,paste0(results_path,"/Equity_results_",aggregation_level,"_",k,".rda"))
-        rm(all_results_eq)}
-      j = 1
-      k = k + 1
-
+    if (is.data.frame(all_results_eq)){
+      all_results_eq <- rbind(all_results_eq, results_eq)
     }else{
-      j = j + 1
+      all_results_eq <- results_eq
     }
+    
   }
   
-  if(exists("all_results_cb")){
-    saveRDS(all_results_cb,paste0(results_path,"/Bonds_results_",aggregation_level,".rda"))}
-  if(exists("all_results_eq")){
-    saveRDS(all_results_eq,paste0(results_path,"/Equity_results_",aggregation_level,".rda"))}
-  
-} 
+  if(file.exists(paste0(results_path_investor,"Bonds_results_portfolio.rda"))){
+    
+    results_cb <- read_rds(paste0(results_path_investor,"Bonds_results_portfolio.rda"))
+    
+    if (is.data.frame(all_results_cb)){
+      all_results_cb <- rbind(all_results_cb, results_cb)
+    }else{
+      all_results_cb <- results_cb
+    }
+  }
+}
 
+saveRDS(all_results_cb,paste0(results_path,"/Bonds_results_portfolio.rda"))
+write.csv(all_results_cb,paste0(results_path,"/Bonds_results_portfolio.csv"))
 
-
-gather_and_save_project_results(results_path, aggregation_level = "portfolio")
-gather_and_save_project_results(results_path, aggregation_level = "company", year_filter = c(START.YEAR(),START.YEAR()+5), allocation_filter = "portfolio_weight", portfolios_per_file = 250)
-
+saveRDS(all_results_eq,paste0(results_path,"/Equity_results_portfolio.rda"))
+write.csv(all_results_eq,paste0(results_path,"/Equity_results_portfolio.csv"))
 
 

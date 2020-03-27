@@ -51,7 +51,7 @@ ReportData <- function(){
   
   SizePortfolio <-  subgroup_overview %>%
     filter(portfolio_name == portfolio_name_select) %>%
-    distinct(portfolio_value_usd)
+    distinct(Port.ValueUSD)
   SizeofPortfolio<- SizePortfolio[[1]]
   
   
