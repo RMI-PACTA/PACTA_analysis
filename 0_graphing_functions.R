@@ -751,7 +751,6 @@ ReportFigures <- function(){
   
 }
 
-
 ##############
 ### Charts ###
 ##############
@@ -3790,9 +3789,4 @@ no_chart <- function(Label){
   return(outputplot)
   
 }
-
-
-# og <- read_rds("C:/Users/clare/Dropbox (2° Investing)/PortCheck/00_Data/07_AnalysisInputs/2018Q3_July_EIOPA/oil_and_gas_resource_type_rollup_debt.rda")
-
-
 
