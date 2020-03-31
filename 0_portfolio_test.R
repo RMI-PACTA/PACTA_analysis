@@ -252,7 +252,7 @@ merge_in_ald <- function(portfolio, ald_scen){
 
 port_weight_allocation <- function(port_ald, portfolio_type){
   
-  port_ald_pw <- port_ald %>% filter(has_ald == TRUE, financial_sector == ald_sector))
+  port_ald_pw <- port_ald %>% filter(has_ald == TRUE, financial_sector == ald_sector)
   
   if(data_check(port_ald_pw)){
     
