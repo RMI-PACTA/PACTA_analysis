@@ -63,13 +63,22 @@ create_audit_chart(audit_file, proc_input_path)
 ################
 #### SAVING ####
 ################
+if (length(file_format_list) == 0){stop("Saving results: No file formats defined")}
 
-if(data_check(portfolio_total)){write_csv(portfolio_total, paste0(proc_input_path, "/", project_name, "_total_portfolio.csv"))}
-if(data_check(eq_portfolio)){write_csv(eq_portfolio, paste0(proc_input_path, "/", project_name, "_equity_portfolio.csv"))}
-if(data_check(cb_portfolio)){write_csv(cb_portfolio, paste0(proc_input_path, "/", project_name, "_bonds_portfolio.csv"))}
-if(data_check(portfolio_overview)){write_csv(portfolio_overview, paste0(proc_input_path, "/", project_name, "_overview_portfolio.csv"))}
-if(data_check(audit_file)){write_csv(audit_file, paste0(proc_input_path, "/", project_name,"_audit_file.csv"))}
-# if(data_check(emissions_totals)){write_csv(emissions_totals, paste0(proc_input_path, "/", project_name, "_emissions.csv"))}
+if("csv" %in% file_format_list){
+  if(data_check(portfolio_total)){write_csv(portfolio_total, paste0(proc_input_path, "/", project_name, "_total_portfolio.csv"))}
+  if(data_check(eq_portfolio)){write_csv(eq_portfolio, paste0(proc_input_path, "/", project_name, "_equity_portfolio.csv"))}
+  if(data_check(cb_portfolio)){write_csv(cb_portfolio, paste0(proc_input_path, "/", project_name, "_bonds_portfolio.csv"))}
+  if(data_check(portfolio_overview)){write_csv(portfolio_overview, paste0(proc_input_path, "/", project_name, "_overview_portfolio.csv"))}
+  if(data_check(audit_file)){write_csv(audit_file, paste0(proc_input_path, "/", project_name,"_audit_file.csv"))}
+  # if(data_check(emissions_totals)){write_csv(emissions_totals, paste0(proc_input_path, "/", project_name, "_emissions.csv"))}
+}
 
-
-
+if("rds" %in% file_format_list | "rda" %in% file_format_list){
+  if(data_check(portfolio_total)){write_rds(portfolio_total, paste0(proc_input_path, "/", project_name, "_total_portfolio.rds"))}
+  if(data_check(eq_portfolio)){write_rds(eq_portfolio, paste0(proc_input_path, "/", project_name, "_equity_portfolio.rds"))}
+  if(data_check(cb_portfolio)){write_rds(cb_portfolio, paste0(proc_input_path, "/", project_name, "_bonds_portfolio.rds"))}
+  if(data_check(portfolio_overview)){write_rds(portfolio_overview, paste0(proc_input_path, "/", project_name, "_overview_portfolio.rds"))}
+  if(data_check(audit_file)){write_rds(audit_file, paste0(proc_input_path, "/", project_name,"_audit_file.rds"))}
+  # if(data_check(emissions_totals)){write_rds(emissions_totals, paste0(proc_input_path, "/", project_name, "_emissions.rds"))}
+}

@@ -101,11 +101,24 @@ set_global_parameters <- function(file_path){
     print("Warning: has_sb set to standard value (FALSE) as not defined in the parameter file")
   }
   
+  has_credit <<- cfg$Methodology$HasCC	
+  if(is.null(has_credit)){	
+    has_credit <<- FALSE	
+    print("Warning: has_credit set to standard value (FALSE) as not defined in the parameter file")	
+  }
+  
   has_revenue <<- cfg$Methodology$HasRevenue
   if(is.null(has_revenue)){
     has_revenue <<- TRUE
     print("Warning: has_revenue set to standard value (TRUE) as not defined in the parameter file")
   }
+  
+  file_format_list <<- tolower(cfg$data_output$file_type)	
+  if(is.null(file_format_list)){	
+    file_format_list <<- c("rda")	
+    print("Warning: file_format_list set to standard value ('rda') as not defined in the parameter file")	
+  }
+  
   
 }
 

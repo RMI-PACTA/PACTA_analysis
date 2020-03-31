@@ -512,7 +512,7 @@ add_fund_portfolio <- function(portfolio, fund_portfolio, cols_of_funds){
   
   # select same columns for both portfolios
   portfolio_no_funds <- portfolio_no_funds %>% select(colnames(portfolio), all_of(cols_of_funds))
-  fund_portfolio <- fund_portfolio %>% select(colnames(portfolio), cols_of_funds)
+  fund_portfolio <- fund_portfolio %>% select(colnames(portfolio), all_of(cols_of_funds))
   
   if(!identical(colnames(portfolio_no_funds), colnames(fund_portfolio))){stop("Colnames not equal, funds vs no funds")}
   
@@ -851,7 +851,8 @@ get_and_clean_revenue_data <- function(){
   
   revenue_data <- revenue_data %>% 
     filter(tot_rev > 0) %>% 
-    rename(revenue_sector = sector)
+    rename(revenue_sector = sector) %>% 
+    ungroup()
   
   return(revenue_data)
 }
@@ -1073,8 +1074,10 @@ create_audit_chart <- function(audit_file, proc_input_path){
 create_audit_file <- function(portfolio_total, comp_fin_data){
   
   portfolio_total <- left_join(portfolio_total, comp_fin_data %>% select(company_id, sectors_with_assets), by = "company_id")
-  portfolio_total <- portfolio_total %>% rowwise() %>% mutate(has_assets_in_fin_sector = grepl(pattern = financial_sector, x = sectors_with_assets))
-  
+  portfolio_total <- portfolio_total %>% rowwise() %>% 	
+    mutate(has_assets = ifelse(is.na(sectors_with_assets), TRUE, FALSE),	
+           has_assets_in_fin_sector = grepl(pattern = financial_sector, x = sectors_with_assets)	
+    )
   audit_file <- portfolio_total %>% 
     select(all_of(grouping_variables), holding_id, isin, value_usd, company_name, asset_type, has_revenue_data,
            financial_sector, sectors_with_assets, has_assets_in_fin_sector,flag)
