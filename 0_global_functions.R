@@ -113,12 +113,11 @@ set_global_parameters <- function(file_path){
     print("Warning: has_revenue set to standard value (TRUE) as not defined in the parameter file")
   }
   
-  file_format_list <<- tolower(cfg$data_output$file_type)	
-  if(is.null(file_format_list)){	
+  file_format_list <<- tolower(cfg$data_output$file_type)
+  if(is.null(file_format_list)|length(file_format_list) == 0){	
     file_format_list <<- c("rda")	
     print("Warning: file_format_list set to standard value ('rda') as not defined in the parameter file")	
   }
-  
   
 }
 
