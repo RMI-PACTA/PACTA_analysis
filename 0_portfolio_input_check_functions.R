@@ -1109,8 +1109,8 @@ create_audit_file <- function(portfolio_total, comp_fin_data){
     )
   
   audit_file <- portfolio_total %>% 
-    select(all_of(grouping_variables), holding_id, isin, value_usd, company_name, asset_type,bics_sector, has_revenue_data,
-           financial_sector, sectors_with_assets, has_assets_in_fin_sector,flag)
+    select(all_of(grouping_variables), holding_id, isin, value_usd, company_name, asset_type, bics_sector, has_revenue_data, valid_input, 
+           direct_holding, financial_sector, sectors_with_assets, has_assets_in_fin_sector,flag)
   
   if(has_revenue == FALSE){audit_file <- audit_file %>% select(-has_revenue_data)}
   
