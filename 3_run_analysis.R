@@ -1,10 +1,5 @@
 # TODO: 
-# Emissions factors aggregations for each portfolio
 # Clean up sectors options
-# Functionalise saving
-# Tech share? if yes, then complete function
-# 
-
 
 port_col_types <- set_col_types(grouping_variables, "ddddccccddcl")
 ##################
@@ -22,7 +17,6 @@ if(file.exists(equity_input_file)){
   ald_scen_eq <- get_ald_scen("Equity")
   
   ald_raw_eq <- get_ald_raw("Equity")
-  
   
   list_investors_eq <- unique(port_raw_all_eq$investor_name)
   
@@ -47,14 +41,12 @@ if(file.exists(equity_input_file)){
     
     port_pw_eq <- aggregate_portfolio(company_pw_eq) 
     
-    
     # Ownership weight methodology
     port_own_eq <- ownership_allocation(port_eq)
     
     company_own_eq <- aggregate_company(port_own_eq)
     
     port_own_eq <- aggregate_portfolio(company_own_eq) 
-    
     
     # Create combined outputs
     company_all_eq <- bind_rows(company_pw_eq, company_own_eq)
@@ -79,7 +71,6 @@ if(file.exists(equity_input_file)){
     
     company_all_eq <- calculate_scenario_alignment(company_all_eq)
     
-    
     investor_results_path <- paste0(results_path,"/", investor_name_select, "/") 
     if(!dir.exists(investor_results_path)){dir.create(investor_results_path)}
     
@@ -103,11 +94,9 @@ if (file.exists(bonds_inputs_file)){
   
   if(length(colnames(port_raw_all_cb)) != nchar(port_col_types)){stop("Check port_col_types: difference in length")}
   
-  
   ald_scen_cb <- get_ald_scen("Bonds")
   
   ald_raw_cb <- get_ald_raw("Bonds")
-  
   
   list_investors_cb <- unique(port_raw_all_cb$investor_name)
   
@@ -117,6 +106,7 @@ if (file.exists(bonds_inputs_file)){
     port_all_cb <- NA
     
     investor_name_select <- list_investors_cb[b]
+    
     print(paste0(b, ": ", investor_name_select))
     
     port_raw_cb <- port_raw_all_cb %>% filter(investor_name == investor_name_select)
@@ -131,8 +121,6 @@ if (file.exists(bonds_inputs_file)){
     company_pw_cb <- aggregate_company(port_pw_cb)
     
     port_pw_cb <- aggregate_portfolio(company_pw_cb) 
-    
-    
     
     # Create combined outputs
     company_all_cb <- company_pw_cb
@@ -158,7 +146,6 @@ if (file.exists(bonds_inputs_file)){
     
     company_all_cb <- calculate_scenario_alignment(company_all_cb)
     
-    
     investor_results_path <- paste0(results_path,"/", investor_name_select, "/") 
     if(!dir.exists(investor_results_path)){dir.create(investor_results_path)}
     
@@ -166,9 +153,7 @@ if (file.exists(bonds_inputs_file)){
     if(data_check(port_all_cb)){write_rds(port_all_cb, paste0(investor_results_path, "Bonds_results_portfolio.rda"))}	
     if(has_map){if(data_check(map_cb)){write_rds(map_cb, paste0(investor_results_path, "Bonds_results_map.rda"))}}
     
-    
   }
-  
 }
 
 
