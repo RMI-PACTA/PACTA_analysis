@@ -24,14 +24,16 @@ setwd(working_location)
 
 library(r2dii.utils)
 
+# TODO: check encodings
+
 source("0_portfolio_test.R", encoding = "windows-1252")
 source("0_graphing_functions.R", encoding = "windows-1252")
 source("0_reporting_functions.R", encoding = "windows-1252")
 source("0_portfolio_input_check_functions.R", encoding = "windows-1252")
 source("0_global_functions.R", encoding = "windows-1252")
 
-project_name <- "PACTA_Test3"
-twodii_internal <- FALSE
+project_name <- "TEST_NEW_DATASTORE"
+twodii_internal <- TRUE
 # TRUE or FALSE: TRUE means that the code is running on a 2dii laptop with dropbox connection
 
 #####################################################################

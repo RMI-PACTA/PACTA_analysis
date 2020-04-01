@@ -98,7 +98,6 @@ ReportData <- function(){
   scenarioDescription <- as.character(scenarioDF$scenarioDescription[scenarioDF$ShortName %in% Scenariochoose])
   
   BenchmarkValue <- "market"
-  if (project_name == "BlackRock"){BenchmarkValue <- "LEH CRED"}
   
   if(HasSB){
     SovBondCov <- SB.Values$SBPerc[SB.Values$investor_name == investor_name_select & SB.Values$portfolio_name == portfolio_name_select]
@@ -354,16 +353,11 @@ ReportGeneration <- function(){
     portfolio_name_select <- "Sample Portfolio"
   }
   
-  portfolio_name_select <- ifelse(portfolio_name_select == "Investment porftolio", "Investment Portfolio",portfolio_name_select)
-  if(project_name == "CDI2017-Sep" & investor_name_select == "California Insurers"){
-    portfolio_name_select <- "Insurance Companies Operating in California"
-    reportdata$SizeofPortfolio <- "4.25 Trillion"}
-  
-  if (reportdata$PeerGroup == "Pensiones"){reportdata$PeerGroup = "Fondos de pensiones Colombianos"}
-  if (grepl("FASECOLDA", project_name) & reportdata$PeerGroup == "Project"){reportdata$PeerGroup = "Mercado asegurador Colombiano"}
-  
   reportdata$AssetClass <- BondReferenceLong
-  reportdata$ReportDate <- if(financial_timestamp == "2017Q4"){"31.12.2017"}else if(financial_timestamp == "2018Q4"){"31.12.2018"}else{financial_timestamp}
+  reportdata$ReportDate <- if(financial_timestamp == "2017Q4"){"31.12.2017"}else 
+    if(financial_timestamp == "2018Q4"){"31.12.2018"}else 
+      if(financial_timestamp == "2019Q4"){"31.12.2019"}else{
+        financial_timestamp}
   
   investor_name_selectClean <- gsub("_"," ",investor_name_select)
   # investor_name_selectClean <- gsub("\("," ",investor_name_selectClean)
@@ -420,9 +414,8 @@ ReportGeneration <- function(){
     FigNames$Fig <- substring(FigNames$Name,1,2)
     
     FigureLocation <- "ReportOutputs"
-    if (project_name == "CDI2017-Sep"){FigureLocation <- "CAFigures"}
-    FigNames$Fig <- paste0(FigureLocation,"/Fig",FigNames$Fig)  
-    
+
+        
     
     
     for (f in 1:nrow(FigNames)){
@@ -433,8 +426,6 @@ ReportGeneration <- function(){
     ReportName <- paste0("ClimateAlignmentReport_",strtrim(investor_name_select,20),"_",strtrim(portfolio_name_select,20))
     
     if (InvestorType %in% c("InvestorSingle","InvestorMeta")){ReportName <- paste0("ClimateAlignmentReport_",investor_name_select)}
-    
-    if(project_name == "CDI2017-Sep"){ ReportName <- paste0("ClimateAlignmentReport_",portfolio_name_select)}    
     
     ReportName <- gsub(" ","",ReportName)
     

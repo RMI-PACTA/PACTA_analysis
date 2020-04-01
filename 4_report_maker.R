@@ -72,7 +72,7 @@ for (i in 1:nrow(report_list)){
 
   ReportFigures()
   
-  if(HasSB){
+  if(has_sb){
     SovereignBondFigures()    
   }
 
