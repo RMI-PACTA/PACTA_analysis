@@ -8,6 +8,13 @@ default:
     HasMAP: TRUE
     HasSB: FALSE
     HasRevenue: FALSE
+    HasCC: FALSE
+    
+  data_output:
+    file_type: 
+      - csv
+      - rda
+  
     
   TimeStamps:
     # setting the dates of the data-input for financial and asset-level data: this identifies the input files
