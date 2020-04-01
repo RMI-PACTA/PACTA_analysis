@@ -60,7 +60,7 @@ for (i in 1:nrow(report_list)){
   set_initial_variables()
   test_list <- create_test_list()
   
-  report_path <- paste0(project_location,"/", project_name, "/50_Outputs/")
+  # report_path <- paste0(project_location,"/", project_name, "/50_Outputs/")
   results_call()
   
   #########################

@@ -98,20 +98,38 @@ set_initial_variables <- function(){
 
 define_peers <- function(){
   
+  if(twodii_internal){
+    eq_peers <<- read_rds(paste0(results_path,"/Equity_results_portfolio.rda")) %>% 
+      filter(investor_name == meta_investor_name)
+  
+    cb_peers <<- read_rds(paste0(results_path,"/Bonds_results_portfolio.rda")) %>% 
+      filter(investor_name == meta_investor_name)
+    
+  }else{
+  
   eq_peers <<- read_rds(paste0(project_location_ext,"/",project_name,"/40_Results/Equity_results_portfolio.rda")) %>% 
     filter(investor_name == meta_investor_name)
   
   cb_peers <<- read_rds(paste0(project_location_ext,"/",project_name,"/40_Results/Bonds_results_portfolio.rda")) %>% 
     filter(investor_name == meta_investor_name)
-  
+  }
 }
 
 define_benchmarks <- function(){
   
-  eq_market <<- read_rds(paste0(data_location_ext,"/Fake_Index/Equity_results_portfolio.rda"))
-  
-  cb_market <<- read_rds(paste0(data_location_ext,"/Fake_Index/Bonds_results_portfolio.rda"))
-  
+  if(twodii_internal){
+    eq_market <<- read_rds(paste0(portcheck_v2_path,"/10_Projects/FAKE_MARKETS/40_Results/Equity_results_portfolio.rda")) %>% 
+      filter(portfolio_name == eq_market_ref)
+    cb_market <<- read_rds(paste0(portcheck_v2_path,"/10_Projects/FAKE_MARKETS/40_Results/Bonds_results_portfolio.rda"))%>% 
+      filter(portfolio_name == cb_market_ref)
+    
+  }else{
+    
+    # Set per project
+    eq_market <<- read_rds(paste0(data_location_ext,"/Fake_Index/Equity_results_portfolio.rda"))
+    
+    cb_market <<- read_rds(paste0(data_location_ext,"/Fake_Index/Bonds_results_portfolio.rda"))
+  }
 }
 
 results_call <- function(){
@@ -2256,10 +2274,9 @@ MapChart <- function(plotnumber,chart_type,tech_to_plot,plot_year){
     Power$technology<-as.factor(Power$technology)
     Power<-subset(Power,year ==plot_year)
     
-    Power <- Power %>% mutate(ALD.Location = PlantLocation )
     
     Power <-Power %>%
-      group_by(ALD.Location,technology) %>%
+      group_by(ald_location,technology) %>%
       summarise(Production = sum(plan_alloc_wt_tech_prod)) %>%
       ungroup() %>%
       filter(technology == tech_to_plot)%>%
@@ -2273,7 +2290,7 @@ MapChart <- function(plotnumber,chart_type,tech_to_plot,plot_year){
     
     
     # if (nrow(Power)>0){
-    tech_map <- joinCountryData2Map(Power, joinCode = "ISO2", nameJoinColumn = "ALD.Location")
+    tech_map <- joinCountryData2Map(Power, joinCode = "ISO2", nameJoinColumn = "ald_location")
     tech_map_poly <- fortify(tech_map) #extract polygons 
     tech_map_poly <- base::merge(tech_map_poly, tech_map@data, by.x="id", by.y="ADMIN", all.x=T)
     tech_map_poly <- tech_map_poly %>% arrange(id, order)
