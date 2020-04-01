@@ -178,7 +178,7 @@ set_currency_timestamp <- function(currencies){
 }
 
 ### Fin data cleaning functions
-map_sectors <- function(fin_data, sector_bridge){
+map_security_sectors <- function(fin_data, sector_bridge){
   
   initial_no_rows = nrow(fin_data)
   
@@ -199,17 +199,41 @@ map_sectors <- function(fin_data, sector_bridge){
   fin_data %>% group_by(security_mapped_sector) %>% filter(is.na(security_mapped_sector)) %>% summarise(count = n())
   fin_data_na <- fin_data %>% filter(is.na(security_mapped_sector))
   
-  # # deal with the issue of too many oil and gas exposure
-  # og <- fin_data %>% filter(sector == "Oil&Gas")
-  # 
-  # fd <- fin_data %>% left_join(comp_fin_data %>% select(company_id,has_asset_level_data, sectors_with_assets), by = "company_id")
-  # cs <- fd %>% select(company_name,sector, has_asset_level_data, sectors_with_assets, security_icb_subsector, security_bics_subgroup)
-  # 
   if(nrow(fin_data) != initial_no_rows){stop("Rows being dropped in mapping sectors")}
   
   return(fin_data)
   
 }
+
+map_comp_sectors <- function(comp_fin_data, sector_bridge){
+  
+  initial_no_rows = nrow(comp_fin_data)
+  
+  comp_fin_data <- comp_fin_data %>% left_join(sector_bridge %>% filter(source == "BICS") %>% select(-source), 
+                                     by = c("bics_subgroup" = "industry_classification"))
+  
+  comp_fin_data_na <- comp_fin_data %>% filter(is.na(sector)) %>% select(-sector)
+  
+  comp_fin_data <- comp_fin_data %>% filter(!is.na(sector))
+  
+  comp_fin_data_na <- comp_fin_data_na %>% left_join(sector_bridge %>% filter(source == "ICB")%>% select(-source), 
+                                           by = c("icb_subgroup" = "industry_classification"))
+  
+  comp_fin_data <- comp_fin_data %>% bind_rows(comp_fin_data_na)
+  
+  comp_fin_data <- comp_fin_data %>% select(-mapped_sector) %>% rename(mapped_sector = sector)
+  
+  comp_fin_data %>% group_by(mapped_sector) %>% filter(is.na(mapped_sector)) %>% summarise(count = n())
+  comp_fin_data_na <- comp_fin_data %>% filter(is.na(mapped_sector))
+  
+  if(nrow(comp_fin_data) != initial_no_rows){stop("Rows being dropped in mapping sectors")}
+  
+  return(comp_fin_data)
+  
+}
+
+
+
 
 override_sector_classification <- function(fin_data, overrides){
   
@@ -796,7 +820,7 @@ get_and_clean_fin_data <- function(){
   
   fin_data <- fin_data %>% filter(!is.na(isin))
   
-  fin_data <- map_sectors(fin_data, sector_bridge)
+  fin_data <- map_security_sectors(fin_data, sector_bridge)
   
   # Adds in the manual sector classification overrides
   fin_data <- override_sector_classification(fin_data, overrides)
@@ -859,8 +883,12 @@ get_and_clean_revenue_data <- function(){
 
 get_and_clean_company_fin_data <- function(){
   
-  comp_fin_data <- read_rds(paste0(analysis_inputs_path,"/consolidated_financial_data.rda"))
+  comp_fin_data_raw <- read_rds(paste0(analysis_inputs_path,"/consolidated_financial_data.rda"))
   # col_types = "ddcccccdddddclccccdccccllclddddddddddddc")
+  
+  sector_bridge <- read_csv("data/sector_bridge.csv", col_types = "ccc")
+  
+  comp_fin_data <- map_comp_sectors(comp_fin_data_raw, sector_bridge)
   
   return(comp_fin_data)
   
@@ -1092,22 +1120,34 @@ create_audit_file <- function(portfolio_total, comp_fin_data){
 
 ### Emissions work 
 
-# average_sector_intensit
+get_average_emission_data <- function(){
+  
+  average_sector_intensity <- readRDS(paste0(analysis_inputs_path,"average_sector_intensity.rda"))
+  
+  return(average_sector_intensity)
+}
+
+get_company_emission_data <- function(){
+  
+  company_emissions <- readRDS(paste0(analysis_inputs_path,"company_emissions.rda"))
+  
+  return(company_emissions)
+}
 
 prepare_portfolio_emissions <- function(
   audit_file,
-  security_financial_data,
-  consolidated_financial_data
+  fin_data,
+  comp_fin_data,
+  average_sector_intensity,
+  company_emissions
 ) {
   
-  load(file = path(here::here(), "EF", "Data", "average_sector_intensity", ext = "rda"))
-  load(file = path(here::here(), "EF", "Data", "company_emissions", ext = "rda"))
   
   audit_file <- audit_file %>% 
-    clean_names(case = "snake")
+    janitor::clean_names(case = "snake")
   
   # prepare sector view 
-  company_bics_sector <- consolidated_financial_data %>% 
+  company_bics_sector <- comp_fin_data %>% 
     distinct(
       company_id, 
       bics_sector,
@@ -1127,7 +1167,7 @@ prepare_portfolio_emissions <- function(
     )
   
   # connect audit to company ids 
-  audit_file_view <- security_financial_data %>% 
+  audit_file_view <- fin_data %>% 
     distinct(
       isin, 
       company_id,
@@ -1140,7 +1180,7 @@ prepare_portfolio_emissions <- function(
     )
   
   # connect to consolidated financial data 
-  audit_file_view <- consolidated_financial_data %>% 
+  audit_file_view <- comp_fin_data %>% 
     distinct(
       company_id, 
       market_cap,
@@ -1154,7 +1194,8 @@ prepare_portfolio_emissions <- function(
   # first try connecting at the company level 
   audit_company_emissions <- audit_file_view %>% 
     inner_join(
-      consolidated_company_emissions, 
+      company_emissions,
+      # consolidated_company_emissions, 
       by = c(
         "company_id",
         "company_name"
@@ -1166,14 +1207,14 @@ prepare_portfolio_emissions <- function(
     mutate(estimation_source = "Company data")
   
   # fix sectors 
-  audit_company_emissions <- audit_company_emissions %>% 
-    mutate(ald_sector = ifelse(ald_sector %in% c("Cement", "Steel"), "Cement&Steel", ald_sector))
-  
+  # audit_company_emissions <- audit_company_emissions %>% 
+  #   mutate(ald_sector = ifelse(ald_sector %in% c("Cement", "Steel"), "Cement&Steel", ald_sector))
+  # 
   # save output 
-  save(
-    audit_company_emissions,
-    file = path(here(), "EF", "Output", "sample_audit_company_emissions", ext = "rda")
-  )
+  # save(
+  #   audit_company_emissions,
+  #   file = path(here(), "EF", "Output", "sample_audit_company_emissions", ext = "rda")
+  # )
   
   # create clean view 
   audit_company_emissions <- audit_company_emissions %>% 
@@ -1266,14 +1307,18 @@ prepare_portfolio_emissions <- function(
 
 calculate_portfolio_emissions <- function(
   audit_file,
-  security_financial_data,
-  consolidated_financial_data
+  fin_data,
+  comp_fin_data,  
+  average_sector_intensity,
+  company_emissions
 ) {
   
   audit_emissions <- prepare_portfolio_emissions(
     audit_file,
-    security_financial_data, 
-    consolidated_financial_data
+    fin_data, 
+    comp_fin_data, 
+    average_sector_intensity,
+    company_emissions
   )
   
   # calculate holding weight 
@@ -1309,21 +1354,8 @@ calculate_portfolio_emissions <- function(
       sector
     ) %>% 
     summarise(
-      sector_emissions = sum(emissions, na.rm = TRUE),
-      sector_emissions_port_weight = sum(weighted_emissions, na.rm = TRUE)
+      weighted_sector_emissions = sum(weighted_emissions, na.rm = TRUE)
     )
-  
-  # save output rda sample 
-  save(
-    audit_sector_emissions,
-    file = path(here(), "EF", "Output", "sample_audit_sector_emissions", ext = "rda")
-  )
-  
-  # save output csv sample 
-  write_csv(
-    audit_sector_emissions,
-    path = path(here(), "EF", "Output", "sample_audit_sector_emissions", ext = "csv")
-  )
   
   audit_sector_emissions
 }
