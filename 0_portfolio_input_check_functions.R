@@ -649,7 +649,7 @@ check_for_ald <- function(portfolio_subset, comp_fin_data){
   initial_port_value = sum(portfolio_subset$value_usd, na.rm = T)
   
   ald_markers <- comp_fin_data %>% 
-    select(company_id, has_asset_level_data, sectors_with_assets) %>% 
+    select(company_id,bics_sector, has_asset_level_data, sectors_with_assets) %>% 
     distinct()
   
   portfolio_subset <- left_join(portfolio_subset, ald_markers, by = "company_id")
@@ -663,7 +663,7 @@ check_for_ald <- function(portfolio_subset, comp_fin_data){
     mutate(has_ald_in_fin_sector = if_else(grepl(financial_sector, sectors_with_assets),TRUE,FALSE))
   
   
-  if(sum(portfolio_subset$value_usd, na.rm = T) != initial_port_value){stop("Merge over company idea changes portfolio value")}
+  if(sum(portfolio_subset$value_usd, na.rm = T) != initial_port_value){stop("Merge over company id changes portfolio value")}
   
   return(portfolio_subset)
   
