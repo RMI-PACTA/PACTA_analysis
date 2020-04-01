@@ -24,6 +24,8 @@ comp_fin_data <- get_and_clean_company_fin_data()
 
 revenue_data <- get_and_clean_revenue_data()
 
+
+
 # emissions_data <- get_and_clean_emissions_data()
 
 ####################
@@ -59,6 +61,8 @@ identify_missing_data(portfolio_total)
 audit_file <- create_audit_file(portfolio_total, comp_fin_data)
 
 create_audit_chart(audit_file, proc_input_path)
+
+emissions_totals <- crea_
 
 ################
 #### SAVING ####

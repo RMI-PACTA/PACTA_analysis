@@ -1090,3 +1090,240 @@ create_audit_file <- function(portfolio_total, comp_fin_data){
   
 }
 
+### Emissions work 
+
+# average_sector_intensit
+
+prepare_portfolio_emissions <- function(
+  audit_file,
+  security_financial_data,
+  consolidated_financial_data
+) {
+  
+  load(file = path(here::here(), "EF", "Data", "average_sector_intensity", ext = "rda"))
+  load(file = path(here::here(), "EF", "Data", "company_emissions", ext = "rda"))
+  
+  audit_file <- audit_file %>% 
+    clean_names(case = "snake")
+  
+  # prepare sector view 
+  company_bics_sector <- consolidated_financial_data %>% 
+    distinct(
+      company_id, 
+      bics_sector,
+      bics_subgroup,
+      mapped_sector
+    ) %>% 
+    filter(!is.na(company_id))
+  
+  # create audit view 
+  audit_file_view <- audit_file %>% 
+    distinct(
+      holding_id,
+      portfolio_name, 
+      investor_name,
+      isin,
+      value_usd
+    )
+  
+  # connect audit to company ids 
+  audit_file_view <- security_financial_data %>% 
+    distinct(
+      isin, 
+      company_id,
+      company_name,
+      asset_type
+    ) %>% 
+    inner_join(
+      audit_file_view, 
+      by = "isin"
+    )
+  
+  # connect to consolidated financial data 
+  audit_file_view <- consolidated_financial_data %>% 
+    distinct(
+      company_id, 
+      market_cap,
+      bond_debt_out
+    ) %>% 
+    inner_join(
+      audit_file_view, 
+      by = "company_id"
+    )
+  
+  # first try connecting at the company level 
+  audit_company_emissions <- audit_file_view %>% 
+    inner_join(
+      consolidated_company_emissions, 
+      by = c(
+        "company_id",
+        "company_name"
+      )
+    )
+  
+  # specify source
+  audit_company_emissions <- audit_company_emissions %>% 
+    mutate(estimation_source = "Company data")
+  
+  # fix sectors 
+  audit_company_emissions <- audit_company_emissions %>% 
+    mutate(ald_sector = ifelse(ald_sector %in% c("Cement", "Steel"), "Cement&Steel", ald_sector))
+  
+  # save output 
+  save(
+    audit_company_emissions,
+    file = path(here(), "EF", "Output", "sample_audit_company_emissions", ext = "rda")
+  )
+  
+  # create clean view 
+  audit_company_emissions <- audit_company_emissions %>% 
+    distinct(
+      investor_name,
+      portfolio_name, 
+      holding_id,
+      isin,
+      value_usd,
+      company_id,
+      company_name,
+      asset_type,
+      ald_sector,
+      bics_sector, 
+      bics_subgroup, 
+      mapped_sector,
+      emissions, 
+      estimation_source
+    )
+  
+  # then try connecting at the sector level 
+  audit_file_sector <- audit_file_view %>% 
+    anti_join(
+      audit_company_emissions, 
+      by = "company_id"
+    )
+  
+  audit_file_sector <- audit_file_sector %>% 
+    inner_join(
+      company_bics_sector, 
+      by = "company_id"
+    )
+  
+  audit_sector_emissions <- audit_file_sector %>% 
+    inner_join(
+      average_sector_intensity, 
+      by = c(
+        "bics_sector",  
+        "asset_type"
+      )
+    )
+  
+  # calculate absolute emissions 
+  audit_sector_emissions <- audit_sector_emissions %>% 
+    mutate(
+      emissions = case_when(
+        asset_type == "Bonds" ~ bond_debt_out * mean_intensity,
+        asset_type == "Equity" ~ market_cap * mean_intensity
+      )
+    )
+  
+  # flagging issues 
+  audit_sector_emissions <- audit_sector_emissions %>% 
+    mutate(
+      issue = case_when(
+        is.na(bond_debt_out) & asset_type == "Bonds" ~ "Missing debt outstanding",
+        is.na(market_cap)  & asset_type == "Equity" ~ "Missing market capitilization"
+      )
+    )
+  
+  # specify source
+  audit_sector_emissions <- audit_sector_emissions %>% 
+    mutate(estimation_source = "Sector average")
+  
+  # create clean view 
+  audit_sector_emissions <- audit_sector_emissions %>% 
+    distinct(
+      investor_name,
+      portfolio_name, 
+      holding_id,
+      isin,
+      value_usd,
+      company_id,
+      company_name,
+      asset_type,
+      bics_sector, 
+      bics_subgroup, 
+      mapped_sector,
+      emissions,
+      estimation_source,
+      issue
+    )
+  
+  # joining both sources together 
+  bind_rows(
+    audit_sector_emissions,
+    audit_company_emissions
+  )
+}
+
+calculate_portfolio_emissions <- function(
+  audit_file,
+  security_financial_data,
+  consolidated_financial_data
+) {
+  
+  audit_emissions <- prepare_portfolio_emissions(
+    audit_file,
+    security_financial_data, 
+    consolidated_financial_data
+  )
+  
+  # calculate holding weight 
+  audit_emissions <- audit_emissions %>% 
+    group_by(
+      portfolio_name,
+      investor_name
+    ) %>% 
+    mutate(weighting = value_usd / sum(value_usd, na.rm = TRUE))
+  
+  # weight emissions by holding weight 
+  audit_emissions <- audit_emissions %>% 
+    mutate(weighted_emissions = weighting * emissions)
+  
+  # fix sector classifications 
+  audit_emissions <- audit_emissions %>% 
+    mutate(ald_sector = ifelse(mapped_sector != "Other" & is.na(ald_sector), mapped_sector, ald_sector))
+  
+  # create final sector grouping 
+  audit_emissions <- audit_emissions %>% 
+    mutate(sector = ifelse(!is.na(ald_sector), ald_sector, bics_sector))
+  
+  # modify sector names 
+  audit_emissions <- audit_emissions %>% 
+    mutate(sector = ifelse(sector %in% c("Industrials", "Energy", "Utilities", "Materials"), paste0("Other ", sector), sector))
+  
+  # sum weighted emissions 
+  audit_sector_emissions <- audit_emissions %>% 
+    group_by(
+      portfolio_name, 
+      investor_name, 
+      asset_type,
+      sector
+    ) %>% 
+    summarise(
+      sector_emissions = sum(emissions, na.rm = TRUE),
+      sector_emissions_port_weight = sum(weighted_emissions, na.rm = TRUE)
+    )
+  
+  # save output rda sample 
+  save(
+    audit_sector_emissions,
+    file = path(here(), "EF", "Output", "sample_audit_sector_emissions", ext = "rda")
+  )
+  
+  # save output csv sample 
+  write_csv(
+    audit_sector_emissions,
+    path = path(here(), "EF", "Output", "sample_audit_sector_emissions", ext = "csv")
+  )
+  
+  audit_sector_emissions
+}
