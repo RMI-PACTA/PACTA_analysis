@@ -50,6 +50,7 @@ default:
       - 2022
       - 2023
       - 2024
+      - 2040
     SECTOR.FILTER:
       - Power
       - Automotive

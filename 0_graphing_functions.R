@@ -101,17 +101,17 @@ define_peers <- function(){
   if(twodii_internal){
     eq_peers <<- read_rds(paste0(results_path,"/Equity_results_portfolio.rda")) %>% 
       filter(investor_name == meta_investor_name)
-  
+    
     cb_peers <<- read_rds(paste0(results_path,"/Bonds_results_portfolio.rda")) %>% 
       filter(investor_name == meta_investor_name)
     
   }else{
-  
-  eq_peers <<- read_rds(paste0(project_location_ext,"/",project_name,"/40_Results/Equity_results_portfolio.rda")) %>% 
-    filter(investor_name == meta_investor_name)
-  
-  cb_peers <<- read_rds(paste0(project_location_ext,"/",project_name,"/40_Results/Bonds_results_portfolio.rda")) %>% 
-    filter(investor_name == meta_investor_name)
+    
+    eq_peers <<- read_rds(paste0(project_location_ext,"/",project_name,"/40_Results/Equity_results_portfolio.rda")) %>% 
+      filter(investor_name == meta_investor_name)
+    
+    cb_peers <<- read_rds(paste0(project_location_ext,"/",project_name,"/40_Results/Bonds_results_portfolio.rda")) %>% 
+      filter(investor_name == meta_investor_name)
   }
 }
 
@@ -198,6 +198,36 @@ results_call <- function(){
   if(has_sb){
     
     SB.Summary <<- read.csv(paste0(PROC.INPUT.PATH,"SovereignBondSummary.csv"),strip.white = T,stringsAsFactors = F)
+  }
+  
+  if(inc_sda_approach){
+    
+    if(data_check(EQCombin)){
+      max_market = max(eq_market$year,na.rm = T)
+      max_year_data = max(EQCombin$year, na.rm = T)
+      
+      if(max_year_data == max_market){
+        EQCombin <- sda_portfolio_target(eq_market, EQCombin, 
+                                         start_year = start_year, 
+                                         target_year = max_year_data)
+        
+      }
+    }
+    
+    
+    
+    if(data_check(CBCombin)){
+      max_market = max(cb_market$year,na.rm = T)
+      max_year_data = max(CBCombin$year, na.rm = T)
+      
+      if(max_year_data == max_market){
+        CBCombin <- sda_portfolio_target(cb_market, CBCombin, 
+                                         start_year = start_year, 
+                                         target_year = max_year_data)
+        
+      }
+    }
+    
   }
   
 }

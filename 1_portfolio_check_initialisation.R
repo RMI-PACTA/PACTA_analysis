@@ -31,8 +31,9 @@ source("0_graphing_functions.R", encoding = "windows-1252")
 source("0_reporting_functions.R", encoding = "windows-1252")
 source("0_portfolio_input_check_functions.R", encoding = "windows-1252")
 source("0_global_functions.R", encoding = "windows-1252")
+source("0_sda_approach.R", encoding = "windows-1252")
 
-project_name <- "TEST_NEW_DATASTORE"
+project_name <- "PACTA_2020_TESTS_CJ"
 twodii_internal <- TRUE
 # TRUE or FALSE: TRUE means that the code is running on a 2dii laptop with dropbox connection
 

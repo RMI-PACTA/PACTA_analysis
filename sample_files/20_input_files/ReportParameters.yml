@@ -29,4 +29,6 @@ default:
       IncAlignment: TRUE
       IncPeersChart: FALSE
       IncPhysicalRisk: FALSE
+      inc_sda_approach: TRUE     
       No.Companies: 15
+     

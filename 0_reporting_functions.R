@@ -21,6 +21,11 @@ set_report_parameters <- function(ParameterFilePath){
   start_year <<- as.numeric(Startyear)
   no_companies <<- as.numeric(No.Companies)
   
+  if(!exists(inc_sda_approach)){
+    inc_sda_approach <- FALSE
+    print("inc_sda_approach not in parameter file. Default value set to FALSE.")
+  }
+  
   AccountingPrinciple <<- if_else(AccountingPrinciple == "PortfolioWeight","portfolio_weight",AccountingPrinciple)
   AccountingPrinciple <<- if_else(AccountingPrinciple == "Ownership","ownership_weight",AccountingPrinciple)  
 }
@@ -414,8 +419,8 @@ ReportGeneration <- function(){
     FigNames$Fig <- substring(FigNames$Name,1,2)
     
     FigureLocation <- "ReportOutputs"
-
-        
+    
+    
     
     
     for (f in 1:nrow(FigNames)){

@@ -128,8 +128,6 @@ set_project_paths <- function(project_name, twodii_internal, project_location_ex
                                path_dropbox_2dii("PortCheck_v2","10_Projects",project_name),
                                paste0(project_location_ext,"/", project_name))
   
-  
-  
   log_path <<- paste0(project_location,"/00_Log_Files")
   par_file_path <<- paste0(project_location,"/10_Parameter_File")
   raw_input_path <<-  paste0(project_location,"/20_Raw_Inputs")
