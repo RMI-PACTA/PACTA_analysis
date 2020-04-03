@@ -21,7 +21,7 @@ set_report_parameters <- function(ParameterFilePath){
   start_year <<- as.numeric(Startyear)
   no_companies <<- as.numeric(No.Companies)
   
-  if(!exists(inc_sda_approach)){
+  if(!exists("inc_sda_approach")){
     inc_sda_approach <- FALSE
     print("inc_sda_approach not in parameter file. Default value set to FALSE.")
   }
@@ -56,7 +56,7 @@ ReportData <- function(){
   
   SizePortfolio <-  subgroup_overview %>%
     filter(portfolio_name == portfolio_name_select) %>%
-    distinct(Port.ValueUSD)
+    distinct(asset_value_usd)
   SizeofPortfolio<- SizePortfolio[[1]]
   
   
@@ -104,7 +104,7 @@ ReportData <- function(){
   
   BenchmarkValue <- "market"
   
-  if(HasSB){
+  if(has_sb){
     SovBondCov <- SB.Values$SBPerc[SB.Values$investor_name == investor_name_select & SB.Values$portfolio_name == portfolio_name_select]
     SovBondCov <- ifelse(identical(SovBondCov, numeric(0)),0,SovBondCov)  
     SovBondCov <<- round(SovBondCov*100,1)
@@ -143,18 +143,18 @@ ReportData <- function(){
   
   ProjectPeersRef = PeerGroupSelection
   
-  PeerGroupName <- ifelse(eq_peers_ref == cb_peers_ref & eq_peers_ref == "Project",ProjectPeersRef, PeerGroupName)
+  PeerGroupName <- ifelse(EQPeersRef == CBPeersRef & EQPeersRef == "Project",ProjectPeersRef, PeerGroupName)
   
   
-  # Check Physical Risk
-  
-  if(data_check(EQPhysicalRisk)){
-    EQPhysicalRiskCheck <- TRUE
-  }else{EQPhysicalRiskCheck <- FALSE}
-  
-  if(data_check(CBPhysicalRisk)){
-    CBPhysicalRiskCheck <-TRUE
-  }  else{CBPhysicalRiskCheck <- FALSE}
+  # # Check Physical Risk
+  # if(HasRISK())
+  # if(data_check(EQPhysicalRisk)){
+  #   EQPhysicalRiskCheck <- TRUE
+  # }else{EQPhysicalRiskCheck <- FALSE}
+  # 
+  # if(data_check(CBPhysicalRisk)){
+  #   CBPhysicalRiskCheck <-TRUE
+  # }  else{CBPhysicalRiskCheck <- FALSE}
   
   # if (IsSample == T){     # Only necessary to print an unnamed report ie for sharing with interested partners. 
   #   investor_name_select <- "Investor"

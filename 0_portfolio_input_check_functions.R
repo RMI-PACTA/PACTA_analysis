@@ -42,7 +42,7 @@ clean_colnames_portfolio_input_file <- function(portfolio){
   
   if("numberof_shares" %in% colnames(portfolio)){portfolio<- portfolio %>% rename(number_of_shares = numberof_shares)}
   
-  # colnames(portfolio) <- gsub("ï..","",colnames(portfolio))
+ 
   
   # names(portfolio)[1] <- gsub("[^A-Za-z0-9]", "", names(portfolio)[1])
   
