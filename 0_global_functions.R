@@ -6,7 +6,6 @@ set_location <- function(){
     working_location <- getwd()
   }
   
-  working_location <- gsub("Â","",working_location)
   working_location <- paste0(working_location, "/")
   
   return(working_location)
@@ -113,6 +112,12 @@ set_global_parameters <- function(file_path){
     print("Warning: has_revenue set to standard value (TRUE) as not defined in the parameter file")
   }
   
+  inc_emission_factors <<- cfg$Methodology$IncEmissionFactors
+  if(is.null(inc_emission_factors)){
+    inc_emission_factors <<- FALSE
+    print("Warning: inc_emission_factors set to standard value (inc_emission_factors) as not defined in the parameter file")
+  }
+  
   file_format_list <<- tolower(cfg$data_output$file_type)
   if(is.null(file_format_list)|length(file_format_list) == 0){	
     file_format_list <<- c("rda")	
@@ -145,7 +150,7 @@ set_git_path <- function(){
     git_path <- getwd()
   }
   
-  git_path <- gsub("Â","",git_path)
+  git_path <- gsub("?","",git_path)
   git_path <- paste0(git_path, "/")
   
   git_path
@@ -261,16 +266,16 @@ first_char_up <- function(x){
 
 clean_punctuation <- function(x){
   
-  x <- gsub("ó","o",x)
+  x <- gsub("Ã³","o",x)
   x <- gsub("&"," and ",x)
-  x <- gsub("á","a",x)
+  x <- gsub("Ã¡","a",x)
   x <- gsub("/"," ",x)
-  x <- gsub("ä","ae", x)
-  x <- gsub("ö","oe", x)
-  x <- gsub("ü","ue", x)
-  x <- gsub("Ä","Ae", x)
-  x <- gsub("Ö","Oe", x)
-  x <- gsub("Ü","Ue", x)
+  x <- gsub("Ã¤","ae", x)
+  x <- gsub("Ã¶","oe", x)
+  x <- gsub("Ã¼","ue", x)
+  x <- gsub("Ã„","Ae", x)
+  x <- gsub("Ã–","Oe", x)
+  x <- gsub("Ãœ","Ue", x)
   
   x
   

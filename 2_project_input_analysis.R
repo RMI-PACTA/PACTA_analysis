@@ -24,9 +24,9 @@ comp_fin_data <- get_and_clean_company_fin_data()
 
 revenue_data <- get_and_clean_revenue_data()
 
-average_sector_intensity <- get_average_emission_data()
+average_sector_intensity <- get_average_emission_data(inc_emission_factors)
 
-company_emissions <- get_company_emission_data()
+company_emissions <- get_company_emission_data(inc_emission_factors)
 
 ####################
 #### PORTFOLIOS ####

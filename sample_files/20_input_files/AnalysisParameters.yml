@@ -9,6 +9,7 @@ default:
     HasSB: FALSE
     HasRevenue: FALSE
     HasCC: FALSE
+    IncEmissionFactors: FALSE 
     
   data_output:
     file_type: 
