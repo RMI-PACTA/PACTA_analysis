@@ -118,11 +118,18 @@ define_peers <- function(){
 define_benchmarks <- function(){
   
   if(twodii_internal){
-    eq_market <<- read_rds(paste0(portcheck_v2_path,"/10_Projects/FAKE_MARKETS/40_Results/Equity_results_portfolio.rda")) %>% 
+    
+    eq_market <<- read_rds(paste0(portcheck_v2_path,"/10_Projects/INDEX_2019/40_Results/Equity_results_portfolio.rda")) %>% 
       filter(portfolio_name == eq_market_ref)
-    cb_market <<- read_rds(paste0(portcheck_v2_path,"/10_Projects/FAKE_MARKETS/40_Results/Bonds_results_portfolio.rda"))%>% 
+    cb_market <<- read_rds(paste0(portcheck_v2_path,"/10_Projects/INDEX_2019/40_Results/Bonds_results_portfolio.rda"))%>% 
       filter(portfolio_name == cb_market_ref)
     
+    
+    # eq_market <<- read_rds(paste0(portcheck_v2_path,"/10_Projects/FAKE_MARKETS/40_Results/Equity_results_portfolio.rda")) %>% 
+    #   filter(portfolio_name == eq_market_ref)
+    # cb_market <<- read_rds(paste0(portcheck_v2_path,"/10_Projects/FAKE_MARKETS/40_Results/Bonds_results_portfolio.rda"))%>% 
+    #   filter(portfolio_name == cb_market_ref)
+    # }
   }else{
     
     # Set per project
