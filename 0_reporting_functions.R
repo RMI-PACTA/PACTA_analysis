@@ -22,7 +22,7 @@ set_report_parameters <- function(ParameterFilePath){
   no_companies <<- as.numeric(No.Companies)
   
   if(!exists("inc_sda_approach")){
-    inc_sda_approach <- FALSE
+    inc_sda_approach <<- FALSE
     print("inc_sda_approach not in parameter file. Default value set to FALSE.")
   }
   
@@ -50,14 +50,14 @@ get_report_list <- function(Ports.Overview){
 
 ReportData <- function(){
   
-  company_name <- portfolio_name_select
-  
-  company_name <- gsub("&","\\\\\\\\&",company_name)
-  
+  # company_name <- portfolio_name_select
+  # 
+  # company_name <- gsub("&","\\\\\\\\&",company_name)
+   
   SizePortfolio <-  subgroup_overview %>%
     filter(portfolio_name == portfolio_name_select) %>%
-    distinct(asset_value_usd)
-  SizeofPortfolio<- SizePortfolio[[1]]
+    distinct(portfolio_value_usd)
+  SizeofPortfolio <- SizePortfolio[[1]]
   
   
   SizeofPortfolio <- comprss_long(SizeofPortfolio)
@@ -167,8 +167,8 @@ ReportData <- function(){
   
   ### MERGE ALL RESULTS ###
   reportdata <<- data.frame(
-    c("investor_name_select",investor_name_select),
-    c("portfolio_name_select",portfolio_name_select),
+    c("InvestorName",investor_name_select),
+    c("PortfolioName",portfolio_name_select),
     c("SizeofPortfolio",SizeofPortfolio),
     c("TodaysDate",TodaysDate),
     c("PeerGroup",PeerGroupName),
@@ -210,10 +210,11 @@ ReportGeneration <- function(){
   
   over <- SectorDataAnalysis()
   
-  AnalysisCoverage <-  round(sum(over$valid_value_usd[over$financial_sector !="Not Included"])/sum(over$valid_value_usd)*100,1)
+  AnalysisCoverage <<-  round(sum(over$valid_value_usd[over$financial_sector !="Not Included"])/sum(over$valid_value_usd)*100,1)
   
   
   reportdata <- ReportData()
+  reportdata <- reportdata %>% filter(PortfolioName == portfolio_name_select)
   
   # Copy in the template for the report
   text <- as.data.frame(template,stringsAsFactors = FALSE)  
@@ -358,7 +359,7 @@ ReportGeneration <- function(){
     portfolio_name_select <- "Sample Portfolio"
   }
   
-  reportdata$AssetClass <- BondReferenceLong
+  reportdata$AssetClass <- BondReference
   reportdata$ReportDate <- if(financial_timestamp == "2017Q4"){"31.12.2017"}else 
     if(financial_timestamp == "2018Q4"){"31.12.2018"}else 
       if(financial_timestamp == "2019Q4"){"31.12.2019"}else{
@@ -397,7 +398,7 @@ ReportGeneration <- function(){
   text$text <- gsub("CBMarketRef",cb_market_ref, text$text)
   
   
-  if (HasSB){
+  if (has_sb){
     text$text <- gsub("SovBondCov",SovBondCov, text$text)
     text$text <- gsub("sbdowngradeperc",sb_downgrade_perc, text$text)
   }
@@ -419,7 +420,7 @@ ReportGeneration <- function(){
     FigNames$Fig <- substring(FigNames$Name,1,2)
     
     FigureLocation <- "ReportOutputs"
-    
+    FigNames$Fig <- paste0(FigureLocation,"/Fig",FigNames$Fig)  
     
     
     
@@ -430,7 +431,7 @@ ReportGeneration <- function(){
     
     ReportName <- paste0("ClimateAlignmentReport_",strtrim(investor_name_select,20),"_",strtrim(portfolio_name_select,20))
     
-    if (InvestorType %in% c("InvestorSingle","InvestorMeta")){ReportName <- paste0("ClimateAlignmentReport_",investor_name_select)}
+    # if (InvestorType %in% c("InvestorSingle","InvestorMeta")){ReportName <- paste0("ClimateAlignmentReport_",investor_name_select)}
     
     ReportName <- gsub(" ","",ReportName)
     
@@ -442,10 +443,10 @@ ReportGeneration <- function(){
     
     
     # Save the template file
-    write.table(text,paste0(report_path,ReportName,".Rnw"),col.names = FALSE,row.names = FALSE,quote=FALSE,fileEncoding = "UTF-8")  
+    write.table(text,paste0(report_path,ReportName,".Rnw"),col.names = FALSE,row.names = FALSE,quote=FALSE)  
     
     # Copy in Report Graphics
-    originalloc <- paste0(dirname(Location),"/Templates/ReportGraphics/")  
+    originalloc <- paste0(getwd(),"/Templates/ReportGraphics/")  
     graphicsloc <- paste0(report_path,"ReportGraphics/")
     flist <- list.files(originalloc, full.names = TRUE)
     
