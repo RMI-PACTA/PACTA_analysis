@@ -58,7 +58,8 @@ audit_file <- create_audit_file(portfolio_total, comp_fin_data)
 
 create_audit_chart(audit_file, proc_input_path)
 
-emissions_totals <- calculate_portfolio_emissions(audit_file,
+emissions_totals <- calculate_portfolio_emissions(inc_emission_factors,
+                                                  audit_file,
                                                   fin_data, 
                                                   comp_fin_data,  
                                                   average_sector_intensity,
