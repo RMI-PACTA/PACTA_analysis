@@ -627,9 +627,9 @@ check_bloomberg_data <- function(portfolio_total){
   
   portfolio_total <- portfolio_total %>%
     mutate(has_bbg_data = case_when(
-      asset_type == "Equity" & (is.na(bloomberg_id) | bloomberg_id == "" | is.na(security_mapped_sector) | security_mapped_sector == "Unclassifiable" | security_mapped_sector == "") ~ FALSE,
-      asset_type == "Bonds" & (is.na(corporate_bond_ticker) | corporate_bond_ticker == "" | is.na(security_mapped_sector) | security_mapped_sector == "Unclassifiable" | security_mapped_sector == "") ~ FALSE,
-      asset_type == "" ~ FALSE,
+      (asset_type == "Equity" | asset_type == "Unclassifiable") & (is.na(bloomberg_id) | bloomberg_id == "") ~ FALSE,
+      (asset_type == "Bonds" | asset_type == "Unclassifiable") & (is.na(corporate_bond_ticker) | corporate_bond_ticker == "") ~ FALSE,
+      (asset_type == ""  | asset_type == "Unclassifiable") ~ FALSE,
       is.na(asset_type) ~ FALSE,
       TRUE ~ TRUE)
     )
