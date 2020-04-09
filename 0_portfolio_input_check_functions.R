@@ -1377,17 +1377,8 @@ calculate_portfolio_emissions <- function(
     audit_emissions <- audit_emissions %>% 
       mutate(weighted_emissions = weighting * emissions)
     
-    # fix sector classifications 
-    audit_emissions <- audit_emissions %>% 
-      mutate(ald_sector = ifelse(mapped_sector != "Other" & is.na(ald_sector), mapped_sector, ald_sector))
     
-    # create final sector grouping 
-    audit_emissions <- audit_emissions %>% 
-      mutate(sector = ifelse(!is.na(ald_sector), ald_sector, bics_sector))
-    
-    # modify sector names 
-    audit_emissions <- audit_emissions %>% 
-      mutate(sector = ifelse(sector %in% c("Industrials", "Energy", "Utilities", "Materials"), paste0("Other ", sector), sector))
+    audit_emissions <- add_other_to_sector_classifications(audit_emissions)
     
     # sum weighted emissions 
     audit_sector_emissions <- audit_emissions %>% 
@@ -1398,9 +1389,27 @@ calculate_portfolio_emissions <- function(
         sector
       ) %>% 
       summarise(
+        value_usd = sum(value_usd, na.rm = TRUE),
         weighted_sector_emissions = sum(weighted_emissions, na.rm = TRUE)
       )
   }
   
   audit_sector_emissions
 }
+
+
+add_other_to_sector_classifications <- function(audit){
+  # fix sector classifications 
+  audit <- audit %>% 
+    mutate(ald_sector = ifelse(mapped_sector != "Other" & is.na(ald_sector), mapped_sector, ald_sector))
+  
+  # create final sector grouping 
+  audit <- audit %>% 
+    mutate(sector = ifelse(!is.na(ald_sector), ald_sector, bics_sector))
+  
+  # modify sector names 
+  audit <- audit %>% 
+    mutate(sector = ifelse(sector %in% c("Industrials", "Energy", "Utilities", "Materials"), paste0("Other ", sector), sector))
+
+  audit
+  }
