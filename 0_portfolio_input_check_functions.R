@@ -902,15 +902,14 @@ get_and_clean_company_fin_data <- function(){
   
 }
 
-read_and_process_portfolio <- function(project_name,
+
+process_raw_portfolio <- function(portfolio_raw,
                                        fin_data,
                                        fund_data,
                                        currencies, 
                                        grouping_variables){
   
-  portfolio <- read_raw_portfolio_file(project_name)
-  
-  portfolio <- clean_colnames_portfolio_input_file(portfolio)
+  portfolio <- clean_colnames_portfolio_input_file(portfolio_raw)
   
   portfolio <- clear_portfolio_input_blanks(portfolio)
   
