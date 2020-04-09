@@ -1,0 +1,6 @@
+The portfolio you have uploaded has $18,040,957,905 USD in holdings. 
+                 Of which $7,213,677,082 USD is in bonds, 
+                and $10,251,917,488 USD is in equity. 
+
+                The remainder of the holdings are in asset classes outside the scope of this analysis. 
+                For more information as to how each holding is classified, review the chart and audit file below.
