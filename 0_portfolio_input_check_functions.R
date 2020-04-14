@@ -790,11 +790,11 @@ get_and_clean_currency_data <- function(){
 get_and_clean_fund_data <- function(){
   
   # Fund Data
-  if(file.exists(paste0(analysis_inputs_path,"/FundsData",financial_timestamp,".rda"))){
-    fund_data <- readRDS(paste0(analysis_inputs_path,"/FundsData",financial_timestamp,".rda"))
+  if(file.exists(paste0(analysis_inputs_path,"/fund_data_",financial_timestamp,".rda"))){
+    fund_data <- readRDS(paste0(analysis_inputs_path,"/fund_data_",financial_timestamp,".rda"))
   }else{
-    fund_data <- readRDS(paste0(analysis_inputs_path,"/FundsData2018Q4.rda"))
-    print("Old Fund Data being used. Replace FundsData2018Q4")
+    fund_data <- readRDS(paste0(analysis_inputs_path,"/fund_data_2018Q4.rda"))
+    print("Old Fund Data being used. Replace FundsData2018Q4 or check name of file.")
   }
   
   fund_data <- fund_data %>% janitor::clean_names()
