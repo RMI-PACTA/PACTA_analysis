@@ -1,5 +1,16 @@
 # 0_web_functions
 
+get_portfolio_name <- function(){
+  PortfolioNameRef = commandArgs(trailingOnly=TRUE)
+  
+  if (length(PortfolioNameRef)==0) {
+    stop("At least one argument must be supplied (input file).n", call.=FALSE)
+  } 
+  
+  return(PortfolioNameRef)
+  
+}
+
 set_webtool_paths <- function(){
   
   project_location <<-  paste0(working_location,"web_folders/web_tool")

@@ -105,6 +105,12 @@ define_peers <- function(){
     cb_peers <<- read_rds(paste0(results_path,"/Bonds_results_portfolio.rda")) %>% 
       filter(investor_name == meta_investor_name)
     
+  }else if (project_name == "web_tool"){
+    
+    eq_peers <<-  NA
+    
+    cb_peers <<- NA
+    
   }else{
     
     eq_peers <<- read_rds(paste0(project_location_ext,"/",project_name,"/40_Results/Equity_results_portfolio.rda")) %>% 

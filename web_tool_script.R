@@ -24,7 +24,7 @@ source("0_web_functions.R")
 if (rstudioapi::isAvailable()) {
   portfolio_name_ref <- "Portfolio3"
 } else {
-  portfolio_name_ref = GetPortfolioName()
+  portfolio_name_ref = get_portfolio_name()
   working_location <- getwd()
 }
 
@@ -32,6 +32,8 @@ if (rstudioapi::isAvailable()) {
 project_name <- "web_tool"
 twodii_internal <- FALSE
 
+
+# Change these to locations on the server. 
 project_location_ext <- "C:/Users/clare/Desktop/ExternalTest"
 data_location_ext <- "C:/Users/clare/Desktop/ExternalTest/r2dii_data/"
 
@@ -134,13 +136,17 @@ if(data_check(cb_portfolio)){write_rds(cb_portfolio, paste0(proc_input_path, "/"
 if(data_check(portfolio_overview)){write_rds(portfolio_overview, paste0(proc_input_path, "/", project_name, "_overview_portfolio.rda"))}
 if(data_check(audit_file)){write_rds(audit_file, paste0(proc_input_path, "/", project_name,"_audit_file.rda"))}
 if(data_check(emissions_totals)){write_rds(emissions_totals, paste0(proc_input_path, "/", project_name, "_emissions.rda"))}
-#########################################################################
 
+
+#########################################################################
+# START RUN ANALYIS
+#########################################################################
 
 # delete all results files
 unlink(paste0(results_path,"/*"), force = TRUE, recursive = TRUE)
 
 port_col_types <- set_col_types(grouping_variables, "ddddccccddcl")
+
 ##################
 ##### EQUITY #####
 ##################
@@ -295,7 +301,69 @@ if (file.exists(bonds_inputs_file)){
   }
 }
 
-##################################################################
+
+#########################################################################
+# START REPORT PRINTING
+#########################################################################
+
+# library(grid)
+# library(ggplot2)
+# library(ggthemes)
+# library(gridExtra)
+# library(scales)
+# library(stringr)
+# library(extrafont)
+# library(knitr)
+# library(RColorBrewer)
+# library(matrixStats)
+# library(rworldmap)
+# library(ggmap)
+# library(cowplot)
+# library(ggrepel)
+# library(ggforce) 
+# library(sitools) 
+# library(countrycode)
 
 
+options(r2dii_config = paste0(par_file_path,"/ReportParameters.yml"))
 
+set_report_parameters(paste0(par_file_path,"/ReportParameters.yml"))
+
+# Set the variables for plotting
+graph_values()
+
+# List of Portfolios to print
+portfolio_overview <- read_rds(paste0(proc_input_path, "/",project_name,"_overview_portfolio.rda"))
+portfolio_overview$investor_name <- clean_punctuation(portfolio_overview$investor_name)
+portfolio_overview$portfolio_name <- clean_punctuation(portfolio_overview$portfolio_name)
+report_list <- get_report_list(portfolio_overview)
+
+
+template <- readLines(paste0(getwd(),"/Templates/",templateversion,".tex")) #,encoding = "UTF-8"
+translate_labels(Language)
+
+i=1
+
+investor_name_select <- report_list$investor_name[i]
+portfolio_name_select <- report_list$portfolio_name[i]
+investor_type <- report_list$Type[i]
+
+# print(paste0(i, " of ", nrow(report_list)))
+
+#######################
+### Read in Results ###
+########################
+set_initial_variables()
+test_list <- create_test_list()
+
+results_call()
+
+#########################
+### REPORT GENERATION ###
+#########################
+report_handle <- graph_name("00",ParameterFile)
+create_results_folder(project_name,investor_name_select,portfolio_name_select,report_handle)
+
+ReportFigures()
+
+ReportGeneration()
