@@ -156,9 +156,7 @@ results_call <- function(){
   # CarbonData <<-  readRDS(paste0(analysis_inputs_path, "/CarbonCapexUpstream.rda"))
 
   if(has_equity){
-    EQCompProdSnapshot <<- read_rds(paste0(results_path, "/",investor_name_select,"/Equity_results_company.rda")) %>%
-      group_by(portfolio_name, scenario, id, allocation) %>%
-      mutate(company_port_weight = mean(port_weight))
+    EQCompProdSnapshot <<- read_rds(paste0(results_path, "/",investor_name_select,"/Equity_results_company.rda")) 
     EQCompProdSnapshot <<- EQCompProdSnapshot[EQCompProdSnapshot$portfolio_name == portfolio_name_select,]
 
     if(has_map){
@@ -183,9 +181,7 @@ results_call <- function(){
   }
 
   if(has_debt == TRUE){
-    CBCompProdSnapshot <<- readRDS(paste0(results_path, "/",investor_name_select,"/Bonds_results_company.rda")) %>%
-      group_by(portfolio_name, scenario, id, allocation) %>%
-      mutate(company_port_weight = mean(port_weight))
+    CBCompProdSnapshot <<- readRDS(paste0(results_path, "/",investor_name_select,"/Bonds_results_company.rda"))
     CBCompProdSnapshot <<- CBCompProdSnapshot[CBCompProdSnapshot$portfolio_name == portfolio_name_select,]
 
     if(has_map){
@@ -1921,13 +1917,13 @@ CompanyInformation <- function(plotnumber, companiestoprint, chart_type, sector_
     # PortfolioData <- rbind(Targetmix, Portfoliomix)
 
     # Percentage share of each technology for each company in the portfolio
-    Companies <- subset(CompProdSS,year == start_year+5, select=c("Entity.Name","technology","plan_tech_prod", "plan_sec_prod","port_weight", "company_port_weight"))
+    Companies <- subset(CompProdSS,year == start_year+5, select=c("Entity.Name","technology","plan_tech_prod", "plan_sec_prod","port_weight"))
     Companies <- Companies %>% filter(plan_sec_prod > 0) %>% select(-plan_sec_prod)
     Companies<- unique(Companies)
     Companies$tech_share <- Companies$plan_tech_prod
     Companies$Classification <- "Companies"
     #Companies$Name <- paste0(substr(Companies$Name, 1, 15),"...")
-    Companies <- subset(Companies, select = c("Entity.Name","Classification","technology","tech_share","company_port_weight"))
+    Companies <- subset(Companies, select = c("Entity.Name","Classification","technology","tech_share","port_weight"))
     colnames(Companies) <- c("Name","Classification","technology","tech_share","PortWeight")
     Companies$Name <- as.character(Companies$Name)
     Companies$Name  <- ifelse(is.na(Companies$Name),"No Name",Companies$Name)
@@ -2101,7 +2097,7 @@ OilShare <- function(plotnumber, companiestoprint, chart_type){
         OilData$ID <- OilData$id
         OilData$bloomberg_id <- NULL}
 
-      OilData<- left_join(comps %>% select(technology, company_name, id, port_weight, company_port_weight),OilData,by=c("technology"="technology","id"="id"))
+      OilData<- left_join(comps %>% select(technology, company_name, id, port_weight),OilData,by=c("technology"="technology","id"="id"))
 
 
     }
@@ -2136,7 +2132,7 @@ OilShare <- function(plotnumber, companiestoprint, chart_type){
           company_lvl_production = ald_production
         )
 
-        OilData <- left_join(comps %>% select(technology, id, port_weight,company_port_weight),OilData,by=c("technology"="technology","id"="id"))
+        OilData <- left_join(comps %>% select(technology, id, port_weight),OilData,by=c("technology"="technology","id"="id"))
 
 
       }
@@ -2147,10 +2143,10 @@ OilShare <- function(plotnumber, companiestoprint, chart_type){
   if(data_check(OilData)){PlotChart = TRUE}else{PlotChart = FALSE}
 
   if (PlotChart){
-    OilCompanies <- subset(OilData, select=c("ald_production","port_weight","technology_type","company_name","company_port_weight"))
+    OilCompanies <- subset(OilData, select=c("ald_production","port_weight","technology_type","company_name"))
 
     OilCompanies1 <- OilCompanies %>%
-      group_by(company_name,technology_type,port_weight, company_port_weight) %>%
+      group_by(company_name,technology_type,port_weight) %>%
       summarise("Oilsum" = sum(ald_production))%>%
       ungroup()
     OilCompanies2 <- OilCompanies1 %>%
@@ -2191,7 +2187,7 @@ OilShare <- function(plotnumber, companiestoprint, chart_type){
 
     OilCompanies <- OilCompanies %>%
       filter(technology_type %in% techorder) %>%
-      arrange(-company_port_weight)
+      arrange(-port_weight)
 
     #LIne to aggregate to portfolio level
     #aggregated all companies by oil type to get the portfolio oilshare
@@ -2207,14 +2203,13 @@ OilShare <- function(plotnumber, companiestoprint, chart_type){
       filter(company_name %in% unique(OilCompanies$company_name)[1:min(companiestoprint,length(unique(OilCompanies$company_name)))])
 
     colnames(OilCompanies)[which(names(OilCompanies) == "technology_type")] <- "Oil.Type"
-    OilCompanies <- subset(OilCompanies,select = c("Oil.Type","company_name","OilShare","Classification","port_weight", "company_port_weight"))
+    OilCompanies <- subset(OilCompanies,select = c("Oil.Type","company_name","OilShare","Classification","port_weight"))
 
     dummy <- data.frame(c("Oil.Type", NA),
                         c("company_name", ""),
                         c("OilShare", 0),
                         c("Classification", NA),
-                        c("port_weight",NA),
-                        c("company_port_weight",NA))
+                        c("port_weight",NA))
 
     colnames(dummy) <- as.character(unlist(dummy[1,]))
     dummy = dummy[-1, ]
@@ -2223,7 +2218,6 @@ OilShare <- function(plotnumber, companiestoprint, chart_type){
     OilCompany <- rbind(OilCompanies,dummy)
     OilCompany$Oil.Type <- factor(OilCompany$Oil.Type, levels=techorder)
     OilCompany$port_weight <-as.numeric(OilCompany$port_weight)
-    OilCompany$company_port_weight <-as.numeric(OilCompany$company_port_weight)
     OilCompany<-as.data.frame(OilCompany)
     #OilCompany$company_name <- factor(OilCompany$company_name, levels=(unique(c("",OilCompany$company_name))))
 
@@ -2232,8 +2226,8 @@ OilShare <- function(plotnumber, companiestoprint, chart_type){
     names(tech_labels) <- techorder
 
     # company_labels <- c(trimws(unique(OilCompanies[!is.na(OilCompanies$Oil.Type),]$company_name))," ","Portfolio")
-    Oil <- na.omit(OilCompany[,c("company_name","port_weight","company_port_weight")])
-    OilCompany <-OilCompany %>% arrange(company_port_weight)
+    Oil <- na.omit(OilCompany[,c("company_name","port_weight")])
+    OilCompany <-OilCompany %>% arrange(port_weight)
     company_labels <- trimws(unique(OilCompany[!is.na(OilCompany$Oil.Type),]$company_name))
 
     for (i in 1:length(company_labels)) {
@@ -2245,13 +2239,13 @@ OilShare <- function(plotnumber, companiestoprint, chart_type){
 
     bar_labels <- c(company_labels,'                          ') #company_labels#
 
-    Oil_PortWeight <- Oil %>%
-      group_by(company_name) %>%
-      summarise(port_weight = mean(company_port_weight))
+    # Oil_PortWeight <- Oil %>%
+    #   group_by(company_name) %>%
+    #   summarise(port_weight = mean(company_port_weight))
 
     PortPlot <- ggplot(data=OilCompany,
                        show.guide = TRUE)+
-      geom_bar(aes(x=reorder(company_name,port_weight), y=OilShare, #reorder(Name,PortWeightEQYlvl)
+      geom_bar(aes(x=reorder(port_weight), y=OilShare, #reorder(Name,PortWeightEQYlvl)
                    fill=factor(Oil.Type,levels=techorder)),
                stat = "identity", position = "fill", width = .6)+
       #geom_hline(yintercept = c(.25,.50,.75), color="white")+
