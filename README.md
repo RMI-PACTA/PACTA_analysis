@@ -13,13 +13,22 @@ To use this repository of code please follow the following instructions:
 | if you use Windows  | 64-bit Version  |32-bit Version |
 | R version  | 3.6.1  |no earlier than 3.4.3 |
 
+You can download R here: 
+https://cran.r-project.org/bin/windows/base/
+
 
 ## Software Requirements / R Environment
 
-**Integrated Development Environment (IDE):**
+**Github software**
+
+For example GitHub Desktop
+https://desktop.github.com/
+
+**Integrated Development Environment (IDE):f**
 
 RStudio 
 preferably version 1.1.456
+https://rstudio.com/products/rstudio/
 
 **R Environment:**
 
@@ -39,8 +48,16 @@ preferably version 2.9
 Further R packages needed:
 grid, ggplot2, ggthemes, dplyr, reshape2, gridExtra, scales, stringr, extrafont, tidyr, knitr, RColorBrewer, matrixStats, rworldmap, ggmap, cowplot, ggrepel, readxl, tidyverse, ggforce, sitools , countrycode
 
+## How to "download" the code
+
+In order to keep track on the latest updates of the codes, we suggest not to download the code just once, but to synchronize a local folder with the PACTA_analysis git repository (https://help.github.com/en/github/getting-started-with-github/fork-a-repo). 
+ - Create an user account on github
+ - Fork this repo by clicking the Fork button at the top right  
+ - Clone the repo to your local machine using a git-software (such as github desktop) 
+ - Do frequent updates of the code by your github desktop
+
 ## Data Requirements
-The evaluation requires input data that is provided by Asset Resoluation (https://asset-resolution.com/). If you are working in a collaboration with the 2DII, the 2DII possibly will allocate the necessary data files. 
+The evaluation requires input data that is provided by Asset Resoluation (https://asset-resolution.com/). If you are working in a collaboration with the 2DII, the 2DII possibly will allocate the necessary data files as a zip file. Unzip the data and save it a folder, that will later be refered to as data_location 
 
 ## Workflow
 
