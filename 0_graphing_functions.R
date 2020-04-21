@@ -2239,36 +2239,32 @@ OilShare <- function(plotnumber, companiestoprint, chart_type){
 
     bar_labels <- c(company_labels,'                          ') #company_labels#
 
-    # Oil_PortWeight <- Oil %>%
-    #   group_by(company_name) %>%
-    #   summarise(port_weight = mean(company_port_weight))
-
-    PortPlot <- ggplot(data=OilCompany,
-                       show.guide = TRUE)+
-      geom_bar(aes(x=reorder(port_weight), y=OilShare, #reorder(Name,PortWeightEQYlvl)
-                   fill=factor(Oil.Type,levels=techorder)),
-               stat = "identity", position = "fill", width = .6)+
-      #geom_hline(yintercept = c(.25,.50,.75), color="white")+
+    OilCompany <- OilCompany %>% filter(!is.na(port_weight))
+    
+    PortPlot <- ggplot(data = OilCompany, aes(x = company_name, y = OilShare, fill = Oil.Type))+
+      geom_bar(position = "fill", stat = "identity")+
       scale_fill_manual(values=colors,labels = rev(paste(tech_labels, " ")), breaks = rev(techorder))+
       scale_y_continuous(expand=c(0,0), labels=percent)+
       scale_x_discrete(labels = bar_labels)+
       guides(fill=guide_legend(nrow = 1))+
       theme_barcharts()+
-      geom_text(data = Oil_PortWeight,
+      geom_text(data = OilCompany,
                 aes(x = company_name, y = 1),
-                label = perc(Oil_PortWeight$port_weight),
+                label = perc(OilCompany$port_weight),
                 hjust = -1, color = textcolor, size=8*(5/14),
                 family = textfont)+
-      geom_text(aes(x="",y=1),
-                label = x_Weight,
-                hjust = -0.5, color = textcolor, size=8*(5/14),
-                family = textfont)+
+      # geom_text(aes(x="",y=1),
+      #           label = x_Weight,
+      #           hjust = -0.5, color = textcolor, size=8*(5/14),
+      #           family = textfont)+
       xlab("")+
       ylab("tech_share")+
       coord_flip()+
       theme(legend.position = "bottom",legend.title = element_blank(),
             plot.margin = unit(c(1, 6, 0, 0), "lines"), axis.line.x = element_line(colour = textcolor,size=0.5))+
       guides(fill = guide_legend(ncol = 5,keywidth=1))
+    
+    
 
     gt <- ggplot_gtable(ggplot_build(PortPlot))
     gt$layout$clip[gt$layout$name == "panel"] <- "off"
