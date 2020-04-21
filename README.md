@@ -101,6 +101,7 @@ If you use Excel for editting the csv file, make sure that "," and not ";" is se
 As soon as the headings are displayed in seperate coumns, add your own portfolio data to this file and save. It is important that the column headings are not changed. The data needs to have the following format: 
 
 | Investor.Name	| Portfolio.Name	| ISIN	| NumberofShares	| MarketValue	| Currency | 
+ | -------------  | -------------  | -------------  | -------------  | -------------  | ------------- |
 | Berlin_Pension_Fund| Green_Assets | DE2939203293 | ------------- | 8493050 | USD |
 | Berlin_Pension_Fund  | Green_Assets  | FR3439285941 |------------- | 324234 | CHF |
 | Berlin_Pension_Fund  | EU_Fund  | FR3439285941 |------------- | 2384929 | EUR |
