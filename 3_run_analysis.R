@@ -6,10 +6,10 @@ port_col_types <- set_col_types(grouping_variables, "ddddccccddcl")
 ##### EQUITY #####
 ##################
 
-equity_input_file <- paste0(proc_input_path, "/",project_name, "_equity_portfolio.csv")
+equity_input_file <- paste0(proc_input_path, "/",project_name, "_equity_portfolio.rda")
 
 if(file.exists(equity_input_file)){
-  port_raw_all_eq <- read_csv(equity_input_file, col_types = port_col_types) %>% 
+  port_raw_all_eq <- read_rds(equity_input_file) %>% 
     mutate(id = as.character(id))
   
   if(length(colnames(port_raw_all_eq)) != nchar(port_col_types)){stop("Check port_col_types: difference in length")}
@@ -85,11 +85,11 @@ if(file.exists(equity_input_file)){
 ##### BONDS #####
 #################
 
-bonds_inputs_file <- paste0(proc_input_path, "/",project_name, "_bonds_portfolio.csv")
+bonds_inputs_file <- paste0(proc_input_path, "/",project_name, "_bonds_portfolio.rda")
 
 if (file.exists(bonds_inputs_file)){
   
-  port_raw_all_cb <- read_csv(bonds_inputs_file, col_types = port_col_types) %>% 
+  port_raw_all_cb <- read_rds(bonds_inputs_file) %>% 
     mutate(id = as.character(id))
   
   if(length(colnames(port_raw_all_cb)) != nchar(port_col_types)){stop("Check port_col_types: difference in length")}

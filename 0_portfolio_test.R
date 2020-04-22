@@ -68,7 +68,7 @@ aggregate_holdings <- function(portfolio){
     ungroup() %>% 
     # group_by(vars(all_of(grouping_variables))) %>% 
     # group_by(holding_id, id, financial_sector, add = T) %>% 
-    group_by(!!!rlang::syms(grouping_variables), holding_id,company_name, id, financial_sector, current_shares_outstanding_all_classes, has_ald) %>%
+    group_by(!!!rlang::syms(grouping_variables), company_name, id, financial_sector, current_shares_outstanding_all_classes, has_ald) %>%
     summarise(number_holdings = n_distinct(holding_id),
               value_usd = sum(value_usd, na.rm = T),
               number_of_shares = sum(number_of_shares, na.rm = T),
@@ -89,10 +89,19 @@ calculate_ownership_weight <- function(portfolio){
 calculate_port_weight <- function(portfolio, grouping_variables){
   
   portfolio <- portfolio %>% 
-    ungroup() %>% 
+    ungroup() %>%
     group_by(!!!rlang::syms(grouping_variables)) %>% 
     mutate(port_total_aum = sum(value_usd, na.rm =  T), 
            port_weight = value_usd/port_total_aum)
+  
+  temp <- portfolio %>% 
+    group_by(!!!rlang::syms(grouping_variables)) %>% 
+    mutate(total_port_weight = sum(port_weight))
+  
+  total_port_weight_per_portfolio <- signif(unique(temp$total_port_weight),2)
+  # check that all portfolio port_weight's sum to 1
+  if (!all(total_port_weight_per_portfolio == 1.0)) {stop("Port weight calculation error")}
+  
   
   portfolio  
   

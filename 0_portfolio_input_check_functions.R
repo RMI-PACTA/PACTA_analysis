@@ -42,7 +42,7 @@ clean_colnames_portfolio_input_file <- function(portfolio){
   
   if("numberof_shares" %in% colnames(portfolio)){portfolio<- portfolio %>% rename(number_of_shares = numberof_shares)}
   
-  # colnames(portfolio) <- gsub("ï..","",colnames(portfolio))
+  
   
   # names(portfolio)[1] <- gsub("[^A-Za-z0-9]", "", names(portfolio)[1])
   
@@ -58,7 +58,7 @@ clean_portfolio_col_types <- function(portfolio, grouping_variables){
   # portfolio$portfolio_name <- clean_punctuation(portfolio$portfolio_name)
   
   
-  portfolio$number_of_shares <- as.numeric(portfolio$number_of_shares)
+  # portfolio$number_of_shares <- as.numeric(portfolio$number_of_shares)
   portfolio$market_value <- as.numeric(portfolio$market_value)
   portfolio$currency <- as.character(portfolio$currency)
   
@@ -214,14 +214,14 @@ map_comp_sectors <- function(comp_fin_data, sector_bridge){
   initial_no_rows = nrow(comp_fin_data)
   
   comp_fin_data <- comp_fin_data %>% left_join(sector_bridge %>% filter(source == "BICS") %>% select(-source), 
-                                     by = c("bics_subgroup" = "industry_classification"))
+                                               by = c("bics_subgroup" = "industry_classification"))
   
   comp_fin_data_na <- comp_fin_data %>% filter(is.na(sector)) %>% select(-sector)
   
   comp_fin_data <- comp_fin_data %>% filter(!is.na(sector))
   
   comp_fin_data_na <- comp_fin_data_na %>% left_join(sector_bridge %>% filter(source == "ICB")%>% select(-source), 
-                                           by = c("icb_subgroup" = "industry_classification"))
+                                                     by = c("icb_subgroup" = "industry_classification"))
   
   comp_fin_data <- comp_fin_data %>% bind_rows(comp_fin_data_na)
   
@@ -627,9 +627,9 @@ check_bloomberg_data <- function(portfolio_total){
   
   portfolio_total <- portfolio_total %>%
     mutate(has_bbg_data = case_when(
-      asset_type == "Equity" & (is.na(bloomberg_id) | bloomberg_id == "" | is.na(security_mapped_sector) | security_mapped_sector == "") ~ FALSE,
-      asset_type == "Bonds" & (is.na(corporate_bond_ticker) | corporate_bond_ticker == "" | is.na(security_mapped_sector) | security_mapped_sector == "") ~ FALSE,
-      asset_type == "" ~ FALSE,
+      (asset_type == "Equity" | asset_type == "Unclassifiable") & (is.na(bloomberg_id) | bloomberg_id == "") ~ FALSE,
+      (asset_type == "Bonds" | asset_type == "Unclassifiable") & (is.na(corporate_bond_ticker) | corporate_bond_ticker == "") ~ FALSE,
+      (asset_type == ""  | asset_type == "Unclassifiable") ~ FALSE,
       is.na(asset_type) ~ FALSE,
       TRUE ~ TRUE)
     )
@@ -790,11 +790,11 @@ get_and_clean_currency_data <- function(){
 get_and_clean_fund_data <- function(){
   
   # Fund Data
-  if(file.exists(paste0(analysis_inputs_path,"/FundsData",financial_timestamp,".rda"))){
-    fund_data <- readRDS(paste0(analysis_inputs_path,"/FundsData",financial_timestamp,".rda"))
+  if(file.exists(paste0(analysis_inputs_path,"/fund_data_",financial_timestamp,".rda"))){
+    fund_data <- readRDS(paste0(analysis_inputs_path,"/fund_data_",financial_timestamp,".rda"))
   }else{
-    fund_data <- readRDS(paste0(analysis_inputs_path,"/FundsData2018Q4.rda"))
-    print("Old Fund Data being used. Replace FundsData2018Q4")
+    fund_data <- readRDS(paste0(analysis_inputs_path,"/fund_data_2018Q4.rda"))
+    print("Old Fund Data being used. Replace FundsData2018Q4. Check naming. ")
   }
   
   fund_data <- fund_data %>% janitor::clean_names()
@@ -874,13 +874,17 @@ get_and_clean_fin_data <- function(){
 
 get_and_clean_revenue_data <- function(){
   
-  revenue_data <- read_rds(paste0(analysis_inputs_path, "/revenue_data_member_ticker.rda"))
-  # col_types = "dcdcclcd")
+  revenue_data <- data.frame()
   
-  revenue_data <- revenue_data %>% 
-    filter(tot_rev > 0) %>% 
-    rename(revenue_sector = sector) %>% 
-    ungroup()
+  if(has_revenue){
+    revenue_data <- read_rds(paste0(analysis_inputs_path, "/revenue_data_member_ticker.rda"))
+    # col_types = "dcdcclcd")
+    
+    revenue_data <- revenue_data %>% 
+      filter(tot_rev > 0) %>% 
+      rename(revenue_sector = sector) %>% 
+      ungroup()
+  }
   
   return(revenue_data)
 }
@@ -949,6 +953,8 @@ read_and_process_portfolio <- function(project_name,
   
   # add fund_portfolio and check that the total value is the same
   portfolio_total <- add_fund_portfolio(portfolio, fund_portfolio, cols_of_funds)
+  
+  portfolio_total <- clean_unmatched_holdings(portfolio_total)
   
   if(round(sum(portfolio_total$value_usd, na.rm = T),1) != round(original_value_usd,1)){stop("Fund Portfolio introducing errors in total value")}
   
@@ -1122,19 +1128,48 @@ create_audit_file <- function(portfolio_total, comp_fin_data){
   
 }
 
+clean_unmatched_holdings <- function(portfolio){
+  
+  port_na <- portfolio %>% filter(is.na(security_mapped_sector))
+  
+  portfolio <- portfolio %>% filter(!is.na(security_mapped_sector))
+  
+  if(data_check(port_na)){
+    
+    port_na <- port_na %>%
+      mutate(asset_type = "Unclassifiable",
+             security_mapped_sector = "Unclassifiable")
+    portfolio <- rbind(portfolio, port_na)
+    
+  }
+  
+  return(portfolio)
+  
+}
+
+
+
 ### Emissions work 
 
-get_average_emission_data <- function(){
+get_average_emission_data <- function(inc_emission_factors){
   
-  average_sector_intensity <- readRDS(paste0(analysis_inputs_path,"average_sector_intensity.rda"))
+  average_sector_intensity <- data.frame()
   
+  if(inc_emission_factors){
+    
+    average_sector_intensity <- readRDS(paste0(analysis_inputs_path,"average_sector_intensity.rda"))
+  }
   return(average_sector_intensity)
 }
 
-get_company_emission_data <- function(){
+get_company_emission_data <- function(inc_emission_factors){
   
-  company_emissions <- readRDS(paste0(analysis_inputs_path,"company_emissions.rda"))
+  company_emissions <- data.frame()
   
+  if(inc_emission_factors){
+    
+    company_emissions <- readRDS(paste0(analysis_inputs_path,"company_emissions.rda"))
+  }
   return(company_emissions)
 }
 
@@ -1310,6 +1345,7 @@ prepare_portfolio_emissions <- function(
 }
 
 calculate_portfolio_emissions <- function(
+  inc_emission_factors,
   audit_file,
   fin_data,
   comp_fin_data,  
@@ -1317,49 +1353,63 @@ calculate_portfolio_emissions <- function(
   company_emissions
 ) {
   
-  audit_emissions <- prepare_portfolio_emissions(
-    audit_file,
-    fin_data, 
-    comp_fin_data, 
-    average_sector_intensity,
-    company_emissions
-  )
+  audit_sector_emissions <- data.frame()
   
-  # calculate holding weight 
-  audit_emissions <- audit_emissions %>% 
-    group_by(
-      portfolio_name,
-      investor_name
-    ) %>% 
-    mutate(weighting = value_usd / sum(value_usd, na.rm = TRUE))
-  
-  # weight emissions by holding weight 
-  audit_emissions <- audit_emissions %>% 
-    mutate(weighted_emissions = weighting * emissions)
-  
-  # fix sector classifications 
-  audit_emissions <- audit_emissions %>% 
-    mutate(ald_sector = ifelse(mapped_sector != "Other" & is.na(ald_sector), mapped_sector, ald_sector))
-  
-  # create final sector grouping 
-  audit_emissions <- audit_emissions %>% 
-    mutate(sector = ifelse(!is.na(ald_sector), ald_sector, bics_sector))
-  
-  # modify sector names 
-  audit_emissions <- audit_emissions %>% 
-    mutate(sector = ifelse(sector %in% c("Industrials", "Energy", "Utilities", "Materials"), paste0("Other ", sector), sector))
-  
-  # sum weighted emissions 
-  audit_sector_emissions <- audit_emissions %>% 
-    group_by(
-      portfolio_name, 
-      investor_name, 
-      asset_type,
-      sector
-    ) %>% 
-    summarise(
-      weighted_sector_emissions = sum(weighted_emissions, na.rm = TRUE)
+  if(inc_emission_factors){
+    
+    audit_emissions <- prepare_portfolio_emissions(
+      audit_file,
+      fin_data, 
+      comp_fin_data, 
+      average_sector_intensity,
+      company_emissions
     )
+    
+    # calculate holding weight 
+    audit_emissions <- audit_emissions %>% 
+      group_by(
+        portfolio_name,
+        investor_name
+      ) %>% 
+      mutate(weighting = value_usd / sum(value_usd, na.rm = TRUE))
+    
+    # weight emissions by holding weight 
+    audit_emissions <- audit_emissions %>% 
+      mutate(weighted_emissions = weighting * emissions)
+    
+    
+    audit_emissions <- add_other_to_sector_classifications(audit_emissions)
+    
+    # sum weighted emissions 
+    audit_sector_emissions <- audit_emissions %>% 
+      group_by(
+        portfolio_name, 
+        investor_name, 
+        asset_type,
+        sector
+      ) %>% 
+      summarise(
+        value_usd = sum(value_usd, na.rm = TRUE),
+        weighted_sector_emissions = sum(weighted_emissions, na.rm = TRUE)
+      )
+  }
   
   audit_sector_emissions
 }
+
+
+add_other_to_sector_classifications <- function(audit){
+  # fix sector classifications 
+  audit <- audit %>% 
+    mutate(ald_sector = ifelse(mapped_sector != "Other" & is.na(ald_sector), mapped_sector, ald_sector))
+  
+  # create final sector grouping 
+  audit <- audit %>% 
+    mutate(sector = ifelse(!is.na(ald_sector), ald_sector, bics_sector))
+  
+  # modify sector names 
+  audit <- audit %>% 
+    mutate(sector = ifelse(sector %in% c("Industrials", "Energy", "Utilities", "Materials"), paste0("Other ", sector), sector))
+
+  audit
+  }

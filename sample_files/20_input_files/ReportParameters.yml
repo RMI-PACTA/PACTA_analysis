@@ -10,14 +10,14 @@ default:
       
       
     Benchmarks:
-      PeerGroupSelection: Pensiones
-      EQPeersRef: Pensiones
-      CBPeersRef: Pensiones	
-      eq_market_ref: iShares MSCI ACWI ETF	
-      cb_market_ref: BEHGTRUU
+      PeerGroupSelection: Project
+      EQPeersRef: Project
+      CBPeersRef: Project
+      eq_market_ref: GlobalMarket	
+      cb_market_ref: GlobalMarket
 
     Contents:
-      templateversion: "GeneralTemplateInput_v6_SB_es"
+      templateversion: "GeneralTemplateInput_v6"
       BondReference: "Bond"
       RefMarketData: TRUE
       WithCompanyCharts: TRUE

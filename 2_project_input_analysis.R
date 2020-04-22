@@ -24,9 +24,9 @@ comp_fin_data <- get_and_clean_company_fin_data()
 
 revenue_data <- get_and_clean_revenue_data()
 
-average_sector_intensity <- get_average_emission_data()
+average_sector_intensity <- get_average_emission_data(inc_emission_factors)
 
-company_emissions <- get_company_emission_data()
+company_emissions <- get_company_emission_data(inc_emission_factors)
 
 ####################
 #### PORTFOLIOS ####
@@ -58,7 +58,8 @@ audit_file <- create_audit_file(portfolio_total, comp_fin_data)
 
 create_audit_chart(audit_file, proc_input_path)
 
-emissions_totals <- calculate_portfolio_emissions(audit_file,
+emissions_totals <- calculate_portfolio_emissions(inc_emission_factors,
+                                                  audit_file,
                                                   fin_data, 
                                                   comp_fin_data,  
                                                   average_sector_intensity,
