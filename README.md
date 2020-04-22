@@ -73,6 +73,7 @@ If you stop the process at a certain point (let's say after 2_project_input_anal
 ### Initialisation
 
 **1. Set Variables**
+
 Within 1_portfolio_check_initialisation.R there are some lines that should be edited to make reference to local directories on your computer. 
 
 ```project_name <- "TEST"```
@@ -147,8 +148,11 @@ Go to the project folder and open the subfolder 30_Processed_Inputs. You should 
 
 ### Run Analysis
 There are no settings at this point. 
+
 **1. Run 3_run_analysis.R**
+
 **2. Check results**
+
 Go to the project folder and open the subfolder 40_Results. You should find 4 files and several folders. For each investor you one folder is created. Further, if CreatMetaPortofolio was set True, a folder for MetaInvestor was created. 
 
 
