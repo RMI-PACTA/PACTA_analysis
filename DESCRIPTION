@@ -2,11 +2,16 @@ Package: PACTAanalysis
 Title: What the Package Does (One Line, Title Case)
 Version: 0.0.0.9000
 Authors@R: 
-    c(person(given = "Mauro",
-             family = "Lepore",
-             role = c("aut", "ctr", "cre"),
-             email = "maurolepore@gmail.com",
-             comment = c(ORCID = "0000-0002-1986-7988")),
+    c(person(given = "Clare",
+             family = "Murray",
+             role = c("aut", "cre"),
+             email = "clare@2degrees-investing.org"),
+      
+     person(given = "Andy",
+             family = "Büchler",
+             role = c("aut"),
+             email = "andy@2degrees-investing.org"),
+             
       person(given = "2 Degrees Investing Initiative",
              role = c("cph", "fnd"),
              email = "contact@2degrees-investing.org"))
