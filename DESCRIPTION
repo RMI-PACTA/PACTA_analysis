@@ -6,12 +6,10 @@ Authors@R:
              family = "Murray",
              role = c("aut", "cre"),
              email = "clare@2degrees-investing.org"),
-      
-     person(given = "Andy",
-             family = "Büchler",
-             role = c("aut"),
+      person(given = "Andy",
+             family = "B_FIXME_chler",
+             role = "aut",
              email = "andy@2degrees-investing.org"),
-             
       person(given = "2 Degrees Investing Initiative",
              role = c("cph", "fnd"),
              email = "contact@2degrees-investing.org"))
