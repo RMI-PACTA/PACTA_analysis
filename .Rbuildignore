@@ -1,2 +1,21 @@
 ^PACTAanalysis\.Rproj$
 ^\.Rproj\.user$
+
+# FIXME: This is a hack to allow building the package
+^0_global_functions\.R$
+^0_graphing_functions\.R$
+^0_portfolio_input_check_functions\.R$
+^0_portfolio_test\.R$
+^0_reporting_functions\.R$
+^0_sda_approach\.R$
+^1_portfolio_check_initialisation\.R$
+^2_project_input_analysis\.R$
+^3_run_analysis\.R$
+^4_report_maker\.R$
+
+^Templates$
+^_config\.yml$
+^documentation$
+^sample_files$
+^data$
+^LICENSE\.md$
