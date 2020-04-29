@@ -186,8 +186,11 @@ map_security_sectors <- function(fin_data, sector_bridge){
   
   initial_no_rows = nrow(fin_data)
   
-  fin_data <- fin_data %>% left_join(sector_bridge %>% filter(source == "BICS") %>% select(-source), 
-                                     by = c("security_bics_subgroup" = "industry_classification"))
+  fin_data <- fin_data %>% left_join(sector_bridge %>% filter(source == "BICS") %>% select(-source),
+                                     by = c("security_bics_subgroup" = "industry_classification")) %>% 
+    mutate(security_icb_subsector = as.character(security_icb_subsector))
+  
+  
   
   fin_data_na <- fin_data %>% filter(is.na(sector)) %>% select(-sector)
   
@@ -350,6 +353,7 @@ check_fin_mapped_sectors <- function(fin_data){
   fin_data <- fin_data %>%
     mutate(security_mapped_sector = case_when(security_mapped_sector == "Others" ~ "Other",
                                               security_mapped_sector == "OIl&Gas" ~ "Oil&Gas",
+                                              is.na(security_mapped_sector) ~ "Other",
                                               TRUE ~ security_mapped_sector))
   
   actual_sectors <- unique(fin_data$security_mapped_sector)
@@ -364,10 +368,12 @@ check_fin_mapped_sectors <- function(fin_data){
 
 convert_corporate_bonds <- function(fin_data){
   
-  cb_groups <- c("Convertible bonds", "Corporate Bonds", "Corporate inflation linked Bonds")
+  cb_groups <- c("Convertible Bonds", "Corporate Bonds", "Corporate inflation linked Bonds")
   
   fin_data <- fin_data %>%
-    mutate(asset_type = if_else(security_type %in% cb_groups,"Bonds",asset_type))
+    mutate(asset_type = if_else(security_type %in% cb_groups,"Bonds",asset_type),
+           asset_type = if_else(!security_type %in% cb_groups & asset_type == "Bonds","Others",asset_type),
+    )
   
   fin_data
 }
@@ -792,10 +798,16 @@ get_and_clean_fund_data <- function(){
   # Fund Data
   if(file.exists(paste0(analysis_inputs_path,"/fund_data_",financial_timestamp,".rda"))){
     fund_data <- readRDS(paste0(analysis_inputs_path,"/fund_data_",financial_timestamp,".rda"))
-  }else{
+  }else if(file.exists(paste0(analysis_inputs_path,"/fund_data_2018Q4.rda"))){
     fund_data <- readRDS(paste0(analysis_inputs_path,"/fund_data_2018Q4.rda"))
-    print("Old Fund Data being used. Replace FundsData2018Q4. Check naming. ")
+    print("Old Fund Data being used. Replace FundsData2018Q4 or check name of file.")
+  }else{
+    fund_data <- read_csv(paste0(analysis_inputs_path, "/SFC_2019_jackson_fund_data_2020Q2.csv"))
+    print("2020Q2 SFC fund data being used")
+    if(!data_check(fund_data)){stop("No fund data available")}
   }
+  
+  
   
   fund_data <- fund_data %>% janitor::clean_names()
   
@@ -1410,6 +1422,6 @@ add_other_to_sector_classifications <- function(audit){
   # modify sector names 
   audit <- audit %>% 
     mutate(sector = ifelse(sector %in% c("Industrials", "Energy", "Utilities", "Materials"), paste0("Other ", sector), sector))
-
+  
   audit
-  }
+}
