@@ -15,19 +15,20 @@ default:
     file_type: 
       - csv
       - rda
-  
+ 
     
   TimeStamps:
     # setting the dates of the data-input for financial and asset-level data: this identifies the input files
     FinancialData.Timestamp: 2019Q4
-    ALD.Timestamp: 2019Q4
-    DataStore.Export: 240220
-    DataPrep.Timestamp: 2019Q4_250220
+    ALD.Timestamp: 201912
+    DataStore.Export: 2019Q4_export_04232020
+    DataPrep.Timestamp: 2019Q4_04232020_2019
   
   AnalysisPeriod:
     # setting the period of time for the analysis: by setting the starting year and the time-horizon 
     Years.Horizon: 5
-    Years.Startyear: 2020
+    Years.Startyear: 2019
+  
   
   ComparisonBenchmarks:
     CreateMetaPortfolio: TRUE
@@ -51,7 +52,7 @@ default:
       - 2022
       - 2023
       - 2024
-      - 2040
+
     SECTOR.FILTER:
       - Power
       - Automotive
@@ -68,8 +69,8 @@ default:
   #    - GP_ER_2015 
       - ETP2017
   #    - BNEF2017
-      - WEO2018
-      - SBTI  
+      - WEO2019
+
     IEA.Scenarios.List:
       - B2DS
       - SDS
