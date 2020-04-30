@@ -39,7 +39,7 @@ portfolio_overview$portfolio_name <- clean_punctuation(portfolio_overview$portfo
 report_list <- get_report_list(portfolio_overview)
 
 
-template <- readLines(paste0(dirname("/Templates/",templateversion,".tex"),encoding = "UTF-8"))
+#template <- readLines(paste0(dirname("/Templates/",templateversion,".tex"),encoding = "UTF-8"))
 translate_labels(Language)
 
 if(has_sb){SB.Values = GetSovBondCoverage()}
