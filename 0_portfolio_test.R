@@ -94,13 +94,13 @@ calculate_port_weight <- function(portfolio, grouping_variables){
     mutate(port_total_aum = sum(value_usd, na.rm =  T), 
            port_weight = value_usd/port_total_aum)
   
-  temp <- portfolio %>% 
-    group_by(!!!rlang::syms(grouping_variables)) %>% 
-    mutate(total_port_weight = sum(port_weight))
-  
-  total_port_weight_per_portfolio <- signif(unique(temp$total_port_weight),2)
-  # check that all portfolio port_weight's sum to 1
-  if (!all(total_port_weight_per_portfolio == 1.0)) {stop("Port weight calculation error")}
+  # temp <- portfolio %>% 
+  #   group_by(!!!rlang::syms(grouping_variables)) %>% 
+  #   mutate(total_port_weight = sum(port_weight))
+  # 
+  # total_port_weight_per_portfolio <- signif(unique(temp$total_port_weight),2)
+  # # check that all portfolio port_weight's sum to 1
+  # if (!all(total_port_weight_per_portfolio == 1.0)) {stop("Port weight calculation error")}
   
   
   portfolio  
@@ -145,11 +145,11 @@ aggregate_company <- function(df) {
         plan_sec_prod=sum(plan_tech_prod, na.rm=TRUE),
         plan_alloc_wt_sec_prod=sum(plan_alloc_wt_tech_prod, na.rm=TRUE),
         plan_sec_carsten=sum(plan_carsten, na.rm=TRUE),
-        plan_sec_emissions_factor = weighted.mean(plan_emission_factor,plan_alloc_wt_tech_prod,na.rm=TRUE),
+        plan_sec_emissions_factor = weighted.mean(plan_emission_factor,plan_alloc_wt_tech_prod, na.rm=TRUE),
         scen_sec_prod=sum(scen_tech_prod, na.rm=TRUE),
         scen_alloc_wt_sec_prod=sum(scen_alloc_wt_tech_prod, na.rm=TRUE),
         scen_sec_carsten=ifelse(all(is.na(scen_carsten)), NA, sum(scen_carsten,na.rm=TRUE)), ### this is a random case where if all SCen.carsten are NA, it will total to zero, when I want it to be NA
-        scen_sec_emissions_factor = weighted.mean(scen_emission_factor,scen_alloc_wt_tech_prod,na.rm=TRUE)) %>% 
+        scen_sec_emissions_factor = weighted.mean(scen_emission_factor, scen_alloc_wt_tech_prod, na.rm=TRUE)) %>% 
       ungroup()
     
   }else{
@@ -212,7 +212,7 @@ aggregate_map_data <- function(portfolio){
     group_by(!!!rlang::syms(grouping_variables), allocation, 
              ald_location, year,
              ald_sector, technology, 
-             financial_sector, allocation, allocation_weight, ) %>%
+             financial_sector, allocation, allocation_weight, ald_production_unit) %>%
     summarise(plan_alloc_wt_tech_prod = sum(plan_alloc_wt_tech_prod, na.rm=TRUE)) %>% 
     mutate(plan_alloc_wt_sec_prod=sum(plan_alloc_wt_tech_prod))
   
@@ -286,7 +286,7 @@ ownership_allocation <- function(portfolio){
   
 }
 
-merge_in_geography <- function(portfolio, ald_raw, sectors_for_maps){
+merge_in_geography <- function(portfolio, ald_raw){
   
   # ald_raw <- ald_raw_eq
   company_all <- portfolio %>% 
@@ -299,7 +299,7 @@ merge_in_geography <- function(portfolio, ald_raw, sectors_for_maps){
   company_all_data <- left_join(company_all, ald_raw %>% distinct(id, country_of_domicile, ald_location, year,
                                                                   ald_sector, technology, ald_production, ald_production_unit),
                                 by=c("id"="id", "financial_sector"="ald_sector")) %>% 
-    mutate(ald_sector = financial_sector)
+    mutate(ald_sector = financial_sector) 
   
   ### complete rows of technology within a sector - we need to have a row for each tech to get a real tech share
   # dont' calculate tech share
