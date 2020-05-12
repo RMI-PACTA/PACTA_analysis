@@ -2,5 +2,5 @@
 .Rhistory
 .RData
 .Ruserdata
-/outputs/
-/r2dii_data/
+**/web_tool
+
