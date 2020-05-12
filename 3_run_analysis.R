@@ -33,6 +33,8 @@ if(file.exists(equity_input_file)){
     port_eq <- calculate_weights(port_raw_eq, "Equity", grouping_variables)
     
     port_eq <- port_eq %>% filter(port_weight > 1e-6)
+    # ToDO: Add Test for how much is filtered
+    
     
     port_eq <- merge_in_ald(port_eq, ald_scen_eq)
     
