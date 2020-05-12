@@ -25,7 +25,6 @@ set_webtool_paths <- function(){
   
 }
 
-
 set_web_parameters <- function(){
   
   NameInput <- read.csv(paste0("web_folders/ParameterFiles/",portfolio_name_ref,"_Naming.csv"), strip.white = TRUE, stringsAsFactors = FALSE)
@@ -34,7 +33,7 @@ set_web_parameters <- function(){
   
   TimeInput <- read.csv(paste0("web_folders/ParameterFiles/",portfolio_name_ref,"_TimeStamp.csv"), strip.white = TRUE, stringsAsFactors = FALSE)
   FinDataTimeStamp <<- TimeInput$FinDataTimeStamp
-
+  
 }
 
 add_naming_to_portfolio <- function(portfolio_raw){
@@ -81,7 +80,24 @@ website_text <- function(audit_file){
 }
 
 
-export_audit_information_jsons <-function(audit_file_ = audit_file, portfolio_total_ = portfolio_total,  folder_path = paste0(proc_input_path), project_name_=NA){
+save_cleaned_files <- function(currencies, 
+                               fund_data, 
+                               fin_data,
+                               comp_fin_data,
+                               average_sector_intensity,
+                               company_emissions){
+  
+  
+  write_rds(currencies,"currencies.rda")
+  write_rds(fund_data,"fund_data.rda")
+  write_rds(fin_data,"fin_data.rda")
+  write_rds(comp_fin_data,"comp_fin_data.rda")
+  write_rds(average_sector_intensity,"average_sector_intensity.rda" )
+  write_rds(company_emissions,"company_emissions.rda")
+  
+}
+
+export_audit_information_jsons <- function(audit_file_ = audit_file, portfolio_total_ = portfolio_total,  folder_path = paste0(proc_input_path), project_name_=NA){
   
   # Check format
   assertthat::is.string(folder_path)
@@ -108,7 +124,7 @@ export_audit_information_jsons <-function(audit_file_ = audit_file, portfolio_to
 
 export_audit_graph_json <-function(audit_file__, export_path_full){
   
-
+  
   audit_file__ <-audit_file__ %>% select("isin", "holding_id","flag")
   
   all_flags<- c("Missing currency information","Negative or missing input value","Invalid or missing ISIN","Holding not in Bloomberg database","Included in analysis")
@@ -121,7 +137,7 @@ export_audit_graph_json <-function(audit_file__, export_path_full){
   
   
   number_of_isin  <- length(audit_file__$holding_id)
-
+  
   missing_currency <- audit_file__ %>% subset(flag == "Missing currency information")
   number_missing_currency <- length(missing_currency$holding_id)
   
@@ -141,7 +157,7 @@ export_audit_graph_json <-function(audit_file__, export_path_full){
   assertthat::are_equal(number_of_isin, sum(all_flags_numbers))
   
   number_all_invalid_input <- sum(c(number_missing_currency, number_negative_missing_input,number_invalid_input))
-    
+  
   legend <- c( "\"Invalid input\"", "\"No data coverage\"", "\"Included in analysis\"")
   keys <- c("\"key_1\"", "\"key_2\"", "\"key_3\"")
   values <- c(number_all_invalid_input, number_not_in_bloomberg, number_included_in_analysis)
@@ -157,7 +173,7 @@ export_audit_graph_json <-function(audit_file__, export_path_full){
   for (i in 1:(length(keys)-1)){
     chart_information <- paste0(chart_information," " , keys[i],": ", values[i],",")
     chart_legend <- paste0(chart_legend," " , keys[i],": ", legend[i],",")
-    } 
+  } 
   i = length(keys)
   chart_information <- paste0(chart_information," " , keys[i],": ", values[i])
   chart_legend <- paste0(chart_legend," " , keys[i],": ", legend[i])
@@ -167,18 +183,24 @@ export_audit_graph_json <-function(audit_file__, export_path_full){
   
   write(chart_legend, file=paste0(export_path_full,"legend.json"))
   write(chart_information, file=paste0(export_path_full,".json"))
+  
 }
 
 export_audit_invalid_json <-function(portfolio_total_,export_path_full){
+  
   portfolio_total_ <- portfolio_total_ %>% subset(flag %in% c("Missing currency information", "Negative or missing input value","Invalid or missing ISIN"))
   portfolio_total_ <- portfolio_total_ %>% select("isin", "market_value", "currency", "flag")
   portfolio_total_ <- portfolio_total_[order(-portfolio_total_$market_value),]
   
   colnames(portfolio_total_) <- c("isin","marketValues","currency","flag")
   invalidsecurties <- toJSON(portfolio_total_, dataframe = c('columns'))
+  
   write(invalidsecurties, file=paste0(export_path_full,".json"))
+  
 } 
+
 export_audit_textvar_json <-function(portfolio_total_, export_path_full){
+  
   portfolio_total_ <- portfolio_total_ %>% select("value_usd", "asset_type", "has_valid_input")
   total_v <- sum(portfolio_total_$value_usd)
   included <- portfolio_total_ %>% subset(has_valid_input == TRUE)
@@ -205,13 +227,15 @@ export_audit_textvar_json <-function(portfolio_total_, export_path_full){
   json_tail = "}"
   
   text_varibles <- json_head
+  
   for (i in 1:(length(keys)-1)){
     text_varibles <- paste0(text_varibles," " , keys[i],": ", values[i],",")
-    } 
+  } 
   i = length(keys)
+  
   text_varibles <- paste0(text_varibles," " , keys[i],": ", values[i])
- 
+  
   text_varibles <- paste0(text_varibles, json_tail)
- 
+  
   write(text_varibles, file=paste0(export_path_full,".json"))
-  }
+}
