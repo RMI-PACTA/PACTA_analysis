@@ -129,6 +129,8 @@ emissions_totals <- calculate_portfolio_emissions(inc_emission_factors,
 
 
 if(data_check(audit_file)){write_csv(audit_file, paste0(proc_input_path, "/", project_name,"_audit_file.csv"))}
+assertthat::are_equal(exists('audit_file'), TRUE)
+web_tool_audit_data(audit_file)
 
 if(data_check(portfolio_total)){write_rds(portfolio_total, paste0(proc_input_path, "/", project_name, "_total_portfolio.rda"))}
 if(data_check(eq_portfolio)){write_rds(eq_portfolio, paste0(proc_input_path, "/", project_name, "_equity_portfolio.rda"))}
