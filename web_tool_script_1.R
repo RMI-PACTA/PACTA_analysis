@@ -2,7 +2,7 @@
 
 options(encoding = "UTF-8") 
 
-if(!require(pacman)) {install.packages(pacman)}
+# if(!require(pacman)) {install.packages(pacman)}
 pacman::p_load(tidyr, dplyr, scales, reshape2, tidyverse, readxl, tidyselect, r2dii.utils)
 
 
@@ -31,7 +31,7 @@ project_name <- "web_tool"
 twodii_internal <- FALSE
 
 # variable to ensure new data is cleaned and saved. 
-new_data <- FALSE
+new_data <- TRUE
 
 
 # Change these to locations on the server. 
@@ -67,7 +67,8 @@ analysis_inputs_path <- set_analysis_inputs_path(twodii_internal, data_location_
 if(new_data == TRUE){
   currencies <- get_and_clean_currency_data()
   
-  fund_data <- get_and_clean_fund_data()
+  # fund_data <- get_and_clean_fund_data()
+  fund_data <- data.frame()
   
   fin_data <- get_and_clean_fin_data()
   
@@ -79,12 +80,18 @@ if(new_data == TRUE){
   
   company_emissions <- get_company_emission_data(inc_emission_factors)
   
-  save_cleaned_files(currencies, 
+  file_location <- paste0(working_location, "r2diidata")
+  
+  save_cleaned_files(file_location,
+                     currencies, 
                      fund_data,
                      fin_data,
                      comp_fin_data,
                      average_sector_intensity,
                      company_emissions)
+  
+  
+  
   
 }else{
   

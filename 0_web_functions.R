@@ -80,7 +80,8 @@ website_text <- function(audit_file){
 }
 
 
-save_cleaned_files <- function(currencies, 
+save_cleaned_files <- function(save_loc, 
+                               currencies, 
                                fund_data, 
                                fin_data,
                                comp_fin_data,
@@ -88,12 +89,25 @@ save_cleaned_files <- function(currencies,
                                company_emissions){
   
   
-  write_rds(currencies,"currencies.rda")
-  write_rds(fund_data,"fund_data.rda")
-  write_rds(fin_data,"fin_data.rda")
-  write_rds(comp_fin_data,"comp_fin_data.rda")
-  write_rds(average_sector_intensity,"average_sector_intensity.rda" )
-  write_rds(company_emissions,"company_emissions.rda")
+  
+  write_rds(currencies,paste0(save_loc,"/currencies.rda"))
+  write_rds(fund_data,paste0(save_loc,"/fund_data.rda"))
+  write_rds(fin_data,paste0(save_loc,"/fin_data.rda"))
+  write_rds(comp_fin_data,paste0(save_loc,"/comp_fin_data.rda"))
+  write_rds(average_sector_intensity,paste0(save_loc,"/average_sector_intensity.rda" ))
+  write_rds(company_emissions,paste0(save_loc,"/company_emissions.rda"))
+  
+  if(check_file_size(save_loc)) warning("File size exceeds what can be pushed to GitHub. Check before Committing")
+  
+  
+  
+}
+
+check_file_size <- function(folder_to_check){
+  
+  files_to_check <- list.files(folder_to_check,full.names = T)
+  any(file.size(files_to_check) > 100e6) 
+  
   
 }
 
