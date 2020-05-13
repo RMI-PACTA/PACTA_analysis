@@ -13,7 +13,7 @@
 
 ####################
 #### DATA FILES ####
-####################
+#################### 
 currencies <- get_and_clean_currency_data()
 
 fund_data <- get_and_clean_fund_data()
@@ -31,11 +31,13 @@ company_emissions <- get_company_emission_data(inc_emission_factors)
 ####################
 #### PORTFOLIOS ####
 ####################
-portfolio <- read_and_process_portfolio(project_name,
-                                        fin_data,
-                                        fund_data,
-                                        currencies, 
-                                        grouping_variables)
+portfolio_raw <- read_raw_portfolio_file(project_name)
+
+portfolio <- process_raw_portfolio(portfolio_raw,
+                                   fin_data,
+                                   fund_data,
+                                   currencies, 
+                                   grouping_variables)
 
 
 portfolio <- add_revenue_split(has_revenue, portfolio, revenue_data)
@@ -87,3 +89,4 @@ if("rds" %in% file_format_list | "rda" %in% file_format_list){
   if(data_check(audit_file)){write_rds(audit_file, paste0(proc_input_path, "/", project_name,"_audit_file.rda"))}
   if(data_check(emissions_totals)){write_rds(emissions_totals, paste0(proc_input_path, "/", project_name, "_emissions.rda"))}
 }
+
