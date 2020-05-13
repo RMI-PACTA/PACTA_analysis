@@ -186,11 +186,9 @@ map_security_sectors <- function(fin_data, sector_bridge){
   
   initial_no_rows = nrow(fin_data)
   
-  fin_data <- fin_data %>% left_join(sector_bridge %>% filter(source == "BICS") %>% select(-source),
+  fin_data <- fin_data %>% left_join(sector_bridge %>% filter(source == "BICS") %>% select(-source), 
                                      by = c("security_bics_subgroup" = "industry_classification")) %>% 
     mutate(security_icb_subsector = as.character(security_icb_subsector))
-  
-  
   
   fin_data_na <- fin_data %>% filter(is.na(sector)) %>% select(-sector)
   
@@ -368,7 +366,7 @@ check_fin_mapped_sectors <- function(fin_data){
 
 convert_corporate_bonds <- function(fin_data){
   
-  cb_groups <- c("Convertible Bonds", "Corporate Bonds", "Corporate inflation linked Bonds")
+  cb_groups <- c("Convertible Bonds", "Corporate Bonds", "Corporate inflation linked Bonds","Convertible Preferreds" )
   
   fin_data <- fin_data %>%
     mutate(asset_type = if_else(security_type %in% cb_groups,"Bonds",asset_type),
@@ -801,11 +799,13 @@ get_and_clean_fund_data <- function(){
   }else if(file.exists(paste0(analysis_inputs_path,"/fund_data_2018Q4.rda"))){
     fund_data <- readRDS(paste0(analysis_inputs_path,"/fund_data_2018Q4.rda"))
     print("Old Fund Data being used. Replace FundsData2018Q4 or check name of file.")
-  }else{
+  }else if(file.exists(paste0(analysis_inputs_path, "/SFC_2019_jackson_fund_data_2020Q2.csv"))){
     fund_data <- read_csv(paste0(analysis_inputs_path, "/SFC_2019_jackson_fund_data_2020Q2.csv"))
     print("2020Q2 SFC fund data being used")
+  }else{
     if(!data_check(fund_data)){stop("No fund data available")}
   }
+  
   
   
   
@@ -822,7 +822,7 @@ get_and_clean_fund_data <- function(){
 get_and_clean_fin_data <- function(){
   
   # Financial Data
-  fin_data_raw <- read_rds(paste0(analysis_inputs_path,"/security_financial_data.rda"))
+  fin_data_raw <- read_rds(paste0(analysis_inputs_path,"/security_financial_data.rda")) %>% as_tibble()
   # col_types = "ddcccccccccccccccDddddddddddddddddc")
   
   if(!unique(fin_data_raw$financial_timestamp) == financial_timestamp){print("Financial timestamp not equal")}
@@ -878,7 +878,7 @@ get_and_clean_fin_data <- function(){
   if (nrow(fin_data) > nrow(fin_data_raw)){stop("Additional rows added to fin data")}
   
   # updates csv file with missing bloomberg data re funds
-  check_funds_wo_bbg(fund_data,fin_data)
+  if(data_check(fund_data))  check_funds_wo_bbg(fund_data,fin_data)
   
   return(fin_data)
   
@@ -906,6 +906,12 @@ get_and_clean_company_fin_data <- function(){
   comp_fin_data_raw <- read_rds(paste0(analysis_inputs_path,"/consolidated_financial_data.rda"))
   # col_types = "ddcccccdddddclccccdccccllclddddddddddddc")
   
+  comp_fin_data_raw <- comp_fin_data_raw %>% select(
+    company_id, company_name, bloomberg_id, country_of_domicile, corporate_bond_ticker, bics_sector, bics_subgroup,
+    icb_subgroup, mapped_sector, has_asset_level_data, has_assets_in_matched_sector, sectors_with_assets, current_shares_outstanding_all_classes, 
+    financial_timestamp
+  )
+  
   sector_bridge <- read_csv("data/sector_bridge.csv", col_types = "ccc")
   
   comp_fin_data <- map_comp_sectors(comp_fin_data_raw, sector_bridge)
@@ -914,15 +920,14 @@ get_and_clean_company_fin_data <- function(){
   
 }
 
-read_and_process_portfolio <- function(project_name,
-                                       fin_data,
-                                       fund_data,
-                                       currencies, 
-                                       grouping_variables){
+
+process_raw_portfolio <- function(portfolio_raw,
+                                  fin_data,
+                                  fund_data,
+                                  currencies, 
+                                  grouping_variables){
   
-  portfolio <- read_raw_portfolio_file(project_name)
-  
-  portfolio <- clean_colnames_portfolio_input_file(portfolio)
+  portfolio <- clean_colnames_portfolio_input_file(portfolio_raw)
   
   portfolio <- clear_portfolio_input_blanks(portfolio)
   
@@ -957,15 +962,21 @@ read_and_process_portfolio <- function(project_name,
   # identify funds in the portfolio
   fund_portfolio <- identify_fund_portfolio(portfolio)
   
-  # Creates the fund_portfolio to match the original portfolio
-  fund_portfolio <- calculate_fund_portfolio(fund_portfolio, fund_data, cols_portfolio, cols_of_funds)
-  
-  # Merges in the bbg data to the fund portfolio
-  fund_portfolio <- add_fin_data(fund_portfolio, fin_data)
-  
-  # add fund_portfolio and check that the total value is the same
-  portfolio_total <- add_fund_portfolio(portfolio, fund_portfolio, cols_of_funds)
-  
+  if(data_check(fund_data)){
+    # Creates the fund_portfolio to match the original portfolio
+    fund_portfolio <- calculate_fund_portfolio(fund_portfolio, fund_data, cols_portfolio, cols_of_funds)
+    
+    # Merges in the bbg data to the fund portfolio
+    fund_portfolio <- add_fin_data(fund_portfolio, fin_data)
+    
+    # add fund_portfolio and check that the total value is the same
+    portfolio_total <- add_fund_portfolio(portfolio, fund_portfolio, cols_of_funds)
+  } else{
+    
+    portfolio_total <- as_tibble(portfolio)
+    portfolio_total$direct_holding <- TRUE
+    
+  }
   portfolio_total <- clean_unmatched_holdings(portfolio_total)
   
   if(round(sum(portfolio_total$value_usd, na.rm = T),1) != round(original_value_usd,1)){stop("Fund Portfolio introducing errors in total value")}
