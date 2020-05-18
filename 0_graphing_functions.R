@@ -653,7 +653,7 @@ graph_values <- function(){
 
 }
 
-graph_name <- function(plotnumber, ParameterFile){
+graph_name <- function(plotnumber, ParameterFile, explicit_filename=""){
 
   namelist <-ParameterFile[,!names(ParameterFile) %in% c("portfolio_name_select","investor_name_select")]
   namelist[is.na(namelist)] <- ""
@@ -667,7 +667,7 @@ graph_name <- function(plotnumber, ParameterFile){
   if (plotnumber == "00"){
     graphname <- gsub(".png","",graphname)
   } else if (plotnumber != "99"){
-    graphname <- paste0(report_path,plotnumber,"_",graphname)
+    graphname <- paste0(report_path,plotnumber,"_",explicit_filename, graphname)
   }else{
     graphname <- paste0(GRAPH.PATH,graphname)
   }
@@ -713,70 +713,110 @@ translate_labels <- function(Language){
 
 }
 
-ReportFigures <- function(){
-
+ReportFigures <- function(explicit_filenames = F){
+  
+  
+  
+  explicit_filename = ""
   #Introduction
-  ScopeOfAnalysis("01") #
-  PercentageOfPortfolioAssessed("02") #
+  if (!explicit_filenames==F){explicit_filename = "_scope_of_analysis_"}
+  ScopeOfAnalysis("01", explicit_filename = explicit_filename) #
+  
+  if (!explicit_filenames==F){explicit_filename = "_climate_relevant_sectors_"}
+  PercentageOfPortfolioAssessed("02", explicit_filename = explicit_filename) #
 
   ScenarioGeographyChoose <- "Global"
-  CarstenMetricChart("03","CB")  #
-  CarstenMetricChart("04","EQ")  #
+  if (!explicit_filenames==F){explicit_filename = "_current_exposure_bonds_"}
+  CarstenMetricChart("03","CB", explicit_filename = explicit_filename)  #
+  
+  if (!explicit_filenames==F){explicit_filename = "_current_expousre_equity_"}
+  CarstenMetricChart("04","EQ", explicit_filename = explicit_filename)  #
+  
   ScenarioGeographyChoose <- "GlobalAggregate"
-
-  TechnologyExposure("05","CB","All", start_year+5) #
+  
+  if (!explicit_filenames==F){explicit_filename = "_future_tech_mix_bonds_"}
+  TechnologyExposure("05","CB","All", start_year+5, explicit_filename = explicit_filename) #
 
   if (has_debt) {
     #5 year Trajectory
-    FiveYearGrowthTrend("07","CB", "CoalCap", LegendOn = F)
-    FiveYearGrowthTrend("08","CB", "RenewablesCap", LegendOn = F)
-    FiveYearGrowthTrend("09","CB", "GasCap", LegendOn = F)
-    FiveYearGrowthTrend("10","CB", "HydroCap", LegendOn = F)
-    FiveYearGrowthTrend("11","CB", "Oil", LegendOn = F)
-    FiveYearGrowthTrend("12","CB", "Gas", LegendOn = F)
-    FiveYearGrowthTrend("13","CB", "Coal", LegendOn = F)
-    FiveYearGrowthTrend("14","CB", "ICE", LegendOn = F)
-    FiveYearGrowthTrend("15","CB", "Electric", LegendOn = F)
-    FiveYearGrowthTrend("16","CB", "Hybrid", LegendOn = F)
+    
+    if (!explicit_filenames==F){explicit_filename = "_alignment_power_coal_bonds_"}
+    FiveYearGrowthTrend("07","CB", "CoalCap", LegendOn = F, explicit_filename = explicit_filename)
+    if (!explicit_filenames==F){explicit_filename = "_alignment_power_renewables_bonds_"}
+    FiveYearGrowthTrend("08","CB", "RenewablesCap", LegendOn = F, explicit_filename = explicit_filename)
+    if (!explicit_filenames==F){explicit_filename = "_alignment_power_coal_bonds_"}
+    FiveYearGrowthTrend("09","CB", "GasCap", LegendOn = F, explicit_filename = explicit_filename)
+    if (!explicit_filenames==F){explicit_filename = "_alignment_power_hydro_bonds_"}
+    FiveYearGrowthTrend("10","CB", "HydroCap", LegendOn = F, explicit_filename = explicit_filename)
+    if (!explicit_filenames==F){explicit_filename = "_alignment_fossil_oil_bonds_"}
+    FiveYearGrowthTrend("11","CB", "Oil", LegendOn = F, explicit_filename = explicit_filename)
+    if (!explicit_filenames==F){explicit_filename = "_alignment_fossil_gas_bonds_"}
+    FiveYearGrowthTrend("12","CB", "Gas", LegendOn = F, explicit_filename = explicit_filename)
+    if (!explicit_filenames==F){explicit_filename = "_alignment_fossil_coal_bonds_"}
+    FiveYearGrowthTrend("13","CB", "Coal", LegendOn = F, explicit_filename = explicit_filename)
+    if (!explicit_filenames==F){explicit_filename = "_alignment_auto_ice_bonds_"}
+    FiveYearGrowthTrend("14","CB", "ICE", LegendOn = F, explicit_filename = explicit_filename)
+    if (!explicit_filenames==F){explicit_filename = "_alignment_auto_electric_bonds_"}
+    FiveYearGrowthTrend("15","CB", "Electric", LegendOn = F, explicit_filename = explicit_filename)
+    if (!explicit_filenames==F){explicit_filename = "_alignment_auto_hybrid_bonds_"}
+    FiveYearGrowthTrend("16","CB", "Hybrid", LegendOn = F, explicit_filename = explicit_filename)
   }
 
-
-  TechnologyExposure("06","EQ","All", start_year+5) #
+  if (!explicit_filenames==F){explicit_filename = "_future_tech_mix_equity_"}
+  TechnologyExposure("06","EQ","All", start_year+5, explicit_filename = explicit_filename) #
 
   if (has_equity) {
 
     #5 year Trajectory
-    FiveYearGrowthTrend("17","EQ", "CoalCap", LegendOn = F)
-    FiveYearGrowthTrend("18","EQ", "RenewablesCap", LegendOn = F)
-    FiveYearGrowthTrend("19","EQ", "GasCap", LegendOn = F)
-    FiveYearGrowthTrend("20","EQ", "HydroCap", LegendOn = F)
-    FiveYearGrowthTrend("21","EQ", "Oil", LegendOn = F)
-    FiveYearGrowthTrend("22","EQ", "Gas", LegendOn = F)
-    FiveYearGrowthTrend("23","EQ", "Coal", LegendOn = F)
-    FiveYearGrowthTrend("24","EQ", "ICE", LegendOn = F)
-    FiveYearGrowthTrend("25","EQ", "Electric", LegendOn = F)
-    FiveYearGrowthTrend("26","EQ", "Hybrid", LegendOn = F)
+    if (!explicit_filenames==F){explicit_filename = "_alignment_power_coal_equity_"}
+    FiveYearGrowthTrend("17","EQ", "CoalCap", LegendOn = F, explicit_filename = explicit_filename)
+    if (!explicit_filenames==F){explicit_filename = "_alignment_power_renewables_equity_"}
+    FiveYearGrowthTrend("18","EQ", "RenewablesCap", LegendOn = F, explicit_filename = explicit_filename)
+    if (!explicit_filenames==F){explicit_filename = "_alignment_power_hydro_equity_"}
+     FiveYearGrowthTrend("19","EQ", "GasCap", LegendOn = F, explicit_filename = explicit_filename)
+    if (!explicit_filenames==F){explicit_filename = "_alignment_power_hydro_equity_"}
+    FiveYearGrowthTrend("20","EQ", "HydroCap", LegendOn = F, explicit_filename = explicit_filename)
+    if (!explicit_filenames==F){explicit_filename = "_alignment_fossil_oil_equity_"}
+    FiveYearGrowthTrend("21","EQ", "Oil", LegendOn = F, explicit_filename = explicit_filename)
+    if (!explicit_filenames==F){explicit_filename = "_alignment_fossil_gas_equity_"}
+    FiveYearGrowthTrend("22","EQ", "Gas", LegendOn = F, explicit_filename = explicit_filename)
+    if (!explicit_filenames==F){explicit_filename = "_alignment_fossil_coal_equity_"}
+    FiveYearGrowthTrend("23","EQ", "Coal", LegendOn = F, explicit_filename = explicit_filename)
+    if (!explicit_filenames==F){explicit_filename = "_alignment_auto_ice_equity_"}
+    FiveYearGrowthTrend("24","EQ", "ICE", LegendOn = F, explicit_filename = explicit_filename)
+    if (!explicit_filenames==F){explicit_filename = "_alignment_auto_electric_equity_"}
+    FiveYearGrowthTrend("25","EQ", "Electric", LegendOn = F, explicit_filename = explicit_filename)
+    if (!explicit_filenames==F){explicit_filename = "_alignment_auto_hybrid_equity_"}
+    FiveYearGrowthTrend("26","EQ", "Hybrid", LegendOn = F, explicit_filename = explicit_filename)
   }
 
   if(IncOtherSectors == T){
-    CO2IntensityTrend("30","Cement", LegendOn = F)
-    CO2IntensityTrend("31","Steel", LegendOn = F)
-    CO2IntensityTrend("32","Aviation", LegendOn = F)
-    ShippingChart("33","All",start_year+5)    #All
+    if (!explicit_filenames==F){explicit_filename = "_emissions_cement_"}
+    CO2IntensityTrend("30","Cement", LegendOn = F, explicit_filename = explicit_filename)
+    if (!explicit_filenames==F){explicit_filename = "_emissions_steel_"}
+    CO2IntensityTrend("31","Steel", LegendOn = F, explicit_filename = explicit_filename)
+    if (!explicit_filenames==F){explicit_filename = "_emissions_aviation_"}
+    CO2IntensityTrend("32","Aviation", LegendOn = F, explicit_filename = explicit_filename)
+    if (!explicit_filenames==F){explicit_filename = "_emissions_shipping_"}
+    ShippingChart("33","All",start_year+5, explicit_filename = explicit_filename)    #All
   }
 
   if (has_map){
-    MapChart("49","CB","Coal",start_year+5)
-    MapChart("50","EQ","Coal",start_year+5)
+    if (!explicit_filenames==F){explicit_filename = "_map_coal_bonds_"}
+    MapChart("49","CB","Coal",start_year+5, explicit_filename = explicit_filename)
+    if (!explicit_filenames==F){explicit_filename = "_map_coal_equity_"}
+    MapChart("50","EQ","Coal",start_year+5, explicit_filename = explicit_filename)
   }
 
   if (has_debt){
-
-    CompanyInformation("40", no_companies, "CB", "Power")
-    CompanyInformation("41", no_companies, "CB", "Automotive")
-
-    OilGasBuildOut("42", no_companies, "CB")
-    OilShare("43", no_companies, "CB")
+    if (!explicit_filenames==F){explicit_filename = "_companies_power_bonds_"}
+    CompanyInformation("40", no_companies, "CB", "Power", explicit_filename = explicit_filename)
+    if (!explicit_filenames==F){explicit_filename = "_companies_auto_bonds_"}
+    CompanyInformation("41", no_companies, "CB", "Automotive", explicit_filename = explicit_filename)
+    if (!explicit_filenames==F){explicit_filename = "_companies_oil_built_out_bonds_"}
+    OilGasBuildOut("42", no_companies, "CB", explicit_filename = explicit_filename)
+    if (!explicit_filenames==F){explicit_filename = "_companies_oil_share_bonds_"}
+    OilShare("43", no_companies, "CB", explicit_filename = explicit_filename)
 
     # if (IncCoalRetirement){
     #   CoalRetirementChart("62",no_companies,"CB")
@@ -787,12 +827,14 @@ ReportFigures <- function(){
 
   if (has_equity){
     if (IncPeersChart){PeerComparison(81,chart_type = "EQ")}
-
-    CompanyInformation("44", no_companies, "EQ", "Power")
-    CompanyInformation("45", no_companies, "EQ", "Automotive")
-
-    OilGasBuildOut("46", no_companies, "EQ")
-    OilShare("47", no_companies, "EQ")
+    if (!explicit_filenames==F){explicit_filename = "_companies_power_equity_"}
+    CompanyInformation("44", no_companies, "EQ", "Power", explicit_filename = explicit_filename)
+    if (!explicit_filenames==F){explicit_filename = "_companies_auto_equity_"}
+    CompanyInformation("45", no_companies, "EQ", "Automotive", explicit_filename = explicit_filename)
+    if (!explicit_filenames==F){explicit_filename = "_companies_oil_built_out_equity_"}
+    OilGasBuildOut("46", no_companies, "EQ", explicit_filename = explicit_filename)
+    if (!explicit_filenames==F){explicit_filename = "_companies_oil_share_equity_"}
+    OilShare("47", no_companies, "EQ", explicit_filename = explicit_filename)
 
     # CarbonBudget("48", no_companies, "EQ")
 
@@ -810,7 +852,7 @@ ReportFigures <- function(){
 ### Charts ###
 ##############
 
-PercentageOfPortfolioAssessed <- function(plotnumber){
+PercentageOfPortfolioAssessed <- function(plotnumber, explicit_filename = ""){
 
 
   over <- SectorDataAnalysis()
@@ -888,10 +930,10 @@ PercentageOfPortfolioAssessed <- function(plotnumber){
 
   }
 
-  ggsave(plot, filename=graph_name(plotnumber,ParameterFile), bg = "white",height=2.3,width=4.5,dpi=ppi)   #linewidth_in*.9
+  ggsave(plot, filename=graph_name(plotnumber,ParameterFile ,explicit_filename = explicit_filename), bg = "white",height=2.3,width=4.5,dpi=ppi)   #linewidth_in*.9
 }
 
-TechnologyExposure <- function(plotnumber,chart_type,sector_to_plot,plot_year){ #PlotYr
+TechnologyExposure <- function(plotnumber,chart_type,sector_to_plot,plot_year, explicit_filename = ""){ #PlotYr
 
   Combin <- data.frame()
 
@@ -1134,12 +1176,12 @@ TechnologyExposure <- function(plotnumber,chart_type,sector_to_plot,plot_year){ 
 
   }
 
-  ggsave(graph_name(plotnumber,ParameterFile), #bg = "transparent",
+  ggsave(graph_name(plotnumber,ParameterFile, explicit_filename = explicit_filename), #bg = "transparent",
          plot = cmd,height=3,width=n,dpi=ppi)
 
 }
 
-FiveYearGrowthTrend <- function(plotnumber, chart_type, tech_to_plot, LegendOn = FALSE){
+FiveYearGrowthTrend <- function(plotnumber, chart_type, tech_to_plot, LegendOn = FALSE, explicit_filename = ""){
 
   tech_to_plot <<- tech_to_plot
 
@@ -1656,14 +1698,14 @@ FiveYearGrowthTrend <- function(plotnumber, chart_type, tech_to_plot, LegendOn =
   }
 
 
-  ggsave(outputplot, filename=graph_name(plotnumber,ParameterFile),bg="white",height=3.6,width=4.6,dpi=ppi*2) #,bg="white"
+  ggsave(outputplot, filename=graph_name(plotnumber,ParameterFile, explicit_filename = explicit_filename),bg="white",height=3.6,width=4.6,dpi=ppi*2) #,bg="white"
 
   tech_to_plot <<- ""
   BV.asset_type <<- ""
 
 }
 
-CO2IntensityTrend <- function(plotnumber, sector_to_plot, LegendOn = TRUE){
+CO2IntensityTrend <- function(plotnumber, sector_to_plot, LegendOn = TRUE, explicit_filename = ""){
 
   PlotChart = FALSE
   Data <- NA
@@ -1851,13 +1893,13 @@ CO2IntensityTrend <- function(plotnumber, sector_to_plot, LegendOn = TRUE){
     outputplot <- no_chart(Label)
   }
 
-  ggsave(filename = graph_name(plotnumber,ParameterFile),bg="white",outputplot,height=3,width=4,dpi=ppi) #,bg="transparent"
+  ggsave(filename = graph_name(plotnumber,ParameterFile, explicit_filename = explicit_filename),bg="white",outputplot,height=3,width=4,dpi=ppi) #,bg="transparent"
   sector_to_plot <<- ""
 
   #return()
 }
 
-CompanyInformation <- function(plotnumber, companiestoprint, chart_type, sector_to_plot){
+CompanyInformation <- function(plotnumber, companiestoprint, chart_type, sector_to_plot, explicit_filename = ""){
 
   sector_to_plot <<- sector_to_plot
   PlotChart <- F
@@ -2056,14 +2098,14 @@ CompanyInformation <- function(plotnumber, companiestoprint, chart_type, sector_
     gt <- no_chart(Label)
     height<-3
   }
-  ggsave(gt,filename=graph_name(plotnumber,ParameterFile), #bg = "transparent",
+  ggsave(gt,filename=graph_name(plotnumber,ParameterFile, explicit_filename = explicit_filename), #bg = "transparent",
          height=height,width=10,dpi=ppi)
 
   sector_to_plot <<- ""
   BV.asset_type <<- ""
 }
 
-OilShare <- function(plotnumber, companiestoprint, chart_type){
+OilShare <- function(plotnumber, companiestoprint, chart_type, explicit_filename=""){
 
   tech_to_plot <<- "Oil"
   chart_type <<- chart_type
@@ -2283,14 +2325,14 @@ OilShare <- function(plotnumber, companiestoprint, chart_type){
 
   }
 
-  ggsave(gt,filename=graph_name(plotnumber,ParameterFile), bg = "white",height=height,width=10,dpi=ppi)
+  ggsave(gt,filename=graph_name(plotnumber,ParameterFile, explicit_filename=explicit_filename), bg = "white",height=height,width=10,dpi=ppi)
 
   tech_to_plot <<- ""
   chart_type <<- ""
   BV.asset_type <<- ""
 }
 
-MapChart <- function(plotnumber,chart_type,tech_to_plot,plot_year){
+MapChart <- function(plotnumber,chart_type,tech_to_plot,plot_year, explicit_filename = ""){
 
   Power <- data.frame()
   tech_to_plot <<- tech_to_plot
@@ -2383,7 +2425,7 @@ MapChart <- function(plotnumber,chart_type,tech_to_plot,plot_year){
     outputplot <- no_chart(Label)
   }
 
-  ggsave(plot = outputplot, filename = graph_name(plotnumber,ParameterFile), bg = "white", height=5, width=10, dpi=ppi) #linewidth_in*.9
+  ggsave(plot = outputplot, filename = graph_name(plotnumber,ParameterFile, explicit_filename = explicit_filename), bg = "white", height=5, width=10, dpi=ppi) #linewidth_in*.9
 
   tech_to_plot <<- ""
   BV.asset_type <<- ""
@@ -2516,7 +2558,7 @@ PeerComparison <- function(plotnumber, VariableToPlot = "plan_carsten", Grouping
   BV.asset_type <<- ""
 }
 
-ShippingChart <- function(plotnumber,chart_type, plot_year, sector_to_plot = "Shipping"){
+ShippingChart <- function(plotnumber,chart_type, plot_year, sector_to_plot = "Shipping", explicit_filename = ""){
 
   # print(chart_type)
   # print(sector_to_plot)
@@ -2699,7 +2741,7 @@ ShippingChart <- function(plotnumber,chart_type, plot_year, sector_to_plot = "Sh
     Label <- Theportfoliohasnocompaniesintheshippingsector    #
     shippingchart <- no_chart(Label)
   }
-  ggsave(shippingchart,filename= graph_name(plotnumber,ParameterFile), bg = "white",height=3,width=4,dpi=ppi)
+  ggsave(shippingchart,filename= graph_name(plotnumber,ParameterFile, explicit_filename = explicit_filename), bg = "white",height=3,width=4,dpi=ppi)
 
   sector_to_plot<<-""
 }
@@ -2752,7 +2794,7 @@ SectorDataAnalysis <- function(){
   return(over)
 }
 
-ScopeOfAnalysis <- function(plotnumber){
+ScopeOfAnalysis <- function(plotnumber, explicit_filename = ""){
 
   over <- SectorDataAnalysis()
 
@@ -2850,11 +2892,11 @@ ScopeOfAnalysis <- function(plotnumber){
     ggtitle(Climaterelevantsectors)
 
 
-  ggsave(plot,filename=graph_name(plotnumber,ParameterFile), bg = "white",height=2.2,width=4.5,dpi=ppi)   #linewidth_in*.9
+  ggsave(plot,filename=graph_name(plotnumber,ParameterFile, explicit_filename = explicit_filename), bg = "white",height=2.2,width=4.5,dpi=ppi)   #linewidth_in*.9
 
 }
 
-CarstenMetricChart <- function(plotnumber,chart_type){
+CarstenMetricChart <- function(plotnumber,chart_type, explicit_filename = ""){
 
   PortName_IN <- portfolio_name_select
 
@@ -2978,7 +3020,7 @@ CarstenMetricChart <- function(plotnumber,chart_type){
 
   }
 
-  ggsave(outputplot, filename = graph_name(plotnumber,ParameterFile), bg = "white",height=4,width=13,dpi=ppi*0.8)
+  ggsave(outputplot, filename = graph_name(plotnumber,ParameterFile, explicit_filename = explicit_filename), bg = "white",height=4,width=13,dpi=ppi*0.8)
 
   BV.asset_type <<- ""
 
@@ -3276,7 +3318,7 @@ CarbonBudget <- function(plotnumber, companiestoprint, chart_type){
   ggsave(plot = gt,filename =  graph_name(plotnumber,ParameterFile), bg = "white",height=h,width=11,dpi=ppi)
 }
 
-OilGasBuildOut <- function(plotnumber, companiestoprint, chart_type){
+OilGasBuildOut <- function(plotnumber, companiestoprint, chart_type, explicit_filename = ""){
 
   sector_to_plot <<- "Oil&Gas"
   # chart_type <<- chart_type
@@ -3419,7 +3461,7 @@ OilGasBuildOut <- function(plotnumber, companiestoprint, chart_type){
     h <-3.25
 
   }
-  ggsave(outputplot,filename=graph_name(plotnumber,ParameterFile),
+  ggsave(outputplot,filename=graph_name(plotnumber,ParameterFile, explicit_filename = explicit_filename),
          height=h,width=10,dpi=ppi)
 
   sector_to_plot <<- ""

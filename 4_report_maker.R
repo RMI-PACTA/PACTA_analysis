@@ -46,7 +46,8 @@ translate_labels(Language)
 
 if(has_sb){SB.Values = GetSovBondCoverage()}
 
-i=1
+#i=94
+
 
 
 
@@ -72,13 +73,9 @@ for (i in 1:nrow(report_list)){
   report_handle <- graph_name("00",ParameterFile)
   create_results_folder(project_name,investor_name_select,portfolio_name_select,report_handle)
   
-  ReportFigures()
+  ReportFigures(explicit_filenames = T)
   
-  if(has_sb){
-    SovereignBondFigures()
-  }
-
-  ReportGeneration()
+ 
   
   
   
