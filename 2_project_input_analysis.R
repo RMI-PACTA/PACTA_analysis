@@ -18,7 +18,7 @@ currencies <- get_and_clean_currency_data()
 
 fund_data <- get_and_clean_fund_data()
 
-fin_data <- get_and_clean_fin_data()
+fin_data <- get_and_clean_fin_data(fund_data)
 
 comp_fin_data <- get_and_clean_company_fin_data()
 

@@ -766,13 +766,15 @@ create_id_columns <- function(portfolio, portfolio_type){
     
     portfolio <- portfolio %>% 
       rename(id = bloomberg_id) %>% 
-      mutate(id_name = "bloomberg_id")
+      mutate(id_name = "bloomberg_id",
+             id = as.character(id))
   }
   if(portfolio_type == "Bonds"){
     
     portfolio <- portfolio %>% 
       rename(id = corporate_bond_ticker) %>% 
-      mutate(id_name = "corporate_bond_ticker")
+      mutate(id_name = "corporate_bond_ticker",
+             id = as.character(id))
   }
   
   return(portfolio)
@@ -819,7 +821,7 @@ get_and_clean_fund_data <- function(){
   return(fund_data)
 }
 
-get_and_clean_fin_data <- function(){
+get_and_clean_fin_data <- function(fund_data){
   
   # Financial Data
   fin_data_raw <- read_rds(paste0(analysis_inputs_path,"/security_financial_data.rda")) %>% as_tibble()
@@ -908,7 +910,8 @@ get_and_clean_company_fin_data <- function(){
   
   comp_fin_data_raw <- comp_fin_data_raw %>% select(
     company_id, company_name, bloomberg_id, country_of_domicile, corporate_bond_ticker, bics_sector, bics_subgroup,
-    icb_subgroup, mapped_sector, has_asset_level_data, has_assets_in_matched_sector, sectors_with_assets, current_shares_outstanding_all_classes, 
+    icb_subgroup, mapped_sector, has_asset_level_data, has_assets_in_matched_sector, sectors_with_assets, 
+    current_shares_outstanding_all_classes, company_status, 
     financial_timestamp
   )
   
