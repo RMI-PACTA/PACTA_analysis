@@ -2337,7 +2337,7 @@ MapChart <- function(plotnumber,chart_type,tech_to_plot,plot_year, explicit_file
   Power <- data.frame()
   tech_to_plot <<- tech_to_plot
   # ScenarioGeographyChoose <<- "Global"
-
+  mapfilename <- ""
 
   if (chart_type =="EQ" & has_equity == TRUE){
     Power <- filter_by_parameters(EQportmap,"EQ", byscenario = F)

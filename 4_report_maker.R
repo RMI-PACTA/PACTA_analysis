@@ -48,7 +48,7 @@ if(has_sb){SB.Values = GetSovBondCoverage()}
 
 #i=94
 
-
+i=1
 
 for (i in 1:nrow(report_list)){
   
