@@ -38,7 +38,7 @@ twodii_internal <- FALSE
 ###ONLY FOR EXTERNAL PROJECTS (twodii_internal <- FALSE):
 # Variables must exist for internal projects
 project_location_ext <- "C:/Users/clare/Desktop/ExternalTest"
-data_location_ext <- "C:/Users/clare/Desktop/ExternalTest/r2dii_data"
+data_location_ext <- "C:/Users/clare/Desktop/Git/pacta-data/2019Q4"
 #####################################################################
 
 create_project_folder(project_name, twodii_internal, project_location_ext)
