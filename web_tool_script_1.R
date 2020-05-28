@@ -137,9 +137,9 @@ identify_missing_data(portfolio_total)
 
 audit_file <- create_audit_file(portfolio_total, comp_fin_data)
 
-create_audit_chart(audit_file, proc_input_path)
+# create_audit_chart(audit_file, proc_input_path)
 
-website_text(audit_file)
+# website_text(audit_file)
 
 emissions_totals <- calculate_portfolio_emissions(inc_emission_factors,
                                                   audit_file,
