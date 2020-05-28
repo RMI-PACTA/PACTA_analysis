@@ -2,9 +2,7 @@
 
 options(encoding = "UTF-8") 
 
-# if(!require(pacman)) {install.packages(pacman)}
-pacman::p_load(tidyr, dplyr, scales, reshape2, tidyverse, readxl, tidyselect, r2dii.utils)
-
+pacman::p_load(tidyr, dplyr, scales, reshape2, tidyverse, readxl, tidyselect, r2dii.utils, fs, jsonlite)
 
 
 # source("0_portfolio_test.R")
@@ -15,7 +13,7 @@ source("0_global_functions.R")
 source("0_web_functions.R")
 
 if (rstudioapi::isAvailable()) {
-  portfolio_name_ref <- "Portfolio3"
+  # portfolio_name_ref <- "Portfolio3"
   working_location <- dirname(rstudioapi::getActiveDocumentContext()$path)
   working_location <- gsub("Â","",working_location)
 } else {
@@ -23,28 +21,20 @@ if (rstudioapi::isAvailable()) {
   working_location <- getwd()
 }
 
-
 working_location <- paste0(working_location, "/")
 
 
-project_name <- "web_tool"
-twodii_internal <- FALSE
-
-# variable to ensure new data is cleaned and saved. 
-new_data <- TRUE
-
-
-# Change these to locations on the server. 
-project_location_ext <- "C:/Users/clare/Desktop/ExternalTest"
-data_location_ext <- "C:/Users/clare/Desktop/ExternalTest/r2dii_data/"
-
-#####################################################################
 
 # just done once
 # create_project_folder(project_name, twodii_internal, project_location_ext)
 
 # replaced with web version
 # set_project_paths(project_name, twodii_internal, project_location_ext)
+set_web_parameters(file_path = paste0(working_location,"/parameter_files/WebParameters_example.yml"))
+
+# just done once
+# create_project_folder(project_name, twodii_internal, project_location_ext)
+
 set_webtool_paths()
 
 # just done once
@@ -58,12 +48,16 @@ set_global_parameters(paste0(par_file_path,"/AnalysisParameters.yml"))
 analysis_inputs_path <- set_analysis_inputs_path(twodii_internal, data_location_ext, dataprep_timestamp)
 
 
-
 ######################################################################
 
 ####################
 #### DATA FILES ####
 ####################
+
+# Files are first cleaned then saved for a faster read in time. 
+# Set parameter to ensure data is reprocessed in "new_data" == TRUE in the parameter file
+file_location <- paste0(analysis_inputs_path, "cleaned_files")
+
 if(new_data == TRUE){
   currencies <- get_and_clean_currency_data()
   
@@ -80,7 +74,6 @@ if(new_data == TRUE){
   
   company_emissions <- get_company_emission_data(inc_emission_factors)
   
-  file_location <- paste0(working_location, "r2diidata")
   
   save_cleaned_files(file_location,
                      currencies, 
@@ -95,33 +88,28 @@ if(new_data == TRUE){
   
 }else{
   
-  currencies <- read_rds(paste0("currencies.rda"))
+  currencies <- read_rds(paste0(file_location, "/currencies.rda"))
   
-  fund_data <- read_rds("fund_data.rda")
+  fund_data <- read_rds(paste0(file_location, "/fund_data.rda"))
 
-  fin_data <- read_rds("fin_data.rda")
+  fin_data <- read_rds(paste0(file_location, "/fin_data.rda"))
 
-  comp_fin_data <- read_rds("comp_fin_data.rda")
+  comp_fin_data <- read_rds(paste0(file_location, "/comp_fin_data.rda"))
 
-  # revenue_data <- read_rds("revenue_data.rda")
+  # revenue_data <- read_rds(paste0(file_location, "revenue_data.rda"))
 
   if (inc_emission_factors){
-    average_sector_intensity <- read_rds("average_sector_intensity.rda")
+    average_sector_intensity <- read_rds(paste0(file_location, "/average_sector_intensity.rda"))
 
-    company_emissions <- read_rds("company_emissions.rda")
+    company_emissions <- read_rds(paste0(file_location, "/company_emissions.rda"))
   }
 }
 ####################
 #### PORTFOLIOS ####
 ####################
 
-set_web_parameters()
+portfolio_raw <- get_input_files()
 
-
-
-portfolio_raw <- read_raw_portfolio_file(project_name)
-
-portfolio_raw <- add_naming_to_portfolio(portfolio_raw)
 
 portfolio <- process_raw_portfolio(portfolio_raw,
                                         fin_data,
@@ -162,6 +150,11 @@ emissions_totals <- calculate_portfolio_emissions(inc_emission_factors,
 ################
 #### SAVING ####
 ################
+
+export_audit_information_jsons(folder_path = proc_input_path)
+export_audit_graph_json(audit_file__ = audit_file, export_path_full = proc_input_path)
+export_audit_invalid_json(portfolio_total,export_path_full = proc_input_path)
+export_audit_textvar_json(portfolio_total, proc_input_path)
 
 
 if(data_check(audit_file)){write_csv(audit_file, paste0(proc_input_path, "/", project_name,"_audit_file.csv"))}

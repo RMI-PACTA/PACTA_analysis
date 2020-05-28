@@ -13,7 +13,7 @@ get_portfolio_name <- function(){
 
 set_webtool_paths <- function(){
   
-  project_location <<-  paste0(working_location,"web_folders/web_tool")
+  project_location <<-  paste0(working_location,"web_folders/working_dir")
   
   log_path <<- paste0(project_location,"/00_Log_Files")
   par_file_path <<- paste0(project_location,"/10_Parameter_File")
@@ -25,24 +25,114 @@ set_webtool_paths <- function(){
   
 }
 
-set_web_parameters <- function(){
+set_web_parameters <- function(file_path){
   
-  NameInput <- read.csv(paste0("web_folders/ParameterFiles/",portfolio_name_ref,"_Naming.csv"), strip.white = TRUE, stringsAsFactors = FALSE)
-  PortfolioName <<- NameInput$PortfolioName
-  InvestorName <<- NameInput$InvestorName
+  cfg <- config::get(file = file_path)
   
-  TimeInput <- read.csv(paste0("web_folders/ParameterFiles/",portfolio_name_ref,"_TimeStamp.csv"), strip.white = TRUE, stringsAsFactors = FALSE)
-  FinDataTimeStamp <<- TimeInput$FinDataTimeStamp
+  project_location_ext <<- cfg$paths$project_location_ext
+  data_location_ext <<- cfg$paths$data_location_ext
+  
+  project_name <<- cfg$parameters$project_name
+  twodii_internal <<- cfg$parameters$twodii_internal
+  new_data <<- cfg$parameters$new_data
+  portfolio_name_ref <<- cfg$parameters$portfolio_name_ref
+  financial_timestamp <<- cfg$parameters$financial_timestamp
+  portfolio_name_in <<- cfg$parameters$portfolio_name_in
+  investor_name_in <<- cfg$parameters$investor_name_in
   
 }
 
 add_naming_to_portfolio <- function(portfolio_raw){
   
-  portfolio_raw$portfolio_name <- PortfolioName
-  portfolio_raw$investor_name <- InvestorName
+  portfolio_raw$portfolio_name <- portfolio_name_in
+  portfolio_raw$investor_name <- investor_name_in
   
   return(portfolio_raw)
   
+}
+
+get_input_files <- function(){
+  
+  portfolio <- NA
+  
+  input_path <- paste0(project_location, "/20_Raw_Inputs/")
+  
+  input_files = list.files(path = input_path,full.names = T)
+  
+  for (i in 1:length(input_files)){
+    
+    input_file_path <- input_files[i]
+    
+    portfolio_ <- read_web_input_file(input_file_path)
+    
+    portfolio_ <- portfolio_ %>%  select(-contains("X"))
+    head(portfolio_)
+    # clean and check column names
+    portfolio_ <- check_input_file_contents(portfolio_, portfolio_name_in, investor_name_in)
+    
+    head(portfolio_)
+    portfolio_$count = i
+    
+    portfolio <- rbind(portfolio, portfolio_)
+    # create warning here for user. 
+  }
+  portfolio <- clean_portfolio_col_types(portfolio)
+  portfolio <- clear_portfolio_input_blanks(portfolio)
+
+  return(portfolio)
+  }
+
+read_web_input_file <- function(input_file_path){
+  
+  file_ext = tools::file_ext(input_file_path)
+
+  if (file_ext == "csv"){
+    input_file <- read_csv(input_file_path)
+    
+  }
+  if (file_ext == "xlsx"){
+    input_file <- read_xlsx(input_file_path)
+  }
+  
+  if (file_ext == "txt"){
+    enc <- guess_encoding(input_file_path)$encoding[1]
+    input_file <- read.table(input_file_path,sep = ",", header = T, fileEncoding = enc)   
+    
+    if (ncol(input_file) == 1){
+      input_file <- read.table(input_file_path,sep = "\t", header = T, fileEncoding = enc)
+    }
+    
+    if (ncol(input_file) == 1){
+      input_file <- read.table(input_file_path,sep = ";", header = T, fileEncoding = enc)
+    }
+    
+    
+  }
+  
+  if(data_check(input_file) == FALSE){
+    warning("Input file not readable")
+  }
+  
+  return(input_file)
+
+}
+
+check_input_file_contents <- function(portfolio_, portfolio_name_in, investor_name_in){
+  
+  portfolio_clean <- clean_colnames_portfolio_input_file(portfolio_)
+  
+  necessary_columns <- c(grouping_variables, "market_value", "currency", "isin")
+
+  if (!"portfolio_name" %in% colnames(portfolio_clean)){portfolio_clean$portfolio_name = portfolio_name_in}
+  if (!"investor_name" %in% colnames(portfolio_clean)){portfolio_clean$investor_name = investor_name_in}
+  
+  if (length(setdiff(necessary_columns, colnames(portfolio_clean))) > 0){
+    missing_cols = setdiff(necessary_columns, colnames(portfolio_clean))
+    
+    warning(paste0("Missing inputs for this portfolio: ", missing_cols)) # Add LOG
+  }
+  
+  return(portfolio_clean)  
 }
 
 website_text <- function(audit_file){
@@ -79,7 +169,6 @@ website_text <- function(audit_file){
   write(text,paste0(proc_input_path,"/Websitetext.txt"))
 }
 
-
 save_cleaned_files <- function(save_loc, 
                                currencies, 
                                fund_data, 
@@ -88,7 +177,7 @@ save_cleaned_files <- function(save_loc,
                                average_sector_intensity,
                                company_emissions){
   
-  
+  if(!dir.exists(save_loc)){dir.create(save_loc)}
   
   write_rds(currencies,paste0(save_loc,"/currencies.rda"))
   write_rds(fund_data,paste0(save_loc,"/fund_data.rda"))
