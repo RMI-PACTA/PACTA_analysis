@@ -128,7 +128,7 @@ set_global_parameters <- function(file_path){
 
 set_project_paths <- function(project_name, twodii_internal, project_location_ext){
   
-  portcheck_v2_path <<- path_dropbox_2dii("PortCheck_v2")
+  # portcheck_v2_path <<- path_dropbox_2dii("PortCheck_v2")
   project_location <<-  ifelse(twodii_internal,
                                path_dropbox_2dii("PortCheck_v2","10_Projects",project_name),
                                paste0(project_location_ext,"/", project_name))
@@ -183,7 +183,7 @@ set_data_paths <- function(financial_timestamp = FINANCIAL.TIMESTAMP(), dataprep
 
 copy_files <- function(project_name){
   
-  folder_location <- paste0(set_git_path(), "/sample_files/20_input_files")
+  folder_location <- paste0(set_git_path(), "parameter_files")
   
   input_file <- paste0(raw_input_path,"/",project_name,"_Input.csv")
   parameter_file <- paste0(par_file_path, "/ReportParameters.yml")
@@ -191,7 +191,7 @@ copy_files <- function(project_name){
   
   if (!file.exists(input_file)){
     file.copy(paste0(folder_location,"/ProjectName_Input.csv"),input_file, overwrite = F)
-  }  
+  }
   
   if(!file.exists(parameter_file)){
     file.copy(paste0(folder_location,"/ReportParameters.yml"),parameter_file, overwrite = F)
@@ -208,8 +208,6 @@ create_project_folder <- function(project_name, twodii_internal, project_locatio
   project_location <- ifelse(twodii_internal, 
                              path_dropbox_2dii("PortCheck_v2","10_Projects",project_name), 
                              paste0(project_location_ext,"/", project_name))
-  
-  # folder_location <- paste0(getwd(),"/", "sample_files/10_folder_structures/start_folders")
   
   project_folders <- c("00_Log_Files", 
                        "10_Parameter_File",

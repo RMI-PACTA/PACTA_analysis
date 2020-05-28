@@ -42,11 +42,6 @@ clean_colnames_portfolio_input_file <- function(portfolio){
   
   if("numberof_shares" %in% colnames(portfolio)){portfolio<- portfolio %>% rename(number_of_shares = numberof_shares)}
   
-  
-  
-  # names(portfolio)[1] <- gsub("[^A-Za-z0-9]", "", names(portfolio)[1])
-  
-  
   portfolio
 }
 
@@ -866,7 +861,7 @@ get_and_clean_fin_data <- function(){
       company_id, company_name,bloomberg_id,corporate_bond_ticker,
       country_of_domicile, 
       isin,
-      unit_share_price, exchange_rate_usd,
+      unit_share_price, #exchange_rate_usd,
       asset_type, security_type,
       security_mapped_sector, security_icb_subsector, security_bics_subgroup, # bclass4,
       maturity_date, coupon_value, amount_issued, current_shares_outstanding_all_classes, unit_share_price,
