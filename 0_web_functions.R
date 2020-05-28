@@ -35,8 +35,17 @@ set_web_parameters <- function(file_path){
   project_name <<- cfg$parameters$project_name
   twodii_internal <<- cfg$parameters$twodii_internal
   new_data <<- cfg$parameters$new_data
-  portfolio_name_ref <<- cfg$parameters$portfolio_name_ref
+  
   financial_timestamp <<- cfg$parameters$financial_timestamp
+
+  
+}
+
+set_portfolio_parameters <- function(file_path){
+  
+  cfg <- config::get(file = file_path)
+  
+  portfolio_name_ref <<- cfg$parameters$portfolio_name_ref
   portfolio_name_in <<- cfg$parameters$portfolio_name_in
   investor_name_in <<- cfg$parameters$investor_name_in
   

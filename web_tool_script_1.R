@@ -16,9 +16,9 @@ source("0_json_functions.R")
 if (rstudioapi::isAvailable()) {
   # portfolio_name_ref <- "Portfolio3"
   working_location <- dirname(rstudioapi::getActiveDocumentContext()$path)
-  working_location <- gsub("Â","",working_location)
+  print(working_location)
 } else {
-  portfolio_name_ref = get_portfolio_name()
+  # portfolio_name_ref = get_portfolio_name()
   working_location <- getwd()
 }
 
@@ -31,7 +31,7 @@ working_location <- paste0(working_location, "/")
 
 # replaced with web version
 # set_project_paths(project_name, twodii_internal, project_location_ext)
-set_web_parameters(file_path = paste0(working_location,"/parameter_files/WebParameters_example.yml"))
+set_web_parameters(file_path = paste0(working_location,"/parameter_files/WebParameters.yml"))
 
 # just done once
 # create_project_folder(project_name, twodii_internal, project_location_ext)
@@ -40,6 +40,8 @@ set_webtool_paths()
 
 # just done once
 # copy_files(project_name)
+
+set_portfolio_parameters(file_path = paste0(par_file_path,"/PortfolioParameters.yml"))
 
 options(r2dii_config = paste0(par_file_path,"/AnalysisParameters.yml"))
 
@@ -153,9 +155,6 @@ emissions_totals <- calculate_portfolio_emissions(inc_emission_factors,
 ################
 
 export_audit_information_jsons(folder_path = proc_input_path)
-export_audit_graph_json(audit_file__ = audit_file, export_path_full = proc_input_path)
-export_audit_invalid_json(portfolio_total,export_path_full = proc_input_path)
-export_audit_textvar_json(portfolio_total, proc_input_path)
 
 
 if(data_check(audit_file)){write_csv(audit_file, paste0(proc_input_path, "/", project_name,"_audit_file.csv"))}

@@ -6,8 +6,3 @@ default:
         project_name: working_dir
         twodii_internal: FALSE
         new_data: FALSE
-        portfolio_name_ref: Portfolio3
-        financial_timestamp: 2019Q4
-        portfolio_name_in: Sample Portfolio
-        investor_name_in: Sample Investor
-
