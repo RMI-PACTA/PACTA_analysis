@@ -236,7 +236,6 @@ export_audit_information_jsons <- function(audit_file_ = audit_file, portfolio_t
 
 export_audit_graph_json <-function(audit_file__, export_path_full){
   
-  
   audit_file__ <-audit_file__ %>% select("isin", "holding_id","flag")
   
   all_flags<- c("Missing currency information","Negative or missing input value","Invalid or missing ISIN","Holding not in Bloomberg database","Included in analysis")
@@ -293,7 +292,7 @@ export_audit_graph_json <-function(audit_file__, export_path_full){
   chart_information <- paste0(chart_information, json_tail)
   chart_legend <- paste0(chart_legend, json_tail)
   
-  write(chart_legend, file=paste0(export_path_full,"legend.json"))
+  write(chart_legend, file=paste0(export_path_full,".json"))
   write(chart_information, file=paste0(export_path_full,".json"))
   
 }
@@ -349,4 +348,6 @@ export_audit_textvar_json <-function(portfolio_total_, export_path_full){
   
   text_varibles <- paste0(text_varibles, json_tail)
   
-  write(text_varibles, file=paste0(export_path_full,".json"))}
+  write(text_varibles, file=paste0(export_path_full,".json"))
+  
+}
