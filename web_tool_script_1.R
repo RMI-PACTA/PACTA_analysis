@@ -11,6 +11,7 @@ pacman::p_load(tidyr, dplyr, scales, reshape2, tidyverse, readxl, tidyselect, r2
 source("0_portfolio_input_check_functions.R")
 source("0_global_functions.R")
 source("0_web_functions.R")
+source("0_json_functions.R")
 
 if (rstudioapi::isAvailable()) {
   # portfolio_name_ref <- "Portfolio3"
