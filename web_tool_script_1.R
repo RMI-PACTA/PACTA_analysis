@@ -2,7 +2,18 @@
 
 options(encoding = "UTF-8") 
 
-pacman::p_load(tidyr, dplyr, scales, reshape2, tidyverse, readxl, tidyselect, r2dii.utils, fs, jsonlite)
+
+
+library(tidyr)
+library(dplyr)
+library(scales) 
+library(reshape2) 
+library(tidyverse) 
+library(readxl) 
+library(tidyselect) 
+library(r2dii.utils)
+library(fs) 
+library(jsonlite)
 
 
 # source("0_portfolio_test.R")
@@ -14,11 +25,11 @@ source("0_web_functions.R")
 source("0_json_functions.R")
 
 if (rstudioapi::isAvailable()) {
-  # portfolio_name_ref <- "Portfolio3"
+  portfolio_name_ref_all <- c("Portfolio3", "Portfolio2")
   working_location <- dirname(rstudioapi::getActiveDocumentContext()$path)
   print(working_location)
 } else {
-  # portfolio_name_ref = get_portfolio_name()
+  portfolio_name_ref_all = get_portfolio_name()
   working_location <- getwd()
 }
 
@@ -41,8 +52,6 @@ set_webtool_paths()
 # just done once
 # copy_files(project_name)
 
-set_portfolio_parameters(file_path = paste0(par_file_path,"/PortfolioParameters.yml"))
-
 options(r2dii_config = paste0(par_file_path,"/AnalysisParameters.yml"))
 
 set_global_parameters(paste0(par_file_path,"/AnalysisParameters.yml"))
@@ -50,49 +59,48 @@ set_global_parameters(paste0(par_file_path,"/AnalysisParameters.yml"))
 # need to define an alternative location for data files
 analysis_inputs_path <- set_analysis_inputs_path(twodii_internal, data_location_ext, dataprep_timestamp)
 
-
 ######################################################################
 
 ####################
 #### DATA FILES ####
 ####################
 
-# Files are first cleaned then saved for a faster read in time. 
+# Files are first cleaned then saved for a faster read in time.
 # Set parameter to ensure data is reprocessed in "new_data" == TRUE in the parameter file
 file_location <- paste0(analysis_inputs_path, "cleaned_files")
 
 if(new_data == TRUE){
   currencies <- get_and_clean_currency_data()
-  
+
   # fund_data <- get_and_clean_fund_data()
   fund_data <- data.frame()
-  
+
   fin_data <- get_and_clean_fin_data()
-  
+
   comp_fin_data <- get_and_clean_company_fin_data()
-  
+
   # revenue_data <- get_and_clean_revenue_data()
-  
+
   average_sector_intensity <- get_average_emission_data(inc_emission_factors)
-  
+
   company_emissions <- get_company_emission_data(inc_emission_factors)
-  
-  
+
+
   save_cleaned_files(file_location,
-                     currencies, 
+                     currencies,
                      fund_data,
                      fin_data,
                      comp_fin_data,
                      average_sector_intensity,
                      company_emissions)
-  
-  
-  
-  
+
+
+
+
 }else{
-  
+
   currencies <- read_rds(paste0(file_location, "/currencies.rda"))
-  
+
   fund_data <- read_rds(paste0(file_location, "/fund_data.rda"))
 
   fin_data <- read_rds(paste0(file_location, "/fin_data.rda"))
@@ -111,24 +119,23 @@ if(new_data == TRUE){
 #### PORTFOLIOS ####
 ####################
 
-portfolio_raw <- get_input_files()
-
+portfolio_raw <- get_input_files(portfolio_name_ref_all)
 
 portfolio <- process_raw_portfolio(portfolio_raw,
                                         fin_data,
                                         fund_data,
-                                        currencies, 
+                                        currencies,
                                         grouping_variables)
 
 
 portfolio <- add_revenue_split(has_revenue, portfolio, revenue_data)
 
-eq_portfolio <- create_portfolio_subset(portfolio, 
-                                        "Equity", 
+eq_portfolio <- create_portfolio_subset(portfolio,
+                                        "Equity",
                                         comp_fin_data)
 
-cb_portfolio <- create_portfolio_subset(portfolio, 
-                                        "Bonds", 
+cb_portfolio <- create_portfolio_subset(portfolio,
+                                        "Bonds",
                                         comp_fin_data)
 
 portfolio_total <- add_portfolio_flags(portfolio)
@@ -145,8 +152,8 @@ audit_file <- create_audit_file(portfolio_total, comp_fin_data)
 
 emissions_totals <- calculate_portfolio_emissions(inc_emission_factors,
                                                   audit_file,
-                                                  fin_data, 
-                                                  comp_fin_data,  
+                                                  fin_data,
+                                                  comp_fin_data,
                                                   average_sector_intensity,
                                                   company_emissions)
 

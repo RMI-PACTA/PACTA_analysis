@@ -1,13 +1,13 @@
 # 0_web_functions
 
 get_portfolio_name <- function(){
-  PortfolioNameRef = commandArgs(trailingOnly=TRUE)
+  portfolio_name_ref = commandArgs(trailingOnly=TRUE)
   
-  if (length(PortfolioNameRef)==0) {
+  if (length(portfolio_name_ref)==0) {
     stop("At least one argument must be supplied (input file).n", call.=FALSE)
   } 
   
-  return(PortfolioNameRef)
+  return(portfolio_name_ref)
   
 }
 
@@ -37,7 +37,7 @@ set_web_parameters <- function(file_path){
   new_data <<- cfg$parameters$new_data
   
   financial_timestamp <<- cfg$parameters$financial_timestamp
-
+  
   
 }
 
@@ -60,26 +60,53 @@ add_naming_to_portfolio <- function(portfolio_raw){
   
 }
 
-get_input_files <- function(){
+get_input_files <- function(portfolio_name_ref_all){
   
   portfolio <- NA
   
   input_path <- paste0(project_location, "/20_Raw_Inputs/")
   
-  input_files = list.files(path = input_path,full.names = T)
+  # set_portfolio_parameters(file_path = paste0(par_file_path,"/PortfolioParameters.yml"))
+  # check that the provided reference names match to the input files
   
-  for (i in 1:length(input_files)){
+  input_files = list.files(path = input_path,full.names = F)
+  input_names = gsub(".csv", "",input_files)
+  input_names = gsub(".txt", "",input_names)
+  input_names = gsub(".xlsx", "",input_names)
+  
+  if(!all(portfolio_name_ref_all %in% input_names)){
+    stop("Difference in input files and input argument portfolio names.")
+  }
+  
+  if(any(!portfolio_name_ref_all %in% input_names)){stop("Missing input argument")}
+  
+  portfolio_file_names <- list.files(paste0(project_location, "/10_Parameter_File/"))
+  portfolio_file_names <- portfolio_file_names[grepl("_PortfolioParameters.yml",portfolio_file_names)]
+  portfolio_file_names <- gsub("_PortfolioParameters.yml","", portfolio_file_names)
+  
+  if(!all(portfolio_name_ref_all %in% portfolio_file_names)){
+    stop("Difference in parameter files and input argument portfolio names.")
+  }
+  if(any(!portfolio_name_ref_all %in% portfolio_file_names)){stop("Missing portfolio parameter file")}
+  
+  if(any(!portfolio_name_ref_all %in% input_names)){stop("Missing input argument")}
+  
+  
+  for (i in 1:length(portfolio_name_ref_all)){
     
-    input_file_path <- input_files[i]
+    input_file_path <- paste0(input_path, input_files[i])
+    portfolio_name_ref = portfolio_name_ref_all[i]
+    
     
     portfolio_ <- read_web_input_file(input_file_path)
     
     portfolio_ <- portfolio_ %>%  select(-contains("X"))
-    head(portfolio_)
+
+    set_portfolio_parameters(file_path = paste0(par_file_path,"/",portfolio_name_ref,"_PortfolioParameters.yml"))
+    print(paste(portfolio_name_ref, portfolio_name_in))
     # clean and check column names
     portfolio_ <- check_input_file_contents(portfolio_, portfolio_name_in, investor_name_in)
-    
-    head(portfolio_)
+
     portfolio_$count = i
     
     portfolio <- rbind(portfolio, portfolio_)
@@ -87,14 +114,14 @@ get_input_files <- function(){
   }
   portfolio <- clean_portfolio_col_types(portfolio)
   portfolio <- clear_portfolio_input_blanks(portfolio)
-
+  
   return(portfolio)
-  }
+}
 
 read_web_input_file <- function(input_file_path){
   
   file_ext = tools::file_ext(input_file_path)
-
+  
   if (file_ext == "csv"){
     input_file <- read_csv(input_file_path)
     
@@ -123,7 +150,7 @@ read_web_input_file <- function(input_file_path){
   }
   
   return(input_file)
-
+  
 }
 
 check_input_file_contents <- function(portfolio_, portfolio_name_in, investor_name_in){
@@ -131,7 +158,7 @@ check_input_file_contents <- function(portfolio_, portfolio_name_in, investor_na
   portfolio_clean <- clean_colnames_portfolio_input_file(portfolio_)
   
   necessary_columns <- c(grouping_variables, "market_value", "currency", "isin")
-
+  
   if (!"portfolio_name" %in% colnames(portfolio_clean)){portfolio_clean$portfolio_name = portfolio_name_in}
   if (!"investor_name" %in% colnames(portfolio_clean)){portfolio_clean$investor_name = investor_name_in}
   
