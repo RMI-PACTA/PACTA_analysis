@@ -119,8 +119,7 @@ add_meta_portfolio <- function(portfolio, inc_meta_portfolio){
   # }
   
   if(inc_meta_portfolio){
-    portfolio_meta$portfolio_name <- portfolio_meta$investor_name
-    portfolio <- rbind(portfolio,portfolio_meta)
+    # portfolio_meta$portfolio_name <- portfolio_meta$investor_name
     # }
     # 
     # if (inc_proj_metaportfolio){
