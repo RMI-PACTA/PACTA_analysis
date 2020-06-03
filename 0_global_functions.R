@@ -156,7 +156,7 @@ set_git_path <- function(){
   git_path
 }
 
-set_analysis_inputs_path <- function(twodii_internal, data_location_ext, dataprep_ref = DATAPREP.TIMESTAMP()){
+set_analysis_inputs_path <- function(twodii_internal, data_location_ext, dataprep_ref = datastore_timestamp){
   
   if (twodii_internal){
     analysis_inputs_path <- path_dropbox_2dii("PortCheck","00_Data","07_AnalysisInputs",dataprep_ref)
@@ -169,7 +169,7 @@ set_analysis_inputs_path <- function(twodii_internal, data_location_ext, datapre
 
 }
 
-set_data_paths <- function(financial_timestamp = FINANCIAL.TIMESTAMP(), dataprep_timestamp = dataprep_timestamp, ald_timestamp = ALD.TIMESTAMP()){
+set_data_paths <- function(financial_timestamp = financial_timestamp, dataprep_timestamp = dataprep_timestamp, ald_timestamp = ald_timestamp){
   
   data_path <<- path_dropbox_2dii("PortCheck","00_Data")
   data_store_path <<- path_dropbox_2dii("PortCheck","00_Data", "06_DataStore",datastore_timestamp,ald_timestamp)
@@ -262,22 +262,22 @@ first_char_up <- function(x){
   x
 }
 
-clean_punctuation <- function(x){
-  
-  x <- gsub("ó","o",x)
-  x <- gsub("&"," and ",x)
-  x <- gsub("á","a",x)
-  x <- gsub("/"," ",x)
-  x <- gsub("ä","ae", x)
-  x <- gsub("ö","oe", x)
-  x <- gsub("ü","ue", x)
-  x <- gsub("Ä","Ae", x)
-  x <- gsub("Ö","Oe", x)
-  x <- gsub("Ü","Ue", x)
-  
-  x
-  
-}
+# clean_punctuation <- function(x){
+#   
+#   x <- gsub("ó","o",x)
+#   x <- gsub("&"," and ",x)
+#   x <- gsub("á","a",x)
+#   x <- gsub("/"," ",x)
+#   x <- gsub("ä","ae", x)
+#   x <- gsub("ö","oe", x)
+#   x <- gsub("ü","ue", x)
+#   x <- gsub("Ä","Ae", x)
+#   x <- gsub("Ö","Oe", x)
+#   x <- gsub("Ü","Ue", x)
+#   
+#   x
+#   
+# }
 
 # Checks whether a variable is a dataframe. Considers also logicals and null values.
 data_check <- function(df){
