@@ -1,3 +1,46 @@
+read_file <- function(file_name){
+  # This function checks the file type and reads it in. 
+  # This should allow switching between fst, rda and csv to happen more simply
+  
+  extension_type = substring(file_name,nchar(file_name)-4+1)
+  if (!extension_type %in% c(".rda", ".csv", ".fst")){stop("Can't read in file. File extension type not applicable.")}  
+  
+  
+  df <- NA
+  
+  if(file.exists(file_name)){
+    
+    
+    if (extension_type == ".rda"){df <- readr::read_rds(file_name)}
+    if (extension_type == ".fst"){df <- fst::read_fst(file_name)}
+    if (extension_type == ".csv"){df <- readr::read_csv(file_name)}
+  }else{
+    print(paste0(file_name, " does not exist"))
+  }
+  
+  return(df)
+}
+
+save_file <- function(df, file_name){
+  
+  
+  extension_type = substring(file_name,nchar(file_name)-4+1)
+  if (!extension_type %in% c(".rda", ".csv", ".fst")){stop("Can't read in file. File extension type not applicable.")}  
+  
+  if(data_check(df)){
+    
+    if (extension_type == ".rda"){df <- readr::write_rds(df, file_name)}
+    if (extension_type == ".fst"){df <- fst::write_fst(df, file_name)}
+    if (extension_type == ".csv"){df <- readr::write_csv(df, file_name)}
+  }else{
+    warning(paste0(df, " has no data to print"))
+  }
+  
+  
+}
+
+
+
 set_location <- function(){
   
   if (rstudioapi::isAvailable()) {
@@ -72,10 +115,10 @@ set_global_parameters <- function(file_path){
   meta_investor_name <<- cfg$ComparisonBenchmarks$MetaInvestorName
   meta_portfolio_name <<- cfg$ComparisonBenchmarks$MetaPortfolioName
   
-  #  inc_metaportfolio <<- cfg$ComparisonBenchmarks$CreateMetaPortfolio
-  # if(is.null(inc_metaportfolio)){
-  #   inc_metaportfolio <<- FALSE
-  # }
+  inc_meta_portfolio <<- cfg$ComparisonBenchmarks$CreateMetaPortfolio
+  if(is.null(inc_meta_portfolio)){
+    inc_meta_portfolio <<- FALSE
+  }
   
   
   # inc_project_metaportfolio <<- cfg$ComparisonBenchmarks$CreateProjectMetaPortfolio
@@ -166,7 +209,7 @@ set_analysis_inputs_path <- function(twodii_internal, data_location_ext, datapre
   }
   
   return(analysis_inputs_path)
-
+  
 }
 
 set_data_paths <- function(financial_timestamp = financial_timestamp, dataprep_timestamp = dataprep_timestamp, ald_timestamp = ald_timestamp){

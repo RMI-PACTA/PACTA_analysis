@@ -1,8 +1,9 @@
 # web_tool_script.R
 
 options(encoding = "UTF-8") 
-
-
+# install.packages("devtools")
+# devtools::install_github("2DegreesInvesting/r2dii")
+# install.packages("fst")
 
 library(tidyr)
 library(dplyr)
@@ -14,6 +15,7 @@ library(tidyselect)
 library(r2dii.utils)
 library(fs) 
 library(jsonlite)
+library(fst)
 
 
 # source("0_portfolio_test.R")
@@ -34,8 +36,6 @@ if (rstudioapi::isAvailable()) {
 }
 
 working_location <- paste0(working_location, "/")
-
-
 
 # just done once
 # create_project_folder(project_name, twodii_internal, project_location_ext)
@@ -99,20 +99,20 @@ if(new_data == TRUE){
 
 }else{
 
-  currencies <- read_rds(paste0(file_location, "/currencies.rda"))
+  currencies <- read_file(paste0(file_location, "/currencies.fst"))
 
-  fund_data <- read_rds(paste0(file_location, "/fund_data.rda"))
+  fund_data <- read_file(paste0(file_location, "/fund_data.fst"))
 
-  fin_data <- read_rds(paste0(file_location, "/fin_data.rda"))
+  fin_data <- read_file(paste0(file_location, "/fin_data.fst"))
 
-  comp_fin_data <- read_rds(paste0(file_location, "/comp_fin_data.rda"))
+  comp_fin_data <- read_file(paste0(file_location, "/comp_fin_data.fst"))
 
-  # revenue_data <- read_rds(paste0(file_location, "revenue_data.rda"))
+  # revenue_data <- read_file(paste0(file_location, "revenue_data.fst"))
 
   if (inc_emission_factors){
-    average_sector_intensity <- read_rds(paste0(file_location, "/average_sector_intensity.rda"))
+    average_sector_intensity <- read_file(paste0(file_location, "/average_sector_intensity.fst"))
 
-    company_emissions <- read_rds(paste0(file_location, "/company_emissions.rda"))
+    company_emissions <- read_file(paste0(file_location, "/company_emissions.fst"))
   }
 }
 ####################

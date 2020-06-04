@@ -101,12 +101,12 @@ get_input_files <- function(portfolio_name_ref_all){
     portfolio_ <- read_web_input_file(input_file_path)
     
     portfolio_ <- portfolio_ %>%  select(-contains("X"))
-
+    
     set_portfolio_parameters(file_path = paste0(par_file_path,"/",portfolio_name_ref,"_PortfolioParameters.yml"))
     print(paste(portfolio_name_ref, portfolio_name_in))
     # clean and check column names
     portfolio_ <- check_input_file_contents(portfolio_, portfolio_name_in, investor_name_in)
-
+    
     portfolio_$count = i
     
     portfolio <- rbind(portfolio, portfolio_)
@@ -215,16 +215,14 @@ save_cleaned_files <- function(save_loc,
   
   if(!dir.exists(save_loc)){dir.create(save_loc)}
   
-  write_rds(currencies,paste0(save_loc,"/currencies.rda"))
-  write_rds(fund_data,paste0(save_loc,"/fund_data.rda"))
-  write_rds(fin_data,paste0(save_loc,"/fin_data.rda"))
-  write_rds(comp_fin_data,paste0(save_loc,"/comp_fin_data.rda"))
-  write_rds(average_sector_intensity,paste0(save_loc,"/average_sector_intensity.rda" ))
-  write_rds(company_emissions,paste0(save_loc,"/company_emissions.rda"))
+  save_file(currencies,paste0(save_loc,"/currencies.fst"))
+  save_file(fund_data,paste0(save_loc,"/fund_data.fst"))
+  save_file(fin_data,paste0(save_loc,"/fin_data.fst"))
+  save_file(comp_fin_data,paste0(save_loc,"/comp_fin_data.fst"))
+  save_file(average_sector_intensity, paste0(save_loc,"/average_sector_intensity.fst" )) 
+  save_file(company_emissions,paste0(save_loc,"/company_emissions.fst"))
   
   if(check_file_size(save_loc)) warning("File size exceeds what can be pushed to GitHub. Check before Committing")
-  
-  
   
 }
 
@@ -233,8 +231,5 @@ check_file_size <- function(folder_to_check){
   files_to_check <- list.files(folder_to_check,full.names = T)
   any(file.size(files_to_check) > 100e6) 
   
-  
 }
-
-
 

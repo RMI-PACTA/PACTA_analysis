@@ -47,10 +47,7 @@ clean_colnames_portfolio_input_file <- function(portfolio){
 
 clean_portfolio_col_types <- function(portfolio, grouping_variables){
   
-  portfolio[,grouping_variables] <- lapply(portfolio[,grouping_variables], clean_punctuation)
-  
-  # portfolio$investor_name <- clean_punctuation(portfolio$investor_name)
-  # portfolio$portfolio_name <- clean_punctuation(portfolio$portfolio_name)
+  # portfolio[,grouping_variables] <- lapply(portfolio[,grouping_variables], clean_punctuation)
   
   
   # portfolio$number_of_shares <- as.numeric(portfolio$number_of_shares)
@@ -566,7 +563,7 @@ check_funds_wo_bbg <- function(fund_data, fin_data){
   
   known_missing_isins <- known_missing_isins %>% bind_rows(fund_isins_missing_bbg) %>% distinct()
   
-  write.csv(fund_isins_missing_bbg, "data/fund_isins_without_bbg_data.csv", row.names = F)
+  save_file(fund_isins_missing_bbg, "data/fund_isins_without_bbg_data.csv")
   
   if (data_check(fund_isins_missing_bbg)){print("Warning: There are funds without bbg data. These are excluded from the analysis.")}
   
@@ -777,7 +774,7 @@ create_id_columns <- function(portfolio, portfolio_type){
 # FINAL SCRIPTS
 get_and_clean_currency_data <- function(){
   
-  currencies <- readRDS("data/currencies.rda")
+  currencies <- read_file("data/currencies.rda")
   
   currencies <- set_currency_timestamp(currencies)
   
@@ -789,9 +786,9 @@ get_and_clean_fund_data <- function(){
   
   # Fund Data
   if(file.exists(paste0(analysis_inputs_path,"/fund_data_",financial_timestamp,".rda"))){
-    fund_data <- readRDS(paste0(analysis_inputs_path,"/fund_data_",financial_timestamp,".rda"))
+    fund_data <- read_file(paste0(analysis_inputs_path,"/fund_data_",financial_timestamp,".rda"))
   }else if(file.exists(paste0(analysis_inputs_path,"/fund_data_2018Q4.rda"))){
-    fund_data <- readRDS(paste0(analysis_inputs_path,"/fund_data_2018Q4.rda"))
+    fund_data <- read_file(paste0(analysis_inputs_path,"/fund_data_2018Q4.rda"))
     print("Old Fund Data being used. Replace FundsData2018Q4 or check name of file.")
   }else if(file.exists(paste0(analysis_inputs_path, "/SFC_2019_jackson_fund_data_2020Q2.csv"))){
     fund_data <- read_csv(paste0(analysis_inputs_path, "/SFC_2019_jackson_fund_data_2020Q2.csv"))
@@ -816,7 +813,7 @@ get_and_clean_fund_data <- function(){
 get_and_clean_fin_data <- function(){
   
   # Financial Data
-  fin_data_raw <- read_rds(paste0(analysis_inputs_path,"/security_financial_data.rda")) %>% as_tibble()
+  fin_data_raw <- read_file(paste0(analysis_inputs_path,"/security_financial_data.rda")) %>% as_tibble()
   # col_types = "ddcccccccccccccccDddddddddddddddddc")
   
   if(!unique(fin_data_raw$financial_timestamp) == financial_timestamp){print("Financial timestamp not equal")}
@@ -883,7 +880,7 @@ get_and_clean_revenue_data <- function(){
   revenue_data <- data.frame()
   
   if(has_revenue){
-    revenue_data <- read_rds(paste0(analysis_inputs_path, "/revenue_data_member_ticker.rda"))
+    revenue_data <- read_file(paste0(analysis_inputs_path, "/revenue_data_member_ticker.rda"))
     # col_types = "dcdcclcd")
     
     revenue_data <- revenue_data %>% 
@@ -897,7 +894,7 @@ get_and_clean_revenue_data <- function(){
 
 get_and_clean_company_fin_data <- function(){
   
-  comp_fin_data_raw <- read_rds(paste0(analysis_inputs_path,"/consolidated_financial_data.rda"))
+  comp_fin_data_raw <- read_file(paste0(analysis_inputs_path,"/consolidated_financial_data.rda"))
   # col_types = "ddcccccdddddclccccdccccllclddddddddddddc")
   
   comp_fin_data_raw <- comp_fin_data_raw %>% select(
@@ -925,7 +922,7 @@ process_raw_portfolio <- function(portfolio_raw,
   
   portfolio <- clear_portfolio_input_blanks(portfolio)
   
-  portfolio <- add_meta_portfolio(portfolio, inc_metaportfolio())
+  portfolio <- add_meta_portfolio(portfolio, inc_meta_portfolio)
   
   start_port_rows = nrow(portfolio)
   
@@ -1174,7 +1171,7 @@ get_average_emission_data <- function(inc_emission_factors){
   
   if(inc_emission_factors){
     
-    average_sector_intensity <- readRDS(paste0(analysis_inputs_path,"average_sector_intensity.rda"))
+    average_sector_intensity <- read_file(paste0(analysis_inputs_path,"average_sector_intensity.rda"))
   }
   return(average_sector_intensity)
 }
@@ -1185,7 +1182,7 @@ get_company_emission_data <- function(inc_emission_factors){
   
   if(inc_emission_factors){
     
-    company_emissions <- readRDS(paste0(analysis_inputs_path,"company_emissions.rda"))
+    company_emissions <- read_file(paste0(analysis_inputs_path,"company_emissions.rda"))
   }
   return(company_emissions)
 }
