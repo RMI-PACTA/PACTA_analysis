@@ -3,6 +3,10 @@
 # START RUN ANALYIS
 #########################################################################
 
+source("0_portfolio_test.R")
+source("0_global_functions.R")
+source("0_web_functions.R")
+
 # delete all results files
 unlink(paste0(results_path,"/*"), force = TRUE, recursive = TRUE)
 
