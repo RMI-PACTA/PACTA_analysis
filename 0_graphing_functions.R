@@ -2337,17 +2337,23 @@ MapChart <- function(plotnumber,chart_type,tech_to_plot,plot_year, explicit_file
   Power <- data.frame()
   tech_to_plot <<- tech_to_plot
   # ScenarioGeographyChoose <<- "Global"
-
+  mapfilename <- ""
 
   if (chart_type =="EQ" & has_equity == TRUE){
     Power <- filter_by_parameters(EQportmap,"EQ", byscenario = F)
+    mapfilename <- paste0(results_path,"/", investor_name_select,"/","Equiry_results_map.rda")
   }
   if (chart_type =="CB" & has_debt == TRUE){
     Power <- filter_by_parameters(CBportmap,"CB", byscenario = F, by_equity_market = FALSE)
+    mapfilename <- paste0(results_path,"/", investor_name_select,"/","Bonds_results_map.rda")
+    
   }
 
   if(data_check(Power)){PlotChart <- TRUE}else{PlotChart<-FALSE}
-
+  
+  
+  if(!file.exists(mapfilename)){PlotChart<-FALSE}
+ 
 
 
   if (PlotChart == TRUE){
