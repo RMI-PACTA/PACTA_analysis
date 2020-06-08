@@ -94,17 +94,17 @@ calculate_port_weight <- function(portfolio, grouping_variables){
     mutate(port_total_aum = sum(value_usd, na.rm =  T), 
            port_weight = value_usd/port_total_aum)
   
-  temp <- portfolio %>% 
-    group_by(!!!rlang::syms(grouping_variables)) %>% 
-    mutate(total_port_weight = sum(port_weight))
+  # temp <- portfolio %>% 
+  #   group_by(!!!rlang::syms(grouping_variables)) %>% 
+  #   mutate(total_port_weight = sum(port_weight))
+  # 
+  # total_port_weight_per_portfolio <- signif(unique(temp$total_port_weight),2)
+  # # check that all portfolio port_weight's sum to 1
+  # if (!all(total_port_weight_per_portfolio == 1.0)) {stop("Port weight calculation error")}
+  # 
   
-  total_port_weight_per_portfolio <- signif(unique(temp$total_port_weight),2)
-  # check that all portfolio port_weight's sum to 1
-  if (!all(total_port_weight_per_portfolio == 1.0)) {stop("Port weight calculation error")}
-
-
-portfolio  
-
+  portfolio  
+  
 }
 
 calculate_with_weights <- function(df, weight_col_name, weight_method_name) {

@@ -1,3 +1,26 @@
+# Checks whether a variable is a dataframe. Considers also logicals and null values.
+data_check <- function(df){
+  
+  if (is.data.frame(df)){
+    if(nrow(df) > 0){
+      check <- TRUE
+    }else{
+      check <- FALSE
+    }
+  }else{
+    check <- FALSE
+  }
+  
+  return(check)
+  
+}
+
+# Checks whether a value is null or blank
+is_blank_na <- function(x){
+  if(is.na(x) | x == ""){flag = TRUE}else{flag = FALSE}
+  flag
+}
+
 read_file <- function(file_name){
   # This function checks the file type and reads it in. 
   # This should allow switching between fst, rda and csv to happen more simply
@@ -322,27 +345,5 @@ first_char_up <- function(x){
 #   
 # }
 
-# Checks whether a variable is a dataframe. Considers also logicals and null values.
-data_check <- function(df){
-  
-  if (is.data.frame(df)){
-    if(nrow(df) > 0){
-      check <- TRUE
-    }else{
-      check <- FALSE
-    }
-  }else{
-    check <- FALSE
-  }
-  
-  return(check)
-  
-}
-
-# Checks whether a value is null or blank
-is_blank_na <- function(x){
-  if(is.na(x) | x == ""){flag = TRUE}else{flag = FALSE}
-  flag
-}
 
 
