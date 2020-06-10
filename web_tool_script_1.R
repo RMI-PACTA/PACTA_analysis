@@ -27,12 +27,14 @@ source("0_web_functions.R")
 source("0_json_functions.R")
 
 if (rstudioapi::isAvailable()) {
-  portfolio_name_ref_all <- c("Portfolio3", "Portfolio2")
+  portfolio_name_ref_all <- c("Portfolio2")
   working_location <- dirname(rstudioapi::getActiveDocumentContext()$path)
-  print(working_location)
+  set_web_parameters(file_path = paste0(working_location,"/parameter_files/WebParameters_2dii.yml"))
+  # print(working_location)
 } else {
   portfolio_name_ref_all = get_portfolio_name()
   working_location <- getwd()
+  set_web_parameters(file_path = paste0(working_location,"/parameter_files/WebParameters_docker.yml"))
 }
 
 working_location <- paste0(working_location, "/")
@@ -42,7 +44,7 @@ working_location <- paste0(working_location, "/")
 
 # replaced with web version
 # set_project_paths(project_name, twodii_internal, project_location_ext)
-set_web_parameters(file_path = paste0(working_location,"/parameter_files/WebParameters.yml"))
+# set_web_parameters(file_path = paste0(working_location,"/parameter_files/WebParameters.yml"))
 
 # just done once
 # create_project_folder(project_name, twodii_internal, project_location_ext)
@@ -126,7 +128,6 @@ portfolio <- process_raw_portfolio(portfolio_raw,
                                         fund_data,
                                         currencies,
                                         grouping_variables)
-
 
 portfolio <- add_revenue_split(has_revenue, portfolio, revenue_data)
 

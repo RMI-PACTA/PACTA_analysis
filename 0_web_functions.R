@@ -103,7 +103,7 @@ get_input_files <- function(portfolio_name_ref_all){
     portfolio_ <- portfolio_ %>%  select(-contains("X"))
     
     set_portfolio_parameters(file_path = paste0(par_file_path,"/",portfolio_name_ref,"_PortfolioParameters.yml"))
-    print(paste(portfolio_name_ref, portfolio_name_in))
+    # print(paste(portfolio_name_ref, portfolio_name_in))
     # clean and check column names
     portfolio_ <- check_input_file_contents(portfolio_, portfolio_name_in, investor_name_in)
     
@@ -215,7 +215,7 @@ save_cleaned_files <- function(save_loc,
   
   if(!dir.exists(save_loc)){dir.create(save_loc)}
   
-  save_file(currencies,paste0(save_loc,"/currencies.fst"))
+  save_file(as.data.frame(currencies),paste0(save_loc,"/currencies.fst"))
   save_file(fund_data,paste0(save_loc,"/fund_data.fst"))
   save_file(fin_data,paste0(save_loc,"/fin_data.fst"))
   save_file(comp_fin_data,paste0(save_loc,"/comp_fin_data.fst"))

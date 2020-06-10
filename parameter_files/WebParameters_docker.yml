@@ -1,0 +1,9 @@
+default:
+    paths:
+        project_location_ext: /bound/web_folders/
+        data_location_ext: /pacta-data/2019Q4/
+    parameters:
+        project_name: working_dir
+        twodii_internal: FALSE
+        new_data: FALSE
+

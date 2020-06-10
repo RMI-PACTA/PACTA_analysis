@@ -28,11 +28,9 @@ read_file <- function(file_name){
   extension_type = substring(file_name,nchar(file_name)-4+1)
   if (!extension_type %in% c(".rda", ".csv", ".fst")){stop("Can't read in file. File extension type not applicable.")}  
   
-  
   df <- NA
   
   if(file.exists(file_name)){
-    
     
     if (extension_type == ".rda"){df <- readr::read_rds(file_name)}
     if (extension_type == ".fst"){df <- fst::read_fst(file_name)}
