@@ -801,8 +801,8 @@ get_and_clean_fund_data <- function(){
   }else if(file.exists(paste0(analysis_inputs_path,"/fund_data_2018Q4.rda"))){
     fund_data <- readRDS(paste0(analysis_inputs_path,"/fund_data_2018Q4.rda"))
     print("Old Fund Data being used. Replace FundsData2018Q4 or check name of file.")
-  }else if(file.exists(paste0(analysis_inputs_path, "/SFC_2019_jackson_fund_data_2020Q2.csv"))){
-    fund_data <- read_csv(paste0(analysis_inputs_path, "/SFC_2019_jackson_fund_data_2020Q2.csv"))
+  }else if(file.exists(paste0(analysis_inputs_path, "/SFC_26052020_funds.csv"))){
+    fund_data <- read_csv(paste0(analysis_inputs_path, "/SFC_26052020_funds.csv"))
     print("2020Q2 SFC fund data being used")
   }else{
     if(!data_check(fund_data)){stop("No fund data available")}
