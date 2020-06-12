@@ -980,6 +980,7 @@ process_raw_portfolio <- function(portfolio_raw,
     portfolio_total$direct_holding <- TRUE
     
   }
+  
   portfolio_total <- clean_unmatched_holdings(portfolio_total)
   
   if(round(sum(portfolio_total$value_usd, na.rm = T),1) != round(original_value_usd,1)){stop("Fund Portfolio introducing errors in total value")}
