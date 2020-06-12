@@ -165,4 +165,7 @@ if (file.exists(bonds_inputs_file)){
 #####################
 
 gather_and_save_project_results(results_path, aggregation_level = "portfolio")	
-gather_and_save_project_results(results_path, aggregation_level = "company", year_filter = c(START.YEAR(),START.YEAR()+5), allocation_filter = "portfolio_weight", portfolios_per_file = 250)	
+gather_and_save_project_results(results_path, aggregation_level = "company", 
+                                year_filter = c(start_year,start_year+5), 
+                                allocation_filter = "portfolio_weight", 
+                                portfolios_per_file = 250)	
