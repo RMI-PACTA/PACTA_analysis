@@ -22,6 +22,8 @@ fin_data <- get_and_clean_fin_data(fund_data)
 
 comp_fin_data <- get_and_clean_company_fin_data()
 
+debt_fin_data <- get_and_clean_debt_fin_data()
+
 revenue_data <- get_and_clean_revenue_data()
 
 average_sector_intensity <- get_average_emission_data(inc_emission_factors)
@@ -42,13 +44,15 @@ portfolio <- process_raw_portfolio(portfolio_raw,
 
 portfolio <- add_revenue_split(has_revenue, portfolio, revenue_data)
 
+portfolio <- create_ald_flag(portfolio, comp_fin_data, debt_fin_data)
+
 eq_portfolio <- create_portfolio_subset(portfolio, 
                                         "Equity", 
                                         comp_fin_data)
 
 cb_portfolio <- create_portfolio_subset(portfolio, 
                                         "Bonds", 
-                                        comp_fin_data)
+                                        debt_fin_data)
 
 portfolio_total <- add_portfolio_flags(portfolio)
 
@@ -56,7 +60,7 @@ portfolio_overview <- portfolio_summary(portfolio_total)
 
 identify_missing_data(portfolio_total)
 
-audit_file <- create_audit_file(portfolio_total, comp_fin_data)
+audit_file <- create_audit_file(portfolio_total)
 
 create_audit_chart(audit_file, proc_input_path)
 
