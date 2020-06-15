@@ -68,7 +68,7 @@ aggregate_holdings <- function(portfolio){
     ungroup() %>% 
     # group_by(vars(all_of(grouping_variables))) %>% 
     # group_by(holding_id, id, financial_sector, add = T) %>% 
-    group_by(!!!rlang::syms(grouping_variables), company_name, id, financial_sector, current_shares_outstanding_all_classes, has_ald) %>%
+    group_by(!!!rlang::syms(grouping_variables), company_name, id, financial_sector, current_shares_outstanding_all_classes, has_ald_in_fin_sector) %>%
     summarise(number_holdings = n_distinct(holding_id),
               value_usd = sum(value_usd, na.rm = T),
               number_of_shares = sum(number_of_shares, na.rm = T),
@@ -228,12 +228,9 @@ aggregate_map_data <- function(portfolio){
 
 calculate_weights <- function(portfolio, portfolio_type, grouping_variables){
   
-  portfolio <- portfolio %>% 
-    rename(has_ald = has_ald_in_fin_sector)
-  
   port_sub <- portfolio %>% 
     select(all_of(grouping_variables), holding_id,id, id_name, company_name, value_usd, number_of_shares, 
-           current_shares_outstanding_all_classes, financial_sector, has_ald)
+           current_shares_outstanding_all_classes, financial_sector, has_ald_in_fin_sector)
   
   port_sub <- calculate_port_weight(port_sub, grouping_variables)
   
@@ -259,9 +256,9 @@ merge_in_ald <- function(portfolio, ald_scen){
   
 }
 
-port_weight_allocation <- function(port_ald, portfolio_type){
+port_weight_allocation <- function(port_ald){
   
-  port_ald_pw <- port_ald %>% filter(has_ald == TRUE, financial_sector == ald_sector)
+  port_ald_pw <- port_ald %>% filter(has_ald_in_fin_sector == TRUE, financial_sector == ald_sector)
   
   if(data_check(port_ald_pw)){
     
