@@ -37,7 +37,7 @@ if(file.exists(equity_input_file)){
     port_eq <- merge_in_ald(port_eq, ald_scen_eq)
     
     # Portfolio weight methodology
-    port_pw_eq <- port_weight_allocation(port_eq, "Equity")
+    port_pw_eq <- port_weight_allocation(port_eq)
     
     company_pw_eq <- aggregate_company(port_pw_eq)
     
@@ -118,7 +118,7 @@ if (file.exists(bonds_inputs_file)){
     port_cb <- merge_in_ald(port_cb, ald_scen_cb)
     
     # Portfolio weight methodology
-    port_pw_cb <- port_weight_allocation(port_cb, "Bonds")
+    port_pw_cb <- port_weight_allocation(port_cb)
     
     company_pw_cb <- aggregate_company(port_pw_cb)
     

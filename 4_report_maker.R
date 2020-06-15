@@ -72,7 +72,7 @@ for (i in 1:nrow(report_list)){
   report_handle <- graph_name("00",ParameterFile)
   create_results_folder(project_name,investor_name_select,portfolio_name_select,report_handle)
   
-  ReportFigures(explicit_filenames = T)
+  ReportFigures(explicit_filenames = F)
   
  
   
