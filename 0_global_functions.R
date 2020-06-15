@@ -72,7 +72,7 @@ set_global_parameters <- function(file_path){
   meta_investor_name <<- cfg$ComparisonBenchmarks$MetaInvestorName
   meta_portfolio_name <<- cfg$ComparisonBenchmarks$MetaPortfolioName
   
-  #  inc_metaportfolio <<- cfg$ComparisonBenchmarks$CreateMetaPortfolio
+   inc_meta_portfolio <<- cfg$ComparisonBenchmarks$CreateMetaPortfolio
   # if(is.null(inc_metaportfolio)){
   #   inc_metaportfolio <<- FALSE
   # }
