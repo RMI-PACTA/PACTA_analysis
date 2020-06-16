@@ -30,8 +30,8 @@ source("0_portfolio_input_check_functions.R")
 source("0_global_functions.R")
 source("0_sda_approach.R")
 
-project_name <- "Offline_test"
-twodii_internal <- FALSE
+project_name <- "BondsTest"
+twodii_internal <- TRUE
 # TRUE or FALSE: TRUE means that the code is running on a 2dii laptop with dropbox connection
 
 #####################################################################
