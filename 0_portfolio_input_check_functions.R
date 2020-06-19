@@ -124,9 +124,9 @@ add_meta_portfolio <- function(portfolio, inc_meta_portfolio){
   # }
   
   if(inc_meta_portfolio){
-    portfolio_meta$portfolio_name <- portfolio_meta$investor_name
-    portfolio <- rbind(portfolio,portfolio_meta)
-    # }
+    # portfolio_meta$portfolio_name <- portfolio_meta$investor_name
+    # portfolio <- rbind(portfolio,portfolio_meta)
+    # # }
     # 
     # if (inc_proj_metaportfolio){
     portfolio_meta$portfolio_name <- meta_portfolio_name
@@ -886,6 +886,8 @@ get_and_clean_fin_data <- function(fund_data){
   # Checks to ensure all finds are classified as such
   fin_data <- classify_all_funds(fin_data)
   
+  # fin_data <- add_bics_sector(fin_data)
+  
   # Select relevant columns
   fin_data <- fin_data %>%
     select(
@@ -910,6 +912,15 @@ get_and_clean_fin_data <- function(fund_data){
   
 }
 
+add_bics_sector <- function(fin_data){
+  
+  bics_bridge <- read_csv("data/bics_bridge.csv")
+  
+  fin_data_ <- left_join(fin_data, bics_bridge, by = c("security_bics_subgroup" = "bics_subsector"))
+  
+  
+}
+
 get_and_clean_revenue_data <- function(){
   
   revenue_data <- data.frame()
@@ -930,12 +941,11 @@ get_and_clean_revenue_data <- function(){
 get_and_clean_company_fin_data <- function(){
   
   comp_fin_data_raw <- read_rds(paste0(analysis_inputs_path,"/consolidated_financial_data.rda"))
-  # col_types = "ddcccccdddddclccccdccccllclddddddddddddc")
   
   comp_fin_data_raw <- comp_fin_data_raw %>% select(
     company_id, company_name, bloomberg_id, country_of_domicile, corporate_bond_ticker, bics_sector, bics_subgroup,
     icb_subgroup, mapped_sector, has_asset_level_data, has_assets_in_matched_sector, sectors_with_assets, 
-    current_shares_outstanding_all_classes, company_status, 
+    current_shares_outstanding_all_classes, company_status, bond_debt_out,
     financial_timestamp
   )
   
@@ -1190,7 +1200,7 @@ create_audit_file <- function(portfolio_total){
   #   )
   
   audit_file <- portfolio_total %>% 
-    select(all_of(grouping_variables), holding_id, isin, value_usd, company_name, asset_type,  has_revenue_data, valid_input, 
+    select(all_of(grouping_variables), holding_id, isin, value_usd, company_name, bics_sector, asset_type,  has_revenue_data, valid_input, 
            direct_holding, financial_sector, sectors_with_assets, has_ald_in_fin_sector,flag)
   
   if(has_revenue == FALSE){audit_file <- audit_file %>% select(-has_revenue_data)}

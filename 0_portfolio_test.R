@@ -13,7 +13,7 @@ get_ald_scen <- function(portfolio_type){
       filter(equity_market %in% equity_market_list) #%>% 
     # rename(bloomberg_id = id)
     
-    
+    if (data_check(ald) == FALSE){stop(" equity market list filtered out all ald_eq")}
     
   }
   if(portfolio_type == "Bonds"){
@@ -423,7 +423,7 @@ gather_and_save_project_results <- function(
     saveRDS(all_results_eq,paste0(results_path,"/Equity_results_",aggregation_level,".rda"))
     write_csv(all_results_eq,paste0(results_path,"/Equity_results_",aggregation_level,".csv"))
     
-    }	
+  }	
   
 }
 
