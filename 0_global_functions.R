@@ -140,6 +140,7 @@ set_global_parameters <- function(file_path){
   if(is.null(inc_meta_portfolio)){
     inc_meta_portfolio <<- FALSE
   }
+
   
   
   # inc_project_metaportfolio <<- cfg$ComparisonBenchmarks$CreateProjectMetaPortfolio
