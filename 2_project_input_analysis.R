@@ -2,12 +2,15 @@
 # File List Check for External Data Requirements:
 # security_financial_data.rda
 # consolidated_financial_data.rda
-# revenue_data_member_ticker.rda
+# debt_financial_data.rda
 # bonds_ald_scenario.rda
 # equity_ald_scenario.rda
 # masterdata_ownership_datastore.rda
 # masterdata_debt_datastore.rda
 
+# optional:
+# fund_data_2019Q4.rda (or relevant time stamp)
+# revenue_data_member_ticker.rda (if not available, set has_revenue = FALSE in parameter file)
 
 # Obtains data, processes the portfolio and saves the files
 
@@ -29,7 +32,7 @@ revenue_data <- get_and_clean_revenue_data()
 average_sector_intensity <- get_average_emission_data(inc_emission_factors)
 
 company_emissions <- get_company_emission_data(inc_emission_factors)
-
+ 
 ####################
 #### PORTFOLIOS ####
 ####################
@@ -41,10 +44,11 @@ portfolio <- process_raw_portfolio(portfolio_raw,
                                    currencies, 
                                    grouping_variables)
 
-
 portfolio <- add_revenue_split(has_revenue, portfolio, revenue_data)
 
 portfolio <- create_ald_flag(portfolio, comp_fin_data, debt_fin_data)
+
+
 
 eq_portfolio <- create_portfolio_subset(portfolio, 
                                         "Equity", 
