@@ -892,7 +892,7 @@ get_and_clean_fin_data <- function(fund_data){
   if (nrow(fin_data) > nrow(fin_data_raw)){stop("Additional rows added to fin data")}
   
   # updates csv file with missing bloomberg data re funds
-  if(data_check(fund_data))  check_funds_wo_bbg(fund_data,fin_data)
+  if(data_check(fund_data)){ check_funds_wo_bbg(fund_data,fin_data)}
   
   return(fin_data)
   
@@ -1192,7 +1192,7 @@ create_audit_file <- function(portfolio_total){
   #   )
   
   audit_file <- portfolio_total %>% 
-    select(all_of(grouping_variables), holding_id, isin, value_usd, company_name, bics_sector, asset_type,  has_revenue_data, valid_input, 
+    select(all_of(grouping_variables), holding_id, isin, value_usd, company_name, asset_type,  has_revenue_data, valid_input, 
            direct_holding, financial_sector, sectors_with_assets, has_ald_in_fin_sector,flag)
   
   if(has_revenue == FALSE){audit_file <- audit_file %>% select(-has_revenue_data)}

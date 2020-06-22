@@ -210,6 +210,7 @@ save_cleaned_files <- function(save_loc,
                                fund_data, 
                                fin_data,
                                comp_fin_data,
+                               debt_fin_data,
                                average_sector_intensity,
                                company_emissions){
   
@@ -219,6 +220,7 @@ save_cleaned_files <- function(save_loc,
   save_file(fund_data,paste0(save_loc,"/fund_data.fst"))
   save_file(fin_data,paste0(save_loc,"/fin_data.fst"))
   save_file(comp_fin_data,paste0(save_loc,"/comp_fin_data.fst"))
+  save_file(debt_fin_data,paste0(save_loc,"/debt_fin_data.fst"))
   save_file(average_sector_intensity, paste0(save_loc,"/average_sector_intensity.fst" )) 
   save_file(company_emissions,paste0(save_loc,"/company_emissions.fst"))
   
