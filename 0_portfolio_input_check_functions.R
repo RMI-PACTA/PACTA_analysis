@@ -699,7 +699,8 @@ check_for_ald <- function(portfolio_subset, portfolio_type, relevant_fin_data){
     
     portfolio_subset <- portfolio_subset %>% 
       rowwise() %>% 
-      mutate(has_ald_in_fin_sector = if_else(grepl(financial_sector, sectors_with_assets),TRUE,FALSE))
+      mutate(has_ald_in_fin_sector = if_else(grepl(financial_sector, sectors_with_assets),TRUE,FALSE)) %>% 
+      ungroup()
     
     if(sum(portfolio_subset$value_usd, na.rm = T) != initial_port_value){stop("Merge over company id changes portfolio value")}
     
@@ -1083,12 +1084,8 @@ create_merged_portfolio <- function(eq_portfolio, cb_portfolio){
 create_portfolio_subset <- function(portfolio, portfolio_type, relevant_fin_data){
   
   if(portfolio_type %in% unique(portfolio$asset_type)){
-    
-    portfolio_subset <- portfolio %>% filter(asset_type == portfolio_type)
-    
-    # portfolio_subset <- check_for_ald(portfolio_subset, 
-    #                                   portfolio_type,
-    #                                   relevant_fin_data) 
+
+    portfolio_subset <- portfolio %>% ungroup() %>% filter(asset_type == portfolio_type)
     
     portfolio_subset <- create_id_columns(portfolio_subset, portfolio_type)
     
