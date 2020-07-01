@@ -1086,6 +1086,7 @@ create_portfolio_subset <- function(portfolio, portfolio_type, relevant_fin_data
   if(portfolio_type %in% unique(portfolio$asset_type)){
 
     portfolio_subset <- portfolio %>% ungroup() %>% filter(asset_type == portfolio_type)
+
     
     portfolio_subset <- create_id_columns(portfolio_subset, portfolio_type)
     
