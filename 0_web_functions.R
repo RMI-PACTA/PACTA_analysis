@@ -103,7 +103,7 @@ get_input_files <- function(portfolio_name_ref_all){
     portfolio_ <- portfolio_ %>%  select(-contains("X"))
     
     set_portfolio_parameters(file_path = paste0(par_file_path,"/",portfolio_name_ref,"_PortfolioParameters.yml"))
-    # print(paste(portfolio_name_ref, portfolio_name_in))
+
     # clean and check column names
     portfolio_ <- check_input_file_contents(portfolio_, portfolio_name_in, investor_name_in)
     
