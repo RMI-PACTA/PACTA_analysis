@@ -25,6 +25,7 @@ library(tidyverse)
 library(ggforce) 
 library(sitools) 
 library(countrycode)
+#library(mapproj)
 
 # Set Reporting Parameters
 options(r2dii_config = paste0(par_file_path,"/ReportParameters.yml"))
@@ -63,9 +64,9 @@ for (i in 1:nrow(report_list)){
   ########################
   set_initial_variables()
   test_list <- create_test_list()
-  
+
   results_call()
-  
+
   #########################
   ### REPORT GENERATION ###
   #########################
