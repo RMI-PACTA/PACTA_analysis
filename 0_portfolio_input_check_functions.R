@@ -711,7 +711,8 @@ check_for_ald <- function(portfolio_subset, portfolio_type, relevant_fin_data){
     
     portfolio_subset <- portfolio_subset %>% 
       rowwise() %>% 
-      mutate(has_ald_in_fin_sector = if_else(grepl(financial_sector, sectors_with_assets),TRUE,FALSE))
+      mutate(has_ald_in_fin_sector = if_else(grepl(financial_sector, sectors_with_assets),TRUE,FALSE)) %>% 
+      ungroup()
     
     if(sum(portfolio_subset$value_usd, na.rm = T) != initial_port_value){stop("Merge over company id changes portfolio value")}
     
@@ -1095,10 +1096,6 @@ create_portfolio_subset <- function(portfolio, portfolio_type, relevant_fin_data
     
     portfolio_subset <- portfolio %>% filter(asset_type == portfolio_type)
     
-    # portfolio_subset <- check_for_ald(portfolio_subset, 
-    #                                   portfolio_type,
-    #                                   relevant_fin_data) 
-    
     portfolio_subset <- create_id_columns(portfolio_subset, portfolio_type)
     
     portfolio_subset <- portfolio_subset %>% 
@@ -1201,7 +1198,7 @@ create_audit_file <- function(portfolio_total){
   #   )
   
   audit_file <- portfolio_total %>% 
-    select(all_of(grouping_variables), holding_id, isin, value_usd, company_name, bics_sector, asset_type,  has_revenue_data, valid_input, 
+    select(all_of(grouping_variables), holding_id, isin, value_usd, company_name, asset_type,  has_revenue_data, valid_input, 
            direct_holding, financial_sector, sectors_with_assets, has_ald_in_fin_sector,flag)
   
   if(has_revenue == FALSE){audit_file <- audit_file %>% select(-has_revenue_data)}
