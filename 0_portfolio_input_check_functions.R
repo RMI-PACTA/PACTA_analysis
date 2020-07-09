@@ -900,7 +900,8 @@ get_and_clean_fin_data <- function(fund_data){
       maturity_date, coupon_value, amount_issued, current_shares_outstanding_all_classes, unit_share_price,
       sector_override,
       is_sb
-    )
+    ) %>% 
+    distinct()
   
   ### TEST
   if (nrow(fin_data) > nrow(fin_data_raw)){stop("Additional rows added to fin data")}
