@@ -122,8 +122,6 @@ if(new_data == TRUE){
 ####################
 #### PORTFOLIOS ####
 ####################
-print(portfolio_name_ref_all)
-print(project_location)
 portfolio_raw <- get_input_files(portfolio_name_ref_all)
 
 portfolio <- process_raw_portfolio(portfolio_raw,
