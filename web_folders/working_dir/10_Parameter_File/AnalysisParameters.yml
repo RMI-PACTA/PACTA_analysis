@@ -30,7 +30,7 @@ default:
     Years.Startyear: 2020
   
   ComparisonBenchmarks:
-    CreateMetaPortfolio: TRUE
+    CreateMetaPortfolio: FALSE
     MetaPortfolioName: Meta Portfolio
     MetaInvestorName: Meta Investor
   
