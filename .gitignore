@@ -33,7 +33,10 @@ vignettes/*.pdf
 *.knit.md
 
 .Ruserdata
-**/working_dir
+**/working_dir/30_Processed_inputs
+**/working_dir/40_Results
+**/working_dir/50_Outputs
+
 setup.R
 data/isins_missing_bbg_data.csv
 data/fund_isins_without_bbg_data.csv
