@@ -11,6 +11,45 @@ get_portfolio_name <- function(){
   
 }
 
+identify_portfolios <- function(portfolio_total){
+  
+  port_names <- portfolio_total %>% select(investor_name,portfolio_name) %>% distinct()
+  
+  port_names <- port_names %>% 
+    mutate(file_name = gsub(" ", "", portfolio_name),
+           loc_name = paste0(portfolio_name_ref_all, "-", file_name))
+  
+  
+  if(length(port_names %>% select(investor_name) %>% distinct()) > 1){warning("More than one investor in portfolio")}
+  
+  return(port_names)
+  
+}
+
+create_portfolio_subfolders <- function(file_names, portfolio_name_ref_all){
+  
+  folders <- c("30_Processed_Inputs", "40_Results", "50_Outputs")
+  
+  locs_to_create <- paste0(project_location, "/", folders, "/", file_names$loc_name)
+  
+  lapply(locs_to_create, dir.create)    
+  
+}
+
+save_if_exists <- function(df, portfolio_name_, save_name, csv_or_rds = "rds"){
+  
+  if(data_check(df)){df <- df %>% filter(portfolio_name == all_of(portfolio_name_))}
+  
+  if(data_check(df)){
+    if(csv_or_rds == "rds"){
+      write_rds(df, save_name)
+    }else if(csv_or_rds == "csv"){
+      write_csv(df, save_name)
+    }
+  }
+  
+}
+
 set_webtool_paths <- function(){
   
   project_location <<-  paste0(working_location,"web_folders/working_dir")

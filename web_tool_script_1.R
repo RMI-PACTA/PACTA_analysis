@@ -73,23 +73,23 @@ file_location <- paste0(analysis_inputs_path, "cleaned_files")
 
 if(new_data == TRUE){
   currencies <- get_and_clean_currency_data()
-
+  
   # fund_data <- get_and_clean_fund_data()
   fund_data <- data.frame()
-
+  
   fin_data <- get_and_clean_fin_data(fund_data)
-
+  
   comp_fin_data <- get_and_clean_company_fin_data()
   
   debt_fin_data <- get_and_clean_debt_fin_data()
-
+  
   # revenue_data <- get_and_clean_revenue_data()
-
+  
   average_sector_intensity <- get_average_emission_data(inc_emission_factors)
-
+  
   company_emissions <- get_company_emission_data(inc_emission_factors)
-
-
+  
+  
   save_cleaned_files(file_location,
                      currencies,
                      fund_data,
@@ -98,27 +98,27 @@ if(new_data == TRUE){
                      debt_fin_data,
                      average_sector_intensity,
                      company_emissions)
-
-
-
-
+  
+  
+  
+  
 }else{
-
+  
   currencies <- read_file(paste0(file_location, "/currencies.fst"))
-
+  
   fund_data <- read_file(paste0(file_location, "/fund_data.fst"))
-
+  
   fin_data <- read_file(paste0(file_location, "/fin_data.fst"))
-
+  
   comp_fin_data <- read_file(paste0(file_location, "/comp_fin_data.fst"))
   
   debt_fin_data <- read_file(paste0(file_location,"/debt_fin_data.fst"))
-
+  
   # revenue_data <- read_file(paste0(file_location, "revenue_data.fst"))
-
+  
   if (inc_emission_factors){
     average_sector_intensity <- read_file(paste0(file_location, "/average_sector_intensity.fst"))
-
+    
     company_emissions <- read_file(paste0(file_location, "/company_emissions.fst"))
   }
 }
@@ -129,10 +129,10 @@ if(new_data == TRUE){
 portfolio_raw <- get_input_files(portfolio_name_ref_all)
 
 portfolio <- process_raw_portfolio(portfolio_raw,
-                                        fin_data,
-                                        fund_data,
-                                        currencies,
-                                        grouping_variables)
+                                   fin_data,
+                                   fund_data,
+                                   currencies,
+                                   grouping_variables)
 
 portfolio <- add_revenue_split(has_revenue, portfolio, revenue_data)
 
@@ -170,15 +170,34 @@ emissions_totals <- calculate_portfolio_emissions(inc_emission_factors,
 #### SAVING ####
 ################
 
-export_audit_information_jsons(folder_path = proc_input_path)
+# To save, files need to go in the portfolio specific folder. 
+# Identify the portfolios to save; 
+# Subset and Save these files
 
 
-if(data_check(audit_file)){write_csv(audit_file, paste0(proc_input_path, "/", project_name,"_audit_file.csv"))}
+file_names <- identify_portfolios(portfolio_total)
+write_csv(file_names, paste0(proc_input_path, "/file_names.csv"))
 
-if(data_check(portfolio_total)){write_rds(portfolio_total, paste0(proc_input_path, "/", project_name, "_total_portfolio.rda"))}
-if(data_check(eq_portfolio)){write_rds(eq_portfolio, paste0(proc_input_path, "/", project_name, "_equity_portfolio.rda"))}
-if(data_check(cb_portfolio)){write_rds(cb_portfolio, paste0(proc_input_path, "/", project_name, "_bonds_portfolio.rda"))}
-if(data_check(portfolio_overview)){write_rds(portfolio_overview, paste0(proc_input_path, "/", project_name, "_overview_portfolio.rda"))}
-if(data_check(audit_file)){write_rds(audit_file, paste0(proc_input_path, "/", project_name,"_audit_file.rda"))}
-if(data_check(emissions_totals)){write_rds(emissions_totals, paste0(proc_input_path, "/", project_name, "_emissions.rda"))}
+create_portfolio_subfolders(file_names)
 
+
+for (p in 1:length(file_names)){
+  
+  portfolio_name_ <- file_names$portfolio_name[p]
+  proc_input_path <- paste0(proc_input_path, "/", file_names$loc_name[p])
+  
+  export_audit_information_jsons(audit_file_ = audit_file %>% filter(portfolio_name == portfolio_name_), 
+                                 portfolio_total_ = portfolio_total %>% filter(portfolio_name == portfolio_name_),  
+                                 folder_path = proc_input_path
+  )
+  
+  save_if_exists(audit_file, portfolio_name_, paste0(proc_input_path, "/", project_name,"_audit_file.csv"), csv_or_rds = "csv")
+  
+  save_if_exists(portfolio_total, portfolio_name_, paste0(proc_input_path, "/", project_name,"_total_portfolio.rda"))
+  save_if_exists(eq_portfolio, portfolio_name_, paste0(proc_input_path, "/", project_name,"_equity_portfolio.rda"))
+  save_if_exists(cb_portfolio, portfolio_name_, paste0(proc_input_path, "/", project_name,"_bonds_portfolio.rda"))
+  save_if_exists(portfolio_overview, portfolio_name_, paste0(proc_input_path, "/", project_name,"_overview_portfolio.rda"))
+  save_if_exists(audit_file, portfolio_name_, paste0(proc_input_path, "/", project_name,"_audit_file.rda"))
+  save_if_exists(emissions_totals, portfolio_name_, paste0(proc_input_path, "/", project_name,"_emissions.rda"))
+  
+}
