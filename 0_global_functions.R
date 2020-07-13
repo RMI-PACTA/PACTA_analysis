@@ -36,7 +36,7 @@ read_file <- function(file_name){
     if (extension_type == ".fst"){df <- fst::read_fst(file_name)}
     if (extension_type == ".csv"){df <- readr::read_csv(file_name)}
   }else{
-    print(paste0(file_name, " does not exist"))
+    warning(paste0(file_name, " does not exist"))
   }
   
   return(df)
@@ -140,7 +140,7 @@ set_global_parameters <- function(file_path){
   if(is.null(inc_meta_portfolio)){
     inc_meta_portfolio <<- FALSE
   }
-
+  
   
   
   # inc_project_metaportfolio <<- cfg$ComparisonBenchmarks$CreateProjectMetaPortfolio
@@ -156,37 +156,37 @@ set_global_parameters <- function(file_path){
   has_map <<- cfg$Methodology$HasMAP
   if(is.null(has_map)){
     has_map <<- TRUE
-    print("Warning: has_map set to standard value (TRUE) as not defined in the parameter file")
+    warning("Warning: has_map set to standard value (TRUE) as not defined in the parameter file")
   }
   
   has_sb <<- cfg$Methodology$HasSB
   if(is.null(has_sb)){
     has_sb <<- FALSE
-    print("Warning: has_sb set to standard value (FALSE) as not defined in the parameter file")
+    warning("Warning: has_sb set to standard value (FALSE) as not defined in the parameter file")
   }
   
   has_credit <<- cfg$Methodology$HasCC	
   if(is.null(has_credit)){	
     has_credit <<- FALSE	
-    print("Warning: has_credit set to standard value (FALSE) as not defined in the parameter file")	
+    warning("Warning: has_credit set to standard value (FALSE) as not defined in the parameter file")	
   }
   
   has_revenue <<- cfg$Methodology$HasRevenue
   if(is.null(has_revenue)){
     has_revenue <<- TRUE
-    print("Warning: has_revenue set to standard value (TRUE) as not defined in the parameter file")
+    warning("Warning: has_revenue set to standard value (TRUE) as not defined in the parameter file")
   }
   
   inc_emission_factors <<- cfg$Methodology$IncEmissionFactors
   if(is.null(inc_emission_factors)){
     inc_emission_factors <<- FALSE
-    print("Warning: inc_emission_factors set to standard value (inc_emission_factors) as not defined in the parameter file")
+    warning("Warning: inc_emission_factors set to standard value (inc_emission_factors) as not defined in the parameter file")
   }
   
   file_format_list <<- tolower(cfg$data_output$file_type)
   if(is.null(file_format_list)|length(file_format_list) == 0){	
     file_format_list <<- c("rda")	
-    print("Warning: file_format_list set to standard value ('rda') as not defined in the parameter file")	
+    warning("Warning: file_format_list set to standard value ('rda') as not defined in the parameter file")	
   }
   
 }
@@ -268,27 +268,32 @@ copy_files <- function(project_name){
   
 }
 
-create_project_folder <- function(project_name, twodii_internal, project_location_ext){
+create_project_folder <- function(project_name, twodii_internal, project_location_ext, working_location = working_location){
   
   project_location <- ifelse(twodii_internal, 
                              path_dropbox_2dii("PortCheck_v2","10_Projects",project_name), 
                              paste0(project_location_ext,"/", project_name))
   
-  project_folders <- c("00_Log_Files", 
-                       "10_Parameter_File",
-                       "20_Raw_Inputs",
-                       "30_Processed_Inputs",
-                       "40_Results",
-                       "50_Outputs")
-  
-  project_folders <- paste0(project_location, "/",project_folders)
-  
   # Create the new project folder
   if (dir.exists(project_location)){
     print("Project Folder Already Exists")
   } else {
+    
+    project_folders <- c("00_Log_Files", 
+                         "10_Parameter_File",
+                         "20_Raw_Inputs",
+                         "30_Processed_Inputs",
+                         "40_Results",
+                         "50_Outputs")
+    
+    project_folders <- paste0(project_location, "/",project_folders)
+    
     dir.create(project_location)
     lapply(project_folders, function(x) dir.create(x))
+    
+    # Copy in Parameter File
+    file.copy(paste0(working_location, "parameter_files/AnalysisParameters.csv"), 
+              paste0(project_location, "/10_Parameter_File/AnalysisParameters.csv"))
   }
   
 }

@@ -1,0 +1,173 @@
+investor_name,portfolio_name,holding_id,isin,value_usd,company_name,asset_type,valid_input,direct_holding,financial_sector,sectors_with_assets,has_ald_in_fin_sector,flag
+Sample Investor,Sample Portfolio,1,GB0007188757,43642033,Rio Tinto Plc,Equity,TRUE,TRUE,Steel,Cement&Steel + Power + Shipping,TRUE,Included in analysis
+Sample Investor,Sample Portfolio,2,AU000000BHP4,31286319,Bhp Group Ltd,Equity,TRUE,TRUE,Other,Coal + Oil&Gas + Power + Shipping,FALSE,Included in analysis
+Sample Investor,Sample Portfolio,3,US8447411088,26889392,Southwest Airlines Co,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Sample Investor,Sample Portfolio,4,JE00B4T3BW64,21610240,Glencore Plc,Equity,TRUE,TRUE,Steel,Aviation + Coal + Oil&Gas + Power + Shipping,FALSE,Included in analysis
+Sample Investor,Sample Portfolio,5,US02376R1023,18749666,American Airlines Group Inc,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Sample Investor,Sample Portfolio,7,DE0008232125,15158134,Deutsche Lufthansa Ag,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Sample Investor,Sample Portfolio,8,US9100471096,11183069,United Airlines Holdings Inc,Equity,TRUE,TRUE,Aviation,Aviation + Power,TRUE,Included in analysis
+Sample Investor,Sample Portfolio,9,JP3429800000,10866897,Ana Holdings Inc,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Sample Investor,Sample Portfolio,10,GB00B1XZS820,10205221,Anglo American Plc,Equity,TRUE,TRUE,Coal,Coal + Power,TRUE,Included in analysis
+Sample Investor,Sample Portfolio,11,AU000000S320,9675943,South32 Ltd,Equity,TRUE,TRUE,Steel,Coal,FALSE,Included in analysis
+Sample Investor,Sample Portfolio,12,JP3705200008,6551350,Japan Airlines Co Ltd,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Sample Investor,Sample Portfolio,14,US4771431016,4930839,Jetblue Airways Corp,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Sample Investor,Sample Portfolio,15,IE00BYTBXV33,4736800,Ryanair Holdings Plc,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Sample Investor,Sample Portfolio,16,FR0000031122,3990583,Air France-Klm,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Sample Investor,Sample Portfolio,17,US2473617023,3009650,Delta Air Lines Inc,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Sample Investor,Sample Portfolio,18,CA0089118776,2675435,Air Canada,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Sample Investor,Sample Portfolio,19,ES0177542018,2621699,International Consolidated Air,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Sample Investor,Sample Portfolio,20,US7045511000,2485244,Peabody Energy Corp,Equity,TRUE,TRUE,Coal,Aviation + Coal,TRUE,Included in analysis
+Sample Investor,Sample Portfolio,21,US8485771021,2374559,Spirit Airlines Inc,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Sample Investor,Sample Portfolio,22,US0116591092,2270504,Alaska Air Group Inc,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Sample Investor,Sample Portfolio,23,AU000000QAN2,2219228,Qantas Airways Ltd,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Sample Investor,Sample Portfolio,24,AU000000OZL8,2063578,Oz Minerals Ltd,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Sample Investor,Sample Portfolio,25,AU000000WHC8,2052840,Whitehaven Coal Ltd,Equity,TRUE,TRUE,Coal,Coal,TRUE,Included in analysis
+Sample Investor,Sample Portfolio,26,US8308791024,1966056,Skywest Inc,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Sample Investor,Sample Portfolio,27,AU000000ILU1,1902185,Iluka Resources Ltd,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Sample Investor,Sample Portfolio,29,AU000000SOL3,1279353,Washington H Soul Pattinson &,Equity,TRUE,TRUE,Other,Coal + Oil&Gas,FALSE,Included in analysis
+Sample Investor,Sample Portfolio,30,US01748X1028,1229355,Allegiant Travel Co,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Sample Investor,Sample Portfolio,31,GB00B0HZPV38,1178249,Kaz Minerals Plc,Equity,TRUE,TRUE,Other,Power,FALSE,Included in analysis
+Sample Investor,Sample Portfolio,32,NZAIRE0001S2,1075435,Air New Zealand Ltd,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Sample Investor,Sample Portfolio,33,SG1V61937297,1032039,Singapore Airlines Ltd,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Sample Investor,Sample Portfolio,34,AU000000PLS0,1001369,Pilbara Minerals Ltd,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Sample Investor,Sample Portfolio,35,AU000000IGO4,974403,Independence Group Nl,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Sample Investor,Sample Portfolio,36,US0393804077,965242,Arch Coal Inc,Equity,TRUE,TRUE,Coal,Aviation + Coal,TRUE,Included in analysis
+Sample Investor,Sample Portfolio,37,US90346E1038,920627,Us Silica Holdings Inc,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Sample Investor,Sample Portfolio,38,GB00B1722W11,807469,Dart Group Plc,Equity,TRUE,TRUE,Aviation,NA,FALSE,Included in analysis
+Sample Investor,Sample Portfolio,39,CA74139C1023,782468,Pretium Resources Inc,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Sample Investor,Sample Portfolio,40,GB00B7KR2P84,780660,Easyjet Plc,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Sample Investor,Sample Portfolio,41,AU000000GXY2,776462,Galaxy Resources Ltd,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Sample Investor,Sample Portfolio,42,US86722A1034,756969,Suncoke Energy Inc,Equity,TRUE,TRUE,Coal,Power,FALSE,Included in analysis
+Sample Investor,Sample Portfolio,43,AU000000RIO1,743278,Rio Tinto Ltd,Equity,TRUE,TRUE,Steel,Cement&Steel + Power + Shipping,TRUE,Included in analysis
+Sample Investor,Sample Portfolio,44,FR0000120859,697023,Imerys Sa,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Sample Investor,Sample Portfolio,46,CA3012831077,657117,Exchange Income Corp,Equity,TRUE,TRUE,Aviation,NA,FALSE,Included in analysis
+Sample Investor,Sample Portfolio,47,AU000000MIN4,573647,Mineral Resources Ltd,Equity,TRUE,TRUE,Steel,NA,FALSE,Included in analysis
+Sample Investor,Sample Portfolio,48,US21241B1008,566140,Contura Energy Inc,Equity,TRUE,TRUE,Other,Coal + Oil&Gas,FALSE,Included in analysis
+Sample Investor,Sample Portfolio,49,CA46579R1047,550998,Ivanhoe Mines Ltd,Equity,TRUE,TRUE,Steel,NA,FALSE,Included in analysis
+Sample Investor,Sample Portfolio,50,CA66510M2040,485978,Northern Dynasty Minerals Ltd,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Sample Investor,Sample Portfolio,51,AU000000WSA9,411136,Western Areas Ltd,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Sample Investor,Sample Portfolio,52,CA8765111064,406602,Taseko Mines Ltd,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Sample Investor,Sample Portfolio,53,CA17040T3001,380244,Chorus Aviation Inc,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Sample Investor,Sample Portfolio,54,CA7798992029,370771,Roxgold Inc,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Sample Investor,Sample Portfolio,56,HK0293001514,356533,Cathay Pacific Airways Ltd,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Sample Investor,Sample Portfolio,57,FI0009003230,326753,Finnair Oyj,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Sample Investor,Sample Portfolio,58,AU000000VAH4,323970,Virgin Australia Holdings Ltd,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Sample Investor,Sample Portfolio,59,CA4858471077,321121,Katanga Mining Ltd,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Sample Investor,Sample Portfolio,60,JE00BN574F90,313912,Wizz Air Holdings Plc,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Sample Investor,Sample Portfolio,61,AU000000NHC7,286411,New Hope Corp Ltd,Equity,TRUE,TRUE,Coal,Oil&Gas,FALSE,Included in analysis
+Sample Investor,Sample Portfolio,62,AU000000SFR8,273881,Sandfire Resources Nl,Equity,TRUE,TRUE,Steel,NA,FALSE,Included in analysis
+Sample Investor,Sample Portfolio,63,US20451N1019,208163,Compass Minerals International,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Sample Investor,Sample Portfolio,64,HK0639031506,195031,Shougang Fushan Resources Grou,Equity,TRUE,TRUE,Coal,Cement&Steel,FALSE,Included in analysis
+Sample Investor,Sample Portfolio,65,CA3807381049,191065,Gold Standard Ventures Corp,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Sample Investor,Sample Portfolio,66,CA0209361009,185173,Altius Minerals Corp,Equity,TRUE,TRUE,Steel,NA,FALSE,Included in analysis
+Sample Investor,Sample Portfolio,68,GB00B67KBV28,170040,Central Asia Metals Plc,Equity,TRUE,TRUE,Steel,NA,FALSE,Included in analysis
+Sample Investor,Sample Portfolio,69,CA21146A1084,165808,Continental Gold Inc,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Sample Investor,Sample Portfolio,70,BMG6661B1211,157798,North Mining Shares Co Ltd,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Sample Investor,Sample Portfolio,71,SE0003366871,153740,Sas Ab,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Sample Investor,Sample Portfolio,73,AU000000MAH3,149832,Macmahon Holdings Ltd,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Sample Investor,Sample Portfolio,74,CA7319161021,148906,Polymet Mining Corp,Equity,TRUE,TRUE,Steel,NA,FALSE,Included in analysis
+Sample Investor,Sample Portfolio,75,CA64045C1068,146544,Nemaska Lithium Inc,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Sample Investor,Sample Portfolio,76,AU000000BKY0,136662,Berkeley Energia Ltd,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Sample Investor,Sample Portfolio,77,JP3680800004,110586,Nittetsu Mining Co Ltd,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Sample Investor,Sample Portfolio,79,CA6882811046,100666,Osisko Mining Inc,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Sample Investor,Sample Portfolio,80,GB00B60BWY28,93488,Hummingbird Resources Plc,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Sample Investor,Sample Portfolio,81,CA2210131058,92290,Corvus Gold Inc,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Sample Investor,Sample Portfolio,82,CA0202833053,89471,Almaden Minerals Ltd,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Sample Investor,Sample Portfolio,84,CA82639W1068,83911,Sierra Metals Inc,Equity,TRUE,TRUE,Steel,NA,FALSE,Included in analysis
+Sample Investor,Sample Portfolio,85,AU000000AJM9,81514,Altura Mining Ltd,Equity,TRUE,TRUE,Other,Coal,FALSE,Included in analysis
+Meta Investor,Meta Portfolio,87,GB0007188757,43642033,Rio Tinto Plc,Equity,TRUE,TRUE,Steel,Cement&Steel + Power + Shipping,TRUE,Included in analysis
+Meta Investor,Meta Portfolio,88,AU000000BHP4,31286319,Bhp Group Ltd,Equity,TRUE,TRUE,Other,Coal + Oil&Gas + Power + Shipping,FALSE,Included in analysis
+Meta Investor,Meta Portfolio,89,US8447411088,26889392,Southwest Airlines Co,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Meta Investor,Meta Portfolio,90,JE00B4T3BW64,21610240,Glencore Plc,Equity,TRUE,TRUE,Steel,Aviation + Coal + Oil&Gas + Power + Shipping,FALSE,Included in analysis
+Meta Investor,Meta Portfolio,91,US02376R1023,18749666,American Airlines Group Inc,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Meta Investor,Meta Portfolio,93,DE0008232125,15158134,Deutsche Lufthansa Ag,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Meta Investor,Meta Portfolio,94,US9100471096,11183069,United Airlines Holdings Inc,Equity,TRUE,TRUE,Aviation,Aviation + Power,TRUE,Included in analysis
+Meta Investor,Meta Portfolio,95,JP3429800000,10866897,Ana Holdings Inc,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Meta Investor,Meta Portfolio,96,GB00B1XZS820,10205221,Anglo American Plc,Equity,TRUE,TRUE,Coal,Coal + Power,TRUE,Included in analysis
+Meta Investor,Meta Portfolio,97,AU000000S320,9675943,South32 Ltd,Equity,TRUE,TRUE,Steel,Coal,FALSE,Included in analysis
+Meta Investor,Meta Portfolio,98,JP3705200008,6551350,Japan Airlines Co Ltd,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Meta Investor,Meta Portfolio,100,US4771431016,4930839,Jetblue Airways Corp,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Meta Investor,Meta Portfolio,101,IE00BYTBXV33,4736800,Ryanair Holdings Plc,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Meta Investor,Meta Portfolio,102,FR0000031122,3990583,Air France-Klm,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Meta Investor,Meta Portfolio,103,US2473617023,3009650,Delta Air Lines Inc,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Meta Investor,Meta Portfolio,104,CA0089118776,2675435,Air Canada,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Meta Investor,Meta Portfolio,105,ES0177542018,2621699,International Consolidated Air,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Meta Investor,Meta Portfolio,106,US7045511000,2485244,Peabody Energy Corp,Equity,TRUE,TRUE,Coal,Aviation + Coal,TRUE,Included in analysis
+Meta Investor,Meta Portfolio,107,US8485771021,2374559,Spirit Airlines Inc,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Meta Investor,Meta Portfolio,108,US0116591092,2270504,Alaska Air Group Inc,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Meta Investor,Meta Portfolio,109,AU000000QAN2,2219228,Qantas Airways Ltd,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Meta Investor,Meta Portfolio,110,AU000000OZL8,2063578,Oz Minerals Ltd,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Meta Investor,Meta Portfolio,111,AU000000WHC8,2052840,Whitehaven Coal Ltd,Equity,TRUE,TRUE,Coal,Coal,TRUE,Included in analysis
+Meta Investor,Meta Portfolio,112,US8308791024,1966056,Skywest Inc,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Meta Investor,Meta Portfolio,113,AU000000ILU1,1902185,Iluka Resources Ltd,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Meta Investor,Meta Portfolio,115,AU000000SOL3,1279353,Washington H Soul Pattinson &,Equity,TRUE,TRUE,Other,Coal + Oil&Gas,FALSE,Included in analysis
+Meta Investor,Meta Portfolio,116,US01748X1028,1229355,Allegiant Travel Co,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Meta Investor,Meta Portfolio,117,GB00B0HZPV38,1178249,Kaz Minerals Plc,Equity,TRUE,TRUE,Other,Power,FALSE,Included in analysis
+Meta Investor,Meta Portfolio,118,NZAIRE0001S2,1075435,Air New Zealand Ltd,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Meta Investor,Meta Portfolio,119,SG1V61937297,1032039,Singapore Airlines Ltd,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Meta Investor,Meta Portfolio,120,AU000000PLS0,1001369,Pilbara Minerals Ltd,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Meta Investor,Meta Portfolio,121,AU000000IGO4,974403,Independence Group Nl,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Meta Investor,Meta Portfolio,122,US0393804077,965242,Arch Coal Inc,Equity,TRUE,TRUE,Coal,Aviation + Coal,TRUE,Included in analysis
+Meta Investor,Meta Portfolio,123,US90346E1038,920627,Us Silica Holdings Inc,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Meta Investor,Meta Portfolio,124,GB00B1722W11,807469,Dart Group Plc,Equity,TRUE,TRUE,Aviation,NA,FALSE,Included in analysis
+Meta Investor,Meta Portfolio,125,CA74139C1023,782468,Pretium Resources Inc,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Meta Investor,Meta Portfolio,126,GB00B7KR2P84,780660,Easyjet Plc,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Meta Investor,Meta Portfolio,127,AU000000GXY2,776462,Galaxy Resources Ltd,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Meta Investor,Meta Portfolio,128,US86722A1034,756969,Suncoke Energy Inc,Equity,TRUE,TRUE,Coal,Power,FALSE,Included in analysis
+Meta Investor,Meta Portfolio,129,AU000000RIO1,743278,Rio Tinto Ltd,Equity,TRUE,TRUE,Steel,Cement&Steel + Power + Shipping,TRUE,Included in analysis
+Meta Investor,Meta Portfolio,130,FR0000120859,697023,Imerys Sa,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Meta Investor,Meta Portfolio,132,CA3012831077,657117,Exchange Income Corp,Equity,TRUE,TRUE,Aviation,NA,FALSE,Included in analysis
+Meta Investor,Meta Portfolio,133,AU000000MIN4,573647,Mineral Resources Ltd,Equity,TRUE,TRUE,Steel,NA,FALSE,Included in analysis
+Meta Investor,Meta Portfolio,134,US21241B1008,566140,Contura Energy Inc,Equity,TRUE,TRUE,Other,Coal + Oil&Gas,FALSE,Included in analysis
+Meta Investor,Meta Portfolio,135,CA46579R1047,550998,Ivanhoe Mines Ltd,Equity,TRUE,TRUE,Steel,NA,FALSE,Included in analysis
+Meta Investor,Meta Portfolio,136,CA66510M2040,485978,Northern Dynasty Minerals Ltd,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Meta Investor,Meta Portfolio,137,AU000000WSA9,411136,Western Areas Ltd,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Meta Investor,Meta Portfolio,138,CA8765111064,406602,Taseko Mines Ltd,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Meta Investor,Meta Portfolio,139,CA17040T3001,380244,Chorus Aviation Inc,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Meta Investor,Meta Portfolio,140,CA7798992029,370771,Roxgold Inc,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Meta Investor,Meta Portfolio,142,HK0293001514,356533,Cathay Pacific Airways Ltd,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Meta Investor,Meta Portfolio,143,FI0009003230,326753,Finnair Oyj,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Meta Investor,Meta Portfolio,144,AU000000VAH4,323970,Virgin Australia Holdings Ltd,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Meta Investor,Meta Portfolio,145,CA4858471077,321121,Katanga Mining Ltd,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Meta Investor,Meta Portfolio,146,JE00BN574F90,313912,Wizz Air Holdings Plc,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Meta Investor,Meta Portfolio,147,AU000000NHC7,286411,New Hope Corp Ltd,Equity,TRUE,TRUE,Coal,Oil&Gas,FALSE,Included in analysis
+Meta Investor,Meta Portfolio,148,AU000000SFR8,273881,Sandfire Resources Nl,Equity,TRUE,TRUE,Steel,NA,FALSE,Included in analysis
+Meta Investor,Meta Portfolio,149,US20451N1019,208163,Compass Minerals International,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Meta Investor,Meta Portfolio,150,HK0639031506,195031,Shougang Fushan Resources Grou,Equity,TRUE,TRUE,Coal,Cement&Steel,FALSE,Included in analysis
+Meta Investor,Meta Portfolio,151,CA3807381049,191065,Gold Standard Ventures Corp,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Meta Investor,Meta Portfolio,152,CA0209361009,185173,Altius Minerals Corp,Equity,TRUE,TRUE,Steel,NA,FALSE,Included in analysis
+Meta Investor,Meta Portfolio,154,GB00B67KBV28,170040,Central Asia Metals Plc,Equity,TRUE,TRUE,Steel,NA,FALSE,Included in analysis
+Meta Investor,Meta Portfolio,155,CA21146A1084,165808,Continental Gold Inc,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Meta Investor,Meta Portfolio,156,BMG6661B1211,157798,North Mining Shares Co Ltd,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Meta Investor,Meta Portfolio,157,SE0003366871,153740,Sas Ab,Equity,TRUE,TRUE,Aviation,Aviation,TRUE,Included in analysis
+Meta Investor,Meta Portfolio,159,AU000000MAH3,149832,Macmahon Holdings Ltd,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Meta Investor,Meta Portfolio,160,CA7319161021,148906,Polymet Mining Corp,Equity,TRUE,TRUE,Steel,NA,FALSE,Included in analysis
+Meta Investor,Meta Portfolio,161,CA64045C1068,146544,Nemaska Lithium Inc,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Meta Investor,Meta Portfolio,162,AU000000BKY0,136662,Berkeley Energia Ltd,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Meta Investor,Meta Portfolio,163,JP3680800004,110586,Nittetsu Mining Co Ltd,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Meta Investor,Meta Portfolio,165,CA6882811046,100666,Osisko Mining Inc,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Meta Investor,Meta Portfolio,166,GB00B60BWY28,93488,Hummingbird Resources Plc,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Meta Investor,Meta Portfolio,167,CA2210131058,92290,Corvus Gold Inc,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Meta Investor,Meta Portfolio,168,CA0202833053,89471,Almaden Minerals Ltd,Equity,TRUE,TRUE,Other,NA,FALSE,Included in analysis
+Meta Investor,Meta Portfolio,170,CA82639W1068,83911,Sierra Metals Inc,Equity,TRUE,TRUE,Steel,NA,FALSE,Included in analysis
+Meta Investor,Meta Portfolio,171,AU000000AJM9,81514,Altura Mining Ltd,Equity,TRUE,TRUE,Other,Coal,FALSE,Included in analysis
+Sample Investor,Sample Portfolio,6,GB0000566504,16211697,NA,Unclassifiable,FALSE,TRUE,Unclassifiable,NA,NA,Holding not in Bloomberg database
+Sample Investor,Sample Portfolio,13,SE0000869646,5367690,NA,Unclassifiable,FALSE,TRUE,Unclassifiable,NA,NA,Holding not in Bloomberg database
+Sample Investor,Sample Portfolio,28,CA9604105044,1796069,NA,Unclassifiable,FALSE,TRUE,Unclassifiable,NA,NA,Holding not in Bloomberg database
+Sample Investor,Sample Portfolio,45,US30555Q1085,665413,NA,Unclassifiable,FALSE,TRUE,Unclassifiable,NA,NA,Holding not in Bloomberg database
+Sample Investor,Sample Portfolio,55,CA64156L1013,366989,NA,Unclassifiable,FALSE,TRUE,Unclassifiable,NA,NA,Holding not in Bloomberg database
+Sample Investor,Sample Portfolio,67,AU000000AGO1,180681,NA,Unclassifiable,FALSE,TRUE,Unclassifiable,NA,NA,Holding not in Bloomberg database
+Sample Investor,Sample Portfolio,72,BMG5713E1093,149920,NA,Unclassifiable,FALSE,TRUE,Unclassifiable,NA,NA,Holding not in Bloomberg database
+Sample Investor,Sample Portfolio,78,CA05634Q1054,105228,NA,Unclassifiable,FALSE,TRUE,Unclassifiable,NA,NA,Holding not in Bloomberg database
+Sample Investor,Sample Portfolio,83,CA2354991002,88623,NA,Unclassifiable,FALSE,TRUE,Unclassifiable,NA,NA,Holding not in Bloomberg database
+Sample Investor,Sample Portfolio,86,GB00B4QMVR10,75302,NA,Unclassifiable,FALSE,TRUE,Unclassifiable,NA,NA,Holding not in Bloomberg database
+Meta Investor,Meta Portfolio,92,GB0000566504,16211697,NA,Unclassifiable,FALSE,TRUE,Unclassifiable,NA,NA,Holding not in Bloomberg database
+Meta Investor,Meta Portfolio,99,SE0000869646,5367690,NA,Unclassifiable,FALSE,TRUE,Unclassifiable,NA,NA,Holding not in Bloomberg database
+Meta Investor,Meta Portfolio,114,CA9604105044,1796069,NA,Unclassifiable,FALSE,TRUE,Unclassifiable,NA,NA,Holding not in Bloomberg database
+Meta Investor,Meta Portfolio,131,US30555Q1085,665413,NA,Unclassifiable,FALSE,TRUE,Unclassifiable,NA,NA,Holding not in Bloomberg database
+Meta Investor,Meta Portfolio,141,CA64156L1013,366989,NA,Unclassifiable,FALSE,TRUE,Unclassifiable,NA,NA,Holding not in Bloomberg database
+Meta Investor,Meta Portfolio,153,AU000000AGO1,180681,NA,Unclassifiable,FALSE,TRUE,Unclassifiable,NA,NA,Holding not in Bloomberg database
+Meta Investor,Meta Portfolio,158,BMG5713E1093,149920,NA,Unclassifiable,FALSE,TRUE,Unclassifiable,NA,NA,Holding not in Bloomberg database
+Meta Investor,Meta Portfolio,164,CA05634Q1054,105228,NA,Unclassifiable,FALSE,TRUE,Unclassifiable,NA,NA,Holding not in Bloomberg database
+Meta Investor,Meta Portfolio,169,CA2354991002,88623,NA,Unclassifiable,FALSE,TRUE,Unclassifiable,NA,NA,Holding not in Bloomberg database
+Meta Investor,Meta Portfolio,172,GB00B4QMVR10,75302,NA,Unclassifiable,FALSE,TRUE,Unclassifiable,NA,NA,Holding not in Bloomberg database

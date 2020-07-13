@@ -30,16 +30,14 @@ if (rstudioapi::isAvailable()) {
   portfolio_name_ref_all <- c("Portfolio2")
   working_location <- dirname(rstudioapi::getActiveDocumentContext()$path)
   set_web_parameters(file_path = paste0(working_location,"/parameter_files/WebParameters_2dii.yml"))
-  # print(working_location)
 } else {
   portfolio_name_ref_all = get_portfolio_name()
   working_location <- getwd()
   set_web_parameters(file_path = paste0(working_location,"/parameter_files/WebParameters_docker.yml"))
-}
+  }
 
 working_location <- paste0(working_location, "/")
 
-# just done once
 # create_project_folder(project_name, twodii_internal, project_location_ext)
 
 # replaced with web version
@@ -53,7 +51,6 @@ set_webtool_paths()
 
 # just done once
 # copy_files(project_name)
-
 options(r2dii_config = paste0(par_file_path,"/AnalysisParameters.yml"))
 
 set_global_parameters(paste0(par_file_path,"/AnalysisParameters.yml"))
@@ -125,7 +122,8 @@ if(new_data == TRUE){
 ####################
 #### PORTFOLIOS ####
 ####################
-
+print(portfolio_name_ref_all)
+print(project_location)
 portfolio_raw <- get_input_files(portfolio_name_ref_all)
 
 portfolio <- process_raw_portfolio(portfolio_raw,

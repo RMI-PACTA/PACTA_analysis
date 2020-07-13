@@ -2,5 +2,4 @@ default:
     parameters:
         portfolio_name_in: Portfolio 2
         investor_name_in: Sample Investor
-        
 
