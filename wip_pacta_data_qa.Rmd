@@ -8,6 +8,8 @@ output: html_document
 knitr::opts_chunk$set(echo = FALSE)
 library(tidyverse)
 library(DT)
+
+source("1_portfolio_check_initialisation.R")
 ```
 
 # Use case
@@ -16,25 +18,13 @@ The aim of this analysis is to ensure data consistency and find holdings, that m
 
 ## Read in data
 
-For the analysis to be run, the processed portfolio inputs as well as the company level results for both corporate bonds and listed equity need to be read in. Within the common PACTA project structure, locate and read in the following files for that:
-
-For the **processed inputs**, the file path should look something like this:
-
-* "/project_path/30_processed_inputs/project_name_total_portfolio.rda"
-
-For the **company level bond results** of the full analysis, the file path should look something like this:
-
-* "/project_path/40_results/Meta Investor/Bonds_results_company.rda"
-
-For the **company level equity results** of the full analysis, the file path should look something like this:
-
-* "/project_path/40_results/Meta Investor/Equity_results_company.rda"
+For the analysis to be run, the processed portfolio inputs as well as the company level results for both corporate bonds and listed equity need to be read in. Given the normal PACTA project structure is used, this .Rmd will automatically locate the corresponding files and read them in. In case the folder structure of the project was changed, the paths need to be adjusted manually (this should rarely be the case).
 
 ```{r}
 # read in if report has been run successfully, but data is not currently in the workspace
-total_portfolio <- "/Users/jacobkastl/Dropbox (2° Investing)/PortCheck_v2/10_Projects/Laura_test_project_2019_jk/30_Processed_Inputs/Laura_test_project_2019_jk_total_portfolio.rda"
-bonds_company <- "/Users/jacobkastl/Dropbox (2° Investing)/PortCheck_v2/10_Projects/Laura_test_project_2019_jk/40_Results/Meta Investor/Bonds_results_company.rda"
-equity_company <- "/Users/jacobkastl/Dropbox (2° Investing)/PortCheck_v2/10_Projects/Laura_test_project_2019_jk/40_Results/Meta Investor/Equity_results_company.rda"
+total_portfolio <- paste0(project_location,"/30_Processed_Inputs/",project_name,"_total_portfolio.rda")
+bonds_company <- paste0(project_location,"/40_Results/Meta Investor/Bonds_results_company.rda")
+equity_company <- paste0(project_location,"/40_Results/Meta Investor/Equity_results_company.rda")
 
 
 result_data_qa <- readRDS(total_portfolio)
