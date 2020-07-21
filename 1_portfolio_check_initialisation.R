@@ -30,7 +30,7 @@ source("0_portfolio_input_check_functions.R")
 source("0_global_functions.R")
 source("0_sda_approach.R")
 
-project_name <- "Laura_test_project_2019_jk"
+project_name <- "lichtenstein"
 twodii_internal <- TRUE
 # TRUE or FALSE: TRUE means that the code is running on a 2dii laptop with dropbox connection
 

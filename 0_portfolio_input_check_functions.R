@@ -902,6 +902,8 @@ get_and_clean_fin_data <- function(fund_data){
       sector_override,
       is_sb
     ) %>% 
+    mutate(unit_share_price = round(unit_share_price, 6),
+           exchange_rate_usd = round(exchange_rate_usd, 7)) %>% 
     distinct()
   
   ### TEST
