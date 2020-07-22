@@ -901,7 +901,10 @@ get_and_clean_fin_data <- function(fund_data){
       maturity_date, coupon_value, amount_issued, current_shares_outstanding_all_classes, unit_share_price,
       sector_override,
       is_sb
-    )
+    ) %>% 
+    mutate(unit_share_price = round(unit_share_price, 6),
+           exchange_rate_usd = round(exchange_rate_usd, 7)) %>% 
+    distinct()
   
   ### TEST
   if (nrow(fin_data) > nrow(fin_data_raw)){stop("Additional rows added to fin data")}
@@ -1118,7 +1121,8 @@ create_audit_chart <- function(audit_file, proc_input_path){
   
   ## GRAPH VALUES
   base_size <- 12
-  base_family <- "Clear Sans"
+  #base_family <- "Clear Sans"
+  base_family <- "Arial"
   font_color <- "#3D3D3C"
   
   #flag.Numbers.Colors <- brewer.pal(n = 8, name = "RdBu")
