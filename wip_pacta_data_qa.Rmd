@@ -1,6 +1,15 @@
 ---
 title: "PACTA Analysis - Input Data QA"
-output: html_document
+author: "Jacob Kastl"
+date: "`r format(Sys.time(), '%B %Y')`"
+mainfont: GT America
+output:
+  html_document:
+    fig_caption: yes
+    theme: flatly
+    toc: yes
+    toc_depth: 2
+    toc_float: yes
 ---
 
 ```{r setup, include=FALSE}
