@@ -3,12 +3,49 @@
 # START RUN ANALYIS
 #########################################################################
 
+library(tidyr)
+library(dplyr)
+library(scales) 
+library(reshape2) 
+library(tidyverse) 
+library(readxl) 
+library(tidyselect) 
+library(r2dii.utils)
+library(fs) 
+library(jsonlite)
+library(fst)
+
 source("0_portfolio_test.R")
 source("0_global_functions.R")
 source("0_web_functions.R")
 
+
+if (rstudioapi::isAvailable()) {
+  portfolio_name_ref_all <- c("Portfolio2")
+  working_location <- dirname(rstudioapi::getActiveDocumentContext()$path)
+  set_web_parameters(file_path = paste0(working_location,"/parameter_files/WebParameters_2dii.yml"))
+} else {
+  portfolio_name_ref_all = get_portfolio_name()
+  working_location <- getwd()
+  set_web_parameters(file_path = paste0(working_location,"/parameter_files/WebParameters_docker.yml"))
+}
+
+working_location <- paste0(working_location, "/")
+
+set_webtool_paths()
+
+# just done once
+options(r2dii_config = paste0(par_file_path,"/AnalysisParameters.yml"))
+
+set_global_parameters(paste0(par_file_path,"/AnalysisParameters.yml"))
+
+# need to define an alternative location for data files
+analysis_inputs_path <- set_analysis_inputs_path(twodii_internal, data_location_ext, dataprep_timestamp)
+
 # delete all results files
 unlink(paste0(results_path,"/*"), force = TRUE, recursive = TRUE)
+
+file_names <- read_csv(paste0(proc_input_path, "/file_names.csv"))
 
 port_col_types <- set_col_types(grouping_variables, "ddddccccddcl")
 
@@ -16,7 +53,7 @@ port_col_types <- set_col_types(grouping_variables, "ddddccccddcl")
 ##### EQUITY #####
 ##################
 
-equity_input_file <- paste0(proc_input_path, "/",project_name, "_equity_portfolio.rda")
+equity_input_file <- paste0(proc_input_path, "/",file_names$loc_name[1],"/",project_name, "_equity_portfolio.rda")
 
 if(file.exists(equity_input_file)){
   port_raw_all_eq <- read_rds(equity_input_file) %>% 
@@ -45,7 +82,7 @@ if(file.exists(equity_input_file)){
     port_eq <- merge_in_ald(port_eq, ald_scen_eq)
     
     # Portfolio weight methodology
-    port_pw_eq <- port_weight_allocation(port_eq, "Equity")
+    port_pw_eq <- port_weight_allocation(port_eq)
     
     company_pw_eq <- aggregate_company(port_pw_eq)
     
@@ -65,7 +102,7 @@ if(file.exists(equity_input_file)){
     
     if(has_map){
       
-      map_eq <- merge_in_geography(company_all_eq, ald_raw_eq, sectors_for_maps)
+      map_eq <- merge_in_geography(company_all_eq, ald_raw_eq)
       
       map_eq <- aggregate_map_data(map_eq)
       
@@ -126,7 +163,7 @@ if (file.exists(bonds_inputs_file)){
     port_cb <- merge_in_ald(port_cb, ald_scen_cb)
     
     # Portfolio weight methodology
-    port_pw_cb <- port_weight_allocation(port_cb, "Bonds")
+    port_pw_cb <- port_weight_allocation(port_cb)
     
     company_pw_cb <- aggregate_company(port_pw_cb)
     
@@ -140,7 +177,7 @@ if (file.exists(bonds_inputs_file)){
     if(has_map){
       
       if(data_check(company_all_cb)){
-        map_cb <- merge_in_geography(company_all_cb, ald_raw_cb, sectors_for_maps)
+        map_cb <- merge_in_geography(company_all_cb, ald_raw_cb)
         
         map_cb <- aggregate_map_data(map_cb)
       }  
