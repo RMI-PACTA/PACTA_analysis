@@ -2,6 +2,7 @@ default:
     paths:
         project_location_ext: /bound/web_folders/
         data_location_ext: /pacta-data/2019Q4/
+        template_location: /create_interactive_report/
     parameters:
         project_name: working_dir
         twodii_internal: FALSE

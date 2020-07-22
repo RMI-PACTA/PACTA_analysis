@@ -9,7 +9,7 @@ default:
     HasSB: FALSE
     HasRevenue: FALSE
     HasCC: FALSE
-    IncEmissionFactors: FALSE 
+    IncEmissionFactors: TRUE
     
   data_output:
     file_type: 
@@ -59,6 +59,10 @@ default:
       - GlobalAggregate
       - NonOECD
       - OECD
+    Equity.Market.List:
+      - GlobalMarket
+      - EmergingMarket
+      - DevelopedMarket
   Reporting:
    Naming: 
       GraphType: Report
