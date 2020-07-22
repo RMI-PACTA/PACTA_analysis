@@ -251,7 +251,7 @@ no_ALD_EQ_detail <- result_data_qa %>%
            investor_name != "Meta Investor") %>% 
   select(financial_sector, isin, company_name, market_value, value_usd) %>% 
   group_by(financial_sector, isin, company_name) %>% 
-  summarise(sum_value_usd = sum(value_usd, na.rm=T)) %>% 
+  summarise(sum_value_usd = round(sum(value_usd, na.rm=T))) %>% 
   ungroup() %>% 
   mutate(share_total_value = round(
     sum_value_usd/(total_overview %>% filter(asset_type=="Equity") %>% pull(sum_value_usd)),6)) %>% 
@@ -279,7 +279,7 @@ no_ALD_CB <- result_data_qa %>%
            financial_sector != "Other" &
            investor_name != "Meta Investor") %>% 
   group_by(financial_sector) %>% 
-  summarise(total_no_ALD_CB = n(), sum_value_usd = sum(value_usd, na.rm=T)) %>% 
+  summarise(total_no_ALD_CB = n(), sum_value_usd = round(sum(value_usd, na.rm=T))) %>% 
   ungroup() %>% 
   mutate(share_total_value = round(
     sum_value_usd/(total_overview %>% filter(asset_type=="Bonds") %>% pull(sum_value_usd)),6)) %>% 
@@ -295,7 +295,7 @@ no_ALD_CB_detail <- result_data_qa %>%
   select(financial_sector, company_name, market_value, value_usd) %>% 
   #group_by(financial_sector, isin, company_name) %>% 
   group_by(financial_sector, company_name) %>% 
-  summarise(sum_value_usd = sum(value_usd, na.rm=T)) %>% 
+  summarise(sum_value_usd = round(sum(value_usd, na.rm=T))) %>% 
   ungroup() %>% 
   mutate(share_total_value = round(
     sum_value_usd/(total_overview %>% filter(asset_type=="Bonds") %>% pull(sum_value_usd)),6)) %>% 
@@ -326,7 +326,7 @@ non_pacta_ALD_EQ <- result_data_qa %>%
            financial_sector == "Other" &
            investor_name != "Meta Investor") %>% 
   group_by(sectors_with_assets) %>% 
-  summarise(total_non_pacta_ALD_EQ = n(), sum_value_usd = sum(value_usd, na.rm=T)) %>% 
+  summarise(total_non_pacta_ALD_EQ = n(), sum_value_usd = round(sum(value_usd, na.rm=T))) %>% 
   ungroup() %>% 
   mutate(share_total_value = round(
     sum_value_usd/(total_overview %>% filter(asset_type=="Equity") %>% pull(sum_value_usd)),6)) %>% 
@@ -340,7 +340,7 @@ non_pacta_ALD_EQ_detail <- result_data_qa %>%
            investor_name != "Meta Investor") %>% 
   select(sectors_with_assets, isin, company_name, market_value, value_usd) %>% 
   group_by(sectors_with_assets, isin, company_name) %>% 
-  summarise(sum_value_usd = sum(value_usd, na.rm=T)) %>% 
+  summarise(sum_value_usd = round(sum(value_usd, na.rm=T))) %>% 
   ungroup() %>% 
   mutate(share_total_value = round(
     sum_value_usd/(total_overview %>% filter(asset_type=="Equity") %>% pull(sum_value_usd)),6)) %>% 
@@ -382,11 +382,9 @@ non_pacta_ALD_CB_detail <- result_data_qa %>%
            has_asset_level_data == T &
            financial_sector == "Other" &
            investor_name != "Meta Investor") %>% 
-  #select(sectors_with_assets, isin, company_name, market_value, value_usd) %>% 
   select(sectors_with_assets, company_name, market_value, value_usd) %>% 
-  #group_by(sectors_with_assets, isin, company_name) %>% 
   group_by(sectors_with_assets, company_name) %>% 
-  summarise(sum_value_usd = sum(value_usd, na.rm=T)) %>% 
+  summarise(sum_value_usd = round(sum(value_usd, na.rm=T))) %>% 
   ungroup() %>% 
   mutate(share_total_value = round(
     sum_value_usd/(total_overview %>% filter(asset_type=="Bonds") %>% pull(sum_value_usd)),6)) %>% 
@@ -419,8 +417,8 @@ funds_coverage <- result_data_qa %>%
   select(fund_isin, currency,#isin, company_name,
          value_usd, market_value) %>% 
   group_by(fund_isin, currency) %>% 
-  summarise(sum_value_usd = sum(value_usd, na.rm=T),
-            sum_market_value = sum(market_value, na.rm=T)) %>% 
+  summarise(sum_value_usd = round(sum(value_usd, na.rm=T)),
+            sum_market_value = round(sum(market_value, na.rm=T))) %>% 
   ungroup() %>% 
   mutate(
     share_missing_value = round(sum_value_usd/
@@ -435,8 +433,8 @@ funds_coverage_missing_value <- result_data_qa %>%
   select(fund_isin, currency,#isin, company_name,
          value_usd, market_value) %>% 
   group_by(fund_isin, currency) %>% 
-  summarise(sum_value_usd = sum(value_usd, na.rm=T),
-            sum_market_value = sum(market_value, na.rm=T)) %>% 
+  summarise(sum_value_usd = round(sum(value_usd, na.rm=T)),
+            sum_market_value = round(sum(market_value, na.rm=T))) %>% 
   ungroup() %>% 
   mutate(
     share_missing_value = round(sum_value_usd/
@@ -459,7 +457,7 @@ One idea seems to be to check to share of sovereign bonds...
 value_by_asset_type <- result_data_qa %>% 
   filter(investor_name != "Meta Investor") %>% 
   group_by(asset_type, security_type) %>% 
-  summarise(sum_value_USD = sum(value_usd, na.rm = T)) %>% 
+  summarise(sum_value_USD = round(sum(value_usd, na.rm = T))) %>% 
   ungroup()
 datatable(value_by_asset_type)
 ```
