@@ -86,7 +86,6 @@ if(new_data == TRUE){
   
   company_emissions <- get_company_emission_data(inc_emission_factors)
   
-  
   save_cleaned_files(file_location,
                      currencies,
                      fund_data,
