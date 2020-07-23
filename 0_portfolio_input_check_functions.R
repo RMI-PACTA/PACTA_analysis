@@ -852,6 +852,12 @@ get_and_clean_fin_data <- function(fund_data){
   fin_data_raw <- read_rds(paste0(analysis_inputs_path,"/security_financial_data.rda")) %>% as_tibble()
   # col_types = "ddcccccccccccccccDddddddddddddddddc")
   
+  # remove unclear duplicates from raw financial data. This should be moved to DataStore.
+  rm_duplicates <- read_csv("non_distinct_isins.csv")
+  rm_duplicates <- rm_duplicates %>% distinct(isin) %>% pull(isin)
+  fin_data_raw <- fin_data_raw %>%
+    filter(!(isin %in% rm_duplicates))
+  
   if(!unique(fin_data_raw$financial_timestamp) == financial_timestamp){print("Financial timestamp not equal")}
   
   overrides <- read_csv("data/fin_sector_overrides.csv",
