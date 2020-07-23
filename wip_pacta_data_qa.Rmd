@@ -427,10 +427,14 @@ For cases with missing currency information, we add aggregation by market_value,
 * Check if the funds with higher impact are available in the fund_data file.
 * If they are not, try to get the corresponding fund data from LIM and add the data to the fund_data table before the next run.
 
+**OPEN:**
+
+Still a bit unsure about the appropriate settings here and if the second table makes any sense.
+
 
 ```{r}
 funds_coverage <- result_data_qa %>% 
-  filter(direct_holding == F &
+  filter(#direct_holding == F &
            asset_type == "Funds" &
            investor_name != "Meta Investor") %>% 
   select(fund_isin, currency,#isin, company_name,
@@ -440,7 +444,7 @@ funds_coverage <- result_data_qa %>%
             sum_market_value = round(sum(market_value, na.rm=T))) %>% 
   ungroup() %>% 
   mutate(
-    share_missing_value = round(sum_value_usd/
+    share_fund_value = round(sum_value_usd/
       (investors_overview %>% filter(investor_name=="Meta Investor") %>% pull(sum_value_usd)), 5)
     ) %>% 
   arrange(fund_isin)
