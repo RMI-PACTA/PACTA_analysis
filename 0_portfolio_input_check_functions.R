@@ -908,6 +908,8 @@ get_and_clean_fin_data <- function(fund_data){
       sector_override,
       is_sb
     ) %>% 
+    mutate(unit_share_price = round(unit_share_price, 6),
+           exchange_rate_usd = round(exchange_rate_usd, 7)) %>% 
     distinct()
   
   ### TEST
@@ -1206,7 +1208,7 @@ create_audit_file <- function(portfolio_total){
   
   audit_file <- portfolio_total %>% 
     select(all_of(grouping_variables), holding_id, isin, value_usd, company_name, asset_type,  has_revenue_data, valid_input, 
-           direct_holding, financial_sector, sectors_with_assets, has_ald_in_fin_sector,flag)
+           direct_holding, bics_sector, financial_sector, sectors_with_assets, has_ald_in_fin_sector,flag)
   
   if(has_revenue == FALSE){audit_file <- audit_file %>% select(-has_revenue_data)}
   
