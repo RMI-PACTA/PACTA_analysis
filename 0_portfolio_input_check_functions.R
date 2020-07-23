@@ -853,10 +853,10 @@ get_and_clean_fin_data <- function(fund_data){
   # col_types = "ddcccccccccccccccDddddddddddddddddc")
   
   # remove unclear duplicates from raw financial data. This should be moved to DataStore.
+  rm_duplicates <- read_csv("non_distinct_isins.csv")
+  rm_duplicates <- rm_duplicates %>% distinct(isin) %>% pull(isin)
   fin_data_raw <- fin_data_raw %>%
-    filter(!(figi %in% c("BBG006SCSYG7", #domicile is CA, this figi refers to US
-             "BBG00709J003", #could not find the corresponding ticker on bbg website
-             "BBG00FGWRBB2", "BBG00MZ1P7Q9", "BBG00FX68RK6", "BBG0043GLPF7", "BBG00K7KTK07", "BBG00FX69H54")))
+    filter(!(isin %in% rm_duplicates))
   
   if(!unique(fin_data_raw$financial_timestamp) == financial_timestamp){print("Financial timestamp not equal")}
   
