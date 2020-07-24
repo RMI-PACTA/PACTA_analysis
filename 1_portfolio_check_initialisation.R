@@ -42,16 +42,11 @@ source("0_sda_approach.R")
 # Specify these data locations in the config file "project_settings.yml" in the repo
 
 cfg <- config::get(file = "project_settings.yml")
-stopifnot(exists("cfg")  == T)
-stopifnot(cfg %>% class() == "list")
-stopifnot(cfg %>% length() == 2)
+
+check_valid_cfg(cfg)
 
 project_name <- cfg$project_name
-stopifnot(project_name %>% is.character() == T)
-
-twodii_internal <- cfg$project_internal$twodii_internal
-stopifnot(twodii_internal %>% is.logical() == T)
-
+twodii_internal <- cfg$project_internal$twodii_interna
 project_location_ext <- cfg$project_internal$project_location_ext
 data_location_ext <- cfg$project_internal$data_location_ext
 

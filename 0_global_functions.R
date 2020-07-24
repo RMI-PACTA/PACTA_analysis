@@ -305,3 +305,14 @@ is_blank_na <- function(x){
 }
 
 
+# checks validity of project config
+check_valid_cfg <- function(cfg){
+  stopifnot(exists("cfg")  == T)
+  stopifnot(cfg %>% class() == "list")
+  stopifnot(cfg %>% length() == 2)
+  
+  stopifnot(cfg$project_name %>% is.character() == T)
+  stopifnot(cfg$project_internal$twodii_internal %>% is.logical() == T)
+  
+  invisible(cfg)
+}
