@@ -857,7 +857,7 @@ get_and_clean_fin_data <- function(fund_data){
   rm_duplicates <- rm_duplicates %>% distinct(isin) %>% pull(isin)
   fin_data_raw <- fin_data_raw %>%
     filter(!(isin %in% rm_duplicates))
-  
+
   if(!unique(fin_data_raw$financial_timestamp) == financial_timestamp){print("Financial timestamp not equal")}
   
   overrides <- read_csv("data/fin_sector_overrides.csv",
