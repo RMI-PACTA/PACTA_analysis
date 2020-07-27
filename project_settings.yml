@@ -1,8 +1,8 @@
 default:
 
-  project_name: new_config_test
+  project_name: liechtenstein_p2020
 
   project_internal:
-    twodii_internal: FALSE
+    twodii_internal: TRUE
     project_location_ext: C:/Users/clare/Desktop/ExternalTest
     data_location_ext: C:/Users/clare/Desktop/Git/pacta-data/2019Q4
