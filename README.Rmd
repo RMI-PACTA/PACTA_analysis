@@ -109,7 +109,6 @@ Project wide settings should be set in the file "project_settings.yml", prior to
    - Please define ```project_location_ext``` by copying the full path to the folder, in which you want to store data (including the results) related to this particular evaluation. During the run of the code, the a project folder with several sub-folders will be created here.
    - Please consider: 
      - copying in a path from windows requires to change all "\" to "/" (e.g. "C:/Users/Desktop/project_folder/)
-     - path needs to be a string ("...")
 
 ``` yml
   project_internal:

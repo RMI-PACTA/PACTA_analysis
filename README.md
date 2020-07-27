@@ -122,7 +122,6 @@ will need to run 1\_portfolio\_check\_initialisation again.
   - Please consider:
       - copying in a path from windows requires to change all “" to”/"
         (e.g. "C:/Users/Desktop/project\_folder/)
-      - path needs to be a string (“…”)
 
 <!-- end list -->
 
