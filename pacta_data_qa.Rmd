@@ -21,7 +21,7 @@ library(DT)
 source("1_portfolio_check_initialisation.R")
 ```
 
-# Use case
+## Use case
 This document can be used to perform Data QA on processed Portfolio Input files.
 The aim of this analysis is to ensure data consistency and find holdings, that may not be considered in the PACTA analysis yet, but could be included in one of the below described ways in order to increase portfolio coverage.
 
