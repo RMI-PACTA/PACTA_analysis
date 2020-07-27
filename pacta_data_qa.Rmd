@@ -89,7 +89,8 @@ investors_portfolio_overview <- result_data_qa %>%
   filter(investor_name != "Meta Investor") %>% 
   group_by(investor_name, portfolio_name) %>% 
   summarise(total_holdings = n(),
-            sum_value_usd = round(sum(value_usd, na.rm = T))) %>% 
+            sum_value_usd = round(sum(value_usd, na.rm = T)),
+            sum_market_value = round(sum(market_value, na.rm = T))) %>% 
   ungroup() %>% 
   mutate(pct_holdings = round(total_holdings / sum(total_holdings),3),
          value_weight = round(sum_value_usd / sum(sum_value_usd), 3))
