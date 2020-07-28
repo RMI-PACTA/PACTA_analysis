@@ -53,7 +53,7 @@ ReportData <- function(){
   # company_name <- portfolio_name_select
   # 
   # company_name <- gsub("&","\\\\\\\\&",company_name)
-   
+  
   SizePortfolio <-  subgroup_overview %>%
     filter(portfolio_name == portfolio_name_select) %>%
     distinct(portfolio_value_usd)
@@ -103,7 +103,7 @@ ReportData <- function(){
   scenarioDescription <- as.character(scenarioDF$scenarioDescription[scenarioDF$ShortName %in% Scenariochoose])
   
   BenchmarkValue <- "market"
-  
+
   if(has_sb){
     SovBondCov <- SB.Values$SBPerc[SB.Values$investor_name == investor_name_select & SB.Values$portfolio_name == portfolio_name_select]
     SovBondCov <- ifelse(identical(SovBondCov, numeric(0)),0,SovBondCov)  
@@ -141,12 +141,12 @@ ReportData <- function(){
   
   PeerGroupName <- gsub("([a-z])([A-Z])", "\\1 \\2", PeerGroupSelection)
   
-  ProjectPeersRef = PeerGroupSelection
+  ProjectPeersRef <- PeerGroupSelection
   
-  PeerGroupName <- ifelse(EQPeersRef == CBPeersRef & EQPeersRef == "Project",ProjectPeersRef, PeerGroupName)
+  PeerGroupName <- ifelse(EQPeersRef == CBPeersRef & EQPeersRef == "Project",ProjectPeersRef, PeerGroupName)  
   
+  # Check Physical Risk
   
-  # # Check Physical Risk
   # if(HasRISK())
   # if(data_check(EQPhysicalRisk)){
   #   EQPhysicalRiskCheck <- TRUE
@@ -163,7 +163,6 @@ ReportData <- function(){
   
   # Underscores break the report hence they are removed from names 
   portfolio_name_select <- gsub("_"," ", portfolio_name_select)
-  
   
   ### MERGE ALL RESULTS ###
   reportdata <<- data.frame(
@@ -211,7 +210,6 @@ ReportGeneration <- function(){
   over <- SectorDataAnalysis()
   
   AnalysisCoverage <<-  round(sum(over$valid_value_usd[over$financial_sector !="Not Included"])/sum(over$valid_value_usd)*100,1)
-  
   
   reportdata <- ReportData()
   reportdata <- reportdata %>% filter(PortfolioName == portfolio_name_select)
@@ -337,12 +335,21 @@ ReportGeneration <- function(){
     text <- removetextlines("AlignmentExecSummary")
   }
   
+  
   if(!IncPhysicalRisk){
     text <- removetextlines("IncludePhysicalRisk")
   }
   
   if(!IncOtherSectors){
     text <- removetextlines("OtherSectors")
+  }
+  
+  if(!IncCoalRetirement){
+    text <- removetextlines("CoalCapChart")
+  }
+  
+  if(!IncRenewableAddition){
+    text <- removetextlines("RenewableCapChart")
   }
   
   # text <- removetextlines("IncRanking")
@@ -364,7 +371,7 @@ ReportGeneration <- function(){
     if(financial_timestamp == "2018Q4"){"31.12.2018"}else 
       if(financial_timestamp == "2019Q4"){"31.12.2019"}else{
         financial_timestamp}
-  
+
   investor_name_selectClean <- gsub("_"," ",investor_name_select)
   # investor_name_selectClean <- gsub("\("," ",investor_name_selectClean)
   # investor_name_selectClean <- gsub("/)"," ",investor_name_selectClean)
@@ -377,27 +384,28 @@ ReportGeneration <- function(){
   portfolio_name_selectClean <- gsub("'","",portfolio_name_selectClean)
   
   
-  text$text <- gsub("start_year+10",start_year+10,text$text,fixed=T)
-  text$text <- gsub("start_year+5",start_year+5,text$text,fixed=T)
-  text$text <- gsub("start_year",start_year,text$text)
-  text$text <- gsub("investor_name_select",investor_name_selectClean,text$text)
-  text$text <- gsub("portfolio_name_select",portfolio_name_selectClean,text$text)
+  text$text <- gsub("Startyear+10",start_year+10,text$text,fixed=T)
+  text$text <- gsub("Startyear+5",start_year+5,text$text,fixed=T)
+  text$text <- gsub("Startyear+5",start_year+5,text$text,fixed=T)
+  text$text <- gsub("Startyear",start_year,text$text)
+  text$text <- gsub("InvestorName",investor_name_selectClean,text$text)
+  text$text <- gsub("PortfolioName",portfolio_name_selectClean,text$text)
   text$text <- gsub("SizeofPortfolio",paste0("\\\\$",reportdata$SizeofPortfolio),text$text)
   text$text <- gsub("TodaysDate",reportdata$TodaysDate,text$text)
   text$text <- gsub("ReportDate",reportdata$ReportDate,text$text)
   text$text <- gsub("PeerGroup",reportdata$PeerGroup,text$text)
   text$text <- gsub("AssetClass",reportdata$AssetClass,text$text)
   text$text <- gsub("AnalysisCoverage",reportdata$AnalysisCoverage,text$text)
-  text$text <- gsub("scenarioText",reportdata$scenarioText,text$text)
-  text$text <- gsub("scenarioName",reportdata$scenarioName,text$text)
-  text$text <- gsub("scenarioValue",reportdata$scenarioValue,text$text)
-  text$text <- gsub("scenarioDescription",reportdata$scenarioDescription,text$text)
-  text$text <- gsub("scenarioTemp",reportdata$scenarioTemp,text$text)
+  text$text <- gsub("ScenarioText",reportdata$scenarioText,text$text)
+  text$text <- gsub("ScenarioName",reportdata$scenarioName,text$text)
+  text$text <- gsub("ScenarioValue",reportdata$scenarioValue,text$text)
+  text$text <- gsub("ScenarioDescription",reportdata$scenarioDescription,text$text)
+  text$text <- gsub("ScenarioTemp",reportdata$scenarioTemp,text$text)
   text$text <- gsub("BenchmarkValue",reportdata$BenchmarkValue,text$text)
   text$text <- gsub("EQMarketRef",eq_market_ref, text$text)
   text$text <- gsub("CBMarketRef",cb_market_ref, text$text)
   
-  
+  has_sb <- HasSB()
   if (has_sb){
     text$text <- gsub("SovBondCov",SovBondCov, text$text)
     text$text <- gsub("sbdowngradeperc",sb_downgrade_perc, text$text)
@@ -431,7 +439,7 @@ ReportGeneration <- function(){
     
     ReportName <- paste0("ClimateAlignmentReport_",strtrim(investor_name_select,20),"_",strtrim(portfolio_name_select,20))
     
-    # if (InvestorType %in% c("InvestorSingle","InvestorMeta")){ReportName <- paste0("ClimateAlignmentReport_",investor_name_select)}
+    if (investor_type %in% c("InvestorSingle","InvestorMeta")){ReportName <- paste0("ClimateAlignmentReport_",investor_name_select)}
     
     ReportName <- gsub(" ","",ReportName)
     
@@ -443,7 +451,7 @@ ReportGeneration <- function(){
     
     
     # Save the template file
-    write.table(text,paste0(report_path,ReportName,".Rnw"),col.names = FALSE,row.names = FALSE,quote=FALSE)  
+    write.table(text,paste0(report_path,ReportName,".Rnw"),col.names = FALSE,row.names = FALSE,quote=FALSE,fileEncoding = "UTF-8")
     
     # Copy in Report Graphics
     originalloc <- paste0(getwd(),"/Templates/ReportGraphics/")  
@@ -458,7 +466,14 @@ ReportGeneration <- function(){
     owd <- getwd()
     setwd(report_path)
     # Create the PDF
-    knit2pdf(paste0(report_path,ReportName,".Rnw"),compiler = "xelatex")
+    # ReportName cannot be too long or else the report won't print!
+    original_system_encoding <- getOption("encoding")
+    
+    options(encoding = "native.enc")
+    
+    knit2pdf(paste0(report_path,ReportName,".Rnw"), compiler = "xelatex")
+    
+    options(encoding = original_system_encoding)
     
     # Delete remaining files and ReportGraphics Folder
     excessfileendings <- c(".Rnw",".tex")

@@ -42,8 +42,6 @@ clean_colnames_portfolio_input_file <- function(portfolio){
   
   if("numberof_shares" %in% colnames(portfolio)){portfolio<- portfolio %>% rename(number_of_shares = numberof_shares)}
   
-  
-  
   # names(portfolio)[1] <- gsub("[^A-Za-z0-9]", "", names(portfolio)[1])
   
   
@@ -56,9 +54,7 @@ clean_portfolio_col_types <- function(portfolio, grouping_variables){
   
   # portfolio$investor_name <- clean_punctuation(portfolio$investor_name)
   # portfolio$portfolio_name <- clean_punctuation(portfolio$portfolio_name)
-  
-  
-  # portfolio$number_of_shares <- as.numeric(portfolio$number_of_shares)
+  portfolio$number_of_shares <- as.numeric(portfolio$number_of_shares)
   portfolio$market_value <- as.numeric(portfolio$market_value)
   portfolio$currency <- as.character(portfolio$currency)
   
@@ -153,7 +149,6 @@ check_missing_cols <- function(portfolio, grouping_variables){
   
   if(!"number_of_shares" %in% colnames(portfolio)){portfolio$number_of_shares <- NA}
   
-  
   missing_columns <-setdiff(required_input_cols,colnames(portfolio))
   
   if(length(missing_columns) > 0){
@@ -182,7 +177,7 @@ set_currency_timestamp <- function(currencies){
 }
 
 ### Fin data cleaning functions
-map_security_sectors <- function(fin_data, sector_bridge){
+map_security_sectors <- function(fin_data, sector_bridge) <- function(fin_data, sector_bridge){
   
   initial_no_rows = nrow(fin_data)
   
@@ -235,9 +230,6 @@ map_comp_sectors <- function(comp_fin_data, sector_bridge){
   return(comp_fin_data)
   
 }
-
-
-
 
 override_sector_classification <- function(fin_data, overrides){
   
@@ -677,7 +669,7 @@ check_for_ald <- function(portfolio_subset, comp_fin_data){
   initial_port_value = sum(portfolio_subset$value_usd, na.rm = T)
   
   ald_markers <- comp_fin_data %>% 
-    select(company_id,bics_sector, has_asset_level_data, sectors_with_assets) %>% 
+    select(company_id, bics_sector, has_asset_level_data, sectors_with_assets) %>% 
     distinct()
   
   portfolio_subset <- left_join(portfolio_subset, ald_markers, by = "company_id")
@@ -812,7 +804,7 @@ get_and_clean_fin_data <- function(){
   # Financial Data
   fin_data_raw <- read_rds(paste0(analysis_inputs_path,"/security_financial_data.rda"))
   # col_types = "ddcccccccccccccccDddddddddddddddddc")
-  
+
   if(!unique(fin_data_raw$financial_timestamp) == financial_timestamp){print("Financial timestamp not equal")}
   
   overrides <- read_csv("data/fin_sector_overrides.csv",
@@ -875,6 +867,8 @@ get_and_clean_fin_data <- function(){
 get_and_clean_revenue_data <- function(){
   
   revenue_data <- data.frame()
+  revenue_data <- read_rds(paste0(analysis_inputs_path, "/revenue_data_member_ticker.rda"))
+  # col_types = "dcdcclcd")
   
   if(has_revenue){
     revenue_data <- read_rds(paste0(analysis_inputs_path, "/revenue_data_member_ticker.rda"))
@@ -893,6 +887,7 @@ get_and_clean_company_fin_data <- function(){
   
   comp_fin_data_raw <- read_rds(paste0(analysis_inputs_path,"/consolidated_financial_data.rda"))
   # col_types = "ddcccccdddddclccccdccccllclddddddddddddc")
+  
   
   sector_bridge <- read_csv("data/sector_bridge.csv", col_types = "ccc")
   
@@ -1011,9 +1006,14 @@ portfolio_summary <- function(portfolio_total){
 create_portfolio_subset <- function(portfolio, portfolio_type, comp_fin_data){
   
   if(portfolio_type %in% unique(portfolio$asset_type)){
-    
-    portfolio_subset <- portfolio %>% filter(asset_type == portfolio_type)
-    
+    if (portfolio_type == "Bonds"){
+      
+      portfolio_subset <- portfolio %>% filter(asset_type == portfolio_type) %>% 
+        filter(security_type %in% c("Convertible bonds","Corporate Bonds", "Corporate inflation linked Bonds"))
+    } else{
+      portfolio_subset <- portfolio %>% filter(asset_type == portfolio_type)
+    }
+  
     portfolio_subset <- check_for_ald(portfolio_subset, 
                                       comp_fin_data) 
     
@@ -1410,6 +1410,7 @@ add_other_to_sector_classifications <- function(audit){
   # modify sector names 
   audit <- audit %>% 
     mutate(sector = ifelse(sector %in% c("Industrials", "Energy", "Utilities", "Materials"), paste0("Other ", sector), sector))
-
+  
   audit
-  }
+} 
+

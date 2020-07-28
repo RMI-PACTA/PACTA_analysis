@@ -89,7 +89,7 @@ calculate_ownership_weight <- function(portfolio){
 calculate_port_weight <- function(portfolio, grouping_variables){
   
   portfolio <- portfolio %>% 
-    ungroup() %>%
+    ungroup() %>% 
     group_by(!!!rlang::syms(grouping_variables)) %>% 
     mutate(port_total_aum = sum(value_usd, na.rm =  T), 
            port_weight = value_usd/port_total_aum)
@@ -101,10 +101,9 @@ calculate_port_weight <- function(portfolio, grouping_variables){
   total_port_weight_per_portfolio <- signif(unique(temp$total_port_weight),2)
   # check that all portfolio port_weight's sum to 1
   if (!all(total_port_weight_per_portfolio == 1.0)) {stop("Port weight calculation error")}
-
-
-portfolio  
-
+  
+  portfolio  
+  
 }
 
 calculate_with_weights <- function(df, weight_col_name, weight_method_name) {
@@ -130,7 +129,7 @@ aggregate_company <- function(df) {
     df <- df %>%
       ungroup() %>% 
       select(all_of(grouping_variables), scenario, allocation, 
-             id, company_name, financial_sector, port_weight,
+             id, company_name, financial_sector, port_weight, company_port_weight,
              allocation_weight, plan_br_dist_alloc_wt, scen_br_dist_alloc_wt,
              equity_market, scenario_geography, year,
              ald_sector, technology,
@@ -153,7 +152,6 @@ aggregate_company <- function(df) {
       ungroup()
     
   }else{
-    # TODO: check that this is a necessary solution, else just return df
     df <- data.frame()
   }
   
@@ -286,6 +284,7 @@ ownership_allocation <- function(portfolio){
   
 }
 
+
 merge_in_geography <- function(portfolio, ald_raw, sectors_for_maps){
   
   # ald_raw <- ald_raw_eq
@@ -349,9 +348,6 @@ gather_and_save_project_results <- function(
   portfolios_per_file = 500, 
   year_filter = NA, 
   allocation_filter = NA){
-  
-  all_investors <- list.dirs(results_folder_path)	
-  all_investors <- basename(all_investors)[-1]	
   
   k <- 1	
   j <- 1	
@@ -425,5 +421,3 @@ gather_and_save_project_results <- function(
     saveRDS(all_results_eq,paste0(results_path,"/Equity_results_",aggregation_level,".rda"))}	
   
 }
-
-

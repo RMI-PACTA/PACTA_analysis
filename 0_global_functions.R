@@ -124,6 +124,7 @@ set_global_parameters <- function(file_path){
     print("Warning: file_format_list set to standard value ('rda') as not defined in the parameter file")	
   }
   
+  
 }
 
 set_project_paths <- function(project_name, twodii_internal, project_location_ext){
@@ -166,7 +167,7 @@ set_analysis_inputs_path <- function(twodii_internal, data_location_ext, datapre
   }
   
   return(analysis_inputs_path)
-
+  
 }
 
 set_data_paths <- function(financial_timestamp = FINANCIAL.TIMESTAMP(), dataprep_timestamp = dataprep_timestamp, ald_timestamp = ALD.TIMESTAMP()){
@@ -303,5 +304,3 @@ is_blank_na <- function(x){
   if(is.na(x) | x == ""){flag = TRUE}else{flag = FALSE}
   flag
 }
-
-

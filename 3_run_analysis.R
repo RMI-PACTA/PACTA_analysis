@@ -18,6 +18,7 @@ if(file.exists(equity_input_file)){
   
   ald_raw_eq <- get_ald_raw("Equity")
   
+  
   list_investors_eq <- unique(port_raw_all_eq$investor_name)
   
   for (e in 1:length(list_investors_eq) ){
@@ -32,7 +33,14 @@ if(file.exists(equity_input_file)){
     
     port_eq <- calculate_weights(port_raw_eq, "Equity", grouping_variables)
     
+    company_port_weight <- port_eq %>% 
+      group_by(id) %>% 
+      summarise(company_port_weight = sum(port_weight)) %>% 
+      select(id, company_port_weight)
+    
     port_eq <- merge_in_ald(port_eq, ald_scen_eq)
+    
+    port_eq <- port_eq %>% left_join(company_port_weight, by = c("id"))
     
     # Portfolio weight methodology
     port_pw_eq <- port_weight_allocation(port_eq, "Equity")
@@ -41,12 +49,14 @@ if(file.exists(equity_input_file)){
     
     port_pw_eq <- aggregate_portfolio(company_pw_eq) 
     
+    
     # Ownership weight methodology
     port_own_eq <- ownership_allocation(port_eq)
     
     company_own_eq <- aggregate_company(port_own_eq)
     
     port_own_eq <- aggregate_portfolio(company_own_eq) 
+    
     
     # Create combined outputs
     company_all_eq <- bind_rows(company_pw_eq, company_own_eq)
@@ -61,15 +71,18 @@ if(file.exists(equity_input_file)){
       
     } 
     
-    # Technology Share Calculation	
-    port_all_eq <- calculate_technology_share(port_all_eq)	
+    # Technology Share Calculation
+    port_all_eq <- calculate_technology_share(port_all_eq)
     
-    company_all_eq <- calculate_technology_share(company_all_eq)	
+    company_all_eq <- calculate_technology_share(company_all_eq)
     
-    # Scenario alignment calculations	
-    port_all_eq <- calculate_scenario_alignment(port_all_eq)	
+    # Scenario alignment calculations
+    port_all_eq <- calculate_scenario_alignment(port_all_eq)
     
     company_all_eq <- calculate_scenario_alignment(company_all_eq)
+    
+    # map needs the "complete" function built in if this is necessary
+    
     
     investor_results_path <- paste0(results_path,"/", investor_name_select, "/") 
     if(!dir.exists(investor_results_path)){dir.create(investor_results_path)}
@@ -98,6 +111,7 @@ if (file.exists(bonds_inputs_file)){
   
   ald_raw_cb <- get_ald_raw("Bonds")
   
+  
   list_investors_cb <- unique(port_raw_all_cb$investor_name)
   
   for (b in 1:length(list_investors_cb) ){
@@ -106,14 +120,20 @@ if (file.exists(bonds_inputs_file)){
     port_all_cb <- NA
     
     investor_name_select <- list_investors_cb[b]
-    
     print(paste0(b, ": ", investor_name_select))
     
     port_raw_cb <- port_raw_all_cb %>% filter(investor_name == investor_name_select)
     
-    port_cb <- calculate_weights(port_raw_cb, "Bonds", grouping_variables)
+    port_cb <- calculate_weights(port_raw_cb, "Bonds", grouping_variables) 
+    
+    company_port_weight <- port_cb %>% 
+      group_by(id) %>% 
+      summarise(company_port_weight = sum(port_weight)) %>% 
+      select(id, company_port_weight)
     
     port_cb <- merge_in_ald(port_cb, ald_scen_cb)
+    
+    port_cb <- port_cb %>% left_join(company_port_weight, by = c("id"))
     
     # Portfolio weight methodology
     port_pw_cb <- port_weight_allocation(port_cb, "Bonds")
@@ -121,6 +141,8 @@ if (file.exists(bonds_inputs_file)){
     company_pw_cb <- aggregate_company(port_pw_cb)
     
     port_pw_cb <- aggregate_portfolio(company_pw_cb) 
+    
+    
     
     # Create combined outputs
     company_all_cb <- company_pw_cb
@@ -136,15 +158,18 @@ if (file.exists(bonds_inputs_file)){
       }  
     } 
     
-    # Technology Share Calculation	
+    # Technology Share Calculation
     if(nrow(port_all_cb)>0){port_all_cb <- calculate_technology_share(port_all_cb)}	
     
     if(nrow(company_all_cb)>0){company_all_cb <- calculate_technology_share(company_all_cb)}	
     
-    # Scenario alignment calculations	
-    port_all_cb <- calculate_scenario_alignment(port_all_cb)	
-    
+    # Scenario alignment calculations
+    port_all_cb <- calculate_scenario_alignment(port_all_cb)
+
     company_all_cb <- calculate_scenario_alignment(company_all_cb)
+    
+    # map needs the "complete" function built in if this is necessary
+    
     
     investor_results_path <- paste0(results_path,"/", investor_name_select, "/") 
     if(!dir.exists(investor_results_path)){dir.create(investor_results_path)}
@@ -153,7 +178,9 @@ if (file.exists(bonds_inputs_file)){
     if(data_check(port_all_cb)){write_rds(port_all_cb, paste0(investor_results_path, "Bonds_results_portfolio.rda"))}	
     if(has_map){if(data_check(map_cb)){write_rds(map_cb, paste0(investor_results_path, "Bonds_results_map.rda"))}}
     
+    
   }
+  
 }
 
 

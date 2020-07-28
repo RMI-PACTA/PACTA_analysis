@@ -44,11 +44,7 @@ translate_labels(Language)
 
 if(has_sb){SB.Values = GetSovBondCoverage()}
 
-i=1
-
-
-
-for (i in 4:nrow(report_list)){
+for (i in 1:nrow(report_list)){
   
   investor_name_select <- report_list$investor_name[i]
   portfolio_name_select <- report_list$portfolio_name[i]
@@ -71,6 +67,8 @@ for (i in 4:nrow(report_list)){
   create_results_folder(project_name,investor_name_select,portfolio_name_select,report_handle)
   
   ReportFigures()
+  
+  has_sb <- HasSB()
   
   if(has_sb){
     SovereignBondFigures()    

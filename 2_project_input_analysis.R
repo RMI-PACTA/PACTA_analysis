@@ -68,6 +68,7 @@ emissions_totals <- calculate_portfolio_emissions(inc_emission_factors,
 ################
 #### SAVING ####
 ################
+
 if (length(file_format_list) == 0){stop("Saving results: No file formats defined")}
 
 if("csv" %in% file_format_list){

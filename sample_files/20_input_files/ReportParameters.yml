@@ -13,8 +13,8 @@ default:
       PeerGroupSelection: Project
       EQPeersRef: Project
       CBPeersRef: Project
-      eq_market_ref: GlobalMarket	
-      cb_market_ref: GlobalMarket
+      eq_market_ref: ACWI	
+      cb_market_ref: BEHGTRUU   
 
     Contents:
       templateversion: "GeneralTemplateInput_v6"
