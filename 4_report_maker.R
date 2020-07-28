@@ -39,12 +39,11 @@ portfolio_overview$portfolio_name <- clean_punctuation(portfolio_overview$portfo
 report_list <- get_report_list(portfolio_overview)
 
 
-template <- readLines("C:\\Users\\jacks\\Desktop\\SFC_2019\\Templates\\GeneralTemplateInput_v6_SB_ES_Mexico.tex")
+template <- readLines(paste0(dirname("/Templates/",templateversion,".tex"),encoding = "UTF-8"))
 translate_labels(Language)
 
 if(has_sb){SB.Values = GetSovBondCoverage()}
 
-i <- 9
 for (i in 1:nrow(report_list)){
   
   investor_name_select <- report_list$investor_name[i]
@@ -70,6 +69,7 @@ for (i in 1:nrow(report_list)){
   ReportFigures()
   
   has_sb <- HasSB()
+  
   if(has_sb){
     SovereignBondFigures()    
   }
