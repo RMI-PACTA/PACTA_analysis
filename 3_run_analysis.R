@@ -43,7 +43,7 @@ if(file.exists(equity_input_file)){
     port_eq <- port_eq %>% left_join(company_port_weight, by = c("id"))
     
     # Portfolio weight methodology
-    port_pw_eq <- port_weight_allocation(port_eq, "Equity")
+    port_pw_eq <- port_weight_allocation(port_eq)
     
     company_pw_eq <- aggregate_company(port_pw_eq)
     
@@ -136,7 +136,7 @@ if (file.exists(bonds_inputs_file)){
     port_cb <- port_cb %>% left_join(company_port_weight, by = c("id"))
     
     # Portfolio weight methodology
-    port_pw_cb <- port_weight_allocation(port_cb, "Bonds")
+    port_pw_cb <- port_weight_allocation(port_cb)
     
     company_pw_cb <- aggregate_company(port_pw_cb)
     
