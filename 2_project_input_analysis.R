@@ -1,13 +1,16 @@
-## Project start
 # File List Check for External Data Requirements:
 # security_financial_data.rda
 # consolidated_financial_data.rda
+# debt_financial_data.rda
 # revenue_data_member_ticker.rda
 # bonds_ald_scenario.rda
 # equity_ald_scenario.rda
 # masterdata_ownership_datastore.rda
 # masterdata_debt_datastore.rda
 
+# optional:
+# fund_data_2019Q4.rda (or relevant time stamp)
+# revenue_data_member_ticker.rda (if not available, set has_revenue = FALSE in parameter file)
 
 # Obtains data, processes the portfolio and saves the files
 
@@ -18,9 +21,11 @@ currencies <- get_and_clean_currency_data()
 
 fund_data <- get_and_clean_fund_data()
 
-fin_data <- get_and_clean_fin_data()
+fin_data <- get_and_clean_fin_data(fund_data)
 
 comp_fin_data <- get_and_clean_company_fin_data()
+
+debt_fin_data <- get_and_clean_debt_fin_data()
 
 revenue_data <- get_and_clean_revenue_data()
 
@@ -31,14 +36,18 @@ company_emissions <- get_company_emission_data(inc_emission_factors)
 ####################
 #### PORTFOLIOS ####
 ####################
-portfolio <- read_and_process_portfolio(project_name,
-                                        fin_data,
-                                        fund_data,
-                                        currencies, 
-                                        grouping_variables)
+portfolio_raw <- read_raw_portfolio_file(project_name)
+
+portfolio <- process_raw_portfolio(portfolio_raw,
+                                   fin_data,
+                                   fund_data,
+                                   currencies, 
+                                   grouping_variables)
 
 
 portfolio <- add_revenue_split(has_revenue, portfolio, revenue_data)
+
+portfolio <- create_ald_flag(portfolio, comp_fin_data, debt_fin_data)
 
 eq_portfolio <- create_portfolio_subset(portfolio, 
                                         "Equity", 
@@ -46,7 +55,7 @@ eq_portfolio <- create_portfolio_subset(portfolio,
 
 cb_portfolio <- create_portfolio_subset(portfolio, 
                                         "Bonds", 
-                                        comp_fin_data)
+                                        debt_fin_data)
 
 portfolio_total <- add_portfolio_flags(portfolio)
 
@@ -54,7 +63,7 @@ portfolio_overview <- portfolio_summary(portfolio_total)
 
 identify_missing_data(portfolio_total)
 
-audit_file <- create_audit_file(portfolio_total, comp_fin_data)
+audit_file <- create_audit_file(portfolio_total)
 
 create_audit_chart(audit_file, proc_input_path)
 
