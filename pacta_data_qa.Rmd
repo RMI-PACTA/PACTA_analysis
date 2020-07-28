@@ -51,14 +51,14 @@ result_data_qa %>% glimpse()
 
 ### Total holdings and value
 
-Overall number of holdings and aggregated value in USD of the portfolio input, by asset type
+Overall number of holdings and aggregated value in USD of the entire portfolio input, grouped by asset type
 
 ```{r}
 total_overview <- result_data_qa %>% 
   filter(investor_name != "Meta Investor") %>% 
   group_by(asset_type) %>% 
-  summarise(total_holdings = n(),
-            sum_value_usd = round(sum(value_usd, na.rm = T))) %>% 
+  summarise(total_holdings_by_asset = n(),
+            sum_value_usd_by_asset = round(sum(value_usd, na.rm = T))) %>% 
   ungroup()
 datatable(total_overview, caption = "Overall # of holdings and aggregated value of the input")
 ```
@@ -66,36 +66,42 @@ datatable(total_overview, caption = "Overall # of holdings and aggregated value 
 
 ### Total holdings and value per investor
 Number of holdings and aggregated value in USD of the portfolio input - grouped by investor.
-"Meta Investor" is the total aggregation across investors.
+"Meta Investor" is the total aggregation across investors, i.e. the entire portfolio input.
 ```{r}
 investors_overview <- result_data_qa %>% 
   group_by(investor_name) %>% 
-  summarise(total_holdings = n(), sum_value_usd = round(sum(value_usd, na.rm = T))) %>% 
+  summarise(total_holdings_by_inv = n(),
+            sum_value_usd_by_inv = round(sum(value_usd, na.rm = T))) %>% 
   ungroup()
 datatable(investors_overview, caption = "Overall # of holdings and value of the input by Investor")
 ```
 
-Number of holdings and aggregated value in USD of the portfolio input, by investor and asset type
+Number of holdings and aggregated value in USD of the portfolio input, grouped by investor and asset type
 
 ```{r}
-total_overview_inv <- result_data_qa %>% 
+investors_overview_asset <- result_data_qa %>% 
   group_by(investor_name, asset_type) %>% 
-  summarise(total_holdings = n(),
-            sum_value_usd = round(sum(value_usd, na.rm = T))) %>% 
+  summarise(total_holdings_by_inv_asset = n(),
+            value_usd_by_inv_asset = round(sum(value_usd, na.rm = T))) %>% 
   ungroup()
-datatable(total_overview_inv, caption = "Overall # of holdings and value of the input by Investor and asset type")
+datatable(investors_overview_asset, caption = "Overall # of holdings and value of the input by Investor and asset type")
 ```
 
 Number of holdings and aggregated value in USD of the portfolio input, by investor and flag type
 
 ```{r}
-total_overview_inv_flag <- result_data_qa %>% 
+investors_overview_flag <- result_data_qa %>% 
   group_by(investor_name, flag) %>% 
-  summarise(total_holdings = n(),
-            sum_value_usd = round(sum(value_usd, na.rm = T))) %>% 
+  summarise(holdings_by_flag_inv = n(),
+            value_usd_by_flag_inv = round(sum(value_usd, na.rm = T))) %>% 
+  ungroup() %>% 
+  inner_join(investors_overview, by = ("investor_name")) %>% 
+  group_by(investor_name) %>% 
+  mutate(share_holdings_investor = round(holdings_by_flag_inv/total_holdings_by_inv, 4),
+         share_value_investor = round(value_usd_by_flag_inv/sum_value_usd_by_inv, 4)) %>% 
   ungroup()
 # add share value investor
-datatable(total_overview_inv_flag, caption = "Overall # of holdings and value of the input by Investor and flag")
+datatable(investors_overview_flag, caption = "Overall # of holdings and value of the input by Investor and flag")
 ```
 
 ### Total holdings and value per investor and portfolio
@@ -103,19 +109,23 @@ Number of holdings and aggregated value in USD of the portfolio input - grouped 
 
 * **total_holdings** is the number of holdings per investor and portfolio
 * **sum_value_usd** is the aggregated value of the holdings in USD by investor and portfolio
-* **sum_market_value** .... see comment below
-* **pct_holdings** This shows the relative size of a given portfolio compared to the overall size of all portfolos in the analysis. The size here is measured in number of securities, not value.
-* **value_weight** This  shows the relative value of a given portfolio compared to the overall value across all portfolios analysed. Measured in USD.
+* **value_weight_overall** This  shows the relative value of a given portfolio compared to the overall value across all portfolios analysed. Measured in USD.
+* **value_weight_by_inv** This  shows the relative value of a given portfolio compared to the overall value of the corresponding investor's portfolios. Measured in USD. Insofar, it is a measure of the portfolio's importance for the investor at hand.
+
+**OPEN** What other weight to include?
 
 
 ```{r}
 investors_portfolio_overview <- result_data_qa %>% 
   filter(investor_name != "Meta Investor") %>% 
   group_by(investor_name, portfolio_name) %>% 
-  summarise(total_holdings = n(),
-            sum_value_usd = round(sum(value_usd, na.rm = T))) %>% 
+  summarise(total_holdings_inv_pf = n(),
+            value_usd_inv_pf = round(sum(value_usd, na.rm = T))) %>% 
   ungroup() %>% 
-  mutate(value_weight = round(sum_value_usd / sum(sum_value_usd), 3))
+  mutate(value_weight_overall = round(value_usd_inv_pf / sum(value_usd_inv_pf), 3)) %>% 
+  group_by(investor_name) %>% 
+  mutate(value_weight_by_inv = round(value_usd_inv_pf / sum(value_usd_inv_pf), 3)) %>% 
+  ungroup()
 datatable(investors_portfolio_overview)
 ```
 
@@ -142,12 +152,21 @@ MISSINGS ARE OPTIONAL SHOULD ONLY BE SHOWN WHEN PRESENT
 ```{r}
 currency_overview <- result_data_qa %>% 
   filter(investor_name != "Meta Investor") %>% 
+  group_by(currency, has_currency) %>% 
+  summarise(total_holdings_by_currency = n(),
+            value_usd_by_currency = round(sum(value_usd, na.rm = T))) %>%
+  ungroup()
+datatable(currency_overview, caption = "Aggregate value USD grouped by currencies and missing currency information")
+
+currency_exchange_rate_overview <- result_data_qa %>% 
+  filter(investor_name != "Meta Investor") %>% 
   group_by(currency, exchange_rate_usd, has_currency) %>% 
-  summarise(total_per_currency = n(),
-            sum_value_usd = round(sum(value_usd, na.rm = T))) %>% 
+  summarise(total_holdings_by_currency_exch = n(),
+            value_usd_by_currency_exch = round(sum(value_usd, na.rm = T))) %>% 
             #sum_market_value = round(sum(market_value, na.rm = T))) %>% 
   ungroup()
-datatable(currency_overview, caption = "Aggregate market in original currencies grouped by missing currency information")
+datatable(currency_exchange_rate_overview, caption = "Aggregate value USD in grouped currencies, exchange rates and missing currency information")
+
 
 
 missing_currency <- result_data_qa %>% 
@@ -157,11 +176,13 @@ missing_currency <- result_data_qa %>%
   summarise(value_usd_miss_currency = round(sum(value_usd, na.rm = T))) %>% 
   ungroup() %>% 
   left_join(
-    investors_portfolio_overview %>% select(investor_name, portfolio_name, sum_value_usd), by = c("investor_name", "portfolio_name")
+    investors_portfolio_overview %>%
+      select(investor_name, portfolio_name, value_usd_inv_pf),
+    by = c("investor_name", "portfolio_name")
     ) %>% 
   mutate(share_missing_value = round(
-    value_usd_miss_currency/sum_value_usd, 4))
-datatable(missing_currency, caption = "Missing aggregate market value due to lack of currency/exchange rate info across overall input by currency")
+    value_usd_miss_currency/value_usd_inv_pf, 4))
+datatable(missing_currency, caption = "Missing aggregate value in USD due to lack of currency/exchange rate info across overall input by currency")
 
 
 ```
@@ -191,10 +212,10 @@ not_in_bloomberg <- result_data_qa %>%
   mutate(sum_value_usd = round(sum(value_usd, na.rm=T))) %>% 
   ungroup() %>% 
   left_join(total_overview, by = c("asset_type")) %>% 
-  rename(sum_value_usd_isin = sum_value_usd.x,
-         total_value_by_asset = sum_value_usd.y) %>% 
+  rename(sum_value_usd_isin = sum_value_usd,
+         total_value_by_asset = sum_value_usd_by_asset) %>% 
   mutate(share_missing_value_by_asset = round(sum_value_usd_isin/total_value_by_asset, 5)) %>% 
-  select(-c(total_holdings, total_value_by_asset)) %>% 
+  select(-c(total_holdings_by_asset, total_value_by_asset)) %>% 
   #arrange(asset_type, isin)
   arrange(desc(share_missing_value_by_asset))
 datatable(not_in_bloomberg)
@@ -232,7 +253,9 @@ ISIN_missing_invalid <- result_data_qa %>%
   ungroup() %>% 
   mutate(
     share_missing_value = round(
-      sum_value_usd/(investors_overview %>% filter(investor_name=="Meta Investor") %>% pull(sum_value_usd)), 7
+      sum_value_usd/(investors_overview %>%
+                       filter(investor_name=="Meta Investor") %>%
+                       pull(sum_value_usd_by_inv)), 7
       )
     ) %>% 
   arrange(desc(share_missing_value), isin)
@@ -265,7 +288,10 @@ no_ALD_EQ <- result_data_qa %>%
   summarise(total_no_ALD_EQ = n(), sum_value_usd = round(sum(value_usd, na.rm=T))) %>% 
   ungroup() %>% 
   mutate(share_total_value = round(
-    sum_value_usd/(total_overview %>% filter(asset_type=="Equity") %>% pull(sum_value_usd)),6)) %>% 
+    sum_value_usd/(total_overview %>%
+                     filter(asset_type=="Equity") %>%
+                     pull(sum_value_usd_by_asset)),6)
+    ) %>% 
   arrange(financial_sector)
 datatable(no_ALD_EQ, caption="Missing agg value due to lack of ALD information - Equity - sector level")
 
@@ -279,7 +305,10 @@ no_ALD_EQ_detail <- result_data_qa %>%
   summarise(sum_value_usd = round(sum(value_usd, na.rm=T))) %>% 
   ungroup() %>% 
   mutate(share_total_value = round(
-    sum_value_usd/(total_overview %>% filter(asset_type=="Equity") %>% pull(sum_value_usd)),6)) %>% 
+    sum_value_usd/(total_overview %>%
+                     filter(asset_type=="Equity") %>%
+                     pull(sum_value_usd_by_asset)),6)
+    ) %>% 
   arrange(desc(share_total_value))
 datatable(no_ALD_EQ_detail, caption="Missing agg value due to lack of ALD information - Equity - company level")
 
@@ -307,7 +336,10 @@ no_ALD_CB <- result_data_qa %>%
   summarise(total_no_ALD_CB = n(), sum_value_usd = round(sum(value_usd, na.rm=T))) %>% 
   ungroup() %>% 
   mutate(share_total_value = round(
-    sum_value_usd/(total_overview %>% filter(asset_type=="Bonds") %>% pull(sum_value_usd)),6)) %>% 
+    sum_value_usd/(total_overview %>%
+                     filter(asset_type=="Bonds") %>%
+                     pull(sum_value_usd_by_asset)),6)
+    ) %>% 
   arrange(financial_sector, desc(share_total_value))
 datatable(no_ALD_CB, caption="Missing agg value due to lack of ALD information - CBonds - sector level")
 
@@ -321,7 +353,9 @@ no_ALD_CB_detail <- result_data_qa %>%
   summarise(sum_value_usd = round(sum(value_usd, na.rm=T))) %>% 
   ungroup() %>% 
   mutate(share_total_value = round(
-    sum_value_usd/(total_overview %>% filter(asset_type=="Bonds") %>% pull(sum_value_usd)),6)) %>% 
+    sum_value_usd/(total_overview %>%
+                     filter(asset_type=="Bonds") %>%
+                     pull(sum_value_usd_by_asset)),6)) %>% 
   arrange(desc(share_total_value))
 datatable(no_ALD_CB_detail, caption="Missing agg value due to lack of ALD information - CBonds - company level")
 
@@ -358,7 +392,10 @@ non_pacta_ALD_EQ <- result_data_qa %>%
   summarise(total_non_pacta_ALD_EQ = n(), sum_value_usd = round(sum(value_usd, na.rm=T))) %>%
   ungroup() %>% 
   mutate(share_total_value = round(
-    sum_value_usd/(total_overview %>% filter(asset_type=="Equity") %>% pull(sum_value_usd)),6)) %>% 
+    sum_value_usd/(total_overview %>%
+                     filter(asset_type=="Equity") %>%
+                     pull(sum_value_usd_by_asset)),6)
+    ) %>% 
   arrange(sectors_with_assets)
 datatable(non_pacta_ALD_EQ, caption="ALD information matched to Other sector - Equity - sector level")
 
@@ -372,7 +409,10 @@ non_pacta_ALD_EQ_detail <- result_data_qa %>%
   summarise(sum_value_usd = round(sum(value_usd, na.rm=T))) %>% 
   ungroup() %>% 
   mutate(share_total_value = round(
-    sum_value_usd/(total_overview %>% filter(asset_type=="Equity") %>% pull(sum_value_usd)),6)) %>% 
+    sum_value_usd/(total_overview %>%
+                     filter(asset_type=="Equity") %>%
+                     pull(sum_value_usd_by_asset)),6)
+    ) %>% 
   arrange(desc(share_total_value))
 datatable(non_pacta_ALD_EQ_detail, caption="ALD information matched to Other sector - Equity - company level")
 
@@ -401,7 +441,10 @@ non_pacta_ALD_CB <- result_data_qa %>%
   summarise(total_non_pacta_ALD_CB = n(), sum_value_usd = round(sum(value_usd, na.rm=T))) %>% 
   ungroup() %>% 
   mutate(share_total_value = round(
-    sum_value_usd/(total_overview %>% filter(asset_type=="Bonds") %>% pull(sum_value_usd)),6)) %>% 
+    sum_value_usd/(total_overview %>%
+                     filter(asset_type=="Bonds") %>%
+                     pull(sum_value_usd_by_asset)),6)
+    ) %>% 
   arrange(sectors_with_assets)
 datatable(non_pacta_ALD_CB, caption="ALD information matched to Other sector - CBonds - sector level")
 
@@ -414,10 +457,11 @@ non_pacta_ALD_CB_detail <- result_data_qa %>%
   group_by(sectors_with_assets, isin, company_name, corporate_bond_ticker, bics_subgroup, icb_subsector,  bloomberg_id) %>%
   summarise(sum_value_usd = round(sum(value_usd, na.rm=T))) %>% 
   ungroup() %>% 
-  mutate(share_total_value = round(sum_value_usd/
-                                     (total_overview %>%
-                                        filter(asset_type=="Bonds") %>%
-                                        pull(sum_value_usd)),6)) %>% 
+  mutate(share_total_value = round(
+    sum_value_usd/(total_overview %>%
+                     filter(asset_type=="Bonds") %>%
+                     pull(sum_value_usd_by_asset)),6)
+         ) %>% 
   arrange(desc(share_total_value))
 datatable(non_pacta_ALD_CB_detail, caption="ALD information matched to Other sector - CBonds - company level")
 
@@ -459,7 +503,9 @@ funds_coverage <- result_data_qa %>%
   ungroup() %>% 
   mutate(
     share_fund_value = round(sum_value_usd/
-      (investors_overview %>% filter(investor_name=="Meta Investor") %>% pull(sum_value_usd)), 5)
+      (investors_overview %>%
+         filter(investor_name=="Meta Investor") %>%
+         pull(sum_value_usd_by_inv)), 5)
     ) %>% 
   arrange(desc(share_fund_value))
 datatable(funds_coverage)
@@ -475,7 +521,9 @@ funds_coverage_missing_value <- result_data_qa %>%
   ungroup() %>% 
   mutate(
     share_missing_value = round(sum_value_usd/
-      (investors_overview %>% filter(investor_name=="Meta Investor") %>% pull(sum_value_usd)), 5)
+      (investors_overview %>%
+         filter(investor_name=="Meta Investor") %>%
+         pull(sum_value_usd_by_inv)), 5)
     ) %>%  
   arrange(fund_isin)
 datatable(funds_coverage_missing_value)
@@ -497,7 +545,7 @@ value_by_asset_type <- result_data_qa %>%
   mutate(share_of_total_value = round(
     sum_value_USD/(investors_overview %>%
                      filter(investor_name=="Meta Investor") %>%
-                     pull(sum_value_usd)
+                     pull(sum_value_usd_by_inv)
                    ), 5)
          )
 datatable(value_by_asset_type)
