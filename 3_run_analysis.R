@@ -176,18 +176,16 @@ gather_and_save_project_results(results_path, aggregation_level = "company",
 ###############################
 
 # currently only works if both equity and corporate bonds results exist
+# should this be checking in "/result_path" OR in "/result_path/Meta Investor"??
 if (
-  c("Bonds_results_company.rda") %in% list.files(results_path) &
-  c("Equity_results_company.rda") %in% list.files(results_path) &
+  (c("Bonds_results_company.rda") %in% list.files(results_path) |
+  c("Equity_results_company.rda") %in% list.files(results_path)) &
   c(paste0(project_name, "_total_portfolio.rda")) %in% list.files(paste0(proc_input_path, "/"))
-  # exists("portfolio_total") &
-  # exists("company_all_eq") &
-  # exists("company_all_cb")
 ) {
   rmarkdown::render(input = "pacta_data_qa.Rmd",
                     output_format = "html_document",
-                    output_file = paste0(results_path, "pacta_data_qa.html"),
-                    output_dir = paste0(results_path, "/"))
+                    output_file = "pacta_data_qa.html",
+                    output_dir = paste0(project_location,"/30_Processed_Inputs/"))
 } else {
   print("Could not find the required files to generate data QA html document in the project directory. Skipping!")
 }

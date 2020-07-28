@@ -8,7 +8,7 @@ output:
     fig_caption: yes
     theme: flatly
     toc: yes
-    toc_depth: 2
+    toc_depth: 3
     toc_float: yes
 ---
 
@@ -31,14 +31,36 @@ For the analysis to be run, the processed portfolio inputs as well as the compan
 
 ```{r}
 # read in if report has been run successfully, but data is not currently in the workspace
-total_portfolio <- paste0(project_location,"/30_Processed_Inputs/",project_name,"_total_portfolio.rda")
-bonds_company <- paste0(project_location,"/40_Results/Meta Investor/Bonds_results_company.rda")
-equity_company <- paste0(project_location,"/40_Results/Meta Investor/Equity_results_company.rda")
+# this is still very ugly, I will tidy it up asap
+if (
+  c("Bonds_results_company.rda") %in% list.files(results_path) &
+  c("Equity_results_company.rda") %in% list.files(results_path) &
+  c(paste0(project_name, "_total_portfolio.rda")) %in% list.files(paste0(proc_input_path, "/"))
+) {
+  result_data_qa <- readRDS(paste0(project_location,"/30_Processed_Inputs/",project_name,"_total_portfolio.rda"))
+  bonds_results_company <- readRDS(paste0(project_location,"/40_Results/Meta Investor/Bonds_results_company.rda"))
+  equity_results_company <- readRDS(paste0(project_location,"/40_Results/Meta Investor/Equity_results_company.rda"))
+} else if (
+  c("Bonds_results_company.rda") %in% list.files(results_path) &
+  c(paste0(project_name, "_total_portfolio.rda")) %in% list.files(paste0(proc_input_path, "/"))
+) {
+  result_data_qa <- readRDS(paste0(project_location,"/30_Processed_Inputs/",project_name,"_total_portfolio.rda"))
+  bonds_results_company <- readRDS(paste0(project_location,"/40_Results/Meta Investor/Bonds_results_company.rda"))
+} else if (
+  c("Equity_results_company.rda") %in% list.files(results_path) &
+  c(paste0(project_name, "_total_portfolio.rda")) %in% list.files(paste0(proc_input_path, "/"))
+) {
+  result_data_qa <- readRDS(paste0(project_location,"/30_Processed_Inputs/",project_name,"_total_portfolio.rda")) &
+  equity_results_company <- readRDS(paste0(project_location,"/40_Results/Meta Investor/Equity_results_company.rda"))
+} else {
+  print("Could not find the required files to generate data QA html document in the project directory. Skipping!")
+}
 
 
-result_data_qa <- readRDS(total_portfolio)
-bonds_results_company <- readRDS(bonds_company)
-equity_results_company <- readRDS(equity_company)
+# inconsisten directory with the check (Meta Investor sub dir)
+result_data_qa <- readRDS(paste0(project_location,"/30_Processed_Inputs/",project_name,"_total_portfolio.rda"))
+bonds_results_company <- readRDS(paste0(project_location,"/40_Results/Meta Investor/Bonds_results_company.rda"))
+equity_results_company <- readRDS(paste0(project_location,"/40_Results/Meta Investor/Equity_results_company.rda"))
 
 ```
 
@@ -162,8 +184,7 @@ currency_exchange_rate_overview <- result_data_qa %>%
   filter(investor_name != "Meta Investor") %>% 
   group_by(currency, exchange_rate_usd, has_currency) %>% 
   summarise(total_holdings_by_currency_exch = n(),
-            value_usd_by_currency_exch = round(sum(value_usd, na.rm = T))) %>% 
-            #sum_market_value = round(sum(market_value, na.rm = T))) %>% 
+            value_usd_by_currency_exch = round(sum(value_usd, na.rm = T))) %>%
   ungroup()
 datatable(currency_exchange_rate_overview, caption = "Aggregate value USD in grouped currencies, exchange rates and missing currency information")
 
@@ -279,6 +300,7 @@ One reason for this to happen can be an error in matching ALD ownership in DataS
 * other steps???
 
 ```{r}
+if (exists("equity_results_company")) {
 no_ALD_EQ <- result_data_qa %>% 
   filter(asset_type == "Equity" &
            has_asset_level_data == F &
@@ -311,7 +333,7 @@ no_ALD_EQ_detail <- result_data_qa %>%
     ) %>% 
   arrange(desc(share_total_value))
 datatable(no_ALD_EQ_detail, caption="Missing agg value due to lack of ALD information - Equity - company level")
-
+} else {print("No Equity data available!")}
 
 ```
 
@@ -327,6 +349,7 @@ Overview of Holdings in PACTA sectors for which no ALD could be matched. Removin
 * other steps???
 
 ```{r}
+if (exists("bonds_results_company")) {
 no_ALD_CB <- result_data_qa %>% 
   filter(asset_type == "Bonds" &
            has_asset_level_data == F &
@@ -358,7 +381,7 @@ no_ALD_CB_detail <- result_data_qa %>%
                      pull(sum_value_usd_by_asset)),6)) %>% 
   arrange(desc(share_total_value))
 datatable(no_ALD_CB_detail, caption="Missing agg value due to lack of ALD information - CBonds - company level")
-
+} else {print("No Bonds data available!")}
 
 ```
 
@@ -383,6 +406,7 @@ On the other hand, this can indicate a sector misclassification and, in such cas
 * ...?
 
 ```{r}
+if (exists("equity_results_company")) {
 non_pacta_ALD_EQ <- result_data_qa %>% 
   filter(asset_type == "Equity" &
            has_asset_level_data == T &
@@ -415,6 +439,7 @@ non_pacta_ALD_EQ_detail <- result_data_qa %>%
     ) %>% 
   arrange(desc(share_total_value))
 datatable(non_pacta_ALD_EQ_detail, caption="ALD information matched to Other sector - Equity - company level")
+} else {print("No Equity data available!")}
 
 ```
 
@@ -432,6 +457,7 @@ Overview of Holdings in non-PACTA sectors for which do find ALD. This could pote
 * ...?
 
 ```{r}
+if (exists("bonds_results_company")) {
 non_pacta_ALD_CB <- result_data_qa %>% 
   filter(asset_type == "Bonds" &
            has_asset_level_data ==  T &
@@ -464,7 +490,7 @@ non_pacta_ALD_CB_detail <- result_data_qa %>%
          ) %>% 
   arrange(desc(share_total_value))
 datatable(non_pacta_ALD_CB_detail, caption="ALD information matched to Other sector - CBonds - company level")
-
+} else {print("No Bonds data available!")}
 
 ```
 
@@ -567,9 +593,11 @@ We expect that this is the case, i.e. the difference in port_weight should be ne
 * anything more precise....?
 
 **OPEN:** NA.RM for max(port_weight) as well?
+
 ### Equity
 
 ```{r}
+if (exists("equity_results_company")) {
 port_weight_eq_input <- result_data_qa %>% 
   filter(investor_name == "Meta Investor" &
            portfolio_name == "Meta Portfolio" &
@@ -597,6 +625,7 @@ port_weight_eq_comp <- port_weight_eq_input %>%
   arrange(financial_sector, company_name) %>% 
   mutate(weight_diff = round((max_port_weight - weight_value_usd),5))
 datatable(port_weight_eq_comp)
+} else {print("No Equity data available!")}
 
 ```
 
