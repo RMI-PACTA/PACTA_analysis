@@ -67,7 +67,7 @@ Auto-Med&Heavy Duty Trks,BICS,Automotive
 Automobile ABS Other,BICS,Other
 Automobiles,ICB,Automotive
 Automobile Sequential,BICS,Other
-Automobiles Manufacturing,BICS,Other
+Automobiles Manufacturing,BICS,Automotive
 Automotive,BCLASS,Other
 Auto Parts,ICB,Other
 Auto Parts Manufacturing,BICS,Other
@@ -78,6 +78,7 @@ Auto-Truck Trailers,BICS,Other
 B2B/E-Commerce,BICS,Other
 Balanced,BICS,Other
 Banking,BCLASS,Other
+Banks,BICS,Other
 Banks,ICB,Other
 Batteries/Battery Sys,BICS,Other
 Beverages-Non-alcoholic,BICS,Other
@@ -85,6 +86,7 @@ Beverages-Wine/Spirits,BICS,Other
 Bicycle Manufacturing,BICS,Other
 Biofuels,BICS,Other
 Biotechnology,ICB,Other
+Biotechnology,BICS,Other
 Bldg Prod-Cement/Aggreg,BICS,Cement
 Bldg-Mobil Home/Mfd Hous,BICS,Other
 Bldg Prod-Air&Heating,BICS,Other
@@ -183,11 +185,13 @@ Consulting Services,BICS,Other
 Consumer Cyc Services,BCLASS,Other
 Consumer Electronics,ICB,Other
 Consumer Finance,ICB,Other
+Consumer Finance,BICS,Other
 Consumer Products,BICS,Other
 Consumer Products-Misc,BICS,Other
 Consumer Services,BICS,Other
 Containers-Metal/Glass,BICS,Other
 Containers & Packaging,ICB,Other
+Containers & Packaging,BICS,Other
 Containers-Paper/Plastic,BICS,Other
 Contrarian,BICS,Other
 Conventional 10 Yr,BCLASS,Other
@@ -318,6 +322,7 @@ Equity/Islamic,BICS,Other
 E-Services/Consulting,BICS,Other
 Event Driven-Merger Arbi,BICS,Other
 Exploration & Production,ICB,Oil&Gas
+Exploration & Production,BICS,Oil&Gas
 Explosives,BICS,Other
 Export/Import Bank,BICS,Other
 Extended Serv Contracts,BICS,Other
@@ -548,6 +553,7 @@ Life,BCLASS,Other
 Lifecare Retirement Centers,BCLASS,Other
 Life/Health Insurance,BICS,Other
 Life Insurance,ICB,Other
+Life Insurance,BICS,Other
 Lighting Products&Sys,BICS,Other
 Linen Supply&Rel Items,BICS,Other
 Local Authority,BCLASS,Other
@@ -708,6 +714,7 @@ Pfandbriefe Jumbo Oeffenliche,BCLASS,Other
 Pfandbriefe Traditional Hypotheken,BCLASS,Other
 Pfandbriefe Traditional Oeffenliche,BCLASS,Other
 Pharmaceuticals,ICB,Other
+Pharmaceuticals,BICS,Other
 Pharmacy Services,BICS,Other
 Photo Equipment&Supplies,BICS,Other
 Phys Practice Mgmnt,BICS,Other
@@ -729,6 +736,7 @@ Private Human Service Providers,BCLASS,Other
 Professional Sports,BICS,Other
 Property/Casualty Ins,BICS,Other
 Property & Casualty Insurance,ICB,Other
+Property & Casualty Insurance,BICS,Other
 Property Trust,BICS,Other
 Protection-Safety,BICS,Other
 PS Loan Non-Pfandbriefe,BCLASS,Other
@@ -873,6 +881,7 @@ Seismic Data Collection,BICS,Other
 Semicon Compo-Intg Circu,BICS,Other
 Semiconductor Equipment,BICS,Other
 Semiconductors,ICB,Other
+Semiconductors,BICS,Other
 Senior Housing Independent Living,BCLASS,Other
 Shipbuilding,BICS,Other
 Metal-Iron,BICS,Steel
