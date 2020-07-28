@@ -6,6 +6,7 @@ set_location <- function(){
     working_location <- getwd()
   }
   
+  working_location <- gsub("Â","",working_location)
   working_location <- paste0(working_location, "/")
   
   return(working_location)
@@ -72,7 +73,7 @@ set_global_parameters <- function(file_path){
   meta_investor_name <<- cfg$ComparisonBenchmarks$MetaInvestorName
   meta_portfolio_name <<- cfg$ComparisonBenchmarks$MetaPortfolioName
   
-   inc_meta_portfolio <<- cfg$ComparisonBenchmarks$CreateMetaPortfolio
+  #  inc_metaportfolio <<- cfg$ComparisonBenchmarks$CreateMetaPortfolio
   # if(is.null(inc_metaportfolio)){
   #   inc_metaportfolio <<- FALSE
   # }
@@ -100,28 +101,10 @@ set_global_parameters <- function(file_path){
     print("Warning: has_sb set to standard value (FALSE) as not defined in the parameter file")
   }
   
-  has_credit <<- cfg$Methodology$HasCC	
-  if(is.null(has_credit)){	
-    has_credit <<- FALSE	
-    print("Warning: has_credit set to standard value (FALSE) as not defined in the parameter file")	
-  }
-  
   has_revenue <<- cfg$Methodology$HasRevenue
   if(is.null(has_revenue)){
     has_revenue <<- TRUE
     print("Warning: has_revenue set to standard value (TRUE) as not defined in the parameter file")
-  }
-  
-  inc_emission_factors <<- cfg$Methodology$IncEmissionFactors
-  if(is.null(inc_emission_factors)){
-    inc_emission_factors <<- FALSE
-    print("Warning: inc_emission_factors set to standard value (inc_emission_factors) as not defined in the parameter file")
-  }
-  
-  file_format_list <<- tolower(cfg$data_output$file_type)
-  if(is.null(file_format_list)|length(file_format_list) == 0){	
-    file_format_list <<- c("rda")	
-    print("Warning: file_format_list set to standard value ('rda') as not defined in the parameter file")	
   }
   
 }
@@ -132,6 +115,8 @@ set_project_paths <- function(project_name, twodii_internal, project_location_ex
   project_location <<-  ifelse(twodii_internal,
                                path_dropbox_2dii("PortCheck_v2","10_Projects",project_name),
                                paste0(project_location_ext,"/", project_name))
+  
+  
   
   log_path <<- paste0(project_location,"/00_Log_Files")
   par_file_path <<- paste0(project_location,"/10_Parameter_File")
@@ -150,7 +135,7 @@ set_git_path <- function(){
     git_path <- getwd()
   }
   
-  git_path <- gsub("?","",git_path)
+  git_path <- gsub("Â","",git_path)
   git_path <- paste0(git_path, "/")
   
   git_path
@@ -166,7 +151,7 @@ set_analysis_inputs_path <- function(twodii_internal, data_location_ext, datapre
   }
   
   return(analysis_inputs_path)
-
+  
 }
 
 set_data_paths <- function(financial_timestamp = FINANCIAL.TIMESTAMP(), dataprep_timestamp = dataprep_timestamp, ald_timestamp = ALD.TIMESTAMP()){
@@ -209,23 +194,18 @@ create_project_folder <- function(project_name, twodii_internal, project_locatio
                              path_dropbox_2dii("PortCheck_v2","10_Projects",project_name), 
                              paste0(project_location_ext,"/", project_name))
   
-  # folder_location <- paste0(getwd(),"/", "sample_files/10_folder_structures/start_folders")
+  folder_location <- paste0(getwd(),"/", "sample_files/10_folder_structures/start_folders")
   
-  project_folders <- c("00_Log_Files", 
-                       "10_Parameter_File",
-                       "20_Raw_Inputs",
-                       "30_Processed_Inputs",
-                       "40_Results",
-                       "50_Outputs")
-  
-  project_folders <- paste0(project_location, "/",project_folders)
   
   # Create the new project folder
   if (dir.exists(project_location)){
     print("Project Folder Already Exists")
   } else {
     dir.create(project_location)
-    lapply(project_folders, function(x) dir.create(x))
+    a <- list.dirs(folder_location)
+    b <- basename(a)[-1]
+    c <- paste0(project_location,"/",b)
+    lapply(c, function(x) dir.create(x))
   }
   
 }
@@ -302,17 +282,4 @@ data_check <- function(df){
 is_blank_na <- function(x){
   if(is.na(x) | x == ""){flag = TRUE}else{flag = FALSE}
   flag
-}
-
-
-# checks validity of project config
-check_valid_cfg <- function(cfg){
-  stopifnot(exists("cfg")  == T)
-  stopifnot(cfg %>% class() == "list")
-  stopifnot(cfg %>% length() == 2)
-  
-  stopifnot(cfg$project_name %>% is.character() == T)
-  stopifnot(cfg$project_internal$twodii_internal %>% is.logical() == T)
-  
-  invisible(cfg)
 }

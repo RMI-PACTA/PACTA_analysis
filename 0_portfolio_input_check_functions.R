@@ -42,7 +42,7 @@ clean_colnames_portfolio_input_file <- function(portfolio){
   
   if("numberof_shares" %in% colnames(portfolio)){portfolio<- portfolio %>% rename(number_of_shares = numberof_shares)}
   
-  
+  # colnames(portfolio) <- gsub("?..","",colnames(portfolio))
   
   # names(portfolio)[1] <- gsub("[^A-Za-z0-9]", "", names(portfolio)[1])
   
@@ -56,9 +56,7 @@ clean_portfolio_col_types <- function(portfolio, grouping_variables){
   
   # portfolio$investor_name <- clean_punctuation(portfolio$investor_name)
   # portfolio$portfolio_name <- clean_punctuation(portfolio$portfolio_name)
-  
-  
-  # portfolio$number_of_shares <- as.numeric(portfolio$number_of_shares)
+  portfolio$number_of_shares <- as.numeric(portfolio$number_of_shares)
   portfolio$market_value <- as.numeric(portfolio$market_value)
   portfolio$currency <- as.character(portfolio$currency)
   
@@ -124,9 +122,9 @@ add_meta_portfolio <- function(portfolio, inc_meta_portfolio){
   # }
   
   if(inc_meta_portfolio){
-    # portfolio_meta$portfolio_name <- portfolio_meta$investor_name
-    # portfolio <- rbind(portfolio,portfolio_meta)
-    # # }
+    portfolio_meta$portfolio_name <- portfolio_meta$investor_name
+    portfolio <- rbind(portfolio,portfolio_meta)
+    # }
     # 
     # if (inc_proj_metaportfolio){
     portfolio_meta$portfolio_name <- meta_portfolio_name
@@ -151,13 +149,11 @@ check_missing_cols <- function(portfolio, grouping_variables){
   
   required_input_cols <- c("holding_id", "market_value","currency","isin",grouping_variables, "number_of_shares")
   
-  if(!"number_of_shares" %in% colnames(portfolio)){portfolio$number_of_shares <- NA}
-  
-  
   missing_columns <-setdiff(required_input_cols,colnames(portfolio))
   
   if(length(missing_columns) > 0){
-    stop(paste0("The input file is missing the following data columns: ", missing_columns))
+    addMessageToLogFile("Error",paste0("The input file is missing the following data columns: ", missing_columns))
+    error_count <- error_count + 1
   }
   
   portfolio <- as_tibble(portfolio)
@@ -182,13 +178,12 @@ set_currency_timestamp <- function(currencies){
 }
 
 ### Fin data cleaning functions
-map_security_sectors <- function(fin_data, sector_bridge){
+map_sectors <- function(fin_data, sector_bridge){
   
   initial_no_rows = nrow(fin_data)
   
   fin_data <- fin_data %>% left_join(sector_bridge %>% filter(source == "BICS") %>% select(-source), 
-                                     by = c("security_bics_subgroup" = "industry_classification")) %>% 
-    mutate(security_icb_subsector = as.character(security_icb_subsector))
+                                     by = c("security_bics_subgroup" = "industry_classification"))
   
   fin_data_na <- fin_data %>% filter(is.na(sector)) %>% select(-sector)
   
@@ -204,37 +199,15 @@ map_security_sectors <- function(fin_data, sector_bridge){
   fin_data %>% group_by(security_mapped_sector) %>% filter(is.na(security_mapped_sector)) %>% summarise(count = n())
   fin_data_na <- fin_data %>% filter(is.na(security_mapped_sector))
   
+  # # deal with the issue of too many oil and gas exposure
+  # og <- fin_data %>% filter(sector == "Oil&Gas")
+  # 
+  # fd <- fin_data %>% left_join(comp_fin_data %>% select(company_id,has_asset_level_data, sectors_with_assets), by = "company_id")
+  # cs <- fd %>% select(company_name,sector, has_asset_level_data, sectors_with_assets, security_icb_subsector, security_bics_subgroup)
+  # 
   if(nrow(fin_data) != initial_no_rows){stop("Rows being dropped in mapping sectors")}
   
   return(fin_data)
-  
-}
-
-map_comp_sectors <- function(comp_fin_data, sector_bridge){
-  
-  initial_no_rows = nrow(comp_fin_data)
-  
-  comp_fin_data <- comp_fin_data %>% left_join(sector_bridge %>% filter(source == "BICS") %>% select(-source), 
-                                               by = c("bics_subgroup" = "industry_classification"))
-  
-  comp_fin_data_na <- comp_fin_data %>% filter(is.na(sector)) %>% select(-sector)
-  
-  comp_fin_data <- comp_fin_data %>% filter(!is.na(sector))
-  
-  comp_fin_data_na <- comp_fin_data_na %>% left_join(sector_bridge %>% filter(source == "ICB")%>% select(-source), 
-                                                     by = c("icb_subgroup" = "industry_classification"))
-  
-  comp_fin_data <- comp_fin_data %>% bind_rows(comp_fin_data_na)
-  
-  comp_fin_data <- comp_fin_data %>% select(-mapped_sector) %>% rename(mapped_sector = sector)
-  
-  comp_fin_data %>% group_by(mapped_sector) %>% filter(is.na(mapped_sector)) %>% summarise(count = n())
-  
-  comp_fin_data_na <- comp_fin_data %>% filter(is.na(mapped_sector))
-  
-  if(nrow(comp_fin_data) != initial_no_rows){stop("Rows being dropped in mapping sectors")}
-  
-  return(comp_fin_data)
   
 }
 
@@ -349,7 +322,6 @@ check_fin_mapped_sectors <- function(fin_data){
   fin_data <- fin_data %>%
     mutate(security_mapped_sector = case_when(security_mapped_sector == "Others" ~ "Other",
                                               security_mapped_sector == "OIl&Gas" ~ "Oil&Gas",
-                                              is.na(security_mapped_sector) ~ "Other",
                                               TRUE ~ security_mapped_sector))
   
   actual_sectors <- unique(fin_data$security_mapped_sector)
@@ -364,12 +336,10 @@ check_fin_mapped_sectors <- function(fin_data){
 
 convert_corporate_bonds <- function(fin_data){
   
-  cb_groups <- c("Convertible Bonds", "Corporate Bonds", "Corporate inflation linked Bonds","Convertible Preferreds" )
+  cb_groups <-c("Convertible bonds","Corporate Bonds", "Corporate inflation linked Bonds")
   
   fin_data <- fin_data %>%
-    mutate(asset_type = if_else(security_type %in% cb_groups,"Bonds",asset_type),
-           asset_type = if_else(!security_type %in% cb_groups & asset_type == "Bonds","Others",asset_type),
-    )
+    mutate(asset_type = if_else(security_type == cb_groups,"Bonds",asset_type))
   
   fin_data
 }
@@ -439,7 +409,6 @@ normalise_fund_data <- function(fund_data){
 }
 
 ### Portfolio Check Functions
-
 convert_currencies <- function(portfolio, currencies){
   
   portfolio <- left_join(portfolio, currencies, by = "currency")
@@ -577,6 +546,7 @@ check_funds_wo_bbg <- function(fund_data, fin_data){
   
 }
 
+
 ###
 
 # Add Columns for missing or incorrect information
@@ -629,9 +599,9 @@ check_bloomberg_data <- function(portfolio_total){
   
   portfolio_total <- portfolio_total %>%
     mutate(has_bbg_data = case_when(
-      (asset_type == "Equity" | asset_type == "Unclassifiable") & (is.na(bloomberg_id) | bloomberg_id == "") ~ FALSE,
-      (asset_type == "Bonds" | asset_type == "Unclassifiable") & (is.na(corporate_bond_ticker) | corporate_bond_ticker == "") ~ FALSE,
-      (asset_type == ""  | asset_type == "Unclassifiable") ~ FALSE,
+      asset_type == "Equity" & (is.na(bloomberg_id) | bloomberg_id == "" | is.na(security_mapped_sector) | security_mapped_sector == "") ~ FALSE,
+      asset_type == "Bonds" & (is.na(corporate_bond_ticker) | corporate_bond_ticker == "" | is.na(security_mapped_sector) | security_mapped_sector == "") ~ FALSE,
+      asset_type == "" ~ FALSE,
       is.na(asset_type) ~ FALSE,
       TRUE ~ TRUE)
     )
@@ -671,56 +641,30 @@ overall_validity_flag <- function(portfolio_total){
   
   portfolio_total
   
-}
-
-create_ald_flag <- function(portfolio, comp_fin_data, debt_fin_data){
-  
-  portfolio_eq <- portfolio %>% filter(asset_type == "Equity")
-  portfolio_cb <- portfolio %>% filter(asset_type == "Bonds")
-  portfolio_other <- portfolio %>% filter(!asset_type %in% c("Equity", "Bonds"))
-  
-  portfolio_eq <- check_for_ald(portfolio_eq, "Equity", comp_fin_data)  
-  portfolio_cb <- check_for_ald(portfolio_cb, "Bonds", debt_fin_data)  
-  
-  if (data_check(portfolio_other)){
-    portfolio_other <- portfolio_other %>% mutate(has_asset_level_data = NA,
-                                                  sectors_with_assets = NA,
-                                                  has_ald_in_fin_sector = NA)
-  }else{
-    portfolio_other <- portfolio_other %>% add_column("has_asset_level_data","sectors_with_assets","has_ald_in_fin_sector")
-    
-  }
-  
-  portfolio <- rbind(portfolio_eq, portfolio_cb, portfolio_other)
   
 }
 
-
-check_for_ald <- function(portfolio_subset, portfolio_type, relevant_fin_data){
+check_for_ald <- function(portfolio_subset, comp_fin_data){
   
-  if (data_check(portfolio_subset)){
-    initial_port_value = sum(portfolio_subset$value_usd, na.rm = T)
-    
-    if(portfolio_type == "Equity"){joining_id = "company_id"}else if(portfolio_type == "Bonds"){joining_id = "corporate_bond_ticker"}
-    
-    ald_markers <- relevant_fin_data %>% 
-      select(all_of(joining_id), has_asset_level_data, sectors_with_assets) %>% 
-      distinct()
-    
-    portfolio_subset <- left_join(portfolio_subset, ald_markers, by = joining_id)
-    
-    portfolio_subset <- portfolio_subset %>% 
-      rowwise() %>% 
-      mutate(has_ald_in_fin_sector = if_else(grepl(financial_sector, sectors_with_assets),TRUE,FALSE)) %>% 
-      ungroup()
-    
-    if(sum(portfolio_subset$value_usd, na.rm = T) != initial_port_value){stop("Merge over company id changes portfolio value")}
-    
-  }else{
-    
-    portfolio_subset <- portfolio_subset %>% add_column("has_asset_level_data","sectors_with_assets","has_ald_in_fin_sector")
-    
-  }
+  initial_port_value = sum(portfolio_subset$value_usd, na.rm = T)
+  
+  ald_markers <- comp_fin_data %>% 
+    select(company_id, has_asset_level_data, sectors_with_assets) %>% 
+    distinct()
+  
+  portfolio_subset <- left_join(portfolio_subset, ald_markers, by = "company_id")
+  
+  # portfolio_subset <- portfolio_subset %>% 
+  #   rowwise() %>% 
+  #   mutate(has_ald_in_fin_sector = if_else(grepl(security_mapped_sector, sectors_with_assets),TRUE,FALSE))
+  
+  portfolio_subset <- portfolio_subset %>% 
+    rowwise() %>% 
+    mutate(has_ald_in_fin_sector = if_else(grepl(financial_sector, sectors_with_assets),TRUE,FALSE))
+  
+  
+  if(sum(portfolio_subset$value_usd, na.rm = T) != initial_port_value){stop("Merge over company idea changes portfolio value")}
+  
   return(portfolio_subset)
   
 }
@@ -790,20 +734,19 @@ create_id_columns <- function(portfolio, portfolio_type){
     
     portfolio <- portfolio %>% 
       rename(id = bloomberg_id) %>% 
-      mutate(id_name = "bloomberg_id",
-             id = as.character(id))
+      mutate(id_name = "bloomberg_id")
   }
   if(portfolio_type == "Bonds"){
     
     portfolio <- portfolio %>% 
       rename(id = corporate_bond_ticker) %>% 
-      mutate(id_name = "corporate_bond_ticker",
-             id = as.character(id))
+      mutate(id_name = "corporate_bond_ticker")
   }
   
   return(portfolio)
   
 }
+
 
 # FINAL SCRIPTS
 get_and_clean_currency_data <- function(){
@@ -818,45 +761,29 @@ get_and_clean_currency_data <- function(){
 
 get_and_clean_fund_data <- function(){
   
-  fund_data <- NA
   # Fund Data
-  if(file.exists(paste0(analysis_inputs_path,"/fund_data_",financial_timestamp,".rda"))){
-    fund_data <- readRDS(paste0(analysis_inputs_path,"/fund_data_",financial_timestamp,".rda"))
-  }else if(file.exists(paste0(analysis_inputs_path,"/fund_data_2018Q4.rda"))){
-    fund_data <- readRDS(paste0(analysis_inputs_path,"/fund_data_2018Q4.rda"))
-    print("Old Fund Data being used. Replace FundsData2018Q4 or check name of file.")
-  }else if(file.exists(paste0(analysis_inputs_path, "/SFC_26052020_funds.csv"))){
-    fund_data <- read_csv(paste0(analysis_inputs_path, "/SFC_26052020_funds.csv"))
-    print("2020Q2 SFC fund data being used")
+  if(file.exists(paste0(analysis_inputs_path,"/FundsData",financial_timestamp,".rda"))){
+    fund_data <- readRDS(paste0(analysis_inputs_path,"/FundsData",financial_timestamp,".rda"))
   }else{
-    if(!data_check(fund_data)){
-      warning("No fund data available")}
+    fund_data <- readRDS(paste0(analysis_inputs_path,"/FundsData2018Q4.rda"))
+    print("Old Fund Data being used. Replace FundsData2018Q4")
   }
   
+  fund_data <- fund_data %>% janitor::clean_names()
   
-  if (data_check(fund_data)){
-    
-    fund_data <- fund_data %>% janitor::clean_names()
-    
-    fund_data <- fund_data %>% filter(!is.na(holding_isin) & holding_isin != "")
-    
-    fund_data <- normalise_fund_data(fund_data)
-    
-  }
+  fund_data <- fund_data %>% filter(!is.na(holding_isin) & holding_isin != "")
+  
+  fund_data <- normalise_fund_data(fund_data)
+  
+  
   return(fund_data)
 }
 
-get_and_clean_fin_data <- function(fund_data){
+get_and_clean_fin_data <- function(){
   
   # Financial Data
-  fin_data_raw <- read_rds(paste0(analysis_inputs_path,"/security_financial_data.rda")) %>% as_tibble()
+  fin_data_raw <- read_rds(paste0(analysis_inputs_path,"/security_financial_data.rda"))
   # col_types = "ddcccccccccccccccDddddddddddddddddc")
-  
-  # remove unclear duplicates from raw financial data. This should be moved to DataStore.
-  rm_duplicates <- read_csv("non_distinct_isins.csv")
-  rm_duplicates <- rm_duplicates %>% distinct(isin) %>% pull(isin)
-  fin_data_raw <- fin_data_raw %>%
-    filter(!(isin %in% rm_duplicates))
 
   if(!unique(fin_data_raw$financial_timestamp) == financial_timestamp){print("Financial timestamp not equal")}
   
@@ -869,7 +796,7 @@ get_and_clean_fin_data <- function(fund_data){
   
   fin_data <- fin_data %>% filter(!is.na(isin))
   
-  fin_data <- map_security_sectors(fin_data, sector_bridge)
+  fin_data <- map_sectors(fin_data, sector_bridge)
   
   # Adds in the manual sector classification overrides
   fin_data <- override_sector_classification(fin_data, overrides)
@@ -893,8 +820,6 @@ get_and_clean_fin_data <- function(fund_data){
   # Checks to ensure all finds are classified as such
   fin_data <- classify_all_funds(fin_data)
   
-  # fin_data <- add_bics_sector(fin_data)
-  
   # Select relevant columns
   fin_data <- fin_data %>%
     select(
@@ -907,85 +832,52 @@ get_and_clean_fin_data <- function(fund_data){
       maturity_date, coupon_value, amount_issued, current_shares_outstanding_all_classes, unit_share_price,
       sector_override,
       is_sb
-    ) %>% 
-    mutate(unit_share_price = round(unit_share_price, 6),
-           exchange_rate_usd = round(exchange_rate_usd, 7)) %>% 
-    distinct()
+    )
   
   ### TEST
   if (nrow(fin_data) > nrow(fin_data_raw)){stop("Additional rows added to fin data")}
   
   # updates csv file with missing bloomberg data re funds
-  if(data_check(fund_data))  check_funds_wo_bbg(fund_data,fin_data)
+  check_funds_wo_bbg(fund_data,fin_data)
   
   return(fin_data)
   
 }
 
-add_bics_sector <- function(fin_data){
-  
-  bics_bridge <- read_csv("data/bics_bridge.csv")
-  
-  fin_data_ <- left_join(fin_data, bics_bridge, by = c("security_bics_subgroup" = "bics_subsector"))
-  
-  
-}
-
 get_and_clean_revenue_data <- function(){
   
-  revenue_data <- data.frame()
+  revenue_data <- read_rds(paste0(analysis_inputs_path, "/revenue_data_member_ticker.rda"))
+  # col_types = "dcdcclcd")
   
-  if(has_revenue){
-    revenue_data <- read_rds(paste0(analysis_inputs_path, "/revenue_data_member_ticker.rda"))
-    # col_types = "dcdcclcd")
-    
-    revenue_data <- revenue_data %>% 
-      filter(tot_rev > 0) %>% 
-      rename(revenue_sector = sector) %>% 
-      ungroup()
-  }
+  revenue_data <- revenue_data %>% 
+    filter(tot_rev > 0) %>% 
+    rename(revenue_sector = sector)
   
   return(revenue_data)
 }
 
 get_and_clean_company_fin_data <- function(){
   
-  comp_fin_data_raw <- read_rds(paste0(analysis_inputs_path,"/consolidated_financial_data.rda"))
-  
-  comp_fin_data_raw <- comp_fin_data_raw %>% select(
-    company_id, company_name, bloomberg_id, country_of_domicile, corporate_bond_ticker, bics_sector, bics_subgroup,
-    icb_subgroup, mapped_sector, has_asset_level_data, has_assets_in_matched_sector, sectors_with_assets, 
-    current_shares_outstanding_all_classes, company_status, bond_debt_out,
-    financial_timestamp
-  )
-  
-  sector_bridge <- read_csv("data/sector_bridge.csv", col_types = "ccc")
-  
-  comp_fin_data <- map_comp_sectors(comp_fin_data_raw, sector_bridge)
+  comp_fin_data <- read_rds(paste0(analysis_inputs_path,"/consolidated_financial_data.rda"))
+  # col_types = "ddcccccdddddclccccdccccllclddddddddddddc")
   
   return(comp_fin_data)
   
 }
 
-get_and_clean_debt_fin_data <- function(){
+read_and_process_portfolio <- function(project_name,
+                                       fin_data,
+                                       fund_data,
+                                       currencies, 
+                                       grouping_variables){
   
-  debt_fin_data_raw <- read_rds(paste0(analysis_inputs_path, "/debt_financial_data.rda"))
+  portfolio <- read_raw_portfolio_file(project_name)
   
-  return(debt_fin_data_raw)
-  
-}
-
-process_raw_portfolio <- function(portfolio_raw,
-                                  fin_data,
-                                  fund_data,
-                                  currencies, 
-                                  grouping_variables){
-  
-  portfolio <- clean_colnames_portfolio_input_file(portfolio_raw)
+  portfolio <- clean_colnames_portfolio_input_file(portfolio)
   
   portfolio <- clear_portfolio_input_blanks(portfolio)
   
-  portfolio <- add_meta_portfolio(portfolio, inc_meta_portfolio)
+  portfolio <- add_meta_portfolio(portfolio, inc_metaportfolio())
   
   start_port_rows = nrow(portfolio)
   
@@ -1016,23 +908,14 @@ process_raw_portfolio <- function(portfolio_raw,
   # identify funds in the portfolio
   fund_portfolio <- identify_fund_portfolio(portfolio)
   
-  if(data_check(fund_data)){
-    # Creates the fund_portfolio to match the original portfolio
-    fund_portfolio <- calculate_fund_portfolio(fund_portfolio, fund_data, cols_portfolio, cols_of_funds)
-    
-    # Merges in the bbg data to the fund portfolio
-    fund_portfolio <- add_fin_data(fund_portfolio, fin_data)
-    
-    # add fund_portfolio and check that the total value is the same
-    portfolio_total <- add_fund_portfolio(portfolio, fund_portfolio, cols_of_funds)
-  } else{
-    
-    portfolio_total <- as_tibble(portfolio)
-    portfolio_total$direct_holding <- TRUE
-    
-  }
+  # Creates the fund_portfolio to match the original portfolio
+  fund_portfolio <- calculate_fund_portfolio(fund_portfolio, fund_data, cols_portfolio, cols_of_funds)
   
-  portfolio_total <- clean_unmatched_holdings(portfolio_total)
+  # Merges in the bbg data to the fund portfolio
+  fund_portfolio <- add_fin_data(fund_portfolio, fin_data)
+  
+  # add fund_portfolio and check that the total value is the same
+  portfolio_total <- add_fund_portfolio(portfolio, fund_portfolio, cols_of_funds)
   
   if(round(sum(portfolio_total$value_usd, na.rm = T),1) != round(original_value_usd,1)){stop("Fund Portfolio introducing errors in total value")}
   
@@ -1086,23 +969,18 @@ portfolio_summary <- function(portfolio_total){
   
 }
 
-create_merged_portfolio <- function(eq_portfolio, cb_portfolio){
-  
-  portfolio_ <- rbind(eq_portfolio, cb_portfolio)
-  
-  portfolio_ <- portfolio_ %>% filter(!is.na(investor_name))
-  
-  if(!data_check(portfolio_)){warning("No portfolio data")}
-  
-  return(portfolio_)
-  
-}
-
-create_portfolio_subset <- function(portfolio, portfolio_type, relevant_fin_data){
+create_portfolio_subset <- function(portfolio, portfolio_type, comp_fin_data){
   
   if(portfolio_type %in% unique(portfolio$asset_type)){
-    
-    portfolio_subset <- portfolio %>% filter(asset_type == portfolio_type)
+    if (portfolio_type == "Bonds"){
+      portfolio_subset <- portfolio %>% filter(asset_type == portfolio_type) %>% 
+        filter(security_type %in% c("Convertible bonds","Corporate Bonds", "Corporate inflation linked Bonds"))
+    } else{
+      portfolio_subset <- portfolio %>% filter(asset_type == portfolio_type)
+    }
+  
+    portfolio_subset <- check_for_ald(portfolio_subset, 
+                                      comp_fin_data) 
     
     portfolio_subset <- create_id_columns(portfolio_subset, portfolio_type)
     
@@ -1127,8 +1005,7 @@ create_audit_chart <- function(audit_file, proc_input_path){
   
   ## GRAPH VALUES
   base_size <- 12
-  #base_family <- "Clear Sans"
-  base_family <- "Arial"
+  base_family <- "Clear Sans"
   font_color <- "#3D3D3C"
   
   #flag.Numbers.Colors <- brewer.pal(n = 8, name = "RdBu")
@@ -1197,18 +1074,14 @@ create_audit_chart <- function(audit_file, proc_input_path){
   
 }
 
-create_audit_file <- function(portfolio_total){
+create_audit_file <- function(portfolio_total, comp_fin_data){
   
-  # portfolio_total <- left_join(portfolio_total, comp_fin_data %>% select(company_id, sectors_with_assets, bics_sector), by = "company_id")
-  # 
-  # portfolio_total <- portfolio_total %>% rowwise() %>% 	
-  #   mutate(has_assets = ifelse(is.na(sectors_with_assets), TRUE, FALSE),	
-  #          has_assets_in_fin_sector = grepl(pattern = financial_sector, x = sectors_with_assets)	
-  #   )
+  portfolio_total <- left_join(portfolio_total, comp_fin_data %>% select(company_id, sectors_with_assets), by = "company_id")
+  portfolio_total <- portfolio_total %>% rowwise() %>% mutate(has_assets_in_fin_sector = grepl(pattern = financial_sector, x = sectors_with_assets))
   
   audit_file <- portfolio_total %>% 
-    select(all_of(grouping_variables), holding_id, isin, value_usd, company_name, asset_type,  has_revenue_data, valid_input, 
-           direct_holding, bics_sector, financial_sector, sectors_with_assets, has_ald_in_fin_sector,flag)
+    select(all_of(grouping_variables), holding_id, isin, value_usd, company_name, asset_type, has_revenue_data,
+           financial_sector, sectors_with_assets, has_assets_in_fin_sector,flag)
   
   if(has_revenue == FALSE){audit_file <- audit_file %>% select(-has_revenue_data)}
   
@@ -1216,285 +1089,3 @@ create_audit_file <- function(portfolio_total){
   
 }
 
-clean_unmatched_holdings <- function(portfolio){
-  
-  port_na <- portfolio %>% filter(is.na(security_mapped_sector))
-  
-  portfolio <- portfolio %>% filter(!is.na(security_mapped_sector))
-  
-  if(data_check(port_na)){
-    
-    port_na <- port_na %>%
-      mutate(asset_type = "Unclassifiable",
-             security_mapped_sector = "Unclassifiable")
-    portfolio <- rbind(portfolio, port_na)
-    
-  }
-  
-  return(portfolio)
-  
-}
-
-### Emissions work 
-
-get_average_emission_data <- function(inc_emission_factors){
-  
-  average_sector_intensity <- data.frame()
-  
-  if(inc_emission_factors){
-    
-    average_sector_intensity <- readRDS(paste0(analysis_inputs_path,"average_sector_intensity.rda"))
-  }
-  return(average_sector_intensity)
-}
-
-get_company_emission_data <- function(inc_emission_factors){
-  
-  company_emissions <- data.frame()
-  
-  if(inc_emission_factors){
-    
-    company_emissions <- readRDS(paste0(analysis_inputs_path,"company_emissions.rda"))
-  }
-  return(company_emissions)
-}
-
-prepare_portfolio_emissions <- function(
-  audit_file,
-  fin_data,
-  comp_fin_data,
-  average_sector_intensity,
-  company_emissions
-) {
-  
-  
-  audit_file <- audit_file %>% 
-    janitor::clean_names(case = "snake")
-  
-  # prepare sector view 
-  company_bics_sector <- comp_fin_data %>% 
-    distinct(
-      company_id, 
-      bics_sector,
-      bics_subgroup,
-      mapped_sector
-    ) %>% 
-    filter(!is.na(company_id))
-  
-  # create audit view 
-  audit_file_view <- audit_file %>% 
-    distinct(
-      holding_id,
-      portfolio_name, 
-      investor_name,
-      isin,
-      value_usd
-    )
-  
-  # connect audit to company ids 
-  audit_file_view <- fin_data %>% 
-    distinct(
-      isin, 
-      company_id,
-      company_name,
-      asset_type
-    ) %>% 
-    inner_join(
-      audit_file_view, 
-      by = "isin"
-    )
-  
-  # connect to consolidated financial data 
-  audit_file_view <- comp_fin_data %>% 
-    distinct(
-      company_id, 
-      market_cap,
-      bond_debt_out
-    ) %>% 
-    inner_join(
-      audit_file_view, 
-      by = "company_id"
-    )
-  
-  # first try connecting at the company level 
-  audit_company_emissions <- audit_file_view %>% 
-    inner_join(
-      company_emissions,
-      # consolidated_company_emissions, 
-      by = c(
-        "company_id",
-        "company_name"
-      )
-    )
-  
-  # specify source
-  audit_company_emissions <- audit_company_emissions %>% 
-    mutate(estimation_source = "Company data")
-  
-  # fix sectors 
-  # audit_company_emissions <- audit_company_emissions %>% 
-  #   mutate(ald_sector = ifelse(ald_sector %in% c("Cement", "Steel"), "Cement&Steel", ald_sector))
-  # 
-  # save output 
-  # save(
-  #   audit_company_emissions,
-  #   file = path(here(), "EF", "Output", "sample_audit_company_emissions", ext = "rda")
-  # )
-  
-  # create clean view 
-  audit_company_emissions <- audit_company_emissions %>% 
-    distinct(
-      investor_name,
-      portfolio_name, 
-      holding_id,
-      isin,
-      value_usd,
-      company_id,
-      company_name,
-      asset_type,
-      ald_sector,
-      bics_sector, 
-      bics_subgroup, 
-      mapped_sector,
-      emissions, 
-      estimation_source
-    )
-  
-  # then try connecting at the sector level 
-  audit_file_sector <- audit_file_view %>% 
-    anti_join(
-      audit_company_emissions, 
-      by = "company_id"
-    )
-  
-  audit_file_sector <- audit_file_sector %>% 
-    inner_join(
-      company_bics_sector, 
-      by = "company_id"
-    )
-  
-  audit_sector_emissions <- audit_file_sector %>% 
-    inner_join(
-      average_sector_intensity, 
-      by = c(
-        "bics_sector",  
-        "asset_type"
-      )
-    )
-  
-  # calculate absolute emissions 
-  audit_sector_emissions <- audit_sector_emissions %>% 
-    mutate(
-      emissions = case_when(
-        asset_type == "Bonds" ~ bond_debt_out * mean_intensity,
-        asset_type == "Equity" ~ market_cap * mean_intensity
-      )
-    )
-  
-  # flagging issues 
-  audit_sector_emissions <- audit_sector_emissions %>% 
-    mutate(
-      issue = case_when(
-        is.na(bond_debt_out) & asset_type == "Bonds" ~ "Missing debt outstanding",
-        is.na(market_cap)  & asset_type == "Equity" ~ "Missing market capitilization"
-      )
-    )
-  
-  # specify source
-  audit_sector_emissions <- audit_sector_emissions %>% 
-    mutate(estimation_source = "Sector average")
-  
-  # create clean view 
-  audit_sector_emissions <- audit_sector_emissions %>% 
-    distinct(
-      investor_name,
-      portfolio_name, 
-      holding_id,
-      isin,
-      value_usd,
-      company_id,
-      company_name,
-      asset_type,
-      bics_sector, 
-      bics_subgroup, 
-      mapped_sector,
-      emissions,
-      estimation_source,
-      issue
-    )
-  
-  # joining both sources together 
-  bind_rows(
-    audit_sector_emissions,
-    audit_company_emissions
-  )
-}
-
-calculate_portfolio_emissions <- function(
-  inc_emission_factors,
-  audit_file,
-  fin_data,
-  comp_fin_data,  
-  average_sector_intensity,
-  company_emissions
-) {
-  
-  audit_sector_emissions <- data.frame()
-  
-  if(inc_emission_factors){
-    
-    audit_emissions <- prepare_portfolio_emissions(
-      audit_file,
-      fin_data, 
-      comp_fin_data, 
-      average_sector_intensity,
-      company_emissions
-    )
-    
-    # calculate holding weight 
-    audit_emissions <- audit_emissions %>% 
-      group_by(
-        portfolio_name,
-        investor_name
-      ) %>% 
-      mutate(weighting = value_usd / sum(value_usd, na.rm = TRUE))
-    
-    # weight emissions by holding weight 
-    audit_emissions <- audit_emissions %>% 
-      mutate(weighted_emissions = weighting * emissions)
-    
-    
-    audit_emissions <- add_other_to_sector_classifications(audit_emissions)
-    
-    # sum weighted emissions 
-    audit_sector_emissions <- audit_emissions %>% 
-      group_by(
-        portfolio_name, 
-        investor_name, 
-        asset_type,
-        sector
-      ) %>% 
-      summarise(
-        value_usd = sum(value_usd, na.rm = TRUE),
-        weighted_sector_emissions = sum(weighted_emissions, na.rm = TRUE)
-      )
-  }
-  
-  audit_sector_emissions
-}
-
-add_other_to_sector_classifications <- function(audit){
-  # fix sector classifications 
-  audit <- audit %>% 
-    mutate(ald_sector = ifelse(mapped_sector != "Other" & is.na(ald_sector), mapped_sector, ald_sector))
-  
-  # create final sector grouping 
-  audit <- audit %>% 
-    mutate(sector = ifelse(!is.na(ald_sector), ald_sector, bics_sector))
-  
-  # modify sector names 
-  audit <- audit %>% 
-    mutate(sector = ifelse(sector %in% c("Industrials", "Energy", "Utilities", "Materials"), paste0("Other ", sector), sector))
-  
-  audit
-}
