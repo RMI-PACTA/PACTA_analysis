@@ -29,17 +29,27 @@ source("0_graphing_functions.R")
 source("0_reporting_functions.R")
 source("0_portfolio_input_check_functions.R")
 source("0_global_functions.R")
+source("0_sda_approach.R")
 
-project_name <- "SFC_2019"
-twodii_internal <- TRUE
-# TRUE or FALSE: TRUE means that the code is running on a 2dii laptop with dropbox connection
 
-#####################################################################
-###ONLY FOR EXTERNAL PROJECTS (twodii_internal <- FALSE):
-# Variables must exist for internal projects
-project_location_ext <- "C:/Users/jacks/Desktop/SFC_2019"
-data_location_ext <- "C:/Users/jacks/Desktop/SFC_2019/Inputs"
-#####################################################################
+# Set Project Settings
+
+# within the "project_setting.yml" config file, set the project_name, the twodii_internal switch,
+# and the external data locations, if necessary.
+# the project_name will determine the name of the folder that is created for this project
+# Set twodii_internal to TRUE to run the analysis on an internal 2dii laptop
+# This setting uses the dropbox connection for data import
+# Set twodii_internal to FALSE, tu use external data locations
+# Specify these data locations in the config file "project_settings.yml" in the repo
+
+cfg <- config::get(file = "project_settings.yml")
+
+check_valid_cfg(cfg)
+
+project_name <- cfg$project_name
+twodii_internal <- cfg$project_internal$twodii_interna
+project_location_ext <- cfg$project_internal$project_location_ext
+data_location_ext <- cfg$project_internal$data_location_ext
 
 create_project_folder(project_name, twodii_internal, project_location_ext)
 
