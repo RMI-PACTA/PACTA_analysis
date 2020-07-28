@@ -1,6 +1,6 @@
 default:
     paths:
-        project_location_ext: /bound/web_folders/
+        project_location_ext: /bound/
         data_location_ext: /pacta-data/2019Q4/
         template_location: /create_interactive_report/
     parameters:

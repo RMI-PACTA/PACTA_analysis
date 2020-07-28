@@ -174,6 +174,7 @@ file_names <- identify_portfolios(portfolio_total)
 write_csv(file_names, paste0(proc_input_path, "/file_names.csv"))
 
 create_portfolio_subfolders(file_names)
+
 for (p in 1:nrow(file_names)){
   
   portfolio_name_ <- file_names$portfolio_name[p]
