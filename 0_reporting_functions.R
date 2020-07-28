@@ -21,6 +21,11 @@ set_report_parameters <- function(ParameterFilePath){
   start_year <<- as.numeric(Startyear)
   no_companies <<- as.numeric(No.Companies)
   
+  if(!exists("inc_sda_approach")){
+    inc_sda_approach <<- FALSE
+    print("inc_sda_approach not in parameter file. Default value set to FALSE.")
+  }
+  
   AccountingPrinciple <<- if_else(AccountingPrinciple == "PortfolioWeight","portfolio_weight",AccountingPrinciple)
   AccountingPrinciple <<- if_else(AccountingPrinciple == "Ownership","ownership_weight",AccountingPrinciple)  
 }
@@ -45,14 +50,14 @@ get_report_list <- function(Ports.Overview){
 
 ReportData <- function(){
   
-  company_name <- portfolio_name_select
-  
-  company_name <- gsub("&","\\\\\\\\&",company_name)
+  # company_name <- portfolio_name_select
+  # 
+  # company_name <- gsub("&","\\\\\\\\&",company_name)
   
   SizePortfolio <-  subgroup_overview %>%
     filter(portfolio_name == portfolio_name_select) %>%
     distinct(portfolio_value_usd)
-  SizeofPortfolio<- SizePortfolio[[1]]
+  SizeofPortfolio <- SizePortfolio[[1]]
   
   
   SizeofPortfolio <- comprss_long(SizeofPortfolio)
@@ -98,8 +103,7 @@ ReportData <- function(){
   scenarioDescription <- as.character(scenarioDF$scenarioDescription[scenarioDF$ShortName %in% Scenariochoose])
   
   BenchmarkValue <- "market"
-  if (project_name == "BlackRock"){BenchmarkValue <- "LEH CRED"}
-  
+
   if(has_sb){
     SovBondCov <- SB.Values$SBPerc[SB.Values$investor_name == investor_name_select & SB.Values$portfolio_name == portfolio_name_select]
     SovBondCov <- ifelse(identical(SovBondCov, numeric(0)),0,SovBondCov)  
@@ -139,11 +143,11 @@ ReportData <- function(){
   
   ProjectPeersRef <- PeerGroupSelection
   
-  # PeerGroupName <- ifelse(eq_peers_ref == cb_peers_ref & eq_peers_ref == "Project",ProjectPeersRef, PeerGroupName)
-  
+  PeerGroupName <- ifelse(EQPeersRef == CBPeersRef & EQPeersRef == "Project",ProjectPeersRef, PeerGroupName)  
   
   # Check Physical Risk
   
+  # if(HasRISK())
   # if(data_check(EQPhysicalRisk)){
   #   EQPhysicalRiskCheck <- TRUE
   # }else{EQPhysicalRiskCheck <- FALSE}
@@ -162,8 +166,8 @@ ReportData <- function(){
   
   ### MERGE ALL RESULTS ###
   reportdata <<- data.frame(
-    c("investor_name_select",investor_name_select),
-    c("portfolio_name_select",portfolio_name_select),
+    c("InvestorName",investor_name_select),
+    c("PortfolioName",portfolio_name_select),
     c("SizeofPortfolio",SizeofPortfolio),
     c("TodaysDate",TodaysDate),
     c("PeerGroup",PeerGroupName),
@@ -208,6 +212,7 @@ ReportGeneration <- function(){
   AnalysisCoverage <<-  round(sum(over$valid_value_usd[over$financial_sector !="Not Included"])/sum(over$valid_value_usd)*100,1)
   
   reportdata <- ReportData()
+  reportdata <- reportdata %>% filter(PortfolioName == portfolio_name_select)
   
   # Copy in the template for the report
   text <- as.data.frame(template,stringsAsFactors = FALSE)  
@@ -361,14 +366,12 @@ ReportGeneration <- function(){
     portfolio_name_select <- "Sample Portfolio"
   }
   
-  portfolio_name_select <- ifelse(portfolio_name_select == "Investment porftolio", "Investment Portfolio",portfolio_name_select)
-  
-  if (reportdata$PeerGroup == "Pensiones"){reportdata$PeerGroup = "Fondos de pensiones Colombianos"}
-  if (grepl("FASECOLDA", project_name) & reportdata$PeerGroup == "Project"){reportdata$PeerGroup = "Mercado asegurador Colombiano"}
-  
-  # reportdata$AssetClass <- BondReferenceLong
-  reportdata$ReportDate <- if(financial_timestamp == "2017Q4"){"31.12.2017"}else if(financial_timestamp == "2018Q4"){"31.12.2018"}else{financial_timestamp}
-  
+  reportdata$AssetClass <- BondReference
+  reportdata$ReportDate <- if(financial_timestamp == "2017Q4"){"31.12.2017"}else 
+    if(financial_timestamp == "2018Q4"){"31.12.2018"}else 
+      if(financial_timestamp == "2019Q4"){"31.12.2019"}else{
+        financial_timestamp}
+
   investor_name_selectClean <- gsub("_"," ",investor_name_select)
   # investor_name_selectClean <- gsub("\("," ",investor_name_selectClean)
   # investor_name_selectClean <- gsub("/)"," ",investor_name_selectClean)
@@ -425,7 +428,6 @@ ReportGeneration <- function(){
     FigNames$Fig <- substring(FigNames$Name,1,2)
     
     FigureLocation <- "ReportOutputs"
-    if (project_name == "CDI2017-Sep"){FigureLocation <- "CAFigures"}
     FigNames$Fig <- paste0(FigureLocation,"/Fig",FigNames$Fig)  
     
     
@@ -439,8 +441,6 @@ ReportGeneration <- function(){
     
     if (investor_type %in% c("InvestorSingle","InvestorMeta")){ReportName <- paste0("ClimateAlignmentReport_",investor_name_select)}
     
-    if(project_name == "CDI2017-Sep"){ ReportName <- paste0("ClimateAlignmentReport_",portfolio_name_select)}    
-    
     ReportName <- gsub(" ","",ReportName)
     
     
@@ -451,11 +451,10 @@ ReportGeneration <- function(){
     
     
     # Save the template file
-    # write.table(text,"C:/Users/jacks/Desktop/ClimateAlignmentReport_SKANDIAPENSIONESY_P.obligatorias.Rnw",col.names = FALSE,row.names = FALSE,quote=FALSE,fileEncoding = "UTF-8")
     write.table(text,paste0(report_path,ReportName,".Rnw"),col.names = FALSE,row.names = FALSE,quote=FALSE,fileEncoding = "UTF-8")
     
     # Copy in Report Graphics
-    originalloc <- "C:/Users/jacks/Desktop/SFC_2019/Templates/ReportGraphics/"
+    originalloc <- paste0(getwd(),"/Templates/ReportGraphics/")  
     graphicsloc <- paste0(report_path,"ReportGraphics/")
     flist <- list.files(originalloc, full.names = TRUE)
     
@@ -468,7 +467,6 @@ ReportGeneration <- function(){
     setwd(report_path)
     # Create the PDF
     # ReportName cannot be too long or else the report won't print!
-    # knit2pdf(paste0("ClimateAlignmentReport_SKANDIAPENSI",".Rnw"),compiler = "xelatex")
     original_system_encoding <- getOption("encoding")
     
     options(encoding = "native.enc")
@@ -479,7 +477,6 @@ ReportGeneration <- function(){
     
     # Delete remaining files and ReportGraphics Folder
     excessfileendings <- c(".Rnw",".tex")
-    # file.remove(paste0("ClimateAlignmentReport_SKANDIAPENSI",excessfileendings))
     file.remove(paste0(ReportName,excessfileendings))
     unlink(paste0(report_path,"ReportGraphics"),recursive = TRUE)
     
