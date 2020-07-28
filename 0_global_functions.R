@@ -72,7 +72,7 @@ set_global_parameters <- function(file_path){
   meta_investor_name <<- cfg$ComparisonBenchmarks$MetaInvestorName
   meta_portfolio_name <<- cfg$ComparisonBenchmarks$MetaPortfolioName
   
-  #  inc_metaportfolio <<- cfg$ComparisonBenchmarks$CreateMetaPortfolio
+  inc_meta_portfolio <<- cfg$ComparisonBenchmarks$CreateMetaPortfolio
   # if(is.null(inc_metaportfolio)){
   #   inc_metaportfolio <<- FALSE
   # }
@@ -304,3 +304,15 @@ is_blank_na <- function(x){
   if(is.na(x) | x == ""){flag = TRUE}else{flag = FALSE}
   flag
 }
+
+# checks validity of project config
+check_valid_cfg <- function(cfg){
+  stopifnot(exists("cfg")  == T)
+  stopifnot(cfg %>% class() == "list")
+  stopifnot(cfg %>% length() == 2)
+  
+  stopifnot(cfg$project_name %>% is.character() == T)
+  stopifnot(cfg$project_internal$twodii_internal %>% is.logical() == T)
+  
+  invisible(cfg)
+} 
