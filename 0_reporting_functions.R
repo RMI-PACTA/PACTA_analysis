@@ -485,6 +485,24 @@ ReportGeneration <- function(){
   return()
 }
 
+read_utf8_tex <-
+  function(file) {
+    opts <- options(encoding = "native.enc")
+    on.exit(options(opts), add = TRUE)
+    
+    readLines(file, encoding = 'UTF-8')
+  }
+
+write_utf8_rnw <-
+  function(text, file) {
+    opts <- options(encoding = "native.enc")
+    on.exit(options(opts), add = TRUE)
+    
+    con <- file(file, encoding = 'native.enc')
+    writeLines(enc2utf8(text$text), con = con, useBytes = TRUE, sep = '\n')
+    close(con)
+  }
+
 ##############
 ### Charts ###
 ##############
