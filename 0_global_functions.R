@@ -6,7 +6,6 @@ set_location <- function(){
     working_location <- getwd()
   }
   
-  working_location <- gsub("Â","",working_location)
   working_location <- paste0(working_location, "/")
   
   return(working_location)
@@ -101,11 +100,30 @@ set_global_parameters <- function(file_path){
     print("Warning: has_sb set to standard value (FALSE) as not defined in the parameter file")
   }
   
+  has_credit <<- cfg$Methodology$HasCC	
+  if(is.null(has_credit)){	
+    has_credit <<- FALSE	
+    print("Warning: has_credit set to standard value (FALSE) as not defined in the parameter file")	
+  }
+  
   has_revenue <<- cfg$Methodology$HasRevenue
   if(is.null(has_revenue)){
     has_revenue <<- TRUE
     print("Warning: has_revenue set to standard value (TRUE) as not defined in the parameter file")
   }
+  
+  inc_emission_factors <<- cfg$Methodology$IncEmissionFactors
+  if(is.null(inc_emission_factors)){
+    inc_emission_factors <<- FALSE
+    print("Warning: inc_emission_factors set to standard value (inc_emission_factors) as not defined in the parameter file")
+  }
+  
+  file_format_list <<- tolower(cfg$data_output$file_type)
+  if(is.null(file_format_list)|length(file_format_list) == 0){	
+    file_format_list <<- c("rda")	
+    print("Warning: file_format_list set to standard value ('rda') as not defined in the parameter file")	
+  }
+  
   
 }
 
@@ -115,8 +133,6 @@ set_project_paths <- function(project_name, twodii_internal, project_location_ex
   project_location <<-  ifelse(twodii_internal,
                                path_dropbox_2dii("PortCheck_v2","10_Projects",project_name),
                                paste0(project_location_ext,"/", project_name))
-  
-  
   
   log_path <<- paste0(project_location,"/00_Log_Files")
   par_file_path <<- paste0(project_location,"/10_Parameter_File")
@@ -135,7 +151,7 @@ set_git_path <- function(){
     git_path <- getwd()
   }
   
-  git_path <- gsub("Â","",git_path)
+  git_path <- gsub("?","",git_path)
   git_path <- paste0(git_path, "/")
   
   git_path
@@ -194,18 +210,23 @@ create_project_folder <- function(project_name, twodii_internal, project_locatio
                              path_dropbox_2dii("PortCheck_v2","10_Projects",project_name), 
                              paste0(project_location_ext,"/", project_name))
   
-  folder_location <- paste0(getwd(),"/", "sample_files/10_folder_structures/start_folders")
+  # folder_location <- paste0(getwd(),"/", "sample_files/10_folder_structures/start_folders")
   
+  project_folders <- c("00_Log_Files", 
+                       "10_Parameter_File",
+                       "20_Raw_Inputs",
+                       "30_Processed_Inputs",
+                       "40_Results",
+                       "50_Outputs")
+  
+  project_folders <- paste0(project_location, "/",project_folders)
   
   # Create the new project folder
   if (dir.exists(project_location)){
     print("Project Folder Already Exists")
   } else {
     dir.create(project_location)
-    a <- list.dirs(folder_location)
-    b <- basename(a)[-1]
-    c <- paste0(project_location,"/",b)
-    lapply(c, function(x) dir.create(x))
+    lapply(project_folders, function(x) dir.create(x))
   }
   
 }
