@@ -98,20 +98,45 @@ set_initial_variables <- function(){
 
 define_peers <- function(){
   
-  eq_peers <<- read_rds(paste0(portcheck_v2_path, "/10_Projects/",project_name,"/40_Results/Equity_results_portfolio.rda")) %>% 
-    filter(investor_name == meta_investor_name)
-  
-  cb_peers <<- read_rds(paste0(portcheck_v2_path, "/10_Projects/",project_name,"/40_Results/Bonds_results_portfolio.rda")) %>% 
-    filter(investor_name == meta_investor_name)
-  
+  if(twodii_internal){
+    eq_peers <<- read_rds(paste0(results_path,"/Equity_results_portfolio.rda")) %>%
+      filter(investor_name == meta_investor_name)
+    
+    cb_peers <<- read_rds(paste0(results_path,"/Bonds_results_portfolio.rda")) %>%
+      filter(investor_name == meta_investor_name)
+    
+  }else{
+    
+    eq_peers <<- read_rds(paste0(project_location_ext,"/",project_name,"/40_Results/Equity_results_portfolio.rda")) %>%
+      filter(investor_name == meta_investor_name)
+    
+    cb_peers <<- read_rds(paste0(project_location_ext,"/",project_name,"/40_Results/Bonds_results_portfolio.rda")) %>%
+      filter(investor_name == meta_investor_name)
+  }
 }
 
 define_benchmarks <- function(){
   
-  eq_market <<- read_rds(path_dropbox_2dii("PortCheck_v2","10_Projects","INDEX_2019","40_Results","Equity_results_portfolio.rda"))
-  
-  cb_market <<- read_rds(path_dropbox_2dii("PortCheck_v2","10_Projects","INDEX_2019","40_Results","Bonds_results_portfolio.rda"))
-  
+  if(twodii_internal){
+    
+    eq_market <<- read_rds(paste0(portcheck_v2_path,"/10_Projects/INDEX_2019/40_Results/Equity_results_portfolio.rda")) %>%
+      filter(portfolio_name == eq_market_ref)
+    cb_market <<- read_rds(paste0(portcheck_v2_path,"/10_Projects/INDEX_2019/40_Results/Bonds_results_portfolio.rda"))%>%
+      filter(portfolio_name == cb_market_ref)
+    
+    
+    # eq_market <<- read_rds(paste0(portcheck_v2_path,"/10_Projects/FAKE_MARKETS/40_Results/Equity_results_portfolio.rda")) %>%
+    #   filter(portfolio_name == eq_market_ref)
+    # cb_market <<- read_rds(paste0(portcheck_v2_path,"/10_Projects/FAKE_MARKETS/40_Results/Bonds_results_portfolio.rda"))%>%
+    #   filter(portfolio_name == cb_market_ref)
+    # }
+  }else{
+    
+    # Set per project
+    eq_market <<- read_rds(paste0(data_location_ext,"/Fake_Index/Equity_results_portfolio.rda"))
+    
+    cb_market <<- read_rds(paste0(data_location_ext,"/Fake_Index/Bonds_results_portfolio.rda"))
+  }
 }
 
 results_call <- function(){
@@ -128,7 +153,7 @@ results_call <- function(){
   
   # RenewableAdditions <<- readRDS(paste0(analysis_inputs_path, "/RenewablesAdditionsData.rda"))
   # CoalRetirements <<- readRDS(paste0(analysis_inputs_path, "/CoalRetirementsData.rda"))
-  # CarbonData <<-  readRDS(paste0(analysis_inputs_path, "CarbonCapexUpstream.rda"))
+  # CarbonData <<-  readRDS(paste0(analysis_inputs_path, "/CarbonCapexUpstream.rda"))
   
   if(has_equity){
     EQCompProdSnapshot <<- read_rds(paste0(results_path, "/",investor_name_select,"/Equity_results_company.rda"))
@@ -144,7 +169,7 @@ results_call <- function(){
     
     EQportmap <<- EQportmap
     
-    EQTechData <<- read_rds(paste0(analysis_inputs_path, "masterdata_ownership_datastore_technology_type_view.rda"))
+    EQTechData <<- read_rds(paste0(analysis_inputs_path, "/masterdata_ownership_datastore_technology_type_view.rda"))
     
     EQOilShareData <<- EQTechData %>% select(id, ald_sector,technology, technology_type, year, ald_production, ald_production_unit) %>% 
       filter(year %in% seq(start_year,start_year+5,1),
@@ -180,6 +205,37 @@ results_call <- function(){
   if(has_sb){
     
     SB.Summary <<- read.csv(paste0(PROC.INPUT.PATH,"SovereignBondSummary.csv"),strip.white = T,stringsAsFactors = F)
+  }
+  
+  
+  if(inc_sda_approach){
+    
+    if(data_check(EQCombin)){
+      max_market = max(eq_market$year,na.rm = T)
+      max_year_data = max(EQCombin$year, na.rm = T)
+      
+      if(max_year_data == max_market){
+        EQCombin <- sda_portfolio_target(eq_market, EQCombin,
+                                         start_year = start_year,
+                                         target_year = max_year_data)
+        
+      }
+    }
+    
+    
+    
+    if(data_check(CBCombin)){
+      max_market = max(cb_market$year,na.rm = T)
+      max_year_data = max(CBCombin$year, na.rm = T)
+      
+      if(max_year_data == max_market){
+        CBCombin <- sda_portfolio_target(cb_market, CBCombin,
+                                         start_year = start_year,
+                                         target_year = max_year_data)
+        
+      }
+    }
+    
   }
   
 }
@@ -1098,7 +1154,7 @@ FiveYearGrowthTrend <- function(plotnumber, chart_type, tech_to_plot, LegendOn =
   ### Equity PRODUCTION
   if (chart_type == "EQ") {
     ALD_Market <- filter_by_parameters(eq_market,"EQ", byscenario = TRUE) %>% distinct()
-    ALD <- filter_by_parameters(EQCombin,"EQ", byscenario = FALSE)
+    ALD <- filter_by_parameters(EQCombin,"EQ", byscenario = FALSE)  %>% filter(ald_sector != "Other")
     if (data_check(ALD) == TRUE){
       ALD$asset_type <- "Equity"
       ALD_Market <- ALD_Market %>%
@@ -1863,7 +1919,7 @@ CompanyInformation <- function(plotnumber, companiestoprint, chart_type, sector_
     # PortfolioData <- rbind(Targetmix, Portfoliomix)
     
     # Percentage share of each technology for each company in the portfolio
-    Companies <- subset(CompProdSS,year == start_year+5, select=c("Entity.Name","technology","plan_tech_prod", "plan_sec_prod","port_weight"))
+    Companies <- subset(CompProdSS,year == start_year+5, select=c("Entity.Name","technology","plan_tech_prod", "plan_sec_prod","company_port_weight"))
     Companies <- Companies %>% filter(plan_sec_prod > 0) %>% select(-plan_sec_prod)
     Companies<- unique(Companies)
     Companies$tech_share <- Companies$plan_tech_prod
@@ -2269,7 +2325,7 @@ MapChart <- function(plotnumber,chart_type,tech_to_plot,plot_year){
     Power <- Power %>% mutate(ALD.Location = ald_location)
     
     Power <-Power %>%
-      group_by(ALD.Location,technology) %>%
+      group_by(ald_location,technology) %>%
       summarise(Production = sum(plan_alloc_wt_tech_prod)) %>%
       ungroup() %>%
       filter(technology == tech_to_plot)%>%
@@ -2283,8 +2339,8 @@ MapChart <- function(plotnumber,chart_type,tech_to_plot,plot_year){
     
     
     # if (nrow(Power)>0){
-    tech_map <- joinCountryData2Map(Power, joinCode = "ISO2", nameJoinColumn = "ALD.Location")
-    tech_map_poly <- fortify(tech_map) #extract polygons 
+    tech_map <- joinCountryData2Map(Power, joinCode = "ISO2", nameJoinColumn = "ald_location")
+    tech_map_poly <- fortify(tech_map) #extract polygons
     tech_map_poly <- base::merge(tech_map_poly, tech_map@data, by.x="id", by.y="ADMIN", all.x=T)
     tech_map_poly <- tech_map_poly %>% arrange(id, order)
     
@@ -3799,9 +3855,3 @@ no_chart <- function(Label){
   return(outputplot)
   
 }
-
-
-# og <- read_rds("C:/Users/clare/Dropbox (2? Investing)/PortCheck/00_Data/07_AnalysisInputs/2018Q3_July_EIOPA/oil_and_gas_resource_type_rollup_debt.rda")
-
-
-
