@@ -494,23 +494,9 @@ datatable(non_pacta_ALD_CB_detail, caption="ALD information matched to Other sec
 
 ## Funds Coverage
 
-FULL REWORK
+This section gives an overview of the impact of funds on the overall coverage of the analysis, in terms of value.
 
-Check the impact of funds on overall coverage.
-Aggregation should happen on value_usd level where possible to ensure comparability across funds regarding the impact on the overall PF value
-For cases with missing currency information, we add aggregation by market_value, and group by currency.
-
-1. List of fund ISINs and their Values impact on the overall PF value, filtered by direct_holding == FALSE and asset_type == "Funds"
-2. List of fund_isins that have ISIN == "MissingValue" and are therefore omitted by the first table. This, however, seems to come from the normalise_fund_data() function and may not be necessary. It is introduced on purpose for fund holdings, whose overall sum weight is smaller than 1. 
-
-**Actions:**
-
-* Check if the funds with higher impact are available in the fund_data file.
-* If they are not, try to get the corresponding fund data from LIM and add the data to the fund_data table before the next run.
-
-**OPEN:**
-
-Still a bit unsure about the appropriate settings here and if the second table makes any sense.
+The first table shows the market value (total investment) in USD per fund and gives the weight of this fund relative to the overall portfolio file value.
 
 
 ```{r}
@@ -530,7 +516,17 @@ funds_coverage <- result_data_qa %>%
     ) %>% 
   arrange(desc(share_fund_value_total))
 datatable(funds_coverage)
+```
 
+
+The second table gives an overview on the fund level of the market value in USD per fund, the value in USD missing per fund, the share of missing value in USD per fund and the weight of each fund's missing value overall.
+
+**Actions:**
+
+* Check if the funds with higher impact are available in the fund_data file.
+* If they are not, try to get the corresponding fund data from LIM and add the data to the fund_data table before the next run.
+
+```{r}
 funds_coverage_missing_value <- result_data_qa %>% 
   filter(isin == "MissingValue" &
            direct_holding == FALSE &
@@ -548,9 +544,6 @@ funds_coverage_missing_value <- result_data_qa %>%
     ) %>%  
   arrange(desc(share_missing_value_by_fund))
 datatable(funds_coverage_missing_value)
-
-
-
 
 ```
 
