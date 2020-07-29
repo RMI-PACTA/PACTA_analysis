@@ -518,40 +518,37 @@ Still a bit unsure about the appropriate settings here and if the second table m
 
 ```{r}
 funds_coverage <- result_data_qa %>% 
-  filter(#direct_holding == F &
-           asset_type == "Funds" &
+  filter(asset_type == "Funds" &
            investor_name != "Meta Investor") %>% 
   select(fund_isin, currency,
-         value_usd, market_value) %>% 
+         value_usd) %>% 
   group_by(fund_isin, currency) %>% 
-  summarise(sum_value_usd = round(sum(value_usd, na.rm=T)),
-            sum_market_value = round(sum(market_value, na.rm=T))) %>% 
+  summarise(value_usd_by_fund = round(sum(value_usd, na.rm=T))) %>% 
   ungroup() %>% 
   mutate(
-    share_fund_value = round(sum_value_usd/
-      (investors_overview %>%
-         filter(investor_name=="Meta Investor") %>%
-         pull(sum_value_usd_by_inv)), 5)
+    overall_value_usd = (investors_overview %>%
+                           filter(investor_name=="Meta Investor") %>%
+                           pull(sum_value_usd_by_inv)),
+    share_fund_value_total = round(value_usd_by_fund/overall_value_usd, 5)
     ) %>% 
-  arrange(desc(share_fund_value))
+  arrange(desc(share_fund_value_total))
 datatable(funds_coverage)
 
 funds_coverage_missing_value <- result_data_qa %>% 
   filter(isin == "MissingValue" &
            investor_name != "Meta Investor") %>% 
-  select(fund_isin, currency,#isin, company_name,
-         value_usd, market_value) %>% 
+  select(fund_isin, currency,
+         value_usd) %>% 
   group_by(fund_isin, currency) %>% 
-  summarise(sum_value_usd = round(sum(value_usd, na.rm=T)),
-            sum_market_value = round(sum(market_value, na.rm=T))) %>% 
+  summarise(value_usd_missing_by_fund = round(sum(value_usd, na.rm=T))) %>% 
   ungroup() %>% 
+  right_join(funds_coverage, by = c("fund_isin", "currency")) %>% 
+  select(fund_isin, currency, value_usd_missing_by_fund, value_usd_by_fund, overall_value_usd) %>% 
   mutate(
-    share_missing_value = round(sum_value_usd/
-      (investors_overview %>%
-         filter(investor_name=="Meta Investor") %>%
-         pull(sum_value_usd_by_inv)), 5)
+    share_missing_value_by_fund = round(value_usd_missing_by_fund/value_usd_by_fund, 5),
+    share_missing_value_overall = round(value_usd_missing_by_fund/overall_value_usd, 5)
     ) %>%  
-  arrange(fund_isin)
+  arrange(desc(share_missing_value_by_fund))
 datatable(funds_coverage_missing_value)
 
 
