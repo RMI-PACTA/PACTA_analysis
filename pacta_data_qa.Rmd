@@ -8,7 +8,7 @@ output:
     fig_caption: yes
     theme: flatly
     toc: yes
-    toc_depth: 2
+    toc_depth: 3
     toc_float: yes
 ---
 
@@ -21,7 +21,7 @@ library(DT)
 source("1_portfolio_check_initialisation.R")
 ```
 
-# Use case
+## Use case
 This document can be used to perform Data QA on processed Portfolio Input files.
 The aim of this analysis is to ensure data consistency and find holdings, that may not be considered in the PACTA analysis yet, but could be included in one of the below described ways in order to increase portfolio coverage.
 
@@ -31,14 +31,36 @@ For the analysis to be run, the processed portfolio inputs as well as the compan
 
 ```{r}
 # read in if report has been run successfully, but data is not currently in the workspace
-total_portfolio <- paste0(project_location,"/30_Processed_Inputs/",project_name,"_total_portfolio.rda")
-bonds_company <- paste0(project_location,"/40_Results/Meta Investor/Bonds_results_company.rda")
-equity_company <- paste0(project_location,"/40_Results/Meta Investor/Equity_results_company.rda")
+# this is still very ugly, I will tidy it up asap
+if (
+  c("Bonds_results_company.rda") %in% list.files(results_path) &
+  c("Equity_results_company.rda") %in% list.files(results_path) &
+  c(paste0(project_name, "_total_portfolio.rda")) %in% list.files(paste0(proc_input_path, "/"))
+) {
+  result_data_qa <- readRDS(paste0(project_location,"/30_Processed_Inputs/",project_name,"_total_portfolio.rda"))
+  bonds_results_company <- readRDS(paste0(project_location,"/40_Results/Meta Investor/Bonds_results_company.rda"))
+  equity_results_company <- readRDS(paste0(project_location,"/40_Results/Meta Investor/Equity_results_company.rda"))
+} else if (
+  c("Bonds_results_company.rda") %in% list.files(results_path) &
+  c(paste0(project_name, "_total_portfolio.rda")) %in% list.files(paste0(proc_input_path, "/"))
+) {
+  result_data_qa <- readRDS(paste0(project_location,"/30_Processed_Inputs/",project_name,"_total_portfolio.rda"))
+  bonds_results_company <- readRDS(paste0(project_location,"/40_Results/Meta Investor/Bonds_results_company.rda"))
+} else if (
+  c("Equity_results_company.rda") %in% list.files(results_path) &
+  c(paste0(project_name, "_total_portfolio.rda")) %in% list.files(paste0(proc_input_path, "/"))
+) {
+  result_data_qa <- readRDS(paste0(project_location,"/30_Processed_Inputs/",project_name,"_total_portfolio.rda")) &
+  equity_results_company <- readRDS(paste0(project_location,"/40_Results/Meta Investor/Equity_results_company.rda"))
+} else {
+  print("Could not find the required files to generate data QA html document in the project directory. Skipping!")
+}
 
 
-result_data_qa <- readRDS(total_portfolio)
-bonds_results_company <- readRDS(bonds_company)
-equity_results_company <- readRDS(equity_company)
+# inconsisten directory with the check (Meta Investor sub dir)
+result_data_qa <- readRDS(paste0(project_location,"/30_Processed_Inputs/",project_name,"_total_portfolio.rda"))
+bonds_results_company <- readRDS(paste0(project_location,"/40_Results/Meta Investor/Bonds_results_company.rda"))
+equity_results_company <- readRDS(paste0(project_location,"/40_Results/Meta Investor/Equity_results_company.rda"))
 
 ```
 
@@ -50,28 +72,58 @@ result_data_qa %>% glimpse()
 ```
 
 ### Total holdings and value
-Overall number of holdings and aggregated value in USD of the portfolio input, by asset type
+
+Overall number of holdings and aggregated value in USD of the entire portfolio input, grouped by asset type
+
 ```{r}
 total_overview <- result_data_qa %>% 
   filter(investor_name != "Meta Investor") %>% 
   group_by(asset_type) %>% 
-  summarise(total_holdings = n(),
-            sum_value_usd = round(sum(value_usd, na.rm = T))) %>% 
+  summarise(total_holdings_by_asset = n(),
+            sum_value_usd_by_asset = round(sum(value_usd, na.rm = T))) %>% 
   ungroup()
-datatable(total_overview)
+datatable(total_overview, caption = "Overall # of holdings and aggregated value of the input")
 ```
-
 
 
 ### Total holdings and value per investor
 Number of holdings and aggregated value in USD of the portfolio input - grouped by investor.
-"Meta Investor" is the total aggregation across investors.
+"Meta Investor" is the total aggregation across investors, i.e. the entire portfolio input.
 ```{r}
 investors_overview <- result_data_qa %>% 
   group_by(investor_name) %>% 
-  summarise(total_holdings = n(), sum_value_usd = round(sum(value_usd, na.rm = T))) %>% 
+  summarise(total_holdings_by_inv = n(),
+            sum_value_usd_by_inv = round(sum(value_usd, na.rm = T))) %>% 
   ungroup()
-datatable(investors_overview)
+datatable(investors_overview, caption = "Overall # of holdings and value of the input by Investor")
+```
+
+Number of holdings and aggregated value in USD of the portfolio input, grouped by investor and asset type
+
+```{r}
+investors_overview_asset <- result_data_qa %>% 
+  group_by(investor_name, asset_type) %>% 
+  summarise(total_holdings_by_inv_asset = n(),
+            value_usd_by_inv_asset = round(sum(value_usd, na.rm = T))) %>% 
+  ungroup()
+datatable(investors_overview_asset, caption = "Overall # of holdings and value of the input by Investor and asset type")
+```
+
+Number of holdings and aggregated value in USD of the portfolio input, by investor and flag type
+
+```{r}
+investors_overview_flag <- result_data_qa %>% 
+  group_by(investor_name, flag) %>% 
+  summarise(holdings_by_flag_inv = n(),
+            value_usd_by_flag_inv = round(sum(value_usd, na.rm = T))) %>% 
+  ungroup() %>% 
+  inner_join(investors_overview, by = ("investor_name")) %>% 
+  group_by(investor_name) %>% 
+  mutate(share_holdings_investor = round(holdings_by_flag_inv/total_holdings_by_inv, 4),
+         share_value_investor = round(value_usd_by_flag_inv/sum_value_usd_by_inv, 4)) %>% 
+  ungroup()
+# add share value investor
+datatable(investors_overview_flag, caption = "Overall # of holdings and value of the input by Investor and flag")
 ```
 
 ### Total holdings and value per investor and portfolio
@@ -79,43 +131,34 @@ Number of holdings and aggregated value in USD of the portfolio input - grouped 
 
 * **total_holdings** is the number of holdings per investor and portfolio
 * **sum_value_usd** is the aggregated value of the holdings in USD by investor and portfolio
-* **sum_market_value** .... see comment below
-* **pct_holdings** is the share of holdings of a specific PF, relative to the overall number of holdings in the analysis. It's the weight of the PF in pure terms of different holdings.
-* **value_weight** is the share of the value of a specific PF in USD, relative to the overall value across all PFs in the analysis. It shows how much value each of the PFs make up for
+* **value_weight_overall** This  shows the relative value of a given portfolio compared to the overall value across all portfolios analysed. Measured in USD.
+* **value_weight_by_inv** This  shows the relative value of a given portfolio compared to the overall value of the corresponding investor's portfolios. Measured in USD. Insofar, it is a measure of the portfolio's importance for the investor at hand.
 
-**OPEN:**
+**OPEN** What other weight to include?
 
-*sum_market_value* only makes sense if all holdings in a portfolio share the same currency. Otherwise, the overall value can look artificially inflated or deflated. Additionally grouping by currency would alleviate this, but the information on the PF level will not be readable anymore.
 
 ```{r}
 investors_portfolio_overview <- result_data_qa %>% 
   filter(investor_name != "Meta Investor") %>% 
   group_by(investor_name, portfolio_name) %>% 
-  summarise(total_holdings = n(),
-            sum_value_usd = round(sum(value_usd, na.rm = T)),
-            sum_market_value = round(sum(market_value, na.rm = T))) %>% 
+  summarise(total_holdings_inv_pf = n(),
+            value_usd_inv_pf = round(sum(value_usd, na.rm = T))) %>% 
   ungroup() %>% 
-  mutate(pct_holdings = round(total_holdings / sum(total_holdings),3),
-         value_weight = round(sum_value_usd / sum(sum_value_usd), 3))
+  mutate(value_weight_overall = round(value_usd_inv_pf / sum(value_usd_inv_pf), 3)) %>% 
+  group_by(investor_name) %>% 
+  mutate(value_weight_by_inv = round(value_usd_inv_pf / sum(value_usd_inv_pf), 3)) %>% 
+  ungroup()
 datatable(investors_portfolio_overview)
-
-investors_portfolio_currency_overview <- result_data_qa %>% 
-  filter(investor_name != "Meta Investor") %>% 
-  group_by(investor_name, portfolio_name, currency) %>% 
-  summarise(total_holdings = n(),
-            sum_value_usd = round(sum(value_usd, na.rm = T)),
-            sum_market_value = round(sum(market_value, na.rm = T))) %>% 
-  ungroup() %>% 
-  mutate(pct_holdings = round(total_holdings / sum(total_holdings),3),
-         market_value_weight = round(sum_market_value / sum(sum_market_value), 3))
-datatable(investors_portfolio_currency_overview)
-
 ```
+
 
 
 ## Currencies
 
 ### currencies in portfolio and missing currency info
+
+MISSINGS ARE OPTIONAL SHOULD ONLY BE SHOWN WHEN PRESENT
+
 1. Overview of all currencies present in the portfolio and their respective overall market values (in units of that currency)
 2. Overview of holdings with missing exchange rate information. For successful analysis, exchange rate information is required, so it should be checked if exchange rates can be manually added in these case.
 
@@ -132,26 +175,42 @@ datatable(investors_portfolio_currency_overview)
 currency_overview <- result_data_qa %>% 
   filter(investor_name != "Meta Investor") %>% 
   group_by(currency, has_currency) %>% 
-  summarise(total_per_currency = n(),
-            sum_market_value = round(sum(market_value, na.rm = T))) %>% 
+  summarise(total_holdings_by_currency = n(),
+            value_usd_by_currency = round(sum(value_usd, na.rm = T))) %>%
   ungroup()
-datatable(currency_overview)
+datatable(currency_overview, caption = "Aggregate value USD grouped by currencies and missing currency information")
+
+currency_exchange_rate_overview <- result_data_qa %>% 
+  filter(investor_name != "Meta Investor") %>% 
+  group_by(currency, exchange_rate_usd, has_currency) %>% 
+  summarise(total_holdings_by_currency_exch = n(),
+            value_usd_by_currency_exch = round(sum(value_usd, na.rm = T))) %>%
+  ungroup()
+datatable(currency_exchange_rate_overview, caption = "Aggregate value USD in grouped currencies, exchange rates and missing currency information")
+
 
 
 missing_currency <- result_data_qa %>% 
   filter((flag == "Missing currency information") &
            investor_name != "Meta Investor") %>% 
-  group_by(investor_name, portfolio_name, currency, isin, exchange_rate_usd, company_name) %>% 
-  summarise(market_value_miss_currency = round(sum(market_value, na.rm = T))) %>% 
+  group_by(investor_name, portfolio_name, currency, isin, exchange_rate_usd) %>% 
+  summarise(value_usd_miss_currency = round(sum(value_usd, na.rm = T))) %>% 
   ungroup() %>% 
   left_join(
-    investors_portfolio_overview %>% select(investor_name, portfolio_name, sum_market_value), by = c("investor_name", "portfolio_name")
+    investors_portfolio_overview %>%
+      select(investor_name, portfolio_name, value_usd_inv_pf),
+    by = c("investor_name", "portfolio_name")
     ) %>% 
-  mutate(share_missing_market_value = round(
-    market_value_miss_currency/sum_market_value, 4))
-datatable(missing_currency, rownames = F)
+  mutate(share_missing_value = round(
+    value_usd_miss_currency/value_usd_inv_pf, 4))
+datatable(missing_currency, caption = "Missing aggregate value in USD due to lack of currency/exchange rate info across overall input by currency")
+
 
 ```
+There is missing information for `r missing_currency %>% distinct(currency) %>% nrow()` currencies in this project.
+
+
+
 
 ## Missing Bloomberg data
 
@@ -160,9 +219,9 @@ Check if data for these ISINs can be downloaded from Bloomberg and added to Data
 Use the .csv file generated by the PACTA_analysis script to pass on the information. This DataTable is supposed to help understand more about individual cases.
 For ISINs that are not in DataStore, check if these are unlisted items (??)
 
-* **share_missing_value** shows the overall impact per ISIN and asset_type
+* **sum_value_usd_isin** is the aggreagted value in USD by ISIN, across investors and portfolios
+* **share_missing_value_by_asset** Shows the impact a missing ISIN has relative to the overall value for that asset type
 
-**OPEN:** should financial_sector == 'Other' be filtered out for convenience?
 
 ```{r}
 not_in_bloomberg <- result_data_qa %>% 
@@ -174,9 +233,12 @@ not_in_bloomberg <- result_data_qa %>%
   mutate(sum_value_usd = round(sum(value_usd, na.rm=T))) %>% 
   ungroup() %>% 
   left_join(total_overview, by = c("asset_type")) %>% 
-  mutate(share_missing_value = round(sum_value_usd.x/sum_value_usd.y, 5)) %>% 
-  select(-c(total_holdings)) %>% 
-  arrange(asset_type, isin)
+  rename(sum_value_usd_isin = sum_value_usd,
+         total_value_by_asset = sum_value_usd_by_asset) %>% 
+  mutate(share_missing_value_by_asset = round(sum_value_usd_isin/total_value_by_asset, 5)) %>% 
+  select(-c(total_holdings_by_asset, total_value_by_asset)) %>% 
+  #arrange(asset_type, isin)
+  arrange(desc(share_missing_value_by_asset))
 datatable(not_in_bloomberg)
 
 ```
@@ -185,7 +247,7 @@ datatable(not_in_bloomberg)
 ## Missing or invalid ISIN
 
 ### overview invalid or missing ISIN
-Overview of holdings with flag "Invalid or missing ISIN" or that have an ISIN with "MissingValue"
+Overview of holdings with flag "Invalid or missing ISIN"
 In order to provide more insight as to what the reasons may be, additional info, such as fund_isin, currency and the flag are provided.
 
 * **share_missing_value** is the value in USD aggregated by fund_isin, relative to the analysis' overall value in USD
@@ -193,34 +255,41 @@ In order to provide more insight as to what the reasons may be, additional info,
 
 **Actions:**
 
-* if the ISIN is a "MissingValue" because it is not available in the BBG database, there is nothing we can do (??)
 * if the ISIN seems to have an odd format, check (potentially with the project partner) if the identifier is really aan ISIN, or some other identifier such as a FIGI. If so, update the identifier.
 * the invalid ISIN might also just be a typo, verify this for cases that look close to valid.
 * These actions are taken on the portfolio input level, so no need to involve the data team
 
+**OPEN:**
+
+What variable should we group this by? ISIN? Fund ISIN? Both?
+
 ```{r}
 ISIN_missing_invalid <- result_data_qa %>% 
-  filter((flag == "Invalid or missing ISIN" | isin == "MissingValue") &
+  filter(flag == "Invalid or missing ISIN" &
            investor_name != "Meta Investor") %>% 
-  select(investor_name, portfolio_name, isin, company_name,  holding_id, #market_value, currency,exchange_rate,
+  select(investor_name, portfolio_name, isin, company_name,  holding_id, 
          value_usd, asset_type, financial_sector, fund_isin, flag) %>% 
-  group_by(fund_isin) %>% 
+  group_by(isin) %>% 
   mutate(sum_value_usd = round(sum(value_usd, na.rm=T))) %>% 
   ungroup() %>% 
   mutate(
     share_missing_value = round(
-      sum_value_usd/(investors_overview %>% filter(investor_name=="Meta Investor") %>% pull(sum_value_usd)), 7
+      sum_value_usd/(investors_overview %>%
+                       filter(investor_name=="Meta Investor") %>%
+                       pull(sum_value_usd_by_inv)), 7
       )
     ) %>% 
-  arrange(desc(share_missing_value), fund_isin)
+  arrange(desc(share_missing_value), isin)
 datatable(ISIN_missing_invalid)
 
 ```
 
 ## Missing ALD
 
-### overview Equity holdings w/o ALD
-Overview of Holdings in PACTA sectors for which no ALD could be matched.
+This section gives an overview of securities that are classified within the set of PACTA sectors, but for which we are not able to match asset level data. When this is the case, the securities should in principle be part of the analysis, but have to be excluded because of this lack of necessary information.
+One reason for this to happen can be an error in matching ALD ownership in DataStore. Otherwise it could also be a misclassified security, if the corresponding company's main field of business is really outside the scope of the PACTA sectors.
+
+### Overview of Equity holdings w/o ALD
 
 1. Overview on sector level, including count and share of overall equity value affected
 2. Overview on sector-company level, including overall equity value affected
@@ -231,6 +300,7 @@ Overview of Holdings in PACTA sectors for which no ALD could be matched.
 * other steps???
 
 ```{r}
+if (exists("equity_results_company")) {
 no_ALD_EQ <- result_data_qa %>% 
   filter(asset_type == "Equity" &
            has_asset_level_data == F &
@@ -240,28 +310,34 @@ no_ALD_EQ <- result_data_qa %>%
   summarise(total_no_ALD_EQ = n(), sum_value_usd = round(sum(value_usd, na.rm=T))) %>% 
   ungroup() %>% 
   mutate(share_total_value = round(
-    sum_value_usd/(total_overview %>% filter(asset_type=="Equity") %>% pull(sum_value_usd)),6)) %>% 
+    sum_value_usd/(total_overview %>%
+                     filter(asset_type=="Equity") %>%
+                     pull(sum_value_usd_by_asset)),6)
+    ) %>% 
   arrange(financial_sector)
-datatable(no_ALD_EQ)
+datatable(no_ALD_EQ, caption="Missing agg value due to lack of ALD information - Equity - sector level")
 
 no_ALD_EQ_detail <- result_data_qa %>% 
   filter(asset_type == "Equity" &
            has_asset_level_data == F &
            financial_sector != "Other" &
            investor_name != "Meta Investor") %>% 
-  select(financial_sector, isin, company_name, market_value, value_usd) %>% 
-  group_by(financial_sector, isin, company_name) %>% 
+  select(financial_sector, bics_subgroup = security_bics_subgroup, icb_subsector = security_icb_subsector, isin, company_name, value_usd) %>% 
+  group_by(financial_sector, bics_subgroup, icb_subsector, isin, company_name) %>% 
   summarise(sum_value_usd = round(sum(value_usd, na.rm=T))) %>% 
   ungroup() %>% 
   mutate(share_total_value = round(
-    sum_value_usd/(total_overview %>% filter(asset_type=="Equity") %>% pull(sum_value_usd)),6)) %>% 
-  arrange(financial_sector, desc(share_total_value))
-datatable(no_ALD_EQ_detail)
-
+    sum_value_usd/(total_overview %>%
+                     filter(asset_type=="Equity") %>%
+                     pull(sum_value_usd_by_asset)),6)
+    ) %>% 
+  arrange(desc(share_total_value))
+datatable(no_ALD_EQ_detail, caption="Missing agg value due to lack of ALD information - Equity - company level")
+} else {print("No Equity data available!")}
 
 ```
 
-### overview Corporate Bond holdings w/o ALD
+### Overview of Corporate Bond holdings w/o ALD
 Overview of Holdings in PACTA sectors for which no ALD could be matched. Removing ISIN here, one company can have multiple ISINs on bond level
 
 1. Overview on sector level, including count and share of overall corporate bonds value affected
@@ -273,6 +349,7 @@ Overview of Holdings in PACTA sectors for which no ALD could be matched. Removin
 * other steps???
 
 ```{r}
+if (exists("bonds_results_company")) {
 no_ALD_CB <- result_data_qa %>% 
   filter(asset_type == "Bonds" &
            has_asset_level_data == F &
@@ -282,33 +359,42 @@ no_ALD_CB <- result_data_qa %>%
   summarise(total_no_ALD_CB = n(), sum_value_usd = round(sum(value_usd, na.rm=T))) %>% 
   ungroup() %>% 
   mutate(share_total_value = round(
-    sum_value_usd/(total_overview %>% filter(asset_type=="Bonds") %>% pull(sum_value_usd)),6)) %>% 
+    sum_value_usd/(total_overview %>%
+                     filter(asset_type=="Bonds") %>%
+                     pull(sum_value_usd_by_asset)),6)
+    ) %>% 
   arrange(financial_sector, desc(share_total_value))
-datatable(no_ALD_CB)
+datatable(no_ALD_CB, caption="Missing agg value due to lack of ALD information - CBonds - sector level")
 
 no_ALD_CB_detail <- result_data_qa %>% 
   filter(asset_type == "Bonds" &
            has_asset_level_data == F &
            financial_sector != "Other" &
            investor_name != "Meta Investor") %>% 
-  #select(financial_sector, isin, company_name, market_value, value_usd) %>% 
-  select(financial_sector, company_name, market_value, value_usd) %>% 
-  #group_by(financial_sector, isin, company_name) %>% 
-  group_by(financial_sector, company_name) %>% 
+  select(financial_sector, bics_subgroup = security_bics_subgroup, icb_subsector = security_icb_subsector, isin, company_name, value_usd) %>% 
+  group_by(financial_sector, bics_subgroup, icb_subsector, isin, company_name) %>% 
   summarise(sum_value_usd = round(sum(value_usd, na.rm=T))) %>% 
   ungroup() %>% 
   mutate(share_total_value = round(
-    sum_value_usd/(total_overview %>% filter(asset_type=="Bonds") %>% pull(sum_value_usd)),6)) %>% 
-  arrange(financial_sector, desc(share_total_value))
-datatable(no_ALD_CB_detail)
-
+    sum_value_usd/(total_overview %>%
+                     filter(asset_type=="Bonds") %>%
+                     pull(sum_value_usd_by_asset)),6)) %>% 
+  arrange(desc(share_total_value))
+datatable(no_ALD_CB_detail, caption="Missing agg value due to lack of ALD information - CBonds - company level")
+} else {print("No Bonds data available!")}
 
 ```
 
 ## Non-PACTA sector with ALD
 
+
+OPEN: Calculate weight of the company in each of the portfolios and add the max(across portfolios)
+
+This section provides an overview of securities in the portfolio, whose parent companies have been classified as not PACTA relevant although we have matched them to asset level data.
+This can be the case, when a company owns such assets in support of its main business operations. The company is still excluded, if that core business is not itself within a PACTA sector. For example, if Apple ran a power plant to support its production of computers, that would not put Apple into the Power sector.
+On the other hand, this can indicate a sector misclassification and, in such cases, the output can be used to correct such misclassifications in the fin_sector_overrides file.
+
 ### overview Equity holdings, non-PACTA sector but with ALD
-Overview of Holdings in non-PACTA sectors for which we do find ALD.
 
 1. Overview on sector level, including count and share of overall equity value affected
 2. Overview on sector-company level, including overall equity value affected
@@ -320,32 +406,40 @@ Overview of Holdings in non-PACTA sectors for which we do find ALD.
 * ...?
 
 ```{r}
+if (exists("equity_results_company")) {
 non_pacta_ALD_EQ <- result_data_qa %>% 
   filter(asset_type == "Equity" &
            has_asset_level_data == T &
            financial_sector == "Other" &
            investor_name != "Meta Investor") %>% 
   group_by(sectors_with_assets) %>% 
-  summarise(total_non_pacta_ALD_EQ = n(), sum_value_usd = round(sum(value_usd, na.rm=T))) %>% 
+  summarise(total_non_pacta_ALD_EQ = n(), sum_value_usd = round(sum(value_usd, na.rm=T))) %>%
   ungroup() %>% 
   mutate(share_total_value = round(
-    sum_value_usd/(total_overview %>% filter(asset_type=="Equity") %>% pull(sum_value_usd)),6)) %>% 
+    sum_value_usd/(total_overview %>%
+                     filter(asset_type=="Equity") %>%
+                     pull(sum_value_usd_by_asset)),6)
+    ) %>% 
   arrange(sectors_with_assets)
-datatable(non_pacta_ALD_EQ)
+datatable(non_pacta_ALD_EQ, caption="ALD information matched to Other sector - Equity - sector level")
 
 non_pacta_ALD_EQ_detail <- result_data_qa %>% 
   filter(asset_type == "Equity" &
            has_asset_level_data == T &
            financial_sector == "Other" &
            investor_name != "Meta Investor") %>% 
-  select(sectors_with_assets, isin, company_name, market_value, value_usd) %>% 
-  group_by(sectors_with_assets, isin, company_name) %>% 
+  select(sectors_with_assets, isin, company_name, bics_subgroup = security_bics_subgroup, icb_subsector = security_icb_subsector, bloomberg_id, value_usd) %>% 
+  group_by(sectors_with_assets, isin, company_name, bics_subgroup, icb_subsector,  bloomberg_id) %>% 
   summarise(sum_value_usd = round(sum(value_usd, na.rm=T))) %>% 
   ungroup() %>% 
   mutate(share_total_value = round(
-    sum_value_usd/(total_overview %>% filter(asset_type=="Equity") %>% pull(sum_value_usd)),6)) %>% 
-  arrange(sectors_with_assets, desc(share_total_value))
-datatable(non_pacta_ALD_EQ_detail)
+    sum_value_usd/(total_overview %>%
+                     filter(asset_type=="Equity") %>%
+                     pull(sum_value_usd_by_asset)),6)
+    ) %>% 
+  arrange(desc(share_total_value))
+datatable(non_pacta_ALD_EQ_detail, caption="ALD information matched to Other sector - Equity - company level")
+} else {print("No Equity data available!")}
 
 ```
 
@@ -363,6 +457,7 @@ Overview of Holdings in non-PACTA sectors for which do find ALD. This could pote
 * ...?
 
 ```{r}
+if (exists("bonds_results_company")) {
 non_pacta_ALD_CB <- result_data_qa %>% 
   filter(asset_type == "Bonds" &
            has_asset_level_data ==  T &
@@ -372,30 +467,38 @@ non_pacta_ALD_CB <- result_data_qa %>%
   summarise(total_non_pacta_ALD_CB = n(), sum_value_usd = round(sum(value_usd, na.rm=T))) %>% 
   ungroup() %>% 
   mutate(share_total_value = round(
-    sum_value_usd/(total_overview %>% filter(asset_type=="Bonds") %>% pull(sum_value_usd)),6)) %>% 
+    sum_value_usd/(total_overview %>%
+                     filter(asset_type=="Bonds") %>%
+                     pull(sum_value_usd_by_asset)),6)
+    ) %>% 
   arrange(sectors_with_assets)
-
-datatable(non_pacta_ALD_CB)
+datatable(non_pacta_ALD_CB, caption="ALD information matched to Other sector - CBonds - sector level")
 
 non_pacta_ALD_CB_detail <- result_data_qa %>% 
   filter(asset_type == "Bonds" &
            has_asset_level_data == T &
            financial_sector == "Other" &
            investor_name != "Meta Investor") %>% 
-  select(sectors_with_assets, company_name, market_value, value_usd) %>% 
-  group_by(sectors_with_assets, company_name) %>% 
+  select(sectors_with_assets, isin, company_name, corporate_bond_ticker,bics_subgroup = security_bics_subgroup, icb_subsector = security_icb_subsector, bloomberg_id, value_usd) %>% 
+  group_by(sectors_with_assets, isin, company_name, corporate_bond_ticker, bics_subgroup, icb_subsector,  bloomberg_id) %>%
   summarise(sum_value_usd = round(sum(value_usd, na.rm=T))) %>% 
   ungroup() %>% 
   mutate(share_total_value = round(
-    sum_value_usd/(total_overview %>% filter(asset_type=="Bonds") %>% pull(sum_value_usd)),6)) %>% 
-  arrange(sectors_with_assets, desc(share_total_value))
-datatable(non_pacta_ALD_CB_detail)
-
+    sum_value_usd/(total_overview %>%
+                     filter(asset_type=="Bonds") %>%
+                     pull(sum_value_usd_by_asset)),6)
+         ) %>% 
+  arrange(desc(share_total_value))
+datatable(non_pacta_ALD_CB_detail, caption="ALD information matched to Other sector - CBonds - company level")
+} else {print("No Bonds data available!")}
 
 ```
 
 
 ## Funds Coverage
+
+FULL REWORK
+
 Check the impact of funds on overall coverage.
 Aggregation should happen on value_usd level where possible to ensure comparability across funds regarding the impact on the overall PF value
 For cases with missing currency information, we add aggregation by market_value, and group by currency.
@@ -408,23 +511,29 @@ For cases with missing currency information, we add aggregation by market_value,
 * Check if the funds with higher impact are available in the fund_data file.
 * If they are not, try to get the corresponding fund data from LIM and add the data to the fund_data table before the next run.
 
+**OPEN:**
+
+Still a bit unsure about the appropriate settings here and if the second table makes any sense.
+
 
 ```{r}
 funds_coverage <- result_data_qa %>% 
-  filter(direct_holding == F &
+  filter(#direct_holding == F &
            asset_type == "Funds" &
            investor_name != "Meta Investor") %>% 
-  select(fund_isin, currency,#isin, company_name,
+  select(fund_isin, currency,
          value_usd, market_value) %>% 
   group_by(fund_isin, currency) %>% 
   summarise(sum_value_usd = round(sum(value_usd, na.rm=T)),
             sum_market_value = round(sum(market_value, na.rm=T))) %>% 
   ungroup() %>% 
   mutate(
-    share_missing_value = round(sum_value_usd/
-      (investors_overview %>% filter(investor_name=="Meta Investor") %>% pull(sum_value_usd)), 5)
+    share_fund_value = round(sum_value_usd/
+      (investors_overview %>%
+         filter(investor_name=="Meta Investor") %>%
+         pull(sum_value_usd_by_inv)), 5)
     ) %>% 
-  arrange(fund_isin)
+  arrange(desc(share_fund_value))
 datatable(funds_coverage)
 
 funds_coverage_missing_value <- result_data_qa %>% 
@@ -438,7 +547,9 @@ funds_coverage_missing_value <- result_data_qa %>%
   ungroup() %>% 
   mutate(
     share_missing_value = round(sum_value_usd/
-      (investors_overview %>% filter(investor_name=="Meta Investor") %>% pull(sum_value_usd)), 5)
+      (investors_overview %>%
+         filter(investor_name=="Meta Investor") %>%
+         pull(sum_value_usd_by_inv)), 5)
     ) %>%  
   arrange(fund_isin)
 datatable(funds_coverage_missing_value)
@@ -448,21 +559,28 @@ datatable(funds_coverage_missing_value)
 
 
 ## Value by asset type
-**OPEN:**
 
-Target and Actions unclear
-One idea seems to be to check to share of sovereign bonds...
+Check if Sovereign Bonds are correctly classified separetly from Corporate Bonds
 
 ```{r}
 value_by_asset_type <- result_data_qa %>% 
   filter(investor_name != "Meta Investor") %>% 
   group_by(asset_type, security_type) %>% 
   summarise(sum_value_USD = round(sum(value_usd, na.rm = T))) %>% 
-  ungroup()
+  ungroup() %>% 
+  mutate(share_of_total_value = round(
+    sum_value_USD/(investors_overview %>%
+                     filter(investor_name=="Meta Investor") %>%
+                     pull(sum_value_usd_by_inv)
+                   ), 5)
+         )
 datatable(value_by_asset_type)
 ```
 
 ## Port Weight check
+
+CHECK AFTER JACKSONS BUGFIX AND MOVE UP
+
 This table checks if the portfolio weights of the data inputs and outputs correspond.
 We expect that this is the case, i.e. the difference in port_weight should be negligible.
 
@@ -475,9 +593,11 @@ We expect that this is the case, i.e. the difference in port_weight should be ne
 * anything more precise....?
 
 **OPEN:** NA.RM for max(port_weight) as well?
+
 ### Equity
 
 ```{r}
+if (exists("equity_results_company")) {
 port_weight_eq_input <- result_data_qa %>% 
   filter(investor_name == "Meta Investor" &
            portfolio_name == "Meta Portfolio" &
@@ -505,6 +625,7 @@ port_weight_eq_comp <- port_weight_eq_input %>%
   arrange(financial_sector, company_name) %>% 
   mutate(weight_diff = round((max_port_weight - weight_value_usd),5))
 datatable(port_weight_eq_comp)
+} else {print("No Equity data available!")}
 
 ```
 

@@ -825,9 +825,12 @@ get_and_clean_fund_data <- function(){
   }else if(file.exists(paste0(analysis_inputs_path,"/fund_data_2018Q4.rda"))){
     fund_data <- readRDS(paste0(analysis_inputs_path,"/fund_data_2018Q4.rda"))
     print("Old Fund Data being used. Replace FundsData2018Q4 or check name of file.")
-  }else if(file.exists(paste0(analysis_inputs_path, "/SFC_26052020_funds.csv"))){
-    fund_data <- read_csv(paste0(analysis_inputs_path, "/SFC_26052020_funds.csv"))
-    print("2020Q2 SFC fund data being used")
+  # }else if(file.exists(paste0(analysis_inputs_path, "/SFC_26052020_funds.csv"))){
+  #   fund_data <- read_csv(paste0(analysis_inputs_path, "/SFC_26052020_funds.csv"))
+  #   print("2020Q2 SFC fund data being used")
+  }else if(file.exists(paste0(analysis_inputs_path, "/Liechtenstein_p2020_fund_holdings_2019Q4.csv"))){
+    fund_data <- read_csv(paste0(analysis_inputs_path, "/Liechtenstein_p2020_fund_holdings_2019Q4.csv"))
+    print("2019Q4 (?) Liechtenstein fund data being used")
   }else{
     if(!data_check(fund_data)){
       warning("No fund data available")}
@@ -852,7 +855,13 @@ get_and_clean_fin_data <- function(fund_data){
   fin_data_raw <- read_rds(paste0(analysis_inputs_path,"/security_financial_data.rda")) %>% as_tibble()
   # col_types = "ddcccccccccccccccDddddddddddddddddc")
   
-  if(!unique(fin_data_raw$financial_timestamp) == financial_timestamp){print("Financial timestamp not equal")}
+  # remove unclear duplicates from raw financial data. This should be moved to DataStore.
+  rm_duplicates <- read_csv("non_distinct_isins.csv")
+  rm_duplicates <- rm_duplicates %>% distinct(isin) %>% pull(isin)
+  fin_data_raw <- fin_data_raw %>%
+    filter(!(isin %in% rm_duplicates))
+
+    if(!unique(fin_data_raw$financial_timestamp) == financial_timestamp){print("Financial timestamp not equal")}
   
   overrides <- read_csv("data/fin_sector_overrides.csv",
                         col_types = "ccdc")
@@ -902,6 +911,8 @@ get_and_clean_fin_data <- function(fund_data){
       sector_override,
       is_sb
     ) %>% 
+    mutate(unit_share_price = round(unit_share_price, 6),
+           exchange_rate_usd = round(exchange_rate_usd, 7)) %>% 
     distinct()
   
   ### TEST
@@ -1200,7 +1211,7 @@ create_audit_file <- function(portfolio_total){
   
   audit_file <- portfolio_total %>% 
     select(all_of(grouping_variables), holding_id, isin, value_usd, company_name, asset_type,  has_revenue_data, valid_input, 
-           direct_holding, financial_sector, sectors_with_assets, has_ald_in_fin_sector,flag)
+           direct_holding, security_mapped_sector, financial_sector, sectors_with_assets, has_ald_in_fin_sector,flag)
   
   if(has_revenue == FALSE){audit_file <- audit_file %>% select(-has_revenue_data)}
   
