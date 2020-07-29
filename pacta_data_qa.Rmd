@@ -31,36 +31,33 @@ For the analysis to be run, the processed portfolio inputs as well as the compan
 
 ```{r}
 # read in if report has been run successfully, but data is not currently in the workspace
-# this is still very ugly, I will tidy it up asap
-if (
-  c("Bonds_results_company.rda") %in% list.files(results_path) &
-  c("Equity_results_company.rda") %in% list.files(results_path) &
-  c(paste0(project_name, "_total_portfolio.rda")) %in% list.files(paste0(proc_input_path, "/"))
-) {
-  result_data_qa <- readRDS(paste0(project_location,"/30_Processed_Inputs/",project_name,"_total_portfolio.rda"))
-  bonds_results_company <- readRDS(paste0(project_location,"/40_Results/Meta Investor/Bonds_results_company.rda"))
-  equity_results_company <- readRDS(paste0(project_location,"/40_Results/Meta Investor/Equity_results_company.rda"))
-} else if (
-  c("Bonds_results_company.rda") %in% list.files(results_path) &
-  c(paste0(project_name, "_total_portfolio.rda")) %in% list.files(paste0(proc_input_path, "/"))
-) {
-  result_data_qa <- readRDS(paste0(project_location,"/30_Processed_Inputs/",project_name,"_total_portfolio.rda"))
-  bonds_results_company <- readRDS(paste0(project_location,"/40_Results/Meta Investor/Bonds_results_company.rda"))
-} else if (
-  c("Equity_results_company.rda") %in% list.files(results_path) &
-  c(paste0(project_name, "_total_portfolio.rda")) %in% list.files(paste0(proc_input_path, "/"))
-) {
-  result_data_qa <- readRDS(paste0(project_location,"/30_Processed_Inputs/",project_name,"_total_portfolio.rda")) &
-  equity_results_company <- readRDS(paste0(project_location,"/40_Results/Meta Investor/Equity_results_company.rda"))
+
+# availability checks
+bonds_available <- c("Bonds_results_company.rda") %in% list.files(results_path)
+equity_available <- c("Equity_results_company.rda") %in% list.files(results_path)
+portfolio_available <- c(paste0(project_name, "_total_portfolio.rda")) %in% list.files(paste0(proc_input_path, "/"))
+
+# data paths
+# inconsisten directory with the check (Meta Investor sub dir)
+portfolio_path <- paste0(project_location,"/30_Processed_Inputs/",project_name,"_total_portfolio.rda")
+bonds_path <- paste0(project_location,"/40_Results/Meta Investor/Bonds_results_company.rda")
+equity_path <- paste0(project_location,"/40_Results/Meta Investor/Equity_results_company.rda")
+
+# read in as much asset types as possible
+if (all(bonds_available, equity_available, portfolio_available)) {
+  result_data_qa <- readRDS(portfolio_path)
+  bonds_results_company <- readRDS(bonds_path)
+  equity_results_company <- readRDS(equity_path)
+} else if (all(bonds_available, portfolio_available)) {
+  result_data_qa <- readRDS(portfolio_path)
+  bonds_results_company <- readRDS(bonds_path)
+} else if (all(equity_available, portfolio_available)) {
+  result_data_qa <- readRDS(portfolio_path) &
+  equity_results_company <- readRDS(equity_path)
 } else {
   print("Could not find the required files to generate data QA html document in the project directory. Skipping!")
 }
 
-
-# inconsisten directory with the check (Meta Investor sub dir)
-result_data_qa <- readRDS(paste0(project_location,"/30_Processed_Inputs/",project_name,"_total_portfolio.rda"))
-bonds_results_company <- readRDS(paste0(project_location,"/40_Results/Meta Investor/Bonds_results_company.rda"))
-equity_results_company <- readRDS(paste0(project_location,"/40_Results/Meta Investor/Equity_results_company.rda"))
 
 ```
 
@@ -518,38 +515,41 @@ Still a bit unsure about the appropriate settings here and if the second table m
 
 ```{r}
 funds_coverage <- result_data_qa %>% 
-  filter(asset_type == "Funds" &
+  filter(direct_holding == FALSE &
            investor_name != "Meta Investor") %>% 
-  select(fund_isin, currency,
+  select(fund_isin, currency, market_value, exchange_rate,
          value_usd) %>% 
   group_by(fund_isin, currency) %>% 
-  summarise(value_usd_by_fund = round(sum(value_usd, na.rm=T))) %>% 
+  summarise(market_value_in_usd_by_fund = round(max(market_value*exchange_rate, na.rm=T))) %>% 
   ungroup() %>% 
   mutate(
     overall_value_usd = (investors_overview %>%
                            filter(investor_name=="Meta Investor") %>%
                            pull(sum_value_usd_by_inv)),
-    share_fund_value_total = round(value_usd_by_fund/overall_value_usd, 5)
+    share_fund_value_total = round(market_value_in_usd_by_fund/overall_value_usd, 5)
     ) %>% 
   arrange(desc(share_fund_value_total))
 datatable(funds_coverage)
 
 funds_coverage_missing_value <- result_data_qa %>% 
   filter(isin == "MissingValue" &
-           investor_name != "Meta Investor") %>% 
+           direct_holding == FALSE &
+           investor_name == "Meta Investor") %>% 
   select(fund_isin, currency,
          value_usd) %>% 
   group_by(fund_isin, currency) %>% 
   summarise(value_usd_missing_by_fund = round(sum(value_usd, na.rm=T))) %>% 
   ungroup() %>% 
   right_join(funds_coverage, by = c("fund_isin", "currency")) %>% 
-  select(fund_isin, currency, value_usd_missing_by_fund, value_usd_by_fund, overall_value_usd) %>% 
+  select(fund_isin, currency, value_usd_missing_by_fund, market_value_in_usd_by_fund, overall_value_usd) %>% 
   mutate(
-    share_missing_value_by_fund = round(value_usd_missing_by_fund/value_usd_by_fund, 5),
+    share_missing_value_by_fund = round(value_usd_missing_by_fund/market_value_in_usd_by_fund, 5),
     share_missing_value_overall = round(value_usd_missing_by_fund/overall_value_usd, 5)
     ) %>%  
   arrange(desc(share_missing_value_by_fund))
 datatable(funds_coverage_missing_value)
+
+
 
 
 ```
