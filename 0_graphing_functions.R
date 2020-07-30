@@ -512,8 +512,8 @@ define_test_variables <- function(test_list){
 
 graph_values <- function(){
   
-  textfont <<- "Calibri"
-  windowsFonts(Calibri=windowsFont(textfont))
+  textfont <<- "Arial"
+  #windowsFonts(Calibri=windowsFont(textfont))
   
   #orangeish
   RenewablesColour <<- "#feedde"
