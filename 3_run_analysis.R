@@ -65,7 +65,7 @@ if(file.exists(equity_input_file)){
     
     if(has_map){
       
-      map_eq <- merge_in_geography(company_all_eq, ald_raw_eq, sectors_for_maps)
+      map_eq <- merge_in_geography(company_all_eq, ald_raw_eq)
       
       map_eq <- aggregate_map_data(map_eq)
       
@@ -152,7 +152,7 @@ if (file.exists(bonds_inputs_file)){
     if(has_map){
       
       if(data_check(company_all_cb)){
-        map_cb <- merge_in_geography(company_all_cb, ald_raw_cb, sectors_for_maps)
+        map_cb <- merge_in_geography(company_all_cb, ald_raw_cb)
         
         map_cb <- aggregate_map_data(map_cb)
       }  
