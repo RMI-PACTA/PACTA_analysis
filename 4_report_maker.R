@@ -39,11 +39,11 @@ portfolio_overview$portfolio_name <- clean_punctuation(portfolio_overview$portfo
 report_list <- get_report_list(portfolio_overview)
 
 
-template <- readLines(paste0(dirname("/Templates/",templateversion,".tex"),encoding = "UTF-8"))
+template <- readLines(paste0("Templates/",templateversion,".tex"),encoding = "UTF-8")
 translate_labels(Language)
 
 if(has_sb){SB.Values = GetSovBondCoverage()}
-
+#i <- 1
 for (i in 1:nrow(report_list)){
   
   investor_name_select <- report_list$investor_name[i]
@@ -66,7 +66,7 @@ for (i in 1:nrow(report_list)){
   report_handle <- graph_name("00",ParameterFile)
   create_results_folder(project_name,investor_name_select,portfolio_name_select,report_handle)
   
-  ReportFigures(explicit_filenames = F)
+  ReportFigures()
   
   has_sb <- HasSB()
   
