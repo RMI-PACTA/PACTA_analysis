@@ -33,6 +33,8 @@ if(file.exists(equity_input_file)){
     
     port_eq <- calculate_weights(port_raw_eq, "Equity", grouping_variables)
     
+    port_eq <- port_eq %>% filter(port_weight > 1e-6)
+    
     company_port_weight <- port_eq %>% 
       group_by(id) %>% 
       summarise(company_port_weight = sum(port_weight)) %>% 
