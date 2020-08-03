@@ -1261,8 +1261,15 @@ FiveYearGrowthTrend <- function(plotnumber, chart_type, tech_to_plot, LegendOn =
     ### Normalisation of market to Portfolio
     ALD.cp <- ALD2 %>% filter(Line.Type=="CurrentPlan")
     
-    var <- ifelse(ALD.cp[which(ALD.cp$portfolio_name==PortNames & ALD.cp$year ==start_year  & ALD.cp$technology ==tech_to_plot),]$Production == 0,0,
-                  ALD.cp[which(ALD.cp$investor_name=="Market" & ALD.cp$year ==start_year  & ALD.cp$technology ==tech_to_plot),]$Production/ ALD.cp[which(ALD.cp$portfolio_name==PortNames & ALD.cp$year ==start_year  & ALD.cp$technology ==tech_to_plot),]$Production)
+    var <- ifelse(ALD.cp[which(ALD.cp$portfolio_name==PortNames &
+                                 ALD.cp$year == start_year  &
+                                 ALD.cp$technology == tech_to_plot),]$Production == 0,0,
+                  ALD.cp[which(ALD.cp$investor_name == "Market" &
+                                 ALD.cp$year == start_year &
+                                 ALD.cp$technology == tech_to_plot),]$Production/
+                    ALD.cp[which(ALD.cp$portfolio_name==PortNames &
+                                   ALD.cp$year == start_year  &
+                                   ALD.cp$technology == tech_to_plot),]$Production)
     # var <- 1
     #ALD.cp[which(ALD.cp$investor_name_select=="Market" & ALD.cp$technology ==tech_to_plot),]$Production<- ifelse(var ==0,0,ALD.cp[which(ALD.cp$investor_name_select=="Market" & ALD.cp$technology ==tech_to_plot),]$Production/var)
     
