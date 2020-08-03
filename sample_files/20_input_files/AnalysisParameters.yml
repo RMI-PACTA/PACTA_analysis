@@ -66,9 +66,8 @@ default:
     
   Lists:
     Scenario.Sources.List:
-  #    - GP_ER_2015 
       - ETP2017
-  #    - BNEF2017
+      - SBTI
       - WEO2019
 
     IEA.Scenarios.List:
@@ -82,10 +81,8 @@ default:
       - GlobalAggregate
       - NonOECD
       - OECD
-  #    - Europe
-   #   - NorthAmerica
     Equity.Market.List:
-      - Global
+      - GlobalMarket
     Global.Aggregate.Sector.List:
       - Power
     Global.Aggregate.Scenario.Sources.List:

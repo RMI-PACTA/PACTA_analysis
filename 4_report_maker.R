@@ -1,5 +1,7 @@
 # Website basic Graph Code
 
+# options(encoding = "native.enc")
+
 # Libraries
 library(grid)
 library(ggplot2)
@@ -23,6 +25,7 @@ library(tidyverse)
 library(ggforce) 
 library(sitools) 
 library(countrycode)
+#library(mapproj)
 
 # Set Reporting Parameters
 options(r2dii_config = paste0(par_file_path,"/ReportParameters.yml"))
@@ -39,14 +42,14 @@ portfolio_overview$portfolio_name <- clean_punctuation(portfolio_overview$portfo
 report_list <- get_report_list(portfolio_overview)
 
 
-#template <- readLines(paste0(dirname("/Templates/",templateversion,".tex"),encoding = "UTF-8"))
+#template <- read_utf8_tex(paste0(getwd(),"/Templates/",templateversion,".tex"))
 translate_labels(Language)
 
 if(has_sb){SB.Values = GetSovBondCoverage()}
 
+#i=94
+
 i=1
-
-
 
 for (i in 1:nrow(report_list)){
   
@@ -61,22 +64,18 @@ for (i in 1:nrow(report_list)){
   ########################
   set_initial_variables()
   test_list <- create_test_list()
-  
+
   results_call()
-  
+
   #########################
   ### REPORT GENERATION ###
   #########################
   report_handle <- graph_name("00",ParameterFile)
   create_results_folder(project_name,investor_name_select,portfolio_name_select,report_handle)
   
-  ReportFigures()
+  ReportFigures(explicit_filenames = F)
   
-  # if(has_sb){
-  #   SovereignBondFigures()    
-  # }
-  # 
-  # ReportGeneration()
+ 
   
   
   
