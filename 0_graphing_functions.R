@@ -144,7 +144,10 @@ results_call <- function(){
   # Filtering Market should already happen here. 
   
   
-  subgroup_overview <<- portfolio_overview[portfolio_overview$investor_name == investor_name_select & portfolio_overview$portfolio_name == portfolio_name_select & portfolio_overview$valid_input == TRUE,]
+  subgroup_overview <<- portfolio_overview %>% 
+                          filter(investor_name == investor_name_select &
+                                   portfolio_name == portfolio_name_select &
+                                   valid_input == TRUE)
   
   
   define_benchmarks()
