@@ -74,7 +74,7 @@ for (i in 1:nrow(report_list)){
     SovereignBondFigures()    
   }
 
-  ReportGeneration()
+  #ReportGeneration()
   
   
   

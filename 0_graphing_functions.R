@@ -119,11 +119,16 @@ define_benchmarks <- function(){
   
   if(twodii_internal){
     
-    eq_market <<- read_rds(paste0(portcheck_v2_path,"/10_Projects/INDEX_2019/40_Results/Equity_results_portfolio.rda")) %>%
+    eq_market <<- read_rds(paste0(portcheck_v2_path,"/10_Projects/0_Indices/40_Results/Equity_results_portfolio.rda")) %>%
       filter(portfolio_name == eq_market_ref)
-    cb_market <<- read_rds(paste0(portcheck_v2_path,"/10_Projects/INDEX_2019/40_Results/Bonds_results_portfolio.rda"))%>%
+    cb_market <<- read_rds(paste0(portcheck_v2_path,"/10_Projects/0_Indices/40_Results/Bonds_results_portfolio.rda"))%>%
       filter(portfolio_name == cb_market_ref)
     
+    # eq_market <<- read_rds(paste0(portcheck_v2_path,"/10_Projects/INDEX_2019/40_Results/Equity_results_portfolio.rda")) %>%
+    #   filter(portfolio_name == eq_market_ref)
+    # cb_market <<- read_rds(paste0(portcheck_v2_path,"/10_Projects/INDEX_2019/40_Results/Bonds_results_portfolio.rda"))%>%
+    #   filter(portfolio_name == cb_market_ref)
+    # 
     
     # eq_market <<- read_rds(paste0(portcheck_v2_path,"/10_Projects/FAKE_MARKETS/40_Results/Equity_results_portfolio.rda")) %>%
     #   filter(portfolio_name == eq_market_ref)
@@ -1935,7 +1940,7 @@ CompanyInformation <- function(plotnumber, companiestoprint, chart_type, sector_
     Companies$tech_share <- Companies$plan_tech_prod
     Companies$Classification <- "Companies"
     #Companies$Name <- paste0(substr(Companies$Name, 1, 15),"...")
-    Companies <- subset(Companies, select = c("Entity.Name","Classification","technology","tech_share","port_weight"))
+    Companies <- subset(Companies, select = c("Entity.Name","Classification","technology","tech_share","company_port_weight"))
     colnames(Companies) <- c("Name","Classification","technology","tech_share","PortWeight")
     Companies$Name <- as.character(Companies$Name)
     Companies$Name  <- ifelse(is.na(Companies$Name),"No Name",Companies$Name)

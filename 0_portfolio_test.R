@@ -9,6 +9,12 @@ get_ald_scen <- function(portfolio_type){
     
     ald <- read_rds(paste0(analysis_inputs_path, "/equity_ald_scenario.rda"))
     
+    # fix naming issue. if equity market list is either Global or GlobalMarket, allow both
+    # values. Else retain the input from the config file
+    equity_market_list <- ifelse(c("Global", "GlobalMarket") %in% equity_market_list,
+                                 c("Global", "GlobalMarket"),
+                                 equity_market_list) 
+    
     ald <- ald %>% 
       filter(equity_market %in% equity_market_list) #%>% 
     # rename(bloomberg_id = id)
