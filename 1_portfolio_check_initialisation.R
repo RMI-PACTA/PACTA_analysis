@@ -46,7 +46,7 @@ cfg <- config::get(file = "project_settings.yml")
 check_valid_cfg(cfg)
 
 project_name <- cfg$project_name
-twodii_internal <- cfg$project_internal$twodii_interna
+twodii_internal <- cfg$project_internal$twodii_internal
 project_location_ext <- cfg$project_internal$project_location_ext
 data_location_ext <- cfg$project_internal$data_location_ext
 
