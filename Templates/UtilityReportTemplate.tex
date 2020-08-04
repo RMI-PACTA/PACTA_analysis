@@ -1,0 +1,758 @@
+%!TEX TS-program = xelatex
+\documentclass[10pt,table,a4]{article}\usepackage[]{graphicx}\usepackage[]{color}
+
+
+%%%%%%%%%%%%
+% To insert a new page, copy in the following text and populate the space between \HEaderSingle and \PageFooter
+% Populate the {brackets} with either the header title or footer text. 
+% \HeaderDouble{FirstLineText}{Second Line Text} is also an option
+% Use unique variable handles for text that must be replaced
+% Highlight text that is "flexible" that will need to be subbed out with text from R
+% Consider checking the GeneralTemplate for inspriration for tables etc. 
+
+%	\section*{} % Introduction
+%	\HeaderSingle{Company Profile}
+%
+%	This is the company report for Company.Name
+%	\adjincludegraphics[width = .95\linewidth,trim={0cm 0cm 0cm .5cm},clip]{BubbleChart.png}
+%	
+%	Flex.Text.P01       % An example handle for text that needs to be written in R based on the results. 
+%
+%	\PageFooter{Company Profile}
+%	\newpage
+%%%%%%%%%%%%
+
+
+
+\usepackage{alltt}
+\usepackage{graphicx}
+\usepackage{gensymb}
+\usepackage[top=1cm, bottom=1.5cm, left=1.8cm, right=1.8cm]{geometry}
+\usepackage[font=small]{caption}
+\usepackage{adjustbox}
+\usepackage{fancyhdr}
+\usepackage{layout}
+%\usepackage{booktabs}
+%\usepackage{kpfonts}
+\usepackage[explicit]{titlesec}
+\usepackage{wrapfig}
+\usepackage{tcolorbox}
+\usepackage{xcolor}
+\usepackage{setspace}
+\usepackage{parskip}
+\usepackage{tikz}
+\usepackage{fontspec}
+\usepackage{anyfontsize}
+\usepackage{hyphenat}
+\usepackage{multicol}
+\usepackage{datetime}
+\usepackage{fixltx2e}
+\usepackage{mfirstuc}
+\usepackage{tabularx}
+\usepackage{microtype}
+\usepackage{vwcol} 
+\usepackage{parcolumns}
+\usepackage{xcolor}
+\usepackage{xpatch}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage{enumitem} %allow changig space between \item
+\usepackage{booktabs} % table 
+\usepackage[sfdefault]{ClearSans}
+
+% Colours
+\definecolor{Blue1}{RGB}{47,73,110}
+\definecolor{Yellow2}{RGB}{252, 190, 54}
+\definecolor{Yellow3}{RGB}{254, 238, 207}
+
+\definecolor{PearlBlack}{RGB}{8,12,18}
+\definecolor{LightGray}{RGB}{208,208,208}
+
+\definecolor{ColRed}{RGB}{244,123,115}
+\definecolor{ColOrange}{RGB}{253,226,145}
+\definecolor{ColYellow}{RGB}{255,255,204}
+\definecolor{ColGreen}{RGB}{195,214,155}
+
+\pagestyle{fancy}
+\fancyhf{}
+%\fancyhead[R]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+\setlength{\parskip}{20pt}
+\righthyphenmin=2
+
+\setmainfont{ClearSans}
+\color{PearlBlack}
+
+
+
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
+
+\newcommand{\nearr}[1]{$\color{#1}\nearrow$}
+\newcommand{\searr}[1]{$\color{#1}\searrow$}
+\newcommand{\uparr}[1]{$\color{#1}\uparrow$}
+
+\setlength{\parskip}{5pt}
+
+\hypersetup{
+	colorlinks=true,
+	linkcolor=cyan,
+	filecolor=magenta,      
+	urlcolor=blue,
+}
+
+\urlstyle{same}
+
+\newcommand*{\PageHeadingSingleLine}{%
+	\begin{tikzpicture}[remember picture,overlay]
+	\node[anchor=north west,minimum width=.375cm,minimum height=1.2cm,fill=Blue1] (RB) at (-1.8,1.2){\Large };
+	
+	\end{tikzpicture}}
+\newcommand*{\PageHeadingDoubleLine}{%
+	\begin{tikzpicture}[remember picture, overlay]
+	\node[anchor=north west,minimum width=.375cm,minimum height=1.9cm,fill=Blue1] (RB) at (-1.8,1.2){\Large };
+	
+	\end{tikzpicture}}
+\newcommand{\HeaderSingle}[1]{
+	\PageHeadingSingleLine 
+	
+	\vspace{-1.2cm}
+	{\huge\textbf{\textcolor{Blue1}{#1}}}
+	\vspace{.2cm}}
+\newcommand{\HeaderDouble}[2]{
+	\PageHeadingDoubleLine
+	
+	\vspace{-1.2cm}
+	{\huge\textbf{\textcolor{Blue1}{#1 \\[2pt] #2}}}
+	\vspace{.45cm}}
+\newcommand*{\SectionHeadingBox}[1]{%
+	\begin{tikzpicture}[remember picture, overlay]
+	\node[anchor=north west,minimum width=.375cm,minimum height=#1,fill=Blue1] (RB) at (-1.2,-16){\Large };
+	\end{tikzpicture}
+	\vspace{.8cm}}
+\newcommand{\SectionHeading}[2]{
+	\SectionHeadingBox{3cm}
+	
+	\vspace{15.7cm}
+	\textbf{{\Huge #1 \\[6pt]\Huge #2}}}
+\newcommand{\SectionHeadingDouble}[3]{
+	\SectionHeadingBox{4cm}
+	
+	\vspace{15.7cm}
+	\textbf{{\Huge #1 \\[6pt]\Huge #2\\[6pt]\Huge #3}}}
+\newcommand{\PageFooter}[1]{% The number indicates the sector..... 
+	\begin{tikzpicture}[remember picture, overlay]
+	\node[text=Blue1,above = .8cm, left = -9.43cm,font=\bf\small,align=center] at (current page.south){ #1 | \thepage};	
+	\end{tikzpicture}
+}
+
+\newcommand{\KeyQuestions}{\textbf{\textcolor{Blue1}{\normalsize Key Questions}}}
+\newcommand{\KeyQuestion}{\textbf{\textcolor{Blue1}{Key Question}}}
+\newcommand{\Companyname}{\textbf{\textcolor{Blue1}{Company.Name}}}
+\newcommand{\Subheader}[1] {\vspace{10pt}{\textbf{\textcolor{Blue1}{\large{#1}}}\vspace{5pt}}}
+\newcommand{\Colortext}[1] {\vspace{0pt}{\textbf{\textcolor{Blue1}{\normalsize{#1}}}\vspace{3pt}}}
+\newcommand{\ColortextLarge}[1] {\vspace{3pt}{\textbf{\textcolor{Blue1}{\normalsize{#1}}}\vspace{6pt}}}
+\newcommand{\Fig}[1]{\textbf{\textcolor{Blue1}{Figure #1}}}
+\newcommand{\FigCap}[1]{{\textcolor{Blue1}{#1}}}
+\newcommand{\Tab}[1]{\textbf{\textcolor{Blue1}{Table #1}}}
+\newcommand{\TabCap}[1]{{\textcolor{Blue1}{#1}}}
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+\newcommand{\Footnotetext}[1] {\vspace{0pt}{\textcolor{Blue1}{\footnotesize{#1}}\vspace{3pt}}}
+
+\setmainfont{ClearSans}
+\color{PearlBlack}
+
+
+% Box with a shaded border
+\newtcolorbox{shadedbox}{colback=Blue1}
+
+%%%%%%%%%% BEGIN %%%%%%%%%%
+\begin{document}
+	
+%%%%%%%%%% FRONT PAGE %%%%%%%%%%
+	\section*{} % Front Page
+	
+	
+	\thispagestyle{empty}
+	\pagecolor{Blue1}
+	
+	\vspace{-2.6cm}
+	
+	\begin{tikzpicture}[remember picture, overlay]
+	\vspace{7cm}
+	\node[below=-5cm] (CN) at (current page.north){\adjincludegraphics[height=19cm,trim={0cm 0cm 0cm 0cm},clip]{CompanyReportGraphics/FrontPageLightBulbs.png}
+	};
+	
+	\node[below = 5cm, right,align = left, white, text width=12cm](TN) at (5,-14.5){
+		\Huge{\textbf{Climate  Scenario  Analysis}}\\[10pt]
+		%		\vspace{2cm}
+		%		{\baselineskip=20pt\Huge\raggedright{\textbf{InvestorName}\par}}
+		\vspace{1.4cm}
+		{\baselineskip=14pt\Huge\raggedright{\textbf{Company.Name}\par}}
+		\vspace{1.4cm}
+		{\baselineskip=12pt\Huge\raggedright{\textbf{Report Start.Year}\par}}};
+	
+	
+	\end{tikzpicture}
+	
+
+	\begin{tikzpicture}[remember picture,overlay]
+	\node[anchor=south west, yshift = 0cm ,minimum width=21.6cm,minimum height=4cm,fill=white] (RB) at (current page.south west){};
+	\node[left= 7cm, above=1.cm] (WS) at (current page.south){\adjincludegraphics[height=1.8cm,trim={0cm 0cm 0cm 0cm},clip]{CompanyReportGraphics/Logo_front}};
+	\node[ below = 2.15cm, minimum width = 3.6cm, minimum height =0.35cm, fill = Blue1] at (1.85,-25.25){};
+	\end{tikzpicture}
+	
+	\vspace{24cm}
+	\hspace{5cm}
+	\begin{tikzpicture}
+	%\draw (0, 0)
+	\node[rounded corners = 5pt, fill = red, text = white, minimum height = 1cm]
+    {\Large{\textbf{DRAFT -  DO NOT CIRCULATE OR USE TO INFORM DECISIONS}}};
+	\end{tikzpicture}
+
+	\newpage
+
+	\pagecolor{white}
+	
+%%%%%%%%%% 2 %%%%%%%%%%
+	\section*{} % Legal Disclaimer
+
+		\HeaderSingle{Legal Disclaimer}
+		
+	\small{	
+	This Report has been prepared by the 2° Investing Initiative (2°ii) a leading not-for-profit think-tank on climate related metrics and policies in financial markets. The Report summarises our Company Climate Scenario Analysis (CCSA) in relation to \(\Companyname\)  (the Company). The CCSA is our limited 'point in time' estimate of the alignment between the Company's revealed business plans for its power generation business in the period 2019-2024, versus the economic trends embodied in the International Energy Agency’s (IEA’s) 'World Energy Outlook' and 'Energy Technology Perspective' scenarios. This Report is made available through our PACTA portal and its use is subject to the Terms of Service agreed to by users of that portal. The methodology applied in the CCSA, its data inputs, assumptions and limitations, are set out in this Report and the Methodology Statement – Company Reports available at www.transitionmonitor.com/company-reports/. 
+	
+	\textbf{Limitations and assumptions:}
+	The CCSA does not purport to analyse all risks, opportunities or issues associated with climate change that may be relevant to the Company. Such issues may include (for example) physical or ecological impacts that may be caused by, or to, the assets and operations of the Company, and any climate-related litigation exposures.
+	The CCSA utilises publicly-available information, and proprietary third party data obtained under licence, which 2°ii believes in good faith to be reliable. However, 2°ii makes no representation or warranty (express or implied) as to the completeness, accuracy or currency of such information or data, nor to the completeness, accuracy or currency of the information in this Report. 
+	
+	\textbf{No forecast or prediction:}
+	The CCSA does not purport to generate, nor does this Report contain or comprise, forecasts or predictions. 2°ii neither makes nor implies any representation regarding the likelihood, risk or expectation of any future matter. In particular, 2°ii does not make any representation that by making the changes to the Company's revealed plans identified in the Report, the Company would be in compliance with any Sustainable Development Goals or the long-term warming goals of the Paris Agreement or achieve any stated climate targets. To the extent that any statements made or information contained in this Report might be considered forward-looking in nature, they are subject to risks, variables and uncertainties that could cause actual results to differ materially. You are cautioned not to place any reliance on any such forward-looking statements, which reflect our assumptions and methodology as applied to third party data and the Company's revealed business plans only as of the date of modelling or such earlier date as indicated in this Report. It is likely that the third party data, the Company's revealed plans, and the IEA scenarios will change in some way during the five-year time horizon, and our assumptions and methodology may also evolve and change during this time. 2°ii is not obliged to revise, or to publicly release any revisions to, this Report or to notify you if the data, revealed plans, assumptions or methodology change or become inaccurate.  
+	
+	\textbf{No financial advice:}
+	The information contained in this Report is general in nature. It does not comprise, constitute or provide personal, specific or individual recommendations or advice, of any kind. In particular, it does not comprise, constitute or provide, nor should it be relied upon as, investment or financial advice, a credit rating, an advertisement, an invitation, a confirmation, an offer, a solicitation, an inducement or a recommendation, to buy or sell any security or other financial, credit or lending product, to engage in any investment strategy or activity, nor an offer of any financial service. \textbf{This Report does not purport to quantify, and 2°ii makes no representation in relation to, the performance, strategy, prospects, creditworthiness or risk associated with the Company or any investment therein, nor the achievability of any stated climate targets (of the Company, the defined market, an investor's portfolio or otherwise). The Report is made available with the understanding and expectation that each user will, with due care and diligence, conduct its own investigations and evaluations, and seek its own professional advice, in considering the Company's financial performance, strategies, prospects or risks, and the suitability of any investment therein for purchase, holding or sale within their portfolio.}
+	
+	\textbf{IEA Scenarios:}
+	The choice of any scenario should not be taken as any endorsement of it, nor any statement as to the accuracy or completeness of its methodologies or assumptions, nor as a general preference for it over any other economic scenario. 2°ii may carry out the CCSA using other economic scenarios. Users must form their own view as to the decarbonisation or economic scenarios, trajectories and models that are most appropriate to their circumstances. No explicit or implicit assumption is made in relation to the current or future alignment of the scenarios with the Paris Agreement or the climate-related policies of any government at international, national or sub-national level.
+	
+	\textbf{TCFD and other climate-related financial reporting:}
+	The CCSA and this Report may provide underlying data for climate-related financial reporting, including initiatives undertaken with regard to the Recommendations of G20 Financial Stability Board’s Taskforce on Climate-Related Financial Disclosures (TCFD). However, its use in isolation does not purport to provide ‘TCFD compliance’ or compliance with any other reporting requirements, and any data used should be subject to appropriate processes of verification and assurance. 
+	
+	\textbf{Exclusion of liability:}
+	To the extent permitted by law we will not be liable to any user or to the Company for any direct, indirect or consequential loss or damage, whether in contract, tort (including negligence), breach of statutory duty or otherwise, even if foreseeable, relating to any information, data, content or opinions stated in this Report, or arising under or in connection with the use of, or reliance on, the CCSA or this Report.
+	
+		
+		
+	}	
+		
+		
+		
+		\PageFooter{Legal Disclaimer}
+		\newpage
+
+%%%%%%%%%% 2 %%%%%%%%%%
+	\section*{} % Executive Summary
+		\HeaderDouble{Executive Summary}{\textsl{Company.Name}}
+		
+		This report by 2° Investing Initiative provides an assessment of \(\Companyname\)'s power capacity by technology, its future alignment with climate transition pathways and evaluates its performance against other utilities in the Bench.Region market.
+		
+		\vspace{0.5cm}
+	   	\Subheader{Installed Capacity Start.Year} \\
+	   		\(\Companyname\) has CapInstalledStart MW of installed capacity with CompPercLowCStart\% coming from low carbon technologies. By End.Year, PlannedAdditions
+	
+	  
+	%Table 1
+	   \vspace{0.3cm} 
+	  
+	  	\begin{center} % Table1 
+	  	\adjincludegraphics[width = 1\linewidth,trim={0cm 0cm 0cm 0cm},clip]{CompanyReportOutputs/Table1.png} 
+	    \end{center}
+	  
+	    
+	 % Bar chart 
+	   	 \vspace{0.5cm}
+	   	\Subheader{Comparison of investment plans with transition scenarios}
+	   	
+	   	\(\Companyname\)’s planned capacity additions are compared to the different
+		climate scenarios of the International Energy Agency (IEA) for each technology as described on page 4. The additional capacity planned by \(\Companyname\) ScenarioStatement
+		
+		\vspace{0.7cm}
+		\begin{center} %bar chart
+			\adjincludegraphics[width = 0.7\linewidth,trim={0cm 0cm 0cm 0cm},clip]{CompanyReportOutputs/Fig31.png} 
+		\end{center}
+	
+	%Table 2
+		\vspace{1cm}
+		\Subheader{Changes in Capacity required to align with the Select.Scenario by End.Year}\\
+		In order to align with the Sustainable Development Scenario (Select.Scenario) by End.Year, \(\Companyname\) would require the following changes in capacity by technology to its
+		current plans by End.Year:
+		\vspace{0.3cm}
+	
+	
+			\begin{center} % Table1 
+				\adjincludegraphics[width = 1\linewidth,trim={0cm 0cm 0cm 0cm},clip]{CompanyReportOutputs/Table2.png} 
+			\end{center}
+		
+		\PageFooter{Executive Summary}
+		\newpage
+		
+			
+		
+	%%%%%%%%%% 3 %%%%%%%%%%
+	\section*{} % Introduction
+		\HeaderSingle{Introduction}
+		
+		\Subheader{Key Questions}
+		
+		This climate scenario report addresses five key questions regarding \(\Companyname\)’s climate strategy:
+		
+		\begin{enumerate}[nolistsep]
+			\item{How does the company’s current capacity mix compare to the power market’s capacity mix? (Page 6)}
+			\item{How do the company’s investment plans compare to different climate transition scenarios? (Page 7)}
+			\item{How does the company’s planned capacity mix by End.Year compare to the scenario-aligned market? 
+			(Page 9)}
+			\item{How can the company adjust its investment plans to align with the Select.Scenario by End.Year? 
+			(Page 10)}
+			\item{How does the company’s climate alignment compare to other utilities? 
+			(Page 11)}
+		\end{enumerate} 
+		
+		This document solely presents the results of the above analyses. For more information on the methodology, sce\-nar\-i\-os, underlying data, and limitations, please refer to methodology documentation available at \\ \href{http://www.transitionmonitor.com/}{www.transitionmonitor.com}.
+		
+		\Subheader{Why is scenario analysis important?}\\
+		Scenario analysis is highlighted within by the Task Force for Climate-related Financial Disclosures (TCFD) as a recommended tool for understanding the resilience of organization’s strategies under different climate related scenarios. It supports both companies and investors in developing action plans as a response to the Paris Agreement.
+		
+		\Subheader{How does this scenario analysis work?}\\
+		This scenario analysis is an assessment of the physical assets owned by  \(\Companyname\)  and its investment plans in new capacity, based on third party data. The share of responsibility, defined by climate scenarios that outline possible transition pathways, has been allocated to the company according to the regional distribution of its power capacity. Further analyses allow us to understand how  \(\Companyname\) is currently, and in the future, exposed to climate transition risks and opportunities.
+		
+		\Subheader{How can it be used?}\\
+		For \textbf{Companies}, this analysis provides a comparison of its performance relative to peers, and an understanding of how climate change responses differ. It also provides an overview of how planned capacity changes compare to the climate scenarios developed by the International Energy Agency (IEA). It highlights potential areas for action by companies.\par
+		
+		For \textbf{Investors}, this report may be used to inform their decision making by highlighting the alignment of the trajectories of companies in their portfolio with different climate scenarios and therefore their potential exposure to transition risks. The information provided in this report can support engagement activities with companies and may provide data for reporting requirements.\par
+		
+		For \textbf{other stakeholders}, such as policy makers or NGOs, this may support the development of guidelines for reporting or research.\par
+		
+		\textbf{What this report doesn’t do:} this report is not a financial analysis of the company and should not be taken as investment advice.\par
+		
+		Data used in this report is based on third party data from GlobalData (effective as of 12/2018) and may vary from what is announced by the company in annual reports; the data in this report	reflects an aggregation of the known subsidiaries of \(\Companyname\) aggregated under the equity share	principle. Details regarding the data sources and processing can be found on page 14. Companies are invited to review the data and provide feedback to assist in improving the underlying data sets by emailing 2dii at transitionmonitor@2degrees-investing.org. 
+	
+		
+	\PageFooter{Introduction}
+	\newpage
+	
+	
+	
+%%%%%%%%%% 4 %%%%%%%%%%
+	\section*{} % Reading the Report
+			\HeaderSingle{Reading the Report}
+			
+			\Subheader{Report Contents}\\	
+			This report consists of three elements:
+			\vspace{-0.2cm}
+			\begin{enumerate}[itemsep=0pt,parsep=2pt,topsep=2pt]
+				\item{\textbf{Company profile:} information about the current installed capacity of the company, its technology mix and its global capacity distribution.} 
+				\item{\textbf{Scenario Analysis:} results of the comparison of the company investment plans to different scenarios and the market.}
+				\item{\textbf{Peer Comparison:} a comparison of the scenario analysis results to peer companies operating in the same market.}
+			\end{enumerate}
+			%\par
+			\vspace{-0.15cm}
+			\Subheader{Key Concepts}\\
+			To understand the results presented in this report, some of the key concepts are summarised below. For detailed
+			information about the methodology, scenarios and underlying data, please refer to methodology documentation available at \href{http://www.transitionmonitor.com/}{www.transitionmonitor.com}.\par
+			
+			%\vspace{0.2cm}
+			\textbf{\emph{Low carbon technologies:}} This report treats renewables, hydro and nuclear as low carbon technologies, and gas, oil and coal capacity as high carbon technologies. Renewable technologies include solar, wind and biomass. While acknowledging other sustainability issues linked to different technologies, the analysis in this report focuses on the low carbon versus high carbon split.\par
+			
+			%\vspace{0.2cm}
+			\textbf{\emph{Capacity build out:}} Refers to the investment plans of the company in new power capacity.\par
+			
+			%\vspace{0.2cm}
+			\textbf{\emph{Capacity vs Generation:}}  This report uses capacity (MW) rather than generation (MWh) as a metric. The generation of electricity from each technology differs by a capacity factor that varies due to a multitude of factors.\par  
+			
+			%\vspace{0.2cm}
+			\textbf{\emph{Capacity mix:}} The distribution of the power capacity of \(\Companyname\) is used as an indicator. This refers to the share of installed capacity that \(\Companyname\) has in each technology.\par
+			
+			%\vspace{0.2cm}
+			\textbf{\emph{Market:}} The market referred to in this report is designated based on the country of domicile of \(\Companyname\). The market therefore includes all Bench.Region utilities.
+			
+			%\vspace{0.2cm}
+			\textbf{\emph{Aligned with a scenario:}} To be aligned with a scenario implies that the capacity build out of the company matches what is expected based on the roadmaps developed by the IEA.\par
+			
+			%\vspace{0.2cm}
+			\textbf{\emph{Scenarios:}} Four IEA scenarios are included in this report's analysis: three are sourced from the World Energy Outlook 2018 (WEO 2018) and one from the Energy Technology Perspectives 2017 (ETP 2017) and are detailed in Table 1. These have been chosen due to their regional and technological gra\-nu\-la\-ri\-ty. The Select.Scenario is used as the benchmark scenario. The scenarios consist of technology roadmaps that outline the technological changes required in each designated region globally. These roadmaps have been applied to each asset to calculate the change that would be required by asset. This is aggregated to the region and then the company to determine the overall expected change required.\par
+			
+			\vspace{0.3cm}
+			\Tab{1:} \TabCap{Overview of the IEA scenarios used in the analysis.}
+		
+		      \begin{center} % Table1 
+			     \adjincludegraphics[width = 0.8\linewidth,trim={0cm 0cm 0cm 0cm},clip]{CompanyReportOutputs/TableScenarios.png} 
+		     \end{center}
+		 \vspace{0.1cm}
+		\noindent\rule{8cm}{0.2pt}\\
+		\Footnotetext{*The temperature rise estimates for the B2DS, SDS and NPS are specified by the IEA. The CPS estimate is taken from Climate Action Tracker's 2018 Warming Projections Global Update.}
+			
+	\PageFooter{Reading the Report}
+	\newpage
+	
+
+	
+%%%%%%%%%% 5 %%%%%%%%%%
+	\section*{} % Company Profile
+	\HeaderSingle{Company Profile}
+	
+	This section outlines the current and future capacity mix of \(\Companyname\). Figure 1.1 shows the changes in capacity in each technology between Start.Year and End.Year. From this, one may be able to extrapolate whether the company’s transition risks increase or decrease. Figure 1.2 and 1.3 show the geographical
+	distribution of power generation assets by capacity and capacity mix.\par
+	
+	%\noindent\rule{8cm}{0.2pt}
+	\vspace{0cm}
+	\begin{center}
+	\hspace*{1.25cm}\includegraphics[width = 1\linewidth,trim={0cm 0cm 0cm 0cm},clip]{CompanyReportOutputs/Fig11.png}
+	\end{center}
+   \Fig{1.1:} \FigCap{Company capacity mix in Start.Year and End.Year.}
+   
+	%\noindent\rule{8cm}{0.2pt}
+	\vspace{0.2cm}	
+	\begin{center}
+	\adjincludegraphics[width = 0.85\linewidth,trim={0cm 0cm 0cm 2cm},clip]{CompanyReportOutputs/Fig12.png}
+    \end{center}
+   \Fig{1.2:} \FigCap{Geographical distribution of the company’s power generating assets in Start.Year.}
+   
+	%\noindent\rule{8cm}{0.2pt}
+	\vspace{-0.2cm}	
+	\begin{center}
+   \hspace*{-0.15cm}\includegraphics[width = 1\linewidth,trim={0cm 0cm 0cm 0cm},clip]{CompanyReportOutputs/Fig13.png}
+    \end{center}
+	\Fig{1.3:} \FigCap{Overview of the company’s capacity mix and total capacity in the largest countries by total capacity in Start.Year.}	
+		
+	\PageFooter{Company Profile}
+	\newpage
+	
+	
+%%%%%%%%%%6 %%%%%%%%%%
+	\section*{} % Current Alignment
+	\HeaderSingle{Current Alignment}
+	
+		\Subheader{How does the current capacity mix of  \(\Companyname\) compare to the market?}\\
+		This section provides an overview of the diversification of  \(\Companyname\)'s capacity across high and low carbon te\-chno\-lo\-gies. In order to meet the goals of the Paris Agreement, the IEA broadly signals that the share of “low carbon technologies” must increase while the share of “high carbon technologies” must decrease.
+		
+		
+		As such, the company's capacity mix is presented both in terms of the share of low carbon technologies of its total capacity, and the breakdown of its capacity by technology specifically. The market is representative of all utilities in the Bench.Region power market. 
+		
+
+	\vspace{0.5cm}	
+	%\begin{center}
+		\hspace*{0.5cm}\textbf{A) Low and high carbon capacity mix percentage}
+		
+		\hspace*{1.5cm}\includegraphics[width = 0.7\linewidth,trim={0cm 0cm 0cm 1cm},clip]{CompanyReportOutputs/Fig2_Start.Year.png}\par
+	%\end{center}
+	%\begin{center}
+	\hspace*{0.5cm}\textbf{B) Capacity mix by technology percentage}
+	   
+	  \hspace*{2.8cm}\includegraphics[width = 0.7\linewidth,trim={0cm 0cm 0cm 0cm},clip]{CompanyReportOutputs/Fig4_Start.Year.png}
+%	\end{center}
+
+	\Fig{2.1:} \FigCap{Comparison of the company's capacity mix to the market's capacity mix in Start.Year by A) low carbon vs high carbon spilt and B) by technology.}	
+	
+	\vspace{0.2cm}	
+	\ColortextLarge{\(\Companyname\) has CompPercLowCStart\% of its power capacity in low carbon technologies compared to MarketPercLowCStart\% in the market. \(\Companyname\) TechShareComparisonStart}
+
+	\PageFooter{Current Alignment}
+	\newpage
+	
+
+
+%%%%%%%%%% 7 %%%%%%%%%%
+	\section*{} % Trajectory
+	\HeaderSingle{Trajectory}
+	
+    \Subheader{How do the capital expenditure plans for different technologies compare to the climate sce\-narios?}\par
+	Plans to build or retire capacity over the next 5 years can be used to compare \(\Companyname\)'s planned changes in capacity  to
+	different In\-ter\-na\-tio\-nal Energy Agency (IEA) scenarios. These scenarios present possible transition pathways and the
+	changes in capacity required if each company in the world were to align its capacity accordingly.\par
+	The expected change in capacity by technology as per the IEA scenarios has been applied to the power capacity of
+	\(\Companyname\) to calculate the changes required under each scenario. This report benchmarks the
+	company against the Sustainable Development Scenario (Select.Scenario), though the following charts also show the Beyond 2 Degree Scenario (B2DS), the New
+	Policy Scenario (NPS) and the Current Policy Scenario (CPS).\par
+	Alignment with climate scenarios may vary by technology. For each technology, figure 3.1 summarises the different IEA sce\-na\-rios
+	that \(\Companyname\)’s investment plan aligns with. It is important to note that these charts are independent of the current exposure to each technology
+	(except by determining the starting point in terms of capacity). The initial (Start.Year) weighting of a technology within
+	the company’s capacity mix is not reflected in these charts.
+	\vspace{0.3cm}
+	\begin{center} % tile chart
+		\adjincludegraphics[width = 0.7\linewidth,trim={0cm 0cm 0cm 0cm},clip]{CompanyReportOutputs/Fig31.png} 
+	\end{center}
+     \vspace{0.3cm}
+	 \Fig{3.1:} \FigCap{Scenario outcome of the build out plans for each technology by End.Year. This summarises the results of the trajectory charts in End.Year.}
+	
+	\vspace{0.3cm}
+	\ColortextLarge{The additional capacity planned by \(\Companyname\) ScenarioStatement}\par
+	The charts on the following page (figure 3.2) provide additional details on how \(\Companyname\)’s
+	investment plans for each technology align with four IEA scenarios over the next five years. They also show the
+	market’s trajectory for context.
+		
+	\vspace{0.5cm}
+	%\noindent\rule{2.5cm}{0.2pt}
+	\begin{multicols}{2}
+	%\Subheader{Annotation}\\
+	\textsl{The background colours represent how the trajectory of a technology should progress under the relevant scenario based on the geographical exposure of the company's power capacity. The solid and dashed lines represent the production plans of the company and those of the utility market scaled to the starting point of the company. In the chart to the right, the company's investment plans for this technology lie between the SDS and NPS trajectories. The difference in End.Year between the company's production plan and the end point for a specific scenario indicates the change in capacity that would be required for alignment. The market capacity can be compared to the company plans as a relative indicator only, as the scenarios are specific to the company. In this case, the company is building out more of this technology than the market.}\par
+	
+	
+	\begin{center} % trajectory gas as example
+		\adjincludegraphics[width = 0.5\textwidth,trim={0cm 0cm 0cm 0.7cm},clip]{CompanyReportGraphics/246Explainer2.png} 
+		
+	\end{center}
+    \end{multicols}
+
+	\PageFooter{Trajectory}
+	\newpage
+
+
+	
+%%%%%%%%%% 8 %%%%%%%%%%
+	\section*{} % Trajectoery
+	\HeaderSingle{Trajectory}
+	
+	\vspace{-0.2cm}
+	\begin{multicols}{2}
+	\begin{center} %trajectory 
+		\adjincludegraphics[width = 1\linewidth,trim={0cm 0cm 0cm 0.5cm},clip]{CompanyReportOutputs/Trajectory_RenewablesCap.png} 
+		\adjincludegraphics[width = 1\linewidth,trim={0cm 0cm 0cm 0.5cm},clip]{CompanyReportOutputs/Trajectory_HydroCap.png} 
+		\adjincludegraphics[width = 1\linewidth,trim={0cm 0cm 0cm 0.5cm},clip]{CompanyReportOutputs/Trajectory_NuclearCap.png} 
+	\end{center}
+	
+	\begin{center} %trajectory 
+		\adjincludegraphics[width = 1\linewidth,trim={0cm 0cm 0cm 0.5cm},clip]{CompanyReportOutputs/Trajectory_CoalCap.png} 
+		\adjincludegraphics[width = 1\linewidth,trim={0cm 0cm 0cm 0.5cm},clip]{CompanyReportOutputs/Trajectory_GasCap.png} 
+		\adjincludegraphics[width = 1\linewidth,trim={0cm 0cm 0cm 0.5cm},clip]{CompanyReportOutputs/Trajectory_OilCap.png} 
+	\end{center}
+	
+	\end{multicols}
+\vspace{-0.2cm}
+	\begin{center} %Trajectory Legend
+	\adjincludegraphics[width = 0.6\linewidth,trim={0.5cm 0.2cm 0.2cm 0.5cm},clip]{CompanyReportGraphics/TrajectoryLegend.png} 
+    \end{center}
+   % \vspace{0.5cm}
+	\Fig{3.2: }\FigCap{illustrates how \(\Companyname\)’s planned capacity changes in each technology compare to different IEA transition pathways and the market.}
+
+	\PageFooter{Trajectory}
+    \newpage
+	
+	
+	
+%%%%%%%%%% 9 %%%%%%%%%%
+	\section*{} % Future Alignment
+	\HeaderSingle{Future Alignment}
+	
+		\Subheader{How will the planned capacity mix of \(\Companyname\) compare to a Bench.Region utility market aligned with the Select.Scenario in End.Year?}\par
+		The capacity mix of \(\Companyname\)  in End.Year is based on its capacity mix in Start.Year plus planned capacity changes between Start.Year and End.Year. The aligned market capacity mix shows what would be expected if the current Bench.Region power market were to develop over the next five years in accordance with the Select.Scenario.\par
+		
+		If the company has a lower amount of low carbon technologies than the theoretical aligned market, it may be exposed to higher transition risks based on the technological trajectories outlined by the IEA.\par
+		
+		Figure 4 shows that \(\Companyname\) has an capacity mix in End.Year which has FutureLowHigh\% percentage points or RelativeHighLow\% LessOrMore low carbon capacity than an aligned market.
+		
+		\vspace{0.5cm}	
+	%\begin{center}
+	\hspace*{0.5cm}\textbf{A) Low and high carbon capacity mix percentage}
+	
+	\hspace*{1.5cm}\includegraphics[width = 0.7\linewidth,trim={0cm 0cm 0cm 0cm},clip]{CompanyReportOutputs/Fig2_End.Year.png}\par
+	%\end{center}
+	%\begin{center}
+	\hspace*{0.5cm}\textbf{B) capacity mix by technology percentage}
+	
+	\hspace*{3cm}\includegraphics[width = 0.7\linewidth,trim={0cm 2cm 0cm 0cm},clip]{CompanyReportOutputs/Fig4_End.Year.png}\par
+	%	\end{center}	
+	\Fig{4.1:} \FigCap{Comparison of the company capacity mix to the market capacity mix in End.Year.}	
+	
+	\vspace{0.5cm}	
+	\ColortextLarge{By End.Year \(\Companyname\) TechShareComparisonEnd} \par 
+	
+	\PageFooter{Future Alignment}
+	\newpage
+	
+	
+	
+	
+%%%%%%%%%% 10 %%%%%%%%%%	
+	\section*{} % Achieving Alignment
+
+	\HeaderSingle{Achieving Alignment}
+	
+		\Subheader{What changes in capacity are required by \(\Companyname\)  to align itself with the Select.Scenario?}
+		
+		For \(\Companyname\) to align itself with the Select.Scenario by End.Year based on the company’s current capacity, the following capacity changes by technology are required. 
+		
+		\vspace{0.5cm}	
+		\begin{center}
+			\hspace*{0.4cm}\includegraphics[width = 1.2\linewidth,trim={0cm 0cm 0cm 0cm},clip]{CompanyReportOutputs/Fig5.png}
+			\adjincludegraphics[width = 0.8\linewidth,trim={0cm 0cm 0cm 0cm},clip]{CompanyReportGraphics/LegendFig5.png} 
+		\end{center}
+		\Fig{5:} \FigCap{Changes in capacity required to align with the Select.Scenario.}	
+		 
+		 \vspace{0.5cm}	
+		 \ColortextLarge{By End.Year, \(\Companyname\) AchievingAlignment}\par
+		 In some cases, the company’s investment plans may outperform the capacity required to align with the Select.Scenario. If the company’s investment plan for low carbon technologies exceeds scenario targets, no retirements are specified. Similarly, no additions are specified if the company’s plans already meet the transition pathways for high carbon technologies.
+	
+	\PageFooter{Achieving Alignment
+}
+	\newpage
+	
+	
+	
+	
+%%%%%%%%%% 11 %%%%%%%%%%
+	\section*{} % Comparison Between Utilities
+	\HeaderSingle{Comparison Between Utilities}
+	
+		\Subheader{How does the current capacity and future planned capacity of \(\Companyname\) for low carbon tech\-no\-lo\-gies compare to other utilities in the Bench.Region market?}\par
+		In this section, we represent the current capacity mix of \(\Companyname\) relative to the other utilities in the Bench.Region market, as well as its investment plans. Figure 6 highlights: 
+	%\begin{enumerate}
+	  	\begin{itemize}
+	  		\item On the x-axis, the percentage of low carbon technologies within the capacity mix in Start.Year.
+	  		\item On the y-axis, the percentage of planned additions by End.Year which are low carbon.
+	  		\item The Start.Year total power capacity of each company via the size of the circles. Each circle represents a separate utility.
+	  	\end{itemize}
+	  %\end{enumerate}
+		\vspace{0.2cm}
+	 	\(\Companyname\) is highlighted in black.
+		\vspace{-0.2cm}
+		\begin{center} %Trajectory Legend
+			\adjincludegraphics[width = 0.9\linewidth,trim={0cm -1cm 0cm 2cm},clip]{CompanyReportOutputs/Fig6.png} 
+		\end{center}
+	
+		\Fig{6:} \FigCap{\% planned future capacity in low carbon technologies vs \% current capacity in low carbon technologies.}	
+		
+		\vspace{0cm}	
+		Companies fall into one of four categories:
+		\begin{enumerate}[nolistsep]
+		\item{Upper Right: These companies are currently heavily invested in low carbon technologies as a share of the capacity mix, and have plans to expand investment in these technologies even further.}
+		\item{Lower Right: These companies are currently heavily invested in low carbon technologies as a share of the capacity mix. However, their planned capacity is either primarily high carbon, or they have no planned capacity additions.}
+		\item{Upper Left: These companies are not currently heavily invested in low carbon technologies, as a share of the capacity mix. However, their planned capacity additions are primarily low carbon.}
+		\item{Lower Left: These companies are neither currently heavily invested in low carbon technologies as a share of the capacity mix, nor have plans to build these out in the future.}
+		\end{enumerate}
+	
+	\PageFooter{Comparison Between Utilities}
+	\newpage
+	
+	
+	
+	
+%%%%%%%%%% 12 %%%%%%%%%%
+		\section*{} % Comparison Between Utilities
+	\HeaderSingle{Comparison Between Utilities}
+	
+		\Subheader{How do the investment plans in new capacity of \(\Companyname\) compare to other utilities?
+}\\
+		This section displays the investment plans by technology of all companies in the Bench.Region market. It highlights the distribution of the global capacity build out of these companies, in renewable and coal capacity.\par
+		Figure 7 shows the planned capacity changes between Start.Year and End.Year. The width of each bar represents the capacity of the build out of each company in the market: i.e. a company with 5 times as much capacity build out will be 5 times as wide as another company. This represents the cumulative additional capacity only and does not reflect net retirements. 
+		
+		 CompRenewBuildout\% of companies in the Bench.Region market have plans to invest in renewables (NewCapRenew\% of new capacity) while CompCoalBuildout\% of companies have plans to invest in new coal capacity (NewCapCoal\% of new capacity).
+		\par
+		The chart shows the build out volume of renewables and coal capacity for each company. 
+		
+		\vspace{0.1cm}
+		\begin{center} % comparison utlities bar chart 
+			\adjincludegraphics[width = 1\linewidth,trim={0cm 0cm 0cm 0cm},clip]{CompanyReportOutputs/Fig7.png} 
+		\end{center}
+	
+	    \vspace{0.5cm}
+		\Fig{7:} \FigCap{Breakdown of new power capacity by technology with a focus on Renewable and Coal power. The width of each bar represents the capacity of the build out of each company within the market.}	
+	
+	
+	\PageFooter{Comparison Between Utilities}
+	\newpage
+	
+	
+	
+	
+%%%%%%%%%% 13 %%%%%%%%%%
+		\section*{} % Market Share
+
+	\HeaderSingle{Market Share}
+	
+		\Subheader{How does \(\Companyname\)’s market share of each power technology evolve between Start.Year and End.Year?
+}\\
+		
+		This section shows how \(\Companyname\)'s market share in key technologies is expected to develop between Start.Year and End.Year and what the company's future positioning relative to the market will be. \par
+		
+		Figure 8 shows changes in the company’s renewable and total power capacity market share, defined as the \% of total capacity in each technology over the entire Bench.Region power capacity in each technology. 
+	
+		\vspace{0cm}
+		\begin{center} % comparison utlities bar chart 
+			\adjincludegraphics[width = 1\linewidth,trim={0.5cm 0cm 0cm 0.5cm},clip]{CompanyReportOutputs/Fig8.png} 
+		\end{center}
+		
+		\vspace{0cm}
+		\Fig{8:} \FigCap{The above charts show how \(\Companyname\)’s market share of the Bench.Region market develops for renewable and total power capacity. The chart on the left provides a comparison to the Bench.Region utility market given current plans, and the chart on the right shows how this would develop if the market were aligned with the Select.Scenario.}	
+		
+		\vspace{0.5cm}	
+		\ColortextLarge{The total market share of \(\Companyname\) ChangeMS Its market share of renewable capacity RenewablesMSChange}
+		
+		The market share for each technology represents the company’s capacity as a percentage of the capacity of all utilities in the market (actual and aligned) including current announced plans. If the company’s renewables market share is decreasing over the next 5 years, this suggests that \(\Companyname\) plans to build out renewables capacity at a lower rate than the utilities market as a whole.
+	
+	
+	\PageFooter{Market Share}
+	\newpage
+	
+	
+	
+	
+%%%%%%%%%% 14 %%%%%%%%%%
+	\section*{} % Data Sources
+
+	\HeaderSingle{Data Sources}
+	
+	2dii scenario analysis is based on forward-looking power asset data from GlobalData paired with company ownership information from Bloomberg. GlobalData provides highly granular information on individual power plants, including plant ownership, technology employed, location as well as active and pipeline capacity values. The company’s current capacity mix was calculated by aggregating capacities across active plants where the company is listed as owner, weighted by an ownership stake. 5-year investment plans were calculated by aggregating capacities from plants with years online between Start.Year and End.Year. Power capacity was allocated from subsidiary companies to the company based on company ownership data sourced primarily from Bloomberg. The result is a forward-looking capacity mix for \(\Companyname\) that serves as starting point and basis for comparison for scenario analysis. It does not include electricity sourced under power purchasing agreements.
+	
+	Self-reported capacity mix data was taken from the company’s website or annual report and compared to the capacity mix used in this report. The comparison revealed a discrepancy of Company.Discrepancy\% (see figure 9). Reasons for discrepancy fall into three categories:
+	
+	\begin{enumerate}
+		\item We take asset data and ownership information from two major data providers: GlobalData and Bloomberg. The data we receive from these sources may in some cases be incomplete or contain errors. Errors may include missing assets, missing or inaccurate parent-subsidiary information, and missing or inaccurate asset ownership data.
+		\item  We allocate capacity from subsidiaries to parent companies according to the following rules: If a subsidiary company is private/unlisted, 100\% of its capacity is allocated to the parent company holding the controlling stake. If a subsidiary is public/listed, the non-free float portion of its capacity is allocated to the parent company holding the controlling stake. No power capacity is allocated to parent companies holding non-controlling stakes.
+		\item Data sourced from GlobalData is effective as of GlobalDataDate, and data from Bloomberg is effective as of FinDataDate. This may differ from the effective dates of company reported data.
+	\end{enumerate}
+	
+	The capacity mix data is still undergoing quality review. As part of the quality review process, 2dii reached out to all companies included in the reports to seek edits and clarifications to the underlying data. Please review the legal disclaimer for further information about the limitations of the data.
+	
+		\vspace{0cm}
+		\begin{center} % validation chart and table 
+			\adjincludegraphics[width = 0.92\linewidth,trim={0.5cm 0cm 0cm 0.5cm},clip]{CompanyReportOutputs/Fig9.png} 
+		\end{center}
+			
+		\vspace{0.5cm}
+		\Fig{9:} \FigCap{Comparison between the power capacity provided in the company reports published by the company to the aggregation of data completed by 2dii.}	
+	
+	
+	
+	\PageFooter{Data Sources}
+	\newpage
+	
+	
+
+	
+%%%%%%%%%% 15 %%%%%%%%%%
+
+	\section*{} % Data Sources
+	
+	\HeaderSingle{Company Statement}
+	
+	Companies were given the opportunity to respond to a draft of this report, to comment on both the data used and other qualitative elements of their sustainability policies that may not be captured in the analysis above. As a company, if you would like to make a similar comment or edit the content of this text, please be in contact with us at transitionmonitor@2degrees-investing.org.
+	
+	
+	%Company.InputS
+\textbf{	Company Statement: }
+	
+
+		CompanyText
+	%Company.InputE
+	
+	\PageFooter{Company Statement}
+	\newpage
+
+	
+\end{document} 
+
+
+
+
+
+

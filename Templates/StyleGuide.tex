@@ -1,0 +1,200 @@
+%!TEX TS-program = xelatex
+\documentclass[10pt,twoside,table]{article}\usepackage[]{graphicx}\usepackage[]{color}
+
+\usepackage{alltt}
+\usepackage{graphicx}
+\usepackage{gensymb}
+\usepackage[top=1cm, bottom=1.5cm, left=1.2cm, right=1.2cm]{geometry}
+\usepackage[font=small]{caption}
+\usepackage{adjustbox}
+\usepackage{fancyhdr}
+\usepackage{layout}
+\usepackage{booktabs}
+\usepackage{kpfonts}
+\usepackage[explicit]{titlesec}
+\usepackage{wrapfig}
+\usepackage{tcolorbox}
+\usepackage{xcolor}
+\usepackage{setspace}
+\usepackage{parskip}
+\usepackage{tikz}
+\usepackage{fontspec}
+\usepackage{anyfontsize}
+\usepackage{hyperref}
+
+
+\setmainfont{ClearSans}
+
+% Colours
+\definecolor{Yellow1}{RGB}{252, 190, 14}
+\definecolor{Yellow2}{RGB}{252, 190, 54}
+\definecolor{Yellow3}{RGB}{252, 190, 84}
+
+\definecolor{OffBlack}{RGB}{61,61,60}
+\definecolor{LightGray}{RGB}{208,208,208}
+
+%\pagenumbering{gobble}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[R]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+
+
+
+%\newcommand*{\PageHeadingSingleLine}[1]{%
+%	\begin{tikzpicture}[remember picture,overlay]
+%	\node[anchor=north west,minimum width=.375cm,minimum height=1.2cm,fill=Yellow1] (RB) at (-1.2,0){\Large };
+%	\node[font=\bf,text=OffBlack,right of=RB, xshift = 3.2cm, yshift = -0.6cm] (RB) at (0,0){\Large #1};
+%	\end{tikzpicture}
+%	\vspace{1.2cm}}
+%
+%\newcommand*{\PageHeadingDoubleLine}[2]{%
+%	\begin{tikzpicture}[remember picture, overlay]
+%	\node[anchor=north west,minimum width=.375cm,minimum height=1.9cm,fill=Yellow1] (RB) at (-1.2,0){\Large };
+%	\node[font=\bf,text=OffBlack,right of=RB, xshift =  3.2cm, yshift = -0.95cm] (RB) at (0,0){\Large #1 \\[2pt]\Large #2};
+%	\end{tikzpicture}
+%	\vspace{1.9cm}}
+
+
+
+
+\newcommand*{\PageHeadingSingleLine}{%
+	\begin{tikzpicture}[remember picture,overlay]
+	\node[anchor=north west,minimum width=.375cm,minimum height=1.2cm,fill=Yellow1] (RB) at (-1.2,0){\Large };
+%	\node[font=\bf,align=left,text=OffBlack,right of=RB, xshift = 1.2cm, yshift = -0.6cm] (RB) at (0,0){\Large};
+	\node[text=OffBlack, right of=RB, xshift = 17cm, yshift=-.4cm] at (0,0){\thepage};
+	\end{tikzpicture}}
+
+\newcommand*{\PageHeadingDoubleLine}{%
+	\begin{tikzpicture}[remember picture, overlay]
+	\node[anchor=north west,minimum width=.375cm,minimum height=1.9cm,fill=Yellow1] (RB) at (-1.2,0){\Large };
+	\node[text=OffBlack, right of=RB, xshift = 17cm, yshift=-.6cm] at (0,0){\thepage};
+%	\node[font=\bf,align=left,text=OffBlack,right of=RB, xshift =  3.2cm, yshift = -0.95cm] (RB) at (0,0){};
+	\end{tikzpicture}}
+
+\newcommand{\HeaderSingle}[1]{
+	\PageHeadingSingleLine 
+	
+	{\Large\textbf{#1}}
+	\vspace{.2cm}}
+
+\newcommand{\HeaderDouble}[2]{
+	\PageHeadingDoubleLine
+
+	{\Large\textbf{#1 \\[2pt] #2}}
+	\vspace{.6cm}}
+
+%%% NEED TO CALCULATE THE HEADER SPACING SO THAT TWO == ONE
+
+%\newcommand*{\SectionHeadingBox}{%
+%	\begin{tikzpicture}[remember picture, overlay]
+%	\node[anchor=north west,minimum width=.375cm,minimum height=3cm,fill=Yellow1] (RB) at (-1.2,-16){\Large };
+%%	\node[font=\bf,align=left,text=OffBlack] (RB) at (4,-17.5){\Huge #1 \\[8pt]\Huge  #2};
+%	\end{tikzpicture}
+%	\vspace{.8cm}}
+%
+%\newcommand{\SectionHeading}[2]{
+%	\SectionHeadingBox
+%	
+%	\vspace{15.7cm}
+%	\textbf{{\Huge #1 \\[6pt]\Huge  #2}}}
+
+\newcommand*{\SectionHeadingBox}[1]{%
+	\begin{tikzpicture}[remember picture, overlay]
+	\node[anchor=north west,minimum width=.375cm,minimum height=#1,fill=Yellow1] (RB) at (-1.2,-16){\Large };
+	\end{tikzpicture}
+	\vspace{.8cm}}
+
+\newcommand{\SectionHeadingSingle}[2]{
+	
+	\SectionHeadingBox{3cm}
+	
+	\vspace{15.7cm}
+	\textbf{{\Huge #1 \\[6pt]\Huge  #2}}}
+
+\newcommand{\SectionHeadingDouble}[3]{%
+	
+	\SectionHeadingBox{4cm}
+	
+	\vspace{15.7cm}
+	\textbf{{\Huge #1 \\[6pt]\Huge  #2\\[6pt]\Huge #3}}}
+
+
+
+
+\newcommand{\PageFooterFirst}{% The number indicates the sector..... 
+	\begin{tikzpicture}[remember picture, overlay]
+		\node[text=OffBlack,above = .8cm, left = 6cm,font=\bf\small,align=center] at (current page.south){01-INTRODUCTION};
+		\node[text=LightGray,above = .8cm, left = 1.7cm,font=\bf\small,align=center] at (current page.south){02-CURRENT EXPOSURE};
+		\node[text=LightGray,above = .8cm, left = -1cm,font=\bf\small,align=center] at (current page.south){03-5YR TREND};
+		\node[text=LightGray,above = .8cm, left = -5cm,font=\bf\small,align=center] at (current page.south){04-EXPOSURE IN 5YRS};
+		\node[text=LightGray,above = .8cm, left = -9cm,font=\bf\small,align=center] at (current page.south){05-COMPANY RESULTS};	
+		\node[left=6cm,minimum width = 3.0cm, minimum height =0.01cm, fill = Yellow1] at (current page.south){};
+	\end{tikzpicture}
+}
+
+\newcommand{\PageFooterSecond}{% The number indicates the sector..... 
+	\begin{tikzpicture}[remember picture, overlay]
+	\node[text=LightGray,above = .8cm, left = 6cm,font=\bf\small,align=center] at (current page.south){01-INTRODUCTION};
+	\node[text=OffBlack,above = .8cm, left = 1.7cm,font=\bf\small,align=center] at (current page.south){02-CURRENT EXPOSURE};
+	\node[text=LightGray,above = .8cm, left = -1cm,font=\bf\small,align=center] at (current page.south){03-5YR TREND};
+	\node[text=LightGray,above = .8cm, left = -5cm,font=\bf\small,align=center] at (current page.south){04-EXPOSURE IN 5YRS};
+	\node[text=LightGray,above = .8cm, left = -9cm,font=\bf\small,align=center] at (current page.south){05-COMPANY RESULTS};	
+	\node[left=1.75cm,minimum width = 3.6cm, minimum height =0.01cm, fill = Yellow1] at (current page.south){};
+	\end{tikzpicture}
+}
+\newcommand{\PageFooterThird}{% The number indicates the sector..... 
+	\begin{tikzpicture}[remember picture, overlay]
+	\node[text=LightGray,above = .8cm, left = 6cm,font=\bf\small,align=center] at (current page.south){01-INTRODUCTION};
+	\node[text=LightGray,above = .8cm, left = 1.7cm,font=\bf\small,align=center] at (current page.south){02-CURRENT EXPOSURE};
+	\node[text=OffBlack,above = .8cm, left = -1cm,font=\bf\small,align=center] at (current page.south){03-5YR TREND};
+	\node[text=LightGray,above = .8cm, left = -5cm,font=\bf\small,align=center] at (current page.south){04-EXPOSURE IN 5YRS};
+	\node[text=LightGray,above = .8cm, left = -9cm,font=\bf\small,align=center] at (current page.south){05-COMPANY RESULTS};	
+	\node[left=-.9cm,minimum width = 2.2cm, minimum height =0.01cm, fill = Yellow1] at (current page.south){};
+	\end{tikzpicture}
+}
+\newcommand{\PageFooterFourth}{% The number indicates the sector..... 
+	\begin{tikzpicture}[remember picture, overlay]
+	\node[text=LightGray,above = .8cm, left = 6cm,font=\bf\small,align=center] at (current page.south){01-INTRODUCTION};
+	\node[text=LightGray,above = .8cm, left = 1.7cm,font=\bf\small,align=center] at (current page.south){02-CURRENT EXPOSURE};
+	\node[text=LightGray,above = .8cm, left = -1cm,font=\bf\small,align=center] at (current page.south){03-5YR TREND};
+	\node[text=OffBlack,above = .8cm, left = -5cm,font=\bf\small,align=center] at (current page.south){04-EXPOSURE IN 5YRS};
+	\node[text=LightGray,above = .8cm, left = -9cm,font=\bf\small,align=center] at (current page.south){05-COMPANY RESULTS};	
+	\node[left=-5cm,minimum width = 3.5cm, minimum height =0.01cm, fill = Yellow1] at (current page.south){};
+	\end{tikzpicture}
+}
+\newcommand{\PageFooterFifth}{% The number indicates the sector..... 
+	\begin{tikzpicture}[remember picture, overlay]
+	\node[text=LightGray,above = .8cm, left = 6cm,font=\bf\small,align=center] at (current page.south){01-INTRODUCTION};
+	\node[text=LightGray,above = .8cm, left = 1.7cm,font=\bf\small,align=center] at (current page.south){02-CURRENT EXPOSURE};
+	\node[text=LightGray,above = .8cm, left = -1cm,font=\bf\small,align=center] at (current page.south){03-5YR TREND};
+	\node[text=LightGray,above = .8cm, left = -5cm,font=\bf\small,align=center] at (current page.south){04-EXPOSURE IN 5YRS};
+	\node[text=OffBlack,above = .8cm, left = -9cm,font=\bf\small,align=center] at (current page.south){05-COMPANY RESULTS};	
+	\node[left=-8.9cm,minimum width = 3.4cm, minimum height =0.01cm, fill = Yellow1] at (current page.south){};
+	\end{tikzpicture}
+}
+
+\setmainfont{ClearSans}
+\color{OffBlack}
+
+\begin{document}
+
+	\HeaderDouble{This is the header}{This is the secondline}
+
+	Testing with text
+	\PageFooterFirst
+	\newpage
+	\SectionHeadingDouble{Section 1:}{INTRODUCTION}{SECOND LINE}
+	
+	\newpage
+	\HeaderSingle{THIS IS THE HEADING TEXT}
+	
+	Some text 
+	
+	\PageFooterFirst
+	\newpage
+
+\end{document}
+ 

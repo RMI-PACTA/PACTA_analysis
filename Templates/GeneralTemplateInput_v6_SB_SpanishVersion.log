@@ -1,0 +1,2219 @@
+This is XeTeX, Version 3.14159265-2.6-0.999991 (MiKTeX 2.9.6960 64-bit) (preloaded format=xelatex 2019.3.5)  6 AUG 2019 18:12
+entering extended mode
+**./GeneralTemplateInput_v6_SB_SpanishVersion.tex
+(GeneralTemplateInput_v6_SB_SpanishVersion.tex
+LaTeX2e <2018-12-01>
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\article
+.cls"
+Document Class: article 2018/09/03 v1.4i Standard LaTeX document class
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\size10.
+clo"
+File: size10.clo 2018/09/03 v1.4i Standard LaTeX file (size option)
+)
+\c@part=\count80
+\c@section=\count81
+\c@subsection=\count82
+\c@subsubsection=\count83
+\c@paragraph=\count84
+\c@subparagraph=\count85
+\c@figure=\count86
+\c@table=\count87
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics\gra
+phicx.sty"
+Package: graphicx 2017/06/01 v1.1a Enhanced LaTeX Graphics (DPC,SPQR)
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics\key
+val.sty"
+Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
+\KV@toks@=\toks14
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics\gra
+phics.sty"
+Package: graphics 2017/06/25 v1.2c Standard LaTeX Graphics (DPC,SPQR)
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics\tri
+g.sty"
+Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics-cfg
+\graphics.cfg"
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: xetex.def on input line 99.
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics-def
+\xetex.def"
+File: xetex.def 2017/06/24 v5.0h Graphics/color driver for xetex
+))
+\Gin@req@height=\dimen103
+\Gin@req@width=\dimen104
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics\col
+or.sty"
+Package: color 2016/07/10 v1.1e Standard LaTeX Color (DPC)
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics-cfg
+\color.cfg"
+File: color.cfg 2016/01/02 v1.6 sample color configuration
+)
+Package color Info: Driver file: xetex.def on input line 147.
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\alltt.s
+ty"
+Package: alltt 1997/06/16 v2.0g defines alltt environment
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/was\gensymb.
+sty"
+Package: gensymb 2003/07/02 v1.0 (WaS)
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/geometry\geo
+metry.sty"
+Package: geometry 2018/04/16 v5.8 Page Geometry
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\i
+fpdf.sty"
+Package: ifpdf 2018/09/07 v3.3 Provides the ifpdf switch
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\i
+fvtex.sty"
+Package: ifvtex 2016/05/16 v1.6 Detect VTeX and its facilities (HO)
+Package ifvtex Info: VTeX not detected.
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/ifxetex\if
+xetex.sty"
+Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
+)
+\Gm@cnth=\count88
+\Gm@cntv=\count89
+\c@Gm@tempcnt=\count90
+\Gm@bindingoffset=\dimen105
+\Gm@wd@mp=\dimen106
+\Gm@odd@mp=\dimen107
+\Gm@even@mp=\dimen108
+\Gm@layoutwidth=\dimen109
+\Gm@layoutheight=\dimen110
+\Gm@layouthoffset=\dimen111
+\Gm@layoutvoffset=\dimen112
+\Gm@dimlist=\toks15
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/xelatex/xetexconfi
+g\geometry.cfg"))
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/caption\capt
+ion.sty"
+Package: caption 2018/10/06 v3.3-154 Customizing captions (AR)
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/caption\capt
+ion3.sty"
+Package: caption3 2018/09/12 v1.8c caption3 kernel (AR)
+Package caption3 Info: TeX engine: e-TeX on input line 64.
+\captionmargin=\dimen113
+\captionmargin@=\dimen114
+\captionwidth=\dimen115
+\caption@tempdima=\dimen116
+\caption@indent=\dimen117
+\caption@parindent=\dimen118
+\caption@hangindent=\dimen119
+)
+\c@caption@flags=\count91
+\c@ContinuedFloat=\count92
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/adjustbox\ad
+justbox.sty"
+Package: adjustbox 2019/01/04 v1.2 Adjusting TeX boxes (trim, clip, ...)
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/xkeyval\xkey
+val.sty"
+Package: xkeyval 2014/12/03 v2.7a package option processing (HA)
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/xkeyval\xk
+eyval.tex"
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/xkeyval\xk
+vutils.tex"
+\XKV@toks=\toks16
+\XKV@tempa@toks=\toks17
+)
+\XKV@depth=\count93
+File: xkeyval.tex 2014/12/03 v2.7a key=value parser (HA)
+))
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/adjustbox\ad
+jcalc.sty"
+Package: adjcalc 2012/05/16 v1.1 Provides advanced setlength with multiple back
+-ends (calc, etex, pgfmath)
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/adjustbox\tr
+imclip.sty"
+Package: trimclip 2018/04/08 v1.1 Trim and clip general TeX material
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/collectbox\c
+ollectbox.sty"
+Package: collectbox 2012/05/17 v0.4b Collect macro arguments as boxes
+\collectedbox=\box27
+)
+\tc@llx=\dimen120
+\tc@lly=\dimen121
+\tc@urx=\dimen122
+\tc@ury=\dimen123
+Package trimclip Info: Using driver 'tc-xetex.def'.
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/adjustbox\tc
+-xetex.def"
+File: tc-xetex.def 2019/01/04 v2.2 Clipping driver for xetex
+))
+\adjbox@Width=\dimen124
+\adjbox@Height=\dimen125
+\adjbox@Depth=\dimen126
+\adjbox@Totalheight=\dimen127
+\adjbox@pwidth=\dimen128
+\adjbox@pheight=\dimen129
+\adjbox@pdepth=\dimen130
+\adjbox@ptotalheight=\dimen131
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/ifoddpage\if
+oddpage.sty"
+Package: ifoddpage 2016/04/23 v1.1 Conditionals for odd/even page detection
+\c@checkoddpage=\count94
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/varwidth\var
+width.sty"
+Package: varwidth 2009/03/30 ver 0.92;  Variable-width minipages
+\@vwid@box=\box28
+\sift@deathcycles=\count95
+\@vwid@loff=\dimen132
+\@vwid@roff=\dimen133
+))
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/fancyhdr\fan
+cyhdr.sty"
+Package: fancyhdr 2019/01/31 v3.10 Extensive control of page headers and footer
+s
+\f@nch@headwidth=\skip43
+\f@nch@O@elh=\skip44
+\f@nch@O@erh=\skip45
+\f@nch@O@olh=\skip46
+\f@nch@O@orh=\skip47
+\f@nch@O@elf=\skip48
+\f@nch@O@erf=\skip49
+\f@nch@O@olf=\skip50
+\f@nch@O@orf=\skip51
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/tools\layout
+.sty"
+Package: layout 2014/10/28 v1.2c Show layout parameters
+\oneinch=\count96
+\cnt@paperwidth=\count97
+\cnt@paperheight=\count98
+\cnt@hoffset=\count99
+\cnt@voffset=\count100
+\cnt@textheight=\count101
+\cnt@textwidth=\count102
+\cnt@topmargin=\count103
+\cnt@oddsidemargin=\count104
+\cnt@evensidemargin=\count105
+\cnt@headheight=\count106
+\cnt@headsep=\count107
+\cnt@marginparsep=\count108
+\cnt@marginparwidth=\count109
+\cnt@marginparpush=\count110
+\cnt@footskip=\count111
+\fheight=\count112
+\ref@top=\count113
+\ref@hoffset=\count114
+\ref@voffset=\count115
+\ref@head=\count116
+\ref@body=\count117
+\ref@foot=\count118
+\ref@margin=\count119
+\ref@marginwidth=\count120
+\ref@marginpar=\count121
+\Interval=\count122
+\ExtraYPos=\count123
+\PositionX=\count124
+\PositionY=\count125
+\ArrowLength=\count126
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/titlesec\tit
+lesec.sty"
+Package: titlesec 2016/03/21 v2.10.2 Sectioning titles
+\ttl@box=\box29
+\beforetitleunit=\skip52
+\aftertitleunit=\skip53
+\ttl@plus=\dimen134
+\ttl@minus=\dimen135
+\ttl@toksa=\toks18
+\titlewidth=\dimen136
+\titlewidthlast=\dimen137
+\titlewidthfirst=\dimen138
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/wrapfig\wrap
+fig.sty"
+\wrapoverhang=\dimen139
+\WF@size=\dimen140
+\c@WF@wrappedlines=\count127
+\WF@box=\box30
+\WF@everypar=\toks19
+Package: wrapfig 2003/01/31  v 3.6
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/tcolorbox\tc
+olorbox.sty"
+Package: tcolorbox 2019/03/02 version 4.20 text color boxes
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/pgf/basiclay
+er\pgf.sty"
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/pgf/utilitie
+s\pgfrcs.sty"
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/utilit
+ies\pgfutil-common.tex"
+\pgfutil@everybye=\toks20
+\pgfutil@tempdima=\dimen141
+\pgfutil@tempdimb=\dimen142
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/utilit
+ies\pgfutil-common-lists.tex"))
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/utilit
+ies\pgfutil-latex.def"
+\pgfutil@abb=\box31
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/ms\everyshi.
+sty"
+Package: everyshi 2001/05/15 v3.00 EveryShipout Package (MS)
+))
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/utilit
+ies\pgfrcs.code.tex"
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf\pgf.re
+vision.tex")
+Package: pgfrcs 2019/02/02 v3.1.1 (3.1.1)
+))
+Package: pgf 2019/02/02 v3.1.1 (3.1.1)
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/pgf/basiclay
+er\pgfcore.sty"
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/pgf/systemla
+yer\pgfsys.sty"
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/system
+layer\pgfsys.code.tex"
+Package: pgfsys 2019/02/02 v3.1.1 (3.1.1)
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/utilit
+ies\pgfkeys.code.tex"
+\pgfkeys@pathtoks=\toks21
+\pgfkeys@temptoks=\toks22
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/utilit
+ies\pgfkeysfiltered.code.tex"
+\pgfkeys@tmptoks=\toks23
+))
+\pgf@x=\dimen143
+\pgf@y=\dimen144
+\pgf@xa=\dimen145
+\pgf@ya=\dimen146
+\pgf@xb=\dimen147
+\pgf@yb=\dimen148
+\pgf@xc=\dimen149
+\pgf@yc=\dimen150
+\w@pgf@writea=\write3
+\r@pgf@reada=\read1
+\c@pgf@counta=\count128
+\c@pgf@countb=\count129
+\c@pgf@countc=\count130
+\c@pgf@countd=\count131
+\t@pgf@toka=\toks24
+\t@pgf@tokb=\toks25
+\t@pgf@tokc=\toks26
+\pgf@sys@id@count=\count132
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/system
+layer\pgf.cfg"
+File: pgf.cfg 2019/02/02 v3.1.1 (3.1.1)
+)
+Driver file for pgf: pgfsys-xetex.def
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/system
+layer\pgfsys-xetex.def"
+File: pgfsys-xetex.def 2019/02/02 v3.1.1 (3.1.1)
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/system
+layer\pgfsys-dvipdfmx.def"
+File: pgfsys-dvipdfmx.def 2019/02/02 v3.1.1 (3.1.1)
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/system
+layer\pgfsys-common-pdf.def"
+File: pgfsys-common-pdf.def 2019/02/02 v3.1.1 (3.1.1)
+)
+\pgfsys@objnum=\count133
+)))
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/system
+layer\pgfsyssoftpath.code.tex"
+File: pgfsyssoftpath.code.tex 2019/02/02 v3.1.1 (3.1.1)
+\pgfsyssoftpath@smallbuffer@items=\count134
+\pgfsyssoftpath@bigbuffer@items=\count135
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/system
+layer\pgfsysprotocol.code.tex"
+File: pgfsysprotocol.code.tex 2019/02/02 v3.1.1 (3.1.1)
+))
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/xcolor\xcolo
+r.sty"
+Package: xcolor 2016/05/11 v2.12 LaTeX color extensions (UK)
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics-cfg
+\color.cfg"
+File: color.cfg 2016/01/02 v1.6 sample color configuration
+)
+Package xcolor Info: Driver file: xetex.def on input line 225.
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/colortbl\col
+ortbl.sty"
+Package: colortbl 2018/12/12 v1.0d Color table columns (DPC)
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/tools\array.
+sty"
+Package: array 2018/12/30 v2.4k Tabular extension package (FMi)
+\col@sep=\dimen151
+\ar@mcellbox=\box32
+\extrarowheight=\dimen152
+\NC@list=\toks27
+\extratabsurround=\skip54
+\backup@length=\skip55
+\ar@cellbox=\box33
+)
+\everycr=\toks28
+\minrowclearance=\skip56
+)
+LaTeX Info: Redefining \color on input line 709.
+\rownum=\count136
+Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1348.
+Package xcolor Info: Model `RGB' extended on input line 1364.
+Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1366.
+Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1367.
+Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1368.
+Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1369.
+Package xcolor Info: Model `Gray' substituted by `gray' on input line 1370.
+Package xcolor Info: Model `wave' substituted by `hsb' on input line 1371.
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/basicl
+ayer\pgfcore.code.tex"
+Package: pgfcore 2019/02/02 v3.1.1 (3.1.1)
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/math\p
+gfmath.code.tex"
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/math\p
+gfmathcalc.code.tex"
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/math\p
+gfmathutil.code.tex")
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/math\p
+gfmathparser.code.tex"
+\pgfmath@dimen=\dimen153
+\pgfmath@count=\count137
+\pgfmath@box=\box34
+\pgfmath@toks=\toks29
+\pgfmath@stack@operand=\toks30
+\pgfmath@stack@operation=\toks31
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/math\p
+gfmathfunctions.code.tex"
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/math\p
+gfmathfunctions.basic.code.tex")
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/math\p
+gfmathfunctions.trigonometric.code.tex")
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/math\p
+gfmathfunctions.random.code.tex")
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/math\p
+gfmathfunctions.comparison.code.tex")
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/math\p
+gfmathfunctions.base.code.tex")
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/math\p
+gfmathfunctions.round.code.tex")
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/math\p
+gfmathfunctions.misc.code.tex")
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/math\p
+gfmathfunctions.integerarithmetics.code.tex")))
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/math\p
+gfmathfloat.code.tex"
+\c@pgfmathroundto@lastzeros=\count138
+))
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/basicl
+ayer\pgfcorepoints.code.tex"
+File: pgfcorepoints.code.tex 2019/02/02 v3.1.1 (3.1.1)
+\pgf@picminx=\dimen154
+\pgf@picmaxx=\dimen155
+\pgf@picminy=\dimen156
+\pgf@picmaxy=\dimen157
+\pgf@pathminx=\dimen158
+\pgf@pathmaxx=\dimen159
+\pgf@pathminy=\dimen160
+\pgf@pathmaxy=\dimen161
+\pgf@xx=\dimen162
+\pgf@xy=\dimen163
+\pgf@yx=\dimen164
+\pgf@yy=\dimen165
+\pgf@zx=\dimen166
+\pgf@zy=\dimen167
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/basicl
+ayer\pgfcorepathconstruct.code.tex"
+File: pgfcorepathconstruct.code.tex 2019/02/02 v3.1.1 (3.1.1)
+\pgf@path@lastx=\dimen168
+\pgf@path@lasty=\dimen169
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/basicl
+ayer\pgfcorepathusage.code.tex"
+File: pgfcorepathusage.code.tex 2019/02/02 v3.1.1 (3.1.1)
+\pgf@shorten@end@additional=\dimen170
+\pgf@shorten@start@additional=\dimen171
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/basicl
+ayer\pgfcorescopes.code.tex"
+File: pgfcorescopes.code.tex 2019/02/02 v3.1.1 (3.1.1)
+\pgfpic=\box35
+\pgf@hbox=\box36
+\pgf@layerbox@main=\box37
+\pgf@picture@serial@count=\count139
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/basicl
+ayer\pgfcoregraphicstate.code.tex"
+File: pgfcoregraphicstate.code.tex 2019/02/02 v3.1.1 (3.1.1)
+\pgflinewidth=\dimen172
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/basicl
+ayer\pgfcoretransformations.code.tex"
+File: pgfcoretransformations.code.tex 2019/02/02 v3.1.1 (3.1.1)
+\pgf@pt@x=\dimen173
+\pgf@pt@y=\dimen174
+\pgf@pt@temp=\dimen175
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/basicl
+ayer\pgfcorequick.code.tex"
+File: pgfcorequick.code.tex 2019/02/02 v3.1.1 (3.1.1)
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/basicl
+ayer\pgfcoreobjects.code.tex"
+File: pgfcoreobjects.code.tex 2019/02/02 v3.1.1 (3.1.1)
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/basicl
+ayer\pgfcorepathprocessing.code.tex"
+File: pgfcorepathprocessing.code.tex 2019/02/02 v3.1.1 (3.1.1)
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/basicl
+ayer\pgfcorearrows.code.tex"
+File: pgfcorearrows.code.tex 2019/02/02 v3.1.1 (3.1.1)
+\pgfarrowsep=\dimen176
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/basicl
+ayer\pgfcoreshade.code.tex"
+File: pgfcoreshade.code.tex 2019/02/02 v3.1.1 (3.1.1)
+\pgf@max=\dimen177
+\pgf@sys@shading@range@num=\count140
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/basicl
+ayer\pgfcoreimage.code.tex"
+File: pgfcoreimage.code.tex 2019/02/02 v3.1.1 (3.1.1)
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/basicl
+ayer\pgfcoreexternal.code.tex"
+File: pgfcoreexternal.code.tex 2019/02/02 v3.1.1 (3.1.1)
+\pgfexternal@startupbox=\box38
+))
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/basicl
+ayer\pgfcorelayers.code.tex"
+File: pgfcorelayers.code.tex 2019/02/02 v3.1.1 (3.1.1)
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/basicl
+ayer\pgfcoretransparency.code.tex"
+File: pgfcoretransparency.code.tex 2019/02/02 v3.1.1 (3.1.1)
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/basicl
+ayer\pgfcorepatterns.code.tex"
+File: pgfcorepatterns.code.tex 2019/02/02 v3.1.1 (3.1.1)
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/basicl
+ayer\pgfcorerdf.code.tex"
+File: pgfcorerdf.code.tex 2019/02/02 v3.1.1 (3.1.1)
+)))
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/module
+s\pgfmoduleshapes.code.tex"
+File: pgfmoduleshapes.code.tex 2019/02/02 v3.1.1 (3.1.1)
+\pgfnodeparttextbox=\box39
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/module
+s\pgfmoduleplot.code.tex"
+File: pgfmoduleplot.code.tex 2019/02/02 v3.1.1 (3.1.1)
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/pgf/compatib
+ility\pgfcomp-version-0-65.sty"
+Package: pgfcomp-version-0-65 2019/02/02 v3.1.1 (3.1.1)
+\pgf@nodesepstart=\dimen178
+\pgf@nodesepend=\dimen179
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/pgf/compatib
+ility\pgfcomp-version-1-18.sty"
+Package: pgfcomp-version-1-18 2019/02/02 v3.1.1 (3.1.1)
+))
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/tools\verbat
+im.sty"
+Package: verbatim 2014/10/28 v1.5q LaTeX2e package for verbatim enhancements
+\every@verbatim=\toks32
+\verbatim@line=\toks33
+\verbatim@in@stream=\read2
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/environ\envi
+ron.sty"
+Package: environ 2014/05/04 v0.3 A new way to define environments
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/trimspaces\t
+rimspaces.sty"
+Package: trimspaces 2009/09/17 v1.1 Trim spaces around a token list
+)
+\@envbody=\toks34
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/etoolbox\eto
+olbox.sty"
+Package: etoolbox 2018/08/19 v2.5f e-TeX tools for LaTeX (JAW)
+\etb@tempcnta=\count141
+)
+\tcb@titlebox=\box40
+\tcb@upperbox=\box41
+\tcb@lowerbox=\box42
+\tcb@phantombox=\box43
+\c@tcbbreakpart=\count142
+\c@tcblayer=\count143
+\tcolorbox@number=\count144
+\tcb@temp=\box44
+\tcb@temp=\box45
+\tcb@temp=\box46
+\tcb@temp=\box47
+\tcb@out=\write4
+\tcb@record@out=\write5
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/setspace\set
+space.sty"
+Package: setspace 2011/12/19 v6.7a set line spacing
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/parskip\pars
+kip.sty"
+Package: parskip 2019-01-16 v2.0c non-zero parskip adjustments
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/oberdiek\kvo
+ptions.sty"
+Package: kvoptions 2016/05/16 v3.12 Key value format for package options (HO)
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\l
+txcmds.sty"
+Package: ltxcmds 2016/05/16 v1.23 LaTeX kernel commands for general use (HO)
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\k
+vsetkeys.sty"
+Package: kvsetkeys 2016/05/16 v1.17 Key value parser (HO)
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\i
+nfwarerr.sty"
+Package: infwarerr 2016/05/16 v1.4 Providing info/warning/error messages (HO)
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\e
+texcmds.sty"
+Package: etexcmds 2016/05/16 v1.6 Avoid name clashes with e-TeX commands (HO)
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\i
+fluatex.sty"
+Package: ifluatex 2016/05/16 v1.4 Provides the ifluatex switch (HO)
+Package ifluatex Info: LuaTeX not detected.
+)))))
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/pgf/frontend
+layer\tikz.sty"
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/pgf/utilitie
+s\pgffor.sty"
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/pgf/utilitie
+s\pgfkeys.sty"
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/utilit
+ies\pgfkeys.code.tex"))
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/pgf/math\pgf
+math.sty"
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/math\p
+gfmath.code.tex"))
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/utilit
+ies\pgffor.code.tex"
+Package: pgffor 2019/02/02 v3.1.1 (3.1.1)
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/math\p
+gfmath.code.tex")
+\pgffor@iter=\dimen180
+\pgffor@skip=\dimen181
+\pgffor@stack=\toks35
+\pgffor@toks=\toks36
+))
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/fronte
+ndlayer/tikz\tikz.code.tex"
+Package: tikz 2019/02/02 v3.1.1 (3.1.1)
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/librar
+ies\pgflibraryplothandlers.code.tex"
+File: pgflibraryplothandlers.code.tex 2019/02/02 v3.1.1 (3.1.1)
+\pgf@plot@mark@count=\count145
+\pgfplotmarksize=\dimen182
+)
+\tikz@lastx=\dimen183
+\tikz@lasty=\dimen184
+\tikz@lastxsaved=\dimen185
+\tikz@lastysaved=\dimen186
+\tikzleveldistance=\dimen187
+\tikzsiblingdistance=\dimen188
+\tikz@figbox=\box48
+\tikz@figbox@bg=\box49
+\tikz@tempbox=\box50
+\tikz@tempbox@bg=\box51
+\tikztreelevel=\count146
+\tikznumberofchildren=\count147
+\tikznumberofcurrentchild=\count148
+\tikz@fig@count=\count149
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/module
+s\pgfmodulematrix.code.tex"
+File: pgfmodulematrix.code.tex 2019/02/02 v3.1.1 (3.1.1)
+\pgfmatrixcurrentrow=\count150
+\pgfmatrixcurrentcolumn=\count151
+\pgf@matrix@numberofcolumns=\count152
+)
+\tikz@expandcount=\count153
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/fronte
+ndlayer/tikz/libraries\tikzlibrarytopaths.code.tex"
+File: tikzlibrarytopaths.code.tex 2019/02/02 v3.1.1 (3.1.1)
+)))
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/fontspec\fon
+tspec.sty"
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/l3packages/x
+parse\xparse.sty"
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/l3kernel\exp
+l3.sty"
+Package: expl3 2019-02-15 L3 programming layer (loader) 
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/l3kernel\exp
+l3-code.tex"
+Package: expl3 2019-02-15 L3 programming layer (code)
+\c_max_int=\count154
+\l_tmpa_int=\count155
+\l_tmpb_int=\count156
+\g_tmpa_int=\count157
+\g_tmpb_int=\count158
+\g__kernel_prg_map_int=\count159
+\c_log_iow=\count160
+\l_iow_line_count_int=\count161
+\l__iow_line_target_int=\count162
+\l__iow_one_indent_int=\count163
+\l__iow_indent_int=\count164
+\c_zero_dim=\dimen189
+\c_max_dim=\dimen190
+\l_tmpa_dim=\dimen191
+\l_tmpb_dim=\dimen192
+\g_tmpa_dim=\dimen193
+\g_tmpb_dim=\dimen194
+\c_zero_skip=\skip57
+\c_max_skip=\skip58
+\l_tmpa_skip=\skip59
+\l_tmpb_skip=\skip60
+\g_tmpa_skip=\skip61
+\g_tmpb_skip=\skip62
+\c_zero_muskip=\muskip10
+\c_max_muskip=\muskip11
+\l_tmpa_muskip=\muskip12
+\l_tmpb_muskip=\muskip13
+\g_tmpa_muskip=\muskip14
+\g_tmpb_muskip=\muskip15
+\l_keys_choice_int=\count165
+\l__intarray_loop_int=\count166
+\c__intarray_sp_dim=\dimen195
+\g__intarray_font_int=\count167
+\c__fp_leading_shift_int=\count168
+\c__fp_middle_shift_int=\count169
+\c__fp_trailing_shift_int=\count170
+\c__fp_big_leading_shift_int=\count171
+\c__fp_big_middle_shift_int=\count172
+\c__fp_big_trailing_shift_int=\count173
+\c__fp_Bigg_leading_shift_int=\count174
+\c__fp_Bigg_middle_shift_int=\count175
+\c__fp_Bigg_trailing_shift_int=\count176
+\g__fp_array_int=\count177
+\l__fp_array_loop_int=\count178
+\l__sort_length_int=\count179
+\l__sort_min_int=\count180
+\l__sort_top_int=\count181
+\l__sort_max_int=\count182
+\l__sort_true_max_int=\count183
+\l__sort_block_int=\count184
+\l__sort_begin_int=\count185
+\l__sort_end_int=\count186
+\l__sort_A_int=\count187
+\l__sort_B_int=\count188
+\l__sort_C_int=\count189
+\l__tl_analysis_normal_int=\count190
+\l__tl_analysis_index_int=\count191
+\l__tl_analysis_nesting_int=\count192
+\l__tl_analysis_type_int=\count193
+\l__regex_internal_a_int=\count194
+\l__regex_internal_b_int=\count195
+\l__regex_internal_c_int=\count196
+\l__regex_balance_int=\count197
+\l__regex_group_level_int=\count198
+\l__regex_mode_int=\count199
+\c__regex_cs_in_class_mode_int=\count266
+\c__regex_cs_mode_int=\count267
+\l__regex_catcodes_int=\count268
+\l__regex_default_catcodes_int=\count269
+\c__regex_catcode_L_int=\count270
+\c__regex_catcode_O_int=\count271
+\c__regex_catcode_A_int=\count272
+\c__regex_all_catcodes_int=\count273
+\l__regex_show_lines_int=\count274
+\l__regex_min_state_int=\count275
+\l__regex_max_state_int=\count276
+\l__regex_left_state_int=\count277
+\l__regex_right_state_int=\count278
+\l__regex_capturing_group_int=\count279
+\l__regex_min_pos_int=\count280
+\l__regex_max_pos_int=\count281
+\l__regex_curr_pos_int=\count282
+\l__regex_start_pos_int=\count283
+\l__regex_success_pos_int=\count284
+\l__regex_curr_char_int=\count285
+\l__regex_curr_catcode_int=\count286
+\l__regex_last_char_int=\count287
+\l__regex_case_changed_char_int=\count288
+\l__regex_curr_state_int=\count289
+\l__regex_step_int=\count290
+\l__regex_min_active_int=\count291
+\l__regex_max_active_int=\count292
+\l__regex_replacement_csnames_int=\count293
+\l__regex_match_count_int=\count294
+\l__regex_min_submatch_int=\count295
+\l__regex_submatch_int=\count296
+\l__regex_zeroth_submatch_int=\count297
+\g__regex_trace_regex_int=\count298
+\c_empty_box=\box52
+\l_tmpa_box=\box53
+\l_tmpb_box=\box54
+\g_tmpa_box=\box55
+\g_tmpb_box=\box56
+\l__box_top_dim=\dimen196
+\l__box_bottom_dim=\dimen197
+\l__box_left_dim=\dimen198
+\l__box_right_dim=\dimen199
+\l__box_top_new_dim=\dimen256
+\l__box_bottom_new_dim=\dimen257
+\l__box_left_new_dim=\dimen258
+\l__box_right_new_dim=\dimen259
+\l__box_internal_box=\box57
+\l__coffin_internal_box=\box58
+\l__coffin_internal_dim=\dimen260
+\l__coffin_offset_x_dim=\dimen261
+\l__coffin_offset_y_dim=\dimen262
+\l__coffin_x_dim=\dimen263
+\l__coffin_y_dim=\dimen264
+\l__coffin_x_prime_dim=\dimen265
+\l__coffin_y_prime_dim=\dimen266
+\c_empty_coffin=\box59
+\l__coffin_aligned_coffin=\box60
+\l__coffin_aligned_internal_coffin=\box61
+\l_tmpa_coffin=\box62
+\l_tmpb_coffin=\box63
+\g_tmpa_coffin=\box64
+\g_tmpb_coffin=\box65
+\c__coffin_empty_coffin=\box66
+\l__coffin_display_coffin=\box67
+\l__coffin_display_coord_coffin=\box68
+\l__coffin_display_pole_coffin=\box69
+\l__coffin_display_offset_dim=\dimen267
+\l__coffin_display_x_dim=\dimen268
+\l__coffin_display_y_dim=\dimen269
+\g__file_internal_ior=\read3
+\l__coffin_bounding_shift_dim=\dimen270
+\l__coffin_left_corner_dim=\dimen271
+\l__coffin_right_corner_dim=\dimen272
+\l__coffin_bottom_corner_dim=\dimen273
+\l__coffin_top_corner_dim=\dimen274
+\l__coffin_scaled_total_height_dim=\dimen275
+\l__coffin_scaled_width_dim=\dimen276
+\l__seq_internal_a_int=\count299
+\l__seq_internal_b_int=\count300
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/l3kernel\l3x
+dvipdfmx.def"
+File: l3xdvipdfmx.def 2019-02-15 v L3 Experimental driver: xdvipdfmx
+\g__driver_image_int=\count301
+\g__driver_pdf_object_int=\count302
+))
+Package: xparse 2018-10-17 L3 Experimental document command parser
+\l__xparse_current_arg_int=\count303
+\g__xparse_grabber_int=\count304
+\l__xparse_m_args_int=\count305
+\l__xparse_mandatory_args_int=\count306
+\l__xparse_v_nesting_int=\count307
+)
+Package: fontspec 2019/02/12 v2.7b Font selection for XeLaTeX and LuaLaTeX
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/fontspec\fon
+tspec-xetex.sty"
+Package: fontspec-xetex 2019/02/12 v2.7b Font selection for XeLaTeX and LuaLaTe
+X
+\l__fontspec_script_int=\count308
+\l__fontspec_language_int=\count309
+\l__fontspec_strnum_int=\count310
+\l__fontspec_tmp_int=\count311
+\l__fontspec_tmpa_int=\count312
+\l__fontspec_tmpb_int=\count313
+\l__fontspec_tmpc_int=\count314
+\l__fontspec_em_int=\count315
+\l__fontspec_emdef_int=\count316
+\l__fontspec_strong_int=\count317
+\l__fontspec_strongdef_int=\count318
+\l__fontspec_tmpa_dim=\dimen277
+\l__fontspec_tmpb_dim=\dimen278
+\l__fontspec_tmpc_dim=\dimen279
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\fontenc
+.sty"
+Package: fontenc 2018/08/11 v2.0j Standard LaTeX package
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\tuenc.d
+ef"
+File: tuenc.def 2018/08/11 v2.0j Standard LaTeX file
+LaTeX Font Info:    Redeclaring font encoding TU on input line 82.
+))
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/fontspec\fon
+tspec.cfg")
+LaTeX Info: Redefining \itshape on input line 4044.
+LaTeX Info: Redefining \slshape on input line 4049.
+LaTeX Info: Redefining \scshape on input line 4054.
+LaTeX Info: Redefining \upshape on input line 4059.
+LaTeX Info: Redefining \em on input line 4089.
+LaTeX Info: Redefining \emph on input line 4114.
+))
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/anyfontsize\
+anyfontsize.sty"
+Invalid UTF-8 byte or sequence at line 3 replaced by U+FFFD.
+Invalid UTF-8 byte or sequence at line 3 replaced by U+FFFD.
+Package: anyfontsize 2007/11/22 anyfontsize.sty by pts
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/hyperref\hyp
+erref.sty"
+Package: hyperref 2018/11/30 v6.88e Hypertext links for LaTeX
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\h
+obsub-hyperref.sty"
+Package: hobsub-hyperref 2016/05/16 v1.14 Bundle oberdiek, subset hyperref (HO)
+
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\h
+obsub-generic.sty"
+Package: hobsub-generic 2016/05/16 v1.14 Bundle oberdiek, subset generic (HO)
+Package: hobsub 2016/05/16 v1.14 Construct package bundles (HO)
+Package hobsub Info: Skipping package `infwarerr' (already loaded).
+Package hobsub Info: Skipping package `ltxcmds' (already loaded).
+Package hobsub Info: Skipping package `ifluatex' (already loaded).
+Package hobsub Info: Skipping package `ifvtex' (already loaded).
+Package: intcalc 2016/05/16 v1.2 Expandable calculations with integers (HO)
+Package hobsub Info: Skipping package `ifpdf' (already loaded).
+Package hobsub Info: Skipping package `etexcmds' (already loaded).
+Package hobsub Info: Skipping package `kvsetkeys' (already loaded).
+Package: kvdefinekeys 2016/05/16 v1.4 Define keys (HO)
+Package: pdftexcmds 2018/09/10 v0.29 Utility functions of pdfTeX for LuaTeX (HO
+)
+Package pdftexcmds Info: LuaTeX not detected.
+Package pdftexcmds Info: pdfTeX >= 1.30 not detected.
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode not found.
+Package: pdfescape 2016/05/16 v1.14 Implements pdfTeX's escape features (HO)
+Package: bigintcalc 2016/05/16 v1.4 Expandable calculations on big integers (HO
+)
+Package: bitset 2016/05/16 v1.2 Handle bit-vector datatype (HO)
+Package: uniquecounter 2016/05/16 v1.3 Provide unlimited unique counter (HO)
+)
+Package hobsub Info: Skipping package `hobsub' (already loaded).
+Package: letltxmacro 2016/05/16 v1.5 Let assignment for LaTeX macros (HO)
+Package: hopatch 2016/05/16 v1.3 Wrapper for package hooks (HO)
+Package: xcolor-patch 2016/05/16 xcolor patch
+Package: atveryend 2016/05/16 v1.9 Hooks at the very end of document (HO)
+Package: atbegshi 2016/06/09 v1.18 At begin shipout hook (HO)
+Package: refcount 2016/05/16 v3.5 Data extraction from label references (HO)
+Package: hycolor 2016/05/16 v1.8 Color options for hyperref/bookmark (HO)
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/oberdiek\aux
+hook.sty"
+Package: auxhook 2016/05/16 v1.4 Hooks for auxiliary files (HO)
+)
+\@linkdim=\dimen280
+\Hy@linkcounter=\count319
+\Hy@pagecounter=\count320
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/hyperref\pd1
+enc.def"
+File: pd1enc.def 2018/11/30 v6.88e Hyperref: PDFDocEncoding definition (HO)
+)
+\Hy@SavedSpaceFactor=\count321
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/00miktex\hyp
+erref.cfg"
+File: hyperref.cfg 2002/06/06 v1.2 hyperref configuration of TeXLive
+)
+Package hyperref Info: Hyper figures OFF on input line 4519.
+Package hyperref Info: Link nesting OFF on input line 4524.
+Package hyperref Info: Hyper index ON on input line 4527.
+Package hyperref Info: Plain pages OFF on input line 4534.
+Package hyperref Info: Backreferencing OFF on input line 4539.
+Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
+Package hyperref Info: Bookmarks ON on input line 4772.
+\c@Hy@tempcnt=\count322
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/url\url.sty"
+\Urlmuskip=\muskip16
+Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
+)
+LaTeX Info: Redefining \url on input line 5125.
+\XeTeXLinkMargin=\dimen281
+\Fld@menulength=\count323
+\Field@Width=\dimen282
+\Fld@charsize=\dimen283
+Package hyperref Info: Hyper figures OFF on input line 6380.
+Package hyperref Info: Link nesting OFF on input line 6385.
+Package hyperref Info: Hyper index ON on input line 6388.
+Package hyperref Info: backreferencing OFF on input line 6395.
+Package hyperref Info: Link coloring OFF on input line 6400.
+Package hyperref Info: Link coloring with OCG OFF on input line 6405.
+Package hyperref Info: PDF/A mode OFF on input line 6410.
+LaTeX Info: Redefining \ref on input line 6450.
+LaTeX Info: Redefining \pageref on input line 6454.
+\Hy@abspage=\count324
+\c@Item=\count325
+\c@Hfootnote=\count326
+)
+Package hyperref Info: Driver (autodetected): hxetex.
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/hyperref\hxe
+tex.def"
+File: hxetex.def 2018/11/30 v6.88e Hyperref driver for XeTeX
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/hyperref\pue
+nc.def"
+File: puenc.def 2018/11/30 v6.88e Hyperref: PDF Unicode definition (HO)
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\s
+tringenc.sty"
+Package: stringenc 2016/05/16 v1.11 Convert strings between diff. encodings (HO
+)
+)
+\pdfm@box=\box70
+\c@Hy@AnnotLevel=\count327
+\HyField@AnnotCount=\count328
+\Fld@listcount=\count329
+\c@bookmark@seq@number=\count330
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/oberdiek\rer
+unfilecheck.sty"
+Package: rerunfilecheck 2016/05/16 v1.8 Rerun checks for auxiliary files (HO)
+Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
+82.
+)
+\Hy@SectionHShift=\skip63
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/tools\multic
+ol.sty"
+Package: multicol 2018/12/27 v1.8v multicolumn formatting (FMi)
+\c@tracingmulticols=\count331
+\mult@box=\box71
+\multicol@leftmargin=\dimen284
+\c@unbalance=\count332
+\c@collectmore=\count333
+\doublecol@number=\count334
+\multicoltolerance=\count335
+\multicolpretolerance=\count336
+\full@width=\dimen285
+\page@free=\dimen286
+\premulticols=\dimen287
+\postmulticols=\dimen288
+\multicolsep=\skip64
+\multicolbaselineskip=\skip65
+\partial@page=\box72
+\last@line=\box73
+\maxbalancingoverflow=\dimen289
+\mult@rightbox=\box74
+\mult@grightbox=\box75
+\mult@gfirstbox=\box76
+\mult@firstbox=\box77
+\@tempa=\box78
+\@tempa=\box79
+\@tempa=\box80
+\@tempa=\box81
+\@tempa=\box82
+\@tempa=\box83
+\@tempa=\box84
+\@tempa=\box85
+\@tempa=\box86
+\@tempa=\box87
+\@tempa=\box88
+\@tempa=\box89
+\@tempa=\box90
+\@tempa=\box91
+\@tempa=\box92
+\@tempa=\box93
+\@tempa=\box94
+\c@columnbadness=\count337
+\c@finalcolumnbadness=\count338
+\last@try=\dimen290
+\multicolovershoot=\dimen291
+\multicolundershoot=\dimen292
+\mult@nat@firstbox=\box95
+\colbreak@box=\box96
+\mc@col@check@num=\count339
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/datetime\dat
+etime.sty"
+Package: datetime 2015/03/20 v2.60 Date Time Package
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/fmtcount\fmt
+count.sty"
+Invalid UTF-8 byte or sequence at line 10 replaced by U+FFFD.
+Invalid UTF-8 byte or sequence at line 22 replaced by U+FFFD.
+Package: fmtcount 2017/12/24 v3.05
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\ifthen.
+sty"
+Package: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/fmtcount\fcp
+refix.sty"
+Invalid UTF-8 byte or sequence at line 10 replaced by U+FFFD.
+Invalid UTF-8 byte or sequence at line 22 replaced by U+FFFD.
+Package: fcprefix 2012/09/28
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/fmtcount\fcn
+umparser.sty"
+Invalid UTF-8 byte or sequence at line 10 replaced by U+FFFD.
+Invalid UTF-8 byte or sequence at line 22 replaced by U+FFFD.
+Package: fcnumparser 2017/06/15
+\fc@digit@counter=\count340
+))
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsmath\amsg
+en.sty"
+File: amsgen.sty 1999/11/30 v2.0 generic functions
+\@emptytoks=\toks37
+\ex@=\dimen293
+)
+\c@padzeroesN=\count341
+\fc@tmpcatcode=\count342
+\@DT@modctr=\count343
+\@ordinalctr=\count344
+\@orgargctr=\count345
+\@strctr=\count346
+\@tmpstrctr=\count347
+\@DT@loopN=\count348
+\@DT@X=\count349
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/datetime\dat
+etime-defaults.sty"
+Package: datetime-defaults 2013/09/10
+)
+\@day=\count350
+\@month=\count351
+\@year=\count352
+\c@HOUR=\count353
+\c@HOURXII=\count354
+\c@MINUTE=\count355
+\c@TOHOUR=\count356
+\c@TOMINUTE=\count357
+\c@SECOND=\count358
+\currenthour=\count359
+\currentminute=\count360
+\currentsecond=\count361
+Package datetime Info: No datetime.cfg file found, using default settings on in
+put line 308.
+\@dtctr=\count362
+\dayofyear=\count363
+\dayofweek=\count364
+LaTeX Info: Redefining \today on input line 736.
+\dt@a=\toks38
+\dt@b=\toks39
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\fixltx2
+e.sty"
+Package: fixltx2e 2016/12/29 v2.1a fixes to LaTeX (obsolete)
+Applying: [2015/01/01] Old fixltx2e package on input line 46.
+
+
+Package fixltx2e Warning: fixltx2e is not required with releases after 2015
+(fixltx2e)                All fixes are now in the LaTeX kernel.
+(fixltx2e)                See the latexrelease package for details.
+
+Already applied: [0000/00/00] Old fixltx2e package on input line 53.
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/mfirstuc\mfi
+rstuc.sty"
+Package: mfirstuc 2017/11/14 v2.06 (NLCT)
+\@glsmfirst=\toks40
+\@glsmrest=\toks41
+)
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/clearsans\Cl
+earSans.sty"
+Package: ClearSans 2014/03/16 (Bob Tennent) Supports Clear-Sans fonts for all L
+aTeX engines.
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\textcom
+p.sty"
+Package: textcomp 2018/08/11 v2.0j Standard LaTeX package
+Package textcomp Info: Sub-encoding information:
+(textcomp)               5 = only ISO-Adobe without \textcurrency
+(textcomp)               4 = 5 + \texteuro
+(textcomp)               3 = 4 + \textohm
+(textcomp)               2 = 3 + \textestimated + \textcurrency
+(textcomp)               1 = TS1 - \textcircled - \t
+(textcomp)               0 = TS1 (full)
+(textcomp)             Font families with sub-encoding setting implement
+(textcomp)             only a restricted character set as indicated.
+(textcomp)             Family '?' is the default used for unknown fonts.
+(textcomp)             See the documentation for details.
+Package textcomp Info: Setting ? sub-encoding to TS1/1 on input line 79.
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\ts1enc.
+def"
+File: ts1enc.def 2001/06/05 v3.0e (jk/car/fm) Standard LaTeX file
+)
+LaTeX Info: Redefining \oldstylenums on input line 334.
+Package textcomp Info: Setting cmr sub-encoding to TS1/0 on input line 349.
+Package textcomp Info: Setting cmss sub-encoding to TS1/0 on input line 350.
+Package textcomp Info: Setting cmtt sub-encoding to TS1/0 on input line 351.
+Package textcomp Info: Setting cmvtt sub-encoding to TS1/0 on input line 352.
+Package textcomp Info: Setting cmbr sub-encoding to TS1/0 on input line 353.
+Package textcomp Info: Setting cmtl sub-encoding to TS1/0 on input line 354.
+Package textcomp Info: Setting ccr sub-encoding to TS1/0 on input line 355.
+Package textcomp Info: Setting ptm sub-encoding to TS1/4 on input line 356.
+Package textcomp Info: Setting pcr sub-encoding to TS1/4 on input line 357.
+Package textcomp Info: Setting phv sub-encoding to TS1/4 on input line 358.
+Package textcomp Info: Setting ppl sub-encoding to TS1/3 on input line 359.
+Package textcomp Info: Setting pag sub-encoding to TS1/4 on input line 360.
+Package textcomp Info: Setting pbk sub-encoding to TS1/4 on input line 361.
+Package textcomp Info: Setting pnc sub-encoding to TS1/4 on input line 362.
+Package textcomp Info: Setting pzc sub-encoding to TS1/4 on input line 363.
+Package textcomp Info: Setting bch sub-encoding to TS1/4 on input line 364.
+Package textcomp Info: Setting put sub-encoding to TS1/5 on input line 365.
+Package textcomp Info: Setting uag sub-encoding to TS1/5 on input line 366.
+Package textcomp Info: Setting ugq sub-encoding to TS1/5 on input line 367.
+Package textcomp Info: Setting ul8 sub-encoding to TS1/4 on input line 368.
+Package textcomp Info: Setting ul9 sub-encoding to TS1/4 on input line 369.
+Package textcomp Info: Setting augie sub-encoding to TS1/5 on input line 370.
+Package textcomp Info: Setting dayrom sub-encoding to TS1/3 on input line 371.
+Package textcomp Info: Setting dayroms sub-encoding to TS1/3 on input line 372.
+
+Package textcomp Info: Setting pxr sub-encoding to TS1/0 on input line 373.
+Package textcomp Info: Setting pxss sub-encoding to TS1/0 on input line 374.
+Package textcomp Info: Setting pxtt sub-encoding to TS1/0 on input line 375.
+Package textcomp Info: Setting txr sub-encoding to TS1/0 on input line 376.
+Package textcomp Info: Setting txss sub-encoding to TS1/0 on input line 377.
+Package textcomp Info: Setting txtt sub-encoding to TS1/0 on input line 378.
+Package textcomp Info: Setting lmr sub-encoding to TS1/0 on input line 379.
+Package textcomp Info: Setting lmdh sub-encoding to TS1/0 on input line 380.
+Package textcomp Info: Setting lmss sub-encoding to TS1/0 on input line 381.
+Package textcomp Info: Setting lmssq sub-encoding to TS1/0 on input line 382.
+Package textcomp Info: Setting lmvtt sub-encoding to TS1/0 on input line 383.
+Package textcomp Info: Setting lmtt sub-encoding to TS1/0 on input line 384.
+Package textcomp Info: Setting qhv sub-encoding to TS1/0 on input line 385.
+Package textcomp Info: Setting qag sub-encoding to TS1/0 on input line 386.
+Package textcomp Info: Setting qbk sub-encoding to TS1/0 on input line 387.
+Package textcomp Info: Setting qcr sub-encoding to TS1/0 on input line 388.
+Package textcomp Info: Setting qcs sub-encoding to TS1/0 on input line 389.
+Package textcomp Info: Setting qpl sub-encoding to TS1/0 on input line 390.
+Package textcomp Info: Setting qtm sub-encoding to TS1/0 on input line 391.
+Package textcomp Info: Setting qzc sub-encoding to TS1/0 on input line 392.
+Package textcomp Info: Setting qhvc sub-encoding to TS1/0 on input line 393.
+Package textcomp Info: Setting futs sub-encoding to TS1/4 on input line 394.
+Package textcomp Info: Setting futx sub-encoding to TS1/4 on input line 395.
+Package textcomp Info: Setting futj sub-encoding to TS1/4 on input line 396.
+Package textcomp Info: Setting hlh sub-encoding to TS1/3 on input line 397.
+Package textcomp Info: Setting hls sub-encoding to TS1/3 on input line 398.
+Package textcomp Info: Setting hlst sub-encoding to TS1/3 on input line 399.
+Package textcomp Info: Setting hlct sub-encoding to TS1/5 on input line 400.
+Package textcomp Info: Setting hlx sub-encoding to TS1/5 on input line 401.
+Package textcomp Info: Setting hlce sub-encoding to TS1/5 on input line 402.
+Package textcomp Info: Setting hlcn sub-encoding to TS1/5 on input line 403.
+Package textcomp Info: Setting hlcw sub-encoding to TS1/5 on input line 404.
+Package textcomp Info: Setting hlcf sub-encoding to TS1/5 on input line 405.
+Package textcomp Info: Setting pplx sub-encoding to TS1/3 on input line 406.
+Package textcomp Info: Setting pplj sub-encoding to TS1/3 on input line 407.
+Package textcomp Info: Setting ptmx sub-encoding to TS1/4 on input line 408.
+Package textcomp Info: Setting ptmj sub-encoding to TS1/4 on input line 409.
+)
+Requested font "[ClearSans-Regular.ttf]/OT" at 9.99997pt
+ -> C:/Users/danielgue88/AppData/Local/Programs/MiKTeX 2.9/fonts/truetype/intel
+/clearsans/ClearSans-Regular.ttf
+Requested font "[ClearSans-Regular.ttf]/OT" at 10.0pt
+ -> C:/Users/danielgue88/AppData/Local/Programs/MiKTeX 2.9/fonts/truetype/intel
+/clearsans/ClearSans-Regular.ttf
+Requested font "[ClearSans-Bold.ttf]/OT" at 10.0pt
+ -> C:/Users/danielgue88/AppData/Local/Programs/MiKTeX 2.9/fonts/truetype/intel
+/clearsans/ClearSans-Bold.ttf
+Requested font "[ClearSans-Italic.ttf]/OT" at 10.0pt
+ -> C:/Users/danielgue88/AppData/Local/Programs/MiKTeX 2.9/fonts/truetype/intel
+/clearsans/ClearSans-Italic.ttf
+Requested font "[ClearSans-BoldItalic.ttf]/OT" at 10.0pt
+ -> C:/Users/danielgue88/AppData/Local/Programs/MiKTeX 2.9/fonts/truetype/intel
+/clearsans/ClearSans-BoldItalic.ttf
+
+Package fontspec Info: Font family 'ClearSans(0)' created for font 'ClearSans'
+(fontspec)             with options [Ligatures = TeX,Scale = 1,Extension =
+(fontspec)             .ttf,Ligatures=TeX,UprightFont = *-Regular,ItalicFont =
+(fontspec)             *-Italic,BoldFont = *-Bold,BoldItalicFont =
+(fontspec)             *-BoldItalic].
+(fontspec)              
+(fontspec)              This font family consists of the following NFSS
+(fontspec)             series/shapes:
+(fontspec)              
+(fontspec)             - 'normal' (m/n) with NFSS spec.:
+(fontspec)             <->s*[1]"[ClearSans-Regular.ttf]/OT:script=latn;language
+=DFLT;mapping=tex-text;"
+(fontspec)             - 'small caps'  (m/sc) with NFSS spec.: 
+(fontspec)             - 'bold' (bx/n) with NFSS spec.:
+(fontspec)             <->s*[1]"[ClearSans-Bold.ttf]/OT:script=latn;language=DF
+LT;mapping=tex-text;"
+(fontspec)             - 'bold small caps'  (bx/sc) with NFSS spec.: 
+(fontspec)             - 'italic' (m/it) with NFSS spec.:
+(fontspec)             <->s*[1]"[ClearSans-Italic.ttf]/OT:script=latn;language=
+DFLT;mapping=tex-text;"
+(fontspec)             - 'italic small caps'  (m/itsc) with NFSS spec.: 
+(fontspec)             - 'bold italic' (bx/it) with NFSS spec.:
+(fontspec)             <->s*[1]"[ClearSans-BoldItalic.ttf]/OT:script=latn;langu
+age=DFLT;mapping=tex-text;"
+(fontspec)             - 'bold italic small caps'  (bx/itsc) with NFSS spec.: 
+
+LaTeX Info: Redefining \sffamily on input line 60.
+
+Package fontspec Info: Font family 'ClearSans(1)' created for font 'ClearSans'
+(fontspec)             with options [Ligatures = TeX,Scale = 1,Extension =
+(fontspec)             .ttf,UprightFont = *-Regular,ItalicFont =
+(fontspec)             *-Italic,BoldFont = *-Bold,BoldItalicFont =
+(fontspec)             *-BoldItalic].
+(fontspec)              
+(fontspec)              This font family consists of the following NFSS
+(fontspec)             series/shapes:
+(fontspec)              
+(fontspec)             - 'normal' (m/n) with NFSS spec.:
+(fontspec)             <->s*[1]"[ClearSans-Regular.ttf]/OT:script=latn;language
+=DFLT;mapping=tex-text;"
+(fontspec)             - 'small caps'  (m/sc) with NFSS spec.: 
+(fontspec)             - 'bold' (bx/n) with NFSS spec.:
+(fontspec)             <->s*[1]"[ClearSans-Bold.ttf]/OT:script=latn;language=DF
+LT;mapping=tex-text;"
+(fontspec)             - 'bold small caps'  (bx/sc) with NFSS spec.: 
+(fontspec)             - 'italic' (m/it) with NFSS spec.:
+(fontspec)             <->s*[1]"[ClearSans-Italic.ttf]/OT:script=latn;language=
+DFLT;mapping=tex-text;"
+(fontspec)             - 'italic small caps'  (m/itsc) with NFSS spec.: 
+(fontspec)             - 'bold italic' (bx/it) with NFSS spec.:
+(fontspec)             <->s*[1]"[ClearSans-BoldItalic.ttf]/OT:script=latn;langu
+age=DFLT;mapping=tex-text;"
+(fontspec)             - 'bold italic small caps'  (bx/itsc) with NFSS spec.: 
+
+Requested font "[ClearSans-Light.ttf]/OT" at 9.99997pt
+ -> C:/Users/danielgue88/AppData/Local/Programs/MiKTeX 2.9/fonts/truetype/intel
+/clearsans/ClearSans-Light.ttf
+Requested font "[ClearSans-Light.ttf]/OT" at 10.0pt
+ -> C:/Users/danielgue88/AppData/Local/Programs/MiKTeX 2.9/fonts/truetype/intel
+/clearsans/ClearSans-Light.ttf
+
+Package fontspec Info: Font family 'ClearSans(2)' created for font 'ClearSans'
+(fontspec)             with options [Ligatures = TeX,Scale = 1,Extension =
+(fontspec)             .ttf,UprightFont = *-Light,BoldFont =
+(fontspec)             *-Bold,BoldItalicFont = *-BoldItalic].
+(fontspec)              
+(fontspec)              This font family consists of the following NFSS
+(fontspec)             series/shapes:
+(fontspec)              
+(fontspec)             - 'normal' (m/n) with NFSS spec.:
+(fontspec)             <->s*[1]"[ClearSans-Light.ttf]/OT:script=latn;language=D
+FLT;mapping=tex-text;"
+(fontspec)             - 'small caps'  (m/sc) with NFSS spec.: 
+(fontspec)             - 'bold' (bx/n) with NFSS spec.:
+(fontspec)             <->s*[1]"[ClearSans-Bold.ttf]/OT:script=latn;language=DF
+LT;mapping=tex-text;"
+(fontspec)             - 'bold small caps'  (bx/sc) with NFSS spec.: 
+(fontspec)             - 'bold italic' (bx/it) with NFSS spec.:
+(fontspec)             <->s*[1]"[ClearSans-BoldItalic.ttf]/OT:script=latn;langu
+age=DFLT;mapping=tex-text;"
+(fontspec)             - 'bold italic small caps'  (bx/itsc) with NFSS spec.: 
+
+Requested font "[ClearSans-Thin.ttf]/OT" at 9.99997pt
+ -> C:/Users/danielgue88/AppData/Local/Programs/MiKTeX 2.9/fonts/truetype/intel
+/clearsans/ClearSans-Thin.ttf
+Requested font "[ClearSans-Thin.ttf]/OT" at 10.0pt
+ -> C:/Users/danielgue88/AppData/Local/Programs/MiKTeX 2.9/fonts/truetype/intel
+/clearsans/ClearSans-Thin.ttf
+
+Package fontspec Info: Font family 'ClearSans(3)' created for font 'ClearSans'
+(fontspec)             with options [Ligatures = TeX,Scale = 1,Extension =
+(fontspec)             .ttf,UprightFont = *-Thin,BoldFont =
+(fontspec)             *-Bold,BoldItalicFont = *-BoldItalic].
+(fontspec)              
+(fontspec)              This font family consists of the following NFSS
+(fontspec)             series/shapes:
+(fontspec)              
+(fontspec)             - 'normal' (m/n) with NFSS spec.:
+(fontspec)             <->s*[1]"[ClearSans-Thin.ttf]/OT:script=latn;language=DF
+LT;mapping=tex-text;"
+(fontspec)             - 'small caps'  (m/sc) with NFSS spec.: 
+(fontspec)             - 'bold' (bx/n) with NFSS spec.:
+(fontspec)             <->s*[1]"[ClearSans-Bold.ttf]/OT:script=latn;language=DF
+LT;mapping=tex-text;"
+(fontspec)             - 'bold small caps'  (bx/sc) with NFSS spec.: 
+(fontspec)             - 'bold italic' (bx/it) with NFSS spec.:
+(fontspec)             <->s*[1]"[ClearSans-BoldItalic.ttf]/OT:script=latn;langu
+age=DFLT;mapping=tex-text;"
+(fontspec)             - 'bold italic small caps'  (bx/itsc) with NFSS spec.: 
+
+)
+Requested font "ClearSans" at 9.99997pt
+ -> C:/Users/danielgue88/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/intel/cl
+earsans/ClearSans-Regular.pfb
+Requested font "ClearSans/OT" at 10.0pt
+ -> C:/Users/danielgue88/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/intel/cl
+earsans/ClearSans-Regular.pfb
+Requested font "ClearSans/OT" at 10.00002pt
+ -> C:/Users/danielgue88/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/intel/cl
+earsans/ClearSans-Regular.pfb
+Requested font "ClearSans/BI/OT" at 10.00002pt
+ -> C:/Users/danielgue88/AppData/Local/Programs/MiKTeX 2.9/fonts/truetype/intel
+/clearsans/ClearSans-BoldItalic.ttf
+Requested font "ClearSans/OT" at 10.00002pt
+ -> C:/Users/danielgue88/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/intel/cl
+earsans/ClearSans-Regular.pfb
+Requested font "ClearSans/B/OT" at 10.00002pt
+ -> C:/Users/danielgue88/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/intel/cl
+earsans/ClearSans-Bold.pfb
+Requested font "ClearSans/OT" at 10.00002pt
+ -> C:/Users/danielgue88/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/intel/cl
+earsans/ClearSans-Regular.pfb
+Requested font "ClearSans/I/OT" at 10.00002pt
+ -> C:/Users/danielgue88/AppData/Local/Programs/MiKTeX 2.9/fonts/truetype/intel
+/clearsans/ClearSans-Italic.ttf
+Requested font "ClearSans/OT" at 10.0pt
+ -> C:/Users/danielgue88/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/intel/cl
+earsans/ClearSans-Regular.pfb
+Requested font "ClearSans/OT" at 10.0pt
+ -> C:/Users/danielgue88/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/intel/cl
+earsans/ClearSans-Regular.pfb
+Requested font "ClearSans/B/OT" at 10.0pt
+ -> C:/Users/danielgue88/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/intel/cl
+earsans/ClearSans-Bold.pfb
+Requested font "ClearSans/B/OT" at 10.0pt
+ -> C:/Users/danielgue88/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/intel/cl
+earsans/ClearSans-Bold.pfb
+Requested font "ClearSans/I/OT" at 10.0pt
+ -> C:/Users/danielgue88/AppData/Local/Programs/MiKTeX 2.9/fonts/truetype/intel
+/clearsans/ClearSans-Italic.ttf
+Requested font "ClearSans/I/OT" at 10.0pt
+ -> C:/Users/danielgue88/AppData/Local/Programs/MiKTeX 2.9/fonts/truetype/intel
+/clearsans/ClearSans-Italic.ttf
+Requested font "ClearSans/BI/OT" at 10.0pt
+ -> C:/Users/danielgue88/AppData/Local/Programs/MiKTeX 2.9/fonts/truetype/intel
+/clearsans/ClearSans-BoldItalic.ttf
+Requested font "ClearSans/BI/OT" at 10.0pt
+ -> C:/Users/danielgue88/AppData/Local/Programs/MiKTeX 2.9/fonts/truetype/intel
+/clearsans/ClearSans-BoldItalic.ttf
+
+Package fontspec Info: Font family 'ClearSans(4)' created for font 'ClearSans'
+(fontspec)             with options [Ligatures=TeX].
+(fontspec)              
+(fontspec)              This font family consists of the following NFSS
+(fontspec)             series/shapes:
+(fontspec)              
+(fontspec)             - 'normal' (m/n) with NFSS spec.:
+(fontspec)             <->"ClearSans/OT:mapping=tex-text;"
+(fontspec)             - 'small caps'  (m/sc) with NFSS spec.: 
+(fontspec)             - 'bold' (bx/n) with NFSS spec.:
+(fontspec)             <->"ClearSans/B/OT:mapping=tex-text;"
+(fontspec)             - 'bold small caps'  (bx/sc) with NFSS spec.: 
+(fontspec)             - 'italic' (m/it) with NFSS spec.:
+(fontspec)             <->"ClearSans/I/OT:mapping=tex-text;"
+(fontspec)             - 'italic small caps'  (m/itsc) with NFSS spec.: 
+(fontspec)             - 'bold italic' (bx/it) with NFSS spec.:
+(fontspec)             <->"ClearSans/BI/OT:mapping=tex-text;"
+(fontspec)             - 'bold italic small caps'  (bx/itsc) with NFSS spec.: 
+
+LaTeX Info: Redefining \rmfamily on input line 151.
+LaTeX Font Info:    Font shape `TU/ClearSans(0)/m/n' will be
+(Font)              scaled to size 10.0pt on input line 151.
+Requested font "[ClearSans-Regular.ttf]/OT:script=latn;language=DFLT;mapping=te
+x-text;" at 10.0pt
+ -> C:/Users/danielgue88/AppData/Local/Programs/MiKTeX 2.9/fonts/truetype/intel
+/clearsans/ClearSans-Regular.ttf
+ (GeneralTemplateInput_v6_SB_SpanishVersion.aux)
+\openout1 = `GeneralTemplateInput_v6_SB_SpanishVersion.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 164.
+LaTeX Font Info:    ... okay on input line 164.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 164.
+LaTeX Font Info:    ... okay on input line 164.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 164.
+LaTeX Font Info:    ... okay on input line 164.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 164.
+LaTeX Font Info:    ... okay on input line 164.
+LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 164.
+LaTeX Font Info:    ... okay on input line 164.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 164.
+LaTeX Font Info:    ... okay on input line 164.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 164.
+LaTeX Font Info:    ... okay on input line 164.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 164.
+LaTeX Font Info:    ... okay on input line 164.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 164.
+LaTeX Font Info:    ... okay on input line 164.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 164.
+LaTeX Font Info:    Try loading font information for TS1+cmr on input line 164.
+
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\ts1cmr.
+fd"
+File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    ... okay on input line 164.
+\symgns@font=\mathgroup4
+LaTeX Font Info:    Overwriting symbol font `gns@font' in version `bold'
+(Font)                  TS1/ClearSans(0)/m/n --> TS1/ClearSans(0)/bx/n on input
+ line 164.
+Package gensymb Info: Math companion symbols declared on input line 164.
+LaTeX Info: Redefining \degree on input line 164.
+LaTeX Info: Redefining \celsius on input line 164.
+Package gensymb Info: Using text companion symbols for \degree, \celsius and \p
+erthousand on input line 164.
+LaTeX Info: Redefining \ohm on input line 164.
+Package gensymb Info: Using \textohm for \ohm on input line 164.
+Package gensymb Info: Using \textmu for \micro on input line 164.
+
+*geometry* detected driver: pdftex
+*geometry* verbose mode - [ preamble ] result:
+* driver: pdftex
+* paper: <default>
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* modes: 
+* h-part:(L,W,R)=(34.14322pt, 546.00856pt, 34.14322pt)
+* v-part:(T,H,B)=(28.45274pt, 723.83812pt, 42.67912pt)
+* \paperwidth=614.295pt
+* \paperheight=794.96999pt
+* \textwidth=546.00856pt
+* \textheight=723.83812pt
+* \oddsidemargin=-38.12677pt
+* \evensidemargin=-38.12677pt
+* \topmargin=-80.81725pt
+* \headheight=12.0pt
+* \headsep=25.0pt
+* \topskip=10.0pt
+* \footskip=30.0pt
+* \marginparwidth=65.0pt
+* \marginparsep=11.0pt
+* \columnsep=10.0pt
+* \skip\footins=9.0pt plus 4.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidefalse
+* \@mparswitchfalse
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
+
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: hyperref package is loaded.
+Package caption Info: wrapfig package is loaded.
+Package caption Info: End \AtBeginDocument code.
+ABD: EveryShipout initializing macros
+
+Package fontspec Info: Adjusting the maths setup (use [no-math] to avoid
+(fontspec)             this).
+
+\symlegacymaths=\mathgroup5
+LaTeX Font Info:    Overwriting symbol font `legacymaths' in version `bold'
+(Font)                  OT1/cmr/m/n --> OT1/cmr/bx/n on input line 164.
+LaTeX Font Info:    Redeclaring math accent \acute on input line 164.
+LaTeX Font Info:    Redeclaring math accent \grave on input line 164.
+LaTeX Font Info:    Redeclaring math accent \ddot on input line 164.
+LaTeX Font Info:    Redeclaring math accent \tilde on input line 164.
+LaTeX Font Info:    Redeclaring math accent \bar on input line 164.
+LaTeX Font Info:    Redeclaring math accent \breve on input line 164.
+LaTeX Font Info:    Redeclaring math accent \check on input line 164.
+LaTeX Font Info:    Redeclaring math accent \hat on input line 164.
+LaTeX Font Info:    Redeclaring math accent \dot on input line 164.
+LaTeX Font Info:    Redeclaring math accent \mathring on input line 164.
+LaTeX Font Info:    Redeclaring math symbol \colon on input line 164.
+LaTeX Font Info:    Redeclaring math symbol \Gamma on input line 164.
+LaTeX Font Info:    Redeclaring math symbol \Delta on input line 164.
+LaTeX Font Info:    Redeclaring math symbol \Theta on input line 164.
+LaTeX Font Info:    Redeclaring math symbol \Lambda on input line 164.
+LaTeX Font Info:    Redeclaring math symbol \Xi on input line 164.
+LaTeX Font Info:    Redeclaring math symbol \Pi on input line 164.
+LaTeX Font Info:    Redeclaring math symbol \Sigma on input line 164.
+LaTeX Font Info:    Redeclaring math symbol \Upsilon on input line 164.
+LaTeX Font Info:    Redeclaring math symbol \Phi on input line 164.
+LaTeX Font Info:    Redeclaring math symbol \Psi on input line 164.
+LaTeX Font Info:    Redeclaring math symbol \Omega on input line 164.
+LaTeX Font Info:    Redeclaring math symbol \mathdollar on input line 164.
+LaTeX Font Info:    Redeclaring symbol font `operators' on input line 164.
+LaTeX Font Info:    Encoding `OT1' has changed to `TU' for symbol font
+(Font)              `operators' in the math version `normal' on input line 164.
+
+LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
+(Font)                  OT1/cmr/m/n --> TU/ClearSans(4)/m/n on input line 164.
+LaTeX Font Info:    Encoding `OT1' has changed to `TU' for symbol font
+(Font)              `operators' in the math version `bold' on input line 164.
+LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
+(Font)                  OT1/cmr/bx/n --> TU/ClearSans(4)/m/n on input line 164.
+
+LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
+(Font)                  TU/ClearSans(4)/m/n --> TU/ClearSans(4)/m/n on input li
+ne 164.
+LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `normal'
+(Font)                  OT1/cmr/m/it --> TU/ClearSans(4)/m/it on input line 164
+.
+LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `normal'
+(Font)                  OT1/cmr/bx/n --> TU/ClearSans(4)/bx/n on input line 164
+.
+LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `normal'
+(Font)                  OT1/cmss/m/n --> TU/ClearSans(0)/m/n on input line 164.
+
+LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `normal'
+(Font)                  OT1/cmtt/m/n --> TU/lmtt/m/n on input line 164.
+LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
+(Font)                  TU/ClearSans(4)/m/n --> TU/ClearSans(4)/bx/n on input l
+ine 164.
+LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
+(Font)                  OT1/cmr/bx/it --> TU/ClearSans(4)/bx/it on input line 1
+64.
+LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
+(Font)                  OT1/cmss/bx/n --> TU/ClearSans(0)/bx/n on input line 16
+4.
+LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
+(Font)                  OT1/cmtt/m/n --> TU/lmtt/bx/n on input line 164.
+\AtBeginShipoutBox=\box97
+Package hyperref Info: Link coloring OFF on input line 164.
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/hyperref\nam
+eref.sty"
+Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\g
+ettitlestring.sty"
+Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
+)
+\c@section@level=\count365
+)
+LaTeX Info: Redefining \ref on input line 164.
+LaTeX Info: Redefining \pageref on input line 164.
+LaTeX Info: Redefining \nameref on input line 164.
+ (GeneralTemplateInput_v6_SB_SpanishVersion.out)
+(GeneralTemplateInput_v6_SB_SpanishVersion.out)
+\@outlinefile=\write6
+\openout6 = `GeneralTemplateInput_v6_SB_SpanishVersion.out'.
+
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/latex/fmtcount\fc-
+english.def"
+Invalid UTF-8 byte or sequence at line 10 replaced by U+FFFD.
+Invalid UTF-8 byte or sequence at line 22 replaced by U+FFFD.
+File: fc-english.def 2016/01/12
+)
+LaTeX Font Info:    Font shape `TU/ClearSans(0)/m/n' will be
+(Font)              scaled to size 14.4pt on input line 165.
+Requested font "[ClearSans-Regular.ttf]/OT:script=latn;language=DFLT;mapping=te
+x-text;" at 14.4pt
+ -> C:/Users/danielgue88/AppData/Local/Programs/MiKTeX 2.9/fonts/truetype/intel
+/clearsans/ClearSans-Regular.ttf
+LaTeX Font Info:    Font shape `TU/ClearSans(0)/bx/n' will be
+(Font)              scaled to size 14.4pt on input line 165.
+Requested font "[ClearSans-Bold.ttf]/OT:script=latn;language=DFLT;mapping=tex-t
+ext;" at 14.4pt
+ -> C:/Users/danielgue88/AppData/Local/Programs/MiKTeX 2.9/fonts/truetype/intel
+/clearsans/ClearSans-Bold.ttf
+File: ReportGraphics/FrontPageUNPRI.jpg Graphic file (type bmp)
+<ReportGraphics/FrontPageUNPRI.jpg>
+LaTeX Font Info:    Font shape `TU/ClearSans(0)/m/n' will be
+(Font)              scaled to size 24.88pt on input line 179.
+Requested font "[ClearSans-Regular.ttf]/OT:script=latn;language=DFLT;mapping=te
+x-text;" at 24.88pt
+ -> C:/Users/danielgue88/AppData/Local/Programs/MiKTeX 2.9/fonts/truetype/intel
+/clearsans/ClearSans-Regular.ttf
+LaTeX Font Info:    Font shape `TU/ClearSans(0)/bx/n' will be
+(Font)              scaled to size 24.88pt on input line 179.
+Requested font "[ClearSans-Bold.ttf]/OT:script=latn;language=DFLT;mapping=tex-t
+ext;" at 24.88pt
+ -> C:/Users/danielgue88/AppData/Local/Programs/MiKTeX 2.9/fonts/truetype/intel
+/clearsans/ClearSans-Bold.ttf
+LaTeX Font Info:    Font shape `TU/ClearSans(0)/m/n' will be
+(Font)              scaled to size 17.28pt on input line 180.
+Requested font "[ClearSans-Regular.ttf]/OT:script=latn;language=DFLT;mapping=te
+x-text;" at 17.28pt
+ -> C:/Users/danielgue88/AppData/Local/Programs/MiKTeX 2.9/fonts/truetype/intel
+/clearsans/ClearSans-Regular.ttf
+LaTeX Font Info:    Font shape `TU/ClearSans(0)/bx/n' will be
+(Font)              scaled to size 17.28pt on input line 180.
+Requested font "[ClearSans-Bold.ttf]/OT:script=latn;language=DFLT;mapping=tex-t
+ext;" at 17.28pt
+ -> C:/Users/danielgue88/AppData/Local/Programs/MiKTeX 2.9/fonts/truetype/intel
+/clearsans/ClearSans-Bold.ttf
+File: ReportGraphics/Logo_front.png Graphic file (type bmp)
+<ReportGraphics/Logo_front.png>
+
+("C:\Users\danielgue88\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\s
+e-ascii-print.def"
+File: se-ascii-print.def 2016/05/16 v1.11 stringenc: Printable ASCII characters
+
+) [1
+
+]
+LaTeX Font Info:    Font shape `TU/ClearSans(0)/bx/n' will be
+(Font)              scaled to size 10.0pt on input line 205.
+Requested font "[ClearSans-Bold.ttf]/OT:script=latn;language=DFLT;mapping=tex-t
+ext;" at 10.0pt
+ -> C:/Users/danielgue88/AppData/Local/Programs/MiKTeX 2.9/fonts/truetype/intel
+/clearsans/ClearSans-Bold.ttf
+
+Overfull \hbox (20.3239pt too wide) in paragraph at lines 215--216
+[]\TU/ClearSans(0)/bx/n/10 EXENCIÓN DE RESPONSABILIDAD: EN LA MEDIDA PERMITIDA 
+POR LA LEY, NO NOS HACEMOS RESPONSABLES POR CUALQUIER
+ []
+
+[2]
+Requested font "ClearSans/OT:mapping=tex-text;" at 10.0pt
+ -> C:/Users/danielgue88/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/intel/cl
+earsans/ClearSans-Regular.pfb
+Requested font "ClearSans/OT:mapping=tex-text;" at 7.0pt
+ -> C:/Users/danielgue88/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/intel/cl
+earsans/ClearSans-Regular.pfb
+Requested font "ClearSans/OT:mapping=tex-text;" at 5.0pt
+ -> C:/Users/danielgue88/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/intel/cl
+earsans/ClearSans-Regular.pfb
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 259.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 259.
+LaTeX Font Info:    Try loading font information for TS1+ClearSans(0) on input 
+line 259.
+LaTeX Font Info:    No file TS1ClearSans(0).fd. on input line 259.
+
+
+LaTeX Font Warning: Font shape `TS1/ClearSans(0)/m/n' undefined
+(Font)              using `TS1/cmr/m/n' instead on input line 259.
+
+Requested font "tcrm1000" at 10.0pt
+Requested font "tcrm0700" at 7.0pt
+Requested font "tcrm0500" at 5.0pt
+
+Underfull \hbox (badness 10000) in paragraph at lines 263--263
+[]|\TU/ClearSans(0)/m/n/10 Nombre del inver-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 269--270
+[]|\TU/ClearSans(0)/m/n/10 Bonos corporativos y ac-
+ []
+
+LaTeX Font Info:    Font shape `TU/ClearSans(0)/m/n' will be
+(Font)              scaled to size 7.0pt on input line 279.
+Requested font "[ClearSans-Regular.ttf]/OT:script=latn;language=DFLT;mapping=te
+x-text;" at 7.0pt
+ -> C:/Users/danielgue88/AppData/Local/Programs/MiKTeX 2.9/fonts/truetype/intel
+/clearsans/ClearSans-Regular.ttf
+File: ReportOutputs/Fig01.png Graphic file (type bmp)
+<ReportOutputs/Fig01.png>
+File: ReportOutputs/Fig02.png Graphic file (type bmp)
+<ReportOutputs/Fig02.png>
+LaTeX Font Info:    Font shape `TU/ClearSans(0)/bx/n' will be
+(Font)              scaled to size 9.0pt on input line 305.
+Requested font "[ClearSans-Bold.ttf]/OT:script=latn;language=DFLT;mapping=tex-t
+ext;" at 9.0pt
+ -> C:/Users/danielgue88/AppData/Local/Programs/MiKTeX 2.9/fonts/truetype/intel
+/clearsans/ClearSans-Bold.ttf
+[3]
+LaTeX Font Info:    Font shape `TU/ClearSans(0)/m/it' will be
+(Font)              scaled to size 10.0pt on input line 321.
+Requested font "[ClearSans-Italic.ttf]/OT:script=latn;language=DFLT;mapping=tex
+-text;" at 10.0pt
+ -> C:/Users/danielgue88/AppData/Local/Programs/MiKTeX 2.9/fonts/truetype/intel
+/clearsans/ClearSans-Italic.ttf
+File: ReportOutputs/Fig03.png Graphic file (type bmp)
+<ReportOutputs/Fig03.png>
+File: ReportOutputs/Fig04.png Graphic file (type bmp)
+<ReportOutputs/Fig04.png>
+ [4]
+File: ReportOutputs/Fig03.png Graphic file (type bmp)
+<ReportOutputs/Fig03.png>
+ [5]
+File: ReportOutputs/Fig04.png Graphic file (type bmp)
+<ReportOutputs/Fig04.png>
+ [6] [7]
+Underfull \hbox (badness 10000) in paragraph at lines 445--446
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 447--448
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 449--450
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 451--452
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 453--454
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 455--456
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 457--458
+
+ []
+
+[8] [9] [10]
+File: ReportGraphics/CMExplainer.png Graphic file (type bmp)
+<ReportGraphics/CMExplainer.png>
+File: ReportOutputs/Fig03.png Graphic file (type bmp)
+<ReportOutputs/Fig03.png>
+File: ReportOutputs/Fig04.png Graphic file (type bmp)
+<ReportOutputs/Fig04.png>
+ [11]
+File: ReportOutputs/Fig80.png Graphic file (type bmp)
+<ReportOutputs/Fig80.png>
+File: ReportOutputs/Fig81.png Graphic file (type bmp)
+<ReportOutputs/Fig81.png>
+ [12] [13]
+Runaway argument?
+{TENDENCIA A 5 AÑOS - BONOS CORPORATIVOS \\[10pt] SECTOR ELÉCTRICO 
+! Paragraph ended before \text@command was complete.
+<to be read again> 
+                   \par 
+l.559 ^^I}
+          ^^I^^I
+I suspect you've forgotten a `}', causing me to apply this
+control sequence to too much text. How can we recover?
+My plan is to forget the whole thing and hope for the best.
+
+! Too many }'s.
+\HeaderDouble ...{\Large \textbf {#1 \\[10pt] #2}}
+                                                   \vspace {.45cm}
+l.559 ^^I}
+          ^^I^^I
+You've closed more groups than you opened.
+Such booboos are generally harmless, so keep going.
+
+File: ReportOutputs/Fig07.png Graphic file (type bmp)
+<ReportOutputs/Fig07.png>
+File: ReportOutputs/Fig08.png Graphic file (type bmp)
+<ReportOutputs/Fig08.png>
+File: ReportOutputs/Fig09.png Graphic file (type bmp)
+<ReportOutputs/Fig09.png>
+File: ReportOutputs/Fig10.png Graphic file (type bmp)
+<ReportOutputs/Fig10.png>
+
+Overfull \hbox (3.60858pt too wide) in paragraph at lines 570--592
+[][]   [] 
+ []
+
+File: ReportGraphics/246Legend.png Graphic file (type bmp)
+<ReportGraphics/246Legend.png>
+LaTeX Font Info:    Font shape `TU/ClearSans(0)/m/n' will be
+(Font)              scaled to size 9.0pt on input line 598.
+Requested font "[ClearSans-Regular.ttf]/OT:script=latn;language=DFLT;mapping=te
+x-text;" at 9.0pt
+ -> C:/Users/danielgue88/AppData/Local/Programs/MiKTeX 2.9/fonts/truetype/intel
+/clearsans/ClearSans-Regular.ttf
+LaTeX Font Info:    Font shape `TU/ClearSans(0)/m/it' will be
+(Font)              scaled to size 9.0pt on input line 598.
+Requested font "[ClearSans-Italic.ttf]/OT:script=latn;language=DFLT;mapping=tex
+-text;" at 9.0pt
+ -> C:/Users/danielgue88/AppData/Local/Programs/MiKTeX 2.9/fonts/truetype/intel
+/clearsans/ClearSans-Italic.ttf
+[14] [15]
+File: ReportOutputs/Fig17.png Graphic file (type bmp)
+<ReportOutputs/Fig17.png>
+File: ReportOutputs/Fig18.png Graphic file (type bmp)
+<ReportOutputs/Fig18.png>
+File: ReportOutputs/Fig19.png Graphic file (type bmp)
+<ReportOutputs/Fig19.png>
+File: ReportOutputs/Fig20.png Graphic file (type bmp)
+<ReportOutputs/Fig20.png>
+
+Overfull \hbox (3.24854pt too wide) in paragraph at lines 617--639
+[][]   [] 
+ []
+
+File: ReportGraphics/246Legend.png Graphic file (type bmp)
+<ReportGraphics/246Legend.png>
+[16]
+File: ReportOutputs/Fig11.png Graphic file (type bmp)
+<ReportOutputs/Fig11.png>
+File: ReportOutputs/Fig12.png Graphic file (type bmp)
+<ReportOutputs/Fig12.png>
+
+Overfull \hbox (3.24854pt too wide) in paragraph at lines 668--681
+[][]   [] 
+ []
+
+File: ReportOutputs/Fig13.png Graphic file (type bmp)
+<ReportOutputs/Fig13.png>
+File: ReportGraphics/246Legend.png Graphic file (type bmp)
+<ReportGraphics/246Legend.png>
+[17]
+File: ReportOutputs/Fig21.png Graphic file (type bmp)
+<ReportOutputs/Fig21.png>
+File: ReportOutputs/Fig22.png Graphic file (type bmp)
+<ReportOutputs/Fig22.png>
+
+Overfull \hbox (3.24854pt too wide) in paragraph at lines 716--729
+[][]   [] 
+ []
+
+File: ReportOutputs/Fig23.png Graphic file (type bmp)
+<ReportOutputs/Fig23.png>
+File: ReportGraphics/246Legend.png Graphic file (type bmp)
+<ReportGraphics/246Legend.png>
+[18]
+Overfull \hbox (0.11633pt too wide) in paragraph at lines 758--761
+\TU/ClearSans(0)/m/n/9 cartera (línea continua) representa la evolución estimad
+a o “trayec-
+ []
+
+File: ReportOutputs/Fig14.png Graphic file (type bmp)
+<ReportOutputs/Fig14.png>
+File: ReportOutputs/Fig15.png Graphic file (type bmp)
+<ReportOutputs/Fig15.png>
+
+Overfull \hbox (3.24854pt too wide) in paragraph at lines 765--778
+[][]   [] 
+ []
+
+File: ReportOutputs/Fig16.png Graphic file (type bmp)
+<ReportOutputs/Fig16.png>
+File: ReportGraphics/246Legend.png Graphic file (type bmp)
+<ReportGraphics/246Legend.png>
+[19]
+Overfull \hbox (0.11633pt too wide) in paragraph at lines 802--804
+\TU/ClearSans(0)/m/n/9 cartera (línea continua) representa la evolución estimad
+a o “trayec-
+ []
+
+File: ReportOutputs/Fig24.png Graphic file (type bmp)
+<ReportOutputs/Fig24.png>
+File: ReportOutputs/Fig25.png Graphic file (type bmp)
+<ReportOutputs/Fig25.png>
+
+Overfull \hbox (3.24854pt too wide) in paragraph at lines 808--821
+[][]   [] 
+ []
+
+File: ReportOutputs/Fig26.png Graphic file (type bmp)
+<ReportOutputs/Fig26.png>
+File: ReportGraphics/246Legend.png Graphic file (type bmp)
+<ReportGraphics/246Legend.png>
+[20]
+Requested font "ClearSans/OT:mapping=tex-text;" at 9.0pt
+ -> C:/Users/danielgue88/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/intel/cl
+earsans/ClearSans-Regular.pfb
+Requested font "ClearSans/OT:mapping=tex-text;" at 6.0pt
+ -> C:/Users/danielgue88/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/intel/cl
+earsans/ClearSans-Regular.pfb
+Requested font "cmmi9" at 9.0pt
+Requested font "cmmi6" at 6.0pt
+Requested font "cmsy9" at 9.0pt
+Requested font "cmsy6" at 6.0pt
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <9> on input line 848.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 848.
+Requested font "tcrm0900" at 9.0pt
+Requested font "tcrm0600" at 6.0pt
+Requested font "cmr9" at 9.0pt
+Requested font "cmr6" at 6.0pt
+LaTeX Font Info:    Font shape `TU/ClearSans(0)/m/n' will be
+(Font)              scaled to size 6.0pt on input line 848.
+Requested font "[ClearSans-Regular.ttf]/OT:script=latn;language=DFLT;mapping=te
+x-text;" at 6.0pt
+ -> C:/Users/danielgue88/AppData/Local/Programs/MiKTeX 2.9/fonts/truetype/intel
+/clearsans/ClearSans-Regular.ttf
+
+! Misplaced alignment tab character &.
+l.851 ... por 2Dii y la empresa consultora Ernst &
+                                                   Young. Para el sector de ...
+I can't figure out why you would want to use a tab mark
+here. If you just want an ampersand, the remedy is
+simple: Just type `I\&' now. But if some right brace
+up above has ended a previous alignment prematurely,
+you're probably due for more error messages, and you
+might try typing `S' now just to see what is salvageable.
+
+File: ReportOutputs/Fig30.png Graphic file (type bmp)
+<ReportOutputs/Fig30.png>
+File: ReportOutputs/Fig31.png Graphic file (type bmp)
+<ReportOutputs/Fig31.png>
+File: ReportOutputs/Fig32.png Graphic file (type bmp)
+<ReportOutputs/Fig32.png>
+File: ReportOutputs/Fig33.png Graphic file (type bmp)
+<ReportOutputs/Fig33.png>
+File: ReportGraphics/OtherSectorLegend.png Graphic file (type bmp)
+<ReportGraphics/OtherSectorLegend.png>
+File: ReportGraphics/ShippingLegend.png Graphic file (type bmp)
+<ReportGraphics/ShippingLegend.png>
+[21] [22]
+File: ReportOutputs/Fig05.png Graphic file (type bmp)
+<ReportOutputs/Fig05.png>
+File: ReportOutputs/Fig06.png Graphic file (type bmp)
+<ReportOutputs/Fig06.png>
+ [23] [24] [25]
+File: ReportOutputs/Fig49.png Graphic file (type bmp)
+<ReportOutputs/Fig49.png>
+File: ReportOutputs/Fig50.png Graphic file (type bmp)
+<ReportOutputs/Fig50.png>
+ [26] [27] [28]
+File: ReportOutputs/Fig42.png Graphic file (type bmp)
+<ReportOutputs/Fig42.png>
+File: ReportOutputs/Fig46.png Graphic file (type bmp)
+<ReportOutputs/Fig46.png>
+ [29]
+File: ReportOutputs/Fig48.png Graphic file (type bmp)
+<ReportOutputs/Fig48.png>
+File: ReportOutputs/Fig43.png Graphic file (type bmp)
+<ReportOutputs/Fig43.png>
+File: ReportOutputs/Fig47.png Graphic file (type bmp)
+<ReportOutputs/Fig47.png>
+ [30]
+File: ReportOutputs/Fig40.png Graphic file (type bmp)
+<ReportOutputs/Fig40.png>
+File: ReportOutputs/Fig44.png Graphic file (type bmp)
+<ReportOutputs/Fig44.png>
+ [31]
+File: ReportOutputs/Fig41.png Graphic file (type bmp)
+<ReportOutputs/Fig41.png>
+File: ReportOutputs/Fig45.png Graphic file (type bmp)
+<ReportOutputs/Fig45.png>
+ [32]
+File: ReportOutputs/Fig62.png Graphic file (type bmp)
+<ReportOutputs/Fig62.png>
+File: ReportOutputs/Fig63.png Graphic file (type bmp)
+<ReportOutputs/Fig63.png>
+ [33] [34]
+File: ReportOutputs/Fig64.png Graphic file (type bmp)
+<ReportOutputs/Fig64.png>
+File: ReportOutputs/Fig65.png Graphic file (type bmp)
+<ReportOutputs/Fig65.png>
+ [35]
+[36]
+Runaway argument?
+{ANÁLISIS DE EXPOSICIÓN DE BONOS SOBERANOS  \\[10pt] 
+! Paragraph ended before \text@command was complete.
+<to be read again> 
+                   \par 
+l.1290 ^^I
+          
+I suspect you've forgotten a `}', causing me to apply this
+control sequence to too much text. How can we recover?
+My plan is to forget the whole thing and hope for the best.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1290--1290
+
+ []
+
+! Too many }'s.
+\HeaderDouble ...{\Large \textbf {#1 \\[10pt] #2}}
+                                                   \vspace {.45cm}
+l.1290 ^^I
+          
+You've closed more groups than you opened.
+Such booboos are generally harmless, so keep going.
+
+[37]
+
+! LaTeX Error: File `ReportOutputs/Fig91' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1340 ...,width=1\linewidth]{ReportOutputs/Fig91}
+                                                  
+I could not locate the file with any of these extensions:
+.pdf,.PDF,.ai,.AI,.png,.PNG,.jpg,.JPG,.jpeg,.JPEG,.jp2,.JP2,.jpf,.JPF,.bmp,.BMP
+,.ps,.PS,.eps,.EPS,.mps,.MPS,.pz,.eps.Z,.ps.Z,.ps.gz,.eps.gz
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1339--1341
+
+ []
+
+
+! LaTeX Error: File `ReportOutputs/Fig92' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1352 ...,width=1\linewidth]{ReportOutputs/Fig92}
+                                                  
+I could not locate the file with any of these extensions:
+.pdf,.PDF,.ai,.AI,.png,.PNG,.jpg,.JPG,.jpeg,.JPEG,.jp2,.JP2,.jpf,.JPF,.bmp,.BMP
+,.ps,.PS,.eps,.EPS,.mps,.MPS,.pz,.eps.Z,.ps.Z,.ps.gz,.eps.gz
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1351--1353
+
+ []
+
+[38]
+
+! LaTeX Error: File `ReportOutputs/Fig93' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1373 ...,width=1\linewidth]{ReportOutputs/Fig93}
+                                                  
+I could not locate the file with any of these extensions:
+.pdf,.PDF,.ai,.AI,.png,.PNG,.jpg,.JPG,.jpeg,.JPEG,.jp2,.JP2,.jpf,.JPF,.bmp,.BMP
+,.ps,.PS,.eps,.EPS,.mps,.MPS,.pz,.eps.Z,.ps.Z,.ps.gz,.eps.gz
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1372--1374
+
+ []
+
+
+Overfull \hbox (4.86096pt too wide) in paragraph at lines 1380--1381
+[]\TU/ClearSans(0)/bx/n/9 Un análisis de exposición y crecimiento de tecnología
+s.\TU/ClearSans(0)/m/n/9 proporciona
+ []
+
+
+! LaTeX Error: File `ReportOutputs/Fig94' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1390 ...,width=1\linewidth]{ReportOutputs/Fig94}
+                                                  
+I could not locate the file with any of these extensions:
+.pdf,.PDF,.ai,.AI,.png,.PNG,.jpg,.JPG,.jpeg,.JPEG,.jp2,.JP2,.jpf,.JPF,.bmp,.BMP
+,.ps,.PS,.eps,.EPS,.mps,.MPS,.pz,.eps.Z,.ps.Z,.ps.gz,.eps.gz
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+[39] [40]
+Underfull \hbox (badness 10000) in paragraph at lines 1427--1429
+
+ []
+
+[41]
+Underfull \hbox (badness 6758) in paragraph at lines 1477--1478
+\TU/ClearSans(0)/m/n/9 de la especificación de estos pueden ser encontrados en
+ []
+
+[42]
+! Missing } inserted.
+<inserted text> 
+                }
+l.1496 ^^I^^I\end{itemize}
+                          
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+! Missing } inserted.
+<inserted text> 
+                }
+l.1496 ^^I^^I\end{itemize}
+                          
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+[43]
+Underfull \hbox (badness 10000) in paragraph at lines 1543--1543
+[]|\TU/ClearSans(0)/m/n/9 Producción vehículos com-
+ []
+
+[44] [45]
+File: ReportGraphics/PowerLine.png Graphic file (type bmp)
+<ReportGraphics/PowerLine.png>
+
+Underfull \hbox (badness 10000) in paragraph at lines 1595--1597
+
+ []
+
+File: ReportGraphics/PowerPie.png Graphic file (type bmp)
+<ReportGraphics/PowerPie.png>
+[46] [47]
+Underfull \hbox (badness 10000) in paragraph at lines 1740--1741
+[]\TU/ClearSans(0)/m/n/9 FSB (2018) https://www.fsb-tcfd.org/publications/final
+-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1742--1743
+[]\TU/ClearSans(0)/m/n/9 WoodMackenzie (2018) https://www.woodmac.com/news/
+ []
+
+
+Overfull \hbox (1.73352pt too wide) in paragraph at lines 1744--1745
+[]\TU/ClearSans(0)/m/n/9 World Energy Outlook 2017 (2018) https://www.iea.org/w
+eo2017/ 
+ []
+
+[48]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1753.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1753.
+ (GeneralTemplateInput_v6_SB_SpanishVersion.aux)
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 1753.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1753.
+
+Package rerunfilecheck Info: File `GeneralTemplateInput_v6_SB_SpanishVersion.ou
+t' has not changed.
+(rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E.
+
+
+LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+ ) 
+Here is how much of TeX's memory you used:
+ 36531 strings out of 427748
+ 719907 string characters out of 3145878
+ 832040 words of memory out of 3000000
+ 40026 multiletter control sequences out of 15000+200000
+ 536531 words of font info for 76 fonts, out of 3000000 for 9000
+ 1328 hyphenation exceptions out of 8191
+ 54i,12n,73p,1644b,682s stack positions out of 5000i,500n,10000p,200000b,50000s
+
+Output written on GeneralTemplateInput_v6_SB_SpanishVersion.pdf (48 pages).

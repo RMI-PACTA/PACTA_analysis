@@ -1,0 +1,266 @@
+%!TEX TS-program = xelatex
+\documentclass[10pt,table,a4]{article}\usepackage[]{graphicx}\usepackage[]{color}
+
+\usepackage{alltt}
+\usepackage{graphicx}
+\usepackage{gensymb}
+\usepackage[top=1cm, bottom=1.5cm, left=1.2cm, right=1.2cm]{geometry}
+\usepackage[font=small]{caption}
+\usepackage{adjustbox}
+\usepackage{fancyhdr}
+\usepackage{layout}
+%\usepackage{booktabs}
+%\usepackage{kpfonts}
+\usepackage[explicit]{titlesec}
+\usepackage{wrapfig}
+\usepackage{tcolorbox}
+\usepackage{xcolor}
+\usepackage{setspace}
+\usepackage{parskip}
+\usepackage{tikz}
+\usepackage{fontspec}
+\usepackage{anyfontsize}
+\usepackage{hyperref}
+\usepackage{multicol}
+\usepackage{datetime}
+
+% Colours
+\definecolor{Yellow1}{RGB}{252, 190, 14}
+\definecolor{Yellow2}{RGB}{252, 190, 54}
+\definecolor{Yellow3}{RGB}{254, 238, 207}
+
+\definecolor{OffBlack}{RGB}{61,61,60}
+\definecolor{LightGray}{RGB}{208,208,208}
+
+\definecolor{ColRed}{RGB}{244,123,115}
+\definecolor{ColOrange}{RGB}{253,226,145}
+\definecolor{ColYellow}{RGB}{255,255,204}
+\definecolor{ColGreen}{RGB}{195,214,155}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[R]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+
+
+\setlength{\parskip}{10pt}
+
+%\pagenumbering{gobble}
+
+\newcommand*{\PageHeadingSingleLine}{%
+	\begin{tikzpicture}[remember picture,overlay]
+	\node[anchor=north west,minimum width=.375cm,minimum height=1.2cm,fill=Yellow1] (RB) at (-1.2,1.2){\Large };
+	\node[text=OffBlack, right of=RB, xshift = 18cm, yshift=0.4cm] at (0,0){\thepage};
+	\end{tikzpicture}}
+\newcommand*{\PageHeadingDoubleLine}{%
+	\begin{tikzpicture}[remember picture, overlay]
+	\node[anchor=north west,minimum width=.375cm,minimum height=1.9cm,fill=Yellow1] (RB) at (-1.2,1.2){\Large };
+	\node[text=OffBlack, right of=RB, xshift = 18cm, yshift=0.6cm] at (0,0){\thepage};
+	\end{tikzpicture}}
+\newcommand{\HeaderSingle}[1]{
+	\PageHeadingSingleLine 
+	
+	\vspace{-1.2cm}
+	{\Large\textbf{#1}}
+	\vspace{.2cm}}
+\newcommand{\HeaderDouble}[2]{
+	\PageHeadingDoubleLine
+	
+	\vspace{-1.2cm}
+	{\Large\textbf{#1 \\[2pt] #2}}
+	\vspace{.45cm}}
+\newcommand*{\SectionHeadingBox}[1]{%
+	\begin{tikzpicture}[remember picture, overlay]
+	\node[anchor=north west,minimum width=.375cm,minimum height=#1,fill=Yellow1] (RB) at (-1.2,-16){\Large };
+	\end{tikzpicture}
+	\vspace{.8cm}}
+\newcommand{\SectionHeading}[2]{
+	\SectionHeadingBox{3cm}
+	
+	\vspace{15.7cm}
+	\textbf{{\Huge #1 \\[6pt]\Huge  #2}}}
+\newcommand{\SectionHeadingDouble}[3]{
+	\SectionHeadingBox{4cm}
+	
+	\vspace{15.7cm}
+	\textbf{{\Huge #1 \\[6pt]\Huge  #2\\[6pt]\Huge  #3}}}
+\newcommand{\PageFooterFirst}{% The number indicates the sector..... 
+	\begin{tikzpicture}[remember picture, overlay]
+	\node[text=OffBlack,above = .8cm, left = 6cm,font=\bf\small,align=center] at (current page.south){01-INTRODUCTION};
+	\node[text=LightGray,above = .8cm, left = 1.7cm,font=\bf\small,align=center] at (current page.south){02-CURRENT EXPOSURE};
+	\node[text=LightGray,above = .8cm, left = -1cm,font=\bf\small,align=center] at (current page.south){03-5YR TREND};
+	\node[text=LightGray,above = .8cm, left = -5cm,font=\bf\small,align=center] at (current page.south){04-EXPOSURE IN 5YRS};
+	\node[text=LightGray,above = .8cm, left = -9cm,font=\bf\small,align=center] at (current page.south){05-COMPANY RESULTS};	
+	\node[left=6cm,minimum width = 3.0cm, minimum height =0.01cm, fill = Yellow1] at (current page.south){};
+	\end{tikzpicture}
+}
+\newcommand{\PageFooterSecond}{% The number indicates the sector..... 
+	\begin{tikzpicture}[remember picture, overlay]
+	\node[text=LightGray,above = .8cm, left = 6cm,font=\bf\small,align=center] at (current page.south){01-INTRODUCTION};
+	\node[text=OffBlack,above = .8cm, left = 1.7cm,font=\bf\small,align=center] at (current page.south){02-CURRENT EXPOSURE};
+	\node[text=LightGray,above = .8cm, left = -1cm,font=\bf\small,align=center] at (current page.south){03-5YR TREND};
+	\node[text=LightGray,above = .8cm, left = -5cm,font=\bf\small,align=center] at (current page.south){04-EXPOSURE IN 5YRS};
+	\node[text=LightGray,above = .8cm, left = -9cm,font=\bf\small,align=center] at (current page.south){05-COMPANY RESULTS};	
+	\node[left=1.75cm,minimum width = 3.6cm, minimum height =0.01cm, fill = Yellow1] at (current page.south){};
+	\end{tikzpicture}
+}
+\newcommand{\PageFooterThird}{% The number indicates the sector..... 
+	\begin{tikzpicture}[remember picture, overlay]
+	\node[text=LightGray,above = .8cm, left = 6cm,font=\bf\small,align=center] at (current page.south){01-INTRODUCTION};
+	\node[text=LightGray,above = .8cm, left = 1.7cm,font=\bf\small,align=center] at (current page.south){02-CURRENT EXPOSURE};
+	\node[text=OffBlack,above = .8cm, left = -1cm,font=\bf\small,align=center] at (current page.south){03-5YR TREND};
+	\node[text=LightGray,above = .8cm, left = -5cm,font=\bf\small,align=center] at (current page.south){04-EXPOSURE IN 5YRS};
+	\node[text=LightGray,above = .8cm, left = -9cm,font=\bf\small,align=center] at (current page.south){05-COMPANY RESULTS};	
+	\node[left=-.9cm,minimum width = 2.2cm, minimum height =0.01cm, fill = Yellow1] at (current page.south){};
+	\end{tikzpicture}
+}
+\newcommand{\PageFooterFourth}{% The number indicates the sector..... 
+	\begin{tikzpicture}[remember picture, overlay]
+	\node[text=LightGray,above = .8cm, left = 6cm,font=\bf\small,align=center] at (current page.south){01-INTRODUCTION};
+	\node[text=LightGray,above = .8cm, left = 1.7cm,font=\bf\small,align=center] at (current page.south){02-CURRENT EXPOSURE};
+	\node[text=LightGray,above = .8cm, left = -1cm,font=\bf\small,align=center] at (current page.south){03-5YR TREND};
+	\node[text=OffBlack,above = .8cm, left = -5cm,font=\bf\small,align=center] at (current page.south){04-EXPOSURE IN 5YRS};
+	\node[text=LightGray,above = .8cm, left = -9cm,font=\bf\small,align=center] at (current page.south){05-COMPANY RESULTS};	
+	\node[left=-5cm,minimum width = 3.5cm, minimum height =0.01cm, fill = Yellow1] at (current page.south){};
+	\end{tikzpicture}
+}
+\newcommand{\PageFooterFifth}{% The number indicates the sector..... 
+	\begin{tikzpicture}[remember picture, overlay]
+	\node[text=LightGray,above = .8cm, left = 6cm,font=\bf\small,align=center] at (current page.south){01-INTRODUCTION};
+	\node[text=LightGray,above = .8cm, left = 1.7cm,font=\bf\small,align=center] at (current page.south){02-CURRENT EXPOSURE};
+	\node[text=LightGray,above = .8cm, left = -1cm,font=\bf\small,align=center] at (current page.south){03-5YR TREND};
+	\node[text=LightGray,above = .8cm, left = -5cm,font=\bf\small,align=center] at (current page.south){04-EXPOSURE IN 5YRS};
+	\node[text=OffBlack,above = .8cm, left = -9cm,font=\bf\small,align=center] at (current page.south){05-COMPANY RESULTS};	
+	\node[left=-8.9cm,minimum width = 3.4cm, minimum height =0.01cm, fill = Yellow1] at (current page.south){};
+	\end{tikzpicture}
+}
+
+\setmainfont{ClearSans}
+\color{OffBlack}
+
+
+% Box with a shaded border
+\newtcolorbox{shadedbox}{colback=Yellow3}
+
+\begin{document}
+\section*{} % Front Page
+
+
+		\thispagestyle{empty}
+		\pagecolor{Yellow1}
+		
+		\vspace{-2.6cm}
+		
+		\begin{tikzpicture}[remember picture, overlay]
+		\vspace{7cm}
+			\node[below=-.2cm] (CN) at (current page.north){\adjincludegraphics[height=15cm,trim={0cm 0cm 0cm 2cm},clip]{ReportGraphics/FrontPagePic.jpeg}
+			};
+			
+			\node[below = 4cm, right,align = left, white, text width=10cm](TN) at (current page.center){
+				\Huge{\textbf{2° SCENARIO ANALYSIS}}\\[10pt]
+			
+				\vspace{2cm}
+				{\baselineskip=20pt\Huge{\textbf{InsuranceCompanyName}\par}}};
+			
+			\node[below = 3.8cm,right= .12cm, minimum width = .8cm, minimum height =0.3cm,fill= OffBlack] at (current page.center){};
+			
+		\end{tikzpicture}
+
+
+	\begin{tikzpicture}[remember picture,overlay]
+		\node[anchor=south west, yshift = 0cm ,minimum width=21.6cm,minimum height=4cm,fill=white] (RB) at (current page.south west){};
+		\node[left= 7cm, above=1.cm] (WS) at (current page.south){\adjincludegraphics[height=1.8cm,trim={0cm 0cm 0cm 0cm},clip]{ReportGraphics/Logo_front}};
+		\node[ below = 1.8cm, minimum width = 3.5cm, minimum height =0.05cm, fill = Yellow1] at (WS){};
+	\end{tikzpicture}
+
+
+\newpage
+\pagecolor{white}
+	\section*{} % Exec Summary p1
+	\HeaderSingle{EXECUTIVE SUMMARY}
+	
+	
+	
+	\begin{wrapfigure}{r}{.5\linewidth}
+		\begin{center}
+			{\rowcolors{2}{white}{Yellow3}
+				\setlength{\tabcolsep}{10pt} % Default value: 6pt
+				\renewcommand{\arraystretch}{1.5} % Default value: 1
+				\begin{tabular}{ p{.35\linewidth} p{.49\linewidth} }
+					\hline
+					\multicolumn{2}{c}{\textbf{Scope of Analysis}} \\
+					\hline
+					Insurer Name & InsuranceCompanyName  \\ 
+					Size of portfolio (in \$) & SizeofPortfolio  \\ 
+					Scenario & IEA 2° Scenario  \\ 
+					Geography - \newline Financial Assets & Global \\ 
+					Geography - \newline Economic Assets & Global  \\ 
+					Asset Class & AssetClass \\ 
+					Peers & 672 Insurers operating in CA with premiums over \$100 million  \\
+					Portfolio Timestamp & 12.31.2016  \\ 
+					Date of Analysis & TodaysDate  \\ 
+					\hline
+				\end{tabular}
+			}
+			
+		\end{center}
+	\end{wrapfigure}
+	
+	\begin{multicols}{2}
+		
+		
+
+		\textbf{This report provides a 2°C scenario analysis on your financial portfolio.} 
+		
+		It responds to the recommendations of the Financial Stability Board Task Force on Climate-Related Financial Disclosures. Over 1,000 financial institutions have been assessed using the model applied in this report, as part of direct partnerships with over 200 institutional investors, and collaborations with  a number of financial supervisory authorities. 
+		
+		The outputs provided in this report – based on the scope of analysis summarized in the table on the right – provide an analysis of the portfolio relative to an economic transition consistent with limiting global warming to 2°C above pre-industrial levels, as well as a comparision to peers. The analysis provides answers to three questions: 
+		
+		\begin{enumerate}
+			\item{What is my exposure to the 2°C scenario today?}
+			\item{Is my portfolio building or reducing risk in terms of being aligned / misaligned with a 2°C transition over the next 5 years?}
+			\item{What is my expected transition risk exposure?}
+		\end{enumerate}
+		
+
+				
+
+		
+		
+		
+		\vspace{1.2cm}
+		
+		
+%	\end{multicols}	
+
+%	\begin{multicols}{2}
+		Of your portfolio, this analysis excludes 
+		The charts below show the share of your portfolio covered in this analysis. The first shows the share of the portfolio that is included in the analysis; this includes listed equity, corporate bonds and the bonds of the largest government and municiple power producers. Of the analysed share, the second chart shows the weight of the sectors 
+	\end{multicols}	
+		
+		\vspace{.5cm}
+		
+
+				
+	\begin{multicols}{2}
+			
+		\textbf{Share of your Portfolio covered by this analysis}
+		
+		
+		\textbf{Share of the portfolio exposed to business activities covered in the International Energy Agency 2°C scenario}
+	
+	\end{multicols}	
+
+	\begin{multicols}{2}
+		\centering{\adjincludegraphics[width = .9\linewidth,trim={0cm 0.2cm 0cm .2cm},clip]{CAFigures/Fig01}	}
+		
+	
+		
+		\centering{\adjincludegraphics[width = .9\linewidth,trim={0cm 0.2cm 0cm .2cm},clip]{CAFigures/Fig02}	}
+		
+	\end{multicols}	
+		
+
+	\newpage
+\end{document}
