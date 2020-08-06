@@ -292,8 +292,8 @@ create_project_folder <- function(project_name, twodii_internal, project_locatio
     lapply(project_folders, function(x) dir.create(x))
     
     # Copy in Parameter File
-    file.copy(paste0(working_location, "parameter_files/AnalysisParameters.csv"), 
-              paste0(project_location, "/10_Parameter_File/AnalysisParameters.csv"))
+    file.copy(paste0(working_location, "parameter_files/AnalysisParameters.yml"), 
+              paste0(project_location, "/10_Parameter_File/AnalysisParameters.yml"))
   }
   
 }
