@@ -1,8 +1,229 @@
 library(tidyverse)
 library(janitor)
+library(assertr)
 
 # hi Klaus
-# hi Vincent
+# hi Vincen
+
+summarise_pacta_sector_exposure <- function(data, ...) {
+  # clean data 
+  data <- data %>%
+    assertr::verify(has_all_names(security_mapped_sector, financial_sector)) %>% 
+    mutate(security_mapped_sector = tolower(security_mapped_sector))
+  # create pacta sector 
+  data <- data %>% 
+    mutate(
+      pacta_sector = case_when(
+        security_mapped_sector %in% c("other", "unclassifiable") ~ "other", 
+        security_mapped_sector == "coal" ~ "coal_mining", 
+        TRUE ~ security_mapped_sector
+      )
+    )
+  # summarise and then reclassify names 
+  data <- data %>% 
+    group_by(
+      ...,
+      pacta_sector, 
+      asset_type
+    ) %>%
+    summarise(sector_exposure = sum(value_usd, na.rm = TRUE)) %>% 
+    classify_asset_types() %>% 
+    group_by(
+      ...,
+      pacta_sector, 
+      asset_type
+    ) %>%
+    summarise(sector_exposure = sum(value_usd, na.rm = TRUE)) %>% 
+    ungroup()
+  
+  
+  sector_exposure_per_asset_type <- sector_exposure_per_asset_type %>% 
+    mutate(
+      sector_exposure = sector_exposure / fund_size_covered,
+      security_mapped_sector = if_else(security_mapped_sector == "coal","coal_mining", security_mapped_sector)
+    ) %>% 
+    select(-fund_size_covered)
+  
+}
+
+classify_asset_types <- function(data) {
+  data %>% 
+    assertr::verify(has_all_names("security_bics_subgroup", "security_type", "flag")) %>% 
+    mutate(
+      asset_type = case_when(
+        security_bics_subgroup %in% c("Sovereign","Sovereign Agency", "Sovereigns") ~ "sovereign",
+        security_type %in% c("Sovereign Debt","Sovereign Agency Debt", "Government inflation linked Bonds") ~ "sovereign",
+        flag == "Holding not in Bloomberg database" ~ "no_data_available",
+        TRUE ~ asset_type
+      )
+    )
+}
+
+summarise_asset_exposure <- function(data, ...) {
+  data <- data %>% 
+    assertr::verify(has_all_names("value_usd")) %>% 
+    classify_asset_types()
+  # summarize total asset type value 
+  data %>% 
+    group_by(
+      ..., 
+      asset_type
+    ) %>% 
+    summarize(asset_type_value = sum(value_usd, na.rm = TRUE)) %>% 
+    group_by(...) %>% 
+    mutate(asset_type_exposure = asset_type_value / sum(asset_type_value, na.rm = TRUE))
+}
+
+summarise_fund_size <- function(data, ...) {
+  data %>% 
+    group_by(...) %>% 
+    summarise(fund_size = sum(value_usd, na.rm = TRUE)) %>% 
+    ungroup()
+}
+
+prep_debt_economy <- function() {
+  browntechs <- c("Oil","Gas","Coal","CoalCap","GasCap","ICE")
+  
+  debt_economy <- read_rds(path(analysis_inputs_path, "bonds_ald_scenario_long", ext = "rda")) %>% 
+    filter(
+      (ald_sector == "Power" & scenario_geography == "GlobalAggregate") | (ald_sector != "Power" & scenario_geography == "Global"),
+      year %in% c(start_year, start_year + 5),
+      !is.na(scenario)
+    ) %>%  
+    select(
+      scenario, 
+      ald_sector, 
+      technology, 
+      year, 
+      plan_tech_prod, 
+      plan_emission_factor, 
+      plan_build_out, 
+      plan_sector_prod,
+      scen_tech_prod, 
+      scen_emission_factor, 
+      scen_build_out, 
+      scen_sec_prod
+    )
+  
+  debt_economy <- debt_economy %>% 
+    mutate_at(
+      .vars = c("ald_sector", "technology"),
+      .funs = tolower
+    )
+  
+  debt_economy <- debt_economy %>% 
+    group_by(
+      scenario, ald_sector, technology, year
+    ) %>% 
+    summarise(
+      plan_emission_factor = weighted.mean(plan_emission_factor, plan_tech_prod, na.rm = T),
+      scen_emission_factor = weighted.mean(scen_emission_factor, scen_tech_prod, na.rm = T),
+      
+      plan_tech_prod = sum(plan_tech_prod, na.rm = T),
+      scen_tech_prod = sum(scen_tech_prod, na.rm = T),
+    ) %>% ungroup() %>% 
+    mutate(
+      trajectory_deviation = ifelse(scen_tech_prod == 0, ifelse(plan_tech_prod == 0, 0, -1), (plan_tech_prod - scen_tech_prod) / scen_tech_prod),
+      trajectory_alignment =  ifelse(technology %in% browntechs, 1 * trajectory_deviation, -1 * trajectory_deviation),
+      
+      plan_emission_factor = if_else(is.nan(plan_emission_factor),0,plan_emission_factor),
+      scen_emission_factor = if_else(is.nan(scen_emission_factor),0,scen_emission_factor)
+    ) %>% 
+    group_by(
+      scenario, ald_sector, technology
+    ) %>% 
+    mutate(
+      plan_build_out = plan_tech_prod - sum(if_else(year == start_year,plan_tech_prod,0),na.rm = T),    
+      scen_build_out = scen_tech_prod - sum(if_else(year == start_year,scen_tech_prod,0),na.rm = T)
+    ) %>% 
+    group_by(
+      scenario, ald_sector, year
+    ) %>% 
+    mutate(
+      plan_sec_emissions_factor = weighted.mean(plan_emission_factor, plan_tech_prod, na.rm = T),
+      scen_sec_emissions_factor = weighted.mean(scen_emission_factor, scen_tech_prod, na.rm = T),
+      
+      plan_sector_prod = sum(plan_tech_prod, na.rm = T),
+      scen_sector_prod = sum(scen_tech_prod, na.rm = T),
+      
+      plan_tech_share = plan_tech_prod / plan_sector_prod,
+      scen_tech_share = scen_tech_prod / scen_sector_prod
+    ) %>% 
+    ungroup()
+  
+  economy_sector_co2_intensity_data <- debt_economy %>% 
+    filter(year == start_year) %>% 
+    transmute(
+      ald_sector, 
+      traffic_light_yellow = plan_sec_emissions_factor
+    ) %>%
+    distinct()
+  
+  # ~ traffic light system ~
+  traffic_light_sector_co2_intensity_data <- debt_economy %>% 
+    filter(
+      year == start_year+5, 
+      scenario %in% c("B2DS","SBTI")
+    ) %>% 
+    transmute(
+      ald_sector, 
+      traffic_light_green = scen_sec_emissions_factor
+    ) %>%
+    distinct() %>% 
+    full_join(economy_sector_co2_intensity_data, by = "ald_sector")
+  
+  # unit transformation for transport sectors
+  traffic_light_sector_co2_intensity_data <- traffic_light_sector_co2_intensity_data %>% 
+    mutate(
+      traffic_light_yellow = if_else(ald_sector %in% c("shipping", "aviation", "automotive"), traffic_light_yellow * 1e6, traffic_light_yellow),
+      traffic_light_green = if_else(ald_sector %in% c("shipping", "aviation", "automotive"), traffic_light_green * 1e6, traffic_light_green)
+    ) %>% 
+    transmute(
+      indicator_name = paste0("sector_co2_intensity_", ald_sector),
+      traffic_light_yellow,
+      traffic_light_green
+    )
+  
+  traffic_light_technology_share <- debt_economy %>% 
+    filter(
+      scenario %in% c("B2DS","SBTI"), 
+      year == start_year+5, 
+      ald_sector %in% c("power","automotive"),
+      !is.na(plan_tech_share)
+    ) %>% 
+    transmute(
+      indicator_name = paste0("technology_share_",str_remove(technology,"cap")),
+      traffic_light_yellow = plan_tech_share * 100, 
+      traffic_light_green = scen_tech_share * 100
+    ) %>% 
+    distinct()
+  
+  traffic_light_technology_climate_alignment <- debt_economy %>% 
+    filter(
+      year == start_year+5,
+      technology %in% c("renewablescap", "electric"),
+      scenario == "B2DS") %>% 
+    mutate(
+      technology_climate_alignment = plan_build_out / scen_build_out * 100
+    ) %>% 
+    transmute(
+      indicator_name = paste0("climate_alignment_", str_remove(technology,"cap")),
+      traffic_light_yellow = round(if_else(technology_climate_alignment>200,200.00,technology_climate_alignment),2),
+      traffic_light_green = 100
+    ) %>% 
+    distinct() 
+  
+  traffic_light_values <- bind_rows(
+    traffic_light_sector_co2_intensity_data,
+    traffic_light_technology_climate_alignment,
+    traffic_light_technology_share
+  ) %>% 
+    mutate(
+      traffic_light_yellow = signif(traffic_light_yellow,3),
+      traffic_light_green = signif(traffic_light_green,3),
+      traffic_light_value_grey = NA
+    )
+}
 
 # gather multiple result files into one for, necessary for large universes
 #### Collate Results for Peer Comparison ####
@@ -45,119 +266,106 @@ load_fund_results <- function(
   # TODO: check if all is needed
   
   # prep influencemap sector and technology weights 
-  sector_weightings <- read_csv(paste0(git_path, "Reference/ReferenceData/sector_weightings.csv")) #tech_sector_weighting.csv")) 
-  
-  sector_weightings <- sector_weightings %>% 
-    clean_names(case = "snake") %>% 
-    mutate_at(
-      .vars = c("sector", "technology"),
-      tolower
-    )
-  
-  sector_weightings <<- sector_weightings
+  sector_weightings <<- read_csv(path(git_path, "data", "sector_weightings", ext = "csv"))  %>% 
+    clean_names(case = "snake") %>%
+    mutate(across(matches(c("sector", "technology")), tolower)) 
   
   #prep scenario relationships file 
-  scenario_relationships <- read_csv(paste0(git_path, "Reference/ReferenceData/scenario_relationships.csv"))
-  
-  scenario_relationships <<- scenario_relationships %>% 
-    clean_names(case = "snake") %>% 
-    mutate_at(
-      .vars = c("sector"),
-      tolower
-    )
+  # scenario_relationships <- read_csv(paste0(git_path, "Reference/ReferenceData/scenario_relationships.csv"))
+  # 
+  # scenario_relationships <<- scenario_relationships %>% 
+  #   clean_names(case = "snake") %>% 
+  #   mutate_at(
+  #     .vars = c("sector"),
+  #     tolower
+  #   )
   
   # prepare revenue data 
-  revenue_data <- read_rds(path(git_path, "Reference/ReferenceData/revenue_data", ext = "rda"))
-  
-  revenue_data <- revenue_data %>% 
-    clean_names(case = "snake") %>% 
-    mutate_at(
-      .vars = c("sector", "asset_type", "sub_sector"),
-      tolower
-    )
-  
-  revenue_data <- revenue_data %>% 
-    mutate(tot_rev = if_else(tot_rev > 100, 100, tot_rev))
-  
-  revenue_data <<- revenue_data
+  # revenue_data <- read_rds(path(git_path, "Reference/ReferenceData/revenue_data", ext = "rda"))
+  # 
+  # revenue_data <- revenue_data %>% 
+  #   clean_names(case = "snake") %>% 
+  #   mutate_at(
+  #     .vars = c("sector", "asset_type", "sub_sector"),
+  #     tolower
+  #   )
+  # 
+  # revenue_data <<- revenue_data %>% 
+  #   mutate(tot_rev = if_else(tot_rev > 100, 100, tot_rev))
   
   # prepare sensitive sectors 
-  sensitive_sectors <- read_csv(paste0(git_path, "Reference/ReferenceData/sensentive_sectors.csv"))
+  # sensitive_sectors <- read_csv(paste0(git_path, "Reference/ReferenceData/sensentive_sectors.csv"))
+  # 
+  # sensitive_sectors <- sensitive_sectors %>% 
+  #   clean_names(case = "snake") %>% 
+  #   mutate_at(
+  #     .vars = c("asset_type", "sector"),
+  #     .funs = tolower
+  #   )
+  # 
+  # sensitive_sectors <- sensitive_sectors %>% 
+  #   mutate(
+  #     tot_rev = if_else(tot_rev > 100, 100, tot_rev),
+  #     id = as.character(id)
+  #     )
+  # 
+  # sensitive_sectors <- sensitive_sectors %>% 
+  #   bind_rows(revenue_data) %>% 
+  #   distinct_all()
   
-  sensitive_sectors <- sensitive_sectors %>% 
-    clean_names(case = "snake") %>% 
-    mutate_at(
-      .vars = c("asset_type", "sector"),
-      .funs = tolower
-    )
-  
-  sensitive_sectors <- sensitive_sectors %>% 
-    mutate(
-      tot_rev = if_else(tot_rev > 100, 100, tot_rev),
-      id = as.character(id)
-      )
-  
-  sensitive_sectors <- sensitive_sectors %>% 
-    bind_rows(revenue_data) %>% 
-    distinct_all()
-  
-  sensitive_sectors <<- sensitive_sectors 
-
   # prepare regions 
-  regions <<- read_csv(paste0(GIT.PATH, "Reference/referencedata/regions.csv"))
+  regions <<- read_csv(path(git_path, "data", "regions", ext = "csv"))
   
   # indicator selection
-  project_indicator_selection <<- read_csv(paste0(project_location, "10_Parameter_File/fund_results_indicator_selection.csv"))
+  project_indicator_selection <<- read_csv(path(project_location, "10_Parameter_File", "fund_results_indicator_selection", ext = "csv"))
   
   # raw MorningStar data
-  general_fund_data <- read_csv(paste0(project_location, "20_Raw_Inputs/", Project.Name, "_fund_info.csv"))
-  
-  general_fund_data <- general_fund_data %>% 
+  general_fund_data <<- read_csv(path(project_location, "20_Raw_Inputs", paste(project_name, "fund_info", sep = "_"), ext = "csv")) %>% 
     clean_names(case = "snake")
   
-  project_general_fund_data <<- general_fund_data
-  
   #prepare PACTA results
-  pacta_portfolio_debt_results <- read_rds(paste0(project_location, "40_Results/Bonds_results_portfolio.rds"))
-  pacta_portfolio_equity_results <- read_rds(paste0(project_location, "40_Results/Equity_results_portfolio.rds"))
+  portfolio_debt_results <- read_rds(path(project_location, "40_Results", "Bonds_results_portfolio", ext = "rda"))
+  portfolio_equity_results <- read_rds(path(project_location, "40_Results", "Equity_results_portfolio", ext = "rda"))
   
-  pacta_portfolio_debt_results$asset_type <- "Bonds"
-  pacta_portfolio_equity_results$asset_type <- "Equity"
+  portfolio_debt_results$asset_type <- "Bonds"
+  portfolio_equity_results$asset_type <- "Equity"
   
-  pacta_portfolio_results <- pacta_portfolio_debt_results %>% 
-    bind_rows(pacta_portfolio_equity_results)
+  portfolio_results <- portfolio_debt_results %>% 
+    bind_rows(portfolio_equity_results)
   
-  pacta_portfolio_results <- pacta_portfolio_results %>% 
+  portfolio_results <- portfolio_results %>% 
     filter((ald_sector == "Power" & scenario_geography == "GlobalAggregate") | (ald_sector != "Power" & scenario_geography == "Global"))
-    
-  pacta_portfolio_results <- pacta_portfolio_results %>%   
+  
+  portfolio_results <- portfolio_results %>%   
     filter(investor_name != portfolio_name | portfolio_name == "Meta Portfolio")
   
-  pacta_portfolio_results <- pacta_portfolio_results %>% 
-    mutate_at(
-      .vars = c("ald_sector", "technology", "asset_type"),
-      .funs = tolower
-    )
-
-  input_pacta_portfolio_results <<- pacta_portfolio_results
+  portfolio_results <<- portfolio_results %>% 
+    mutate(across(matches(c("ald_sector", "technology", "asset_type")), tolower)) 
   
   # prepare processed portfolio 
-  pacta_audit_flag <- read_csv(paste0(project_location, "30_Processed_Inputs/", Project.Name, "_audit_file.csv")) %>% 
-    distinct(portfolio_name, isin, company_name, asset_type, financial_sector, has_ald_in_fin_sector)
-    
-  pacta_audit <- read_csv(paste0(project_location, "30_Processed_Inputs/", Project.Name, "_total_portfolio.csv")) 
+  pacta_audit_flag <- read_rds(path(project_location, "30_Processed_Inputs", paste(project_name, "audit_file", sep = "_"), ext = "rda")) %>% 
+    distinct(
+      portfolio_name, 
+      isin, 
+      company_name, 
+      asset_type, 
+      financial_sector, 
+      has_ald_in_fin_sector
+    )
+  
+  pacta_audit <- read_rds(path(project_location, "30_Processed_Inputs", paste(project_name, "total_portfolio", sep = "_"), ext = "rda")) 
   
   pacta_audit <- pacta_audit %>% 
     mutate(bloomberg_id = as.character(bloomberg_id),
            value_usd = if_else(is.infinite(value_usd),0,value_usd)) %>% 
     filter(investor_name != portfolio_name | portfolio_name == "Meta Portfolio") %>% 
     left_join(pacta_audit_flag, by = intersect(colnames(pacta_audit),colnames(pacta_audit_flag)))
-
-  pacta_audit <- pacta_audit %>% 
+  
+  pacta_audit <<- pacta_audit %>% 
     mutate(across(matches(c("asset_type", "financial_sector", "security_mapped_sector")), tolower)) 
   
-  Ports.Overview <<- read_csv(paste0(PROC.INPUT.PATH,Project.Name,"_overview_portfolio.csv"))
-
+  # Ports.Overview <<- read_csv(paste0(project_location, paste(project_name, "overview_portfolio", sep = "_"), ext = "csv"))
+  
   # TODO: determine company with highest coal % in power sector (use filter of at least 100 MW?)
   # pacta_company_debt_results <- read_rds(paste0(project_location, "40_Results/Bonds_results_company.rds"))
   # pacta_company_equity_results <- read_rds(paste0(project_location, "40_Results/Equity_results_company.rds"))
@@ -397,7 +605,7 @@ mapped_sector_exposure <- function(
   fund_size_data, 
   fund_size_indicator,
   sector_list = c("power", "shipping", "aviation", "oil&gas", "steel", "coal", "cement", "automotive")
-  ) {
+) {
   
   #################################################################
   # coverage assessment for the single indicator metric
@@ -421,17 +629,17 @@ mapped_sector_exposure <- function(
     left_join(
       fund_size_data,
       by = group_vars
-      )
+    )
   
   coverage <- coverage %>%
     group_by(
       !!!syms(group_vars), 
       climate_rel_sector
-      ) %>%
+    ) %>%
     mutate(
       sector_exposure_climate_alignment_sectors = sum(value_usd, na.rm = TRUE) / .data[[fund_size_indicator]],
       sector_exposure_climate_alignment_sectors = ifelse(is.na(sector_exposure_climate_alignment_sectors), 0 , sector_exposure_climate_alignment_sectors)
-      ) %>%
+    ) %>%
     ungroup()
   
   
@@ -440,7 +648,7 @@ mapped_sector_exposure <- function(
     distinct(
       !!!syms(group_vars), 
       sector_exposure_climate_alignment_sectors
-      )
+    )
 }
 
 calculate_technology_sector_exposure <- function(
@@ -464,7 +672,7 @@ calculate_technology_sector_exposure <- function(
       technology, 
       id, 
       asset_type
-      ) %>% 
+    ) %>% 
     summarise(plan_alloc_prod = sum(plan_alloc_wt_tech_prod, na.rm = TRUE)) %>% 
     ungroup()
   
