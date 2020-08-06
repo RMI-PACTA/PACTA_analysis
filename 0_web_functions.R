@@ -275,3 +275,13 @@ check_file_size <- function(folder_to_check){
   
 }
 
+
+#write error log for input portfolio - msg should be a string containing the error message
+write_log <- function(msg, ...) {
+  composed <- paste(
+    as.character(Sys.time()),
+    as.character(msg),
+    ...
+  )
+  write(composed, file = paste0(project_location,"/00_Log_Files/input_errors.txt"), append = TRUE)
+}
