@@ -18,7 +18,7 @@ library(jsonlite)
 library(fst)
 
 if (rstudioapi::isAvailable()) {
-  portfolio_name_ref_all <- c("Portfolio2")
+  portfolio_name_ref_all <- c("TestPortfolio_Input")
   working_location <- dirname(rstudioapi::getActiveDocumentContext()$path)
   set_web_parameters(file_path = paste0(working_location,"/parameter_files/WebParameters_2dii.yml"))
 } else {
