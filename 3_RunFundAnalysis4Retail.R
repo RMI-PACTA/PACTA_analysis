@@ -31,12 +31,12 @@ coverage_threshold = 0.70
 # Need to run 1_PortCheckInitialisation.R
 
 #TODO: collect all functions in a script "0_FundAnalysis4Retail_functions.R"
-source("0_FundAnalysis4Retail_functions.R")
+source("0_fund_analysis_functions.R")
 
 # ~ Load Data ~
 load_fund_results(
-  git_path = GIT.PATH,
-  project_location = PROJ.LOCATION
+  git_path = working_location,
+  project_location = project_location
 )
 
 # ~ Meta analysis ~
@@ -51,38 +51,38 @@ load_fund_results(
 #   b) Companies expositionen
 
 # 3 Company share
-company_share_data <- input_pacta_company_results %>% 
-  filter(
-    portfolio_name == "Meta Portfolio",
-    year %in% c(START.YEAR,START.YEAR+5),
-    allocation == "portfolio_weight")
-
-identify_range <- function(value, range_size){
-  value <- floor(value/range_size) * range_size 
-}
-
-company_share_data <- company_share_data %>% mutate(
-  tech_share_range = identify_range(value = plan_tech_prod / plan_sec_prod * 100, 10)
-)
-
-tech_share_distribution <- company_share_data %>% filter(year == START.YEAR+5) %>% 
-  select(id, ald_sector, technology, port_weight, plan_sec_prod, tech_share_range) %>% distinct() %>% 
-  group_by(ald_sector, technology, tech_share_range) %>% 
-  summarise(
-    financial_exposure = sum(port_weight,na.rm = T),
-    client_exposure = sum(plan_sec_prod),
-  ) %>% 
-  group_by(ald_sector, technology) %>% 
-  mutate(
-    financial_exposure_sector = sum(financial_exposure,na.rm = T),
-    client_exposure_sector = sum(client_exposure,na.rm = T)
-  ) %>% ungroup() %>% 
-  mutate(
-    financial_exposure_perc = financial_exposure / financial_exposure_sector,
-    client_exposure_perc = client_exposure / client_exposure_sector
-  )
-
-write.csv(tech_share_distribution,  paste0(PROJ.LOCATION, "40_Results/", Project.Name, "Meta_results_company_distribution_sample.csv"), row.names = F, na = "")
+# company_share_data <- input_pacta_company_results %>% 
+#   filter(
+#     portfolio_name == "Meta Portfolio",
+#     year %in% c(start_year,start_year+5),
+#     allocation == "portfolio_weight")
+# 
+# identify_range <- function(value, range_size){
+#   value <- floor(value/range_size) * range_size 
+# }
+# 
+# company_share_data <- company_share_data %>% mutate(
+#   tech_share_range = identify_range(value = plan_tech_prod / plan_sec_prod * 100, 10)
+# )
+# 
+# tech_share_distribution <- company_share_data %>% filter(year == start_year+5) %>% 
+#   select(id, ald_sector, technology, port_weight, plan_sec_prod, tech_share_range) %>% distinct() %>% 
+#   group_by(ald_sector, technology, tech_share_range) %>% 
+#   summarise(
+#     financial_exposure = sum(port_weight,na.rm = T),
+#     client_exposure = sum(plan_sec_prod),
+#   ) %>% 
+#   group_by(ald_sector, technology) %>% 
+#   mutate(
+#     financial_exposure_sector = sum(financial_exposure,na.rm = T),
+#     client_exposure_sector = sum(client_exposure,na.rm = T)
+#   ) %>% ungroup() %>% 
+#   mutate(
+#     financial_exposure_perc = financial_exposure / financial_exposure_sector,
+#     client_exposure_perc = client_exposure / client_exposure_sector
+#   )
+# 
+# write.csv(tech_share_distribution,  paste0(project_location, "40_Results/", Project.Name, "Meta_results_company_distribution_sample.csv"), row.names = F, na = "")
 
 
 # ~ calculation of the corporate economy to get the traffic light values
@@ -91,120 +91,153 @@ write.csv(tech_share_distribution,  paste0(PROJ.LOCATION, "40_Results/", Project
 # equity_economy <- read.csv(file = paste0(DATA.PATH, "/06_DataStore/",DATASTORE.TIMESTAMP, "/", ALD.TIMESTAMP,"/masterdata_ownership.csv"))
 browntechs <- c("Oil","Gas","Coal","CoalCap","GasCap","ICE")
 
-debt_economy <- read_rds(paste0(DATA.PATH, "/07_AnalysisInputs/2019Q4_250220/bonds_ald_scenario_long.rda")) %>% 
-  filter(
-    (ald_sector == "Power" & scenario_geography == "GlobalAggregate") | (ald_sector != "Power" & scenario_geography == "Global"),
-    year %in% c(START.YEAR,START.YEAR+5),
-    !is.na(scenario)
-  ) %>%  
-  select(scenario, ald_sector, technology, year, 
-         plan_tech_prod, plan_emission_factor, plan_build_out, plan_sector_prod,
-         scen_tech_prod, scen_emission_factor, scen_build_out, scen_SecProd)
 
-debt_economy <- debt_economy %>% 
-  mutate_at(
-    .vars = c("ald_sector", "technology"),
-    .funs = tolower
-  )
-
-debt_economy <- debt_economy %>% 
-  group_by(
-    scenario, ald_sector, technology, year
+prep_debt_economy <- function() {
+  debt_economy <- read_rds(path(analysis_inputs_path, "bonds_ald_scenario_long", ext = "rda")) %>% 
+    filter(
+      (ald_sector == "Power" & scenario_geography == "GlobalAggregate") | (ald_sector != "Power" & scenario_geography == "Global"),
+      year %in% c(start_year, start_year + 5),
+      !is.na(scenario)
+    ) %>%  
+    select(
+      scenario, 
+      ald_sector, 
+      technology, 
+      year, 
+      plan_tech_prod, 
+      plan_emission_factor, 
+      plan_build_out, 
+      plan_sector_prod,
+      scen_tech_prod, 
+      scen_emission_factor, 
+      scen_build_out, 
+      scen_sec_prod
+    )
+  
+  debt_economy <- debt_economy %>% 
+    mutate_at(
+      .vars = c("ald_sector", "technology"),
+      .funs = tolower
+    )
+  
+  debt_economy <- debt_economy %>% 
+    group_by(
+      scenario, ald_sector, technology, year
+    ) %>% 
+    summarise(
+      plan_emission_factor = weighted.mean(plan_emission_factor, plan_tech_prod, na.rm = T),
+      scen_emission_factor = weighted.mean(scen_emission_factor, scen_tech_prod, na.rm = T),
+      
+      plan_tech_prod = sum(plan_tech_prod, na.rm = T),
+      scen_tech_prod = sum(scen_tech_prod, na.rm = T),
+    ) %>% ungroup() %>% 
+    mutate(
+      trajectory_deviation = ifelse(scen_tech_prod == 0, ifelse(plan_tech_prod == 0, 0, -1), (plan_tech_prod - scen_tech_prod) / scen_tech_prod),
+      trajectory_alignment =  ifelse(technology %in% browntechs, 1 * trajectory_deviation, -1 * trajectory_deviation),
+      
+      plan_emission_factor = if_else(is.nan(plan_emission_factor),0,plan_emission_factor),
+      scen_emission_factor = if_else(is.nan(scen_emission_factor),0,scen_emission_factor)
+    ) %>% 
+    group_by(
+      scenario, ald_sector, technology
+    ) %>% 
+    mutate(
+      plan_build_out = plan_tech_prod - sum(if_else(year == start_year,plan_tech_prod,0),na.rm = T),    
+      scen_build_out = scen_tech_prod - sum(if_else(year == start_year,scen_tech_prod,0),na.rm = T)
+    ) %>% 
+    group_by(
+      scenario, ald_sector, year
+    ) %>% 
+    mutate(
+      plan_sec_emissions_factor = weighted.mean(plan_emission_factor, plan_tech_prod, na.rm = T),
+      scen_sec_emissions_factor = weighted.mean(scen_emission_factor, scen_tech_prod, na.rm = T),
+      
+      plan_sector_prod = sum(plan_tech_prod, na.rm = T),
+      scen_sector_prod = sum(scen_tech_prod, na.rm = T),
+      
+      plan_tech_share = plan_tech_prod / plan_sector_prod,
+      scen_tech_share = scen_tech_prod / scen_sector_prod
+    ) %>% 
+    ungroup()
+  
+  economy_sector_co2_intensity_data <- debt_economy %>% 
+    filter(year == start_year) %>% 
+    transmute(
+      ald_sector, 
+      traffic_light_yellow = plan_sec_emissions_factor
+    ) %>%
+    distinct()
+  
+  # ~ traffic light system ~
+  traffic_light_sector_co2_intensity_data <- debt_economy %>% 
+    filter(
+      year == start_year+5, 
+      scenario %in% c("B2DS","SBTI")
+    ) %>% 
+    transmute(
+      ald_sector, 
+      traffic_light_green = scen_sec_emissions_factor
+    ) %>%
+    distinct() %>% 
+    full_join(economy_sector_co2_intensity_data, by = "ald_sector")
+  
+  # unit transformation for transport sectors
+  traffic_light_sector_co2_intensity_data <- traffic_light_sector_co2_intensity_data %>% 
+    mutate(
+      traffic_light_yellow = if_else(ald_sector %in% c("shipping", "aviation", "automotive"), traffic_light_yellow * 1e6, traffic_light_yellow),
+      traffic_light_green = if_else(ald_sector %in% c("shipping", "aviation", "automotive"), traffic_light_green * 1e6, traffic_light_green)
+    ) %>% 
+    transmute(
+      indicator_name = paste0("sector_co2_intensity_", ald_sector),
+      traffic_light_yellow,
+      traffic_light_green
+    )
+  
+  traffic_light_technology_share <- debt_economy %>% 
+    filter(
+      scenario %in% c("B2DS","SBTI"), 
+      year == start_year+5, 
+      ald_sector %in% c("power","automotive"),
+      !is.na(plan_tech_share)
+    ) %>% 
+    transmute(
+      indicator_name = paste0("technology_share_",str_remove(technology,"cap")),
+      traffic_light_yellow = plan_tech_share * 100, 
+      traffic_light_green = scen_tech_share * 100
+    ) %>% 
+    distinct()
+  
+  traffic_light_technology_climate_alignment <- debt_economy %>% 
+    filter(
+      year == start_year+5,
+      technology %in% c("renewablescap", "electric"),
+      scenario == "B2DS") %>% 
+    mutate(
+      technology_climate_alignment = plan_build_out / scen_build_out * 100
+    ) %>% 
+    transmute(
+      indicator_name = paste0("climate_alignment_", str_remove(technology,"cap")),
+      traffic_light_yellow = round(if_else(technology_climate_alignment>200,200.00,technology_climate_alignment),2),
+      traffic_light_green = 100
+    ) %>% 
+    distinct() 
+  
+  traffic_light_values <- bind_rows(
+    traffic_light_sector_co2_intensity_data,
+    traffic_light_technology_climate_alignment,
+    traffic_light_technology_share
   ) %>% 
-  summarise(
-    plan_emission_factor = weighted.mean(plan_emission_factor, plan_tech_prod, na.rm = T),
-    scen_emission_factor = weighted.mean(scen_emission_factor, scen_tech_prod, na.rm = T),
-    
-    plan_tech_prod = sum(plan_tech_prod, na.rm = T),
-    scen_tech_prod = sum(scen_tech_prod, na.rm = T),
-  ) %>% ungroup() %>% 
-  mutate(
-    trajectory_deviation = ifelse(scen_tech_prod == 0, ifelse(plan_tech_prod == 0, 0, -1), (plan_tech_prod - scen_tech_prod) / scen_tech_prod),
-    trajectory_alignment =  ifelse(technology %in% browntechs, 1 * trajectory_deviation, -1 * trajectory_deviation),
-    
-    plan_emission_factor = if_else(is.nan(plan_emission_factor),0,plan_emission_factor),
-    scen_emission_factor = if_else(is.nan(scen_emission_factor),0,scen_emission_factor)
-  ) %>% 
-  group_by(
-    scenario, ald_sector, technology
-  ) %>% 
-  mutate(
-    plan_build_out = plan_tech_prod - sum(if_else(year == START.YEAR,plan_tech_prod,0),na.rm = T),    
-    scen_build_out = scen_tech_prod - sum(if_else(year == START.YEAR,scen_tech_prod,0),na.rm = T)
-  ) %>% 
-  group_by(
-    scenario, ald_sector, year
-  ) %>% 
-  mutate(
-    plan_sec_emissions_factor = weighted.mean(plan_emission_factor, plan_tech_prod, na.rm = T),
-    scen_sec_emissions_factor = weighted.mean(scen_emission_factor, scen_tech_prod, na.rm = T),
-    
-    plan_sector_prod = sum(plan_tech_prod, na.rm = T),
-    scen_sector_prod = sum(scen_tech_prod, na.rm = T),
-    
-    plan_tech_share = plan_tech_prod / plan_sector_prod,
-    scen_tech_share = scen_tech_prod / scen_sector_prod
-    
-  ) %>% ungroup()
+    mutate(
+      traffic_light_yellow = signif(traffic_light_yellow,3),
+      traffic_light_green = signif(traffic_light_green,3),
+      traffic_light_value_grey = NA
+    )
+}
 
-economy_sector_co2_intensity_data <- debt_economy %>% 
-  filter(year == START.YEAR) %>% 
-  transmute(ald_sector, 
-            traffic_light_yellow = plan_sec_emissions_factor) %>%
-  distinct()
-
-# ~ traffic light system ~
-traffic_light_sector_co2_intensity_data <- debt_economy %>% 
-  filter(year == START.YEAR+5, scenario %in% c("B2DS","SBTI")) %>% 
-  transmute(ald_sector, 
-            traffic_light_green = scen_sec_emissions_factor) %>%
-  distinct() %>% full_join(economy_sector_co2_intensity_data, by = "ald_sector")
-
-# unit transformation for transport sectors
-traffic_light_sector_co2_intensity_data <- traffic_light_sector_co2_intensity_data %>% 
-  mutate(
-    traffic_light_yellow = if_else(ald_sector %in% c("shipping", "aviation", "automotive"), traffic_light_yellow * 1e6, traffic_light_yellow),
-    traffic_light_green = if_else(ald_sector %in% c("shipping", "aviation", "automotive"), traffic_light_green * 1e6, traffic_light_green)
-  ) %>% 
-  transmute(
-    indicator_name = paste0("sector_co2_intensity_", ald_sector),
-    traffic_light_yellow,
-    traffic_light_green
-  )
-
-traffic_light_technology_share <- debt_economy %>% 
-  filter(scenario %in% c("B2DS","SBTI"), year == START.YEAR+5, ald_sector %in% c("power","automotive"),!is.na(plan_tech_share)) %>% 
-  transmute(
-    indicator_name = paste0("technology_share_",str_remove(technology,"cap")),
-    traffic_light_yellow = plan_tech_share * 100, 
-    traffic_light_green = scen_tech_share * 100) %>% distinct()
-
-traffic_light_technology_climate_alignment <- debt_economy %>% 
-  filter(
-    year == START.YEAR+5,
-    technology %in% c("renewablescap", "electric"),
-    scenario == "B2DS") %>% 
-  mutate(
-    technology_climate_alignment = plan_build_out / scen_build_out * 100
-  ) %>% 
-  transmute(
-    indicator_name = paste0("climate_alignment_", str_remove(technology,"cap")),
-    traffic_light_yellow = round(if_else(technology_climate_alignment>200,200.00,technology_climate_alignment),2),
-    traffic_light_green = 100
-  ) %>% distinct() 
-
-traffic_light_values <- bind_rows(
-  traffic_light_sector_co2_intensity_data,
-  traffic_light_technology_climate_alignment,
-  traffic_light_technology_share
-) %>% 
-  mutate(
-    traffic_light_yellow = signif(traffic_light_yellow,3),
-    traffic_light_green = signif(traffic_light_green,3),
-    traffic_light_value_grey = NA
-  )
-
-write.csv(traffic_light_values, paste0(PROJ.LOCATION, "40_Results/traffic_light_values.csv"), row.names = F, na = "")
+write_csv(
+  traffic_light_values, 
+  path(project_location, "40_Results", "traffic_light_values", ext = "csv")
+)
 
 # TODO: write small function that creates meta statistic for the selected indicators: a) average and b) min-max values
 
@@ -229,37 +262,10 @@ write.csv(traffic_light_values, paste0(PROJ.LOCATION, "40_Results/traffic_light_
 # calculate_asset_type_exposure <- function()
 
 # flag asset types 
-asset_type_exposure <- pacta_audit %>% 
-  mutate(
-    asset_type = case_when(
-      security_bics_subgroup %in% c("Sovereign","Sovereign Agency", "Sovereigns") ~ "Sovereign",
-      security_type %in% c("Sovereign Debt","Sovereign Agency Debt", "Government inflation linked Bonds") ~ "Sovereign",
-      flag == "Holding not in Bloomberg database" ~ "no_data_available",
-      TRUE ~ asset_type
-    )
-  )
 
-# first calculate total fund market value  
-fund_total_value <- asset_type_exposure %>% 
-  group_by(portfolio_name) %>% 
-  summarise(fund_size_covered = sum(value_usd, na.rm = TRUE)) %>% 
-  ungroup()
+fund_total_value <- summarise_fund_size(pacta_audit)
 
-# summarize total asset type value 
-asset_type_exposure <- asset_type_exposure %>% 
-  group_by(
-    portfolio_name, 
-    asset_type
-  ) %>% 
-  summarize(asset_type_value = sum(value_usd, na.rm = TRUE))
-
-# calculate total fund value and asset type exposure 
-asset_type_exposure <- asset_type_exposure %>%
-  left_join(
-    fund_total_value, 
-    by = "portfolio_name"
-  ) %>% 
-  mutate(asset_type_exposure = asset_type_value / fund_size_covered)
+asset_type_exposure <- summarise_asset_exposure(pacta_audit)
 
 # clean asset type exposure 
 asset_type_exposure <- asset_type_exposure %>%
@@ -394,7 +400,7 @@ portfolio_climate_alignment <- input_pacta_portfolio_results %>%
   filter(
     scenario == "B2DS",
     allocation == "portfolio_weight",
-    year == START.YEAR + 5
+    year == start_year + 5
   ) %>% 
   mutate(
     trajectory_alignment = case_when(
@@ -461,7 +467,7 @@ portfolio_build_out_climate_alignment <- portfolio_build_out_climate_alignment %
     investor_name, portfolio_name,asset_type, ald_sector, technology
   ) %>% 
   mutate(
-    reference_value = sum(if_else(year == START.YEAR,plan_alloc_wt_tech_prod,0)),
+    reference_value = sum(if_else(year == start_year,plan_alloc_wt_tech_prod,0)),
     
     build_out_deviation_tech = case_when(
       !technology %in% tolower(high_carbon_tech_list) & (scen_alloc_wt_tech_prod - reference_value) == 0 & plan_alloc_wt_tech_prod > 0 ~ 1,
@@ -472,7 +478,7 @@ portfolio_build_out_climate_alignment <- portfolio_build_out_climate_alignment %
       # T ~ (plan_alloc_wt_tech_prod - scen_alloc_wt_tech_prod) / abs(scen_alloc_wt_tech_prod - reference_value)),
       technology %in% tolower(high_carbon_tech_list) & plan_alloc_wt_tech_prod > scen_alloc_wt_tech_prod ~ (plan_alloc_wt_tech_prod - scen_alloc_wt_tech_prod) / abs(scen_alloc_wt_tech_prod - reference_value),
       T ~ -(plan_alloc_wt_tech_prod - scen_alloc_wt_tech_prod) / (scen_alloc_wt_tech_prod - reference_value)),
-        
+    
     build_out_deviation_sec = (plan_sec_emissions_factor - scen_sec_emissions_factor) / scen_sec_emissions_factor,
     build_out_deviation_sec = if_else(scen_sec_emissions_factor == 0, if_else(plan_sec_emissions_factor == 0, 0, -1), build_out_deviation_sec),
     
@@ -483,9 +489,9 @@ portfolio_build_out_climate_alignment <- portfolio_build_out_climate_alignment %
       technology %in% tolower(high_carbon_tech_list) ~ -build_out_deviation,
       T ~ build_out_deviation
     )) %>% 
-    filter(
-      year == START.YEAR + 5
-    ) 
+  filter(
+    year == start_year + 5
+  ) 
 
 portfolio_build_out_climate_alignment <- portfolio_build_out_climate_alignment %>%
   mutate(
@@ -532,7 +538,7 @@ climate_rel_sector_exposure <- mapped_sector_exposure(
   fund_size_data = fund_size_covered,
   fund_size_indicator = "fund_size_covered",
   sector_list = c("power", "aviation", "oil&gas", "steel", "coal", "cement", "automotive")
-  )
+)
 
 complete_fund_matrix <- complete_fund_matrix %>% 
   left_join(
@@ -548,7 +554,7 @@ complete_fund_matrix <- complete_fund_matrix %>%
 
 sector_co2_intensity <- input_pacta_portfolio_results %>% 
   filter(
-    year == START.YEAR, 
+    year == start_year, 
     allocation == "portfolio_weight", 
     !is.na(plan_sec_emissions_factor)
   ) %>% 
@@ -760,7 +766,7 @@ exposure_data <- exposure_data %>%
 # technology_exposure =  sector_exposure * technology_share (weighted by asset type)
 technology_exposure <- input_pacta_portfolio_results %>% 
   filter(
-    year == START.YEAR, 
+    year == start_year, 
     technology %in% c("coalcap", "nuclearcap"),
     !is.na(plan_tech_share),
     plan_sec_carsten!=0
@@ -927,10 +933,10 @@ complete_fund_matrix <- complete_fund_matrix %>%
 
 # ~ Technology Share in specific climate relevant sectors with green alternatives ~
 # calculate technology share for PACTA sectors (automotive and power)
- 
+
 
 technology_share_data <- input_pacta_portfolio_results %>% 
-  filter(year == START.YEAR+5, allocation == "portfolio_weight", ald_sector %in% c("power","automotive"), plan_alloc_wt_sec_prod != 0) %>% 
+  filter(year == start_year+5, allocation == "portfolio_weight", ald_sector %in% c("power","automotive"), plan_alloc_wt_sec_prod != 0) %>% 
   select(portfolio_name, ald_sector, technology, plan_tech_share, asset_type) %>% distinct()
 
 technology_share_data <- technology_share_data %>% 
@@ -973,7 +979,7 @@ complete_fund_matrix <- complete_fund_matrix %>% left_join(technology_share_data
 # Scenario compatibility:
 #   RE build out plans # climate indicator
 calculate_technology_climate_alignment <- function(pacta_input_portfolio = input_pacta_portfolio_results, 
-                                                   start_year = START.YEAR, 
+                                                   start_year = start_year, 
                                                    technology_selection = "renewablescap", 
                                                    scenario_selection = "B2DS"){
   
@@ -1027,12 +1033,12 @@ calculate_technology_climate_alignment <- function(pacta_input_portfolio = input
 
 
 climate_alignment_renewables_data <- calculate_technology_climate_alignment(pacta_input_portfolio = input_pacta_portfolio_results, 
-                                                                            start_year = START.YEAR, 
+                                                                            start_year = start_year, 
                                                                             technology_selection = "renewablescap", 
                                                                             scenario_selection = "B2DS")
 
 climate_alignment_electric_data <- calculate_technology_climate_alignment(pacta_input_portfolio = input_pacta_portfolio_results, 
-                                                                          start_year = START.YEAR, 
+                                                                          start_year = start_year, 
                                                                           technology_selection = "electric", 
                                                                           scenario_selection = "B2DS")
 
@@ -1135,7 +1141,7 @@ complete_fund_matrix <- complete_fund_matrix %>%
   left_join(
     coverage_top5_countries,
     by = "fund_isin"
-    )
+  )
 
 # ~ Top sector exposure ~
 # TODO: compare to other sector exposure calculations and align!
@@ -1245,8 +1251,8 @@ fund_data_complete_formated <- fund_data_complete_formated %>%
   mutate_at(.vars = list_perc_indicators, .funs = convert_int_to_perc)
 
 # ~ save entire fund matrix, including all available indicators ~
-write.csv(fund_data_complete_formated, paste0(PROJ.LOCATION, "40_Results/", Project.Name, "Fund_Data_complete.csv"), row.names = F, na = "")
-write.csv(fund_data_complete_formated %>% filter(fund_isin == "Meta Portfolio"), paste0(PROJ.LOCATION, "40_Results/", Project.Name, "Meta_Portfolio_results.csv"), row.names = F, na = "")
+write.csv(fund_data_complete_formated, paste0(project_location, "40_Results/", Project.Name, "Fund_Data_complete.csv"), row.names = F, na = "")
+write.csv(fund_data_complete_formated %>% filter(fund_isin == "Meta Portfolio"), paste0(project_location, "40_Results/", Project.Name, "Meta_Portfolio_results.csv"), row.names = F, na = "")
 
 
 # subset and rename fund matrix
@@ -1266,10 +1272,10 @@ fund_data_formated_subset <- filter_and_rename_fund_matrix(fund_matrix = fund_da
 fund_list_sufficient_coverage <- complete_fund_matrix %>% filter(fund_size_covered > fund_size * coverage_threshold)
 fund_data_with_sufficient_coverage <- fund_data_formated_subset %>% filter(fund_isin %in% fund_list_sufficient_coverage$fund_isin)
 
-write_csv(fund_data_with_sufficient_coverage, paste0(PROJ.LOCATION, "40_Results/", Project.Name, "Fund_Data.csv"), na = "")
+write_csv(fund_data_with_sufficient_coverage, paste0(project_location, "40_Results/", Project.Name, "Fund_Data.csv"), na = "")
 
 # ~ save entire fund matrix, including all available indicators ~
-write_csv(fund_data_complete_formated %>% filter(fund_isin %in% fund_list_sufficient_coverage$fund_isin), paste0(PROJ.LOCATION, "40_Results/", Project.Name, "Fund_Data_all data points.csv"), na = "")
+write_csv(fund_data_complete_formated %>% filter(fund_isin %in% fund_list_sufficient_coverage$fund_isin), paste0(project_location, "40_Results/", Project.Name, "Fund_Data_all data points.csv"), na = "")
 
 
 
@@ -1456,8 +1462,8 @@ add_3rd_party_datapoint <- function(
 # brown_technologies_list <- c("Oil", "Gas", "Coal", "CoalCap", "OilCap", "GasCap", "ICE")
 # 
 # #results 
-# input_debt <- read_rds(paste0(PROJ.LOCATION, "40_Results/", Project.Name, "_Bonds-PortInput-Port.rda"))
-# input_equity <- read_rds(paste0(PROJ.LOCATION, "40_Results/", Project.Name, "_Equity-PortInput-Port.rda"))
+# input_debt <- read_rds(paste0(project_location, "40_Results/", Project.Name, "_Bonds-PortInput-Port.rda"))
+# input_equity <- read_rds(paste0(project_location, "40_Results/", Project.Name, "_Equity-PortInput-Port.rda"))
 # 
 # input_debt$Asset.Type <- "Bonds"
 # input_equity$Asset.Type <- "Equity"
@@ -1465,7 +1471,7 @@ add_3rd_party_datapoint <- function(
 # input_results <- bind_rows(input_debt, input_equity)
 # 
 # #audit 
-# input_audit <- read_rds(paste0(PROJ.LOCATION, "30_Processed_Inputs/", Project.Name,"-AUDIT-Portfolio-Coverage.rda")) %>% 
+# input_audit <- read_rds(paste0(project_location, "30_Processed_Inputs/", Project.Name,"-AUDIT-Portfolio-Coverage.rda")) %>% 
 #   mutate(bloomberg_id = as.character(bloomberg_id)) 
 # 
 # 
