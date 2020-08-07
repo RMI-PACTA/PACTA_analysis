@@ -303,5 +303,5 @@ write_log <- function(msg, ...) {
     as.character(msg),
     ...
   )
-  write(composed, file = paste0(project_location,"/00_Log_Files/input_errors.txt"), append = TRUE)
+  write(composed, file = paste0(project_location,"/00_Log_Files/error_messages.txt"), append = TRUE)
 }
