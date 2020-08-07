@@ -115,21 +115,29 @@ get_input_files <- function(portfolio_name_ref_all){
   input_names = gsub(".xlsx", "",input_names)
   
   if(!all(portfolio_name_ref_all %in% input_names)){
+    write_log(msg = "Difference in input files and input argument portfolio names.")
     stop("Difference in input files and input argument portfolio names.")
   }
   
-  if(any(!portfolio_name_ref_all %in% input_names)){stop("Missing input argument")}
+  if(any(!portfolio_name_ref_all %in% input_names)){
+    write_log(msg = "Missing input argument")
+    stop("Missing input argument")
+  }
   
   portfolio_file_names <- list.files(paste0(project_location, "/10_Parameter_File/"))
   portfolio_file_names <- portfolio_file_names[grepl("_PortfolioParameters.yml",portfolio_file_names)]
   portfolio_file_names <- gsub("_PortfolioParameters.yml","", portfolio_file_names)
   
   if(!all(portfolio_name_ref_all %in% portfolio_file_names)){
+    write_log(msg = "Difference in parameter files and input argument portfolio names.")
     stop("Difference in parameter files and input argument portfolio names.")
   }
-  if(any(!portfolio_name_ref_all %in% portfolio_file_names)){stop("Missing portfolio parameter file")}
-  
-  if(any(!portfolio_name_ref_all %in% input_names)){stop("Missing input argument")}
+  if(any(!portfolio_name_ref_all %in% portfolio_file_names)){
+    write_log(msg = "Missing portfolio parameter file")
+    stop("Missing portfolio parameter file")
+  }
+  # this is already tested above -- duplicate
+  # if(any(!portfolio_name_ref_all %in% input_names)){stop("Missing input argument")}
   
   
   for (i in 1:length(portfolio_name_ref_all)){
@@ -162,6 +170,10 @@ read_web_input_file <- function(input_file_path){
   
   file_ext = tools::file_ext(input_file_path)
   
+  if (!file_ext %in% c("csv", "xlsx", "txt")) {
+    write_log(msg = "Input file format not supported. Must be .csv, .xlsx or .txt")
+  }
+  
   if (file_ext == "csv"){
     input_file <- read_csv(input_file_path)
     
@@ -187,6 +199,11 @@ read_web_input_file <- function(input_file_path){
   
   if(data_check(input_file) == FALSE){
     warning("Input file not readable")
+    ifelse(nrow(input_file) == 0,
+           write_log(msg = "Input file has 0 rows. Please ensure the uploaded file is not empty."),
+           write_log(msg = "Input file could not be transformed into a data.frame.
+                     Please check the uploaded file has the correct format.")
+    )
   }
   
   return(input_file)
@@ -206,6 +223,9 @@ check_input_file_contents <- function(portfolio_, portfolio_name_in, investor_na
     missing_cols = setdiff(necessary_columns, colnames(portfolio_clean))
     
     warning(paste0("Missing inputs for this portfolio: ", missing_cols)) # Add LOG
+    write_log(msg = paste("The uploaded portfolio file contains the following missing variables:", missing_cols,
+                          "\n For correct analysis, please ensure the following required variables are included in your uploaded portfolio file:",
+                          necessary_columns))
   }
   
   return(portfolio_clean)  
