@@ -1,6 +1,6 @@
 default:
 
-  project_name: name_of_the_project_folder
+  project_name: daisy_test5
 
   project_internal:
     twodii_internal: FALSE

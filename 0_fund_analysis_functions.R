@@ -6,55 +6,107 @@ library(fs)
 # hi Klaus
 # hi Vincen
 
-summarise_pacta_sector_exposure <- function(data, ...) {
-  # clean data 
-  data <- data %>%
-    assertr::verify(has_all_names(security_mapped_sector, financial_sector)) %>% 
-    mutate(security_mapped_sector = tolower(security_mapped_sector))
-  # create nice pacta sectors
-  data <- data %>% 
+summarise_portfolio_paris_alignment <- function(
+  results, 
+  portfolio,
+  scenario = "b2ds", 
+  allocation = "portfolio_weight", 
+  start_year = 2019,
+  git_path = here::here(),
+  nice_score = TRUE
+) {
+  # filter data 
+  results <- results %>% 
+    filter(
+      .data$scenario == tolower(scenario), 
+      .data$allocation == tolower(allocation),
+      between(.data$year, start_year, start_year + 5), 
+      (.data$scenario_geography == "globalaggregate" & .data$ald_sector == "power") | (.data$ald_sector != "power" & .data$scenario_geography == "global")
+    )
+  # fix trajectory alignment 
+  results <- results %>% 
     mutate(
-      pacta_sector = case_when(
-        security_mapped_sector %in% c("other", "unclassifiable") ~ "other", 
-        security_mapped_sector == "coal" ~ "coal_mining", 
-        TRUE ~ security_mapped_sector
+      trajectory_alignment = case_when(
+        .data$trajectory_alignment > 1 ~ 1,
+        .data$trajectory_alignment < -1 ~ -1,
+        TRUE ~ .data$trajectory_alignment
       )
     )
+  # apply weight to get portfolio results 
+  results <- influencemap_weighting_methodology(
+    results,
+    portfolio,
+    alignment_metric = "trajectory_alignment", 
+    git_path
+  )
+  # add nice score if you would like 
+  if (nice_score == TRUE) {
+    results %>% 
+      mutate(
+        paris_alignment_score = case_when(
+          paris_alignment_score > 1 ~ 100,
+          paris_alignment_score < -1 ~ -100,
+          TRUE ~ paris_alignment_score * 100
+        )
+      )
+  } else if (nice_score == FALSE) {
+    results
+    }
+}
+
+
+summarise_pacta_sector_exposure <- function(
+  .data, 
+  ...,
+  value_usd = "value_usd"
+) {
+  # clean data 
+  .data <- .data %>%
+    assertr::verify(has_all_names("security_mapped_sector")) %>% 
+    mutate(across(matches(c("security_mapped_sector", "asset_type"), tolower)))
+  # create nice pacta sectors
+  .data <- .data %>% 
+    mutate(
+      security_mapped_sector = if_else(security_mapped_sector %in% c("other", "unclassifiable"), "other", security_mapped_sector),
+      security_mapped_sector = if_else(security_mapped_sector == "coal", "coal_mining", security_mapped_sector)
+    )
   # summarise and then reclassify names 
-  data <- data %>% 
+  .data <- .data %>% 
     group_by(
       ...,
-      pacta_sector, 
-      asset_type
+      asset_type, 
+      security_mapped_sector
     ) %>%
-    summarise(sector_exposure = sum(value_usd, na.rm = TRUE)) %>% 
-    ungroup()
-  # reclassify things 
-  data <- data %>% 
-    classify_asset_types() %>% 
-    group_by(
-      ...,
-      pacta_sector, 
-      asset_type
-    ) %>%
-    summarise(sector_exposure = sum(sector_exposure, na.rm = TRUE)) %>% 
-    ungroup()
+    summarise(sector_exposure = sum(.data[[value_usd]], na.rm = TRUE))
   # calculate share 
-  data %>% 
-    group_by(...)
-  mutate(sector_exposure = sector_exposure / sum(sector_exposure, na.rm = TRUE)) 
+  .data %>% 
+    group_by(...) %>% 
+    mutate(sector_exposure = .data$sector_exposure / sum(.data$sector_exposure, na.rm = TRUE)) %>% 
+    ungroup()
 }
 
 classify_asset_types <- function(.data) {
+  # sovereign debt types 
+  sovereign_types <- c(
+    "Supra-National Debt", 
+    "Sovereign Agency Debt", 
+    "Treasury Bills", 
+    "Sovereign Debt", 
+    "Local/Regional Govt Debt", 
+    "U.S. Taxable Municipals",
+    "Government inflation linked Bonds",
+    "U.S. Treasuries",
+    "Sovereign",
+    "Sovereign Agency",
+    "Sovereigns"
+  )
+  # classify asset-types 
   .data %>% 
     assertr::verify(has_all_names("security_bics_subgroup", "security_type", "flag")) %>% 
     mutate(
-      asset_type = case_when(
-        security_bics_subgroup %in% c("Sovereign","Sovereign Agency", "Sovereigns") ~ "sovereign",
-        security_type %in% c("Sovereign Debt","Sovereign Agency Debt", "Government inflation linked Bonds") ~ "sovereign",
-        flag == "Holding not in Bloomberg database" ~ "no_data_available",
-        TRUE ~ asset_type
-      )
+      asset_type = if_else(tolower(security_bics_subgroup) %in% tolower(sovereign_types), "sovereign", asset_type),
+      asset_type = if_else(tolower(security_type) %in% tolower(sovereign_types), "sovereign", asset_type),
+      asset_type = if_else(asset_type == "unclassifiable", "others", asset_type)
     )
 }
 
@@ -63,18 +115,16 @@ summarise_asset_type_exposure <- function(
   ...,
   value_usd = "value_usd"
 ) {
-  .data <- .data %>% 
-    assertr::verify(has_all_names(value_usd)) %>% 
-    classify_asset_types()
   # summarize total asset type value 
   .data %>% 
+    classify_asset_types() %>% 
     group_by(
       ..., 
       asset_type
     ) %>% 
-    summarize(asset_type_value = sum(.data[[value_usd]], na.rm = TRUE)) %>% 
+    summarize(asset_type_exposure = sum(.data[[value_usd]], na.rm = TRUE)) %>% 
     group_by(...) %>% 
-    mutate(asset_type_exposure = asset_type_value / sum(asset_type_value, na.rm = TRUE))
+    mutate(asset_type_exposure = asset_type_exposure / sum(asset_type_exposure, na.rm = TRUE))
 }
 
 summarise_portfolio_value <- function(
@@ -85,6 +135,23 @@ summarise_portfolio_value <- function(
   .data %>% 
     group_by(...) %>% 
     summarise(fund_size = sum(.data[[value_usd]], na.rm = TRUE)) %>% 
+    ungroup()
+}
+
+summarise_portfolio_exposure <- function(
+  .data, 
+  ...,
+  value_usd = "value_usd", 
+  portfolio_name = "portfolio_name"
+) {
+  .data %>% 
+    group_by(
+      .data[[portfolio_name]],
+      ...
+    ) %>% 
+    summarise(value = sum(.data[[value_usd]], na.rm = TRUE)) %>% 
+    group_by(.data[[portfolio_name]]) %>% 
+    mutate(exposure = .data$value / sum(.data$value, na.rm = TRUE)) %>% 
     ungroup()
 }
 
@@ -264,55 +331,63 @@ gather_all_company_result_files <- function(result_path = RESULTS.PATH){
   saveRDS(AllBondPortResults,paste0(result_path,"Bonds_results_company.rda"))
   saveRDS(AllEQPortResults,paste0(result_path,"Equity_results_company.rda"))}
 
-load_pacta_portfolio <- function(project_location) {
-  # prepare processed portfolio 
-  audit_flag <- read_rds(path(project_location, "30_Processed_Inputs", paste(project_name, "audit_file", sep = "_"), ext = "rda")) %>% 
-    distinct(
-      portfolio_name, 
-      isin, 
-      company_name, 
-      asset_type, 
-      financial_sector, 
-      has_ald_in_fin_sector
-    )
+load_portfolio <- function(project_location) {
+  # # prepare processed portfolio 
+  # audit_flag <- read_rds(path(project_location, "30_Processed_Inputs", paste(project_name, "audit_file", sep = "_"), ext = "rda")) %>% 
+  #   distinct(
+  #     portfolio_name, 
+  #     isin, 
+  #     company_name, 
+  #     asset_type, 
+  #     financial_sector, 
+  #     has_ald_in_fin_sector
+  #   )
+  # 
+  # portfolio <- read_rds(path(project_location, "30_Processed_Inputs", paste(project_name, "total_portfolio", sep = "_"), ext = "rda")) 
+  # 
+  # portfolio <- portfolio %>% 
+  #   mutate(
+  #     bloomberg_id = as.character(bloomberg_id),
+  #     value_usd = if_else(is.infinite(value_usd),0,value_usd)
+  #   ) %>% 
+  #   filter(investor_name != portfolio_name | portfolio_name == "Meta Portfolio") %>% 
+  #   left_join(
+  #     audit_flag, 
+  #     by = intersect(colnames(portfolio),colnames(audit_flag))
+  #     )
   
-  portfolio <- read_rds(path(project_location, "30_Processed_Inputs", paste(project_name, "total_portfolio", sep = "_"), ext = "rda")) 
-  
-  portfolio <- portfolio %>% 
-    mutate(
-      bloomberg_id = as.character(bloomberg_id),
-      value_usd = if_else(is.infinite(value_usd),0,value_usd)
-    ) %>% 
-    filter(investor_name != portfolio_name | portfolio_name == "Meta Portfolio") %>% 
-    left_join(
-      audit_flag, 
-      by = intersect(colnames(portfolio),colnames(audit_flag))
-      )
-  
-  portfolio %>% 
-    mutate(across(matches(c("asset_type", "financial_sector", "security_mapped_sector")), tolower)) 
+  read_rds(path(project_location, "30_Processed_Inputs", paste(project_name, "total_portfolio", sep = "_"), ext = "rda")) %>% 
+    mutate(across(matches(c("asset_type", "financial_sector", "security_mapped_sector")), tolower)) %>% 
+    classify_asset_types()
 }
 
 #prepare PACTA results
-load_pacta_results <- function(project_location = project_location) {
-  
-  portfolio_debt_results <- read_rds(path(project_location, "40_Results", "Bonds_results_portfolio", ext = "rda"))
-  portfolio_equity_results <- read_rds(path(project_location, "40_Results", "Equity_results_portfolio", ext = "rda"))
-  
-  portfolio_debt_results$asset_type <- "Bonds"
-  portfolio_equity_results$asset_type <- "Equity"
-  
-  portfolio_results <- portfolio_debt_results %>% 
-    bind_rows(portfolio_equity_results)
-  
-  portfolio_results <- portfolio_results %>% 
-    filter((ald_sector == "Power" & scenario_geography == "GlobalAggregate") | (ald_sector != "Power" & scenario_geography == "Global"))
-  
-  portfolio_results <- portfolio_results %>%   
-    filter(investor_name != portfolio_name | portfolio_name == "Meta Portfolio")
-  
+load_results <- function(project_location = project_location) {
+  # load results 
+  portfolio_debt_results <- read_rds(path(project_location, "40_Results", "Bonds_results_portfolio", ext = "rda")) %>% 
+    clean_names(case = "snake")
+  portfolio_equity_results <- read_rds(path(project_location, "40_Results", "Equity_results_portfolio", ext = "rda")) %>% 
+    clean_names(case = "snake")
+  # add asset-type 
+  portfolio_debt_results$asset_type <- "bonds"
+  portfolio_equity_results$asset_type <- "equity"
+  # bind things together
+  portfolio_results <- portfolio_equity_results %>% 
+    bind_rows(portfolio_debt_results) 
+  # to lower selection
+  columns_to_lower <- c(
+    "ald_sector", 
+    "technology", 
+    "asset_type", 
+    "scenario", 
+    "equity_market", 
+    "scenario_geography", 
+    "ald_sector", 
+    "technology"
+  )
+  # make names nicers 
   portfolio_results %>% 
-    mutate(across(matches(c("ald_sector", "technology", "asset_type")), tolower)) 
+    mutate(across(matches(columns_to_lower), tolower)) 
 }
 
 # load data sets if needed (check indicator list for this)
@@ -507,115 +582,81 @@ summarise_group_exposure <- function(input, group_vars, rel_vars, value_var, nam
 #   value_var = "ValueUSD" # a numeric value to calculate percentage exposure. 
 # )
 
+results <- load_results(project_location)
 
+connect_results_with_weights <- function(
+  results, 
+  portfolio,
+  git_path = here::here()
+) {
+  # load sector weights 
+  sector_weights <- read_rds(path(git_path, "data", "sector_weightings", ext = "rds"))
+  # first join technology and sector weights to pacta results file 
+  results <- results %>%
+    inner_join(
+      sector_weights, 
+      by = c("ald_sector", "technology")
+    )
+  # prepare audit file to show the relative portfolio weight in each sector 
+  asset_type_sector_exposure <- portfolio %>%
+    summarise_pacta_sector_exposure(investor_name, portfolio_name) %>% 
+    rename(ald_sector = .data$security_mapped_sector)
+  # join audit exposure to result file 
+  results <- results %>%
+    inner_join(
+      asset_type_sector_exposure, 
+      by = c("ald_sector", "investor_name", "portfolio_name", "asset_type")
+    )
+  # asset_type exposure
+  asset_type_exposure <- portfolio %>% 
+    summarise_asset_type_exposure(investor_name, portfolio_name)
+  # join asset type exposure with results 
+  results %>%
+    inner_join(
+      asset_type_exposure, 
+      by = c("investor_name", "portfolio_name", "asset_type")
+    )
+}
 
 # Single Indicator function - should be loaded from r2dii.analysis instead!
 influencemap_weighting_methodology <- function(
-  pacta_portfolio_results,
-  processed_portfolio,
-  metric_col = "trajectory_alignment"
+  results,
+  portfolio,
+  alignment_metric = "trajectory_alignment", 
+  git_path = here::here()
 ) {
-  # load sector technology weights 
-  sector_weightings <<- read_csv(paste0(GIT.PATH, "Reference/ReferenceData/sector_weightings.csv")) #tech_sector_weighting.csv"))
-  
-  sector_weightings <- sector_weightings %>% 
-    mutate(across(everything(), tolower))
-  
-  results_file <- pacta_portfolio_results
-  
-  # first join technology and sector weights to pacta results file 
-  results <- results_file %>%
-    inner_join(
-      sector_weightings, 
-      by = c(
-        "ald_sector" = "sector", 
-        "technology" = "technology"
-      )
-    )
-  
-  # prepare audit file to show the relative portfolio weight in each sector 
-  audit_file <- processed_portfolio %>%
-    filter(security_mapped_sector == financial_sector) %>% 
-    rename(ald_sector = security_mapped_sector)
-  
-  # calculate by asset_type the value_usd in each sector 
-  audit_exposure <- audit_file %>% 
-    group_by(
-      investor_name, 
-      portfolio_name, 
-      ald_sector, 
-      asset_type
-    ) %>%
-    summarise(value_usd_sector = sum(value_usd, na.rm = TRUE))
-  
-  # caculate for each port the value_usd in each asset_type 
-  audit_exposure <- audit_exposure %>%
-    group_by(
-      investor_name, 
-      portfolio_name,
-      asset_type
-    ) %>%
-    mutate(value_usd_asset_type = sum(value_usd_sector, na.rm = TRUE))
-  
-  # join audit exposure to result file 
-  results_audit <- audit_exposure %>%
-    mutate(ald_sector = tolower(ald_sector)) %>% 
-    filter(ald_sector != "other" & !is.na(ald_sector)) %>%
-    inner_join(
-      results, 
-      by = c(
-        "ald_sector", 
-        "investor_name", 
-        "portfolio_name", 
-        "asset_type"
-      )
-    )
-  
+  results <- connect_results_with_weights(results, portfolio, git_path)
   # first reweight alignment to the sector level based on the technology importance 
-  results_technology <- results_audit %>%
-    filter(!is.na(technology_weight)) %>%
+  results <- results %>%
     group_by(
-      investor_name, 
-      portfolio_name, 
-      asset_type, 
-      ald_sector
+      .data$investor_name, 
+      .data$portfolio_name, 
+      .data$asset_type, 
+      .data$ald_sector
     ) %>%
     mutate(
-      technology_production_weight = as.numeric(technology_weight) * as.numeric(plan_alloc_wt_tech_prod),
-      metric_sector = stats::weighted.mean(.data[[metric_col]], technology_weight, na.rm = TRUE)
+      alignment_sector = if_else(
+        !is.na(.data$technology_weight), 
+        stats::weighted.mean(.data[[alignment_metric]], .data$technology_weight * .data$plan_alloc_wt_tech_prod, na.rm = TRUE),
+        .data[[alignment_metric]]
+      )
     )
-  
-  # if no technology breakdown then just pass sectors alignment 
-  results_sector <- results_audit %>%
-    filter(is.na(technology_weight)) %>%
-    mutate(metric_sector = .data[[metric_col]])
-  
-  # bind both calculations together
-  results_sector <- bind_rows(
-    results_technology, 
-    results_sector
-  )
-  
-  # then weight according to the port value in the sector and the sector importance 
-  results_asset_type <- results_sector %>%
+  # then weight up to asset_type level 
+  results <- results %>%
     group_by(
-      investor_name, 
-      portfolio_name, 
-      asset_type
+      .data$investor_name, 
+      .data$portfolio_name, 
+      .data$asset_type,
+      .data$asset_type_exposure
     ) %>%
-    mutate(
-      sector_value_usd_weight = as.numeric(value_usd_sector) * as.numeric(sector_weight),
-      metric_asset_type = stats::weighted.mean(metric_sector, sector_value_usd_weight, na.rm = TRUE)
-    )
-  
-  results_portfolio <- results_asset_type %>%
+    summarise(alignment_asset_type = stats::weighted.mean(.data$alignment_sector, .data$sector_weight * .data$sector_exposure, na.rm = TRUE))
+  # calculate portfolio level results 
+  results %>%
     group_by(
-      investor_name, 
-      portfolio_name
+      .data$investor_name, 
+      .data$portfolio_name
     ) %>%
-    mutate(metric_port = stats::weighted.mean(metric_asset_type, value_usd_asset_type, na.rm = TRUE))
-  
-  results_portfolio %>% 
+    summarise(paris_alignment_score = stats::weighted.mean(.data$alignment_asset_type, .data$asset_type_exposure, na.rm = TRUE)) %>% 
     ungroup()
 }
 

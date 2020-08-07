@@ -1,5 +1,7 @@
 source("0_fund_analysis_functions.R")
 
+project_location <- "/Users/vincentjerosch-herold/Dropbox (2° Investing)/PortCheck_v2/10_Projects/daisy_test5"
+
 ###########################################
 ###########################################
 # ~ Load Data ~
@@ -10,7 +12,7 @@ load_fund_results(
   project_location = project_location
 )
 
-audit_file <- load_pacta_portfolio(project_location)
+portfolio <- load_portfolio(project_location)
 
 traffic_light_values <- prep_debt_economy()
 
@@ -86,8 +88,12 @@ complete_fund_matrix <- complete_fund_matrix %>%
     by = c("fund_isin" = "portfolio_name")
   )
 
+portfolio <- load_portfolio(project_location)
 
-sector_exposure_per_asset_type_wide <- sector_exposure_per_asset_type %>% 
+pacta_sector_exposure <- portfolio %>% 
+  summarise_pacta_sector_exposure(portfolio_name)
+
+pacta_sector_exposure <- pacta_sector_exposure %>% 
   pivot_wider(
     names_from = "security_mapped_sector", 
     names_prefix = "sector_exposure_per_asset_type_", 
@@ -95,14 +101,26 @@ sector_exposure_per_asset_type_wide <- sector_exposure_per_asset_type %>%
     values_fill = list(sector_exposure = 0)
   )
 
-sector_exposure_per_asset_type_view <- sector_exposure_per_asset_type_wide %>% 
-  mutate(asset_type = tolower(asset_type)) %>% 
-  distinct(
-    portfolio_name, 
-    sector_exposure_per_asset_type_power, 
-    asset_type
-  )
 
-pacta_audit %>% 
-  summarise_pacta_sector_exposure(portfolio_name)
+###########################################
+###########################################
+# paris alignment score 
+###########################################
+###########################################
+
+results <- load_results(project_location)
+
+portfolio_paris_alignment <- summarise_portfolio_paris_alignment(
+  results, 
+  portfolio,
+  scenario = "b2ds", 
+  allocation = "portfolio_weight", 
+  start_year = 2019,
+  git_path = here::here(), 
+  nice_score = TRUE
+)
+
+
+
+
 
