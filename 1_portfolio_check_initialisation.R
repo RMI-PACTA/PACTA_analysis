@@ -59,7 +59,10 @@ copy_files(project_name)
 
 options(r2dii_config = paste0(par_file_path,"/AnalysisParameters.yml"))
 
-set_global_parameters(paste0(par_file_path,"/AnalysisParameters.yml"))
+set_global_parameters("/Volumes/Photos/mfm_v4_07082020/10_Parameter_File/AnalysisParameters.yml")
 
 analysis_inputs_path <- set_analysis_inputs_path(twodii_internal, data_location_ext, dataprep_timestamp)
+
+
+
 

@@ -1,5 +1,8 @@
 source("0_fund_analysis_functions.R")
 
+# TODO sanity check technology alignment figures. 
+
+project_name <- "daisy_test5"
 project_location <- "/Users/vincentjerosch-herold/Dropbox (2° Investing)/PortCheck_v2/10_Projects/daisy_test5"
 
 ###########################################
@@ -90,8 +93,15 @@ complete_fund_matrix <- complete_fund_matrix %>%
 
 portfolio <- load_portfolio(project_location)
 
-pacta_sector_exposure <- portfolio %>% 
-  summarise_pacta_sector_exposure(portfolio_name)
+security_mapped_sector_exposure <- portfolio %>% 
+  summarise_by_group_share(
+    id_cols = "investor_name",
+    values_from = "value_usd",
+    numerator_from = "security_mapped_sector", 
+    denominator_from = "portfolio_name", 
+    name_to = "sector_exposure", 
+    na.rm = TRUE
+  )
 
 pacta_sector_exposure <- pacta_sector_exposure %>% 
   pivot_wider(
@@ -108,17 +118,121 @@ pacta_sector_exposure <- pacta_sector_exposure %>%
 ###########################################
 ###########################################
 
-results <- load_results(project_location)
+results <- load_results(project_location) %>% 
+  filter_unique_cross_sector_results()
 
-portfolio_paris_alignment <- summarise_portfolio_paris_alignment(
-  results, 
-  portfolio,
-  scenario = "b2ds", 
-  allocation = "portfolio_weight", 
-  start_year = 2019,
-  git_path = here::here(), 
-  nice_score = TRUE
-)
+paris_alignment_score <- results %>% 
+  add_nice_values(
+    values_from = "trajectory_alignment", 
+    scale = 100,
+    min = -100, 
+    max = 100
+  ) %>% 
+  summarise_portfolio_paris_alignment(
+    portfolio,
+    start_year = 2019,
+    alignment_from = "trajectory_alignment",
+    git_path = here::here()
+  )
+
+results <- load_results(project_location) %>% 
+  filter_unique_cross_sector_results()
+
+paris_alignment_score <- results %>% 
+  calculate_build_out_alignment() %>% 
+  add_nice_values(
+    values_from = "build_out_alignment", 
+    scale = 100,
+    min = -100, 
+    max = 100
+  ) %>% 
+  summarise_portfolio_paris_alignment(
+    portfolio,
+    start_year = 2019,
+    alignment_from = "build_out_alignment",
+    git_path = here::here()
+  )
+
+###########################################
+###########################################
+# paris alignment score 
+###########################################
+###########################################
+
+technology_exposure <- results %>% 
+  summarise_by_group_share(
+    id_cols = c("investor_name", "portfolio_name"),
+    values_from = "plan_alloc_wt_tech_prod",
+    numerator_from = "technology", 
+    denominator_from = "ald_sector", 
+    name_to = "technology_exposure", 
+    na.rm = TRUE
+  )
+
+###########################################
+###########################################
+# paris alignment score 
+###########################################
+###########################################
+
+results <- load_results(project_location)
+portfolio <- load_portfolio(project_location)
+
+asset_type_exposure <- portfolio %>% 
+  summarise_by_group_share(
+    id_cols = "investor_name",
+    values_from = "value_usd",
+    numerator_from = "asset_type", 
+    denominator_from = "portfolio_name", 
+    name_to = "asset_type_exposure", 
+    na.rm = TRUE
+  )
+
+results <- results %>% 
+  inner_join(
+    asset_type_exposure, 
+    by = c("investor_name", "portfolio_name", "asset_type")
+  )
+
+results <- results %>% 
+  filter(technology == "renewablescap") %>% 
+  calculate_technology_alignment(
+    start_year = 2019, 
+    time_horizon = 5, 
+    id_cols = c("investor_name", "portfolio_name", "asset_type", "ald_sector", "technology"),
+    plan_tech_prod_from = "plan_alloc_wt_tech_prod", 
+    scen_tech_prod_from = "scen_alloc_wt_tech_prod"
+  ) %>% 
+  add_nice_values(
+    values_from = "tech_build_out_alignment", 
+    scale = 100,
+    min = -200, 
+    max = 200
+  )
+
+technology_alignment <- results %>% 
+  summarise_by_group_weight(
+    id_cols = c("investor_name", "portfolio_name", "ald_sector", "technology"), 
+    weights_from = "asset_type_exposure",
+    values_from = "technology_build_out_alignment",
+    name_to = "technology_alignment",
+    na.rm = TRUE
+  )
+
+country_exposure <- portfolio %>% 
+  filter(!is.na(country_of_domicile)) %>% 
+  summarise_by_group_share(
+    id_cols = "investor_name",
+    values_from = "value_usd",
+    numerator_group = "country_of_domicile", 
+    denominator_group = "portfolio_name", 
+    name_to = "country_exposure", 
+    na.rm = TRUE
+  )
+
+
+
+
 
 
 

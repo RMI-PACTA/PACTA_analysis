@@ -6,56 +6,326 @@ library(fs)
 # hi Klaus
 # hi Vincen
 
+check_group_weight_parameters <- function(
+  data,
+  id_cols,
+  weights_from,
+  values_from,
+  name_to = NULL
+) {
+  # check parameters 
+  stopifnot(is.character(id_cols))
+  stopifnot(is.character(weights_from))
+  stopifnot(is.character(values_from))
+  stopifnot(is.character(name_to) | is.null(name_to))
+  # check class 
+  data %>% 
+    assertr::verify(class(.data[[weights_from]]) == "numeric") %>% 
+    assertr::verify(class(.data[[values_from]]) == "numeric")
+}
+
+summarise_by_group_weight <- function(
+  .data, 
+  id_cols,
+  weights_from,
+  values_from,
+  name_to = NULL, 
+  ...
+) {
+  # check parameters 
+  .data <- .data %>% 
+    check_group_weight_parameters(
+      id_cols,
+      weights_from,
+      values_from,
+      name_to
+    )
+  # weight value 
+  .data <- .data %>% 
+    dplyr::group_by(!!!rlang::syms(id_cols)) %>% 
+    dplyr::summarise(weighted_value = stats::weighted.mean(sum(.data[[weights_from]], ...) * sum(.data[[weights_from]], ...))) %>% 
+    dplyr::ungroup()
+  # rename output
+  if (!is.null(name_to)) {
+    .data %>% 
+      plyr::rename(c("weighted_value" = name_to))
+  } else if (is.null(name_to)) {
+    return(.data)
+  }
+}
+
+
+
+calculate_technology_alignment <- function(
+  .data, 
+  start_year = 2019, 
+  time_horizon = 5, 
+  id_cols = c("investor_name", "portfolio_name", "asset_type", "ald_sector", "technology"),
+  plan_tech_prod_from = "plan_alloc_wt_tech_prod", 
+  scen_tech_prod_from = "scen_alloc_wt_tech_prod"
+) {
+  .data %>% 
+    dplyr::ungroup() %>% 
+    dplyr::filter(between(.data$year, start_year, start_year + time_horizon)) %>% 
+    dplyr::group_by(!!!rlang::syms(id_cols)) %>% 
+    dplyr::arrange(.data$year, .by_group = TRUE) %>% 
+    dplyr::mutate(
+      plan_technology_build_out = dplyr::last(.data[[plan_tech_prod_from]]) - dplyr::first(.data[[plan_tech_prod_from]]),
+      scen_technology_build_out = dplyr::last(.data[[scen_tech_prod_from]]) - dplyr::first(.data[[scen_tech_prod_from]]), 
+      tech_build_out_alignment = .data$plan_technology_build_out / .data$scen_technology_build_out
+    ) %>% 
+    dplyr::ungroup()
+}
+
+
+check_share_logic <- function(
+  data, 
+  numerator_group, 
+  denominator_group
+) {
+  logic <- tibble::tibble(numerator_group = n_distinct(data[[numerator_group]], data[[denominator_group]]), denominator_group = n_distinct(data[[denominator_group]]))
+  assertr::verify(logic, numerator_group > denominator_group)
+  return(data)
+}
+
+check_group_share_data <- function(
+  data, 
+  numerator_group, 
+  denominator_group,
+  values_from,
+  check_logic
+) {
+  # ungroup input 
+  data <- data %>%
+    dplyr::ungroup()
+  # check essential names
+  data %>%
+    r2dii.utils::check_crucial_names(c(values_from, numerator_group, denominator_group)) %>% 
+    assertr::verify(class(.data[[values_from]]) == "numeric")
+  # check percent logic 
+  if (check_logic == TRUE) {
+    data %>%
+      check_share_logic(numerator_group, denominator_group)
+  } else if (check_logic == FALSE) {
+    warning("No logic check applied!")
+    return(data)
+  }
+}
+
+check_group_share_parameters <- function(
+  id_cols,
+  numerator_group, 
+  denominator_group,
+  values_from,
+  name_to,
+  check_logic
+) {
+  stopifnot(is.character(id_cols) | is.null(id_cols))
+  stopifnot(is.character(numerator_group))
+  stopifnot(is.character(denominator_group))
+  stopifnot(is.character(values_from))
+  stopifnot(is.character(name_to) | is.null(name_to))
+  stopifnot(is.logical(check_logic))
+}
+
+summarise_by_group_share <- function(
+  .data,
+  id_cols = NULL,
+  numerator_group = "technology", 
+  denominator_group = "ald_sector",
+  values_from = "plan_alloc_wt_tech_prod",
+  name_to = NULL,
+  check_logic = TRUE,
+  ...
+) {
+  # check parameters
+  check_group_share_parameters(
+    id_cols,
+    numerator_group, 
+    denominator_group,
+    values_from,
+    name_to,
+    check_logic
+  )
+  # check input logic 
+  .data <- .data %>% 
+    check_group_share_data(
+      numerator_group, 
+      denominator_group,
+      values_from,
+      check_logic
+    )
+  # calculate exposure 
+  .data <- .data %>%
+    dplyr::filter(!is.nan(.data[[values_from]])) %>% 
+    dplyr::group_by(
+      !!!rlang::syms(id_cols),
+      .data[[numerator_group]],
+      .data[[denominator_group]]
+    ) %>% 
+    dplyr::summarise(group_share = sum(.data[[values_from]], ...)) %>% 
+    group_by(
+      !!!rlang::syms(id_cols),
+      .data[[denominator_group]]
+    ) %>% 
+    dplyr::mutate(group_share = .data$group_share / sum(.data$group_share, ...)) %>% 
+    dplyr::ungroup()
+  # rename output
+  if (!is.null(name_to)) {
+    .data %>% 
+      plyr::rename(c("group_share" = name_to))
+  } else if (is.null(name_to)) {
+    return(.data)
+  }
+}
+
+summarise_ald_technology_exposure <- function(
+  .data,
+  ...,
+  production = "plan_alloc_wt_tech_prod"
+) {
+  .data %>%
+    r2dii.utils::check_crucial_names(c(production, "ald_sector", "technology")) %>% 
+    filter(
+      !is.nan(.data[[production]]),
+      !is.na(ald_sector)
+    ) %>% 
+    group_by(
+      ...,
+      ald_sector,
+      technology
+    ) %>% 
+    summarise(technology_exposure = sum(.data[[production]], na.rm = TRUE)) %>% 
+    group_by(
+      ...,
+      ald_sector
+    ) %>% 
+    mutate(technology_exposure = .data$technology_exposure / sum(.data$technology_exposure)) %>% 
+    ungroup()
+}
+
+
+
+summarise_emisson_factor <- function(
+  .data, 
+  ...,
+  production_from = "plan_alloc_wt_tech_prod", 
+  emission_factor_from = "plan_emission_factor",
+  sector_from = "ald_sector"
+) {
+  .data %>% 
+    r2dii.utils::check_crucial_names(c(production_from, emission_factor_from, sector_from)) %>% 
+    filter(
+      !is.nan(.data[[production_from]]),
+      !is.nan(.data[[emission_factor_from]]),
+      !is.na(.data[[sector_from]])
+    ) %>% 
+    group_by(
+      ..., 
+      .data[[sector_from]]
+    ) %>%
+    mutate(weight = .data[[production_from]] / sum(.data[[production_from]], na.rm = TRUE)) %>%
+    summarize(
+      production = sum(.data[[production_from]], na.rm = TRUE),
+      emission_factor = sum(.data[[emission_factor_from]] * .data$weight / sum(.data$weight))
+    ) %>%
+    ungroup()
+}
+
+calculate_build_out_alignment <- function(
+  .data,
+  start_year = 2019
+  ) {
+  # define things
+  high_carbon_technologies <- c("oil","gas","coal","coalcap","gascap","ice", "oilcap")
+  other_sectors <- c("shipping","steel","aviation","cement")
+  # the mega 
+  .data %>%
+    group_by(
+      .data$investor_name, 
+      .data$portfolio_name,
+      .data$asset_type, 
+      .data$scenario, 
+      .data$scenario_geography, 
+      .data$ald_sector, 
+      .data$technology
+    ) %>% 
+    mutate(reference_value = sum(if_else(year == start_year,plan_alloc_wt_tech_prod,0))) %>% 
+    mutate(
+      build_out_deviation_tech = case_when(
+        !technology %in% high_carbon_technologies & (scen_alloc_wt_tech_prod - reference_value) == 0 & plan_alloc_wt_tech_prod > 0 ~ 1,
+        !technology %in% high_carbon_technologies ~ (plan_alloc_wt_tech_prod - scen_alloc_wt_tech_prod) / (scen_alloc_wt_tech_prod - reference_value),
+        technology %in% high_carbon_technologies & (scen_alloc_wt_tech_prod - reference_value) == 0 & (plan_alloc_wt_tech_prod > reference_value) ~ 1,
+        technology %in% high_carbon_technologies & (scen_alloc_wt_tech_prod - reference_value) == 0 & (plan_alloc_wt_tech_prod < reference_value) ~ -1,
+        technology %in% high_carbon_technologies & plan_alloc_wt_tech_prod > scen_alloc_wt_tech_prod ~ (plan_alloc_wt_tech_prod - scen_alloc_wt_tech_prod) / abs(scen_alloc_wt_tech_prod - reference_value),
+        TRUE ~ -(plan_alloc_wt_tech_prod - scen_alloc_wt_tech_prod) / (scen_alloc_wt_tech_prod - reference_value))
+    ) %>% 
+    mutate(build_out_deviation_sec = (plan_sec_emissions_factor - scen_sec_emissions_factor) / scen_sec_emissions_factor) %>% 
+    mutate(
+      build_out_deviation_sec = if_else(scen_sec_emissions_factor == 0, if_else(plan_sec_emissions_factor == 0, 0, -1), build_out_deviation_sec),
+      build_out_deviation = if_else(ald_sector %in% other_sectors,build_out_deviation_sec, build_out_deviation_tech)
+    ) %>% 
+    mutate(
+      build_out_alignment = case_when(
+        ald_sector %in% other_sectors ~ -build_out_deviation,
+        technology %in% high_carbon_technologies ~ -build_out_deviation,
+        TRUE ~ build_out_deviation
+      )
+    ) %>% 
+    ungroup()
+}
+
+filter_unique_cross_sector_results <- function(
+  .data, 
+  scenario = "b2ds",
+  allocation = "portfolio_weight",
+  start_year = 2019
+) {
+  .data %>% 
+    ungroup() %>% 
+    filter(
+      .data$scenario == "b2ds", 
+      .data$allocation == "portfolio_weight",
+      between(.data$year, start_year, start_year + 5), 
+      (.data$scenario_geography == "globalaggregate" & .data$ald_sector == "power") | (.data$ald_sector != "power" & .data$scenario_geography == "global")
+    )
+}
+
+
 summarise_portfolio_paris_alignment <- function(
   results, 
   portfolio,
-  scenario = "b2ds", 
-  allocation = "portfolio_weight", 
+  alignment_from = "trajectory_alignment",
   start_year = 2019,
   git_path = here::here(),
   nice_score = TRUE
 ) {
-  # filter data 
-  results <- results %>% 
-    filter(
-      .data$scenario == tolower(scenario), 
-      .data$allocation == tolower(allocation),
-      between(.data$year, start_year, start_year + 5), 
-      (.data$scenario_geography == "globalaggregate" & .data$ald_sector == "power") | (.data$ald_sector != "power" & .data$scenario_geography == "global")
-    )
-  # fix trajectory alignment 
-  results <- results %>% 
-    mutate(
-      trajectory_alignment = case_when(
-        .data$trajectory_alignment > 1 ~ 1,
-        .data$trajectory_alignment < -1 ~ -1,
-        TRUE ~ .data$trajectory_alignment
-      )
-    )
   # apply weight to get portfolio results 
-  results <- influencemap_weighting_methodology(
-    results,
-    portfolio,
-    alignment_metric = "trajectory_alignment", 
-    git_path
-  )
-  # add nice score if you would like 
-  if (nice_score == TRUE) {
-    results %>% 
-      mutate(
-        paris_alignment_score = case_when(
-          paris_alignment_score > 1 ~ 100,
-          paris_alignment_score < -1 ~ -100,
-          TRUE ~ paris_alignment_score * 100
-        )
+  influencemap_weighting_methodology(results, portfolio)
+}
+
+add_nice_values <- function(
+  data, 
+  values_from = "paris_alignment_score", 
+  scale = 100,
+  min = -200, 
+  max = 200
+) {
+  data %>% 
+    assertr::verify(class(.data[[values_from]]) == "numeric") %>% 
+    mutate(
+      "{values_from}" := case_when(
+        .data[[values_from]] * scale > max ~ max,
+        .data[[values_from]] * scale < min ~ min,
+        TRUE ~ .data[[values_from]] * scale
       )
-  } else if (nice_score == FALSE) {
-    results
-    }
+    )
 }
 
 
-summarise_pacta_sector_exposure <- function(
+
+
+summarise_ald_sector_exposure <- function(
   .data, 
   ...,
   value_usd = "value_usd"
@@ -63,7 +333,7 @@ summarise_pacta_sector_exposure <- function(
   # clean data 
   .data <- .data %>%
     assertr::verify(has_all_names("security_mapped_sector")) %>% 
-    mutate(across(matches(c("security_mapped_sector", "asset_type"), tolower)))
+    mutate(across(matches(c("security_mapped_sector"), tolower)))
   # create nice pacta sectors
   .data <- .data %>% 
     mutate(
@@ -74,7 +344,6 @@ summarise_pacta_sector_exposure <- function(
   .data <- .data %>% 
     group_by(
       ...,
-      asset_type, 
       security_mapped_sector
     ) %>%
     summarise(sector_exposure = sum(.data[[value_usd]], na.rm = TRUE))
@@ -367,7 +636,7 @@ load_results <- function(project_location = project_location) {
   portfolio_debt_results <- read_rds(path(project_location, "40_Results", "Bonds_results_portfolio", ext = "rda")) %>% 
     clean_names(case = "snake")
   portfolio_equity_results <- read_rds(path(project_location, "40_Results", "Equity_results_portfolio", ext = "rda")) %>% 
-    clean_names(case = "snake")
+    clean_names(case = "snake") 
   # add asset-type 
   portfolio_debt_results$asset_type <- "bonds"
   portfolio_equity_results$asset_type <- "equity"
@@ -387,7 +656,8 @@ load_results <- function(project_location = project_location) {
   )
   # make names nicers 
   portfolio_results %>% 
-    mutate(across(matches(columns_to_lower), tolower)) 
+    mutate(across(matches(columns_to_lower), tolower)) %>% 
+    ungroup()
 }
 
 # load data sets if needed (check indicator list for this)
@@ -598,8 +868,15 @@ connect_results_with_weights <- function(
       by = c("ald_sector", "technology")
     )
   # prepare audit file to show the relative portfolio weight in each sector 
-  asset_type_sector_exposure <- portfolio %>%
-    summarise_pacta_sector_exposure(investor_name, portfolio_name) %>% 
+  asset_type_sector_exposure <- portfolio %>% 
+    summarise_by_group_share(
+      id_cols = c("investor_name", "portfolio_name"),
+      values_from = "value_usd",
+      numerator_group = "security_mapped_sector", 
+      denominator_group = "asset_type", 
+      name_to = "sector_exposure", 
+      na.rm = TRUE
+    ) %>% 
     rename(ald_sector = .data$security_mapped_sector)
   # join audit exposure to result file 
   results <- results %>%
@@ -609,7 +886,14 @@ connect_results_with_weights <- function(
     )
   # asset_type exposure
   asset_type_exposure <- portfolio %>% 
-    summarise_asset_type_exposure(investor_name, portfolio_name)
+    summarise_by_group_share(
+      id_cols = "investor_name",
+      values_from = "value_usd",
+      numerator_group = "asset_type", 
+      denominator_group = "portfolio_name", 
+      name_to = "asset_type_exposure", 
+      na.rm = TRUE
+    )
   # join asset type exposure with results 
   results %>%
     inner_join(
@@ -622,7 +906,7 @@ connect_results_with_weights <- function(
 influencemap_weighting_methodology <- function(
   results,
   portfolio,
-  alignment_metric = "trajectory_alignment", 
+  alignment_from = "trajectory_alignment",
   git_path = here::here()
 ) {
   results <- connect_results_with_weights(results, portfolio, git_path)
@@ -632,13 +916,16 @@ influencemap_weighting_methodology <- function(
       .data$investor_name, 
       .data$portfolio_name, 
       .data$asset_type, 
-      .data$ald_sector
+      .data$ald_sector, 
+      .data$scenario, 
+      .data$scenario_geography, 
+      .data$allocation
     ) %>%
     mutate(
       alignment_sector = if_else(
         !is.na(.data$technology_weight), 
-        stats::weighted.mean(.data[[alignment_metric]], .data$technology_weight * .data$plan_alloc_wt_tech_prod, na.rm = TRUE),
-        .data[[alignment_metric]]
+        stats::weighted.mean(.data[[alignment_from]], .data$technology_weight * .data$plan_alloc_wt_tech_prod, na.rm = TRUE),
+        .data[[alignment_from]]
       )
     )
   # then weight up to asset_type level 
@@ -647,14 +934,20 @@ influencemap_weighting_methodology <- function(
       .data$investor_name, 
       .data$portfolio_name, 
       .data$asset_type,
-      .data$asset_type_exposure
+      .data$asset_type_exposure,
+      .data$scenario, 
+      .data$scenario_geography, 
+      .data$allocation
     ) %>%
     summarise(alignment_asset_type = stats::weighted.mean(.data$alignment_sector, .data$sector_weight * .data$sector_exposure, na.rm = TRUE))
   # calculate portfolio level results 
   results %>%
     group_by(
       .data$investor_name, 
-      .data$portfolio_name
+      .data$portfolio_name,
+      .data$scenario, 
+      .data$scenario_geography, 
+      .data$allocation
     ) %>%
     summarise(paris_alignment_score = stats::weighted.mean(.data$alignment_asset_type, .data$asset_type_exposure, na.rm = TRUE)) %>% 
     ungroup()
