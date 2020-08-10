@@ -121,7 +121,7 @@ check_group_weight_parameters <- function(
     assertr::verify(class(.data[[values_from]]) == "numeric")
 }
 
-summarise_by_group_weight <- function(
+summarise_group_weight <- function(
   .data, 
   id_cols,
   weights_from,
@@ -201,7 +201,7 @@ check_group_share_parameters <- function(
   stopifnot(is.character(name_to) | is.null(name_to))
 }
 
-summarise_by_group_share <- function(
+summarise_group_share <- function(
   .data,
   id_cols = NULL,
   numerator_group = "technology", 
@@ -854,7 +854,7 @@ connect_results_with_weights <- function(
     )
   # prepare audit file to show the relative portfolio weight in each sector 
   asset_type_sector_exposure <- portfolio %>% 
-    summarise_by_group_share(
+    summarise_group_share(
       id_cols = c("investor_name", "portfolio_name"),
       values_from = "value_usd",
       numerator_group = "security_mapped_sector", 
@@ -871,7 +871,7 @@ connect_results_with_weights <- function(
     )
   # asset_type exposure
   asset_type_exposure <- portfolio %>% 
-    summarise_by_group_share(
+    summarise_group_share(
       id_cols = "investor_name",
       values_from = "value_usd",
       numerator_group = "asset_type", 

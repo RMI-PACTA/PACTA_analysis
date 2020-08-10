@@ -94,7 +94,7 @@ complete_fund_matrix <- complete_fund_matrix %>%
 portfolio <- load_portfolio(project_location)
 
 security_mapped_sector_exposure <- portfolio %>% 
-  summarise_by_group_share(
+  summarise_group_share(
     id_cols = "investor_name",
     values_from = "value_usd",
     numerator_group = "security_mapped_sector", 
@@ -158,7 +158,7 @@ paris_alignment_score <- results %>%
 ###########################################
 
 technology_exposure <- results %>% 
-  summarise_by_group_share(
+  summarise_group_share(
     id_cols = c("investor_name", "portfolio_name"),
     values_from = "plan_alloc_wt_tech_prod",
     numerator_group = "technology", 
@@ -209,7 +209,7 @@ technology_alignment <- results %>%
 
 country_exposure <- portfolio %>% 
   filter(!is.na(country_of_domicile)) %>% 
-  summarise_by_group_share(
+  summarise_group_share(
     id_cols = "investor_name",
     values_from = "value_usd",
     numerator_group = "country_of_domicile", 
@@ -220,7 +220,7 @@ country_exposure <- portfolio %>%
 
 asset_type_exposure <- portfolio %>% 
   filter(asset_type %in% c("equity", "bonds")) %>% 
-  summarise_by_group_share(
+  summarise_group_share(
     id_cols = "investor_name",
     values_from = "value_usd",
     numerator_group = "asset_type", 
@@ -231,7 +231,7 @@ asset_type_exposure <- portfolio %>%
 
 pacta_sector_exposure <- portfolio %>% 
   mutate(pacta_sector = if_else(security_mapped_sector != "other", "pacta_sector", "other_sector")) %>% 
-  summarise_by_group_share(
+  summarise_group_share(
     id_cols = "investor_name",
     values_from = "value_usd",
     numerator_group = "pacta_sector", 
@@ -253,7 +253,7 @@ sensentive_exposures <- portfolio %>%
     id_cols = c("investor_name", "portfolio_name"), 
     market_value_from = "value_usd"
   ) %>% 
-  summarise_by_group_share(
+  summarise_group_share(
     id_cols = "investor_name", 
     numerator_group = "sensitive_sector", 
     denominator_group = "portfolio_name", 
@@ -262,7 +262,35 @@ sensentive_exposures <- portfolio %>%
     na.rm = TRUE
   )
 
+###########################################
+###########################################
+# weighted emissions factor 
+###########################################
+###########################################
 
+results <- load_results(project_location)
+
+tmp <- results %>% 
+  filter(
+    !is.nan(plan_emission_factor),
+    scenario == "b2ds", 
+    scenario_geography == "global", 
+    year == 2020, 
+    allocation == "portfolio_weight"
+  ) %>% 
+  calculate_group_share(
+    id_cols = c("investor_name", "portfolio_name", "asset_type"), 
+    numerator_group = "technology", 
+    denominator_group = "ald_sector", 
+    values_from = "plan_alloc_wt_tech_prod", 
+    name_to = "technology_share", 
+    na.rm = TRUE
+  ) %>% 
+  summarise_group_weight(
+    id_cols = c("investor_name", "portfolio_name", "asset_type", "ald_sector"), 
+    weights_from = "technology_share", 
+    values_from = "plan_emission_factor"
+  )
 
 
 
