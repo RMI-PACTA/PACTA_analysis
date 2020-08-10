@@ -166,23 +166,11 @@ calculate_technology_alignment <- function(
     dplyr::ungroup()
 }
 
-
-check_share_logic <- function(
-  data, 
-  numerator_group, 
-  denominator_group
-) {
-  logic <- tibble::tibble(numerator_group = n_distinct(data[[numerator_group]], data[[denominator_group]]), denominator_group = n_distinct(data[[denominator_group]]))
-  assertr::verify(logic, numerator_group > denominator_group)
-  return(data)
-}
-
 check_group_share_data <- function(
   data, 
   numerator_group, 
   denominator_group,
-  values_from,
-  check_logic
+  values_from
 ) {
   # ungroup input 
   data <- data %>%
@@ -191,14 +179,6 @@ check_group_share_data <- function(
   data %>%
     r2dii.utils::check_crucial_names(c(values_from, numerator_group, denominator_group)) %>% 
     assertr::verify(class(.data[[values_from]]) == "numeric")
-  # check percent logic 
-  if (check_logic == TRUE) {
-    data %>%
-      check_share_logic(numerator_group, denominator_group)
-  } else if (check_logic == FALSE) {
-    warning("No logic check applied!")
-    return(data)
-  }
 }
 
 check_group_share_parameters <- function(
@@ -206,15 +186,13 @@ check_group_share_parameters <- function(
   numerator_group, 
   denominator_group,
   values_from,
-  name_to,
-  check_logic
+  name_to
 ) {
   stopifnot(is.character(id_cols) | is.null(id_cols))
   stopifnot(is.character(numerator_group))
   stopifnot(is.character(denominator_group))
   stopifnot(is.character(values_from))
   stopifnot(is.character(name_to) | is.null(name_to))
-  stopifnot(is.logical(check_logic))
 }
 
 summarise_by_group_share <- function(
@@ -224,7 +202,6 @@ summarise_by_group_share <- function(
   denominator_group = "ald_sector",
   values_from = "plan_alloc_wt_tech_prod",
   name_to = NULL,
-  check_logic = TRUE,
   ...
 ) {
   # check parameters
@@ -233,20 +210,17 @@ summarise_by_group_share <- function(
     numerator_group, 
     denominator_group,
     values_from,
-    name_to,
-    check_logic
+    name_to
   )
   # check input logic 
   .data <- .data %>% 
     check_group_share_data(
       numerator_group, 
       denominator_group,
-      values_from,
-      check_logic
+      values_from
     )
   # calculate exposure 
   .data <- .data %>%
-    dplyr::filter(!is.nan(.data[[values_from]])) %>% 
     dplyr::group_by(
       !!!rlang::syms(id_cols),
       .data[[numerator_group]],
