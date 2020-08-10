@@ -30,9 +30,13 @@ create_portfolio_subfolders <- function(file_names, portfolio_name_ref_all){
   
   folders <- c("30_Processed_Inputs", "40_Results", "50_Outputs")
   
-  locs_to_create <- paste0(project_location, "/", folders, "/", file_names$loc_name)
+  locs_to_create <- folders %>%
+    purrr::map(~ paste0(project_location, "/", .x, "/", file_names$loc_name)) %>% 
+    flatten_chr()
   
-  lapply(locs_to_create, dir.create)    
+  locs_to_create %>% 
+    purrr::map(~ dir.create(.x))
+  
   
 }
 
@@ -102,7 +106,7 @@ add_naming_to_portfolio <- function(portfolio_raw){
 
 get_input_files <- function(portfolio_name_ref_all){
   
-  portfolio <- NA
+  portfolio <- tibble()
   
   input_path <- paste0(project_location, "/20_Raw_Inputs/")
   
@@ -113,6 +117,12 @@ get_input_files <- function(portfolio_name_ref_all){
   input_names = gsub(".csv", "",input_files)
   input_names = gsub(".txt", "",input_names)
   input_names = gsub(".xlsx", "",input_names)
+  
+  input_file_type <- unique(tools::file_ext(grep(portfolio_name_ref_all,list.files(path = input_path,full.names = F), value = T)))
+  if (!input_file_type %in% c("csv", "xlsx", "txt")) {
+    write_log(msg = "Input file format not supported. Must be .csv, .xlsx or .txt")
+  }
+  
   
   if(!all(portfolio_name_ref_all %in% input_names)){
     write_log(msg = "Difference in input files and input argument portfolio names.")
@@ -170,10 +180,6 @@ read_web_input_file <- function(input_file_path){
   
   file_ext = tools::file_ext(input_file_path)
   
-  if (!file_ext %in% c("csv", "xlsx", "txt")) {
-    write_log(msg = "Input file format not supported. Must be .csv, .xlsx or .txt")
-  }
-  
   if (file_ext == "csv"){
     input_file <- read_csv(input_file_path)
     
@@ -216,6 +222,7 @@ check_input_file_contents <- function(portfolio_, portfolio_name_in, investor_na
   
   necessary_columns <- c(grouping_variables, "market_value", "currency", "isin")
   
+  # if portfolio_name and investor_name are not among the columns of the input file, they are created using the values from the parameter file
   if (!"portfolio_name" %in% colnames(portfolio_clean)){portfolio_clean$portfolio_name = portfolio_name_in}
   if (!"investor_name" %in% colnames(portfolio_clean)){portfolio_clean$investor_name = investor_name_in}
   
