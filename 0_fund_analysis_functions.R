@@ -248,6 +248,53 @@ summarise_by_group_share <- function(
   }
 }
 
+calculate_group_share <- function(
+  .data,
+  id_cols = NULL,
+  numerator_group = "technology", 
+  denominator_group = "ald_sector",
+  values_from = "plan_alloc_wt_tech_prod",
+  name_to = NULL,
+  ...
+) {
+  # check parameters
+  check_group_share_parameters(
+    id_cols,
+    numerator_group, 
+    denominator_group,
+    values_from,
+    name_to
+  )
+  # check input logic 
+  .data <- .data %>% 
+    check_group_share_data(
+      numerator_group, 
+      denominator_group,
+      values_from
+    )
+  # calculate exposure 
+  .data <- .data %>%
+    dplyr::group_by(
+      !!!rlang::syms(id_cols),
+      .data[[numerator_group]],
+      .data[[denominator_group]]
+    ) %>% 
+    dplyr::mutate(group_share = sum(.data[[values_from]], ...)) %>% 
+    group_by(
+      !!!rlang::syms(id_cols),
+      .data[[denominator_group]]
+    ) %>% 
+    dplyr::mutate(group_share = .data$group_share / sum(.data$group_share, ...)) %>% 
+    dplyr::ungroup()
+  # rename output
+  if (!is.null(name_to)) {
+    .data %>% 
+      plyr::rename(c("group_share" = name_to))
+  } else if (is.null(name_to)) {
+    return(.data)
+  }
+}
+
 calculate_build_out_alignment <- function(
   .data,
   start_year = 2019
