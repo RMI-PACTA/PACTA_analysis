@@ -67,9 +67,11 @@ calculate_sensentive_exposures <- function(
 }
 
 load_esg_raw_data <- function() {
+  # list files 
   files <- list.files(path("data", "iss_esg_data"))
+  # check file count 
   stopifnot(n_distinct(files) == 11)
-  
+  # load and map files 
   data <- map_df(
     list.files(path("data", "iss_esg_data")), 
     function(x) {
@@ -77,23 +79,27 @@ load_esg_raw_data <- function() {
         mutate(source = x)
     }
   )
-  
+  # clean input data 
   data <- data %>% 
     clean_names(case = "snake") %>% 
-    filter(str_detect(isin, "[[:upper:]]{2}[[:alnum:]]{10}")) %>% 
+    filter(str_detect(isin, "[[:upper:]]{2}[[:alnum:]]{10}"))
+  # extract sector 
+  data <- data %>% 
     mutate(
       sensitive_sector = str_remove(source, "2DII - "),
       sensitive_sector = str_remove(sensitive_sector, "[[:punct:]][[:digit:]]{8}[[:punct:]]xlsx$"),
       sensitive_sector = snakecase::to_any_case(sensitive_sector, case = "snake"),
       sensitive_sector = str_remove(sensitive_sector, "_issuers$")
-    ) %>% 
+    )
+  # add current data 
+  data <- data %>% 
     mutate(last_updated = Sys.Date())
-  
+  # make sure no files are dropped
   stopifnot(n_distinct(data$source) == 11)
-  
+  # save output
   data %>% 
     write_rds(path("data", "sensentive_sector_exposure", ext = "rds"))
-  
+  # return data
   return(data)
 }
 
@@ -134,7 +140,7 @@ summarise_by_group_weight <- function(
   # weight value 
   .data <- .data %>% 
     dplyr::group_by(!!!rlang::syms(id_cols)) %>% 
-    dplyr::summarise(weighted_value = stats::weighted.mean(sum(.data[[weights_from]], ...) * sum(.data[[weights_from]], ...))) %>% 
+    dplyr::summarise(weighted_value = stats::weighted.mean(.data[[values_from]], .data[[weights_from]])) %>% 
     dplyr::ungroup()
   # rename output
   if (!is.null(name_to)) {
@@ -242,59 +248,6 @@ summarise_by_group_share <- function(
   }
 }
 
-summarise_ald_technology_exposure <- function(
-  .data,
-  ...,
-  production = "plan_alloc_wt_tech_prod"
-) {
-  .data %>%
-    r2dii.utils::check_crucial_names(c(production, "ald_sector", "technology")) %>% 
-    filter(
-      !is.nan(.data[[production]]),
-      !is.na(ald_sector)
-    ) %>% 
-    group_by(
-      ...,
-      ald_sector,
-      technology
-    ) %>% 
-    summarise(technology_exposure = sum(.data[[production]], na.rm = TRUE)) %>% 
-    group_by(
-      ...,
-      ald_sector
-    ) %>% 
-    mutate(technology_exposure = .data$technology_exposure / sum(.data$technology_exposure)) %>% 
-    ungroup()
-}
-
-
-
-summarise_emisson_factor <- function(
-  .data, 
-  ...,
-  production_from = "plan_alloc_wt_tech_prod", 
-  emission_factor_from = "plan_emission_factor",
-  sector_from = "ald_sector"
-) {
-  .data %>% 
-    r2dii.utils::check_crucial_names(c(production_from, emission_factor_from, sector_from)) %>% 
-    filter(
-      !is.nan(.data[[production_from]]),
-      !is.nan(.data[[emission_factor_from]]),
-      !is.na(.data[[sector_from]])
-    ) %>% 
-    group_by(
-      ..., 
-      .data[[sector_from]]
-    ) %>%
-    mutate(weight = .data[[production_from]] / sum(.data[[production_from]], na.rm = TRUE)) %>%
-    summarize(
-      production = sum(.data[[production_from]], na.rm = TRUE),
-      emission_factor = sum(.data[[emission_factor_from]] * .data$weight / sum(.data$weight))
-    ) %>%
-    ungroup()
-}
-
 calculate_build_out_alignment <- function(
   .data,
   start_year = 2019
@@ -354,7 +307,6 @@ filter_unique_cross_sector_results <- function(
     )
 }
 
-
 summarise_portfolio_paris_alignment <- function(
   results, 
   portfolio,
@@ -385,38 +337,6 @@ add_nice_values <- function(
     )
 }
 
-
-
-
-summarise_ald_sector_exposure <- function(
-  .data, 
-  ...,
-  value_usd = "value_usd"
-) {
-  # clean data 
-  .data <- .data %>%
-    assertr::verify(has_all_names("security_mapped_sector")) %>% 
-    mutate(across(matches(c("security_mapped_sector"), tolower)))
-  # create nice pacta sectors
-  .data <- .data %>% 
-    mutate(
-      security_mapped_sector = if_else(security_mapped_sector %in% c("other", "unclassifiable"), "other", security_mapped_sector),
-      security_mapped_sector = if_else(security_mapped_sector == "coal", "coal_mining", security_mapped_sector)
-    )
-  # summarise and then reclassify names 
-  .data <- .data %>% 
-    group_by(
-      ...,
-      security_mapped_sector
-    ) %>%
-    summarise(sector_exposure = sum(.data[[value_usd]], na.rm = TRUE))
-  # calculate share 
-  .data %>% 
-    group_by(...) %>% 
-    mutate(sector_exposure = .data$sector_exposure / sum(.data$sector_exposure, na.rm = TRUE)) %>% 
-    ungroup()
-}
-
 classify_asset_types <- function(.data) {
   # sovereign debt types 
   sovereign_types <- c(
@@ -434,57 +354,12 @@ classify_asset_types <- function(.data) {
   )
   # classify asset-types 
   .data %>% 
-    assertr::verify(has_all_names("security_bics_subgroup", "security_type", "flag")) %>% 
+    assertr::verify(has_all_names("security_bics_subgroup", "security_type")) %>% 
     mutate(
       asset_type = if_else(tolower(security_bics_subgroup) %in% tolower(sovereign_types), "sovereign", asset_type),
       asset_type = if_else(tolower(security_type) %in% tolower(sovereign_types), "sovereign", asset_type),
       asset_type = if_else(asset_type == "unclassifiable", "others", asset_type)
     )
-}
-
-summarise_asset_type_exposure <- function(
-  .data, 
-  ...,
-  value_usd = "value_usd"
-) {
-  # summarize total asset type value 
-  .data %>% 
-    classify_asset_types() %>% 
-    group_by(
-      ..., 
-      asset_type
-    ) %>% 
-    summarize(asset_type_exposure = sum(.data[[value_usd]], na.rm = TRUE)) %>% 
-    group_by(...) %>% 
-    mutate(asset_type_exposure = asset_type_exposure / sum(asset_type_exposure, na.rm = TRUE))
-}
-
-summarise_portfolio_value <- function(
-  .data, 
-  ...,
-  value_usd = "value_usd"
-) {
-  .data %>% 
-    group_by(...) %>% 
-    summarise(fund_size = sum(.data[[value_usd]], na.rm = TRUE)) %>% 
-    ungroup()
-}
-
-summarise_portfolio_exposure <- function(
-  .data, 
-  ...,
-  value_usd = "value_usd", 
-  portfolio_name = "portfolio_name"
-) {
-  .data %>% 
-    group_by(
-      .data[[portfolio_name]],
-      ...
-    ) %>% 
-    summarise(value = sum(.data[[value_usd]], na.rm = TRUE)) %>% 
-    group_by(.data[[portfolio_name]]) %>% 
-    mutate(exposure = .data$value / sum(.data$value, na.rm = TRUE)) %>% 
-    ungroup()
 }
 
 prep_debt_economy <- function() {

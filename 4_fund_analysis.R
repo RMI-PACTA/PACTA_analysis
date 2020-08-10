@@ -240,6 +240,11 @@ pacta_sector_exposure <- portfolio %>%
     na.rm = TRUE
   )
 
+###########################################
+###########################################
+# sensentive sector exposure
+###########################################
+###########################################
 
 portfolio <- load_portfolio(project_location)
 
