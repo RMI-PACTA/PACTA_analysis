@@ -1,8 +1,8 @@
 default:
 
-  project_name: mfm_v4_07082020
+  project_name: daisy_test5
 
   project_internal:
     twodii_internal: FALSE
-    project_location_ext: /Volumes/Photos/
+    project_location_ext: /Users/vincentjerosch-herold/Dropbox (2° Investing)/PortCheck_v2/10_Projects
     data_location_ext: /Users/vincentjerosch-herold/Dropbox (2° Investing)/PortCheck/00_Data/07_AnalysisInputs/2019Q4_08052020_2020

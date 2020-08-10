@@ -3,8 +3,44 @@ library(janitor)
 library(assertr)
 library(fs)
 
-# hi Klaus
-# hi Vincen
+load_esg_raw_data <- function() {
+  files <- list.files(path("data", "iss_esg_data"))
+  stopifnot(n_distinct(files) == 11)
+  
+  data <- map_df(
+    list.files(path("data", "iss_esg_data")), 
+    function(x) {
+      read_xlsx(path("data", "iss_esg_data", x)) %>% 
+        mutate(source = x)
+    }
+  )
+  
+  data <- data %>% 
+    clean_names(case = "snake") %>% 
+    filter(str_detect(isin, "[[:upper:]]{2}[[:alnum:]]{10}")) %>% 
+    mutate(
+      sensitive_sector = str_remove(source, "2DII - "),
+      sensitive_sector = str_remove(sensitive_sector, "[[:punct:]][[:digit:]]{8}[[:punct:]]xlsx$"),
+      sensitive_sector = str_to_lower(sensitive_sector),
+      sensitive_sector = str_remove(sensitive_sector, "_issuers$")
+    ) %>% 
+    mutate(date_updated = Sys.Date())
+  
+  stopifnot(n_distinct(data$source) == 11)
+  
+  data %>% 
+    write_rds(path("data", "sensentive_sector_exposure", ext = "rds"))
+  
+  return(data)
+}
+
+check <- data %>% 
+  distinct(
+    source, 
+    sensitive_sector
+  )
+
+
 
 check_group_weight_parameters <- function(
   data,
@@ -53,8 +89,6 @@ summarise_by_group_weight <- function(
     return(.data)
   }
 }
-
-
 
 calculate_technology_alignment <- function(
   .data, 
@@ -235,7 +269,7 @@ summarise_emisson_factor <- function(
 calculate_build_out_alignment <- function(
   .data,
   start_year = 2019
-  ) {
+) {
   # define things
   high_carbon_technologies <- c("oil","gas","coal","coalcap","gascap","ice", "oilcap")
   other_sectors <- c("shipping","steel","aviation","cement")
@@ -952,7 +986,6 @@ influencemap_weighting_methodology <- function(
     summarise(paris_alignment_score = stats::weighted.mean(.data$alignment_asset_type, .data$asset_type_exposure, na.rm = TRUE)) %>% 
     ungroup()
 }
-
 
 mapped_sector_exposure <- function(
   input_audit = pacta_audit, 

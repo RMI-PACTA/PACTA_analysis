@@ -97,8 +97,8 @@ security_mapped_sector_exposure <- portfolio %>%
   summarise_by_group_share(
     id_cols = "investor_name",
     values_from = "value_usd",
-    numerator_from = "security_mapped_sector", 
-    denominator_from = "portfolio_name", 
+    numerator_group = "security_mapped_sector", 
+    denominator_group = "portfolio_name", 
     name_to = "sector_exposure", 
     na.rm = TRUE
   )
@@ -131,8 +131,7 @@ paris_alignment_score <- results %>%
   summarise_portfolio_paris_alignment(
     portfolio,
     start_year = 2019,
-    alignment_from = "trajectory_alignment",
-    git_path = here::here()
+    alignment_from = "trajectory_alignment"
   )
 
 results <- load_results(project_location) %>% 
@@ -149,8 +148,7 @@ paris_alignment_score <- results %>%
   summarise_portfolio_paris_alignment(
     portfolio,
     start_year = 2019,
-    alignment_from = "build_out_alignment",
-    git_path = here::here()
+    alignment_from = "build_out_alignment"
   )
 
 ###########################################
@@ -163,8 +161,8 @@ technology_exposure <- results %>%
   summarise_by_group_share(
     id_cols = c("investor_name", "portfolio_name"),
     values_from = "plan_alloc_wt_tech_prod",
-    numerator_from = "technology", 
-    denominator_from = "ald_sector", 
+    numerator_group = "technology", 
+    denominator_group = "ald_sector", 
     name_to = "technology_exposure", 
     na.rm = TRUE
   )
@@ -177,16 +175,6 @@ technology_exposure <- results %>%
 
 results <- load_results(project_location)
 portfolio <- load_portfolio(project_location)
-
-asset_type_exposure <- portfolio %>% 
-  summarise_by_group_share(
-    id_cols = "investor_name",
-    values_from = "value_usd",
-    numerator_from = "asset_type", 
-    denominator_from = "portfolio_name", 
-    name_to = "asset_type_exposure", 
-    na.rm = TRUE
-  )
 
 results <- results %>% 
   inner_join(
@@ -207,7 +195,7 @@ results <- results %>%
     values_from = "tech_build_out_alignment", 
     scale = 100,
     min = -200, 
-    max = 200
+    max = 2009
   )
 
 technology_alignment <- results %>% 
@@ -227,6 +215,28 @@ country_exposure <- portfolio %>%
     numerator_group = "country_of_domicile", 
     denominator_group = "portfolio_name", 
     name_to = "country_exposure", 
+    na.rm = TRUE
+  )
+
+asset_type_exposure <- portfolio %>% 
+  filter(asset_type %in% c("equity", "bonds")) %>% 
+  summarise_by_group_share(
+    id_cols = "investor_name",
+    values_from = "value_usd",
+    numerator_group = "asset_type", 
+    denominator_group = "portfolio_name", 
+    name_to = "asset_type_exposure", 
+    na.rm = TRUE
+  )
+
+pacta_sector_exposure <- portfolio %>% 
+  mutate(pacta_sector = if_else(security_mapped_sector != "other", "pacta_sector", "other_sector")) %>% 
+  summarise_by_group_share(
+    id_cols = "investor_name",
+    values_from = "value_usd",
+    numerator_group = "pacta_sector", 
+    denominator_group = "portfolio_name", 
+    name_to = "pacta_sector_exposure", 
     na.rm = TRUE
   )
 
