@@ -241,6 +241,21 @@ pacta_sector_exposure <- portfolio %>%
   )
 
 
+portfolio <- load_portfolio(project_location)
+
+sensentive_exposures <- portfolio %>% 
+  calculate_sensentive_exposures(
+    id_cols = c("investor_name", "portfolio_name"), 
+    market_value_from = "value_usd"
+  ) %>% 
+  summarise_by_group_share(
+    id_cols = "investor_name", 
+    numerator_group = "sensitive_sector", 
+    denominator_group = "portfolio_name", 
+    values_from = "adjusted_market_value", 
+    name_to = "sensitive_sector_exposure", 
+    na.rm = TRUE
+  )
 
 
 

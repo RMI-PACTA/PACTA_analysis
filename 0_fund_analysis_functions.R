@@ -3,6 +3,69 @@ library(janitor)
 library(assertr)
 library(fs)
 
+check_portfolio_data <- function(
+  data, 
+  crucial_names, 
+  market_value_from
+) {
+  # introduce input 
+  data <- data %>% 
+    ungroup()
+  # check crucial names 
+  data <- data %>% 
+    r2dii.utils::check_crucial_names(crucial_names)
+  # check market value class
+  data <- data %>% 
+    assertr::verify(class(.data[[market_value_from]]) == "numeric")
+  # check for negative values 
+  data <- data %>% 
+    assertr::assert(
+      within_bounds(0,Inf),
+      .data[[market_value_from]], 
+      error_fun = just_warn
+      )
+  # check isin inputs 
+  data %>% 
+    filter(str_detect(.data$isin, "[[:upper:]]{2}[[:alnum:]]{10}")) %>% 
+    assertr::verify(nrow(.) > 0)
+}
+
+calculate_sensentive_exposures <- function(
+  .data, 
+  id_cols = c("investor_name", "portfolio_name"),
+  market_value_from = "value_usd",
+  ...
+) {
+  # define crucial names 
+  crucial_names <- c(id_cols, market_value_from, "isin")
+  # check portfolio data 
+  .data <- .data %>% 
+    check_portfolio_data(crucial_names, market_value_from)
+  # load oekom data 
+  sensentive_exposures <- read_rds(path("data", "sensentive_sector_exposure", ext = "rds"))
+  # calculate the total portfolio value in each isin 
+  .data <- .data %>% 
+    group_by(
+      !!!rlang::syms(id_cols), 
+      .data$isin
+    ) %>% 
+    summarise(market_value = sum(.data[[market_value_from]], ...))
+  # join with sensentive sector data 
+  .data <- .data %>% 
+    left_join(
+      sensentive_exposures, 
+      by = "isin"
+    ) %>% # and clean na.names 
+    mutate(sensitive_sector = if_else(is.na(.data$sensitive_sector), "other", .data$sensitive_sector))
+  # scaling things to avoid increasing the portfolio's market value size 
+  .data %>% 
+    group_by(
+      !!!rlang::syms(id_cols),
+      .data$isin
+    ) %>% 
+    mutate(adjusted_market_value = .data$market_value / n())
+}
+
 load_esg_raw_data <- function() {
   files <- list.files(path("data", "iss_esg_data"))
   stopifnot(n_distinct(files) == 11)
@@ -10,7 +73,7 @@ load_esg_raw_data <- function() {
   data <- map_df(
     list.files(path("data", "iss_esg_data")), 
     function(x) {
-      read_xlsx(path("data", "iss_esg_data", x)) %>% 
+      readxl::read_xlsx(path("data", "iss_esg_data", x)) %>% 
         mutate(source = x)
     }
   )
@@ -21,10 +84,10 @@ load_esg_raw_data <- function() {
     mutate(
       sensitive_sector = str_remove(source, "2DII - "),
       sensitive_sector = str_remove(sensitive_sector, "[[:punct:]][[:digit:]]{8}[[:punct:]]xlsx$"),
-      sensitive_sector = str_to_lower(sensitive_sector),
+      sensitive_sector = snakecase::to_any_case(sensitive_sector, case = "snake"),
       sensitive_sector = str_remove(sensitive_sector, "_issuers$")
     ) %>% 
-    mutate(date_updated = Sys.Date())
+    mutate(last_updated = Sys.Date())
   
   stopifnot(n_distinct(data$source) == 11)
   
@@ -33,14 +96,6 @@ load_esg_raw_data <- function() {
   
   return(data)
 }
-
-check <- data %>% 
-  distinct(
-    source, 
-    sensitive_sector
-  )
-
-
 
 check_group_weight_parameters <- function(
   data,
