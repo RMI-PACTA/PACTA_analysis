@@ -3,6 +3,43 @@ library(janitor)
 library(assertr)
 library(fs)
 
+add_nice_names <- function(
+  values_from, 
+  names_from, 
+  values_to = NULL, 
+  names_to = NULL, 
+  names_prefix = NULL,
+  names_suffix = NULL,
+  sep = "_",
+  ...
+) {
+  # round values 
+  data <- data %>% 
+    dplyr::mutate("{values_from}" := round(.data[[values_from]], ...))
+  # add prefix or suffix 
+  if (!is.null(names_prefix) & is.null(names_suffix)) {       
+    data <- data %>% 
+      dplyr::mutate("{names_from}" := paste(names_prefix, .data[[names_from]], sep = sep))
+  } else if (!is.null(names_prefix) & !is.null(names_suffix)) {       
+    data <- data %>% 
+      dplyr::mutate("{names_from}" := paste(names_prefix, .data[[names_from]], names_suffix, sep = sep))
+  } else if (is.null(names_prefix) & !is.null(names_suffix)) {       
+    data <- data %>% 
+      dplyr::mutate("{names_from}" := paste(.data[[names_from]], names_suffix, sep = sep))
+  }
+  # rename values  
+  if (!is.null(values_to)) {
+    data <- data %>% 
+      plyr::rename(c(values_from = values_to))
+  }
+  # rename names 
+  if (!is.null(values_to)) {
+    data <- data %>% 
+      plyr::rename(c(names_from = names_to))
+  }
+  return(data)
+}
+
 clean_and_pivot <- function(
   .data, 
   values_from = "pacta_sector_exposure", 
@@ -12,26 +49,25 @@ clean_and_pivot <- function(
   sep = "_",
   ...
 ) {
-  # round values 
   .data <- .data %>% 
-    mutate(values = round(.data[[values_from]], ...))
-  # add prefix or suffix 
-  if (!is.null(names_prefix) & is.null(names_suffix)) {       
-    .data <- .data %>% 
-      mutate(names = paste(names_prefix, .data[[names_from]], sep = sep))
-  } else if (!is.null(names_prefix) & !is.null(names_suffix)) {       
-    .data <- .data %>% 
-      mutate(names =  paste(names_prefix, .data[[names_from]], names_suffix, sep = sep))
-  } else if (is.null(names_prefix) & !is.null(names_suffix)) {       
-    .data <- .data %>% 
-      mutate(names =  paste(.data[[names_from]], names_suffix, sep = sep))
-  }
+    dplyr::ungroup()
+  # add nice names 
+  .data <- add_nice_names(
+    values_from, 
+    names_from, 
+    values_to = NULL, 
+    names_to = NULL, 
+    names_prefix,
+    names_suffix,
+    sep = "_",
+    ...
+  )
   # pivot wider   
   .data %>% 
-    pivot_wider(
-      names_from = .data$names, 
-      values_from = .data$values,
-      values_fill = list(values = 0)
+    tidyr::pivot_wider(
+      names_from = .data[[names_from]], 
+      values_from = .data[[values_from]],
+      values_fill = 0
     )
 }
 
