@@ -106,6 +106,11 @@ paris_alignment_build_out_score <- results %>%
 ###########################################
 
 technology_exposure <- results %>% 
+  filter(
+    !is.nan(plan_alloc_wt_tech_prod), 
+    !is.na(ald_sector), 
+    !is.na(technology)
+    ) %>% 
   summarise_group_share(
     id_cols = c("investor_name", "portfolio_name"),
     values_from = "plan_alloc_wt_tech_prod",
@@ -113,24 +118,25 @@ technology_exposure <- results %>%
     denominator_group = "ald_sector", 
     name_to = "technology_exposure", 
     na.rm = TRUE
+  ) %>% 
+  filter(ald_sector == "power") %>% 
+  clean_and_pivot(
+    values_from = "technology_exposure", 
+    names_from = "technology", 
+    names_prefix = "technology_exposure",
+    digits = 2
   )
 
 ###########################################
 ###########################################
-# paris alignment score 
+# technology alignment 
 ###########################################
 ###########################################
 
 results <- load_results(project_location)
 portfolio <- load_portfolio(project_location)
 
-results <- results %>% 
-  inner_join(
-    asset_type_exposure, 
-    by = c("investor_name", "portfolio_name", "asset_type")
-  )
-
-results <- results %>% 
+technology_alignment <- results %>% 
   filter(technology == "renewablescap") %>% 
   calculate_technology_alignment(
     start_year = 2019, 
@@ -146,7 +152,7 @@ results <- results %>%
     max = 2009
   )
 
-technology_alignment <- results %>% 
+technology_alignment <- technology_alignment %>% 
   summarise_group_weight(
     id_cols = c("investor_name", "portfolio_name", "ald_sector", "technology"), 
     weights_from = "asset_type_exposure",
@@ -155,37 +161,20 @@ technology_alignment <- results %>%
     na.rm = TRUE
   )
 
-country_exposure <- portfolio %>% 
-  filter(!is.na(country_of_domicile)) %>% 
-  summarise_group_share(
-    id_cols = "investor_name",
-    values_from = "value_usd",
-    numerator_group = "country_of_domicile", 
-    denominator_group = "portfolio_name", 
-    name_to = "country_exposure", 
-    na.rm = TRUE
-  )
+###########################################
+###########################################
+# top exposures 
+###########################################
+###########################################
 
-asset_type_exposure <- portfolio %>% 
-  filter(asset_type %in% c("equity", "bonds")) %>% 
-  summarise_group_share(
+top_holdings <- portfolio %>% 
+  summarise_top_values(
+    n = 5, 
+    name_prefix = "top_holdings",
     id_cols = "investor_name",
     values_from = "value_usd",
-    numerator_group = "asset_type", 
-    denominator_group = "portfolio_name", 
-    name_to = "asset_type_exposure", 
-    na.rm = TRUE
-  )
-
-pacta_sector_exposure <- portfolio %>% 
-  mutate(pacta_sector = if_else(security_mapped_sector != "other", "pacta_sector", "other_sector")) %>% 
-  summarise_group_share(
-    id_cols = "investor_name",
-    values_from = "value_usd",
-    numerator_group = "pacta_sector", 
-    denominator_group = "portfolio_name", 
-    name_to = "pacta_sector_exposure", 
-    na.rm = TRUE
+    numerator_group = "company_name", 
+    denominator_group = "portfolio_name"
   )
 
 ###########################################

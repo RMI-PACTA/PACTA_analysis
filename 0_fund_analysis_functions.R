@@ -3,7 +3,73 @@ library(janitor)
 library(assertr)
 library(fs)
 
+summarise_top_values <- function(
+  .data, 
+  n = 5, 
+  name_prefix = "top",
+  id_cols = "investor_name",
+  values_from = "value_usd",
+  numerator_group = "company_name", 
+  denominator_group = "portfolio_name"
+) {
+  # group_cols 
+  groups_from <- c(id_cols, denominator_group)
+  # summarise group share
+  .data <- .data %>% 
+    filter(!is.na(.data[[numerator_group]])) %>% 
+    summarise_group_share(
+      id_cols = id_cols,
+      numerator_group = numerator_group, 
+      denominator_group = denominator_group,
+      values_from = values_from,
+      name_to = "values",
+      na.rm = TRUE
+    )
+  # take top values 
+  .data <- .data %>% 
+    group_by(!!!rlang::syms(groups_from)) %>% 
+    slice_max(values, n = n, with_ties = FALSE)
+  # add sequence 
+  .data <- .data %>% 
+    group_by(!!!rlang::syms(groups_from)) %>% 
+    mutate(names = seq_along(.data[[numerator_group]]))
+  # pivot values 
+  values <- .data %>% 
+    distinct(
+      !!!rlang::syms(groups_from), 
+      .data$names,
+      .data$values
+    ) %>% 
+    clean_and_pivot(
+      values_from = "values", 
+      names_from = "names", 
+      names_prefix = paste("share", name_prefix, sep = "_"),
+      values_fill = 0,
+      digits = 2
+    )
+  # pivot names
+  names <- .data %>% 
+    distinct(
+      !!!rlang::syms(groups_from), 
+      .data$names,
+      .data[[numerator_group]]
+    ) %>% 
+    clean_and_pivot(
+      values_from = numerator_group, 
+      names_from = "names", 
+      names_prefix = paste("name", name_prefix, sep = "_"),
+      values_fill = NA_character_
+    )
+  # join names and values 
+  values %>% 
+    full_join(
+      names, 
+      by = groups_from
+    )
+}
+
 add_nice_names <- function(
+  data,
   values_from, 
   names_from, 
   values_to = NULL, 
@@ -14,8 +80,10 @@ add_nice_names <- function(
   ...
 ) {
   # round values 
+  if (is.integer(.data[[values_from]])) {
   data <- data %>% 
     dplyr::mutate("{values_from}" := round(.data[[values_from]], ...))
+  }
   # add prefix or suffix 
   if (!is.null(names_prefix) & is.null(names_suffix)) {       
     data <- data %>% 
@@ -42,32 +110,34 @@ add_nice_names <- function(
 
 clean_and_pivot <- function(
   .data, 
-  values_from = "pacta_sector_exposure", 
-  names_from = "financial_sector", 
+  values_from = "group_share", 
+  names_from = "portfolio_name", 
   names_prefix = NULL,
   names_suffix = NULL,
   sep = "_",
+  values_fill = NA,
   ...
 ) {
   .data <- .data %>% 
     dplyr::ungroup()
   # add nice names 
-  .data <- add_nice_names(
-    values_from, 
-    names_from, 
-    values_to = NULL, 
-    names_to = NULL, 
-    names_prefix,
-    names_suffix,
-    sep = "_",
-    ...
-  )
+  .data <- .data %>% 
+    add_nice_names(
+      values_from, 
+      names_from, 
+      values_to = NULL, 
+      names_to = NULL, 
+      names_prefix,
+      names_suffix,
+      sep = "_",
+      ...
+    )
   # pivot wider   
   .data %>% 
     tidyr::pivot_wider(
       names_from = .data[[names_from]], 
       values_from = .data[[values_from]],
-      values_fill = 0
+      values_fill = values_fill
     )
 }
 
@@ -135,15 +205,17 @@ calculate_sensentive_exposures <- function(
 }
 
 load_esg_raw_data <- function() {
+  # define path
+  folder_path <- path("data", "iss_esg_data", "company_exposures")
   # list files 
-  files <- list.files(path("data", "iss_esg_data", "company_exposures"))
+  files <- list.files(folder_path)
   # check file count 
   stopifnot(n_distinct(files) == 11)
   # load and map files 
   data <- map_df(
-    list.files(path("data", "iss_esg_data")), 
+    files, 
     function(x) {
-      readxl::read_xlsx(path("data", "iss_esg_data", x)) %>% 
+      readxl::read_xlsx(path(folder_path, x)) %>% 
         mutate(source = x)
     }
   )
