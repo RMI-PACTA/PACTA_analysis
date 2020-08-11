@@ -14,7 +14,8 @@ project_location <- "/Users/vincentjerosch-herold/Dropbox (2° Investing)/PortChe
 portfolio <- load_portfolio(project_location)
 
 results <- load_results(project_location) %>% 
-  filter_unique_cross_sector_results()
+  filter_unique_cross_sector_results() %>% 
+  connect_results_with_portfolio_weights(portfolio, sector_from = "financial_sector" )
 
 ###########################################
 ###########################################
@@ -59,7 +60,7 @@ pacta_sector_exposure <- portfolio %>%
     name_to = "pacta_sector_exposure", 
     na.rm = TRUE
   ) %>% 
-  clean_and_pivot(
+  pivot_wider_and_clean_names(
     values_from = "pacta_sector_exposure", 
     names_from = "financial_sector", 
     names_prefix = "sector_exposure",
@@ -79,11 +80,7 @@ paris_alignment_trajectory_score <- results %>%
     min = -100, 
     max = 100
   ) %>% 
-  summarise_portfolio_paris_alignment(
-    portfolio,
-    start_year = 2019,
-    alignment_from = "trajectory_alignment"
-  )
+  summarise_portfolio_paris_alignment(start_year = 2019, alignment_from = "trajectory_alignment")
 
 paris_alignment_build_out_score <- results %>% 
   calculate_build_out_alignment() %>% 
@@ -93,11 +90,7 @@ paris_alignment_build_out_score <- results %>%
     min = -100, 
     max = 100
   ) %>% 
-  summarise_portfolio_paris_alignment(
-    portfolio,
-    start_year = 2019,
-    alignment_from = "build_out_alignment"
-  )
+  summarise_portfolio_paris_alignment(start_year = 2019, alignment_from = "build_out_alignment")
 
 ###########################################
 ###########################################
@@ -110,7 +103,7 @@ technology_exposure <- results %>%
     !is.nan(plan_alloc_wt_tech_prod), 
     !is.na(ald_sector), 
     !is.na(technology)
-    ) %>% 
+  ) %>% 
   summarise_group_share(
     id_cols = c("investor_name", "portfolio_name"),
     values_from = "plan_alloc_wt_tech_prod",
@@ -120,7 +113,7 @@ technology_exposure <- results %>%
     na.rm = TRUE
   ) %>% 
   filter(ald_sector == "power") %>% 
-  clean_and_pivot(
+  pivot_wider_and_clean_names(
     values_from = "technology_exposure", 
     names_from = "technology", 
     names_prefix = "technology_exposure",
@@ -149,7 +142,7 @@ technology_alignment <- results %>%
     values_from = "tech_build_out_alignment", 
     scale = 100,
     min = -200, 
-    max = 2009
+    max = 200
   )
 
 technology_alignment <- technology_alignment %>% 
@@ -168,12 +161,32 @@ technology_alignment <- technology_alignment %>%
 ###########################################
 
 top_holdings <- portfolio %>% 
-  summarise_top_values(
+  summarise_top_groups(
     n = 5, 
     name_prefix = "top_holdings",
     id_cols = "investor_name",
     values_from = "value_usd",
     numerator_group = "company_name", 
+    denominator_group = "portfolio_name"
+  )
+
+top_countries <- portfolio %>% 
+  summarise_top_groups(
+    n = 5, 
+    name_prefix = "top_countries",
+    id_cols = "investor_name",
+    values_from = "value_usd",
+    numerator_group = "country_of_domicile", 
+    denominator_group = "portfolio_name"
+  )
+
+top_currencies <- portfolio %>% 
+  summarise_top_groups(
+    n = 5, 
+    name_prefix = "top_currencies",
+    id_cols = "investor_name",
+    values_from = "value_usd",
+    numerator_group = "currency", 
     denominator_group = "portfolio_name"
   )
 
@@ -183,13 +196,13 @@ top_holdings <- portfolio %>%
 ###########################################
 ###########################################
 
-portfolio <- load_portfolio(project_location)
-
 sensentive_exposures <- portfolio %>% 
   calculate_sensentive_exposures(
     id_cols = c("investor_name", "portfolio_name"), 
     market_value_from = "value_usd"
-  ) %>% 
+  )
+
+sensentive_exposures <- sensentive_exposures %>% 
   summarise_group_share(
     id_cols = "investor_name", 
     numerator_group = "sensitive_sector", 
@@ -199,37 +212,31 @@ sensentive_exposures <- portfolio %>%
     na.rm = TRUE
   )
 
+sensentive_exposures <- sensentive_exposures %>%
+  filter(sensitive_sector != "other") %>% 
+  pivot_wider_and_clean_names(
+    values_from = "sensitive_sector_exposure", 
+    names_from = "sensitive_sector", 
+    names_prefix = "sector_exposure"
+  )
+
 ###########################################
 ###########################################
 # weighted emissions factor 
 ###########################################
 ###########################################
 
-results <- load_results(project_location)
+emission_factors <- results %>% 
+  summarise_emission_factor(names_prefix = "sector_co2_intensity")
 
-tmp <- results %>% 
-  filter(
-    !is.nan(plan_emission_factor),
-    scenario == "b2ds", 
-    scenario_geography == "global", 
-    year == 2020, 
-    allocation == "portfolio_weight"
-  ) %>% 
-  calculate_group_share(
-    id_cols = c("investor_name", "portfolio_name", "asset_type"), 
-    numerator_group = "technology", 
-    denominator_group = "ald_sector", 
-    values_from = "plan_alloc_wt_tech_prod", 
-    name_to = "technology_share", 
-    na.rm = TRUE
-  ) %>% 
-  summarise_group_weight(
-    id_cols = c("investor_name", "portfolio_name", "asset_type", "ald_sector"), 
-    weights_from = "technology_share", 
-    values_from = "plan_emission_factor"
-  )
+###########################################
+###########################################
+# summarise technology share 
+###########################################
+###########################################
 
-
-
+technology_exposure <- results %>% 
+  filter(ald_sector == "automotive") %>% 
+  summarise_technology_share(names_prefix = "technology_exposure")
 
 

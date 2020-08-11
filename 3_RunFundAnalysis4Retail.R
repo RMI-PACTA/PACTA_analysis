@@ -934,7 +934,6 @@ complete_fund_matrix <- complete_fund_matrix %>%
 # ~ Technology Share in specific climate relevant sectors with green alternatives ~
 # calculate technology share for PACTA sectors (automotive and power)
 
-
 technology_share_data <- input_pacta_portfolio_results %>% 
   filter(year == start_year+5, allocation == "portfolio_weight", ald_sector %in% c("power","automotive"), plan_alloc_wt_sec_prod != 0) %>% 
   select(portfolio_name, ald_sector, technology, plan_tech_share, asset_type) %>% distinct()

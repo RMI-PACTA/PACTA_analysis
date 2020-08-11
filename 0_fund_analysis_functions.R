@@ -3,15 +3,168 @@ library(janitor)
 library(assertr)
 library(fs)
 
-summarise_top_values <- function(
+summarise_technology_share <- function(
+  .data, 
+  plan_tech_emission_factor_from = "plan_emission_factor", 
+  plan_tech_prod_from = "plan_alloc_wt_tech_prod",
+  names_prefix = "sector_co2_intensity",
+  values_wide = TRUE
+) {
+  # define crucial names
+  crucial_names <- c(
+    "investor_name", 
+    "portfolio_name", 
+    "asset_type", 
+    "ald_sector",
+    "technology",
+    "asset_type_exposure", 
+    plan_tech_emission_factor_from,
+    plan_tech_prod_from
+  )
+  # check crucial names
+  r2dii.utils::check_crucial_names(.data,  crucial_names)
+  # calculate sector technology exposure 
+  .data <- .data %>% 
+    dplyr::filter(!is.nan(.data[[plan_tech_emission_factor_from]])) %>% 
+    summarise_group_share(
+      id_cols = c("investor_name", "portfolio_name", "asset_type", "asset_type_exposure"), 
+      numerator_group = "technology", 
+      denominator_group = "ald_sector", 
+      values_from = plan_tech_prod_from, 
+      name_to = "technology_exposure", 
+      na.rm = TRUE
+    )
+  # then roll-up to portfolio, sector-level 
+  .data <- .data %>% 
+    summarise_group_weight(
+      id_cols = c("investor_name", "portfolio_name", "ald_sector", "technology"), 
+      weights_from = "asset_type_exposure", 
+      values_from = "technology_exposure"
+    )
+  # make the output pretty and wide 
+  if (values_wide == TRUE) {
+    .data %>% 
+      pivot_wider_and_clean_names(
+        values_from = "technology_exposure", 
+        names_from = "technology", 
+        names_prefix = names_prefix
+      )
+  } else {
+    return(technology_exposure)
+  }
+}
+
+summarise_emission_factor <- function(
+  .data, 
+  plan_tech_emission_factor_from = "plan_emission_factor", 
+  plan_tech_prod_from = "plan_alloc_wt_tech_prod",
+  names_prefix = "sector_co2_intensity",
+  values_wide = TRUE
+) {
+  # define crucial names
+  crucial_names_results <- c(
+    "investor_name", 
+    "portfolio_name", 
+    "asset_type", 
+    "ald_sector",
+    "technology",
+    "asset_type_exposure",
+    plan_tech_emission_factor_from,
+    plan_tech_prod_from
+  )
+  # check crucial names
+  r2dii.utils::check_crucial_names(.data, crucial_names_results)
+  # calculate sector technology exposure 
+  .data <- .data %>% 
+    dplyr::filter(
+      !is.nan(.data[[plan_tech_emission_factor_from]]),
+      !is.nan(.data[[plan_tech_prod_from]])
+    ) %>% 
+    calculate_group_share(
+      id_cols = c("investor_name", "portfolio_name", "asset_type"), 
+      numerator_group = "technology", 
+      denominator_group = "ald_sector", 
+      values_from = plan_tech_prod_from, 
+      name_to = "technology_exposure", 
+      na.rm = TRUE
+    )
+  # summarise by technology exposure 
+  .data <- .data %>% 
+    summarise_group_weight(
+      id_cols = c("investor_name", "portfolio_name", "asset_type", "ald_sector", "asset_type_exposure"), 
+      weights_from = "technology_exposure", 
+      values_from = plan_tech_emission_factor_from, 
+      name_to = "emission_factor"
+    )
+  # then roll-up to portfolio, sector-level 
+  .data <- .data %>% 
+    summarise_group_weight(
+      id_cols = c("investor_name", "portfolio_name", "ald_sector"), 
+      weights_from = "asset_type_exposure", 
+      values_from = "emission_factor"
+    )
+  # make the output pretty and wide 
+  if (values_wide == TRUE) {
+    .data %>% 
+      pivot_wider_and_clean_names(
+        values_from = "emission_factor", 
+        names_from = "ald_sector", 
+        names_prefix = names_prefix
+      )
+  } else {
+    return(.data)
+  }
+}
+
+check_top_groups_parameters <- function(
+  n, 
+  name_prefix,
+  id_cols,
+  values_from,
+  numerator_group, 
+  denominator_group,
+  values_fill, 
+  names_fill,
+  values_and_names_wide
+) {
+  # interger checks 
+  stopifnot(is.numeric(n))
+  stopifnot(is.numeric(values_fill))
+  # character checks 
+  stopifnot(is.character(name_prefix))
+  stopifnot(is.character(id_cols))
+  stopifnot(is.character(values_from))
+  stopifnot(is.character(numerator_group))
+  stopifnot(is.character(denominator_group))
+  stopifnot(is.character(names_fill))
+  # check logical 
+  stopifnot(is.logical(values_and_names_wide))
+}
+
+summarise_top_groups <- function(
   .data, 
   n = 5, 
   name_prefix = "top",
   id_cols = "investor_name",
   values_from = "value_usd",
   numerator_group = "company_name", 
-  denominator_group = "portfolio_name"
+  denominator_group = "portfolio_name",
+  values_fill = NA_integer_, 
+  names_fill = NA_character_,
+  values_and_names_wide = TRUE
 ) {
+  # check parameters 
+  check_top_groups_parameters(  
+    n = n, 
+    name_prefix = name_prefix,
+    id_cols = id_cols,
+    values_from = values_from,
+    numerator_group = numerator_group, 
+    denominator_group = denominator_group,
+    values_fill = values_fill, 
+    names_fill = names_fill,
+    values_and_names_wide = values_and_names_wide
+  )
   # group_cols 
   groups_from <- c(id_cols, denominator_group)
   # summarise group share
@@ -29,36 +182,65 @@ summarise_top_values <- function(
   .data <- .data %>% 
     group_by(!!!rlang::syms(groups_from)) %>% 
     slice_max(values, n = n, with_ties = FALSE)
+  # make top values wide 
+  if (values_and_names_wide == TRUE) {
+    .data %>% 
+      pivot_wider_names_and_values(
+        name_prefix = name_prefix,
+        id_cols = id_cols,
+        values_from = values_from,
+        numerator_group = numerator_group, 
+        denominator_group = denominator_group,
+        values_fill = values_fill,
+        names_fill = names_fill
+      )
+  } else if (values_and_names_wide == FALSE) {
+    return(.data)
+  }
+}
+
+pivot_wider_names_and_values <- function(
+  data,
+  n = 5, 
+  name_prefix = "top",
+  id_cols = "investor_name",
+  values_from = "value_usd",
+  numerator_group = "company_name", 
+  denominator_group = "portfolio_name",
+  values_fill = NA_integer_, 
+  names_fill = NA_character_
+) {
+  groups_from <- c(id_cols, denominator_group)
   # add sequence 
-  .data <- .data %>% 
+  data <- data %>% 
     group_by(!!!rlang::syms(groups_from)) %>% 
     mutate(names = seq_along(.data[[numerator_group]]))
   # pivot values 
-  values <- .data %>% 
+  values <- data %>% 
     distinct(
       !!!rlang::syms(groups_from), 
       .data$names,
       .data$values
     ) %>% 
-    clean_and_pivot(
+    pivot_wider_and_clean_names(
       values_from = "values", 
       names_from = "names", 
       names_prefix = paste("share", name_prefix, sep = "_"),
-      values_fill = 0,
+      values_fill = values_fill,
       digits = 2
     )
   # pivot names
-  names <- .data %>% 
+  names <- data %>% 
     distinct(
       !!!rlang::syms(groups_from), 
       .data$names,
       .data[[numerator_group]]
     ) %>% 
-    clean_and_pivot(
+    pivot_wider_and_clean_names(
       values_from = numerator_group, 
       names_from = "names", 
       names_prefix = paste("name", name_prefix, sep = "_"),
-      values_fill = NA_character_
+      values_fill = names_fill
     )
   # join names and values 
   values %>% 
@@ -81,8 +263,8 @@ add_nice_names <- function(
 ) {
   # round values 
   if (is.integer(.data[[values_from]])) {
-  data <- data %>% 
-    dplyr::mutate("{values_from}" := round(.data[[values_from]], ...))
+    data <- data %>% 
+      dplyr::mutate("{values_from}" := round(.data[[values_from]], ...))
   }
   # add prefix or suffix 
   if (!is.null(names_prefix) & is.null(names_suffix)) {       
@@ -108,14 +290,14 @@ add_nice_names <- function(
   return(data)
 }
 
-clean_and_pivot <- function(
+pivot_wider_and_clean_names <- function(
   .data, 
   values_from = "group_share", 
   names_from = "portfolio_name", 
   names_prefix = NULL,
   names_suffix = NULL,
   sep = "_",
-  values_fill = NA,
+  values_fill = NA_integer_,
   ...
 ) {
   .data <- .data %>% 
@@ -123,12 +305,12 @@ clean_and_pivot <- function(
   # add nice names 
   .data <- .data %>% 
     add_nice_names(
-      values_from, 
-      names_from, 
+      values_from = values_from, 
+      names_from = names_from, 
       values_to = NULL, 
       names_to = NULL, 
-      names_prefix,
-      names_suffix,
+      names_prefix = names_prefix,
+      names_suffix = names_suffix,
       sep = "_",
       ...
     )
@@ -280,14 +462,15 @@ summarise_group_weight <- function(
   # weight value 
   .data <- .data %>% 
     dplyr::group_by(!!!rlang::syms(id_cols)) %>% 
-    dplyr::summarise(weighted_value = stats::weighted.mean(.data[[values_from]], .data[[weights_from]])) %>% 
+    dplyr::summarise(weighted_value := stats::weighted.mean(.data[[values_from]], .data[[weights_from]])) %>% 
     dplyr::ungroup()
   # rename output
   if (!is.null(name_to)) {
     .data %>% 
       plyr::rename(c("weighted_value" = name_to))
   } else if (is.null(name_to)) {
-    return(.data)
+    .data %>% 
+      plyr::rename(c("weighted_value" = values_from))
   }
 }
 
@@ -502,7 +685,7 @@ summarise_portfolio_paris_alignment <- function(
   git_path = here::here()
 ) {
   # apply weight to get portfolio results 
-  influencemap_weighting_methodology(results, portfolio)
+  influencemap_weighting_methodology(results, alignment_from)
 }
 
 add_nice_values <- function(
@@ -959,37 +1142,45 @@ summarise_group_exposure <- function(input, group_vars, rel_vars, value_var, nam
 #   value_var = "ValueUSD" # a numeric value to calculate percentage exposure. 
 # )
 
-results <- load_results(project_location)
-
-connect_results_with_weights <- function(
+connect_results_with_portfolio_weights <- function(
   results, 
-  portfolio,
-  git_path = here::here()
+  portfolio, 
+  sector_from = "financial_sector",
+  sector_to = "ald_sector"
 ) {
-  # load sector weights 
-  sector_weights <- read_rds(path(git_path, "data", "sector_weightings", ext = "rds"))
-  # first join technology and sector weights to pacta results file 
-  results <- results %>%
-    inner_join(
-      sector_weights, 
-      by = c("ald_sector", "technology")
-    )
   # prepare audit file to show the relative portfolio weight in each sector 
   asset_type_sector_exposure <- portfolio %>% 
     summarise_group_share(
       id_cols = c("investor_name", "portfolio_name"),
       values_from = "value_usd",
-      numerator_group = "security_mapped_sector", 
+      numerator_group = sector_from, 
       denominator_group = "asset_type", 
-      name_to = "sector_exposure", 
+      name_to = "asset_type_sector_exposure", 
       na.rm = TRUE
     ) %>% 
-    rename(ald_sector = .data$security_mapped_sector)
+    rename("{sector_to}" := .data[[sector_from]])
   # join audit exposure to result file 
   results <- results %>%
     inner_join(
       asset_type_sector_exposure, 
-      by = c("ald_sector", "investor_name", "portfolio_name", "asset_type")
+      by = c(sector_to, "investor_name", "portfolio_name", "asset_type")
+    )
+  # prepare audit file to show the relative portfolio weight in each sector 
+  sector_exposure <- portfolio %>% 
+    summarise_group_share(
+      id_cols = "investor_name",
+      values_from = "value_usd",
+      numerator_group = sector_from, 
+      denominator_group = "portfolio_name", 
+      name_to = "sector_exposure", 
+      na.rm = TRUE
+    ) %>% 
+    rename("{sector_to}" := .data[[sector_from]])
+  # join audit exposure to result file 
+  results <- results %>%
+    inner_join(
+      sector_exposure, 
+      by = c(sector_to, "investor_name", "portfolio_name")
     )
   # asset_type exposure
   asset_type_exposure <- portfolio %>% 
@@ -1011,19 +1202,34 @@ connect_results_with_weights <- function(
 
 # Single Indicator function - should be loaded from r2dii.analysis instead!
 influencemap_weighting_methodology <- function(
-  results,
-  portfolio,
+  .data,
   alignment_from = "trajectory_alignment",
   git_path = here::here()
 ) {
   # crucial names
-  crucial_names <- c("investor_name", "portfolio_name", "asset_type", "ald_sector", "scenario", "scenario_geography", "allocation")
+  crucial_names <- c(
+    "investor_name", 
+    "portfolio_name", 
+    "asset_type", 
+    "ald_sector", 
+    "scenario", 
+    "scenario_geography", 
+    "allocation",
+    "asset_type_exposure",
+    "asset_type_sector_exposure"
+    )
   # check inputs 
-  r2dii.utils::check_crucial_names(results, crucial_names) 
-  # connect results with weights 
-  results <- connect_results_with_weights(results, portfolio, git_path)
+  r2dii.utils::check_crucial_names(.data, crucial_names) 
+  # load sector weights 
+  sector_weights <- read_rds(path(git_path, "data", "sector_weightings", ext = "rds"))
+  # first join technology and sector weights to pacta results file 
+  .data <- .data %>%
+    inner_join(
+      sector_weights, 
+      by = c("ald_sector", "technology")
+    )
   # first reweight alignment to the sector level based on the technology importance 
-  results <- results %>%
+  .data <- .data %>%
     group_by(
       .data$investor_name, 
       .data$portfolio_name, 
@@ -1041,7 +1247,7 @@ influencemap_weighting_methodology <- function(
       )
     )
   # then weight up to asset_type level 
-  results <- results %>%
+  .data <- .data %>%
     group_by(
       .data$investor_name, 
       .data$portfolio_name, 
@@ -1051,9 +1257,9 @@ influencemap_weighting_methodology <- function(
       .data$scenario_geography, 
       .data$allocation
     ) %>%
-    summarise(alignment_asset_type = stats::weighted.mean(.data$alignment_sector, .data$sector_weight * .data$sector_exposure, na.rm = TRUE))
+    summarise(alignment_asset_type = stats::weighted.mean(.data$alignment_sector, .data$sector_weight * .data$asset_type_sector_exposure, na.rm = TRUE))
   # calculate portfolio level results 
-  results %>%
+  .data <- .data %>%
     group_by(
       .data$investor_name, 
       .data$portfolio_name,
@@ -1061,8 +1267,11 @@ influencemap_weighting_methodology <- function(
       .data$scenario_geography, 
       .data$allocation
     ) %>%
-    summarise(paris_alignment_score = stats::weighted.mean(.data$alignment_asset_type, .data$asset_type_exposure, na.rm = TRUE)) %>% 
+    summarise(alignment_portfolio = stats::weighted.mean(.data$alignment_asset_type, .data$asset_type_exposure, na.rm = TRUE)) %>% 
     ungroup()
+  # rename output 
+  .data <- .data %>%
+    rename("{alignment_from}" := alignment_portfolio)
 }
 
 mapped_sector_exposure <- function(
