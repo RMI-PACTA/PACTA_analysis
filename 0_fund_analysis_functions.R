@@ -3,6 +3,38 @@ library(janitor)
 library(assertr)
 library(fs)
 
+clean_and_pivot <- function(
+  .data, 
+  values_from = "pacta_sector_exposure", 
+  names_from = "financial_sector", 
+  names_prefix = NULL,
+  names_suffix = NULL,
+  sep = "_",
+  ...
+) {
+  # round values 
+  .data <- .data %>% 
+    mutate(values = round(.data[[values_from]], ...))
+  # add prefix or suffix 
+  if (!is.null(names_prefix) & is.null(names_suffix)) {       
+    .data <- .data %>% 
+      mutate(names = paste(names_prefix, .data[[names_from]], sep = sep))
+  } else if (!is.null(names_prefix) & !is.null(names_suffix)) {       
+    .data <- .data %>% 
+      mutate(names =  paste(names_prefix, .data[[names_from]], names_suffix, sep = sep))
+  } else if (is.null(names_prefix) & !is.null(names_suffix)) {       
+    .data <- .data %>% 
+      mutate(names =  paste(.data[[names_from]], names_suffix, sep = sep))
+  }
+  # pivot wider   
+  .data %>% 
+    pivot_wider(
+      names_from = .data$names, 
+      values_from = .data$values,
+      values_fill = list(values = 0)
+    )
+}
+
 check_portfolio_data <- function(
   data, 
   crucial_names, 
@@ -23,7 +55,7 @@ check_portfolio_data <- function(
       within_bounds(0,Inf),
       .data[[market_value_from]], 
       error_fun = just_warn
-      )
+    )
   # check isin inputs 
   data %>% 
     filter(str_detect(.data$isin, "[[:upper:]]{2}[[:alnum:]]{10}")) %>% 
@@ -68,7 +100,7 @@ calculate_sensentive_exposures <- function(
 
 load_esg_raw_data <- function() {
   # list files 
-  files <- list.files(path("data", "iss_esg_data"))
+  files <- list.files(path("data", "iss_esg_data", "company_exposures"))
   # check file count 
   stopifnot(n_distinct(files) == 11)
   # load and map files 
@@ -359,8 +391,7 @@ summarise_portfolio_paris_alignment <- function(
   portfolio,
   alignment_from = "trajectory_alignment",
   start_year = 2019,
-  git_path = here::here(),
-  nice_score = TRUE
+  git_path = here::here()
 ) {
   # apply weight to get portfolio results 
   influencemap_weighting_methodology(results, portfolio)
@@ -405,7 +436,7 @@ classify_asset_types <- function(.data) {
     mutate(
       asset_type = if_else(tolower(security_bics_subgroup) %in% tolower(sovereign_types), "sovereign", asset_type),
       asset_type = if_else(tolower(security_type) %in% tolower(sovereign_types), "sovereign", asset_type),
-      asset_type = if_else(asset_type == "unclassifiable", "others", asset_type)
+      asset_type = if_else(asset_type %in% c("others", "unclassifiable"), "other", asset_type)
     )
 }
 
@@ -586,33 +617,16 @@ gather_all_company_result_files <- function(result_path = RESULTS.PATH){
   saveRDS(AllEQPortResults,paste0(result_path,"Equity_results_company.rda"))}
 
 load_portfolio <- function(project_location) {
-  # # prepare processed portfolio 
-  # audit_flag <- read_rds(path(project_location, "30_Processed_Inputs", paste(project_name, "audit_file", sep = "_"), ext = "rda")) %>% 
-  #   distinct(
-  #     portfolio_name, 
-  #     isin, 
-  #     company_name, 
-  #     asset_type, 
-  #     financial_sector, 
-  #     has_ald_in_fin_sector
-  #   )
-  # 
-  # portfolio <- read_rds(path(project_location, "30_Processed_Inputs", paste(project_name, "total_portfolio", sep = "_"), ext = "rda")) 
-  # 
-  # portfolio <- portfolio %>% 
-  #   mutate(
-  #     bloomberg_id = as.character(bloomberg_id),
-  #     value_usd = if_else(is.infinite(value_usd),0,value_usd)
-  #   ) %>% 
-  #   filter(investor_name != portfolio_name | portfolio_name == "Meta Portfolio") %>% 
-  #   left_join(
-  #     audit_flag, 
-  #     by = intersect(colnames(portfolio),colnames(audit_flag))
-  #     )
-  
-  read_rds(path(project_location, "30_Processed_Inputs", paste(project_name, "total_portfolio", sep = "_"), ext = "rda")) %>% 
-    mutate(across(matches(c("asset_type", "financial_sector", "security_mapped_sector")), tolower)) %>% 
+  # load portfolio
+  portfolio <- read_rds(path(project_location, "30_Processed_Inputs", paste(project_name, "total_portfolio", sep = "_"), ext = "rda"))
+  # clean names 
+  portfolio <- portfolio %>% 
+    mutate(across(matches(c("asset_type", "financial_sector", "security_mapped_sector")), tolower))
+  # classify asset_types 
+  portfolio %>% 
     classify_asset_types()
+  
+  
 }
 
 #prepare PACTA results
@@ -894,6 +908,11 @@ influencemap_weighting_methodology <- function(
   alignment_from = "trajectory_alignment",
   git_path = here::here()
 ) {
+  # crucial names
+  crucial_names <- c("investor_name", "portfolio_name", "asset_type", "ald_sector", "scenario", "scenario_geography", "allocation")
+  # check inputs 
+  r2dii.utils::check_crucial_names(results, crucial_names) 
+  # connect results with weights 
   results <- connect_results_with_weights(results, portfolio, git_path)
   # first reweight alignment to the sector level based on the technology importance 
   results <- results %>%
