@@ -1,9 +1,13 @@
-source("0_fund_analysis_functions.R")
+source("0_fund_analysis_functions_v2.R")
 
 # TODO sanity check technology alignment figures. 
+# TODO fund scores 
+# TODO figure top function indicator, value style
 
 project_name <- "daisy_test5"
-project_location <- "/Users/vincentjerosch-herold/Dropbox (2° Investing)/PortCheck_v2/10_Projects/daisy_test5"
+project_location <- path(r2dii.utils::path_dropbox_2dii(), "PortCheck_v2", "10_Projects", project_name)
+  
+output_columns <- c("investor_name", "portfolio_name", "indicator", "value")
 
 ###########################################
 ###########################################
@@ -15,7 +19,7 @@ portfolio <- load_portfolio(project_location)
 
 results <- load_results(project_location) %>% 
   filter_unique_cross_sector_results() %>% 
-  connect_results_with_portfolio_weights(portfolio, sector_from = "financial_sector" )
+  connect_results_with_portfolio_weights(portfolio, sector_from = "financial_sector")
 
 ###########################################
 ###########################################
@@ -31,18 +35,19 @@ asset_type_exposure <- portfolio %>%
     values_from = "value_usd", 
     name_to = "asset_type_exposure", 
     na.rm = TRUE
+  ) %>% 
+  add_nice_names(
+    values_from = "asset_type_exposure",
+    names_from = "asset_type",
+    names_prefix = "exposure"
   )
 
-# pivot wider 
-asset_type_exposure <- asset_type_exposure %>% 
-  mutate(asset_type_exposure = round(asset_type_exposure, digits = 2)) %>% 
-  pivot_wider(
-    id_cols = c("portfolio_name", "investor_name"), 
-    names_from = "asset_type", 
-    values_from = "asset_type_exposure", 
-    names_prefix = "asset_type_exposure_",
-    values_fill = list(asset_type_exposure = 0)
-  )
+# asset_type_exposure <- asset_type_exposure %>% 
+#   pivot_wider_and_clean_names(
+#     values_from = "asset_type_exposure", 
+#     names_from = "asset_type", 
+#     names_prefix = "exposure"
+#   )
 
 ###########################################
 ###########################################
@@ -60,11 +65,10 @@ pacta_sector_exposure <- portfolio %>%
     name_to = "pacta_sector_exposure", 
     na.rm = TRUE
   ) %>% 
-  pivot_wider_and_clean_names(
-    values_from = "pacta_sector_exposure", 
-    names_from = "financial_sector", 
-    names_prefix = "sector_exposure",
-    digits = 2
+  add_nice_names(
+    values_from = "pacta_sector_exposure",
+    names_from = "financial_sector",
+    names_prefix = "sector_exposure"
   )
 
 ###########################################
@@ -80,7 +84,8 @@ paris_alignment_trajectory_score <- results %>%
     min = -100, 
     max = 100
   ) %>% 
-  summarise_portfolio_paris_alignment(start_year = 2019, alignment_from = "trajectory_alignment")
+  summarise_portfolio_paris_alignment(start_year = 2019, alignment_from = "trajectory_alignment") %>% 
+  mutate(score_type = "trajectory_alignment")
 
 paris_alignment_build_out_score <- results %>% 
   calculate_build_out_alignment() %>% 
@@ -90,44 +95,23 @@ paris_alignment_build_out_score <- results %>%
     min = -100, 
     max = 100
   ) %>% 
-  summarise_portfolio_paris_alignment(start_year = 2019, alignment_from = "build_out_alignment")
+  summarise_portfolio_paris_alignment(start_year = 2019, alignment_from = "build_out_alignment") %>% 
+  mutate(score_type = "build_out_alignment")
 
-###########################################
-###########################################
-# technology exposure 
-###########################################
-###########################################
+alignment_scores <- paris_alignment_trajectory_score %>% 
+  bind_rows(paris_alignment_build_out_score) %>% 
+  add_nice_names(
+    names_from = "score_type", 
+    values_from = "alignment_portfolio"
+  ) %>% 
+  distinct(!!!rlang::syms(output_columns))
 
-technology_exposure <- results %>% 
-  filter(
-    !is.nan(plan_alloc_wt_tech_prod), 
-    !is.na(ald_sector), 
-    !is.na(technology)
-  ) %>% 
-  summarise_group_share(
-    id_cols = c("investor_name", "portfolio_name"),
-    values_from = "plan_alloc_wt_tech_prod",
-    numerator_group = "technology", 
-    denominator_group = "ald_sector", 
-    name_to = "technology_exposure", 
-    na.rm = TRUE
-  ) %>% 
-  filter(ald_sector == "power") %>% 
-  pivot_wider_and_clean_names(
-    values_from = "technology_exposure", 
-    names_from = "technology", 
-    names_prefix = "technology_exposure",
-    digits = 2
-  )
 
 ###########################################
 ###########################################
 # technology alignment 
 ###########################################
 ###########################################
-
-results <- load_results(project_location)
-portfolio <- load_portfolio(project_location)
 
 technology_alignment <- results %>% 
   filter(technology == "renewablescap") %>% 
@@ -149,10 +133,19 @@ technology_alignment <- technology_alignment %>%
   summarise_group_weight(
     id_cols = c("investor_name", "portfolio_name", "ald_sector", "technology"), 
     weights_from = "asset_type_exposure",
-    values_from = "technology_build_out_alignment",
+    values_from = "tech_build_out_alignment",
     name_to = "technology_alignment",
     na.rm = TRUE
   )
+
+technology_alignment <- technology_alignment %>% 
+  add_nice_names(
+    names_from = "technology", 
+    values_from = "technology_alignment", 
+    names_prefix = "technology_alignment"
+  ) %>% 
+  distinct(!!!rlang::syms(output_columns))
+  
 
 ###########################################
 ###########################################
@@ -163,7 +156,6 @@ technology_alignment <- technology_alignment %>%
 top_holdings <- portfolio %>% 
   summarise_top_groups(
     n = 5, 
-    name_prefix = "top_holdings",
     id_cols = "investor_name",
     values_from = "value_usd",
     numerator_group = "company_name", 
@@ -173,7 +165,6 @@ top_holdings <- portfolio %>%
 top_countries <- portfolio %>% 
   summarise_top_groups(
     n = 5, 
-    name_prefix = "top_countries",
     id_cols = "investor_name",
     values_from = "value_usd",
     numerator_group = "country_of_domicile", 
@@ -183,7 +174,6 @@ top_countries <- portfolio %>%
 top_currencies <- portfolio %>% 
   summarise_top_groups(
     n = 5, 
-    name_prefix = "top_currencies",
     id_cols = "investor_name",
     values_from = "value_usd",
     numerator_group = "currency", 
@@ -214,10 +204,17 @@ sensentive_exposures <- sensentive_exposures %>%
 
 sensentive_exposures <- sensentive_exposures %>%
   filter(sensitive_sector != "other") %>% 
-  pivot_wider_and_clean_names(
-    values_from = "sensitive_sector_exposure", 
+  add_nice_names(
     names_from = "sensitive_sector", 
+    values_from = "sensitive_sector_exposure", 
     names_prefix = "sector_exposure"
+  ) %>% 
+  distinct(!!!rlang::syms(output_columns))
+
+sensentive_exposures <- sensentive_exposures %>% 
+  pivot_wider(
+    names_from = "indicator", 
+    values_from = "value"
   )
 
 ###########################################
@@ -235,8 +232,14 @@ emission_factors <- results %>%
 ###########################################
 ###########################################
 
-technology_exposure <- results %>% 
+technology_exposure_auto <- results %>% 
   filter(ald_sector == "automotive") %>% 
-  summarise_technology_share(names_prefix = "technology_exposure")
+  summarise_technology_share(names_prefix = "technology_exposure") 
+
+technology_exposure_power <- results %>% 
+  filter(ald_sector == "power") %>% 
+  summarise_technology_share(names_prefix = "technology_exposure") 
+
+
 
 
