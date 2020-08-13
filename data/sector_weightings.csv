@@ -1,34 +1,34 @@
 ald_sector,technology,sector_weight,technology_weight
-Power,CoalCap,0.22,0.25
-Power,GasCap,0.22,0.06
-Power,HydroCap,0.22,0.09
-Power,NuclearCap,0.22,0.11
-Power,OilCap,0.22,0.02
-Power,RenewablesCap,0.22,0.46
-Automotive,Electric,0.09,0.44
-Automotive,Hybrid,0.09,0.17
-Automotive,ICE,0.09,0.38
-Oil&Gas,Gas,0.35,0.34
-Oil&Gas,Oil,0.35,0.66
-Coal,Coal ,0.23,
-Aviation,Freight,0.01,
-Aviation,Mix,0.01,
-Aviation,Passenger,0.01,
-Cement,Grinding,0.05,
-Cement,Integrated facility,0.05,
-Shipping,A,0.02,
-Shipping,B,0.02,
-Shipping,C,0.02,
-Shipping,D,0.02,
-Shipping,E,0.02,
-Shipping,F,0.02,
-Shipping,G,0.02,
-Steel,Ac-Electric Arc Furnace,0.03,
-Steel,Blast Furnace,0.03,
-Steel,BOF Shop,0.03,
-Steel,Coking Plant,0.03,
-Steel,Dc-Electric Arc Furnace,0.03,
-Steel,Direct/Smelting Reduction Plant,0.03,
-Steel,Open Hearth Plant,0.03,
-Steel,Pelletizing Plant,0.03,
-Steel,Sintering Plant,0.03,
+power,coalcap,0.22,0.25
+power,gascap,0.22,0.06
+power,hydrocap,0.22,0.09
+power,nuclearcap,0.22,0.11
+power,oilcap,0.22,0.02
+power,renewablescap,0.22,0.46
+automotive,electric,0.09,0.44
+automotive,hybrid,0.09,0.17
+automotive,ice,0.09,0.38
+oil&gas,gas,0.35,0.34
+oil&gas,oil,0.35,0.66
+coal,coal,0.23,NA
+aviation,freight,0.01,NA
+aviation,mix,0.01,NA
+aviation,passenger,0.01,NA
+cement,grinding,0.05,NA
+cement,integrated facility,0.05,NA
+shipping,a,0.02,NA
+shipping,b,0.02,NA
+shipping,c,0.02,NA
+shipping,d,0.02,NA
+shipping,e,0.02,NA
+shipping,f,0.02,NA
+shipping,g,0.02,NA
+steel,ac-electric arc furnace,0.03,NA
+steel,blast furnace,0.03,NA
+steel,bof shop,0.03,NA
+steel,coking plant,0.03,NA
+steel,dc-electric arc furnace,0.03,NA
+steel,direct/smelting reduction plant,0.03,NA
+steel,open hearth plant,0.03,NA
+steel,pelletizing plant,0.03,NA
+steel,sintering plant,0.03,NA

@@ -22,7 +22,7 @@ apply_traffic_light_system <- function(
       names_prefix = "technology_share"
     )
   
-
+  
   traffic_light_data_indicator <- input_data_indicator %>% left_join(traffic_light_data, by = "indicator_name")
   
   .data <- .data %>% 
@@ -46,11 +46,50 @@ apply_traffic_light_system <- function(
   
 }
 
+add_sector_weights <- function() {
+  tibble::tribble(
+    ~ald_sector,                       ~technology, ~sector_weight, ~technology_weight,
+    "power",                         "coalcap",           0.22,               0.25,
+    "power",                          "gascap",           0.22,               0.06,
+    "power",                        "hydrocap",           0.22,               0.09,
+    "power",                      "nuclearcap",           0.22,               0.11,
+    "power",                          "oilcap",           0.22,               0.02,
+    "power",                   "renewablescap",           0.22,               0.46,
+    "automotive",                        "electric",           0.09,               0.44,
+    "automotive",                          "hybrid",           0.09,               0.17,
+    "automotive",                             "ice",           0.09,               0.38,
+    "oil&gas",                             "gas",           0.35,               0.34,
+    "oil&gas",                             "oil",           0.35,               0.66,
+    "coal",                            "coal",           0.23,                 NA,
+    "aviation",                         "freight",           0.01,                 NA,
+    "aviation",                             "mix",           0.01,                 NA,
+    "aviation",                       "passenger",           0.01,                 NA,
+    "cement",                        "grinding",           0.05,                 NA,
+    "cement",             "integrated facility",           0.05,                 NA,
+    "shipping",                               "a",           0.02,                 NA,
+    "shipping",                               "b",           0.02,                 NA,
+    "shipping",                               "c",           0.02,                 NA,
+    "shipping",                               "d",           0.02,                 NA,
+    "shipping",                               "e",           0.02,                 NA,
+    "shipping",                               "f",           0.02,                 NA,
+    "shipping",                               "g",           0.02,                 NA,
+    "steel",         "ac-electric arc furnace",           0.03,                 NA,
+    "steel",                   "blast furnace",           0.03,                 NA,
+    "steel",                        "bof shop",           0.03,                 NA,
+    "steel",                    "coking plant",           0.03,                 NA,
+    "steel",         "dc-electric arc furnace",           0.03,                 NA,
+    "steel", "direct/smelting reduction plant",           0.03,                 NA,
+    "steel",               "open hearth plant",           0.03,                 NA,
+    "steel",               "pelletizing plant",           0.03,                 NA,
+    "steel",                 "sintering plant",           0.03,                 NA
+  )
+}
+
 
 influencemap_weighting_methodology <- function(
   .data,
   alignment_from = "trajectory_alignment",
-  git_path = here::here()
+  ...
 ) {
   # crucial names
   crucial_names <- c(
@@ -66,12 +105,10 @@ influencemap_weighting_methodology <- function(
   )
   # check inputs 
   r2dii.utils::check_crucial_names(.data, crucial_names) 
-  # load sector weights 
-  sector_weights <- read_rds(path(git_path, "data", "sector_weightings", ext = "rds"))
   # first join technology and sector weights to pacta results file 
   .data <- .data %>%
-    inner_join(
-      sector_weights, 
+    dplyr::inner_join(
+      add_sector_weights(), 
       by = c("ald_sector", "technology")
     )
   # first reweight alignment to the sector level based on the technology importance 
@@ -88,7 +125,7 @@ influencemap_weighting_methodology <- function(
     mutate(
       alignment_sector = if_else(
         !is.na(.data$technology_weight), 
-        stats::weighted.mean(.data[[alignment_from]], .data$technology_weight * .data$plan_alloc_wt_tech_prod, na.rm = TRUE),
+        stats::weighted.mean(.data[[alignment_from]], .data$technology_weight * .data$plan_alloc_wt_tech_prod, ...),
         .data[[alignment_from]]
       )
     )
@@ -103,9 +140,9 @@ influencemap_weighting_methodology <- function(
       .data$scenario_geography, 
       .data$allocation
     ) %>%
-    summarise(alignment_asset_type = stats::weighted.mean(.data$alignment_sector, .data$sector_weight * .data$asset_type_sector_exposure, na.rm = TRUE))
+    summarise(alignment_asset_type = stats::weighted.mean(.data$alignment_sector, .data$sector_weight * .data$asset_type_sector_exposure, ...))
   # calculate portfolio level results 
-  .data %>%
+  .data <- .data %>%
     group_by(
       .data$investor_name, 
       .data$portfolio_name,
@@ -113,15 +150,18 @@ influencemap_weighting_methodology <- function(
       .data$scenario_geography, 
       .data$allocation
     ) %>%
-    summarise(alignment_portfolio = stats::weighted.mean(.data$alignment_asset_type, .data$asset_type_exposure, na.rm = TRUE)) %>% 
+    summarise(alignment_portfolio = stats::weighted.mean(.data$alignment_asset_type, .data$asset_type_exposure, ...))
+  # alignment source 
+  .data %>% 
+    mutate(alignment_metric = alignment_from) %>% 
     ungroup()
 }
 
 summarise_technology_share <- function(
   .data, 
-  plan_tech_emission_factor_from = "plan_emission_factor", 
-  plan_tech_prod_from = "plan_alloc_wt_tech_prod",
-  names_prefix = "sector_co2_intensity"
+  emission_factors_from = "plan_emission_factor", 
+  production_from = "plan_alloc_wt_tech_prod", 
+  technology_share_to = "technology_exposure"
 ) {
   # define crucial names
   crucial_names <- c(
@@ -131,20 +171,20 @@ summarise_technology_share <- function(
     "ald_sector",
     "technology",
     "asset_type_exposure", 
-    plan_tech_emission_factor_from,
-    plan_tech_prod_from
+    emission_factors_from,
+    production_from
   )
   # check crucial names
   r2dii.utils::check_crucial_names(.data,  crucial_names)
   # calculate sector technology exposure 
   .data <- .data %>% 
-    dplyr::filter(!is.nan(.data[[plan_tech_emission_factor_from]])) %>% 
+    dplyr::filter(!is.nan(.data[[emission_factors_from]])) %>% 
     summarise_group_share(
       id_cols = c("investor_name", "portfolio_name", "asset_type", "asset_type_exposure"), 
       numerator_group = "technology", 
       denominator_group = "ald_sector", 
-      values_from = plan_tech_prod_from, 
-      name_to = "technology_exposure", 
+      values_from = production_from, 
+      values_to = "technology_exposure", 
       na.rm = TRUE
     )
   # then roll-up to portfolio, sector-level 
@@ -152,41 +192,43 @@ summarise_technology_share <- function(
     summarise_group_weight(
       id_cols = c("investor_name", "portfolio_name", "ald_sector", "technology"), 
       weights_from = "asset_type_exposure", 
-      values_from = "technology_exposure"
+      values_from = "technology_exposure", 
+      values_to = technology_share_to
     )
 }
 
 
-summarise_emission_factor <- function(
+summarise_sector_production_weighted_emission_factor <- function(
   .data, 
-  plan_tech_emission_factor_from = "plan_emission_factor", 
-  plan_tech_prod_from = "plan_alloc_wt_tech_prod"
+  emission_factors_from = "plan_emission_factor", 
+  emission_factors_to = "emission_factor",
+  production_from = "plan_alloc_wt_tech_prod"
 ) {
   # define crucial names
-  crucial_names_results <- c(
+  crucial_names <- c(
     "investor_name", 
     "portfolio_name", 
     "asset_type", 
     "ald_sector",
     "technology",
     "asset_type_exposure",
-    plan_tech_emission_factor_from,
-    plan_tech_prod_from
+    emission_factor_from,
+    production_from
   )
   # check crucial names
-  r2dii.utils::check_crucial_names(.data, crucial_names_results)
+  r2dii.utils::check_crucial_names(.data, crucial_names)
   # calculate sector technology exposure 
   .data <- .data %>% 
     dplyr::filter(
-      !is.nan(.data[[plan_tech_emission_factor_from]]),
-      !is.nan(.data[[plan_tech_prod_from]])
+      !is.nan(.data[[emission_factor_from]]),
+      !is.nan(.data[[production_from]])
     ) %>% 
     calculate_group_share(
       id_cols = c("investor_name", "portfolio_name", "asset_type"), 
       numerator_group = "technology", 
       denominator_group = "ald_sector", 
-      values_from = plan_tech_prod_from, 
-      name_to = "technology_exposure", 
+      values_from = production_from, 
+      values_to = "technology_exposure", 
       na.rm = TRUE
     )
   # summarise by technology exposure 
@@ -194,15 +236,15 @@ summarise_emission_factor <- function(
     summarise_group_weight(
       id_cols = c("investor_name", "portfolio_name", "asset_type", "ald_sector", "asset_type_exposure"), 
       weights_from = "technology_exposure", 
-      values_from = plan_tech_emission_factor_from, 
-      name_to = "emission_factor"
+      values_from = emission_factor_from, 
+      values_to = emission_factor_to
     )
   # then roll-up to portfolio, sector-level 
   .data %>% 
     summarise_group_weight(
       id_cols = c("investor_name", "portfolio_name", "ald_sector"), 
       weights_from = "asset_type_exposure", 
-      values_from = "emission_factor"
+      values_from = emission_factor_to
     )
 }
 
@@ -227,8 +269,10 @@ summarise_top_groups <- function(
   n = 5, 
   id_cols = "investor_name",
   values_from = "value_usd",
+  values_to = "group_share",
   numerator_group = "company_name", 
-  denominator_group = "portfolio_name"
+  denominator_group = "portfolio_name", 
+  ...
 ) {
   # check parameters 
   check_top_groups_parameters(  
@@ -239,7 +283,7 @@ summarise_top_groups <- function(
     denominator_group = denominator_group
   )
   # group_cols 
-  groups_from <- c(id_cols, denominator_group)
+  group_vars <- unique(c(id_cols, denominator_group))
   # summarise group share
   .data <- .data %>% 
     filter(!is.na(.data[[numerator_group]])) %>% 
@@ -248,13 +292,14 @@ summarise_top_groups <- function(
       numerator_group = numerator_group, 
       denominator_group = denominator_group,
       values_from = values_from,
-      name_to = "values",
-      na.rm = TRUE
+      values_to = values_to,
+      ...
     )
   # take top values 
   .data %>% 
-    dplyr::group_by(!!!rlang::syms(groups_from)) %>% 
-    dplyr::slice_max(values, n = n, with_ties = FALSE) %>% 
+    dplyr::group_by(!!!rlang::syms(group_vars)) %>% 
+    dplyr::slice_max(.data[[values_to]], n = n, with_ties = FALSE) %>% 
+    dplyr::mutate(rank = seq_along(.data[[numerator_group]])) %>% 
     dplyr::ungroup()
 }
 
@@ -318,21 +363,17 @@ check_portfolio_data <- function(
     ungroup()
   # check crucial names 
   data <- data %>% 
-    r2dii.utils::check_crucial_names(crucial_names)
+    r2dii.utils::check_crucial_names(.data, crucial_names)
   # check market value class
   data <- data %>% 
     assertr::verify(class(.data[[market_value_from]]) == "numeric")
   # check for negative values 
-  data <- data %>% 
+  data %>% 
     assertr::assert(
       within_bounds(0,Inf),
       .data[[market_value_from]], 
       error_fun = just_warn
     )
-  # check isin inputs 
-  data %>% 
-    filter(str_detect(.data$isin, "[[:upper:]]{2}[[:alnum:]]{10}")) %>% 
-    assertr::verify(nrow(.) > 0)
 }
 
 calculate_sensentive_exposures <- function(
@@ -343,9 +384,7 @@ calculate_sensentive_exposures <- function(
 ) {
   # define crucial names 
   crucial_names <- c(id_cols, market_value_from, "isin")
-  # check portfolio data 
-  .data <- .data %>% 
-    check_portfolio_data(crucial_names, market_value_from)
+  r2dii.utils::check_crucial_names(.data, crucial_names)
   # load oekom data 
   sensentive_exposures <- read_rds(path("data", "sensentive_sector_exposure", ext = "rds"))
   # calculate the total portfolio value in each isin 
@@ -368,7 +407,8 @@ calculate_sensentive_exposures <- function(
       !!!rlang::syms(id_cols),
       .data$isin
     ) %>% 
-    mutate(adjusted_market_value = .data$market_value / n())
+    mutate(adjusted_market_value = .data$market_value / n()) %>% 
+    ungroup()
 }
 
 load_esg_raw_data <- function() {
@@ -415,13 +455,13 @@ check_group_weight_parameters <- function(
   id_cols,
   weights_from,
   values_from,
-  name_to = NULL
+  values_to = NULL
 ) {
   # check parameters 
   stopifnot(is.character(id_cols))
   stopifnot(is.character(weights_from))
   stopifnot(is.character(values_from))
-  stopifnot(is.character(name_to) | is.null(name_to))
+  stopifnot(is.character(values_to) | is.null(values_to))
   # check class 
   data %>% 
     assertr::verify(class(.data[[weights_from]]) == "numeric") %>% 
@@ -434,7 +474,7 @@ summarise_group_weight <- function(
   id_cols,
   weights_from,
   values_from,
-  name_to = NULL, 
+  values_to = NULL, 
   ...
 ) {
   # check parameters 
@@ -443,7 +483,7 @@ summarise_group_weight <- function(
       id_cols,
       weights_from,
       values_from,
-      name_to
+      values_to
     )
   # weight value 
   .data <- .data %>% 
@@ -451,10 +491,10 @@ summarise_group_weight <- function(
     dplyr::summarise(weighted_value := stats::weighted.mean(.data[[values_from]], .data[[weights_from]])) %>% 
     dplyr::ungroup()
   # rename output
-  if (!is.null(name_to)) {
+  if (!is.null(values_to)) {
     .data %>% 
-      plyr::rename(c("weighted_value" = name_to))
-  } else if (is.null(name_to)) {
+      plyr::rename(c("weighted_value" = values_to))
+  } else if (is.null(values_to)) {
     .data %>% 
       plyr::rename(c("weighted_value" = values_from))
   }
@@ -487,24 +527,21 @@ calculate_group_share <- function(
   numerator_group = "technology", 
   denominator_group = "ald_sector",
   values_from = "plan_alloc_wt_tech_prod",
-  name_to = NULL,
+  values_to = NULL,
   ...
 ) {
+  # ungroup data 
+  .data <- .data %>% 
+    ungroup()
   # check parameters
   check_group_share_parameters(
-    id_cols,
-    numerator_group, 
-    denominator_group,
-    values_from,
-    name_to
+    .data = .data,
+    id_cols = id_cols,
+    numerator_group = numerator_group, 
+    denominator_group = denominator_group,
+    values_from = values_from,
+    values_to = values_to
   )
-  # check input logic 
-  .data <- .data %>% 
-    check_group_share_data(
-      numerator_group, 
-      denominator_group,
-      values_from
-    )
   # calculate exposure 
   .data <- .data %>%
     dplyr::group_by(
@@ -520,10 +557,10 @@ calculate_group_share <- function(
     dplyr::mutate(group_share = .data$group_share / sum(.data$group_share, ...)) %>% 
     dplyr::ungroup()
   # rename output
-  if (!is.null(name_to)) {
+  if (!is.null(values_to)) {
     .data %>% 
-      plyr::rename(c("group_share" = name_to))
-  } else if (is.null(name_to)) {
+      plyr::rename(c("group_share" = values_to))
+  } else if (is.null(values_to)) {
     return(.data)
   }
 }
@@ -572,14 +609,15 @@ calculate_build_out_alignment <- function(
 }
 
 summarise_portfolio_paris_alignment <- function(
-  results, 
+  .data, 
   portfolio,
   alignment_from = "trajectory_alignment",
-  start_year = 2019,
-  git_path = here::here()
+  start_year = 2019
 ) {
   # apply weight to get portfolio results 
-  influencemap_weighting_methodology(results, alignment_from)
+  .data %>% 
+    filter(between(.data$year, start_year, start_year + 5)) %>% 
+    influencemap_weighting_methodology(alignment_from = alignment_from)
 }
 
 add_nice_values <- function(
@@ -769,44 +807,92 @@ prep_debt_economy <- function() {
     )
 }
 
+add_several_nice_names <- function(
+  .data,
+  values_from = NULL, 
+  names_from = NULL, 
+  values_to = "value", 
+  names_to = "indicator", 
+  names_prefixes = NULL,
+  names_suffixes = NULL,
+  sep = "_",
+  ...
+) {
+  purrr::map(
+    1:length(values_from), 
+    function(x) {
+      value_x <- values_from[x]
+      selected_columns <- c(id_cols, value_x, names_from)
+      .data %>% 
+        distinct(!!!rlang::syms(selected_columns)) %>% 
+        add_nice_names(
+          values_from = value_x,
+          values_to = values_to,
+          names_from = names_from, 
+          names_to = names_to,
+          names_prefix = names_prefixes[x],
+          names_suffix = names_suffixes[x], 
+          sep = sep, 
+          ...
+        )
+    }
+  )
+}
+
 add_nice_names <- function(
-  data,
-  values_from, 
-  names_from, 
+  .data,
+  values_from = NULL, 
+  names_from = NULL, 
   values_to = "value", 
   names_to = "indicator", 
   names_prefix = NULL,
   names_suffix = NULL,
   sep = "_",
+  add_value_class = TRUE,
   ...
 ) {
+  # define parameters 
+  character_parameters <- c(names_from, values_from, values_to, names_to, sep)
+  character_null_parameters <- c(names_prefix, names_suffix)
+  # check parameters
+  stopifnot(is.data.frame(.data))
+  lapply(character_parameters, function(x) {stopifnot(is.character(x) & !is.null(x))})
+  lapply(character_null_parameters, function(x) {stopifnot(is.character(x) | is.null(x))})
+  # check names
+  crucial_names <- c(names_from, values_from)
+  r2dii.utils::check_crucial_names(.data, crucial_names)
   # round values 
   if (is.integer(.data[[values_from]])) {
-    data <- data %>% 
+    .data <- .data %>% 
       dplyr::mutate("{values_from}" := round(.data[[values_from]], ...))
   }
   # add prefix or suffix 
   if (!is.null(names_prefix) & is.null(names_suffix)) {       
-    data <- data %>% 
+    .data <- .data %>% 
       dplyr::mutate("{names_from}" := paste(names_prefix, .data[[names_from]], sep = sep))
   } else if (!is.null(names_prefix) & !is.null(names_suffix)) {       
-    data <- data %>% 
+    .data <- .data %>% 
       dplyr::mutate("{names_from}" := paste(names_prefix, .data[[names_from]], names_suffix, sep = sep))
   } else if (is.null(names_prefix) & !is.null(names_suffix)) {       
-    data <- data %>% 
+    .data <- .data %>% 
       dplyr::mutate("{names_from}" := paste(.data[[names_from]], names_suffix, sep = sep))
+  }
+  # add class 
+  if (add_value_class == TRUE) {
+    .data <- .data %>% 
+      mutate(value_class = class(.data[[values_from]]))
   }
   # rename values  
   if (!is.null(values_to)) {
-    data <- data %>% 
+    .data <- .data %>% 
       dplyr::rename("{values_to}" := .data[[values_from]])
   }
   # rename names 
   if (!is.null(values_to)) {
-    data <- data %>% 
+    .data <- .data %>% 
       dplyr::rename("{names_to}" := .data[[names_from]])
   }
-  return(data)
+  return(.data)
 }
 
 pivot_wider_and_clean_names <- function(
@@ -858,7 +944,7 @@ connect_results_with_portfolio_weights <- function(
       values_from = "value_usd",
       numerator_group = sector_from, 
       denominator_group = "asset_type", 
-      name_to = "asset_type_sector_exposure", 
+      values_to = "asset_type_sector_exposure", 
       na.rm = TRUE
     ) %>% 
     rename("{sector_to}" := .data[[sector_from]])
@@ -875,7 +961,7 @@ connect_results_with_portfolio_weights <- function(
       values_from = "value_usd",
       numerator_group = sector_from, 
       denominator_group = "portfolio_name", 
-      name_to = "sector_exposure", 
+      values_to = "sector_exposure", 
       na.rm = TRUE
     ) %>% 
     rename("{sector_to}" := .data[[sector_from]])
@@ -892,7 +978,7 @@ connect_results_with_portfolio_weights <- function(
       values_from = "value_usd",
       numerator_group = "asset_type", 
       denominator_group = "portfolio_name", 
-      name_to = "asset_type_exposure", 
+      values_to = "asset_type_exposure", 
       na.rm = TRUE
     )
   # join asset type exposure with results 
@@ -1061,78 +1147,64 @@ load_fund_results <- function(
   # input_pacta_company_results <<- pacta_company_results
 }
 
-check_group_share_data <- function(
-  data, 
-  numerator_group, 
-  denominator_group,
-  values_from
-) {
-  # ungroup input 
-  data <- data %>%
-    dplyr::ungroup()
-  # check essential names
-  data %>%
-    r2dii.utils::check_crucial_names(c(values_from, numerator_group, denominator_group)) %>% 
-    assertr::verify(class(.data[[values_from]]) == "numeric")
-}
 
 check_group_share_parameters <- function(
+  .data, 
   id_cols,
   numerator_group, 
   denominator_group,
   values_from,
-  name_to
+  values_to
 ) {
-  stopifnot(is.character(id_cols) | is.null(id_cols))
-  stopifnot(is.character(numerator_group))
-  stopifnot(is.character(denominator_group))
-  stopifnot(is.character(values_from))
-  stopifnot(is.character(name_to) | is.null(name_to))
+  character_parameters <- c(numerator_group, denominator_group, values_from)
+  character_null_parameters <- c(id_cols, values_to)
+  # check parameters 
+  lapply(character_parameters, function(x) {stopifnot(is.character(x) & !is.null(x))})
+  lapply(character_null_parameters, function(x) {stopifnot(is.character(x) | is.null(x))})
+  # check names 
+  crucial_names <- c(values_from, numerator_group, denominator_group, id_cols)
+  r2dii.utils::check_crucial_names(.data, crucial_names)
+  # check values
+  assertr::verify(.data, class(.data[[values_from]]) == "numeric")
+  # return 
+  return(.data)
 }
 
 summarise_group_share <- function(
   .data,
   id_cols = NULL,
-  numerator_group = "technology", 
-  denominator_group = "ald_sector",
-  values_from = "plan_alloc_wt_tech_prod",
-  name_to = NULL,
+  numerator_group = "asset_type", 
+  denominator_group = "portfolio_name",
+  values_from = "value_usd",
+  values_to = NULL,
   ...
 ) {
-  # check parameters
-  check_group_share_parameters(
-    id_cols,
-    numerator_group, 
-    denominator_group,
-    values_from,
-    name_to
-  )
-  # check input logic 
+  # ungroup data 
   .data <- .data %>% 
-    check_group_share_data(
-      numerator_group, 
-      denominator_group,
-      values_from
+    ungroup()
+  # check parameters
+  .data <- .data %>% 
+    check_group_share_parameters(
+      id_cols = id_cols,
+      numerator_group = numerator_group, 
+      denominator_group = denominator_group,
+      values_from = values_from,
+      values_to = values_to
     )
+  # define group_vars 
+  group_vars <- unique(c(id_cols, denominator_group))
   # calculate exposure 
   .data <- .data %>%
-    dplyr::group_by(
-      !!!rlang::syms(id_cols),
-      .data[[numerator_group]],
-      .data[[denominator_group]]
-    ) %>% 
+    dplyr::group_by(!!!rlang::syms(c(group_vars, numerator_group))) %>% 
     dplyr::summarise(group_share = sum(.data[[values_from]], ...)) %>% 
-    group_by(
-      !!!rlang::syms(id_cols),
-      .data[[denominator_group]]
-    ) %>% 
+    group_by(!!!rlang::syms(group_vars)) %>% 
     dplyr::mutate(group_share = .data$group_share / sum(.data$group_share, ...)) %>% 
     dplyr::ungroup()
   # rename output
-  if (!is.null(name_to)) {
+  if (!is.null(values_to)) {
     .data %>% 
-      plyr::rename(c("group_share" = name_to))
-  } else if (is.null(name_to)) {
+      dplyr::rename("{values_to}" := .data$group_share)
+  } else if (is.null(values_to)) {
     return(.data)
   }
 }
