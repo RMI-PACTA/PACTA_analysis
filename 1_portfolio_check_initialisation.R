@@ -59,7 +59,7 @@ copy_files(project_name)
 
 options(r2dii_config = paste0(par_file_path,"/AnalysisParameters.yml"))
 
-set_global_parameters("/Users/vincentjerosch-herold/Dropbox (2° Investing)/PortCheck_v2/10_Projects/daisy_test5/10_Parameter_File/AnalysisParameters.yml")
+set_global_parameters(paste0(par_file_path,"/AnalysisParameters.yml"))
 
 analysis_inputs_path <- set_analysis_inputs_path(twodii_internal, data_location_ext, dataprep_timestamp)
 
