@@ -64,6 +64,28 @@ clean_portfolio_col_types <- function(portfolio, grouping_variables){
   
   portfolio$currency <- if_else(portfolio$currency == "Euro","EUR",portfolio$currency)
   
+  if(is.character(portfolio$investor_name) == FALSE) {
+    write_log(msg = paste("Wrong variable class for investor_name. Should be character, but is",
+                          class(portfolio$investor_name)))
+  }
+  if(is.character(portfolio$portfolio_name) == FALSE) {
+    write_log(msg = paste("Wrong variable class for portfolio_name Should be character, but is",
+                          class(portfolio$portfolio_name)))
+  }
+  if(is.numeric(portfolio$market_value) == FALSE) {
+    write_log(msg = paste("Wrong variable class for market_value Should be numeric, but is",
+                          class(portfolio$market_value)))
+  }
+  if(is.character(portfolio$currency) == FALSE) {
+    write_log(msg = paste("Wrong variable class for currency Should be character, but is",
+                          class(portfolio$currency)))
+  }
+  if(is.character(portfolio$isin) == FALSE) {
+    write_log(msg = paste("Wrong variable class for isin Should be character, but is",
+                          class(portfolio$isin)))
+  }
+  ###what about number_of_shares???
+  
   portfolio
 }
 
@@ -71,6 +93,10 @@ clear_portfolio_input_blanks <- function(portfolio){
   
   if(any(portfolio[,grouping_variables] == ""| is.na(portfolio[,grouping_variables]))){
     print("Warning: missing grouping variables, corresponding rows removed")
+    write_log(msg = paste("Warning: some entries of the uploaded portfolio file were removed
+              because of missing values in at least one of the variables", grouping_variables,
+                          "\n To ensure complete analysis, please upload a file without
+                          missing values in these columns."))
     
     portfolio <- portfolio %>% filter_at(
       grouping_variables, all_vars(!is.na(.))
@@ -157,6 +183,7 @@ check_missing_cols <- function(portfolio, grouping_variables){
   missing_columns <-setdiff(required_input_cols,colnames(portfolio))
   
   if(length(missing_columns) > 0){
+    write_log(msg = paste0("The input file is missing the following data columns: ", missing_columns))
     stop(paste0("The input file is missing the following data columns: ", missing_columns))
   }
   
@@ -955,7 +982,7 @@ get_and_clean_company_fin_data <- function(){
   comp_fin_data_raw <- comp_fin_data_raw %>% select(
     company_id, company_name, bloomberg_id, country_of_domicile, corporate_bond_ticker, bics_sector, bics_subgroup,
     icb_subgroup, mapped_sector, has_asset_level_data, has_assets_in_matched_sector, sectors_with_assets, 
-    current_shares_outstanding_all_classes, company_status, bond_debt_out,
+    current_shares_outstanding_all_classes, company_status, market_cap, bond_debt_out,
     financial_timestamp
   )
   
