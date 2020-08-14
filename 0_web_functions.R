@@ -121,6 +121,7 @@ get_input_files <- function(portfolio_name_ref_all){
   input_file_type <- unique(tools::file_ext(grep(portfolio_name_ref_all,list.files(path = input_path,full.names = F), value = T)))
   if (!input_file_type %in% c("csv", "xlsx", "txt")) {
     write_log(msg = "Input file format not supported. Must be .csv, .xlsx or .txt")
+    stop("Input file format not supported. Must be .csv, .xlsx or .txt")
   }
   
   
@@ -182,12 +183,10 @@ read_web_input_file <- function(input_file_path){
   
   if (file_ext == "csv"){
     input_file <- read_csv(input_file_path)
-    
   }
   if (file_ext == "xlsx"){
     input_file <- read_xlsx(input_file_path)
   }
-  
   if (file_ext == "txt"){
     enc <- guess_encoding(input_file_path)$encoding[1]
     input_file <- read.table(input_file_path,sep = ",", header = T, fileEncoding = enc)   
@@ -229,10 +228,10 @@ check_input_file_contents <- function(portfolio_, portfolio_name_in, investor_na
   if (length(setdiff(necessary_columns, colnames(portfolio_clean))) > 0){
     missing_cols = setdiff(necessary_columns, colnames(portfolio_clean))
     
-    warning(paste0("Missing inputs for this portfolio: ", missing_cols)) # Add LOG
-    write_log(msg = paste("The uploaded portfolio file contains the following missing variables:", missing_cols,
+    warning(paste0("Missing inputs for this portfolio: ", str_c(missing_cols, collapse = ", "))) # Add LOG
+    write_log(msg = paste("The uploaded portfolio file contains the following missing variables:", str_c(missing_cols, collapse = ", "),
                           "\n For correct analysis, please ensure the following required variables are included in your uploaded portfolio file:",
-                          necessary_columns))
+                          str_c(necessary_columns, collapse = ", ")))
   }
   
   return(portfolio_clean)  
