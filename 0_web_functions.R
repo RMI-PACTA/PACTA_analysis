@@ -231,7 +231,7 @@ check_input_file_contents <- function(portfolio_, portfolio_name_in, investor_na
     write_log(msg = paste("The uploaded portfolio file contains the following missing variables:", str_c(missing_cols, collapse = ", "),
                           "\n For correct analysis, please ensure the following required variables are included in your uploaded portfolio file:",
                           str_c(necessary_columns, collapse = ", ")))
-    stop(paste0("Missing inputs for this portfolio: ", str_c(missing_cols, collapse = ", "))) # Add LOG
+    stop(paste0("Missing inputs for this portfolio: ", str_c(missing_cols, collapse = ", ")))
     
   }
   
