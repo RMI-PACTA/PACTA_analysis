@@ -1,0 +1,16 @@
+investor_name,portfolio_name,holding_id,isin,value_usd,company_name,asset_type,valid_input,direct_holding,security_mapped_sector,financial_sector,sectors_with_assets,has_ald_in_fin_sector,flag
+Test,pow_eq_full,BR344104,US398433AK84,1248,NA,Bonds,TRUE,TRUE,Other,Other,NA,FALSE,Included in analysis
+Test,pow_eq_full,BR673093,US880779AZ60,865380,Terex Corp,Bonds,TRUE,TRUE,Other,Other,NA,FALSE,Included in analysis
+Test,pow_eq_full,BR344104,US98212BAG86,1248,Wpx Energy Inc,Bonds,TRUE,TRUE,Oil&Gas,Oil&Gas,Aviation + Oil&Gas,TRUE,Included in analysis
+Test,pow_eq_full,BR579280,US402635AH93,799872,Gulfport Energy Corp,Bonds,TRUE,TRUE,Oil&Gas,Oil&Gas,Oil&Gas,TRUE,Included in analysis
+Test,pow_eq_full,BR624105,US552704AD04,976752,Meg Energy Corp,Bonds,TRUE,TRUE,Oil&Gas,Oil&Gas,Oil&Gas + Power,TRUE,Included in analysis
+Test,pow_eq_full,BR579280,US880779AZ60,799872,Terex Corp,Bonds,TRUE,TRUE,Other,Other,NA,FALSE,Included in analysis
+Test,pow_eq_full,BR579280,US858119BD11,799872,Steel Dynamics Inc,Bonds,TRUE,TRUE,Steel,Steel,Aviation + Steel,TRUE,Included in analysis
+Test,pow_eq_full,BR673093,US651290AR99,865380,NA,Bonds,TRUE,TRUE,Oil&Gas,Oil&Gas,NA,FALSE,Included in analysis
+Test,pow_eq_full,BR307051,US00130HBU86,1957213,Aes Corp/The,Bonds,TRUE,TRUE,Power,Power,Coal + Power,TRUE,Included in analysis
+Test,pow_eq_full,BR307051,US912909AM02,1957213,United States Steel Corp,Bonds,TRUE,TRUE,Steel,Steel,Aviation + Power + Steel,TRUE,Included in analysis
+Test,pow_eq_full,BR344104,US26817RBA59,1248,Vistra Energy Corp,Bonds,TRUE,TRUE,Other,Other,Coal + Power,FALSE,Included in analysis
+Test,pow_eq_full,BR624105,US398433AH55,976752,NA,Bonds,TRUE,TRUE,Other,Other,NA,FALSE,Included in analysis
+Test,pow_eq_full,BR624105,US26817RAM07,976752,NA,Unclassifiable,FALSE,TRUE,Unclassifiable,Unclassifiable,NA,NA,Holding not in Bloomberg database
+Test,pow_eq_full,BR139343,US665531AB54,20770631,NA,Unclassifiable,FALSE,TRUE,Unclassifiable,Unclassifiable,NA,NA,Holding not in Bloomberg database
+Test,pow_eq_full,BR579280,US899415AA10,799872,NA,Unclassifiable,FALSE,TRUE,Unclassifiable,Unclassifiable,NA,NA,Holding not in Bloomberg database
