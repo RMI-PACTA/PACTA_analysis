@@ -42,8 +42,8 @@ set_global_parameters(paste0(par_file_path,"/AnalysisParameters.yml"))
 # need to define an alternative location for data files
 analysis_inputs_path <- set_analysis_inputs_path(twodii_internal, data_location_ext, dataprep_timestamp)
 
-# delete all results files
-unlink(paste0(results_path,"/*"), force = TRUE, recursive = TRUE)
+# delete all results files within the current portfolio folder
+unlink(paste0(results_path,"/",portfolio_name_ref_all,"/*"), force = TRUE, recursive = TRUE)
 
 # run again so output folders are available after deleting past results
 file_names <- read_csv(paste0(proc_input_path, "/file_names.csv"))
