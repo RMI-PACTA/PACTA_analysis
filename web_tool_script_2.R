@@ -55,6 +55,9 @@ port_col_types <- set_col_types(grouping_variables, "ddddccccddcl")
 ##### EQUITY #####
 ##################
 
+ald_scen_eq <- get_ald_scen("Equity")
+ald_raw_eq <- get_ald_raw("Equity")
+
 for (p in 1:nrow(file_names)){
   
   equity_input_file <- paste0(proc_input_path, "/",file_names$portfolio_name[p],"/equity_portfolio.rda")
@@ -65,10 +68,6 @@ for (p in 1:nrow(file_names)){
       mutate(id = as.character(id))
     
     if(length(colnames(port_raw_all_eq)) != nchar(port_col_types)){stop("Check port_col_types: difference in length")}
-    
-    ald_scen_eq <- get_ald_scen("Equity")
-    
-    ald_raw_eq <- get_ald_raw("Equity")
     
     list_investors_eq <- unique(port_raw_all_eq$investor_name)
     
@@ -145,6 +144,9 @@ for (p in 1:nrow(file_names)){
 ##### BONDS #####
 #################
 
+ald_scen_cb <- get_ald_scen("Bonds")
+ald_raw_cb <- get_ald_raw("Bonds")
+
 for (p in 1:nrow(file_names)){
   
   bonds_inputs_file <- paste0(proc_input_path, "/",file_names$portfolio_name[p],"/bonds_portfolio.rda")
@@ -156,10 +158,6 @@ for (p in 1:nrow(file_names)){
       mutate(id = as.character(id))
     
     if(length(colnames(port_raw_all_cb)) != nchar(port_col_types)){stop("Check port_col_types: difference in length")}
-    
-    ald_scen_cb <- get_ald_scen("Bonds")
-    
-    ald_raw_cb <- get_ald_raw("Bonds")
     
     list_investors_cb <- unique(port_raw_all_cb$investor_name)
     
