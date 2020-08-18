@@ -20,7 +20,10 @@ identify_portfolios <- function(portfolio_total){
            loc_name = paste0(portfolio_name_ref_all, "-", file_name))
   
   
-  if(length(port_names %>% select(investor_name) %>% distinct()) > 1){warning("More than one investor in portfolio")}
+  if(length(port_names %>% select(investor_name) %>% distinct()) > 1){
+      write_log("There is more than one investor name within a portfolio. Please correct the input data and retry.")
+      stop("More than one investor in portfolio")
+    }
   
   return(port_names)
   
@@ -31,7 +34,8 @@ create_portfolio_subfolders <- function(file_names, portfolio_name_ref_all){
   folders <- c("30_Processed_Inputs", "40_Results", "50_Outputs")
   
   locs_to_create <- folders %>%
-    purrr::map(~ paste0(project_location, "/", .x, "/", file_names$portfolio_name)) %>% 
+    # purrr::map(~ paste0(project_location, "/", .x, "/", file_names$portfolio_name)) %>% 
+    purrr::map(~ paste0(project_location, "/", .x, "/", portfolio_name_ref_all)) %>% 
     flatten_chr()
   
   locs_to_create %>% 
@@ -56,7 +60,7 @@ save_if_exists <- function(df, portfolio_name_, save_name, csv_or_rds = "rds"){
 
 set_webtool_paths <- function(){
   
-  project_location <<-  paste0(working_location,"working_dir")
+  project_location <<-  paste0(working_location,"working_dir/")
   
   log_path <<- paste0(project_location,"/00_Log_Files")
   par_file_path <<- paste0(project_location,"/10_Parameter_File")

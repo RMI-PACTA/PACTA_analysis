@@ -47,7 +47,7 @@ unlink(paste0(results_path,"/*"), force = TRUE, recursive = TRUE)
 
 # run again so output folders are available after deleting past results
 file_names <- read_csv(paste0(proc_input_path, "/file_names.csv"))
-create_portfolio_subfolders(file_names)
+create_portfolio_subfolders(file_names, portfolio_name_ref_all)
 
 port_col_types <- set_col_types(grouping_variables, "ddddccccddcl")
 
@@ -60,7 +60,7 @@ ald_raw_eq <- get_ald_raw("Equity")
 
 for (p in 1:nrow(file_names)){
   
-  equity_input_file <- paste0(proc_input_path, "/",file_names$portfolio_name[p],"/equity_portfolio.rda")
+  equity_input_file <- paste0(proc_input_path,"/", portfolio_name_ref_all, "/",file_names$portfolio_name[p],"_equity_portfolio.rda")
   portfolio_name_ <- file_names$portfolio_name[p]
   
   if(file.exists(equity_input_file)){
@@ -122,12 +122,12 @@ for (p in 1:nrow(file_names)){
       
       company_all_eq <- calculate_scenario_alignment(company_all_eq)
       
-      pf_file_results_path <- paste0(results_path,"/", portfolio_name_, "/") 
+      pf_file_results_path <- paste0(results_path,"/", portfolio_name_ref_all, "/") 
       if(!dir.exists(pf_file_results_path)){dir.create(pf_file_results_path)}
       
-      if(data_check(company_all_eq)){write_rds(company_all_eq, paste0(pf_file_results_path, "Equity_results_company.rda"))}	
-      if(data_check(port_all_eq)){write_rds(port_all_eq, paste0(pf_file_results_path, "Equity_results_portfolio.rda"))}	
-      if(has_map){if(data_check(map_eq)){write_rds(map_eq, paste0(pf_file_results_path, "Equity_results_map.rda"))}}
+      if(data_check(company_all_eq)){write_rds(company_all_eq, paste0(pf_file_results_path, portfolio_name_,"_Equity_results_company.rda"))}	
+      if(data_check(port_all_eq)){write_rds(port_all_eq, paste0(pf_file_results_path, portfolio_name_,"_Equity_results_portfolio.rda"))}	
+      if(has_map){if(data_check(map_eq)){write_rds(map_eq, paste0(pf_file_results_path, portfolio_name_,"_Equity_results_map.rda"))}}
       
       # investor_results_path <- paste0(results_path,"/", investor_name_select, "/") 
       # if(!dir.exists(investor_results_path)){dir.create(investor_results_path)}
@@ -149,7 +149,7 @@ ald_raw_cb <- get_ald_raw("Bonds")
 
 for (p in 1:nrow(file_names)){
   
-  bonds_inputs_file <- paste0(proc_input_path, "/",file_names$portfolio_name[p],"/bonds_portfolio.rda")
+  bonds_inputs_file <- paste0(proc_input_path,"/", portfolio_name_ref_all,"/",file_names$portfolio_name[p],"_bonds_portfolio.rda")
   portfolio_name_ <- file_names$portfolio_name[p]
   
   if (file.exists(bonds_inputs_file)){
@@ -207,12 +207,12 @@ for (p in 1:nrow(file_names)){
       
       company_all_cb <- calculate_scenario_alignment(company_all_cb)
       
-      pf_file_results_path <- paste0(results_path,"/", portfolio_name_, "/") 
+      pf_file_results_path <- paste0(results_path,"/", portfolio_name_ref_all, "/") 
       if(!dir.exists(pf_file_results_path)){dir.create(pf_file_results_path)}
       
-      if(data_check(company_all_cb)){ write_rds(company_all_cb, paste0(pf_file_results_path, "Bonds_results_company.rda"))}	
-      if(data_check(port_all_cb)){write_rds(port_all_cb, paste0(pf_file_results_path, "Bonds_results_portfolio.rda"))}	
-      if(has_map){if(data_check(map_cb)){write_rds(map_cb, paste0(pf_file_results_path, "Bonds_results_map.rda"))}}
+      if(data_check(company_all_cb)){ write_rds(company_all_cb, paste0(pf_file_results_path, portfolio_name_,"_Bonds_results_company.rda"))}	
+      if(data_check(port_all_cb)){write_rds(port_all_cb, paste0(pf_file_results_path, portfolio_name_,"_Bonds_results_portfolio.rda"))}	
+      if(has_map){if(data_check(map_cb)){write_rds(map_cb, paste0(pf_file_results_path, portfolio_name_,"_Bonds_results_map.rda"))}}
       
       # investor_results_path <- paste0(results_path,"/", investor_name_select, "/") 
       # if(!dir.exists(investor_results_path)){dir.create(investor_results_path)}
