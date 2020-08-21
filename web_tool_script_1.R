@@ -129,6 +129,12 @@ portfolio <- process_raw_portfolio(portfolio_raw,
                                    currencies,
                                    grouping_variables)
 
+portfolio <- portfolio %>% 
+  mutate(portfolio_name = ifelse(portfolio_name %>% unique() %>% length() > 1,
+                                 portfolio_name_ref_all,
+                                 portfolio_name)
+         )
+
 portfolio <- add_revenue_split(has_revenue, portfolio, revenue_data)
 
 portfolio <- create_ald_flag(portfolio, comp_fin_data, debt_fin_data)
