@@ -181,24 +181,21 @@ write_csv(file_names, paste0(proc_input_path, "/file_names.csv"))
 
 create_portfolio_subfolders(file_names, portfolio_name_ref_all)
 
-for (p in 1:nrow(file_names)){
   
-  portfolio_name_ <- file_names$portfolio_name[p]
-  # proc_input_path_ <- paste0(proc_input_path, "/", file_names$portfolio_name[p])
-  proc_input_path_ <- paste0(proc_input_path, "/", portfolio_name_ref_all)
-  print(p)
-  export_audit_information_jsons(audit_file_ = audit_file %>% filter(portfolio_name == portfolio_name_), 
-                                 portfolio_total_ = portfolio_total %>% filter(portfolio_name == portfolio_name_),  
-                                 folder_path = proc_input_path_
-  )
+portfolio_name <- file_names$portfolio_name
+
+proc_input_path_ <- paste0(proc_input_path, "/", portfolio_name_ref_all)
   
-  save_if_exists(audit_file, portfolio_name_, paste0(proc_input_path_, "/",portfolio_name_,"_audit_file.csv"), csv_or_rds = "csv")
+export_audit_information_jsons(audit_file_ = audit_file %>% filter(portfolio_name == portfolio_name), 
+                               portfolio_total_ = portfolio_total %>% filter(portfolio_name == portfolio_name),  
+                               folder_path = proc_input_path_)
   
-  save_if_exists(portfolio_total, portfolio_name_, paste0(proc_input_path_, "/",portfolio_name_,"_total_portfolio.rda"))
-  save_if_exists(eq_portfolio, portfolio_name_, paste0(proc_input_path_, "/",portfolio_name_,"_equity_portfolio.rda"))
-  save_if_exists(cb_portfolio, portfolio_name_, paste0(proc_input_path_, "/",portfolio_name_,"_bonds_portfolio.rda"))
-  save_if_exists(portfolio_overview, portfolio_name_, paste0(proc_input_path_, "/",portfolio_name_,"_overview_portfolio.rda"))
-  save_if_exists(audit_file, portfolio_name_, paste0(proc_input_path_, "/",portfolio_name_,"_audit_file.rda"))
-  save_if_exists(emissions_totals, portfolio_name_, paste0(proc_input_path_, "/",portfolio_name_,"_emissions.rda"))
+save_if_exists(audit_file, portfolio_name, paste0(proc_input_path_, "/",portfolio_name,"_audit_file.csv"), csv_or_rds = "csv")
   
-}
+save_if_exists(portfolio_total, portfolio_name, paste0(proc_input_path_, "/",portfolio_name,"_total_portfolio.rda"))
+save_if_exists(eq_portfolio, portfolio_name, paste0(proc_input_path_, "/",portfolio_name,"_equity_portfolio.rda"))
+save_if_exists(cb_portfolio, portfolio_name, paste0(proc_input_path_, "/",portfolio_name,"_bonds_portfolio.rda"))
+save_if_exists(portfolio_overview, portfolio_name, paste0(proc_input_path_, "/",portfolio_name,"_overview_portfolio.rda"))
+save_if_exists(audit_file, portfolio_name, paste0(proc_input_path_, "/",portfolio_name,"_audit_file.rda"))
+save_if_exists(emissions_totals, portfolio_name, paste0(proc_input_path_, "/",portfolio_name,"_emissions.rda"))
+
