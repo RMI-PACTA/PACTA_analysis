@@ -208,7 +208,7 @@ aggregate_map_data <- function(portfolio){
   
   portfolio <- portfolio %>% 
     ungroup() %>% 
-    group_by(!!!rlang::syms(grouping_variables), allocation, 
+    group_by(!!!rlang::syms(grouping_variables), #allocation, 
              ald_location, year,
              ald_sector, technology, 
              financial_sector, allocation, allocation_weight, ald_production_unit) %>%

@@ -292,8 +292,8 @@ create_project_folder <- function(project_name, twodii_internal, project_locatio
     lapply(project_folders, function(x) dir.create(x))
     
     # Copy in Parameter File
-    file.copy(paste0(working_location, "parameter_files/AnalysisParameters.csv"), 
-              paste0(project_location, "/10_Parameter_File/AnalysisParameters.csv"))
+    file.copy(paste0(working_location, "parameter_files/AnalysisParameters.yml"), 
+              paste0(project_location, "/10_Parameter_File/AnalysisParameters.yml"))
   }
   
 }
@@ -331,6 +331,19 @@ first_char_up <- function(x){
   x <- paste0(toupper(substr(x,1,1)),tolower(substr(x,2,nchar(x))))
   x
 }
+
+
+#write error log for input portfolio - msg should be a string containing the error message
+write_log <- function(msg, ...) {
+  composed <- paste(
+    as.character(Sys.time()),
+    as.character(msg),
+    ...
+  )
+  write(composed, file = paste0(project_location,"/00_Log_Files/error_messages.txt"), append = TRUE)
+}
+
+
 
 # clean_punctuation <- function(x){
 #   

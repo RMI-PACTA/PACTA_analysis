@@ -20,7 +20,10 @@ identify_portfolios <- function(portfolio_total){
            loc_name = paste0(portfolio_name_ref_all, "-", file_name))
   
   
-  if(length(port_names %>% select(investor_name) %>% distinct()) > 1){warning("More than one investor in portfolio")}
+  if(length(port_names %>% select(investor_name) %>% distinct()) > 1){
+      write_log("There is more than one investor name within a portfolio. Please correct the input data and retry.")
+      stop("More than one investor in portfolio")
+    }
   
   return(port_names)
   
@@ -30,9 +33,14 @@ create_portfolio_subfolders <- function(file_names, portfolio_name_ref_all){
   
   folders <- c("30_Processed_Inputs", "40_Results", "50_Outputs")
   
-  locs_to_create <- paste0(project_location, "/", folders, "/", file_names$loc_name)
+  locs_to_create <- folders %>%
+    # purrr::map(~ paste0(project_location, "/", .x, "/", file_names$portfolio_name)) %>% 
+    purrr::map(~ paste0(project_location, "/", .x, "/", portfolio_name_ref_all)) %>% 
+    flatten_chr()
   
-  lapply(locs_to_create, dir.create)    
+  locs_to_create %>% 
+    purrr::map(~ dir.create(.x))
+  
   
 }
 
@@ -52,7 +60,7 @@ save_if_exists <- function(df, portfolio_name_, save_name, csv_or_rds = "rds"){
 
 set_webtool_paths <- function(){
   
-  project_location <<-  paste0(working_location,"working_dir")
+  project_location <<-  paste0(working_location,"working_dir/")
   
   log_path <<- paste0(project_location,"/00_Log_Files")
   par_file_path <<- paste0(project_location,"/10_Parameter_File")
@@ -102,7 +110,7 @@ add_naming_to_portfolio <- function(portfolio_raw){
 
 get_input_files <- function(portfolio_name_ref_all){
   
-  portfolio <- NA
+  portfolio <- tibble()
   
   input_path <- paste0(project_location, "/20_Raw_Inputs/")
   
@@ -114,22 +122,37 @@ get_input_files <- function(portfolio_name_ref_all){
   input_names = gsub(".txt", "",input_names)
   input_names = gsub(".xlsx", "",input_names)
   
+  input_file_type <- unique(tools::file_ext(grep(portfolio_name_ref_all,list.files(path = input_path,full.names = F), value = T)))
+  if (!input_file_type %in% c("csv", "xlsx", "txt")) {
+    write_log(msg = "Input file format not supported. Must be .csv, .xlsx or .txt")
+    stop("Input file format not supported. Must be .csv, .xlsx or .txt")
+  }
+  
+  
   if(!all(portfolio_name_ref_all %in% input_names)){
+    write_log(msg = "Difference in input files and input argument portfolio names.")
     stop("Difference in input files and input argument portfolio names.")
   }
   
-  if(any(!portfolio_name_ref_all %in% input_names)){stop("Missing input argument")}
+  if(any(!portfolio_name_ref_all %in% input_names)){
+    write_log(msg = "Missing input argument")
+    stop("Missing input argument")
+  }
   
   portfolio_file_names <- list.files(paste0(project_location, "/10_Parameter_File/"))
   portfolio_file_names <- portfolio_file_names[grepl("_PortfolioParameters.yml",portfolio_file_names)]
   portfolio_file_names <- gsub("_PortfolioParameters.yml","", portfolio_file_names)
   
   if(!all(portfolio_name_ref_all %in% portfolio_file_names)){
+    write_log(msg = "Difference in parameter files and input argument portfolio names.")
     stop("Difference in parameter files and input argument portfolio names.")
   }
-  if(any(!portfolio_name_ref_all %in% portfolio_file_names)){stop("Missing portfolio parameter file")}
-  
-  if(any(!portfolio_name_ref_all %in% input_names)){stop("Missing input argument")}
+  if(any(!portfolio_name_ref_all %in% portfolio_file_names)){
+    write_log(msg = "Missing portfolio parameter file")
+    stop("Missing portfolio parameter file")
+  }
+  # this is already tested above -- duplicate
+  # if(any(!portfolio_name_ref_all %in% input_names)){stop("Missing input argument")}
   
   
   for (i in 1:length(portfolio_name_ref_all)){
@@ -164,12 +187,10 @@ read_web_input_file <- function(input_file_path){
   
   if (file_ext == "csv"){
     input_file <- read_csv(input_file_path)
-    
   }
   if (file_ext == "xlsx"){
     input_file <- read_xlsx(input_file_path)
   }
-  
   if (file_ext == "txt"){
     enc <- guess_encoding(input_file_path)$encoding[1]
     input_file <- read.table(input_file_path,sep = ",", header = T, fileEncoding = enc)   
@@ -187,6 +208,11 @@ read_web_input_file <- function(input_file_path){
   
   if(data_check(input_file) == FALSE){
     warning("Input file not readable")
+    ifelse(nrow(input_file) == 0,
+           write_log(msg = "Input file has 0 rows. Please ensure the uploaded file is not empty."),
+           write_log(msg = "Input file could not be transformed into a data.frame.
+                     Please check the uploaded file has the correct format.")
+    )
   }
   
   return(input_file)
@@ -199,13 +225,18 @@ check_input_file_contents <- function(portfolio_, portfolio_name_in, investor_na
   
   necessary_columns <- c(grouping_variables, "market_value", "currency", "isin")
   
+  # if portfolio_name and investor_name are not among the columns of the input file, they are created using the values from the parameter file
   if (!"portfolio_name" %in% colnames(portfolio_clean)){portfolio_clean$portfolio_name = portfolio_name_in}
   if (!"investor_name" %in% colnames(portfolio_clean)){portfolio_clean$investor_name = investor_name_in}
   
   if (length(setdiff(necessary_columns, colnames(portfolio_clean))) > 0){
     missing_cols = setdiff(necessary_columns, colnames(portfolio_clean))
     
-    warning(paste0("Missing inputs for this portfolio: ", missing_cols)) # Add LOG
+    write_log(msg = paste("The uploaded portfolio file contains the following missing variables:", str_c(missing_cols, collapse = ", "),
+                          "\n For correct analysis, please ensure the following required variables are included in your uploaded portfolio file:",
+                          str_c(necessary_columns, collapse = ", ")))
+    stop(paste0("Missing inputs for this portfolio: ", str_c(missing_cols, collapse = ", ")))
+    
   }
   
   return(portfolio_clean)  
@@ -274,4 +305,5 @@ check_file_size <- function(folder_to_check){
   any(file.size(files_to_check) > 100e6) 
   
 }
+
 

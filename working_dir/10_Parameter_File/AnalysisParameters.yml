@@ -61,6 +61,7 @@ default:
       - OECD
     Equity.Market.List:
       - GlobalMarket
+      - Global
       - EmergingMarket
       - DevelopedMarket
   Reporting:
