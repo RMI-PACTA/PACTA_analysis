@@ -27,7 +27,7 @@ source("0_web_functions.R")
 source("0_json_functions.R")
 
 if (rstudioapi::isAvailable()) {
-  portfolio_name_ref_all <- c("TestPortfolio_Input")
+  portfolio_name_ref_all <- c("liechtenstein_p2020_rerun_Input")
   working_location <- dirname(rstudioapi::getActiveDocumentContext()$path)
   set_web_parameters(file_path = paste0(working_location,"/parameter_files/WebParameters_2dii.yml"))
 } else {
@@ -134,6 +134,7 @@ portfolio <- portfolio %>%
                                  portfolio_name_ref_all,
                                  portfolio_name)
          )
+
 
 portfolio <- add_revenue_split(has_revenue, portfolio, revenue_data)
 
