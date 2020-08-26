@@ -48,6 +48,8 @@ portfolio <- add_revenue_split(has_revenue, portfolio, revenue_data)
 
 portfolio <- create_ald_flag(portfolio, comp_fin_data, debt_fin_data)
 
+portfolio <- add_bics_sector(portfolio, comp_fin_data, debt_fin_data)
+
 eq_portfolio <- create_portfolio_subset(portfolio, 
                                         "Equity", 
                                         comp_fin_data)
