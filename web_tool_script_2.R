@@ -21,7 +21,7 @@ source("0_web_functions.R")
 
 
 if (rstudioapi::isAvailable()) {
-  portfolio_name_ref_all <- c("liechtenstein_p2020_rerun_Input")
+  portfolio_name_ref_all <- c("TestPortfolio_Input")
   working_location <- dirname(rstudioapi::getActiveDocumentContext()$path)
   set_web_parameters(file_path = paste0(working_location,"/parameter_files/WebParameters_2dii.yml"))
 } else {
@@ -49,7 +49,7 @@ unlink(paste0(results_path,"/",portfolio_name_ref_all,"/*"), force = TRUE, recur
 file_names <- read_csv(paste0(proc_input_path, "/file_names.csv"))
 create_portfolio_subfolders(file_names, portfolio_name_ref_all)
 
-port_col_types <- set_col_types(grouping_variables, "ddddccccddcl")
+port_col_types <- set_col_types(grouping_variables, "ddddccccddclc")
 
 ##################
 ##### EQUITY #####

@@ -18,7 +18,7 @@ library(jsonlite)
 library(fst)
 
 if (rstudioapi::isAvailable()) {
-  portfolio_name_ref_all <- c("liechtenstein_p2020_rerun_Input")
+  portfolio_name_ref_all <- c("TestPortfolio_Input")
   working_location <- dirname(rstudioapi::getActiveDocumentContext()$path)
   set_web_parameters(file_path = paste0(working_location,"/parameter_files/WebParameters_2dii.yml"))
 } else {
@@ -51,12 +51,12 @@ file_names <- read_csv(paste0(proc_input_path, "/file_names.csv"))
 repo_path <- template_path
 template_dir <- fs::path(template_path, "template_beta")
 company_charts_dir <- fs::path(template_path, "company_charts", "Mixed_Portfolio")
-output_dir <- outputs_path
+output_dir <- paste0(outputs_path,"/", portfolio_name_ref_all, "/")
 project_name <- "working_dir"
 investor_name <- file_names$investor_name
 portfolio_name <- file_names$portfolio_name
 # start_year <- 2020
-scenario <- "SDS"
+scenario <- "B2DS"
 portfolio_allocation_method <- "portfolio_weight"
 scenario_geography <- "Global"
 audit_file <- read_csv(paste0(proc_input_path,"/", portfolio_name,"/", portfolio_name,"_audit_file.csv"))

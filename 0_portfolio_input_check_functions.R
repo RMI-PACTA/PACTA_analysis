@@ -694,8 +694,10 @@ overall_validity_flag <- function(portfolio_total){
 
 create_ald_flag <- function(portfolio, comp_fin_data, debt_fin_data){
   
-  portfolio_eq <- portfolio %>% filter(asset_type == "Equity")
-  portfolio_cb <- portfolio %>% filter(asset_type == "Bonds")
+  portfolio_eq <- portfolio %>% filter(asset_type == "Equity") %>% 
+    left_join(comp_fin_data %>% select(company_id, bics_sector), by = c("company_id"))
+  portfolio_cb <- portfolio %>% filter(asset_type == "Bonds") %>% 
+    left_join(debt_fin_data %>% select(corporate_bond_ticker, bics_sector), by = c("corporate_bond_ticker"))
   portfolio_other <- portfolio %>% filter(!asset_type %in% c("Equity", "Bonds"))
   
   portfolio_eq <- check_for_ald(portfolio_eq, "Equity", comp_fin_data)  
@@ -704,9 +706,10 @@ create_ald_flag <- function(portfolio, comp_fin_data, debt_fin_data){
   if (data_check(portfolio_other)){
     portfolio_other <- portfolio_other %>% mutate(has_asset_level_data = NA,
                                                   sectors_with_assets = NA,
-                                                  has_ald_in_fin_sector = NA)
+                                                  has_ald_in_fin_sector = NA,
+                                                  bics_sector = NA)
   }else{
-    portfolio_other <- portfolio_other %>% add_column("has_asset_level_data","sectors_with_assets","has_ald_in_fin_sector")
+    portfolio_other <- portfolio_other %>% add_column("has_asset_level_data","sectors_with_assets","has_ald_in_fin_sector", "bics_sector")
     
   }
   
@@ -1124,7 +1127,7 @@ create_portfolio_subset <- function(portfolio, portfolio_type, relevant_fin_data
     portfolio_subset <- portfolio_subset %>% 
       select(all_of(grouping_variables), holding_id, value_usd, number_of_shares, 
              company_id, company_name, id, id_name, country_of_domicile, unit_share_price, current_shares_outstanding_all_classes,
-             financial_sector, has_ald_in_fin_sector)
+             financial_sector, has_ald_in_fin_sector, bics_sector)
     
   }else{
     print(paste0("No ",portfolio_type," in portfolio"))
@@ -1222,7 +1225,7 @@ create_audit_file <- function(portfolio_total){
   
   audit_file <- portfolio_total %>% 
     select(all_of(grouping_variables), holding_id, isin, value_usd, company_name, asset_type,  has_revenue_data, valid_input, 
-          direct_holding, security_mapped_sector, financial_sector, sectors_with_assets, has_ald_in_fin_sector,flag)
+          direct_holding, security_mapped_sector, financial_sector, bics_sector, sectors_with_assets, has_ald_in_fin_sector,flag)
   
   if(has_revenue == FALSE){audit_file <- audit_file %>% select(-has_revenue_data)}
   
