@@ -1,7 +1,7 @@
 # TODO: 
 # Clean up sectors options
 
-port_col_types <- set_col_types(grouping_variables, "ddddccccddcl")
+port_col_types <- set_col_types(grouping_variables, "ddddccccddclc")
 ##################
 ##### EQUITY #####
 ##################
