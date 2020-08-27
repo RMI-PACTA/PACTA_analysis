@@ -62,12 +62,12 @@ set_webtool_paths <- function(){
   
   project_location <<-  paste0(working_location,"working_dir/")
   
-  log_path <<- paste0(project_location,"/00_Log_Files")
-  par_file_path <<- paste0(project_location,"/10_Parameter_File")
-  raw_input_path <<-  paste0(project_location,"/20_Raw_Inputs")
-  proc_input_path <<- paste0(project_location,"/30_Processed_Inputs")
-  results_path <<- paste0(project_location,"/40_Results")
-  outputs_path <<- paste0(project_location,"/50_Outputs")
+  log_path <<- paste0(project_location,"00_Log_Files")
+  par_file_path <<- paste0(project_location,"10_Parameter_File")
+  raw_input_path <<-  paste0(project_location,"20_Raw_Inputs")
+  proc_input_path <<- paste0(project_location,"30_Processed_Inputs")
+  results_path <<- paste0(project_location,"40_Results")
+  outputs_path <<- paste0(project_location,"50_Outputs")
   
   
 }
@@ -177,6 +177,11 @@ get_input_files <- function(portfolio_name_ref_all){
   }
   portfolio <- clean_portfolio_col_types(portfolio)
   portfolio <- clear_portfolio_input_blanks(portfolio)
+  
+  if(portfolio %>% pull(investor_name) %>% unique() %>% length() > 1){
+    write_log(msg = "Multiple investors detected. Only one investor at a time can be anaylsed")
+    stop("Multiple investors detected. Only one investor at a time can be anaylsed")
+  }
   
   return(portfolio)
 }

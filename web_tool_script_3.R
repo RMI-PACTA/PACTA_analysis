@@ -51,31 +51,31 @@ file_names <- read_csv(paste0(proc_input_path, "/file_names.csv"))
 repo_path <- template_path
 template_dir <- fs::path(template_path, "template_beta")
 company_charts_dir <- fs::path(template_path, "company_charts", "Mixed_Portfolio")
-output_dir <- outputs_path
+output_dir <- paste0(outputs_path,"/", portfolio_name_ref_all, "/")
 project_name <- "working_dir"
-investor_name <- investor_name_in
-portfolio_name <- portfolio_name_in
-start_year <- 2020
-scenario <- "SDS"
+investor_name <- file_names$investor_name
+portfolio_name <- file_names$portfolio_name
+# start_year <- 2020
+scenario <- "B2DS"
 portfolio_allocation_method <- "portfolio_weight"
 scenario_geography <- "Global"
-audit_file <- read_csv(fs::path(proc_input_path, file_names$loc_name[1],"/working_dir_audit_file.csv"))
-emissions <- read_rds(fs::path(proc_input_path, file_names$loc_name[1],"/working_dir_emissions.rda"))
-equity_results_portfolio <- read_rds(fs::path(results_path,"/", investor_name_in,"/Equity_results_portfolio.rda"))
-bonds_results_portfolio <- read_rds(fs::path(results_path,"/", investor_name_in,"/Bonds_results_portfolio.rda"))
+audit_file <- read_csv(paste0(proc_input_path,"/", portfolio_name,"/", portfolio_name,"_audit_file.csv"))
+emissions <- read_rds(paste0(proc_input_path,"/", portfolio_name,"/", portfolio_name,"_emissions.rda"))
+equity_results_portfolio <- read_rds(paste0(results_path,"/", portfolio_name,"/", portfolio_name,"_Equity_results_portfolio.rda"))
+bonds_results_portfolio <- read_rds(paste0(results_path,"/", portfolio_name,"/", portfolio_name,"_Bonds_results_portfolio.rda"))
 # bonds_results_portfolio <- equity_results_portfolio %>% filter(portfolio_name == "")
-equity_results_company <- read_rds(fs::path(results_path,"/", investor_name_in,"/Equity_results_company.rda"))
-bonds_results_company <- read_rds(fs::path(results_path,"/", investor_name_in,"/Bonds_results_company.rda"))
+equity_results_company <- read_rds(paste0(results_path,"/", portfolio_name,"/", portfolio_name,"_Equity_results_company.rda"))
+bonds_results_company <- read_rds(paste0(results_path,"/", portfolio_name,"/", portfolio_name,"_Bonds_results_company.rda"))
 
 # bonds_results_company <- equity_results_company %>% filter(portfolio_name == "")
-equity_results_map <-read_rds(fs::path(results_path,"/", investor_name_in,"/Equity_results_map.rda"))
-bonds_results_map <-read_rds(fs::path(results_path,"/", investor_name_in,"/Bonds_results_map.rda"))
+equity_results_map <-read_rds(paste0(results_path,"/", portfolio_name,"/", portfolio_name,"_Equity_results_map.rda"))
+bonds_results_map <-read_rds(paste0(results_path,"/", portfolio_name,"/", portfolio_name,"_Bonds_results_map.rda"))
 
 # bonds_results_map <- equity_results_map %>% filter(portfolio_name == "")
-indicies_equity_results_portfolio <- read_rds(fs::path(data_location_ext,"/0_Indices_equity_portfolio.rda"))
-indicies_bonds_results_portfolio <- read_rds(fs::path(data_location_ext,"/0_Indices_bonds_portfolio.rda"))
-peers_equity_results_portfolio <- read_rds(fs::path(data_location_ext,"/0_Indices_equity_portfolio.rda"))
-peers_bonds_results_portfolio <- read_rds(fs::path(data_location_ext,"/0_Indices_bonds_portfolio.rda"))
+indicies_equity_results_portfolio <- read_rds(paste0(data_location_ext,"0_Indices_equity_portfolio.rda"))
+indicies_bonds_results_portfolio <- read_rds(paste0(data_location_ext,"0_Indices_bonds_portfolio.rda"))
+peers_equity_results_portfolio <- read_rds(paste0(data_location_ext,"0_Indices_equity_portfolio.rda"))
+peers_bonds_results_portfolio <- read_rds(paste0(data_location_ext,"0_Indices_bonds_portfolio.rda"))
 
 
 

@@ -49,7 +49,7 @@ unlink(paste0(results_path,"/",portfolio_name_ref_all,"/*"), force = TRUE, recur
 file_names <- read_csv(paste0(proc_input_path, "/file_names.csv"))
 create_portfolio_subfolders(file_names, portfolio_name_ref_all)
 
-port_col_types <- set_col_types(grouping_variables, "ddddccccddcl")
+port_col_types <- set_col_types(grouping_variables, "ddddccccddclc")
 
 ##################
 ##### EQUITY #####
