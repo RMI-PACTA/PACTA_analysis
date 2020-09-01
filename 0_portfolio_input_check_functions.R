@@ -869,6 +869,12 @@ get_and_clean_fin_data <- function(fund_data){
   # Financial Data
   fin_data_raw <- read_file(paste0(analysis_inputs_path,"/security_financial_data.rda")) %>% as_tibble()
   
+  # remove unclear duplicates from raw financial data. This should be moved to DataStore.
+  rm_duplicates <- read_csv("non_distinct_isins.csv")
+  rm_duplicates <- rm_duplicates %>% distinct(isin) %>% pull(isin)
+  fin_data_raw <- fin_data_raw %>%
+    filter(!(isin %in% rm_duplicates))
+  
   if(!unique(fin_data_raw$financial_timestamp) == financial_timestamp){print("Financial timestamp not equal")}
   
   overrides <- read_csv("data/fin_sector_overrides.csv",
@@ -1518,8 +1524,14 @@ add_bics_sector <- function(portfolio, comp_fin_data, debt_fin_data){
   #join in bics sectors for EQ and CB
   portfolio_eq <- portfolio %>% filter(asset_type == "Equity") %>% 
     left_join(comp_fin_data %>% select(company_id, bics_sector), by = c("company_id"))
+  if ("bics_sector.x" %in% colnames(portfolio_eq)) {
+    portfolio_eq <- portfolio_eq %>% select(-bics_sector.x) %>% rename(bics_sector = bics_sector.y)
+  }
   portfolio_cb <- portfolio %>% filter(asset_type == "Bonds") %>% 
     left_join(debt_fin_data %>% select(corporate_bond_ticker, bics_sector), by = c("corporate_bond_ticker"))
+  if ("bics_sector.y" %in% colnames(portfolio_cb)) {
+    portfolio_cb <- portfolio_cb %>% select(-bics_sector.x) %>% rename(bics_sector = bics_sector.y)
+  }
   #separate out other asset_types to handle new variable
   portfolio_other <- portfolio %>% filter(!asset_type %in% c("Equity", "Bonds"))
   #if other asset_types has pos. number of entries, add bics_sector with NA value, otherwise add column name
