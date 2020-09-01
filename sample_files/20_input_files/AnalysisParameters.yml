@@ -1,0 +1,134 @@
+default:
+
+  GroupingVariables: 
+    - investor_name
+    - portfolio_name
+
+  Methodology:
+    HasMAP: TRUE
+    HasSB: FALSE
+    HasRevenue: FALSE
+    HasCC: FALSE
+    IncEmissionFactors: FALSE 
+    
+  data_output:
+    file_type: 
+      - csv
+      - rda
+ 
+    
+  TimeStamps:
+    # setting the dates of the data-input for financial and asset-level data: this identifies the input files
+    FinancialData.Timestamp: 2019Q4
+    ALD.Timestamp: 201912
+    DataStore.Export: 2019Q4_export_04232020
+    DataPrep.Timestamp: 2019Q4_04232020_2019
+  
+  AnalysisPeriod:
+    # setting the period of time for the analysis: by setting the starting year and the time-horizon 
+    Years.Horizon: 5
+    Years.Startyear: 2019
+  
+  
+  ComparisonBenchmarks:
+    CreateMetaPortfolio: TRUE
+    MetaPortfolioName: Meta Portfolio
+    MetaInvestorName: Meta Investor
+
+  Large.Universe.Filter:
+    FINANCIAL.INSTRUMENT.FILTER:
+      - EQUITY
+      - BONDS
+    SCENARIO.FILTER:
+      - B2DS
+      - SDS
+      - NPSRTS
+      - CPS
+      - SBTI
+    YEAR.FILTER:
+      - 2019
+      - 2020
+      - 2021
+      - 2022
+      - 2023
+      - 2024
+
+    SECTOR.FILTER:
+      - Power
+      - Automotive
+      - Fossil Fuels
+      - Oil&Gas
+      - Coal
+      - Shipping
+      - Steel
+      - Aviation
+      - Cement
+    
+  Lists:
+    Scenario.Sources.List:
+      - ETP2017
+      - SBTI
+      - WEO2019
+
+    IEA.Scenarios.List:
+      - B2DS
+      - SDS
+      - CPS      
+      - NPS
+      - NPSRTS
+    Scenario.Geography.List:
+      - Global
+      - GlobalAggregate
+      - NonOECD
+      - OECD
+    Equity.Market.List:
+      - GlobalMarket
+    Global.Aggregate.Sector.List:
+      - Power
+    Global.Aggregate.Scenario.Sources.List:
+      - WEO2018
+    Technology.List:
+      - Electric
+      - Hybrid
+      - ICE
+      - GasCap
+      - CoalCap
+      - OilCap
+      - RenewablesCap
+      - HydroCap
+      - NuclearCap
+      - Coal
+      - Oil
+      - Gas
+    Technology.Exclusion.List:
+      - FuelCell
+      - Fuel cell
+      - OtherCap
+      - OtherFF
+      - Bof Shop
+      - Coking Plant
+      - Sintering Plant
+      - Direct Or Smelting Reduction Plant
+      - Pelletizing Plant
+      - Open Hearth Meltshop
+    TechnologyRoadmap.Sector.List: 
+      - Automotive
+      - Power
+      - Fossil Fuels
+      - Oil&Gas
+      - Coal
+    CO2Intensity.Sector.List: 
+      - Shipping
+      - Steel
+      - Aviation
+      - Cement
+    WebToolRegions:
+      - Global
+      - OECD
+      - NonOECD
+      - NorthAmerica
+      - Europe
+      - AsiaPacific
+      - OECDNorthAmerica 
+      
+
