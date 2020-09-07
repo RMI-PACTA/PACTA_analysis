@@ -916,9 +916,9 @@ get_and_clean_fin_data <- function(fund_data){
   fin_data <- fin_data %>%
     select(
       company_id, company_name,bloomberg_id,corporate_bond_ticker,
-      country_of_domicile, 
+      country_of_domicile,
       isin,
-      unit_share_price, #exchange_rate_usd,
+      unit_share_price, exchange_rate_usd,
       asset_type, security_type,
       security_mapped_sector, security_icb_subsector, security_bics_subgroup, # bclass4,
       maturity_date, coupon_value, amount_issued, current_shares_outstanding_all_classes, unit_share_price,
