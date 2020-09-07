@@ -1,0 +1,34 @@
+default:
+    Naming: 
+      GraphType: Report
+      Scenariochoose: SDS
+      AccountingPrinciple: PortfolioWeight
+      ScenarioGeographyChoose: GlobalAggregate
+      EquityMarketSelection: Global
+      Language: "EN"
+      Startyear: 2019
+      
+      
+    Benchmarks:
+      PeerGroupSelection: Project
+      EQPeersRef: Project
+      CBPeersRef: Project
+      eq_market_ref: ACWI	
+      cb_market_ref: BEHGTRUU   
+
+    Contents:
+      templateversion: "GeneralTemplateInput_v6"
+      BondReference: "Bond"
+      RefMarketData: TRUE
+      WithCompanyCharts: TRUE
+      IsSample: FALSE
+      IncWWF: FALSE
+      IncPRI: FALSE
+      IncCoalRetirement: TRUE
+      IncOtherSectors: TRUE
+      IncAlignment: TRUE
+      IncPeersChart: FALSE
+      IncPhysicalRisk: FALSE
+      inc_sda_approach: TRUE     
+      No.Companies: 15
+     
