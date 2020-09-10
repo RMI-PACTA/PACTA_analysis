@@ -51,28 +51,28 @@ clean_portfolio_col_types <- function(portfolio, grouping_variables){
   
   if(is.character(portfolio$investor_name) == FALSE) {
     write_log(msg = paste0("Wrong variable class for investor_name. Should be character, but is ",
-                          class(portfolio$investor_name),
-                          ". This can introduce errors in further calculations!"))
+                           class(portfolio$investor_name),
+                           ". This can introduce errors in further calculations!"))
   }
   if(is.character(portfolio$portfolio_name) == FALSE) {
     write_log(msg = paste0("Wrong variable class for portfolio_name Should be character, but is ",
-                          class(portfolio$portfolio_name),
-                          ". This can introduce errors in further calculations!"))
+                           class(portfolio$portfolio_name),
+                           ". This can introduce errors in further calculations!"))
   }
   if(is.numeric(portfolio$market_value) == FALSE) {
     write_log(msg = paste0("Wrong variable class for market_value Should be numeric, but is ",
-                          class(portfolio$market_value),
-                          ". This can introduce errors in further calculations!"))
+                           class(portfolio$market_value),
+                           ". This can introduce errors in further calculations!"))
   }
   if(is.character(portfolio$currency) == FALSE) {
     write_log(msg = paste0("Wrong variable class for currency Should be character, but is ",
-                          class(portfolio$currency),
-                          ". This can introduce errors in further calculations!"))
+                           class(portfolio$currency),
+                           ". This can introduce errors in further calculations!"))
   }
   if(is.character(portfolio$isin) == FALSE) {
     write_log(msg = paste0("Wrong variable class for isin Should be character, but is ",
-                          class(portfolio$isin),
-                          ". This can introduce errors in further calculations!"))
+                           class(portfolio$isin),
+                           ". This can introduce errors in further calculations!"))
   }
   ###what about number_of_shares???
   
@@ -146,7 +146,7 @@ add_meta_portfolio <- function(portfolio, inc_meta_portfolio){
   # }
   
   if(inc_meta_portfolio){
-
+    
     portfolio_meta$portfolio_name <- meta_portfolio_name
     portfolio_meta$investor_name <- meta_investor_name
     portfolio <- rbind(portfolio,portfolio_meta)
@@ -910,17 +910,17 @@ get_and_clean_fin_data <- function(fund_data){
   # Checks to ensure all finds are classified as such
   fin_data <- classify_all_funds(fin_data)
   
-  # fin_data <- add_bics_sector(fin_data)
+  fin_data <- add_bics_sector(fin_data)
   
   # Select relevant columns
   fin_data <- fin_data %>%
     select(
       company_id, company_name,bloomberg_id,corporate_bond_ticker,
-      country_of_domicile,
+      country_of_domicile, 
       isin,
       unit_share_price, exchange_rate_usd,
       asset_type, security_type,
-      security_mapped_sector, security_icb_subsector, security_bics_subgroup, # bclass4,
+      security_mapped_sector, security_icb_subsector, security_bics_subgroup, bics_sector, # bclass4,
       maturity_date, coupon_value, amount_issued, current_shares_outstanding_all_classes, unit_share_price,
       sector_override,
       is_sb
@@ -937,14 +937,13 @@ get_and_clean_fin_data <- function(fund_data){
   
 }
 
-# add_bics_sector <- function(fin_data){
-#   
-#   bics_bridge <- read_csv("data/bics_bridge.csv")
-#   
-#   fin_data_ <- left_join(fin_data, bics_bridge, by = c("security_bics_subgroup" = "bics_subsector"))
-#   
-#   
-# }
+add_bics_sector <- function(fin_data){
+
+  bics_bridge <- read_csv("data/bics_bridge.csv")
+
+  fin_data <- left_join(fin_data, bics_bridge, by = c("security_bics_subgroup" = "bics_subgroup"))
+
+}
 
 get_and_clean_revenue_data <- function(){
   
@@ -967,15 +966,15 @@ get_and_clean_company_fin_data <- function(){
   
   comp_fin_data_raw <- read_rds(paste0(analysis_inputs_path,"/consolidated_financial_data.rda"))
   
-  comp_fin_data_raw <- comp_fin_data_raw %>% select(
-    company_id, company_name, bloomberg_id, country_of_domicile, corporate_bond_ticker, bics_sector, bics_subgroup,
-    icb_subgroup, mapped_sector, has_asset_level_data, has_assets_in_matched_sector, sectors_with_assets, 
-    current_shares_outstanding_all_classes, company_status, market_cap, bond_debt_out,
-    financial_timestamp
-  )
+  # comp_fin_data_raw <- comp_fin_data_raw %>% select(
+  #   company_id, company_name, bloomberg_id, country_of_domicile, corporate_bond_ticker, bics_sector, bics_subgroup,
+  #   icb_subgroup, mapped_sector, has_asset_level_data, has_assets_in_matched_sector, sectors_with_assets, 
+  #   current_shares_outstanding_all_classes, company_status, market_cap, bond_debt_out,
+  #   financial_timestamp
+  # )
   
   comp_fin_data_raw <- comp_fin_data_raw %>% select(
-    company_id, company_name, bloomberg_id, country_of_domicile, corporate_bond_ticker, bics_sector, bics_subgroup,
+    company_id, company_name, bloomberg_id, country_of_domicile, corporate_bond_ticker, bics_subgroup,
     icb_subgroup, mapped_sector, has_asset_level_data, has_assets_in_matched_sector, sectors_with_assets, current_shares_outstanding_all_classes, 
     market_cap, bond_debt_out, financial_timestamp
   )
@@ -1052,7 +1051,7 @@ process_raw_portfolio <- function(portfolio_raw,
     portfolio_total$direct_holding <- TRUE
     
   }
-
+  
   portfolio_total <- clean_unmatched_holdings(portfolio_total)
   
   if(round(sum(portfolio_total$value_usd, na.rm = T),1) != round(original_value_usd,1)){stop("Fund Portfolio introducing errors in total value")}
@@ -1122,7 +1121,7 @@ create_merged_portfolio <- function(eq_portfolio, cb_portfolio){
 create_portfolio_subset <- function(portfolio, portfolio_type, relevant_fin_data){
   
   if(portfolio_type %in% unique(portfolio$asset_type)){
-
+    
     portfolio_subset <- portfolio %>% ungroup() %>% filter(asset_type == portfolio_type)
     
     portfolio_subset <- create_id_columns(portfolio_subset, portfolio_type)
@@ -1228,7 +1227,7 @@ create_audit_file <- function(portfolio_total){
   
   audit_file <- portfolio_total %>% 
     select(all_of(grouping_variables), holding_id, isin, value_usd, company_name, asset_type,  has_revenue_data, valid_input, 
-          direct_holding, security_mapped_sector, financial_sector, bics_sector, sectors_with_assets, has_ald_in_fin_sector,flag)
+           direct_holding, security_mapped_sector, financial_sector, bics_sector, sectors_with_assets, has_ald_in_fin_sector,flag)
   
   if(has_revenue == FALSE){audit_file <- audit_file %>% select(-has_revenue_data)}
   
@@ -1520,30 +1519,16 @@ add_other_to_sector_classifications <- function(audit){
 }
 
 
-add_bics_sector <- function(portfolio, comp_fin_data, debt_fin_data){
-  #join in bics sectors for EQ and CB
-  portfolio_eq <- portfolio %>% filter(asset_type == "Equity") %>% 
-    left_join(comp_fin_data %>% select(company_id, bics_sector), by = c("company_id"))
-  if ("bics_sector.x" %in% colnames(portfolio_eq)) {
-    portfolio_eq <- portfolio_eq %>% select(-bics_sector.x) %>% rename(bics_sector = bics_sector.y)
-  }
-  portfolio_cb <- portfolio %>% filter(asset_type == "Bonds") %>% 
-    left_join(debt_fin_data %>% select(corporate_bond_ticker, bics_sector), by = c("corporate_bond_ticker"))
-  if ("bics_sector.y" %in% colnames(portfolio_cb)) {
-    portfolio_cb <- portfolio_cb %>% select(-bics_sector.x) %>% rename(bics_sector = bics_sector.y)
-  }
-  #separate out other asset_types to handle new variable
-  portfolio_other <- portfolio %>% filter(!asset_type %in% c("Equity", "Bonds"))
-  #if other asset_types has pos. number of entries, add bics_sector with NA value, otherwise add column name
-  if (data_check(portfolio_other)){
-    portfolio_other <- portfolio_other %>% mutate(bics_sector = NA_character_)
-  }else{
-    portfolio_other <- portfolio_other %>% add_column("bics_sector")
-    
-  }
-  #bind the diff asset types back together
-  portfolio <- rbind(portfolio_eq, portfolio_cb, portfolio_other)
-  
-  return(portfolio)
-  
-}
+# add_bics_sector <- function(portfolio){
+#   #join in bics sectors for EQ and CB via bics_bridge
+#   bics_bridge <- read_csv("data/bics_bridge.csv")
+#   portfolio <- portfolio %>% 
+#     left_join(bics_bridge, by = c("security_bics_subgroup" = "bics_subgroup"))
+#   
+#   if ("bics_sector.x" %in% colnames(portfolio)) {
+#     portfolio <- portfolio %>% select(-bics_sector.x) %>% rename(bics_sector = bics_sector.y)
+#   }
+  # 
+  # return(portfolio)
+  # 
+# }
