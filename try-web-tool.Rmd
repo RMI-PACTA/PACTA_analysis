@@ -196,42 +196,10 @@ NOTE: I see duplicated code in the first lines of each script. For example, you 
 source("web_tool_script_2.R")
 ```
 
-**FIXME: Error at web_tool_script_2.R#209**
-
-Running this interactively, the line
-
-```r
-write_rds(company_all_cb, paste0(pf_file_results, portfolio_name, "_Bonds_results_company.rda")) at web_tool_script_2.R#209
-```
-
-throws this error:
-
-```r
-Error in saveRDS(x, con) : cannot open the connection
-In addition: Warning messages:
-1: In dir.create(.x) :
-  '/home/mauro/git/PACTA_analysis/working_dir//30_Processed_Inputs/TestPortfolio_Input' already exists
-2: In dir.create(.x) :
-  cannot create dir '/home/mauro/git/PACTA_analysis/working_dir//40_Results/TestPortfolio_Input', reason 'No such file or directory'
-3: In dir.create(.x) :
-  cannot create dir '/home/mauro/git/PACTA_analysis/working_dir//50_Outputs/TestPortfolio_Input', reason 'No such file or directory'
-4: In dir.create(pf_file_results) :
-  cannot create dir '/home/mauro/git/PACTA_analysis/working_dir/40_Results/TestPortfolio_Input', reason 'No such file or directory'
-5: In saveRDS(x, con) :
-  cannot open file '/home/mauro/git/PACTA_analysis/working_dir/40_Results/TestPortfolio_Input/TestPortfolio_Input_Bonds_results_company.rda': No such file or directory
-```
-
-As explained above, I suspect the problem is the double "/" as in "working_dir//40_Results/", or maybe that a required parent directory is missing.
-
-
-
 
 
 
 **TODO: Continue exploring below**
-
-
-
 
 
 
