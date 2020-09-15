@@ -201,11 +201,12 @@ source("web_tool_script_2.R")
 <!-- end list -->
 
 ``` r
-parent <- fs::path_dir(here())
+parent <- path_dir(here())
 sibling <- path(parent, "create_interactive_report")
+
 if (!dir_exists(sibling)) {
   abort(glue("
-    PACTA_analysis and create_interactive_report must share a parent directory
+    PACTA_analysis/ and create_interactive_report/ must share a parent directory
     See https://git.io/JUBkN
   "))
 }

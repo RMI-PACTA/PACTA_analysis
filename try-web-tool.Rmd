@@ -153,11 +153,12 @@ source("web_tool_script_2.R")
 * web_tool_script_3.R this will take the results from the previous step plus some pre-calculated data from the pacta-data repo and input these results into the create_interactive_report function.
 
 ```{r}
-parent <- fs::path_dir(here())
+parent <- path_dir(here())
 sibling <- path(parent, "create_interactive_report")
+
 if (!dir_exists(sibling)) {
   abort(glue("
-    PACTA_analysis and create_interactive_report must share a parent directory
+    PACTA_analysis/ and create_interactive_report/ must share a parent directory
     See https://git.io/JUBkN
   "))
 }
