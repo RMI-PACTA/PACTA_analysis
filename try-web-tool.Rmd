@@ -1,5 +1,5 @@
 ---
-title: "Mauro's attempt to run the web tool"
+title: "Mauro's first run of the web tool"
 date: "`r Sys.Date()`"
 output: github_document
 ---
@@ -19,39 +19,49 @@ knitr::opts_chunk$set(
 
 ```{r}
 library(testthat)
-library(config)
-library(rlang)
 library(glue)
 library(fs)
+library(config)
+library(rlang)
 library(here)
 library(tidyverse)
 ```
 
 ### Git
 
-Fork and clone 2DegreesInvesting/PACTA_analysis:
+Fork and clone required repos:
 
 ```bash
+gh repo fork --clone 2DegreesInvesting/pacta-data
+gh repo fork --clone 2DegreesInvesting/create_interactive_report
 gh repo fork --clone 2DegreesInvesting/PACTA_analysis
 ```
 
+Run from PACTA_analysis/
+
+```bash
+cd PACTA_analysis
+```
+
 ```{bash, comment = "$"}
+pwd
 git remote -vv
 ```
 
-Work on branch `current_web_functionality`.
+Work off branch `current_web_functionality`.
 
 ```{bash, comment = "$"}
 git remote show upstream | grep current_web_functionality
+git branch
 ```
 
-```{bash, comment = "$"}
-git remote show upstream | grep current_web_functionality
+Inspect recent history:
+
+```{bash}
+git log --oneline --no-merges current_web_functionaliry..HEAD
 ```
 
-## [Instructions](https://bit.ly/2RCRJn7)
-
-Now in order to actually run a test portfolio, you need to:
+## [Instructions by Jacob](https://bit.ly/2RCRJn7)
 
 ### 1. Copy TestPortfolio_Input.csv from sample_files/20_input_files/ to working_dir/20_Raw_Inputs/
 
@@ -196,13 +206,6 @@ NOTE: I see duplicated code in the first lines of each script. For example, you 
 source("web_tool_script_2.R")
 ```
 
-
-
-
-**TODO: Continue exploring below**
-
-
-
 * web_tool_script_3.R this will take the results from the previous step plus some pre-calculated data from the pacta-data repo and input these results into the create_interactive_report function.
 
 ```{r}
@@ -219,9 +222,32 @@ if (!dir_exists(sibling)) {
 expect_true(dir_exists(sibling))
 ```
 
-```{r, error=TRUE, message=FALSE}
-source("web_tool_script_3.R")
+```{r, error=TRUE, cache=FALSE, message=FALSE}
+source("web_tool_script_3.R") 
 ```
 
-If all goes well, this will copy some of the css, js etc files into working_dir/50_Outputs/, along with the results written into the index.html file. It will also produce a zip archive of the results, which is the current not-so-pretty solution to download the report and use everything interactively when offline)
+If all goes well, this will copy some of the css, js etc files into working_dir/50_Outputs/, along with the results written into the index.html file. It will also produce a zip archive of the results, which is the current not-so-pretty solution to download the report and use everything interactively when offline).
+
+```{r}
+outputs <- path("working_dir", "50_Outputs")
+
+css <- dir_ls(outputs, recurse = TRUE, regexp = "[.]css")
+expect_true(length(css) > 0L)
+
+js <- dir_ls(outputs, recurse = TRUE, regexp = "[.]js")
+expect_true(length(js) > 0L)
+
+index <- dir_ls(outputs, recurse = TRUE, regexp = "index[.]html")
+expect_true(length(index) > 0L)
+```
+
+```{r}
+n <- 20L
+writeLines(head(readLines(index), n))
+```
+
+```{r}
+save_space <- FALSE
+dir_tree(path(outputs, "TestPortfolio_Input"), recurse = save_space)
+```
 

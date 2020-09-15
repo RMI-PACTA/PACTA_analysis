@@ -1,4 +1,4 @@
-Mauro’s attempt to run the web tool
+Mauro’s first run of the web tool
 ================
 2020-09-15
 
@@ -8,46 +8,68 @@ Mauro’s attempt to run the web tool
 
 ``` r
 library(testthat)
-library(config)
-library(rlang)
 library(glue)
 library(fs)
+library(config)
+library(rlang)
 library(here)
 library(tidyverse)
 ```
 
 ### Git
 
-Fork and clone 2DegreesInvesting/PACTA\_analysis:
+Fork and clone required repos:
 
 ``` bash
+gh repo fork --clone 2DegreesInvesting/pacta-data
+gh repo fork --clone 2DegreesInvesting/create_interactive_report
 gh repo fork --clone 2DegreesInvesting/PACTA_analysis
 ```
 
+Run from PACTA\_analysis/
+
 ``` bash
+cd PACTA_analysis
+```
+
+``` bash
+pwd
 git remote -vv
+$ /home/mauro/git/PACTA_analysis
 $ origin    git@github.com:maurolepore/PACTA_analysis.git (fetch)
 $ origin    git@github.com:maurolepore/PACTA_analysis.git (push)
 $ upstream  git@github.com:2DegreesInvesting/PACTA_analysis.git (fetch)
 $ upstream  git@github.com:2DegreesInvesting/PACTA_analysis.git (push)
 ```
 
-Work on branch `current_web_functionality`.
+Work off branch `current_web_functionality`.
 
 ``` bash
 git remote show upstream | grep current_web_functionality
+git branch
 $     current_web_functionality  tracked
-$     mauro-wip merges with remote current_web_functionality
+$   current_web_functionaliry
+$   master
+$ * mauro-wip
 ```
+
+Inspect recent history:
 
 ``` bash
-git remote show upstream | grep current_web_functionality
-$     current_web_functionality  tracked
+git log --oneline --no-merges current_web_functionaliry..HEAD
+#> 8e5ed03 Cleanup
+#> aa517d6 Add notes
+#> 6784cbf Cleanup: Show rather than explain changes
+#> c453ebf Fix working_location
+#> 4ccdd59 Find a few more errors
+#> 73f2032 Find error in web_tool_script_1.R: line 34
+#> 809375b Remove horrible --hard reset
+#> 762dcf1 Style
+#> 10c80a7 Expect sibling repo
+#> 78aa9c4 Try runnign web tool following Jacob's guide
 ```
 
-## [Instructions](https://bit.ly/2RCRJn7)
-
-Now in order to actually run a test portfolio, you need to:
+## [Instructions by Jacob](https://bit.ly/2RCRJn7)
 
 ### 1\. Copy TestPortfolio\_Input.csv from sample\_files/20\_input\_files/ to working\_dir/20\_Raw\_Inputs/
 
@@ -89,9 +111,9 @@ this_pattern <- "portfolio_name_ref_all.*<-.*TestPortfolio_Input"
 matched <- map(files, show_pattern_in_file, pattern = this_pattern)
 
 walk(matched, writeLines)
-#>   portfolio_name_ref_all <- c("TestPortfolio_Input")
-#>   portfolio_name_ref_all <- c("TestPortfolio_Input")
-#>   portfolio_name_ref_all <- c("TestPortfolio_Input")
+#> portfolio_name_ref_all <- c("TestPortfolio_Input")
+#> portfolio_name_ref_all <- c("TestPortfolio_Input")
+#> portfolio_name_ref_all <- c("TestPortfolio_Input")
 ```
 
 ``` r
@@ -180,7 +202,15 @@ expect_true(all(map_lgl(config2_paths, dir_exists)))
 
 ``` r
 source("web_tool_script_1.R")
-#> Error: At least one argument must be supplied (input file).n
+#> Warning in read_file(paste0(file_location, "/fund_data.fst")): ~/git/pacta-data/
+#> 2019Q4/cleaned_files/fund_data.fst does not exist
+#> [1] "No Equity in portfolio"
+#> Warning in dir.create(.x): '/home/mauro/git/PACTA_analysis/working_dir//
+#> 30_Processed_Inputs/TestPortfolio_Input' already exists
+#> Warning in dir.create(.x): '/home/mauro/git/PACTA_analysis/working_dir//
+#> 40_Results/TestPortfolio_Input' already exists
+#> Warning in dir.create(.x): '/home/mauro/git/PACTA_analysis/working_dir//
+#> 50_Outputs/TestPortfolio_Input' already exists
 ```
 
 **FIXME: Warning at web\_tool\_script\_1.R\#105**
@@ -238,39 +268,14 @@ here::here()`).
 
 ``` r
 source("web_tool_script_2.R")
-#> Error: At least one argument must be supplied (input file).n
+#> Warning in dir.create(.x): '/home/mauro/git/PACTA_analysis/working_dir//
+#> 30_Processed_Inputs/TestPortfolio_Input' already exists
+#> Warning in dir.create(.x): '/home/mauro/git/PACTA_analysis/working_dir//
+#> 40_Results/TestPortfolio_Input' already exists
+#> Warning in dir.create(.x): '/home/mauro/git/PACTA_analysis/working_dir//
+#> 50_Outputs/TestPortfolio_Input' already exists
+#> [1] "1: Test"
 ```
-
-**FIXME: Error at web\_tool\_script\_2.R\#209**
-
-Running this interactively, the line
-
-``` r
-write_rds(company_all_cb, paste0(pf_file_results, portfolio_name, "_Bonds_results_company.rda")) at web_tool_script_2.R#209
-```
-
-throws this error:
-
-``` r
-Error in saveRDS(x, con) : cannot open the connection
-In addition: Warning messages:
-1: In dir.create(.x) :
-  '/home/mauro/git/PACTA_analysis/working_dir//30_Processed_Inputs/TestPortfolio_Input' already exists
-2: In dir.create(.x) :
-  cannot create dir '/home/mauro/git/PACTA_analysis/working_dir//40_Results/TestPortfolio_Input', reason 'No such file or directory'
-3: In dir.create(.x) :
-  cannot create dir '/home/mauro/git/PACTA_analysis/working_dir//50_Outputs/TestPortfolio_Input', reason 'No such file or directory'
-4: In dir.create(pf_file_results) :
-  cannot create dir '/home/mauro/git/PACTA_analysis/working_dir/40_Results/TestPortfolio_Input', reason 'No such file or directory'
-5: In saveRDS(x, con) :
-  cannot open file '/home/mauro/git/PACTA_analysis/working_dir/40_Results/TestPortfolio_Input/TestPortfolio_Input_Bonds_results_company.rda': No such file or directory
-```
-
-As explained above, I suspect the problem is the double “/” as in
-“working\_dir//40\_Results/”, or maybe that a required parent
-directory is missing.
-
-**TODO: Continue exploring below**
 
   - web\_tool\_script\_3.R this will take the results from the previous
     step plus some pre-calculated data from the pacta-data repo and
@@ -293,12 +298,66 @@ expect_true(dir_exists(sibling))
 ```
 
 ``` r
-source("web_tool_script_3.R")
-#> Error: At least one argument must be supplied (input file).n
+source("web_tool_script_3.R") 
 ```
 
 If all goes well, this will copy some of the css, js etc files into
 working\_dir/50\_Outputs/, along with the results written into the
 index.html file. It will also produce a zip archive of the results,
 which is the current not-so-pretty solution to download the report and
-use everything interactively when offline)
+use everything interactively when offline).
+
+``` r
+outputs <- path("working_dir", "50_Outputs")
+
+css <- dir_ls(outputs, recurse = TRUE, regexp = "[.]css")
+expect_true(length(css) > 0L)
+
+js <- dir_ls(outputs, recurse = TRUE, regexp = "[.]js")
+expect_true(length(js) > 0L)
+
+index <- dir_ls(outputs, recurse = TRUE, regexp = "index[.]html")
+expect_true(length(index) > 0L)
+```
+
+``` r
+n <- 20L
+writeLines(head(readLines(index), n))
+#> <!DOCTYPE html>
+#> <html lang="" xml:lang="">
+#> <head>
+#> 
+#>   <meta charset="utf-8" />
+#>   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+#>   <title>Interactive Portfolio Report</title>
+#>   <meta name="description" content="" />
+#>   <meta name="generator" content="bookdown 0.19 and GitBook 2.6.7" />
+#> 
+#>   <meta property="og:title" content="Interactive Portfolio Report" />
+#>   <meta property="og:type" content="book" />
+#>   
+#>   
+#>   
+#>   
+#> 
+#>   <meta name="twitter:card" content="summary" />
+#>   <meta name="twitter:title" content="Interactive Portfolio Report" />
+#> 
+```
+
+``` r
+save_space <- FALSE
+dir_tree(path(outputs, "TestPortfolio_Input"), recurse = save_space)
+#> working_dir/50_Outputs/TestPortfolio_Input
+#> ├── 2dii_gitbook_style.css
+#> ├── TestPortfolio_Input_results.zip
+#> ├── company_charts
+#> ├── css
+#> ├── data
+#> ├── export
+#> ├── img
+#> ├── index.html
+#> ├── js
+#> ├── libs
+#> └── search_index.json
+```
