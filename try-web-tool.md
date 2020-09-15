@@ -9,6 +9,9 @@ Mauro’s attempt to run the web tool
 ``` r
 library(testthat)
 library(config)
+library(rlang)
+library(glue)
+library(fs)
 library(here)
 library(tidyverse)
 ```
@@ -180,7 +183,7 @@ source("web_tool_script_1.R")
 #> Error: At least one argument must be supplied (input file).n
 ```
 
-#### Exploring the error
+**Error at web\_tool\_script\_1.R\#32**
 
 ``` r
 > traceback()
@@ -246,9 +249,9 @@ get_portfolio_name
 #> <bytecode: 0x5614e87564d8>
 ```
 
-Apparently, it’s expected to come from the global environment (which is
-a bad idea); surprisingly, it is defined in an interactive session, but
-not in a non-interactive session:
+Apparently, it comes from the global environment (which is a bad idea);
+surprisingly, it is defined in an interactive session but not in a
+non-interactive session:
 
 ``` r
 interactive()
@@ -258,14 +261,42 @@ exists("portfolio_name_ref")
 #> [1] FALSE
 ```
 
-–
+**FIXME: Error at web\_tool\_script\_1.R\#183**
 
-NOTE:
+(I run this section interactively)
 
-I stop here. The rest fails until we successfully
-`source("web_tool_script_1.R")`.
+This line expected a directory that didn’t exist. Consider adding
+somethig like this:
 
-–
+``` r
+processed_path <- here("working_dir/30_Processed_Inputs")
+
+if (!dir_exists(processed_path)) {
+  dir_create(processed_path)
+}
+```
+
+**FIXME: Warning at web\_tool\_script\_1.R\#105**
+
+If I continue working interactively, and craete the missing directory,
+the script web\_tool\_script\_1.R seems to continue to the end but I get
+this warning:
+
+I get this warning:
+
+``` r
+Warning messages:
+1: In dir.create(.x) :
+  '/home/mauro/git/PACTA_analysis/working_dir//30_Processed_Inputs/TestPortfolio_Input' already exists
+2: In dir.create(.x) :
+  cannot create dir '/home/mauro/git/PACTA_analysis/working_dir//40_Results/TestPortfolio_Input', reason 'No such file or directory'
+3: In dir.create(.x) :
+  cannot create dir '/home/mauro/git/PACTA_analysis/working_dir//50_Outputs/TestPortfolio_Input', reason 'No such file or directory'
+```
+
+I suspect the problem is the double “/” as in “…//40\_Results/…”, which
+might results from creating paths with `paste0()` instead of dedicated
+functions such as `fs::path()` or `here::here()`.
 
   - web\_tool\_script\_2.R will take the processed inputs from the
     previous step, calculate PACTA results and write them to
@@ -277,6 +308,37 @@ I stop here. The rest fails until we successfully
 source("web_tool_script_2.R")
 #> Error: At least one argument must be supplied (input file).n
 ```
+
+**FIXME: Error at web\_tool\_script\_2.R\#209**
+
+Running this interactively, the line
+
+``` r
+write_rds(company_all_cb, paste0(pf_file_results_path, portfolio_name, "_Bonds_results_company.rda")) at web_tool_script_2.R#209
+```
+
+throws this error:
+
+``` r
+Error in saveRDS(x, con) : cannot open the connection
+In addition: Warning messages:
+1: In dir.create(.x) :
+  '/home/mauro/git/PACTA_analysis/working_dir//30_Processed_Inputs/TestPortfolio_Input' already exists
+2: In dir.create(.x) :
+  cannot create dir '/home/mauro/git/PACTA_analysis/working_dir//40_Results/TestPortfolio_Input', reason 'No such file or directory'
+3: In dir.create(.x) :
+  cannot create dir '/home/mauro/git/PACTA_analysis/working_dir//50_Outputs/TestPortfolio_Input', reason 'No such file or directory'
+4: In dir.create(pf_file_results_path) :
+  cannot create dir '/home/mauro/git/PACTA_analysis/working_dir/40_Results/TestPortfolio_Input', reason 'No such file or directory'
+5: In saveRDS(x, con) :
+  cannot open file '/home/mauro/git/PACTA_analysis/working_dir/40_Results/TestPortfolio_Input/TestPortfolio_Input_Bonds_results_company.rda': No such file or directory
+```
+
+As explained above, I suspect the problem is the double “/” as in
+“working\_dir//40\_Results/”, or maybe that a required parent
+directory is missing.
+
+**TODO: Continue exploring below**
 
   - web\_tool\_script\_3.R this will take the results from the previous
     step plus some pre-calculated data from the pacta-data repo and
