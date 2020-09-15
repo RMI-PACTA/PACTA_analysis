@@ -40,45 +40,9 @@ $     current_web_functionality  tracked
 $     mauro-wip merges with remote current_web_functionality
 ```
 
-Create the new branch `mauro-wip` (if it doesn’t already exist), check
-it out, and reset it to point to the latest commit of the branch
-`upstream/current_web_funcionality`.
-
 ``` bash
-git checkout master
-git branch mauro-wip || git checkout mauro-wip
-git reset --hard upstream/current_web_functionality
-$ Switched to branch 'master'
-$ Your branch and 'origin/master' have diverged,
-$ and have 89 and 53 different commits each, respectively.
-$   (use "git pull" to merge the remote branch into yours)
-$ fatal: A branch named 'mauro-wip' already exists.
-$ Switched to branch 'mauro-wip'
-$ Your branch is up to date with 'upstream/current_web_functionality'.
-$ HEAD is now at 62a2e32 Merge pull request #76 from jacobvjk/report_with_eq_or_cb
-```
-
-See the latest history.
-
-``` bash
-git log --no-merges -3
-$ commit 290d508192016d0fb0cbea90d5e693581295d49b
-$ Author: jacobvjk <jacob.kastl@gmail.com>
-$ Date:   Thu Sep 10 16:08:51 2020 +0200
-$ 
-$     add_bics_sector via fin_data and bics_bridge
-$ 
-$ commit 3fffe2c804e9cc100c23878af2207564c98c3ffe
-$ Author: jacobvjk <jacob.kastl@gmail.com>
-$ Date:   Mon Sep 7 20:10:58 2020 +0200
-$ 
-$     align fin data with master to fix bonds issue
-$ 
-$ commit 60f0169dada44528106cb53561b6703c8998b93c
-$ Author: jacobvjk <jacob.kastl@gmail.com>
-$ Date:   Mon Sep 7 14:57:55 2020 +0200
-$ 
-$     allow creating interactive report for PF with only one of EQ or CB
+git remote show upstream | grep current_web_functionality
+$     current_web_functionality  tracked
 ```
 
 ## [Instructions](https://bit.ly/2RCRJn7)

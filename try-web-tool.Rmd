@@ -45,18 +45,8 @@ Work on branch `current_web_functionality`.
 git remote show upstream | grep current_web_functionality
 ```
 
-Create the new branch `mauro-wip` (if it doesn't already exist), check it out, and reset it to point to the latest commit of the branch `upstream/current_web_funcionality`.
-
 ```{bash, comment = "$"}
-git checkout master
-git branch mauro-wip || git checkout mauro-wip
-git reset --hard upstream/current_web_functionality
-```
-
-See the latest history.
-
-```{bash, comment = "$"}
-git log --no-merges -3
+git remote show upstream | grep current_web_functionality
 ```
 
 ## [Instructions](https://bit.ly/2RCRJn7)
