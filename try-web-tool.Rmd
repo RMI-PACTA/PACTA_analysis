@@ -19,12 +19,9 @@ knitr::opts_chunk$set(
 
 ```{r}
 library(testthat)
-library(fs)
-library(glue)
-library(rlang)
-library(stringr)
-library(purrr)
+library(config)
 library(here)
+library(tidyverse)
 ```
 
 ### Git
@@ -108,35 +105,120 @@ Note:
 * It seems useful to parametrize these calls: `r matched[[1]]` -- for example, as parameters in a parametrized rmarkdown document, or as arguments to a function.
 
 
-### 3 Ensure that there is a config file with name "TestPortfolio_Input_PortfolioParameters.yml" in working_dir/10_Parameter_File/ (this should already be the case, the content should not matter too much, as far as I can tell….)
+### 3 Configuration files
+
+#### 3.1. Ensure that there is a config file with name "TestPortfolio_Input_PortfolioParameters.yml" in working_dir/10_Parameter_File/ (this should already be the case, the content should not matter too much, as far as I can tell….)
 
 ```{r}
-config <- here(
+config1 <- here(
   "working_dir",
   "10_Parameter_File",
   "TestPortfolio_Input_PortfolioParameters.yml"
 )
 
-writeLines(readLines(config))
+writeLines(readLines(config1))
 ```
 
 ```{r}
-expect_true(file_exists(config))
+expect_true(file_exists(config1))
 ```
+
+#### 3.1. Set parameters
+
+Ensure this configuration file exists, as well as all the directories specified in the field `paths`:
+
+```{r}
+config2 <- path("parameter_files", "WebParameters_2dii.yml")
+writeLines(readLines(config2))
+```
+
+```{r}
+expect_true(file_exists(config2))
+```
+
+```{r}
+config2_paths <- config::get(file = config2)$paths
+str(config2_paths)
+```
+
+```{r}
+expect_true(all(map_lgl(config2_paths, dir_exists)))
+```
+
 
 ### 4. Run scripts
 
 * web_tool_script_1.R will produce processed input files in working_dir/30_Processed_Inputs/
 
 ```{r, error=TRUE, message=FALSE}
-# install.packages("fst")
 source("web_tool_script_1.R")
 ```
+#### Exploring the error
+ 
+```r
+> traceback()
+7: stop("Config file ", basename(file), " not found in current working ", 
+       "directory", ifelse(use_parent, " or parent directories", 
+    ...
+6: config::get(file = file_path) at 0_web_functions.R#77
+5: set_web_parameters(file_path = paste0(working_location, "/parameter_files/WebParameters_2dii.yml")) at web_tool_script_1.R#32
+4: eval(ei, envir)
+3: eval(ei, envir)
+2: withVisible(eval(ei, envir))
+1: source("web_tool_script_1.R", echo = TRUE)
+```
+
+The script behaves differently in an interactive versus non-interactive session. When I knit this document, it runs in a non-interactive session:
+
+```{r}
+interactive()
+```
+
+This also means that the rstudio API is unavailable (but in this case using the rstudioapi seems a suboptimal solution).
+
+```{r}
+rstudioapi::isAvailable()
+```
+
+In a non-interactive session, we enter the `else` statement in line 34 of web_tool_script_1.R with looks like this:
+
+```r
+portfolio_name_ref_all = get_portfolio_name()
+working_location <- getwd()
+set_web_parameters(file_path = paste0(working_location,"/parameter_files/WebParameters_docker.yml"))
+```
+
+And `get_portfolio_name()` throws an error:
+
+```{r error = TRUE}
+get_portfolio_name()
+```
+
+This function calls the argument `portfolio_name_ref` that is not defined in the function signature (e.g. there is no `x` in `f <- function(x) { x + 1}`):
+
+```{r}
+get_portfolio_name
+```
+
+Apparently, it's expected to come from the global environment (which is a bad idea); surprisingly, it is defined in an interactive session, but not in a non-interactive session:
+
+```{r}
+interactive()
+
+exists("portfolio_name_ref")
+```
+
+--
+
+NOTE:
+
+I stop here. The rest fails until we successfully `source("web_tool_script_1.R")`.
+
+--
 
 * web_tool_script_2.R will take the processed inputs from the previous step, calculate PACTA results and write them to working_dir/40_Results/
 
 ```{r, error=TRUE, message=FALSE}
-# install.packages("fst")
 source("web_tool_script_2.R")
 ```
 
@@ -157,7 +239,6 @@ expect_true(dir_exists(sibling))
 ```
 
 ```{r, error=TRUE, message=FALSE}
-# install.packages("fst")
 source("web_tool_script_3.R")
 ```
 
