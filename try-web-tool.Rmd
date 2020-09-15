@@ -1,0 +1,174 @@
+---
+title: "Mauro's attempt to run the web tool"
+date: "`r Sys.Date()`"
+output: github_document
+---
+
+## Setup
+
+### R
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  comment = "#>",
+  collapse = TRUE,
+  cache = TRUE
+)
+```
+
+```{r}
+library(testthat)
+library(fs)
+library(glue)
+library(rlang)
+library(stringr)
+library(purrr)
+library(here)
+```
+
+### Git
+
+Fork and clone 2DegreesInvesting/PACTA_analysis:
+
+```bash
+gh repo fork --clone 2DegreesInvesting/PACTA_analysis
+```
+
+```{bash, comment = "$"}
+git remote -vv
+```
+
+Work on branch `current_web_functionality`.
+
+```{bash, comment = "$"}
+git remote show upstream | grep current_web_functionality
+```
+
+Create the new branch `mauro-wip` (if it doesn't already exist), check it out, and reset it to point to the latest commit of the branch `upstream/current_web_funcionality`.
+
+```{bash, comment = "$"}
+git checkout master
+git branch mauro-wip || git checkout mauro-wip
+git reset --hard upstream/current_web_functionality
+```
+
+See the latest history.
+
+```{bash, comment = "$"}
+git log --no-merges -3
+```
+
+## [Instructions](https://bit.ly/2RCRJn7)
+
+Now in order to actually run a test portfolio, you need to:
+
+### 1. Copy TestPortfolio_Input.csv from sample_files/20_input_files/ to working_dir/20_Raw_Inputs/
+
+```{r}
+# Ensure the source file exists
+portfolio_csv <- "TestPortfolio_Input.csv"
+from <- here("sample_files", "20_input_files", portfolio_csv)
+stopifnot(file_exists(from))
+
+# If it already exists, remove it with a warning
+to <- here("working_dir", "20_Raw_Inputs", portfolio_csv)
+if (file_exists(to)) {
+  warn(glue("Removing existing file: {to}"))
+  file_delete(to)
+}
+```
+
+```{r}
+file_copy(from, to)
+```
+
+```{r}
+expect_true(file_exists(to))
+```
+
+### 2. Set "TestPortfolio_Input" as the portfolio_name_ref_all in all three web_tool_scripts (lines 30, 24 and 21)
+
+```{r}
+show_pattern_in_file <- function(file, pattern) {
+  grep(pattern, readLines(file), value = TRUE)
+}
+```
+
+```{r}
+files <- dir_ls(regexp = "web_tool_script")
+this_pattern <- "portfolio_name_ref_all.*<-.*TestPortfolio_Input"
+matched <- map(files, show_pattern_in_file, pattern = this_pattern)
+
+walk(matched, writeLines)
+```
+
+
+```{r}
+script_has_this_pattern <- grepl(this_pattern, matched)
+expect_true(all(script_has_this_pattern))
+```
+
+--
+
+Note:
+
+* It seems useful to automate the process of running these files:  `r files` -- for example, via a drake plan, or an rmarkdown document, or a function in a package.
+
+* It seems useful to parametrize these calls: `r matched[[1]]` -- for example, as parameters in a parametrized rmarkdown document, or as arguments to a function.
+
+
+### 3 Ensure that there is a config file with name "TestPortfolio_Input_PortfolioParameters.yml" in working_dir/10_Parameter_File/ (this should already be the case, the content should not matter too much, as far as I can tell….)
+
+```{r}
+config <- here(
+  "working_dir",
+  "10_Parameter_File",
+  "TestPortfolio_Input_PortfolioParameters.yml"
+)
+
+writeLines(readLines(config))
+```
+
+```{r}
+expect_true(file_exists(config))
+```
+
+### 4. Run scripts
+
+* web_tool_script_1.R will produce processed input files in working_dir/30_Processed_Inputs/
+
+```{r, error=TRUE, message=FALSE}
+# install.packages("fst")
+source("web_tool_script_1.R")
+```
+
+* web_tool_script_2.R will take the processed inputs from the previous step, calculate PACTA results and write them to working_dir/40_Results/
+
+```{r, error=TRUE, message=FALSE}
+# install.packages("fst")
+source("web_tool_script_2.R")
+```
+
+* web_tool_script_3.R this will take the results from the previous step plus some pre-calculated data from the pacta-data repo and input these results into the create_interactive_report function.
+
+```{r}
+parent <- fs::path_dir(here())
+sibling <- path(parent, "create_interactive_report")
+if (!dir_exists(sibling)) {
+  abort(glue("
+    PACTA_analysis and create_interactive_report must share a parent directory
+    See https://git.io/JUBkN
+  "))
+}
+
+expect_true(dir_exists(sibling))
+```
+
+```{r, error=TRUE, message=FALSE}
+# install.packages("fst")
+source("web_tool_script_3.R")
+```
+
+If all goes well, this will copy some of the css, js etc files into working_dir/50_Outputs/, along with the results written into the index.html file. It will also produce a zip archive of the results, which is the current not-so-pretty solution to download the report and use everything interactively when offline)
+
