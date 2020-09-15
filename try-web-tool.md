@@ -183,84 +183,6 @@ source("web_tool_script_1.R")
 #> Error: At least one argument must be supplied (input file).n
 ```
 
-**Error at web\_tool\_script\_1.R\#32**
-
-``` r
-> traceback()
-7: stop("Config file ", basename(file), " not found in current working ", 
-       "directory", ifelse(use_parent, " or parent directories", 
-    ...
-6: config::get(file = file_path) at 0_web_functions.R#77
-5: set_web_parameters(file_path = paste0(working_location, "/parameter_files/WebParameters_2dii.yml")) at web_tool_script_1.R#32
-4: eval(ei, envir)
-3: eval(ei, envir)
-2: withVisible(eval(ei, envir))
-1: source("web_tool_script_1.R", echo = TRUE)
-```
-
-The script behaves differently in an interactive versus non-interactive
-session. When I knit this document, it runs in a non-interactive
-session:
-
-``` r
-interactive()
-#> [1] FALSE
-```
-
-This also means that the rstudio API is unavailable (but in this case
-using the rstudioapi seems a suboptimal solution).
-
-``` r
-rstudioapi::isAvailable()
-#> [1] FALSE
-```
-
-In a non-interactive session, we enter the `else` statement in line 34
-of web\_tool\_script\_1.R with looks like this:
-
-``` r
-portfolio_name_ref_all = get_portfolio_name()
-working_location <- getwd()
-set_web_parameters(file_path = paste0(working_location,"/parameter_files/WebParameters_docker.yml"))
-```
-
-And `get_portfolio_name()` throws an error:
-
-``` r
-get_portfolio_name()
-#> Error: At least one argument must be supplied (input file).n
-```
-
-This function calls the argument `portfolio_name_ref` that is not
-defined in the function signature (e.g. there is no `x` in `f <-
-function(x) { x + 1}`):
-
-``` r
-get_portfolio_name
-#> function () 
-#> {
-#>     portfolio_name_ref = commandArgs(trailingOnly = TRUE)
-#>     if (length(portfolio_name_ref) == 0) {
-#>         stop("At least one argument must be supplied (input file).n", 
-#>             call. = FALSE)
-#>     }
-#>     return(portfolio_name_ref)
-#> }
-#> <bytecode: 0x5614e87564d8>
-```
-
-Apparently, it comes from the global environment (which is a bad idea);
-surprisingly, it is defined in an interactive session but not in a
-non-interactive session:
-
-``` r
-interactive()
-#> [1] FALSE
-
-exists("portfolio_name_ref")
-#> [1] FALSE
-```
-
 **FIXME: Warning at web\_tool\_script\_1.R\#105**
 
 ``` r
@@ -273,7 +195,7 @@ Not sure if this dataset is crucial, but it’s missing from my clone of
 pacta-data/:
 
 ``` r
-dir_ls("../pacta-data/2019Q4/cleaned_files/")
+dir_ls(path("..", "pacta-data", "2019Q4", "cleaned_files"))
 #> ../pacta-data/2019Q4/cleaned_files/average_sector_intensity.fst
 #> ../pacta-data/2019Q4/cleaned_files/comp_fin_data.fst
 #> ../pacta-data/2019Q4/cleaned_files/company_emissions.fst
@@ -282,59 +204,24 @@ dir_ls("../pacta-data/2019Q4/cleaned_files/")
 #> ../pacta-data/2019Q4/cleaned_files/fin_data.fst
 ```
 
-**FIXME: Error at web\_tool\_script\_1.R\#183**
+**FIXME: Error at web\_tool\_script\_1.R, create required parent
+directories**
 
-This line expected a directory that didn’t exist. Consider adding
-somethig like this:
+A number of calls require parent directories, which should be created if
+they don’t exist.
 
 ``` r
-processed_path <- here("working_dir/30_Processed_Inputs")
-
-if (!dir_exists(processed_path)) {
-  dir_create(processed_path)
+create_if_doesnt_exist <- function(path) {
+  if (!fs::dir_exists(path)) {
+    fs::dir_create(path)
+  }
+  
+  invisible(path)
 }
-```
 
-**FIXME: Warning at web\_tool\_script\_1.R\#105**
-
-This line
-
-``` r
-create_portfolio_subfolders(file_names, portfolio_name_ref_all)
-```
-
-Throws three warnings:
-
-``` r
-Warning messages:
-1: In dir.create(.x) :
-  '/home/mauro/git/PACTA_analysis/working_dir//30_Processed_Inputs/TestPortfolio_Input' already exists
-```
-
-Maybe create the directory only if it doesn’t already exist:
-
-``` r
-2: In dir.create(.x) :
-  cannot create dir '/home/mauro/git/PACTA_analysis/working_dir//40_Results/TestPortfolio_Input', reason 'No such file or directory'
-```
-
-Fix with:
-
-``` r
-results <- here("working_dir", "40_Results")
-if (!dir_exists(results)) dir_create(results)
-```
-
-``` r
-3: In dir.create(.x) :
-  cannot create dir '/home/mauro/git/PACTA_analysis/working_dir//50_Outputs/TestPortfolio_Input', reason 'No such file or directory'
-```
-
-Fix with:
-
-``` r
-outputs <- here("working_dir", "50_Outputs")
-if (!dir_exists(outputs)) dir_create(outputs)
+children <- c("30_Processed_Inputs", "40_Results", "50_Outputs")
+paths <- here("working_dir", children)
+walk(paths, create_if_doesnt_exist)
 ```
 
   - web\_tool\_script\_2.R will take the processed inputs from the
