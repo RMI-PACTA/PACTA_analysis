@@ -211,9 +211,21 @@ interactive()
 exists("portfolio_name_ref")
 ```
 
-**FIXME: Error at web_tool_script_1.R#183**
+**FIXME: Warning at web_tool_script_1.R#105**
 
-(I run this section interactively)
+```r
+Warning message:
+In read_file(paste0(file_location, "/fund_data.fst")) :
+  ~/git/pacta-data/2019Q4/cleaned_files/fund_data.fst does not exist
+```
+
+Not sure if this dataset is crucial, but it's missing from my clone of pacta-data/:
+
+```{r}
+dir_ls("../pacta-data/2019Q4/cleaned_files/")
+```
+
+**FIXME: Error at web_tool_script_1.R#183**
 
 This line expected a directory that didn't exist. Consider adding somethig like this:
 
@@ -227,21 +239,45 @@ if (!dir_exists(processed_path)) {
 
 **FIXME: Warning at web_tool_script_1.R#105**
 
-If I continue working interactively, and craete the missing directory, the script web_tool_script_1.R seems to continue to the end but I get this warning:
+This line
 
-I get this warning:
+```r
+create_portfolio_subfolders(file_names, portfolio_name_ref_all)
+
+```
+
+Throws three warnings:
 
 ```r
 Warning messages:
 1: In dir.create(.x) :
   '/home/mauro/git/PACTA_analysis/working_dir//30_Processed_Inputs/TestPortfolio_Input' already exists
+```
+
+Maybe create the directory only if it doesn't already exist:
+
+```r
 2: In dir.create(.x) :
   cannot create dir '/home/mauro/git/PACTA_analysis/working_dir//40_Results/TestPortfolio_Input', reason 'No such file or directory'
+```
+
+Fix with: 
+
+```{r}
+results <- here("working_dir", "40_Results")
+if (!dir_exists(results)) dir_create(results)
+```
+
+```r
 3: In dir.create(.x) :
   cannot create dir '/home/mauro/git/PACTA_analysis/working_dir//50_Outputs/TestPortfolio_Input', reason 'No such file or directory'
 ```
-
-I suspect the problem is the double "/" as in "...//40_Results/...", which might results from creating paths with `paste0()` instead of dedicated functions such as `fs::path()` or `here::here()`.
+ Fix with: 
+ 
+```{r}
+outputs <- here("working_dir", "50_Outputs")
+if (!dir_exists(outputs)) dir_create(outputs)
+```
 
 
 
@@ -256,7 +292,7 @@ source("web_tool_script_2.R")
 Running this interactively, the line
 
 ```r
-write_rds(company_all_cb, paste0(pf_file_results_path, portfolio_name, "_Bonds_results_company.rda")) at web_tool_script_2.R#209
+write_rds(company_all_cb, paste0(pf_file_results, portfolio_name, "_Bonds_results_company.rda")) at web_tool_script_2.R#209
 ```
 
 throws this error:
@@ -270,7 +306,7 @@ In addition: Warning messages:
   cannot create dir '/home/mauro/git/PACTA_analysis/working_dir//40_Results/TestPortfolio_Input', reason 'No such file or directory'
 3: In dir.create(.x) :
   cannot create dir '/home/mauro/git/PACTA_analysis/working_dir//50_Outputs/TestPortfolio_Input', reason 'No such file or directory'
-4: In dir.create(pf_file_results_path) :
+4: In dir.create(pf_file_results) :
   cannot create dir '/home/mauro/git/PACTA_analysis/working_dir/40_Results/TestPortfolio_Input', reason 'No such file or directory'
 5: In saveRDS(x, con) :
   cannot open file '/home/mauro/git/PACTA_analysis/working_dir/40_Results/TestPortfolio_Input/TestPortfolio_Input_Bonds_results_company.rda': No such file or directory
