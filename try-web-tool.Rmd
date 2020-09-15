@@ -170,11 +170,10 @@ Not sure if this dataset is crucial, but it's missing from my clone of pacta-dat
 dir_ls(path("..", "pacta-data", "2019Q4", "cleaned_files"))
 ```
 
-**FIXME: Error at web_tool_script_1.R, create required parent directories**
-
-A number of calls require parent directories, which should be created if they don't exist. You may do that with something like this:
+NOTE: A number of calls require parent directories, which should be created if they don't exist. You may do that with something like this:
 
 ```{r}
+# Compare with `create_portfolio_subfolders()`
 create_directory_if_it_doesnt_exist <- function(directory) {
   if (!fs::dir_exists(directory)) {
     fs::dir_create(directory)
@@ -184,12 +183,14 @@ create_directory_if_it_doesnt_exist <- function(directory) {
 }
 
 children <- c("30_Processed_Inputs", "40_Results", "50_Outputs")
-paths <- here("working_dir", children)
+(paths <- here("working_dir", children))
 
 walk(paths, create_directory_if_it_doesnt_exist)
 ```
 
 * web_tool_script_2.R will take the processed inputs from the previous step, calculate PACTA results and write them to working_dir/40_Results/
+
+NOTE: I see duplicated code in the first lines of each script. For example, you may extract all calls to `library()` into a file packages.R; and you may also extract the repeated definitions of `working_location` (which I think should be `working_location <- here::here()`).
 
 ```{r, error=TRUE, message=FALSE}
 source("web_tool_script_2.R")

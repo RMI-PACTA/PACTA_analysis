@@ -204,31 +204,37 @@ dir_ls(path("..", "pacta-data", "2019Q4", "cleaned_files"))
 #> ../pacta-data/2019Q4/cleaned_files/fin_data.fst
 ```
 
-**FIXME: Error at web\_tool\_script\_1.R, create required parent
-directories**
-
-A number of calls require parent directories, which should be created if
-they don’t exist.
+NOTE: A number of calls require parent directories, which should be
+created if they don’t exist. You may do that with something like this:
 
 ``` r
-create_if_doesnt_exist <- function(path) {
-  if (!fs::dir_exists(path)) {
-    fs::dir_create(path)
+# Compare with `create_portfolio_subfolders()`
+create_directory_if_it_doesnt_exist <- function(directory) {
+  if (!fs::dir_exists(directory)) {
+    fs::dir_create(directory)
   }
   
-  invisible(path)
+  invisible(directory)
 }
 
 children <- c("30_Processed_Inputs", "40_Results", "50_Outputs")
-paths <- here("working_dir", children)
-walk(paths, create_if_doesnt_exist)
+(paths <- here("working_dir", children))
+#> [1] "/home/mauro/git/PACTA_analysis/working_dir/30_Processed_Inputs"
+#> [2] "/home/mauro/git/PACTA_analysis/working_dir/40_Results"         
+#> [3] "/home/mauro/git/PACTA_analysis/working_dir/50_Outputs"
+
+walk(paths, create_directory_if_it_doesnt_exist)
 ```
 
   - web\_tool\_script\_2.R will take the processed inputs from the
     previous step, calculate PACTA results and write them to
     working\_dir/40\_Results/
 
-<!-- end list -->
+NOTE: I see duplicated code in the first lines of each script. For
+example, you may extract all calls to `library()` into a file
+packages.R; and you may also extract the repeated definitions of
+`working_location` (which I think should be `working_location <-
+here::here()`).
 
 ``` r
 source("web_tool_script_2.R")
