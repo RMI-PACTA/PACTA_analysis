@@ -153,7 +153,7 @@ writeLines(readLines(config_1))
 expect_true(file_exists(config_1))
 ```
 
-3.1. Ensure this other configuration also file exists, and has correct
+3.1. Ensure this other configuration file also exists, and has correct
 paths:
 
 ``` r
@@ -210,7 +210,8 @@ source("web_tool_script_1.R")
 #> 50_Outputs/TestPortfolio_Input' already exists
 ```
 
-**FIXME: Warning at web\_tool\_script\_1.R\#105**
+NOTE: Some warnings may be avoided if required directories are created
+only if they don’t already exist.
 
 ``` r
 Warning message:
@@ -218,8 +219,8 @@ In read_file(paste0(file_location, "/fund_data.fst")) :
   ~/git/pacta-data/2019Q4/cleaned_files/fund_data.fst does not exist
 ```
 
-Not sure if this dataset is crucial, but it’s missing from my clone of
-pacta-data/:
+NOTE: I’m not sure if this dataset is crucial, but it’s missing from my
+clone of pacta-data/:
 
 ``` r
 dir_ls(path("..", "pacta-data", "2019Q4", "cleaned_files"))
@@ -336,3 +337,5 @@ dir_tree(path(outputs, "TestPortfolio_Input"), recurse = save_space)
 #> ├── libs
 #> └── search_index.json
 ```
+
+The output looks good\!
