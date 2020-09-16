@@ -4,167 +4,161 @@ Mauro’s first run of the web tool
 
 ## Setup
 
-### R
+Packages
 
 ``` r
 library(testthat)
 library(glue)
-library(fs)
 library(config)
 library(rlang)
 library(here)
+library(fs)
 library(tidyverse)
 ```
 
-### Git
+Required paths
 
-Fork and clone required repos:
+``` r
+file_name <- "TestPortfolio_Input.csv"
+example_dataset <- here::here("sample_files", "20_input_files", file_name)
+expected_dataset <- here::here("working_dir", "20_Raw_Inputs", file_name)
+```
+
+Required directories
+
+``` r
+# Similar to `create_portfolio_subfolders()`
+create_directory_if_it_doesnt_exist <- function(directory) {
+  if (!fs::dir_exists(directory)) {
+    fs::dir_create(directory)
+  }
+  
+  invisible(directory)
+}
+
+children <- c("30_Processed_Inputs", "40_Results", "50_Outputs")
+(paths <- here("working_dir", children))
+#> [1] "/home/mauro/git/PACTA_analysis/working_dir/30_Processed_Inputs"
+#> [2] "/home/mauro/git/PACTA_analysis/working_dir/40_Results"         
+#> [3] "/home/mauro/git/PACTA_analysis/working_dir/50_Outputs"
+
+walk(paths, create_directory_if_it_doesnt_exist)
+```
+
+Required repos
 
 ``` bash
+# Terminal
 gh repo fork --clone 2DegreesInvesting/pacta-data
 gh repo fork --clone 2DegreesInvesting/create_interactive_report
 gh repo fork --clone 2DegreesInvesting/PACTA_analysis
 ```
 
-Run from PACTA\_analysis/
+Required branch: Run from inside the project PACTA\_analysis/,
+particularly on the branch `current_web_functionality`.
 
 ``` bash
+# Terminal
 cd PACTA_analysis
 ```
 
-``` bash
-pwd
-git remote -vv
-$ /home/mauro/git/PACTA_analysis
-$ origin    git@github.com:maurolepore/PACTA_analysis.git (fetch)
-$ origin    git@github.com:maurolepore/PACTA_analysis.git (push)
-$ upstream  git@github.com:2DegreesInvesting/PACTA_analysis.git (fetch)
-$ upstream  git@github.com:2DegreesInvesting/PACTA_analysis.git (push)
+Required working directory
+
+``` r
+here()
+#> [1] "/home/mauro/git/PACTA_analysis"
 ```
 
-Work off branch `current_web_functionality`.
-
-``` bash
-git remote show upstream | grep current_web_functionality
-git branch
-$     current_web_functionality  tracked
-$   current_web_functionaliry
-$   master
-$ * mauro-wip
-```
-
-Inspect recent history:
-
-``` bash
-git log --oneline --no-merges current_web_functionaliry..HEAD
-#> 8e5ed03 Cleanup
-#> aa517d6 Add notes
-#> 6784cbf Cleanup: Show rather than explain changes
-#> c453ebf Fix working_location
-#> 4ccdd59 Find a few more errors
-#> 73f2032 Find error in web_tool_script_1.R: line 34
-#> 809375b Remove horrible --hard reset
-#> 762dcf1 Style
-#> 10c80a7 Expect sibling repo
-#> 78aa9c4 Try runnign web tool following Jacob's guide
-```
+NOTE: The branch `current_web_functionaliry` is long-lived, which makes
+the workflow more complex than the standard GitHub workflow (by which
+the only long-lived branch is `master`). I suggest merging
+`current_web_functionality` into master, or extracting the
+non-overlapping code into a separate repo.
 
 ## [Instructions by Jacob](https://bit.ly/2RCRJn7)
 
-### 1\. Copy TestPortfolio\_Input.csv from sample\_files/20\_input\_files/ to working\_dir/20\_Raw\_Inputs/
+### 1\. Data
+
+Here we use an example dataset, which the analysis expects in a specific
+folder.
+
+Sanity checks:
 
 ``` r
-# Ensure the source file exists
-portfolio_csv <- "TestPortfolio_Input.csv"
-from <- here("sample_files", "20_input_files", portfolio_csv)
-stopifnot(file_exists(from))
+stopifnot(file_exists(example_dataset))
 
-# If it already exists, remove it with a warning
-to <- here("working_dir", "20_Raw_Inputs", portfolio_csv)
-if (file_exists(to)) {
-  warn(glue("Removing existing file: {to}"))
-  file_delete(to)
+if (file_exists(expected_dataset)) {
+  warn(glue("Removing existing file: {expected_dataset}"))
+  file_delete(expected_dataset)
 }
 #> Warning: Removing existing file: /home/mauro/git/PACTA_analysis/working_dir/
 #> 20_Raw_Inputs/TestPortfolio_Input.csv
+
+file_copy(example_dataset, expected_dataset)
+
+expect_true(file_exists(expected_dataset))
 ```
 
-``` r
-file_copy(from, to)
-```
+### 2\. Assign a value to `portfolio_name_ref_all`
 
-``` r
-expect_true(file_exists(to))
-```
+2.  Set “TestPortfolio\_Input” as the portfolio\_name\_ref\_all in all
+    three web\_tool\_scripts (lines 30, 24 and 21)
 
-### 2\. Set “TestPortfolio\_Input” as the portfolio\_name\_ref\_all in all three web\_tool\_scripts (lines 30, 24 and 21)
+I explore what value is currently assigned to the variable
+`TestPortfolio_Input`:
 
 ``` r
 show_pattern_in_file <- function(file, pattern) {
   grep(pattern, readLines(file), value = TRUE)
 }
+
+(files <- dir_ls(regexp = "web_tool_script"))
+#> web_tool_script_1.R web_tool_script_2.R web_tool_script_3.R
+this_pattern <- "portfolio_name_ref_all.*<-"
+matched <- map(files, show_pattern_in_file, pattern = this_pattern)
 ```
 
-``` r
-files <- dir_ls(regexp = "web_tool_script")
-this_pattern <- "portfolio_name_ref_all.*<-.*TestPortfolio_Input"
-matched <- map(files, show_pattern_in_file, pattern = this_pattern)
+It looks like the values are already the ones we expect:
 
+``` r
 walk(matched, writeLines)
 #> portfolio_name_ref_all <- c("TestPortfolio_Input")
 #> portfolio_name_ref_all <- c("TestPortfolio_Input")
 #> portfolio_name_ref_all <- c("TestPortfolio_Input")
-```
 
-``` r
 script_has_this_pattern <- grepl(this_pattern, matched)
 expect_true(all(script_has_this_pattern))
 ```
 
-–
-
-Note:
-
-  - It seems useful to automate the process of running these files:
-    web\_tool\_script\_1.R, web\_tool\_script\_2.R,
-    web\_tool\_script\_3.R – for example, via a drake plan, or an
-    rmarkdown document, or a function in a package.
-
-  - It seems useful to parametrize these calls:
-    portfolio\_name\_ref\_all \<- c(“TestPortfolio\_Input”) – for
-    example, as parameters in a parametrized rmarkdown document, or as
-    arguments to a function.
+NOTE: It seems useful to make `portfolio_name_ref_all` a parameter; that
+way the user can set it without changing source code.
 
 ### 3 Configuration files
 
-#### 3.1. Ensure that there is a config file with name “TestPortfolio\_Input\_PortfolioParameters.yml” in working\_dir/10\_Parameter\_File/ (this should already be the case, the content should not matter too much, as far as I can tell….)
+3.1. Ensure this config file:
 
 ``` r
-config1 <- here(
+config_1 <- here(
   "working_dir",
   "10_Parameter_File",
   "TestPortfolio_Input_PortfolioParameters.yml"
 )
 
-writeLines(readLines(config1))
+writeLines(readLines(config_1))
 #> default:
 #>     parameters:
 #>         portfolio_name_in: test_portfolio
 #>         investor_name_in: Test
+
+expect_true(file_exists(config_1))
 ```
 
-``` r
-expect_true(file_exists(config1))
-```
-
-#### 3.1. Set parameters
-
-Ensure this configuration file exists, as well as all the directories
-specified in the field `paths`:
+3.1. Ensure this other configuration also file exists, and has correct
+paths:
 
 ``` r
-config2 <- path("parameter_files", "WebParameters_2dii.yml")
-writeLines(readLines(config2))
+config_2 <- here("parameter_files", "WebParameters_2dii.yml")
+writeLines(readLines(config_2))
 #> default:
 #>     paths:
 #>         project_location_ext: ~/git/PACTA_analysis/
@@ -177,21 +171,24 @@ writeLines(readLines(config2))
 ```
 
 ``` r
-expect_true(file_exists(config2))
+expect_true(file_exists(config_2))
 ```
 
 ``` r
-config2_paths <- config::get(file = config2)$paths
-str(config2_paths)
+config_paths <- config::get(file = config_2)$paths
+str(config_paths)
 #> List of 3
 #>  $ project_location_ext: chr "~/git/PACTA_analysis/"
 #>  $ data_location_ext   : chr "~/git/pacta-data/2019Q4/"
 #>  $ template_location   : chr "~/git/create_interactive_report/"
+
+all_paths_exist <- all(map_lgl(config_paths, dir_exists))
+expect_true(all_paths_exist)
 ```
 
-``` r
-expect_true(all(map_lgl(config2_paths, dir_exists)))
-```
+NOTE: It would be nice to set these paths from a more flexible
+interface, like the arguments of a function or the parameters of a
+parametrized rmarkdown file.
 
 ### 4\. Run scripts
 
@@ -232,28 +229,6 @@ dir_ls(path("..", "pacta-data", "2019Q4", "cleaned_files"))
 #> ../pacta-data/2019Q4/cleaned_files/currencies.fst
 #> ../pacta-data/2019Q4/cleaned_files/debt_fin_data.fst
 #> ../pacta-data/2019Q4/cleaned_files/fin_data.fst
-```
-
-NOTE: A number of calls require parent directories, which should be
-created if they don’t exist. You may do that with something like this:
-
-``` r
-# Compare with `create_portfolio_subfolders()`
-create_directory_if_it_doesnt_exist <- function(directory) {
-  if (!fs::dir_exists(directory)) {
-    fs::dir_create(directory)
-  }
-  
-  invisible(directory)
-}
-
-children <- c("30_Processed_Inputs", "40_Results", "50_Outputs")
-(paths <- here("working_dir", children))
-#> [1] "/home/mauro/git/PACTA_analysis/working_dir/30_Processed_Inputs"
-#> [2] "/home/mauro/git/PACTA_analysis/working_dir/40_Results"         
-#> [3] "/home/mauro/git/PACTA_analysis/working_dir/50_Outputs"
-
-walk(paths, create_directory_if_it_doesnt_exist)
 ```
 
   - web\_tool\_script\_2.R will take the processed inputs from the
