@@ -1,13 +1,13 @@
-Mauro’s first run of the web tool
+Running the web tool: A reproducible example
 ================
 2020-09-22
 
 ## Introduction
 
-This document aims to provide a reproducible example of the workflow to
-run PACTA\_analysis. It is based on [these instructions by
-Jacob](https://bit.ly/2RCRJn7). Here are some of the ways you may use
-this document:
+This document aims to provide a reproducible example of how to run the
+web tool that PACTA\_analysis provides. It is based on [these
+instructions by Jacob](https://bit.ly/2RCRJn7). Here are some of the
+ways you may use this document:
 
   - To document the repository, by incorporating it into the README
     file.

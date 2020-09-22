@@ -1,12 +1,12 @@
 ---
-title: "Mauro's first run of the web tool"
+title: "Running the web tool: A reproducible example"
 date: "`r Sys.Date()`"
 output: github_document
 ---
 
 ## Introduction
 
-This document aims to provide a reproducible example of the workflow to run PACTA_analysis. It is based on [these instructions by Jacob](https://bit.ly/2RCRJn7). Here are some of the ways you may use this document:
+This document aims to provide a reproducible example of how to run the web tool that PACTA_analysis provides. It is based on [these instructions by Jacob](https://bit.ly/2RCRJn7). Here are some of the ways you may use this document:
 
 * To document the repository, by incorporating it into the README file.
 * To onboard contributors.
