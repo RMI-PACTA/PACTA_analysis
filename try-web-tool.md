@@ -9,9 +9,9 @@ web tool that PACTA\_analysis provides. It is based on [these
 instructions by Jacob](https://bit.ly/2RCRJn7). Here are some of the
 ways you may use this document:
 
-  - To document the repository, by incorporating it into the README
-    file.
-  - To onboard contributors.
+  - To document the repository PACTA\_analysis, by incorporating it into
+    the README file.
+  - To onboard contributors to the PACTA\_analysis project.
   - To test the output of PACTA\_analysis remains unchanged, maybe by
     running this document on a continuous integration service like
     GitHub actions.
@@ -226,7 +226,8 @@ Ensure the example data is available.
 
 ``` r
 file_name <- "TestPortfolio_Input.csv"
-example_dataset <- here("sample_files", "20_input_files", file_name)
+example_dataset <- params$example_dataset
+# example_dataset <- here("sample_files", "20_input_files", file_name)
 
 expect_true(file_exists(example_dataset))
 ```
@@ -270,11 +271,12 @@ children <- c("30_Processed_Inputs", "40_Results", "50_Outputs")
 walk(paths, create_directory_if_it_doesnt_exist)
 ```
 
-Ensure the following repos are siblings of PACTA\_analysis/ (
+Ensure the following repos are siblings, i.e. they share a parent
+directory:
 
+  - 2DegreesInvesting/PACTA\_analysis
   - 2DegreesInvesting/pacta-data
   - 2DegreesInvesting/create\_interactive\_report
-  - 2DegreesInvesting/PACTA\_analysis
 
 <!-- end list -->
 
@@ -296,6 +298,9 @@ visual inspection.
 
 ``` bash
 git log --oneline --graph --no-merges upstream/current_web_functionality..HEAD
+#> * 98d13c4 Parametrize
+#> * ed6f5db Parametrize
+#> * dc67ed7 Refresh cache
 #> * 479fe89 Make title more specific
 #> * a752e87 Polish try-web-tool.Rmd
 #> * fda04ce Polish
@@ -355,7 +360,7 @@ TODO: If the value of `portfolio_name_ref_all` comes from the user, we
 need an interface for the user to supply it – instead of asking a user
 to change the source code.
 
-### 3 Configuration files
+### Configuration files
 
 Ensure the file “TestPortfolio\_Input\_PortfolioParameters.yml” exists.
 
@@ -387,13 +392,32 @@ config_2 <- here("parameter_files", "WebParameters_2dii.yml")
 look_into(config_2)
 #> default:
 #>     paths:
-#>         project_location_ext: ~/git/PACTA_analysis/
-#>         data_location_ext: ~/git/pacta-data/2019Q4/
-#>         template_location: ~/git/create_interactive_report/
+#>         project_location_ext: /home/mauro/git/PACTA_analysis
+#>         data_location_ext: /home/mauro/git/pacta-data/2019Q4
+#>         template_location: /home/mauro/git/create_interactive_report
 #>     parameters:
 #>         project_name: working_dir
 #>         twodii_internal: FALSE
 #>         new_data: FALSE
+```
+
+To make this more portable, overwrite the configutation file with the
+parameters in this parametrized rmarkdown document.
+
+``` r
+use_params_field <- function(lines, field) {
+  pattern <- glue("(.*{field}: )(.*)$")
+  replacement <- glue("\\1{params[[field]]}")
+  sub(pattern, replacement, lines)
+}
+
+tmp <- readLines(config_2, encoding = "UTF-8")
+tmp <- use_params_field(tmp, "project_location_ext")
+tmp <- use_params_field(tmp, "data_location_ext")
+tmp <- use_params_field(tmp, "template_location")
+tmp
+
+writeLines(tmp, config_2)
 ```
 
 ``` r
@@ -404,9 +428,9 @@ expect_true(file_exists(config_2))
 config_paths <- config::get(file = config_2)$paths
 str(config_paths)
 #> List of 3
-#>  $ project_location_ext: chr "~/git/PACTA_analysis/"
-#>  $ data_location_ext   : chr "~/git/pacta-data/2019Q4/"
-#>  $ template_location   : chr "~/git/create_interactive_report/"
+#>  $ project_location_ext: chr "/home/mauro/git/PACTA_analysis"
+#>  $ data_location_ext   : chr "/home/mauro/git/pacta-data/2019Q4"
+#>  $ template_location   : chr "/home/mauro/git/create_interactive_report"
 
 all_paths_exist <- all(map_lgl(config_paths, dir_exists))
 expect_true(all_paths_exist)
@@ -421,15 +445,22 @@ parametrized rmarkdown file.
 ``` r
 # Populate the directory "working\_dir/30\_Processed\_Inputs/"
 source("web_tool_script_1.R")
-#> Warning in read_file(paste0(file_location, "/fund_data.fst")): ~/git/pacta-data/
-#> 2019Q4/cleaned_files/fund_data.fst does not exist
-#> [1] "No Equity in portfolio"
-#> Warning in dir.create(.x): '/home/mauro/git/PACTA_analysis/working_dir//
-#> 30_Processed_Inputs/TestPortfolio_Input' already exists
-#> Warning in dir.create(.x): '/home/mauro/git/PACTA_analysis/working_dir//
-#> 40_Results/TestPortfolio_Input' already exists
-#> Warning in dir.create(.x): '/home/mauro/git/PACTA_analysis/working_dir//
-#> 50_Outputs/TestPortfolio_Input' already exists
+#> Warning in read_file(paste0(file_location, "/currencies.fst")): /home/mauro/git/
+#> pacta-data/2019Q4cleaned_files/currencies.fst does not exist
+#> Warning in read_file(paste0(file_location, "/fund_data.fst")): /home/mauro/git/
+#> pacta-data/2019Q4cleaned_files/fund_data.fst does not exist
+#> Warning in read_file(paste0(file_location, "/fin_data.fst")): /home/mauro/git/
+#> pacta-data/2019Q4cleaned_files/fin_data.fst does not exist
+#> Warning in read_file(paste0(file_location, "/comp_fin_data.fst")): /home/mauro/
+#> git/pacta-data/2019Q4cleaned_files/comp_fin_data.fst does not exist
+#> Warning in read_file(paste0(file_location, "/debt_fin_data.fst")): /home/mauro/
+#> git/pacta-data/2019Q4cleaned_files/debt_fin_data.fst does not exist
+#> Warning in read_file(paste0(file_location, "/average_sector_intensity.fst")): /
+#> home/mauro/git/pacta-data/2019Q4cleaned_files/average_sector_intensity.fst does
+#> not exist
+#> Warning in read_file(paste0(file_location, "/company_emissions.fst")): /home/
+#> mauro/git/pacta-data/2019Q4cleaned_files/company_emissions.fst does not exist
+#> Error: `x` and `y` must share the same src, set `copy` = TRUE (may be slow).
 
 #  Populate working_dir/40_Results/
 source("web_tool_script_2.R")
@@ -444,6 +475,10 @@ source("web_tool_script_2.R")
 # Feed previous results plus data from the pacta-data/ into
 # `create_interactive_report()`.
 source("web_tool_script_3.R") 
+#> Warning in file(filename, "r", encoding = encoding): cannot open file '/home/
+#> mauro/git/create_interactive_reportcreate_interactive_report.R': No such file or
+#> directory
+#> Error in file(filename, "r", encoding = encoding): cannot open the connection
 ```
 
 Ensure the directory “working\_dir/50\_Outputs/” is now populated with
