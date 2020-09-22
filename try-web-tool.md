@@ -26,12 +26,72 @@ This report uses the following packages:
 library(testthat)
 library(glue)
 library(config)
+#> 
+#> Attaching package: 'config'
+#> The following objects are masked from 'package:base':
+#> 
+#>     get, merge
 library(rlang)
+#> 
+#> Attaching package: 'rlang'
+#> The following objects are masked from 'package:testthat':
+#> 
+#>     is_false, is_null, is_true
 library(here)
+#> here() starts at /home/mauro/git/PACTA_analysis
 library(renv)
+#> 
+#> Attaching package: 'renv'
+#> The following object is masked from 'package:rlang':
+#> 
+#>     modify
+#> The following object is masked from 'package:stats':
+#> 
+#>     update
+#> The following objects are masked from 'package:utils':
+#> 
+#>     history, upgrade
+#> The following objects are masked from 'package:base':
+#> 
+#>     load, remove
 library(fs)
 library(tidyverse)
+#> ── Attaching packages ──────────────── tidyverse 1.3.0 ──
+#> ✓ ggplot2 3.3.2     ✓ purrr   0.3.4
+#> ✓ tibble  3.0.3     ✓ dplyr   1.0.2
+#> ✓ tidyr   1.1.2     ✓ stringr 1.4.0
+#> ✓ readr   1.3.1     ✓ forcats 0.5.0
+#> ── Conflicts ─────────────────── tidyverse_conflicts() ──
+#> x purrr::%@%()         masks rlang::%@%()
+#> x purrr::as_function() masks rlang::as_function()
+#> x dplyr::collapse()    masks glue::collapse()
+#> x dplyr::filter()      masks stats::filter()
+#> x purrr::flatten()     masks rlang::flatten()
+#> x purrr::flatten_chr() masks rlang::flatten_chr()
+#> x purrr::flatten_dbl() masks rlang::flatten_dbl()
+#> x purrr::flatten_int() masks rlang::flatten_int()
+#> x purrr::flatten_lgl() masks rlang::flatten_lgl()
+#> x purrr::flatten_raw() masks rlang::flatten_raw()
+#> x purrr::invoke()      masks rlang::invoke()
+#> x rlang::is_false()    masks testthat::is_false()
+#> x purrr::is_null()     masks rlang::is_null(), testthat::is_null()
+#> x rlang::is_true()     masks testthat::is_true()
+#> x dplyr::lag()         masks stats::lag()
+#> x purrr::list_along()  masks rlang::list_along()
+#> x dplyr::matches()     masks tidyr::matches(), testthat::matches()
+#> x purrr::modify()      masks renv::modify(), rlang::modify()
+#> x purrr::prepend()     masks rlang::prepend()
+#> x purrr::splice()      masks rlang::splice()
 library(devtools)
+#> Loading required package: usethis
+#> 
+#> Attaching package: 'devtools'
+#> The following object is masked from 'package:renv':
+#> 
+#>     install
+#> The following object is masked from 'package:testthat':
+#> 
+#>     test_file
 ```
 
 These are all the packages detected in the PACTA\_analysis project:
@@ -41,15 +101,15 @@ pkg <- renv::dependencies()
 #> Finding R package dependencies ... Done!
 sort(unique(pkg$Package))
 #>  [1] "assertthat"   "base"         "bookdown"     "config"       "countrycode" 
-#>  [6] "cowplot"      "dplyr"        "extrafont"    "fs"           "fst"         
-#> [11] "ggforce"      "ggmap"        "ggplot2"      "ggrepel"      "ggthemes"    
-#> [16] "glue"         "grid"         "gridExtra"    "here"         "janitor"     
-#> [21] "jsonlite"     "knitr"        "lme4"         "matrixStats"  "plyr"        
-#> [26] "purrr"        "r2dii.utils"  "RColorBrewer" "readr"        "readxl"      
-#> [31] "renv"         "reshape2"     "rlang"        "rmarkdown"    "rstudioapi"  
-#> [36] "rworldmap"    "scales"       "sitools"      "stringr"      "testthat"    
-#> [41] "tidyr"        "tidyselect"   "tidyverse"    "tools"        "withr"       
-#> [46] "xml2"
+#>  [6] "cowplot"      "devtools"     "dplyr"        "extrafont"    "fs"          
+#> [11] "fst"          "ggforce"      "ggmap"        "ggplot2"      "ggrepel"     
+#> [16] "ggthemes"     "glue"         "grid"         "gridExtra"    "here"        
+#> [21] "janitor"      "jsonlite"     "knitr"        "lme4"         "matrixStats" 
+#> [26] "plyr"         "purrr"        "r2dii.utils"  "RColorBrewer" "readr"       
+#> [31] "readxl"       "renv"         "reshape2"     "rlang"        "rmarkdown"   
+#> [36] "rstudioapi"   "rworldmap"    "scales"       "sitools"      "stringr"     
+#> [41] "testthat"     "tidyr"        "tidyselect"   "tidyverse"    "tools"       
+#> [46] "withr"        "xml2"
 ```
 
 The published
@@ -76,166 +136,81 @@ devtools::session_info()
 #>  date     2020-09-22                  
 #> 
 #> ─ Packages ───────────────────────────────────────────────────────────────────
-#>  package     * version     date       lib
-#>  assertthat    0.2.1       2019-03-21 [1]
-#>  backports     1.1.10      2020-09-15 [1]
-#>  blob          1.2.1       2020-01-20 [1]
-#>  broom         0.7.0       2020-07-09 [1]
-#>  callr         3.4.4       2020-09-07 [1]
-#>  cellranger    1.1.0       2016-07-27 [1]
-#>  cli           2.0.2       2020-02-28 [1]
-#>  colorspace    1.4-1       2019-03-18 [1]
-#>  config      * 0.3         2018-03-27 [1]
-#>  countrycode * 1.2.0       2020-05-22 [1]
-#>  crayon        1.3.4.9000  2020-09-03 [1]
-#>  DBI           1.1.0       2019-12-15 [1]
-#>  dbplyr        1.4.4       2020-05-27 [1]
-#>  desc          1.2.0       2018-05-01 [1]
-#>  devtools      2.3.1.9000  2020-08-18 [1]
-#>  digest        0.6.25      2020-02-23 [1]
-#>  dplyr       * 1.0.2       2020-08-18 [1]
-#>  ellipsis      0.3.1       2020-05-15 [1]
-#>  evaluate      0.14        2019-05-28 [1]
-#>  fansi         0.4.1       2020-01-08 [1]
-#>  forcats     * 0.5.0       2020-03-01 [1]
-#>  fs          * 1.5.0       2020-07-31 [1]
-#>  fst         * 0.9.4       2020-08-27 [1]
-#>  generics      0.0.2       2018-11-29 [1]
-#>  ggplot2     * 3.3.2       2020-06-19 [1]
-#>  glue        * 1.4.2       2020-08-27 [1]
-#>  gtable        0.3.0       2019-03-25 [1]
-#>  haven         2.3.1       2020-06-01 [1]
-#>  here        * 0.1         2017-05-28 [1]
-#>  hms           0.5.3       2020-01-08 [1]
-#>  htmltools     0.5.0       2020-06-16 [1]
-#>  httr          1.4.2       2020-07-20 [1]
-#>  jsonlite    * 1.7.1       2020-09-07 [1]
-#>  knitr         1.29        2020-06-23 [1]
-#>  lifecycle     0.2.0       2020-03-06 [1]
-#>  lubridate     1.7.9       2020-06-08 [1]
-#>  magrittr      1.5.0.9000  2020-08-31 [1]
-#>  memoise       1.1.0       2017-04-21 [1]
-#>  modelr        0.1.8       2020-05-19 [1]
-#>  munsell       0.5.0       2018-06-12 [1]
-#>  pillar        1.4.6       2020-07-10 [1]
-#>  pkgbuild      1.1.0       2020-07-13 [1]
-#>  pkgconfig     2.0.3       2019-09-22 [1]
-#>  pkgload       1.1.0       2020-05-29 [1]
-#>  plyr          1.8.6       2020-03-03 [1]
-#>  prettyunits   1.1.1       2020-01-24 [1]
-#>  processx      3.4.4       2020-09-03 [1]
-#>  ps            1.3.4       2020-08-11 [1]
-#>  purrr       * 0.3.4       2020-04-17 [1]
-#>  r2dii.utils * 0.0.0.9003  2020-05-14 [1]
-#>  R6            2.4.1       2019-11-12 [1]
-#>  Rcpp          1.0.5       2020-07-06 [1]
-#>  readr       * 1.3.1       2018-12-21 [1]
-#>  readxl      * 1.3.1       2019-03-13 [1]
-#>  remotes       2.2.0       2020-07-21 [1]
-#>  renv        * 0.12.0      2020-08-28 [1]
-#>  reprex        0.3.0       2019-05-16 [1]
-#>  reshape2    * 1.4.4       2020-04-09 [1]
-#>  rlang       * 0.4.7       2020-07-09 [1]
-#>  rmarkdown     2.3         2020-06-18 [1]
-#>  rprojroot     1.3-2       2018-01-03 [1]
-#>  rstudioapi    0.11        2020-02-07 [1]
-#>  rvest         0.3.6       2020-07-25 [1]
-#>  scales      * 1.1.1       2020-05-11 [1]
-#>  sessioninfo   1.1.1       2018-11-05 [1]
-#>  stringi       1.5.3       2020-09-09 [1]
-#>  stringr     * 1.4.0       2019-02-10 [1]
-#>  testthat    * 2.99.0.9000 2020-08-18 [1]
-#>  tibble      * 3.0.3       2020-07-10 [1]
-#>  tidyr       * 1.1.2       2020-08-27 [1]
-#>  tidyselect  * 1.1.0       2020-05-11 [1]
-#>  tidyverse   * 1.3.0       2019-11-21 [1]
-#>  usethis       1.6.1       2020-04-29 [1]
-#>  vctrs         0.3.4       2020-08-29 [1]
-#>  withr         2.2.0       2020-04-20 [1]
-#>  writexl     * 1.3.1       2020-08-26 [1]
-#>  xfun          0.17        2020-09-09 [1]
-#>  xml2          1.3.2       2020-04-23 [1]
-#>  yaml          2.2.1       2020-02-01 [1]
-#>  source                                        
-#>  CRAN (R 4.0.0)                                
-#>  CRAN (R 4.0.2)                                
-#>  CRAN (R 4.0.0)                                
-#>  CRAN (R 4.0.0)                                
-#>  RSPM (R 4.0.2)                                
-#>  CRAN (R 4.0.0)                                
-#>  CRAN (R 4.0.0)                                
-#>  CRAN (R 4.0.0)                                
-#>  CRAN (R 4.0.0)                                
-#>  CRAN (R 4.0.0)                                
-#>  Github (r-lib/crayon@6b3f0c6)                 
-#>  CRAN (R 4.0.0)                                
-#>  CRAN (R 4.0.0)                                
-#>  CRAN (R 4.0.0)                                
-#>  Github (r-lib/devtools@df619ce)               
-#>  CRAN (R 4.0.0)                                
-#>  RSPM (R 4.0.2)                                
-#>  CRAN (R 4.0.0)                                
-#>  CRAN (R 4.0.0)                                
-#>  CRAN (R 4.0.0)                                
-#>  CRAN (R 4.0.0)                                
-#>  RSPM (R 4.0.2)                                
-#>  RSPM (R 4.0.2)                                
-#>  CRAN (R 4.0.0)                                
-#>  CRAN (R 4.0.0)                                
-#>  RSPM (R 4.0.2)                                
-#>  CRAN (R 4.0.0)                                
-#>  CRAN (R 4.0.0)                                
-#>  CRAN (R 4.0.0)                                
-#>  CRAN (R 4.0.0)                                
-#>  CRAN (R 4.0.0)                                
-#>  RSPM (R 4.0.2)                                
-#>  RSPM (R 4.0.2)                                
-#>  RSPM (R 4.0.2)                                
-#>  CRAN (R 4.0.0)                                
-#>  CRAN (R 4.0.0)                                
-#>  Github (tidyverse/magrittr@15f6f07)           
-#>  CRAN (R 4.0.0)                                
-#>  CRAN (R 4.0.0)                                
-#>  CRAN (R 4.0.0)                                
-#>  CRAN (R 4.0.0)                                
-#>  RSPM (R 4.0.2)                                
-#>  CRAN (R 4.0.0)                                
-#>  CRAN (R 4.0.0)                                
-#>  CRAN (R 4.0.0)                                
-#>  CRAN (R 4.0.0)                                
-#>  CRAN (R 4.0.2)                                
-#>  CRAN (R 4.0.0)                                
-#>  CRAN (R 4.0.0)                                
-#>  Github (2DegreesInvesting/r2dii.utils@fd29303)
-#>  CRAN (R 4.0.0)                                
-#>  CRAN (R 4.0.0)                                
-#>  CRAN (R 4.0.0)                                
-#>  CRAN (R 4.0.0)                                
-#>  RSPM (R 4.0.2)                                
-#>  RSPM (R 4.0.2)                                
-#>  CRAN (R 4.0.0)                                
-#>  CRAN (R 4.0.0)                                
-#>  CRAN (R 4.0.0)                                
-#>  CRAN (R 4.0.0)                                
-#>  CRAN (R 4.0.0)                                
-#>  CRAN (R 4.0.0)                                
-#>  RSPM (R 4.0.2)                                
-#>  CRAN (R 4.0.0)                                
-#>  CRAN (R 4.0.0)                                
-#>  RSPM (R 4.0.2)                                
-#>  CRAN (R 4.0.0)                                
-#>  Github (r-lib/testthat@9e643d8)               
-#>  CRAN (R 4.0.0)                                
-#>  RSPM (R 4.0.2)                                
-#>  CRAN (R 4.0.0)                                
-#>  RSPM (R 4.0.2)                                
-#>  RSPM (R 4.0.2)                                
-#>  RSPM (R 4.0.2)                                
-#>  CRAN (R 4.0.0)                                
-#>  RSPM (R 4.0.2)                                
-#>  RSPM (R 4.0.2)                                
-#>  CRAN (R 4.0.0)                                
-#>  RSPM (R 4.0.0)                                
+#>  package     * version     date       lib source                             
+#>  assertthat    0.2.1       2019-03-21 [1] CRAN (R 4.0.0)                     
+#>  backports     1.1.10      2020-09-15 [1] CRAN (R 4.0.2)                     
+#>  blob          1.2.1       2020-01-20 [1] CRAN (R 4.0.0)                     
+#>  broom         0.7.0       2020-07-09 [1] CRAN (R 4.0.0)                     
+#>  callr         3.4.4       2020-09-07 [1] RSPM (R 4.0.2)                     
+#>  cellranger    1.1.0       2016-07-27 [1] CRAN (R 4.0.0)                     
+#>  cli           2.0.2       2020-02-28 [1] CRAN (R 4.0.0)                     
+#>  codetools     0.2-16      2018-12-24 [4] CRAN (R 4.0.0)                     
+#>  colorspace    1.4-1       2019-03-18 [1] CRAN (R 4.0.0)                     
+#>  config      * 0.3         2018-03-27 [1] CRAN (R 4.0.0)                     
+#>  crayon        1.3.4.9000  2020-09-03 [1] Github (r-lib/crayon@6b3f0c6)      
+#>  DBI           1.1.0       2019-12-15 [1] CRAN (R 4.0.0)                     
+#>  dbplyr        1.4.4       2020-05-27 [1] CRAN (R 4.0.0)                     
+#>  desc          1.2.0       2018-05-01 [1] CRAN (R 4.0.0)                     
+#>  devtools    * 2.3.1.9000  2020-08-18 [1] Github (r-lib/devtools@df619ce)    
+#>  digest        0.6.25      2020-02-23 [1] CRAN (R 4.0.0)                     
+#>  dplyr       * 1.0.2       2020-08-18 [1] RSPM (R 4.0.2)                     
+#>  ellipsis      0.3.1       2020-05-15 [1] CRAN (R 4.0.0)                     
+#>  evaluate      0.14        2019-05-28 [1] CRAN (R 4.0.0)                     
+#>  fansi         0.4.1       2020-01-08 [1] CRAN (R 4.0.0)                     
+#>  forcats     * 0.5.0       2020-03-01 [1] CRAN (R 4.0.0)                     
+#>  fs          * 1.5.0       2020-07-31 [1] RSPM (R 4.0.2)                     
+#>  generics      0.0.2       2018-11-29 [1] CRAN (R 4.0.0)                     
+#>  ggplot2     * 3.3.2       2020-06-19 [1] CRAN (R 4.0.0)                     
+#>  glue        * 1.4.2       2020-08-27 [1] RSPM (R 4.0.2)                     
+#>  gtable        0.3.0       2019-03-25 [1] CRAN (R 4.0.0)                     
+#>  haven         2.3.1       2020-06-01 [1] CRAN (R 4.0.0)                     
+#>  here        * 0.1         2017-05-28 [1] CRAN (R 4.0.0)                     
+#>  hms           0.5.3       2020-01-08 [1] CRAN (R 4.0.0)                     
+#>  htmltools     0.5.0       2020-06-16 [1] CRAN (R 4.0.0)                     
+#>  httr          1.4.2       2020-07-20 [1] RSPM (R 4.0.2)                     
+#>  jsonlite      1.7.1       2020-09-07 [1] RSPM (R 4.0.2)                     
+#>  knitr         1.29        2020-06-23 [1] RSPM (R 4.0.2)                     
+#>  lifecycle     0.2.0       2020-03-06 [1] CRAN (R 4.0.0)                     
+#>  lubridate     1.7.9       2020-06-08 [1] CRAN (R 4.0.0)                     
+#>  magrittr      1.5.0.9000  2020-08-31 [1] Github (tidyverse/magrittr@15f6f07)
+#>  memoise       1.1.0       2017-04-21 [1] CRAN (R 4.0.0)                     
+#>  modelr        0.1.8       2020-05-19 [1] CRAN (R 4.0.0)                     
+#>  munsell       0.5.0       2018-06-12 [1] CRAN (R 4.0.0)                     
+#>  pillar        1.4.6       2020-07-10 [1] CRAN (R 4.0.0)                     
+#>  pkgbuild      1.1.0       2020-07-13 [1] RSPM (R 4.0.2)                     
+#>  pkgconfig     2.0.3       2019-09-22 [1] CRAN (R 4.0.0)                     
+#>  pkgload       1.1.0       2020-05-29 [1] CRAN (R 4.0.0)                     
+#>  prettyunits   1.1.1       2020-01-24 [1] CRAN (R 4.0.0)                     
+#>  processx      3.4.4       2020-09-03 [1] CRAN (R 4.0.2)                     
+#>  ps            1.3.4       2020-08-11 [1] CRAN (R 4.0.0)                     
+#>  purrr       * 0.3.4       2020-04-17 [1] CRAN (R 4.0.0)                     
+#>  R6            2.4.1       2019-11-12 [1] CRAN (R 4.0.0)                     
+#>  Rcpp          1.0.5       2020-07-06 [1] CRAN (R 4.0.0)                     
+#>  readr       * 1.3.1       2018-12-21 [1] CRAN (R 4.0.0)                     
+#>  readxl        1.3.1       2019-03-13 [1] CRAN (R 4.0.0)                     
+#>  remotes       2.2.0       2020-07-21 [1] RSPM (R 4.0.2)                     
+#>  renv        * 0.12.0      2020-08-28 [1] RSPM (R 4.0.2)                     
+#>  reprex        0.3.0       2019-05-16 [1] CRAN (R 4.0.0)                     
+#>  rlang       * 0.4.7       2020-07-09 [1] CRAN (R 4.0.0)                     
+#>  rmarkdown     2.3         2020-06-18 [1] CRAN (R 4.0.0)                     
+#>  rprojroot     1.3-2       2018-01-03 [1] CRAN (R 4.0.0)                     
+#>  rstudioapi    0.11        2020-02-07 [1] CRAN (R 4.0.0)                     
+#>  rvest         0.3.6       2020-07-25 [1] RSPM (R 4.0.2)                     
+#>  scales        1.1.1       2020-05-11 [1] CRAN (R 4.0.0)                     
+#>  sessioninfo   1.1.1       2018-11-05 [1] CRAN (R 4.0.0)                     
+#>  stringi       1.5.3       2020-09-09 [1] RSPM (R 4.0.2)                     
+#>  stringr     * 1.4.0       2019-02-10 [1] CRAN (R 4.0.0)                     
+#>  testthat    * 2.99.0.9000 2020-08-18 [1] Github (r-lib/testthat@9e643d8)    
+#>  tibble      * 3.0.3       2020-07-10 [1] CRAN (R 4.0.0)                     
+#>  tidyr       * 1.1.2       2020-08-27 [1] RSPM (R 4.0.2)                     
+#>  tidyselect    1.1.0       2020-05-11 [1] CRAN (R 4.0.0)                     
+#>  tidyverse   * 1.3.0       2019-11-21 [1] RSPM (R 4.0.2)                     
+#>  usethis     * 1.6.1       2020-04-29 [1] RSPM (R 4.0.2)                     
+#>  vctrs         0.3.4       2020-08-29 [1] RSPM (R 4.0.2)                     
+#>  withr         2.2.0       2020-04-20 [1] CRAN (R 4.0.0)                     
+#>  xfun          0.17        2020-09-09 [1] RSPM (R 4.0.2)                     
+#>  xml2          1.3.2       2020-04-23 [1] CRAN (R 4.0.0)                     
+#>  yaml          2.2.1       2020-02-01 [1] RSPM (R 4.0.0)                     
 #> 
 #> [1] /home/mauro/R/x86_64-pc-linux-gnu-library/4.0
 #> [2] /usr/local/lib/R/site-library
@@ -321,14 +296,8 @@ visual inspection.
 
 ``` bash
 git log --oneline --graph --no-merges upstream/current_web_functionality..HEAD
-#> * e593f8e WIP include calls to expect_true in previous chunks
-#> * 13fe0d2 WIP Write intro
-#> * 7d4b106 WIP polish: create directories
-#> * 8caa1af WIP polish
-#> * 443217e Document dependencies
-#> * d74885e WIP: extend try-web-tool.Rmd
-#> * 7787647 WIP: New wip.R creates interactive report
-#> * 8cf4935 WIP clean this commit: show example of create_interactive_report
+#> * 479fe89 Make title more specific
+#> * a752e87 Polish try-web-tool.Rmd
 #> * fda04ce Polish
 #> * fc799b1 Polish: define required stuff at the top
 #> * 779a9ef Cleanup my notes
