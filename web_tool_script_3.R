@@ -180,8 +180,6 @@ indicies_bonds_results_portfolio <- read_rds(paste0(data_location_ext,"0_Indices
 peers_equity_results_portfolio <- read_rds(paste0(data_location_ext,"0_Indices_equity_portfolio.rda"))
 peers_bonds_results_portfolio <- read_rds(paste0(data_location_ext,"0_Indices_bonds_portfolio.rda"))
 
-
-
 create_interactive_report(
   repo_path,
   template_dir,
@@ -191,7 +189,7 @@ create_interactive_report(
   investor_name,
   portfolio_name,
   start_year,
-  scenario,
+  select_scenario = scenario,
   portfolio_allocation_method,
   scenario_geography,
   twodi_sectors = c('Power', 'Automotive', 'Shipping', 'Oil&Gas', 'Coal', 'Steel', 'Cement', 'Aviation'),
