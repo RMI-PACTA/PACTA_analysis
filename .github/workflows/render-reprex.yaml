@@ -35,7 +35,7 @@ jobs:
       - name: Install dependencies
         run: |
           install.packages("renv")
-          dependencies <- try(renv::dependencies())$Package
+          dependencies <- renv::dependencies()$Package
           install.packages(dependencies)
         shell: Rscript {0}
       - name: Render reprex.Rmd
