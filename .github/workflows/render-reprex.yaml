@@ -17,9 +17,4 @@ jobs:
         shell: Rscript {0}
       - name: Render reprex.Rmd
         run: Rscript -e 'rmarkdown::render("reprex.Rmd")'
-      - name: Commit results
-        run: |
-          git config --local user.email "actions@github.com"
-          git config --local user.name "GitHub Actions"
-          git commit reprex.md -m 'Re-build reprex.Rmd' || echo "No changes to commit"
-          git push origin || echo "No changes to commit"
+

@@ -8,12 +8,5 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r}
-tryCatch(
-  message("Reproducible example rendered successfully."),
-  error = function(e) {
-    msg <- paste("Reproducible example failed with:\n", conditionMessage(e))
-    stop(msg, call. = FALSE)
-  }
-)
+"Success!"
 ```
-
