@@ -56,12 +56,12 @@ library(renv)
 #>     load, remove
 library(fs)
 library(tidyverse)
-#> ── Attaching packages ───────────────────── tidyverse 1.3.0 ──
+#> ── Attaching packages ──────────────────── tidyverse 1.3.0 ──
 #> ✓ ggplot2 3.3.2     ✓ purrr   0.3.4
 #> ✓ tibble  3.0.3     ✓ dplyr   1.0.2
 #> ✓ tidyr   1.1.2     ✓ stringr 1.4.0
 #> ✓ readr   1.3.1     ✓ forcats 0.5.0
-#> ── Conflicts ──────────────────────── tidyverse_conflicts() ──
+#> ── Conflicts ─────────────────────── tidyverse_conflicts() ──
 #> x purrr::%@%()         masks rlang::%@%()
 #> x purrr::as_function() masks rlang::as_function()
 #> x dplyr::collapse()    masks glue::collapse()
@@ -100,16 +100,15 @@ These are all the packages detected in the PACTA\_analysis project:
 pkg <- renv::dependencies()
 #> Finding R package dependencies ... Done!
 sort(unique(pkg$Package))
-#>  [1] "assertthat"   "base"         "bookdown"     "config"       "countrycode" 
-#>  [6] "cowplot"      "devtools"     "dplyr"        "extrafont"    "fs"          
-#> [11] "fst"          "ggforce"      "ggmap"        "ggplot2"      "ggrepel"     
-#> [16] "ggthemes"     "glue"         "grid"         "gridExtra"    "here"        
-#> [21] "janitor"      "jsonlite"     "knitr"        "lme4"         "matrixStats" 
-#> [26] "plyr"         "purrr"        "r2dii.utils"  "RColorBrewer" "readr"       
-#> [31] "readxl"       "renv"         "reshape2"     "rlang"        "rmarkdown"   
-#> [36] "rstudioapi"   "rworldmap"    "scales"       "sitools"      "stringr"     
-#> [41] "testthat"     "tidyr"        "tidyselect"   "tidyverse"    "tools"       
-#> [46] "withr"        "xml2"
+#>  [1] "assertthat"   "base"         "config"       "countrycode"  "cowplot"     
+#>  [6] "devtools"     "dplyr"        "extrafont"    "fs"           "fst"         
+#> [11] "ggforce"      "ggmap"        "ggplot2"      "ggrepel"      "ggthemes"    
+#> [16] "glue"         "grid"         "gridExtra"    "here"         "janitor"     
+#> [21] "jsonlite"     "knitr"        "lme4"         "matrixStats"  "plyr"        
+#> [26] "purrr"        "r2dii.utils"  "RColorBrewer" "readr"        "readxl"      
+#> [31] "renv"         "reshape2"     "rlang"        "rmarkdown"    "rstudioapi"  
+#> [36] "rworldmap"    "scales"       "sitools"      "stringr"      "testthat"    
+#> [41] "tidyr"        "tidyselect"   "tidyverse"    "tools"        "xml2"
 ```
 
 The published
@@ -295,9 +294,8 @@ visual inspection.
 
 ``` bash
 git log --oneline --graph --no-merges upstream/current_web_functionality..HEAD
-#> * b705ef5 Don't cache, again
-#> * b4531e9 Revert "Parametrize and brake"
-#> * 51fdbfa Don't cache
+#> * 5c74f93 Add workflow to run a reproducible example on CI
+#> * c5d11c2 Revert parametrize and brake
 #> * b10bbd7 Prune needless file
 #> * 2f2ed7f Render with params
 #> * 5d21678 Parametrize
