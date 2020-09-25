@@ -1,0 +1,42 @@
+on: [push, pull_request]
+
+name: Render reprex
+
+jobs:
+  render:
+    name: Render reprex.Rmd
+    runs-on: macOS-latest
+    steps:
+      - name: Checkout PACTA_analysis
+        uses: actions/checkout@v2
+        with:
+          path: PACTA_analysis
+      - name: Checkout pacta-data
+        uses: actions/checkout@v2
+        with:
+          repository: 2DegreesInvesting/pacta-data
+          token: ${{ secrets.MAURO_PAT_FOR_2DII }}
+          path: pacta-data
+      - name: Checkout create_interactive_report
+        uses: actions/checkout@v2
+        with:
+          repository: 2DegreesInvesting/create_interactive_report
+          token: ${{ secrets.MAURO_PAT_FOR_2DII }}
+          path: create_interactive_report
+
+      - uses: r-lib/actions/setup-r@v1
+      - uses: r-lib/actions/setup-pandoc@v1
+      - name: Install rmarkdown
+        run: |
+          install.packages("remotes")
+          remotes::install_cran("rmarkdown")
+        shell: Rscript {0}
+
+      - name: Install dependencies
+        run: |
+          install.packages("here")
+        shell: Rscript {0}
+      - name: Render reprex.Rmd
+        run: |
+          cd PACTA_analysis
+          Rscript -e "rmarkdown::render('reprex.Rmd')"

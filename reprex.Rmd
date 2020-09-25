@@ -1,0 +1,25 @@
+---
+title: "Minimal file to test rendering a file on GitHub actions"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Packages.
+
+```{r}
+library(here)
+```
+
+```{r}
+parent_path <- function(...) {
+  parent <- dirname(here::here())
+  file.path(parent, ...)
+}
+
+path <- parent_path("pacta-data", "2019Q4", "0_Indices_bonds_portfolio.rda")
+dataset <- readRDS(path)
+head(dataset)
+```
