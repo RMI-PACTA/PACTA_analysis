@@ -56,12 +56,12 @@ library(renv)
 #>     load, remove
 library(fs)
 library(tidyverse)
-#> ── Attaching packages ──────────────────── tidyverse 1.3.0 ──
+#> ── Attaching packages ───────────────────── tidyverse 1.3.0 ──
 #> ✓ ggplot2 3.3.2     ✓ purrr   0.3.4
 #> ✓ tibble  3.0.3     ✓ dplyr   1.0.2
 #> ✓ tidyr   1.1.2     ✓ stringr 1.4.0
 #> ✓ readr   1.3.1     ✓ forcats 0.5.0
-#> ── Conflicts ─────────────────────── tidyverse_conflicts() ──
+#> ── Conflicts ──────────────────────── tidyverse_conflicts() ──
 #> x purrr::%@%()         masks rlang::%@%()
 #> x purrr::as_function() masks rlang::as_function()
 #> x dplyr::collapse()    masks glue::collapse()
@@ -98,7 +98,7 @@ These are all the packages detected in the PACTA\_analysis project:
 
 ``` r
 pkg <- renv::dependencies()
-#> Finding R package dependencies ... [10/21] [11/21] [12/21] [13/21] [14/21] [15/21] [16/21] [17/21] [18/21] [19/21] [20/21] [21/21] Done!
+#> Finding R package dependencies ... Done!
 sort(unique(pkg$Package))
 #>  [1] "assertthat"   "base"         "config"       "countrycode"  "cowplot"     
 #>  [6] "devtools"     "dplyr"        "extrafont"    "fs"           "fst"         
@@ -294,6 +294,8 @@ visual inspection.
 
 ``` bash
 git log --oneline --graph --no-merges upstream/current_web_functionality..HEAD
+#> * d1bb569 Fix wrong syntax
+#> * 59d3880 Rename try-web-tool.Rmd to reprex.Rmd
 #> * c1e41b5 Install dependencies in workflow
 #> * 5c74f93 Add workflow to run a reproducible example on CI
 #> * c5d11c2 Revert parametrize and brake
