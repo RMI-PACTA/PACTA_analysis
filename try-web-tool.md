@@ -1,6 +1,6 @@
 Running the web tool: A reproducible example
 ================
-2020-09-22
+2020-09-25
 
 ## Introduction
 
@@ -9,9 +9,9 @@ web tool that PACTA\_analysis provides. It is based on [these
 instructions by Jacob](https://bit.ly/2RCRJn7). Here are some of the
 ways you may use this document:
 
-  - To document the repository PACTA\_analysis, by incorporating it into
-    the README file.
-  - To onboard contributors to the PACTA\_analysis project.
+  - To document the repository, by incorporating it into the README
+    file.
+  - To onboard contributors.
   - To test the output of PACTA\_analysis remains unchanged, maybe by
     running this document on a continuous integration service like
     GitHub actions.
@@ -56,12 +56,12 @@ library(renv)
 #>     load, remove
 library(fs)
 library(tidyverse)
-#> ── Attaching packages ──────────────── tidyverse 1.3.0 ──
+#> ── Attaching packages ───────────────────── tidyverse 1.3.0 ──
 #> ✓ ggplot2 3.3.2     ✓ purrr   0.3.4
 #> ✓ tibble  3.0.3     ✓ dplyr   1.0.2
 #> ✓ tidyr   1.1.2     ✓ stringr 1.4.0
 #> ✓ readr   1.3.1     ✓ forcats 0.5.0
-#> ── Conflicts ─────────────────── tidyverse_conflicts() ──
+#> ── Conflicts ──────────────────────── tidyverse_conflicts() ──
 #> x purrr::%@%()         masks rlang::%@%()
 #> x purrr::as_function() masks rlang::as_function()
 #> x dplyr::collapse()    masks glue::collapse()
@@ -133,7 +133,7 @@ devtools::session_info()
 #>  collate  en_US.UTF-8                 
 #>  ctype    en_US.UTF-8                 
 #>  tz       America/Chicago             
-#>  date     2020-09-22                  
+#>  date     2020-09-25                  
 #> 
 #> ─ Packages ───────────────────────────────────────────────────────────────────
 #>  package     * version     date       lib source                             
@@ -144,14 +144,13 @@ devtools::session_info()
 #>  callr         3.4.4       2020-09-07 [1] RSPM (R 4.0.2)                     
 #>  cellranger    1.1.0       2016-07-27 [1] CRAN (R 4.0.0)                     
 #>  cli           2.0.2       2020-02-28 [1] CRAN (R 4.0.0)                     
-#>  codetools     0.2-16      2018-12-24 [4] CRAN (R 4.0.0)                     
 #>  colorspace    1.4-1       2019-03-18 [1] CRAN (R 4.0.0)                     
 #>  config      * 0.3         2018-03-27 [1] CRAN (R 4.0.0)                     
 #>  crayon        1.3.4.9000  2020-09-03 [1] Github (r-lib/crayon@6b3f0c6)      
 #>  DBI           1.1.0       2019-12-15 [1] CRAN (R 4.0.0)                     
 #>  dbplyr        1.4.4       2020-05-27 [1] CRAN (R 4.0.0)                     
 #>  desc          1.2.0       2018-05-01 [1] CRAN (R 4.0.0)                     
-#>  devtools    * 2.3.1.9000  2020-08-18 [1] Github (r-lib/devtools@df619ce)    
+#>  devtools    * 2.3.2       2020-09-18 [1] RSPM (R 4.0.2)                     
 #>  digest        0.6.25      2020-02-23 [1] CRAN (R 4.0.0)                     
 #>  dplyr       * 1.0.2       2020-08-18 [1] RSPM (R 4.0.2)                     
 #>  ellipsis      0.3.1       2020-05-15 [1] CRAN (R 4.0.0)                     
@@ -169,7 +168,7 @@ devtools::session_info()
 #>  htmltools     0.5.0       2020-06-16 [1] CRAN (R 4.0.0)                     
 #>  httr          1.4.2       2020-07-20 [1] RSPM (R 4.0.2)                     
 #>  jsonlite      1.7.1       2020-09-07 [1] RSPM (R 4.0.2)                     
-#>  knitr         1.29        2020-06-23 [1] RSPM (R 4.0.2)                     
+#>  knitr         1.30        2020-09-22 [1] RSPM (R 4.0.2)                     
 #>  lifecycle     0.2.0       2020-03-06 [1] CRAN (R 4.0.0)                     
 #>  lubridate     1.7.9       2020-06-08 [1] CRAN (R 4.0.0)                     
 #>  magrittr      1.5.0.9000  2020-08-31 [1] Github (tidyverse/magrittr@15f6f07)
@@ -205,9 +204,9 @@ devtools::session_info()
 #>  tidyr       * 1.1.2       2020-08-27 [1] RSPM (R 4.0.2)                     
 #>  tidyselect    1.1.0       2020-05-11 [1] CRAN (R 4.0.0)                     
 #>  tidyverse   * 1.3.0       2019-11-21 [1] RSPM (R 4.0.2)                     
-#>  usethis     * 1.6.1       2020-04-29 [1] RSPM (R 4.0.2)                     
+#>  usethis     * 1.6.3       2020-09-17 [1] RSPM (R 4.0.2)                     
 #>  vctrs         0.3.4       2020-08-29 [1] RSPM (R 4.0.2)                     
-#>  withr         2.2.0       2020-04-20 [1] CRAN (R 4.0.0)                     
+#>  withr         2.3.0       2020-09-22 [1] RSPM (R 4.0.2)                     
 #>  xfun          0.17        2020-09-09 [1] RSPM (R 4.0.2)                     
 #>  xml2          1.3.2       2020-04-23 [1] CRAN (R 4.0.0)                     
 #>  yaml          2.2.1       2020-02-01 [1] RSPM (R 4.0.0)                     
@@ -226,8 +225,7 @@ Ensure the example data is available.
 
 ``` r
 file_name <- "TestPortfolio_Input.csv"
-example_dataset <- params$example_dataset
-# example_dataset <- here("sample_files", "20_input_files", file_name)
+example_dataset <- here("sample_files", "20_input_files", file_name)
 
 expect_true(file_exists(example_dataset))
 ```
@@ -271,12 +269,11 @@ children <- c("30_Processed_Inputs", "40_Results", "50_Outputs")
 walk(paths, create_directory_if_it_doesnt_exist)
 ```
 
-Ensure the following repos are siblings, i.e. they share a parent
-directory:
+Ensure the following repos are siblings of PACTA\_analysis/ (
 
-  - 2DegreesInvesting/PACTA\_analysis
   - 2DegreesInvesting/pacta-data
   - 2DegreesInvesting/create\_interactive\_report
+  - 2DegreesInvesting/PACTA\_analysis
 
 <!-- end list -->
 
@@ -298,8 +295,12 @@ visual inspection.
 
 ``` bash
 git log --oneline --graph --no-merges upstream/current_web_functionality..HEAD
-#> * 98d13c4 Parametrize
-#> * ed6f5db Parametrize
+#> * b705ef5 Don't cache, again
+#> * b4531e9 Revert "Parametrize and brake"
+#> * 51fdbfa Don't cache
+#> * b10bbd7 Prune needless file
+#> * 2f2ed7f Render with params
+#> * 5d21678 Parametrize
 #> * dc67ed7 Refresh cache
 #> * 479fe89 Make title more specific
 #> * a752e87 Polish try-web-tool.Rmd
@@ -360,7 +361,7 @@ TODO: If the value of `portfolio_name_ref_all` comes from the user, we
 need an interface for the user to supply it – instead of asking a user
 to change the source code.
 
-### Configuration files
+### 3 Configuration files
 
 Ensure the file “TestPortfolio\_Input\_PortfolioParameters.yml” exists.
 
@@ -392,32 +393,13 @@ config_2 <- here("parameter_files", "WebParameters_2dii.yml")
 look_into(config_2)
 #> default:
 #>     paths:
-#>         project_location_ext: /home/mauro/git/PACTA_analysis
-#>         data_location_ext: /home/mauro/git/pacta-data/2019Q4
-#>         template_location: /home/mauro/git/create_interactive_report
+#>         project_location_ext: ~/git/PACTA_analysis/
+#>         data_location_ext: ~/git/pacta-data/2019Q4/
+#>         template_location: ~/git/create_interactive_report/
 #>     parameters:
 #>         project_name: working_dir
 #>         twodii_internal: FALSE
 #>         new_data: FALSE
-```
-
-To make this more portable, overwrite the configutation file with the
-parameters in this parametrized rmarkdown document.
-
-``` r
-use_params_field <- function(lines, field) {
-  pattern <- glue("(.*{field}: )(.*)$")
-  replacement <- glue("\\1{params[[field]]}")
-  sub(pattern, replacement, lines)
-}
-
-tmp <- readLines(config_2, encoding = "UTF-8")
-tmp <- use_params_field(tmp, "project_location_ext")
-tmp <- use_params_field(tmp, "data_location_ext")
-tmp <- use_params_field(tmp, "template_location")
-tmp
-
-writeLines(tmp, config_2)
 ```
 
 ``` r
@@ -428,9 +410,9 @@ expect_true(file_exists(config_2))
 config_paths <- config::get(file = config_2)$paths
 str(config_paths)
 #> List of 3
-#>  $ project_location_ext: chr "/home/mauro/git/PACTA_analysis"
-#>  $ data_location_ext   : chr "/home/mauro/git/pacta-data/2019Q4"
-#>  $ template_location   : chr "/home/mauro/git/create_interactive_report"
+#>  $ project_location_ext: chr "~/git/PACTA_analysis/"
+#>  $ data_location_ext   : chr "~/git/pacta-data/2019Q4/"
+#>  $ template_location   : chr "~/git/create_interactive_report/"
 
 all_paths_exist <- all(map_lgl(config_paths, dir_exists))
 expect_true(all_paths_exist)
@@ -445,22 +427,15 @@ parametrized rmarkdown file.
 ``` r
 # Populate the directory "working\_dir/30\_Processed\_Inputs/"
 source("web_tool_script_1.R")
-#> Warning in read_file(paste0(file_location, "/currencies.fst")): /home/mauro/git/
-#> pacta-data/2019Q4cleaned_files/currencies.fst does not exist
-#> Warning in read_file(paste0(file_location, "/fund_data.fst")): /home/mauro/git/
-#> pacta-data/2019Q4cleaned_files/fund_data.fst does not exist
-#> Warning in read_file(paste0(file_location, "/fin_data.fst")): /home/mauro/git/
-#> pacta-data/2019Q4cleaned_files/fin_data.fst does not exist
-#> Warning in read_file(paste0(file_location, "/comp_fin_data.fst")): /home/mauro/
-#> git/pacta-data/2019Q4cleaned_files/comp_fin_data.fst does not exist
-#> Warning in read_file(paste0(file_location, "/debt_fin_data.fst")): /home/mauro/
-#> git/pacta-data/2019Q4cleaned_files/debt_fin_data.fst does not exist
-#> Warning in read_file(paste0(file_location, "/average_sector_intensity.fst")): /
-#> home/mauro/git/pacta-data/2019Q4cleaned_files/average_sector_intensity.fst does
-#> not exist
-#> Warning in read_file(paste0(file_location, "/company_emissions.fst")): /home/
-#> mauro/git/pacta-data/2019Q4cleaned_files/company_emissions.fst does not exist
-#> Error: `x` and `y` must share the same src, set `copy` = TRUE (may be slow).
+#> Warning in read_file(paste0(file_location, "/fund_data.fst")): ~/git/pacta-data/
+#> 2019Q4/cleaned_files/fund_data.fst does not exist
+#> [1] "No Equity in portfolio"
+#> Warning in dir.create(.x): '/home/mauro/git/PACTA_analysis/working_dir//
+#> 30_Processed_Inputs/TestPortfolio_Input' already exists
+#> Warning in dir.create(.x): '/home/mauro/git/PACTA_analysis/working_dir//
+#> 40_Results/TestPortfolio_Input' already exists
+#> Warning in dir.create(.x): '/home/mauro/git/PACTA_analysis/working_dir//
+#> 50_Outputs/TestPortfolio_Input' already exists
 
 #  Populate working_dir/40_Results/
 source("web_tool_script_2.R")
@@ -475,10 +450,6 @@ source("web_tool_script_2.R")
 # Feed previous results plus data from the pacta-data/ into
 # `create_interactive_report()`.
 source("web_tool_script_3.R") 
-#> Warning in file(filename, "r", encoding = encoding): cannot open file '/home/
-#> mauro/git/create_interactive_reportcreate_interactive_report.R': No such file or
-#> directory
-#> Error in file(filename, "r", encoding = encoding): cannot open the connection
 ```
 
 Ensure the directory “working\_dir/50\_Outputs/” is now populated with
@@ -511,11 +482,11 @@ look_into(index, n = 20L)
 #> 
 #>   <meta charset="utf-8" />
 #>   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-#>   <title>Interactive Portfolio Report</title>
+#>   <title>1 Introduction: What to get out of this report and how to read it | Interactive Portfolio Report</title>
 #>   <meta name="description" content="" />
-#>   <meta name="generator" content="bookdown 0.19 and GitBook 2.6.7" />
+#>   <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
 #> 
-#>   <meta property="og:title" content="Interactive Portfolio Report" />
+#>   <meta property="og:title" content="1 Introduction: What to get out of this report and how to read it | Interactive Portfolio Report" />
 #>   <meta property="og:type" content="book" />
 #>   
 #>   
@@ -523,7 +494,7 @@ look_into(index, n = 20L)
 #>   
 #> 
 #>   <meta name="twitter:card" content="summary" />
-#>   <meta name="twitter:title" content="Interactive Portfolio Report" />
+#>   <meta name="twitter:title" content="1 Introduction: What to get out of this report and how to read it | Interactive Portfolio Report" />
 #> 
 ```
 

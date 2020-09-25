@@ -2,19 +2,14 @@
 title: "Running the web tool: A reproducible example"
 date: "`r Sys.Date()`"
 output: github_document
-params:
-  example_dataset: !r here::here('sample_files', '20_input_files', 'TestPortfolio_Input.csv')
-  project_location_ext: !r here::here()
-  data_location_ext: !r fs::path(fs::path_dir(here::here()), 'pacta-data', '2019Q4')
-  template_location: !r fs::path(fs::path_dir(here::here()), 'create_interactive_report')
 ---
 
 ## Introduction
 
 This document aims to provide a reproducible example of how to run the web tool that PACTA_analysis provides. It is based on [these instructions by Jacob](https://bit.ly/2RCRJn7). Here are some of the ways you may use this document:
 
-* To document the repository PACTA_analysis, by incorporating it into the README file.
-* To onboard contributors to the PACTA_analysis project.
+* To document the repository, by incorporating it into the README file.
+* To onboard contributors.
 * To test the output of PACTA_analysis remains unchanged, maybe by running this document on a continuous integration service like GitHub actions.
 
 ## Setup
@@ -24,7 +19,7 @@ knitr::opts_chunk$set(
   echo = TRUE,
   comment = "#>",
   collapse = TRUE,
-  cache = TRUE
+  cache = FALSE
 )
 ```
 
@@ -69,8 +64,7 @@ Ensure the example data is available.
 
 ```{r}
 file_name <- "TestPortfolio_Input.csv"
-example_dataset <- params$example_dataset
-# example_dataset <- here("sample_files", "20_input_files", file_name)
+example_dataset <- here("sample_files", "20_input_files", file_name)
 
 expect_true(file_exists(example_dataset))
 ```
@@ -109,11 +103,11 @@ children <- c("30_Processed_Inputs", "40_Results", "50_Outputs")
 walk(paths, create_directory_if_it_doesnt_exist)
 ```
 
-Ensure the following repos are siblings, i.e. they share a parent directory:
+Ensure the following repos are siblings of PACTA\_analysis/ (
 
-* 2DegreesInvesting/PACTA_analysis
 * 2DegreesInvesting/pacta-data
 * 2DegreesInvesting/create_interactive_report
+* 2DegreesInvesting/PACTA_analysis
 
 ```{r}
 is_sibling <- function(x) {
@@ -163,7 +157,7 @@ expect_true(all(script_has_this_pattern))
 
 TODO: If the value of `portfolio_name_ref_all` comes from the user, we need an interface for the user to supply it -- instead of asking a user to change the source code.
 
-### Configuration files
+### 3 Configuration files
 
 Ensure the file "TestPortfolio\_Input\_PortfolioParameters.yml" exists.
 
@@ -190,25 +184,6 @@ Ensure this other configuration file also exists, and has correct paths:
 config_2 <- here("parameter_files", "WebParameters_2dii.yml")
 look_into(config_2)
 ```
-
-To make this more portable, overwrite the configutation file with the parameters in this parametrized rmarkdown document.
-
-```{r, eval=FALSE}
-use_params_field <- function(lines, field) {
-  pattern <- glue("(.*{field}: )(.*)$")
-  replacement <- glue("\\1{params[[field]]}")
-  sub(pattern, replacement, lines)
-}
-
-tmp <- readLines(config_2, encoding = "UTF-8")
-tmp <- use_params_field(tmp, "project_location_ext")
-tmp <- use_params_field(tmp, "data_location_ext")
-tmp <- use_params_field(tmp, "template_location")
-tmp
-
-writeLines(tmp, config_2)
-```
-
 
 ```{r}
 expect_true(file_exists(config_2))
