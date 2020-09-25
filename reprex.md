@@ -292,35 +292,6 @@ Ensure the repo PACTA\_analysis is on the branch
 `current_web_functionality`, or a PR off it. This is not a test but a
 visual inspection.
 
-``` bash
-git log --oneline --graph --no-merges upstream/current_web_functionality..HEAD
-#> * d1bb569 Fix wrong syntax
-#> * 59d3880 Rename try-web-tool.Rmd to reprex.Rmd
-#> * c1e41b5 Install dependencies in workflow
-#> * 5c74f93 Add workflow to run a reproducible example on CI
-#> * c5d11c2 Revert parametrize and brake
-#> * b10bbd7 Prune needless file
-#> * 2f2ed7f Render with params
-#> * 5d21678 Parametrize
-#> * dc67ed7 Refresh cache
-#> * 479fe89 Make title more specific
-#> * a752e87 Polish try-web-tool.Rmd
-#> * fda04ce Polish
-#> * fc799b1 Polish: define required stuff at the top
-#> * 779a9ef Cleanup my notes
-#> * 23604e9 Simplify definition of working_location
-#> * 8e5ed03 Cleanup
-#> * aa517d6 Add notes
-#> * 6784cbf Cleanup: Show rather than explain changes
-#> * c453ebf Fix working_location
-#> * 4ccdd59 Find a few more errors
-#> * 73f2032 Find error in web_tool_script_1.R: line 34
-#> * 809375b Remove horrible --hard reset
-#> * 762dcf1 Style
-#> * 78aa9c4 Try runnign web tool following Jacob's guide
-#> * 10c80a7 Expect sibling repo
-```
-
 Ensure you are on the required working directory.
 
 ``` r

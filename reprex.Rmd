@@ -123,10 +123,6 @@ expect_true(all_siblings)
 
 Ensure the repo PACTA_analysis is on the branch `current_web_functionality`, or a PR off it. This is not a test but a visual inspection.
 
-```{bash}
-git log --oneline --graph --no-merges upstream/current_web_functionality..HEAD
-```
-
 Ensure you are on the required working directory.
 
 ```{r}
