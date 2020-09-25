@@ -16,7 +16,7 @@ jobs:
           remotes::install_cran("rmarkdown")
         shell: Rscript {0}
       - name: Render README
-        run: Rscript -e 'rmarkdown::render("reproducible-example.Rmd")'
+        run: Rscript -e 'rmarkdown::render("reprex.Rmd")'
       - name: Commit results
         run: |
           git config --local user.email "actions@github.com"
