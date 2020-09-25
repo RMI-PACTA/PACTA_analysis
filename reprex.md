@@ -9,5 +9,6 @@ tryCatch(
     stop(msg, call. = FALSE)
   }
 )
-#> Reproducible example rendered successfully.
 ```
+
+    ## Reproducible example rendered successfully.
