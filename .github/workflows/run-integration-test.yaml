@@ -1,6 +1,6 @@
 on: [push, pull_request]
 
-name: Render reprex
+name: Run integration test
 
 jobs:
   Run-integration-test:
