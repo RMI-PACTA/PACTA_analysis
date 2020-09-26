@@ -174,11 +174,10 @@ look_into(config_1)
 expect_true(file_exists(config_1))
 ```
 
-Ensure this other configuration file also exists, and has correct paths:
+Ensure this other configuration file also exists.
 
 ```{r}
 config_2 <- here("parameter_files", "WebParameters_2dii.yml")
-look_into(config_2)
 ```
 
 ```{r}
@@ -206,17 +205,19 @@ make_paths_portable <- function(x) {
 replace_field <- function(x, field, pattern) {
   parent <- path_dir(here())
   value <- path(parent, extract_from(x, pattern))
-  sub(glue("({field}:[ ]?).*"), glue("\\1{value}"), x)
+  sub(glue("({field}:[ ]?).*"), glue("\\1{value}/"), x)
 }
 
 extract_from <- function(x, pattern) {
   line <- grep(pattern, x, value = TRUE)
   sub(glue(".*({pattern}.*)"), "\\1", line)
 }
+
+make_config_portable(config_2)
+look_into(config_2)
 ```
 
 ```{r}
-make_config_portable(config_2)
 config_paths <- config::get(file = config_2)$paths
 str(config_paths)
 
