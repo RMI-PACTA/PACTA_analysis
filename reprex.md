@@ -56,12 +56,12 @@ library(renv)
 #>     load, remove
 library(fs)
 library(tidyverse)
-#> ── Attaching packages ───────────────────── tidyverse 1.3.0 ──
+#> ── Attaching packages ─────────────────── tidyverse 1.3.0 ──
 #> ✓ ggplot2 3.3.2     ✓ purrr   0.3.4
 #> ✓ tibble  3.0.3     ✓ dplyr   1.0.2
 #> ✓ tidyr   1.1.2     ✓ stringr 1.4.0
 #> ✓ readr   1.3.1     ✓ forcats 0.5.0
-#> ── Conflicts ──────────────────────── tidyverse_conflicts() ──
+#> ── Conflicts ────────────────────── tidyverse_conflicts() ──
 #> x purrr::%@%()         masks rlang::%@%()
 #> x purrr::as_function() masks rlang::as_function()
 #> x dplyr::collapse()    masks glue::collapse()
@@ -365,9 +365,9 @@ config_2 <- here("parameter_files", "WebParameters_2dii.yml")
 look_into(config_2)
 #> default:
 #>     paths:
-#>         project_location_ext: ~/git/PACTA_analysis/
-#>         data_location_ext: ~/git/pacta-data/2019Q4/
-#>         template_location: ~/git/create_interactive_report/
+#>         project_location_ext: /home/mauro/git/PACTA_analysis
+#>         data_location_ext: /home/mauro/git/pacta-data/2019Q4
+#>         template_location: /home/mauro/git/create_interactive_report
 #>     parameters:
 #>         project_name: working_dir
 #>         twodii_internal: FALSE
@@ -378,13 +378,45 @@ look_into(config_2)
 expect_true(file_exists(config_2))
 ```
 
+Make the configuration file portable, so it works locally and on GitHub
+actions.
+
 ``` r
+make_config_portable <- function(config) {
+  lines <- readLines(config, encoding = "UTF-8")
+  lines <- make_paths_portable(lines)
+  writeLines(lines, config)
+  
+  invisible(config)
+}
+
+make_paths_portable <- function(x) {
+  x <- replace_field(x, "project_location_ext", pattern = "PACTA_analysis")
+  x <- replace_field(x, "data_location_ext", pattern = "pacta-data")
+  x <- replace_field(x, "template_location", pattern = "create_interactive_report")
+  x
+}
+
+replace_field <- function(x, field, pattern) {
+  parent <- path_dir(here())
+  value <- path(parent, extract_from(x, pattern))
+  sub(glue("({field}:[ ]?).*"), glue("\\1{value}"), x)
+}
+
+extract_from <- function(x, pattern) {
+  line <- grep(pattern, x, value = TRUE)
+  sub(glue(".*({pattern}.*)"), "\\1", line)
+}
+```
+
+``` r
+make_config_portable(config_2)
 config_paths <- config::get(file = config_2)$paths
 str(config_paths)
 #> List of 3
-#>  $ project_location_ext: chr "~/git/PACTA_analysis/"
-#>  $ data_location_ext   : chr "~/git/pacta-data/2019Q4/"
-#>  $ template_location   : chr "~/git/create_interactive_report/"
+#>  $ project_location_ext: chr "/home/mauro/git/PACTA_analysis"
+#>  $ data_location_ext   : chr "/home/mauro/git/pacta-data/2019Q4"
+#>  $ template_location   : chr "/home/mauro/git/create_interactive_report"
 
 all_paths_exist <- all(map_lgl(config_paths, dir_exists))
 expect_true(all_paths_exist)
@@ -399,15 +431,22 @@ parametrized rmarkdown file.
 ``` r
 # Populate the directory "working\_dir/30\_Processed\_Inputs/"
 source("web_tool_script_1.R")
-#> Warning in read_file(paste0(file_location, "/fund_data.fst")): ~/git/pacta-data/
-#> 2019Q4/cleaned_files/fund_data.fst does not exist
-#> [1] "No Equity in portfolio"
-#> Warning in dir.create(.x): '/home/mauro/git/PACTA_analysis/working_dir//
-#> 30_Processed_Inputs/TestPortfolio_Input' already exists
-#> Warning in dir.create(.x): '/home/mauro/git/PACTA_analysis/working_dir//
-#> 40_Results/TestPortfolio_Input' already exists
-#> Warning in dir.create(.x): '/home/mauro/git/PACTA_analysis/working_dir//
-#> 50_Outputs/TestPortfolio_Input' already exists
+#> Warning in read_file(paste0(file_location, "/currencies.fst")): /home/mauro/git/
+#> pacta-data/2019Q4cleaned_files/currencies.fst does not exist
+#> Warning in read_file(paste0(file_location, "/fund_data.fst")): /home/mauro/git/
+#> pacta-data/2019Q4cleaned_files/fund_data.fst does not exist
+#> Warning in read_file(paste0(file_location, "/fin_data.fst")): /home/mauro/git/
+#> pacta-data/2019Q4cleaned_files/fin_data.fst does not exist
+#> Warning in read_file(paste0(file_location, "/comp_fin_data.fst")): /home/mauro/
+#> git/pacta-data/2019Q4cleaned_files/comp_fin_data.fst does not exist
+#> Warning in read_file(paste0(file_location, "/debt_fin_data.fst")): /home/mauro/
+#> git/pacta-data/2019Q4cleaned_files/debt_fin_data.fst does not exist
+#> Warning in read_file(paste0(file_location, "/average_sector_intensity.fst")): /
+#> home/mauro/git/pacta-data/2019Q4cleaned_files/average_sector_intensity.fst does
+#> not exist
+#> Warning in read_file(paste0(file_location, "/company_emissions.fst")): /home/
+#> mauro/git/pacta-data/2019Q4cleaned_files/company_emissions.fst does not exist
+#> Error: `x` and `y` must share the same src, set `copy` = TRUE (may be slow).
 
 #  Populate working_dir/40_Results/
 source("web_tool_script_2.R")
@@ -422,6 +461,10 @@ source("web_tool_script_2.R")
 # Feed previous results plus data from the pacta-data/ into
 # `create_interactive_report()`.
 source("web_tool_script_3.R") 
+#> Warning in file(filename, "r", encoding = encoding): cannot open file '/home/
+#> mauro/git/create_interactive_reportcreate_interactive_report.R': No such file or
+#> directory
+#> Error in file(filename, "r", encoding = encoding): cannot open the connection
 ```
 
 Ensure the directory “working\_dir/50\_Outputs/” is now populated with

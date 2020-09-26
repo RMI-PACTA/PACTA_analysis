@@ -185,7 +185,38 @@ look_into(config_2)
 expect_true(file_exists(config_2))
 ```
 
+Make the configuration file portable, so it works locally and on GitHub actions.
+
 ```{r}
+make_config_portable <- function(config) {
+  lines <- readLines(config, encoding = "UTF-8")
+  lines <- make_paths_portable(lines)
+  writeLines(lines, config)
+  
+  invisible(config)
+}
+
+make_paths_portable <- function(x) {
+  x <- replace_field(x, "project_location_ext", pattern = "PACTA_analysis")
+  x <- replace_field(x, "data_location_ext", pattern = "pacta-data")
+  x <- replace_field(x, "template_location", pattern = "create_interactive_report")
+  x
+}
+
+replace_field <- function(x, field, pattern) {
+  parent <- path_dir(here())
+  value <- path(parent, extract_from(x, pattern))
+  sub(glue("({field}:[ ]?).*"), glue("\\1{value}"), x)
+}
+
+extract_from <- function(x, pattern) {
+  line <- grep(pattern, x, value = TRUE)
+  sub(glue(".*({pattern}.*)"), "\\1", line)
+}
+```
+
+```{r}
+make_config_portable(config_2)
 config_paths <- config::get(file = config_2)$paths
 str(config_paths)
 
