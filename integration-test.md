@@ -4,102 +4,44 @@ Integration test: Run the web tool
 
 ## Introduction
 
-This document aims to provide a reproducible example of how to run the
-web tool that PACTA\_analysis provides. It is based on [these
-instructions by Jacob](https://bit.ly/2RCRJn7). Here are some of the
-ways you may use this document:
+This document provides a reproducible example of how to run the so
+called “web tool”. It is based on [these
+instructions](https://bit.ly/2RCRJn7). It is useful in three ways:
 
-  - To document the repository, by incorporating it into the README
-    file.
+  - To document this repository.
   - To onboard contributors.
-  - To test the output of PACTA\_analysis remains unchanged, maybe by
-    running this document on a continuous integration service like
-    GitHub actions.
+  - As an integration test – to test running this file produces the
+    expected output. We do this both locally and on a continuous
+    integration service (GitHub actions) with multiple platforms and
+    versions of R.
 
-## Setup
+## Environment
 
-### Dependencies
-
-This report uses the following packages:
+Packages used in this file:
 
 ``` r
-library(testthat)
-library(glue)
-library(config)
-#> 
-#> Attaching package: 'config'
-#> The following objects are masked from 'package:base':
-#> 
-#>     get, merge
-library(rlang)
-#> 
-#> Attaching package: 'rlang'
-#> The following objects are masked from 'package:testthat':
-#> 
-#>     is_false, is_null, is_true
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(devtools))
+suppressPackageStartupMessages(library(testthat))
+suppressPackageStartupMessages(library(config))
+suppressPackageStartupMessages(library(rlang))
+suppressPackageStartupMessages(library(renv))
+suppressPackageStartupMessages(library(glue))
+suppressPackageStartupMessages(library(fs))
 library(here)
 #> here() starts at /home/mauro/git/PACTA_analysis
-library(renv)
-#> 
-#> Attaching package: 'renv'
-#> The following object is masked from 'package:rlang':
-#> 
-#>     modify
-#> The following object is masked from 'package:stats':
-#> 
-#>     update
-#> The following objects are masked from 'package:utils':
-#> 
-#>     history, upgrade
-#> The following objects are masked from 'package:base':
-#> 
-#>     load, remove
-library(fs)
-library(tidyverse)
-#> ── Attaching packages ───────────────────── tidyverse 1.3.0 ──
-#> ✓ ggplot2 3.3.2     ✓ purrr   0.3.4
-#> ✓ tibble  3.0.3     ✓ dplyr   1.0.2
-#> ✓ tidyr   1.1.2     ✓ stringr 1.4.0
-#> ✓ readr   1.3.1     ✓ forcats 0.5.0
-#> ── Conflicts ──────────────────────── tidyverse_conflicts() ──
-#> x purrr::%@%()         masks rlang::%@%()
-#> x purrr::as_function() masks rlang::as_function()
-#> x dplyr::collapse()    masks glue::collapse()
-#> x dplyr::filter()      masks stats::filter()
-#> x purrr::flatten()     masks rlang::flatten()
-#> x purrr::flatten_chr() masks rlang::flatten_chr()
-#> x purrr::flatten_dbl() masks rlang::flatten_dbl()
-#> x purrr::flatten_int() masks rlang::flatten_int()
-#> x purrr::flatten_lgl() masks rlang::flatten_lgl()
-#> x purrr::flatten_raw() masks rlang::flatten_raw()
-#> x purrr::invoke()      masks rlang::invoke()
-#> x rlang::is_false()    masks testthat::is_false()
-#> x purrr::is_null()     masks rlang::is_null(), testthat::is_null()
-#> x rlang::is_true()     masks testthat::is_true()
-#> x dplyr::lag()         masks stats::lag()
-#> x purrr::list_along()  masks rlang::list_along()
-#> x dplyr::matches()     masks tidyr::matches(), testthat::matches()
-#> x purrr::modify()      masks renv::modify(), rlang::modify()
-#> x purrr::prepend()     masks rlang::prepend()
-#> x purrr::splice()      masks rlang::splice()
-library(devtools)
-#> Loading required package: usethis
-#> 
-#> Attaching package: 'devtools'
-#> The following object is masked from 'package:renv':
-#> 
-#>     install
-#> The following object is masked from 'package:testthat':
-#> 
-#>     test_file
 ```
 
-These are all the packages detected in the PACTA\_analysis project:
+All packages detected in the directory PACTA\_analysis:
 
 ``` r
-pkg <- renv::dependencies()
+detect_packages <- function() {
+  packages <- renv::dependencies()$Package
+  sort(unique(packages))
+}
+
+detect_packages()
 #> Finding R package dependencies ... Done!
-sort(unique(pkg$Package))
 #>  [1] "assertthat"   "base"         "config"       "countrycode"  "cowplot"     
 #>  [6] "devtools"     "dplyr"        "extrafont"    "fs"           "fst"         
 #> [11] "ggforce"      "ggmap"        "ggplot2"      "ggrepel"      "ggthemes"    
@@ -111,14 +53,9 @@ sort(unique(pkg$Package))
 #> [41] "tidyr"        "tidyselect"   "tidyverse"    "tools"        "xml2"
 ```
 
-The published
-[README](https://github.com/2DegreesInvesting/PACTA_analysis#system-requirements)
-suggest this project has a number of additional dependencies. That
-information seems quite restrictive and outdated.
-
 <details>
 
-<summary>Here is the information for this session</summary>
+<summary>Session information</summary>
 
 ``` r
 devtools::session_info()
@@ -218,7 +155,7 @@ devtools::session_info()
 
 </details>
 
-### Required data
+## Data
 
 Ensure the example data is available.
 
@@ -246,17 +183,17 @@ file_copy(example_dataset, expected_dataset)
 expect_true(file_exists(expected_dataset))
 ```
 
-### Required files-system structure
+## Directories
 
-If they don’t already exist, create the required directories.
+Ensure the required directories exist, and are empty.
 
 ``` r
 ensure_empty_directory <- function(directory) {
-  if (fs::dir_exists(directory)) {
-    fs::dir_delete(directory)
+  if (dir_exists(directory)) {
+    dir_delete(directory)
   }
 
-  fs::dir_create(directory)
+  dir_create(directory)
 
   invisible(directory)
 }
@@ -270,11 +207,12 @@ children <- c("30_Processed_Inputs", "40_Results", "50_Outputs")
 walk(paths, ensure_empty_directory)
 ```
 
-Ensure the following repos are siblings of PACTA\_analysis/ (
+Ensure the following repos are siblings, i.e. they are inside the same
+parent directory:
 
-  - 2DegreesInvesting/pacta-data
-  - 2DegreesInvesting/create\_interactive\_report
-  - 2DegreesInvesting/PACTA\_analysis
+  - “2DegreesInvesting/pacta-data/”
+  - “2DegreesInvesting/create\_interactive\_report/”
+  - “2DegreesInvesting/PACTA\_analysis/”
 
 <!-- end list -->
 
@@ -290,23 +228,17 @@ all_siblings <- all(map_lgl(repos, is_sibling))
 expect_true(all_siblings)
 ```
 
-Ensure the repo PACTA\_analysis is on the branch
-`current_web_functionality`, or a PR off it. This is not a test but a
-visual inspection.
+**NOTE: As of this writing the main line of development is not the
+standard branch `master` – it is the branch
+`current_web_functionality`.**
 
-Ensure you are on the required working directory.
+Ensure the expected working directory.
 
 ``` r
 expect_equal(path_file(here()), "PACTA_analysis")
 ```
 
-TODO: The branch `current_web_functionaliry` is long-lived, which makes
-the workflow more complex than the standard GitHub workflow (by which
-the only long-lived branch is `master`). I suggest merging
-`current_web_functionality` into master, or extracting the
-non-overlapping code into a separate repo.
-
-### Ensure the value of `portfolio_name_ref_all` is “TestPortfolio\_Input”
+## `portfolio_name_ref_all <- "TestPortfolio_Input"`
 
 Ensure `portfolio_name_ref_all` takes the value “TestPortfolio\_Input”
 in the files which name contains “web\_tool\_scripts”.
@@ -331,13 +263,13 @@ script_has_this_pattern <- grepl(this_pattern, matched)
 expect_true(all(script_has_this_pattern))
 ```
 
-TODO: If the value of `portfolio_name_ref_all` comes from the user, we
-need an interface for the user to supply it – instead of asking a user
-to change the source code.
+**NOTE: If the value of `portfolio_name_ref_all` comes from the user, we
+should provide an interface for the user to supply it – so that the user
+needs not to change the source code.**
 
-### 3 Configuration files
+## Configurations
 
-Ensure the file “TestPortfolio\_Input\_PortfolioParameters.yml” exists.
+Ensure this configuration file exists:
 
 ``` r
 config_1 <- here(
@@ -346,6 +278,10 @@ config_1 <- here(
   "TestPortfolio_Input_PortfolioParameters.yml"
 )
 
+expect_true(file_exists(config_1))
+```
+
+``` r
 look_into <- function(path, n = -1L) {
   lines <- readLines(path, n, encoding = "UTF-8")
   writeLines(lines)
@@ -356,22 +292,18 @@ look_into(config_1)
 #>     parameters:
 #>         portfolio_name_in: test_portfolio
 #>         investor_name_in: Test
-
-expect_true(file_exists(config_1))
 ```
 
-Ensure this other configuration file also exists.
+Ensure this other configuration file also exists:
 
 ``` r
 config_2 <- here("parameter_files", "WebParameters_2dii.yml")
-```
 
-``` r
 expect_true(file_exists(config_2))
 ```
 
-Make the configuration file portable, so it works locally and on GitHub
-actions.
+Ensure the paths in the configuration file work both locally and on
+GitHub actions:
 
 ``` r
 make_config_portable <- function(config) {
@@ -401,6 +333,16 @@ extract_from <- function(x, pattern) {
 }
 
 make_config_portable(config_2)
+```
+
+``` r
+config_paths <- config::get(file = config_2)$paths
+all_paths_exist <- all(map_lgl(config_paths, dir_exists))
+
+expect_true(all_paths_exist)
+```
+
+``` r
 look_into(config_2)
 #> default:
 #>     paths:
@@ -413,79 +355,36 @@ look_into(config_2)
 #>         new_data: FALSE
 ```
 
-``` r
-config_paths <- config::get(file = config_2)$paths
-str(config_paths)
-#> List of 3
-#>  $ project_location_ext: chr "/home/mauro/git/PACTA_analysis/"
-#>  $ data_location_ext   : chr "/home/mauro/git/pacta-data/2019Q4/"
-#>  $ template_location   : chr "/home/mauro/git/create_interactive_report/"
+## Scripts
 
-all_paths_exist <- all(map_lgl(config_paths, dir_exists))
-expect_true(all_paths_exist)
-```
-
-TODO: It would be nice to set these paths from a more flexible
-interface, like the arguments of a function or the parameters of a
-parametrized rmarkdown file.
-
-### Run scripts
+Populate the directory for processed inputs:
 
 ``` r
-# Populate the directory "working\_dir/30\_Processed\_Inputs/"
+dir_has_files <- function(path) {
+  stopifnot(is_dir(path))
+  
+  contents <- dir_ls(path, recurse = TRUE)
+  has_files <- any(map_lgl(contents, is_file))
+  has_files
+}
+
+out_1 <- path("working_dir", "30_Processed_Inputs")
+
+expect_false(dir_has_files(out_1))
 source("web_tool_script_1.R")
-#> 
-#> Attaching package: 'scales'
-#> The following object is masked from 'package:purrr':
-#> 
-#>     discard
-#> The following object is masked from 'package:readr':
-#> 
-#>     col_factor
-#> 
-#> Attaching package: 'reshape2'
-#> The following object is masked from 'package:tidyr':
-#> 
-#>     smiths
-#> 
-#> Attaching package: 'tidyselect'
-#> The following object is masked from 'package:testthat':
-#> 
-#>     matches
-#> 
-#> Attaching package: 'jsonlite'
-#> The following object is masked from 'package:purrr':
-#> 
-#>     flatten
-#> The following objects are masked from 'package:rlang':
-#> 
-#>     flatten, unbox
 #> Warning in read_file(paste0(file_location, "/fund_data.fst")): /home/mauro/git/
 #> pacta-data/2019Q4/cleaned_files/fund_data.fst does not exist
-#> Parsed with column specification:
-#> cols(
-#>   Holding.ID = col_character(),
-#>   Portfolio.Name = col_character(),
-#>   Investor.Name = col_character(),
-#>   ISIN = col_character(),
-#>   MarketValue = col_double(),
-#>   Currency = col_character(),
-#>   NumberofShares = col_logical()
-#> )
 #> [1] "No Equity in portfolio"
-#> `summarise()` regrouping output by 'portfolio_name', 'investor_name', 'asset_type' (override with `.groups` argument)
+expect_true(dir_has_files(out_1))
 ```
 
+Populate the directory for results:
+
 ``` r
-#  Populate working_dir/40_Results/
+out_2 <- path("working_dir", "40_Results")
+
+expect_false(dir_has_files(out_2))
 source("web_tool_script_2.R")
-#> Parsed with column specification:
-#> cols(
-#>   investor_name = col_character(),
-#>   portfolio_name = col_character(),
-#>   file_name = col_character(),
-#>   loc_name = col_character()
-#> )
 #> Warning in dir.create(.x): '/home/mauro/git/PACTA_analysis/working_dir//
 #> 30_Processed_Inputs/TestPortfolio_Input' already exists
 #> Warning in dir.create(.x): '/home/mauro/git/PACTA_analysis/working_dir//
@@ -493,45 +392,20 @@ source("web_tool_script_2.R")
 #> Warning in dir.create(.x): '/home/mauro/git/PACTA_analysis/working_dir//
 #> 50_Outputs/TestPortfolio_Input' already exists
 #> [1] "1: Test"
-#> `summarise()` regrouping output by 'investor_name', 'portfolio_name', 'company_name', 'id', 'financial_sector', 'current_shares_outstanding_all_classes' (override with `.groups` argument)
-#> `summarise()` regrouping output by 'investor_name', 'portfolio_name', 'scenario', 'allocation', 'equity_market', 'scenario_geography', 'year', 'ald_sector' (override with `.groups` argument)
-#> `summarise()` regrouping output by 'investor_name', 'portfolio_name', 'ald_location', 'year', 'ald_sector', 'technology', 'financial_sector', 'allocation', 'allocation_weight' (override with `.groups` argument)
+expect_true(dir_has_files(out_2))
 ```
+
+Populate the directory for outputs:
 
 ``` r
-# Feed previous results plus data from the pacta-data/ into
-# `create_interactive_report()`.
+out_3 <- path("working_dir", "50_Outputs")
+
+expect_false(dir_has_files(out_3))
 source("web_tool_script_3.R") 
-#> Parsed with column specification:
-#> cols(
-#>   investor_name = col_character(),
-#>   portfolio_name = col_character(),
-#>   file_name = col_character(),
-#>   loc_name = col_character()
-#> )
-#> Parsed with column specification:
-#> cols(
-#>   investor_name = col_character(),
-#>   portfolio_name = col_character(),
-#>   holding_id = col_character(),
-#>   isin = col_character(),
-#>   value_usd = col_double(),
-#>   company_name = col_character(),
-#>   asset_type = col_character(),
-#>   valid_input = col_logical(),
-#>   direct_holding = col_logical(),
-#>   security_mapped_sector = col_character(),
-#>   financial_sector = col_character(),
-#>   bics_sector = col_character(),
-#>   sectors_with_assets = col_character(),
-#>   has_ald_in_fin_sector = col_logical(),
-#>   flag = col_character()
-#> )
+expect_true(dir_has_files(out_3))
 ```
 
-Ensure the directory “working\_dir/50\_Outputs/” is now populated with
-some .css file, some .js file, the file “index.html”, and some .zip
-file.
+Ensure the output includes specific types of files:
 
 ``` r
 outputs <- path("working_dir", "50_Outputs")
@@ -549,7 +423,7 @@ zip <- dir_ls(outputs, recurse = TRUE, regexp = "[.]zip")
 expect_true(length(zip) > 0L)
 ```
 
-The output looks good\!
+## Output
 
 ``` r
 look_into(index, n = 20L)
@@ -573,9 +447,7 @@ look_into(index, n = 20L)
 #>   <meta name="twitter:card" content="summary" />
 #>   <meta name="twitter:title" content="1 Introduction: What to get out of this report and how to read it | Interactive Portfolio Report" />
 #> 
-```
 
-``` r
 dir_tree(path(outputs, "TestPortfolio_Input"), recurse = FALSE)
 #> working_dir/50_Outputs/TestPortfolio_Input
 #> ├── 2dii_gitbook_style.css
@@ -591,7 +463,7 @@ dir_tree(path(outputs, "TestPortfolio_Input"), recurse = FALSE)
 #> └── search_index.json
 ```
 
-NOTES
+## TODO
 
   - Some warnings may be avoided if required directories are created
     only if they don’t already exist.
@@ -618,9 +490,3 @@ dir_ls(path("..", "pacta-data", "2019Q4", "cleaned_files"))
 #> ../pacta-data/2019Q4/cleaned_files/debt_fin_data.fst
 #> ../pacta-data/2019Q4/cleaned_files/fin_data.fst
 ```
-
-  - I see duplicated code in the first lines of each script. For
-    example, you may extract all calls to `library()` into a file
-    packages.R; and you may also extract the repeated definitions of
-    `working_location` (which I think should be `working_location <-
-    here()`).
