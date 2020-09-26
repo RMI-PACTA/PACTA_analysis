@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
   echo = TRUE,
   comment = "#>",
   collapse = TRUE,
-  cache = TRUE
+  cache = FALSE
 )
 ```
 
