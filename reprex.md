@@ -1,6 +1,6 @@
 Running the web tool: A reproducible example
 ================
-2020-09-25
+2020-09-26
 
 ## Introduction
 
@@ -56,12 +56,12 @@ library(renv)
 #>     load, remove
 library(fs)
 library(tidyverse)
-#> ── Attaching packages ─────────────────── tidyverse 1.3.0 ──
+#> ── Attaching packages ────── tidyverse 1.3.0 ──
 #> ✓ ggplot2 3.3.2     ✓ purrr   0.3.4
 #> ✓ tibble  3.0.3     ✓ dplyr   1.0.2
 #> ✓ tidyr   1.1.2     ✓ stringr 1.4.0
 #> ✓ readr   1.3.1     ✓ forcats 0.5.0
-#> ── Conflicts ────────────────────── tidyverse_conflicts() ──
+#> ── Conflicts ───────── tidyverse_conflicts() ──
 #> x purrr::%@%()         masks rlang::%@%()
 #> x purrr::as_function() masks rlang::as_function()
 #> x dplyr::collapse()    masks glue::collapse()
@@ -132,7 +132,7 @@ devtools::session_info()
 #>  collate  en_US.UTF-8                 
 #>  ctype    en_US.UTF-8                 
 #>  tz       America/Chicago             
-#>  date     2020-09-25                  
+#>  date     2020-09-26                  
 #> 
 #> ─ Packages ───────────────────────────────────────────────────────────────────
 #>  package     * version     date       lib source                             
@@ -381,13 +381,13 @@ make_config_portable <- function(config) {
 }
 
 make_paths_portable <- function(x) {
-  x <- replace_field(x, "project_location_ext", pattern = "PACTA_analysis")
-  x <- replace_field(x, "data_location_ext", pattern = "pacta-data")
-  x <- replace_field(x, "template_location", pattern = "create_interactive_report")
-  x
+  x %>% 
+    root_field_path("project_location_ext", pattern = "PACTA_analysis") %>% 
+    root_field_path("data_location_ext", pattern = "pacta-data") %>% 
+    root_field_path("template_location", pattern = "create_interactive_report")
 }
 
-replace_field <- function(x, field, pattern) {
+root_field_path <- function(x, field, pattern) {
   parent <- path_dir(here())
   value <- path(parent, extract_from(x, pattern))
   sub(glue("({field}:[ ]?).*"), glue("\\1{value}/"), x)

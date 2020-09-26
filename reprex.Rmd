@@ -196,13 +196,13 @@ make_config_portable <- function(config) {
 }
 
 make_paths_portable <- function(x) {
-  x <- replace_field(x, "project_location_ext", pattern = "PACTA_analysis")
-  x <- replace_field(x, "data_location_ext", pattern = "pacta-data")
-  x <- replace_field(x, "template_location", pattern = "create_interactive_report")
-  x
+  x %>% 
+    root_field_path("project_location_ext", pattern = "PACTA_analysis") %>% 
+    root_field_path("data_location_ext", pattern = "pacta-data") %>% 
+    root_field_path("template_location", pattern = "create_interactive_report")
 }
 
-replace_field <- function(x, field, pattern) {
+root_field_path <- function(x, field, pattern) {
   parent <- path_dir(here())
   value <- path(parent, extract_from(x, pattern))
   sub(glue("({field}:[ ]?).*"), glue("\\1{value}/"), x)
@@ -229,7 +229,7 @@ TODO: It would be nice to set these paths from a more flexible interface, like t
 
 ### Run scripts
 
-```{r, error=TRUE, message=FALSE}
+```{r, message=FALSE}
 # Populate the directory "working\_dir/30\_Processed\_Inputs/"
 source("web_tool_script_1.R")
 
