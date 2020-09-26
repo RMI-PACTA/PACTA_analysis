@@ -1,5 +1,5 @@
 ---
-title: "Running the web tool: A reproducible example"
+title: "Integration test: Run the web tool"
 date: "`r Sys.Date()`"
 output: github_document
 ---

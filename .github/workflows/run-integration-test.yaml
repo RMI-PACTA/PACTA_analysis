@@ -4,7 +4,7 @@ name: Render reprex
 
 jobs:
   render:
-    name: Render reprex.Rmd
+    name: Run integration test
     runs-on: macOS-latest
     steps:
       - name: Checkout PACTA_analysis
@@ -42,7 +42,7 @@ jobs:
         run: |
           remotes::install_github("2DegreesInvesting/r2dii.utils")
         shell: Rscript {0}
-      - name: Render reprex.Rmd
+      - name: Run integration test
         run: |
           cd PACTA_analysis
-          Rscript -e "rmarkdown::render('reprex.Rmd')"
+          Rscript -e "rmarkdown::render('integration-test.Rmd')"

@@ -1,4 +1,4 @@
-Running the web tool: A reproducible example
+Integration test: Run the web tool
 ================
 2020-09-26
 
@@ -98,7 +98,7 @@ These are all the packages detected in the PACTA\_analysis project:
 
 ``` r
 pkg <- renv::dependencies()
-#> Finding R package dependencies ... [19/21] [20/21] [21/21] Done!
+#> Finding R package dependencies ... Done!
 sort(unique(pkg$Package))
 #>  [1] "assertthat"   "base"         "config"       "countrycode"  "cowplot"     
 #>  [6] "devtools"     "dplyr"        "extrafont"    "fs"           "fst"         
@@ -475,12 +475,6 @@ source("web_tool_script_1.R")
 #> )
 #> [1] "No Equity in portfolio"
 #> `summarise()` regrouping output by 'portfolio_name', 'investor_name', 'asset_type' (override with `.groups` argument)
-#> Warning in dir.create(.x): '/home/mauro/git/PACTA_analysis/working_dir//
-#> 30_Processed_Inputs/TestPortfolio_Input' already exists
-#> Warning in dir.create(.x): '/home/mauro/git/PACTA_analysis/working_dir//
-#> 40_Results/TestPortfolio_Input' already exists
-#> Warning in dir.create(.x): '/home/mauro/git/PACTA_analysis/working_dir//
-#> 50_Outputs/TestPortfolio_Input' already exists
 ```
 
 ``` r
