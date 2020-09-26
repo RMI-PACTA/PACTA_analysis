@@ -40,4 +40,3 @@ vignettes/*.pdf
 setup.R
 data/isins_missing_bbg_data.csv
 data/fund_isins_without_bbg_data.csv
-reprex.html
