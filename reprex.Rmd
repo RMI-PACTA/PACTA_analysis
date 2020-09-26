@@ -89,18 +89,20 @@ expect_true(file_exists(expected_dataset))
 If they don't already exist, create the required directories.
 
 ```{r}
-create_directory_if_it_doesnt_exist <- function(directory) {
-  if (!fs::dir_exists(directory)) {
-    fs::dir_create(directory)
+ensure_empty_directory <- function(directory) {
+  if (fs::dir_exists(directory)) {
+    fs::dir_delete(directory)
   }
-  
+
+  fs::dir_create(directory)
+
   invisible(directory)
 }
 
 children <- c("30_Processed_Inputs", "40_Results", "50_Outputs")
 (paths <- here("working_dir", children))
 
-walk(paths, create_directory_if_it_doesnt_exist)
+walk(paths, ensure_empty_directory)
 ```
 
 Ensure the following repos are siblings of PACTA\_analysis/ (

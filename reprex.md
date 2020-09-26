@@ -56,12 +56,12 @@ library(renv)
 #>     load, remove
 library(fs)
 library(tidyverse)
-#> ── Attaching packages ─────── tidyverse 1.3.0 ──
+#> ── Attaching packages ────────────────── tidyverse 1.3.0 ──
 #> ✓ ggplot2 3.3.2     ✓ purrr   0.3.4
 #> ✓ tibble  3.0.3     ✓ dplyr   1.0.2
 #> ✓ tidyr   1.1.2     ✓ stringr 1.4.0
 #> ✓ readr   1.3.1     ✓ forcats 0.5.0
-#> ── Conflicts ────────── tidyverse_conflicts() ──
+#> ── Conflicts ───────────────────── tidyverse_conflicts() ──
 #> x purrr::%@%()         masks rlang::%@%()
 #> x purrr::as_function() masks rlang::as_function()
 #> x dplyr::collapse()    masks glue::collapse()
@@ -98,7 +98,7 @@ These are all the packages detected in the PACTA\_analysis project:
 
 ``` r
 pkg <- renv::dependencies()
-#> Finding R package dependencies ... [20/21] [21/21] Done!
+#> Finding R package dependencies ... [19/21] [20/21] [21/21] Done!
 sort(unique(pkg$Package))
 #>  [1] "assertthat"   "base"         "config"       "countrycode"  "cowplot"     
 #>  [6] "devtools"     "dplyr"        "extrafont"    "fs"           "fst"         
@@ -143,6 +143,7 @@ devtools::session_info()
 #>  callr         3.4.4       2020-09-07 [1] RSPM (R 4.0.2)                     
 #>  cellranger    1.1.0       2016-07-27 [1] CRAN (R 4.0.0)                     
 #>  cli           2.0.2       2020-02-28 [1] CRAN (R 4.0.0)                     
+#>  codetools     0.2-16      2018-12-24 [4] CRAN (R 4.0.0)                     
 #>  colorspace    1.4-1       2019-03-18 [1] CRAN (R 4.0.0)                     
 #>  config      * 0.3         2018-03-27 [1] CRAN (R 4.0.0)                     
 #>  crayon        1.3.4.9000  2020-09-03 [1] Github (r-lib/crayon@6b3f0c6)      
@@ -251,11 +252,13 @@ expect_true(file_exists(expected_dataset))
 If they don’t already exist, create the required directories.
 
 ``` r
-create_directory_if_it_doesnt_exist <- function(directory) {
-  if (!fs::dir_exists(directory)) {
-    fs::dir_create(directory)
+ensure_empty_directory <- function(directory) {
+  if (fs::dir_exists(directory)) {
+    fs::dir_delete(directory)
   }
-  
+
+  fs::dir_create(directory)
+
   invisible(directory)
 }
 
@@ -265,7 +268,7 @@ children <- c("30_Processed_Inputs", "40_Results", "50_Outputs")
 #> [2] "/home/mauro/git/PACTA_analysis/working_dir/40_Results"         
 #> [3] "/home/mauro/git/PACTA_analysis/working_dir/50_Outputs"
 
-walk(paths, create_directory_if_it_doesnt_exist)
+walk(paths, ensure_empty_directory)
 ```
 
 Ensure the following repos are siblings of PACTA\_analysis/ (
@@ -478,7 +481,9 @@ source("web_tool_script_1.R")
 #> 40_Results/TestPortfolio_Input' already exists
 #> Warning in dir.create(.x): '/home/mauro/git/PACTA_analysis/working_dir//
 #> 50_Outputs/TestPortfolio_Input' already exists
+```
 
+``` r
 #  Populate working_dir/40_Results/
 source("web_tool_script_2.R")
 #> Parsed with column specification:
@@ -498,7 +503,9 @@ source("web_tool_script_2.R")
 #> `summarise()` regrouping output by 'investor_name', 'portfolio_name', 'company_name', 'id', 'financial_sector', 'current_shares_outstanding_all_classes' (override with `.groups` argument)
 #> `summarise()` regrouping output by 'investor_name', 'portfolio_name', 'scenario', 'allocation', 'equity_market', 'scenario_geography', 'year', 'ald_sector' (override with `.groups` argument)
 #> `summarise()` regrouping output by 'investor_name', 'portfolio_name', 'ald_location', 'year', 'ald_sector', 'technology', 'financial_sector', 'allocation', 'allocation_weight' (override with `.groups` argument)
+```
 
+``` r
 # Feed previous results plus data from the pacta-data/ into
 # `create_interactive_report()`.
 source("web_tool_script_3.R") 
