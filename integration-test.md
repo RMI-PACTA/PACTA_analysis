@@ -1,6 +1,6 @@
-Running the web tool: A reproducible example
+Integration test: Run the web tool
 ================
-2020-09-25
+2020-09-26
 
 ## Introduction
 
@@ -56,12 +56,12 @@ library(renv)
 #>     load, remove
 library(fs)
 library(tidyverse)
-#> ── Attaching packages ──────────────────── tidyverse 1.3.0 ──
+#> ── Attaching packages ───────────────────── tidyverse 1.3.0 ──
 #> ✓ ggplot2 3.3.2     ✓ purrr   0.3.4
 #> ✓ tibble  3.0.3     ✓ dplyr   1.0.2
 #> ✓ tidyr   1.1.2     ✓ stringr 1.4.0
 #> ✓ readr   1.3.1     ✓ forcats 0.5.0
-#> ── Conflicts ─────────────────────── tidyverse_conflicts() ──
+#> ── Conflicts ──────────────────────── tidyverse_conflicts() ──
 #> x purrr::%@%()         masks rlang::%@%()
 #> x purrr::as_function() masks rlang::as_function()
 #> x dplyr::collapse()    masks glue::collapse()
@@ -132,7 +132,7 @@ devtools::session_info()
 #>  collate  en_US.UTF-8                 
 #>  ctype    en_US.UTF-8                 
 #>  tz       America/Chicago             
-#>  date     2020-09-25                  
+#>  date     2020-09-26                  
 #> 
 #> ─ Packages ───────────────────────────────────────────────────────────────────
 #>  package     * version     date       lib source                             
@@ -251,11 +251,13 @@ expect_true(file_exists(expected_dataset))
 If they don’t already exist, create the required directories.
 
 ``` r
-create_directory_if_it_doesnt_exist <- function(directory) {
-  if (!fs::dir_exists(directory)) {
-    fs::dir_create(directory)
+ensure_empty_directory <- function(directory) {
+  if (fs::dir_exists(directory)) {
+    fs::dir_delete(directory)
   }
-  
+
+  fs::dir_create(directory)
+
   invisible(directory)
 }
 
@@ -265,7 +267,7 @@ children <- c("30_Processed_Inputs", "40_Results", "50_Outputs")
 #> [2] "/home/mauro/git/PACTA_analysis/working_dir/40_Results"         
 #> [3] "/home/mauro/git/PACTA_analysis/working_dir/50_Outputs"
 
-walk(paths, create_directory_if_it_doesnt_exist)
+walk(paths, ensure_empty_directory)
 ```
 
 Ensure the following repos are siblings of PACTA\_analysis/ (
@@ -291,32 +293,6 @@ expect_true(all_siblings)
 Ensure the repo PACTA\_analysis is on the branch
 `current_web_functionality`, or a PR off it. This is not a test but a
 visual inspection.
-
-``` bash
-git log --oneline --graph --no-merges upstream/current_web_functionality..HEAD
-#> * 5c74f93 Add workflow to run a reproducible example on CI
-#> * c5d11c2 Revert parametrize and brake
-#> * b10bbd7 Prune needless file
-#> * 2f2ed7f Render with params
-#> * 5d21678 Parametrize
-#> * dc67ed7 Refresh cache
-#> * 479fe89 Make title more specific
-#> * a752e87 Polish try-web-tool.Rmd
-#> * fda04ce Polish
-#> * fc799b1 Polish: define required stuff at the top
-#> * 779a9ef Cleanup my notes
-#> * 23604e9 Simplify definition of working_location
-#> * 8e5ed03 Cleanup
-#> * aa517d6 Add notes
-#> * 6784cbf Cleanup: Show rather than explain changes
-#> * c453ebf Fix working_location
-#> * 4ccdd59 Find a few more errors
-#> * 73f2032 Find error in web_tool_script_1.R: line 34
-#> * 809375b Remove horrible --hard reset
-#> * 762dcf1 Style
-#> * 78aa9c4 Try runnign web tool following Jacob's guide
-#> * 10c80a7 Expect sibling repo
-```
 
 Ensure you are on the required working directory.
 
@@ -384,16 +360,53 @@ look_into(config_1)
 expect_true(file_exists(config_1))
 ```
 
-Ensure this other configuration file also exists, and has correct paths:
+Ensure this other configuration file also exists.
 
 ``` r
 config_2 <- here("parameter_files", "WebParameters_2dii.yml")
+```
+
+``` r
+expect_true(file_exists(config_2))
+```
+
+Make the configuration file portable, so it works locally and on GitHub
+actions.
+
+``` r
+make_config_portable <- function(config) {
+  lines <- readLines(config, encoding = "UTF-8")
+  lines <- make_paths_portable(lines)
+  writeLines(lines, config)
+  
+  invisible(config)
+}
+
+make_paths_portable <- function(x) {
+  x %>% 
+    root_field_path("project_location_ext", pattern = "PACTA_analysis") %>% 
+    root_field_path("data_location_ext", pattern = "pacta-data") %>% 
+    root_field_path("template_location", pattern = "create_interactive_report")
+}
+
+root_field_path <- function(x, field, pattern) {
+  parent <- path_dir(here())
+  value <- path(parent, extract_from(x, pattern))
+  sub(glue("({field}:[ ]?).*"), glue("\\1{value}/"), x)
+}
+
+extract_from <- function(x, pattern) {
+  line <- grep(pattern, x, value = TRUE)
+  sub(glue(".*({pattern}.*)"), "\\1", line)
+}
+
+make_config_portable(config_2)
 look_into(config_2)
 #> default:
 #>     paths:
-#>         project_location_ext: ~/git/PACTA_analysis/
-#>         data_location_ext: ~/git/pacta-data/2019Q4/
-#>         template_location: ~/git/create_interactive_report/
+#>         project_location_ext: /home/mauro/git/PACTA_analysis/
+#>         data_location_ext: /home/mauro/git/pacta-data/2019Q4/
+#>         template_location: /home/mauro/git/create_interactive_report/
 #>     parameters:
 #>         project_name: working_dir
 #>         twodii_internal: FALSE
@@ -401,16 +414,12 @@ look_into(config_2)
 ```
 
 ``` r
-expect_true(file_exists(config_2))
-```
-
-``` r
 config_paths <- config::get(file = config_2)$paths
 str(config_paths)
 #> List of 3
-#>  $ project_location_ext: chr "~/git/PACTA_analysis/"
-#>  $ data_location_ext   : chr "~/git/pacta-data/2019Q4/"
-#>  $ template_location   : chr "~/git/create_interactive_report/"
+#>  $ project_location_ext: chr "/home/mauro/git/PACTA_analysis/"
+#>  $ data_location_ext   : chr "/home/mauro/git/pacta-data/2019Q4/"
+#>  $ template_location   : chr "/home/mauro/git/create_interactive_report/"
 
 all_paths_exist <- all(map_lgl(config_paths, dir_exists))
 expect_true(all_paths_exist)
@@ -425,18 +434,58 @@ parametrized rmarkdown file.
 ``` r
 # Populate the directory "working\_dir/30\_Processed\_Inputs/"
 source("web_tool_script_1.R")
-#> Warning in read_file(paste0(file_location, "/fund_data.fst")): ~/git/pacta-data/
-#> 2019Q4/cleaned_files/fund_data.fst does not exist
+#> 
+#> Attaching package: 'scales'
+#> The following object is masked from 'package:purrr':
+#> 
+#>     discard
+#> The following object is masked from 'package:readr':
+#> 
+#>     col_factor
+#> 
+#> Attaching package: 'reshape2'
+#> The following object is masked from 'package:tidyr':
+#> 
+#>     smiths
+#> 
+#> Attaching package: 'tidyselect'
+#> The following object is masked from 'package:testthat':
+#> 
+#>     matches
+#> 
+#> Attaching package: 'jsonlite'
+#> The following object is masked from 'package:purrr':
+#> 
+#>     flatten
+#> The following objects are masked from 'package:rlang':
+#> 
+#>     flatten, unbox
+#> Warning in read_file(paste0(file_location, "/fund_data.fst")): /home/mauro/git/
+#> pacta-data/2019Q4/cleaned_files/fund_data.fst does not exist
+#> Parsed with column specification:
+#> cols(
+#>   Holding.ID = col_character(),
+#>   Portfolio.Name = col_character(),
+#>   Investor.Name = col_character(),
+#>   ISIN = col_character(),
+#>   MarketValue = col_double(),
+#>   Currency = col_character(),
+#>   NumberofShares = col_logical()
+#> )
 #> [1] "No Equity in portfolio"
-#> Warning in dir.create(.x): '/home/mauro/git/PACTA_analysis/working_dir//
-#> 30_Processed_Inputs/TestPortfolio_Input' already exists
-#> Warning in dir.create(.x): '/home/mauro/git/PACTA_analysis/working_dir//
-#> 40_Results/TestPortfolio_Input' already exists
-#> Warning in dir.create(.x): '/home/mauro/git/PACTA_analysis/working_dir//
-#> 50_Outputs/TestPortfolio_Input' already exists
+#> `summarise()` regrouping output by 'portfolio_name', 'investor_name', 'asset_type' (override with `.groups` argument)
+```
 
+``` r
 #  Populate working_dir/40_Results/
 source("web_tool_script_2.R")
+#> Parsed with column specification:
+#> cols(
+#>   investor_name = col_character(),
+#>   portfolio_name = col_character(),
+#>   file_name = col_character(),
+#>   loc_name = col_character()
+#> )
 #> Warning in dir.create(.x): '/home/mauro/git/PACTA_analysis/working_dir//
 #> 30_Processed_Inputs/TestPortfolio_Input' already exists
 #> Warning in dir.create(.x): '/home/mauro/git/PACTA_analysis/working_dir//
@@ -444,10 +493,40 @@ source("web_tool_script_2.R")
 #> Warning in dir.create(.x): '/home/mauro/git/PACTA_analysis/working_dir//
 #> 50_Outputs/TestPortfolio_Input' already exists
 #> [1] "1: Test"
+#> `summarise()` regrouping output by 'investor_name', 'portfolio_name', 'company_name', 'id', 'financial_sector', 'current_shares_outstanding_all_classes' (override with `.groups` argument)
+#> `summarise()` regrouping output by 'investor_name', 'portfolio_name', 'scenario', 'allocation', 'equity_market', 'scenario_geography', 'year', 'ald_sector' (override with `.groups` argument)
+#> `summarise()` regrouping output by 'investor_name', 'portfolio_name', 'ald_location', 'year', 'ald_sector', 'technology', 'financial_sector', 'allocation', 'allocation_weight' (override with `.groups` argument)
+```
 
+``` r
 # Feed previous results plus data from the pacta-data/ into
 # `create_interactive_report()`.
 source("web_tool_script_3.R") 
+#> Parsed with column specification:
+#> cols(
+#>   investor_name = col_character(),
+#>   portfolio_name = col_character(),
+#>   file_name = col_character(),
+#>   loc_name = col_character()
+#> )
+#> Parsed with column specification:
+#> cols(
+#>   investor_name = col_character(),
+#>   portfolio_name = col_character(),
+#>   holding_id = col_character(),
+#>   isin = col_character(),
+#>   value_usd = col_double(),
+#>   company_name = col_character(),
+#>   asset_type = col_character(),
+#>   valid_input = col_logical(),
+#>   direct_holding = col_logical(),
+#>   security_mapped_sector = col_character(),
+#>   financial_sector = col_character(),
+#>   bics_sector = col_character(),
+#>   sectors_with_assets = col_character(),
+#>   has_ald_in_fin_sector = col_logical(),
+#>   flag = col_character()
+#> )
 ```
 
 Ensure the directory “working\_dir/50\_Outputs/” is now populated with

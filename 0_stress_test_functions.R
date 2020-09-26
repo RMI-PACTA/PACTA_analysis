@@ -52,7 +52,7 @@ if (rstudioapi::isAvailable()) {
 ### Load in Audit File ###
 
 
-process_audit_filt <- function(all_holdings, ){
+process_audit_filt <- function(all_holdings){
   port <- merge(all_holdings, revenue, by = "isin", all.x = T)
   
   port$Value.USD <- as.numeric(port$Value.USD)

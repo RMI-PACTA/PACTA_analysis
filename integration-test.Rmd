@@ -1,5 +1,5 @@
 ---
-title: "Running the web tool: A reproducible example"
+title: "Integration test: Run the web tool"
 date: "`r Sys.Date()`"
 output: github_document
 ---
@@ -89,18 +89,20 @@ expect_true(file_exists(expected_dataset))
 If they don't already exist, create the required directories.
 
 ```{r}
-create_directory_if_it_doesnt_exist <- function(directory) {
-  if (!fs::dir_exists(directory)) {
-    fs::dir_create(directory)
+ensure_empty_directory <- function(directory) {
+  if (fs::dir_exists(directory)) {
+    fs::dir_delete(directory)
   }
-  
+
+  fs::dir_create(directory)
+
   invisible(directory)
 }
 
 children <- c("30_Processed_Inputs", "40_Results", "50_Outputs")
 (paths <- here("working_dir", children))
 
-walk(paths, create_directory_if_it_doesnt_exist)
+walk(paths, ensure_empty_directory)
 ```
 
 Ensure the following repos are siblings of PACTA\_analysis/ (
@@ -122,10 +124,6 @@ expect_true(all_siblings)
 ```
 
 Ensure the repo PACTA_analysis is on the branch `current_web_functionality`, or a PR off it. This is not a test but a visual inspection.
-
-```{bash}
-git log --oneline --graph --no-merges upstream/current_web_functionality..HEAD
-```
 
 Ensure you are on the required working directory.
 
@@ -178,15 +176,47 @@ look_into(config_1)
 expect_true(file_exists(config_1))
 ```
 
-Ensure this other configuration file also exists, and has correct paths:
+Ensure this other configuration file also exists.
 
 ```{r}
 config_2 <- here("parameter_files", "WebParameters_2dii.yml")
-look_into(config_2)
 ```
 
 ```{r}
 expect_true(file_exists(config_2))
+```
+
+Make the configuration file portable, so it works locally and on GitHub actions.
+
+```{r}
+make_config_portable <- function(config) {
+  lines <- readLines(config, encoding = "UTF-8")
+  lines <- make_paths_portable(lines)
+  writeLines(lines, config)
+  
+  invisible(config)
+}
+
+make_paths_portable <- function(x) {
+  x %>% 
+    root_field_path("project_location_ext", pattern = "PACTA_analysis") %>% 
+    root_field_path("data_location_ext", pattern = "pacta-data") %>% 
+    root_field_path("template_location", pattern = "create_interactive_report")
+}
+
+root_field_path <- function(x, field, pattern) {
+  parent <- path_dir(here())
+  value <- path(parent, extract_from(x, pattern))
+  sub(glue("({field}:[ ]?).*"), glue("\\1{value}/"), x)
+}
+
+extract_from <- function(x, pattern) {
+  line <- grep(pattern, x, value = TRUE)
+  sub(glue(".*({pattern}.*)"), "\\1", line)
+}
+
+make_config_portable(config_2)
+look_into(config_2)
 ```
 
 ```{r}
@@ -201,13 +231,17 @@ TODO: It would be nice to set these paths from a more flexible interface, like t
 
 ### Run scripts
 
-```{r, error=TRUE, message=FALSE}
+```{r}
 # Populate the directory "working\_dir/30\_Processed\_Inputs/"
 source("web_tool_script_1.R")
+```
 
+```{r}
 #  Populate working_dir/40_Results/
 source("web_tool_script_2.R")
+```
 
+```{r}
 # Feed previous results plus data from the pacta-data/ into
 # `create_interactive_report()`.
 source("web_tool_script_3.R") 
