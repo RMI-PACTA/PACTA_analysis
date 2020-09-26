@@ -56,12 +56,12 @@ library(renv)
 #>     load, remove
 library(fs)
 library(tidyverse)
-#> ── Attaching packages ────────────────── tidyverse 1.3.0 ──
+#> ── Attaching packages ───────────────────── tidyverse 1.3.0 ──
 #> ✓ ggplot2 3.3.2     ✓ purrr   0.3.4
 #> ✓ tibble  3.0.3     ✓ dplyr   1.0.2
 #> ✓ tidyr   1.1.2     ✓ stringr 1.4.0
 #> ✓ readr   1.3.1     ✓ forcats 0.5.0
-#> ── Conflicts ───────────────────── tidyverse_conflicts() ──
+#> ── Conflicts ──────────────────────── tidyverse_conflicts() ──
 #> x purrr::%@%()         masks rlang::%@%()
 #> x purrr::as_function() masks rlang::as_function()
 #> x dplyr::collapse()    masks glue::collapse()
@@ -143,7 +143,6 @@ devtools::session_info()
 #>  callr         3.4.4       2020-09-07 [1] RSPM (R 4.0.2)                     
 #>  cellranger    1.1.0       2016-07-27 [1] CRAN (R 4.0.0)                     
 #>  cli           2.0.2       2020-02-28 [1] CRAN (R 4.0.0)                     
-#>  codetools     0.2-16      2018-12-24 [4] CRAN (R 4.0.0)                     
 #>  colorspace    1.4-1       2019-03-18 [1] CRAN (R 4.0.0)                     
 #>  config      * 0.3         2018-03-27 [1] CRAN (R 4.0.0)                     
 #>  crayon        1.3.4.9000  2020-09-03 [1] Github (r-lib/crayon@6b3f0c6)      

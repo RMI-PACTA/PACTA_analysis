@@ -3,7 +3,7 @@ on: [push, pull_request]
 name: Render reprex
 
 jobs:
-  render:
+  Run-integration-test:
     name: Run integration test
     runs-on: macOS-latest
     steps:
