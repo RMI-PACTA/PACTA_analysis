@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
   echo = TRUE,
   comment = "#>",
   collapse = TRUE,
-  cache = FALSE
+  cache = TRUE
 )
 ```
 
@@ -229,13 +229,17 @@ TODO: It would be nice to set these paths from a more flexible interface, like t
 
 ### Run scripts
 
-```{r, message=FALSE}
+```{r}
 # Populate the directory "working\_dir/30\_Processed\_Inputs/"
 source("web_tool_script_1.R")
+```
 
+```{r}
 #  Populate working_dir/40_Results/
 source("web_tool_script_2.R")
+```
 
+```{r}
 # Feed previous results plus data from the pacta-data/ into
 # `create_interactive_report()`.
 source("web_tool_script_3.R") 

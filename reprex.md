@@ -56,12 +56,12 @@ library(renv)
 #>     load, remove
 library(fs)
 library(tidyverse)
-#> ── Attaching packages ────── tidyverse 1.3.0 ──
+#> ── Attaching packages ─────── tidyverse 1.3.0 ──
 #> ✓ ggplot2 3.3.2     ✓ purrr   0.3.4
 #> ✓ tibble  3.0.3     ✓ dplyr   1.0.2
 #> ✓ tidyr   1.1.2     ✓ stringr 1.4.0
 #> ✓ readr   1.3.1     ✓ forcats 0.5.0
-#> ── Conflicts ───────── tidyverse_conflicts() ──
+#> ── Conflicts ────────── tidyverse_conflicts() ──
 #> x purrr::%@%()         masks rlang::%@%()
 #> x purrr::as_function() masks rlang::as_function()
 #> x dplyr::collapse()    masks glue::collapse()
@@ -98,7 +98,7 @@ These are all the packages detected in the PACTA\_analysis project:
 
 ``` r
 pkg <- renv::dependencies()
-#> Finding R package dependencies ... Done!
+#> Finding R package dependencies ... [20/21] [21/21] Done!
 sort(unique(pkg$Package))
 #>  [1] "assertthat"   "base"         "config"       "countrycode"  "cowplot"     
 #>  [6] "devtools"     "dplyr"        "extrafont"    "fs"           "fst"         
@@ -432,9 +432,46 @@ parametrized rmarkdown file.
 ``` r
 # Populate the directory "working\_dir/30\_Processed\_Inputs/"
 source("web_tool_script_1.R")
+#> 
+#> Attaching package: 'scales'
+#> The following object is masked from 'package:purrr':
+#> 
+#>     discard
+#> The following object is masked from 'package:readr':
+#> 
+#>     col_factor
+#> 
+#> Attaching package: 'reshape2'
+#> The following object is masked from 'package:tidyr':
+#> 
+#>     smiths
+#> 
+#> Attaching package: 'tidyselect'
+#> The following object is masked from 'package:testthat':
+#> 
+#>     matches
+#> 
+#> Attaching package: 'jsonlite'
+#> The following object is masked from 'package:purrr':
+#> 
+#>     flatten
+#> The following objects are masked from 'package:rlang':
+#> 
+#>     flatten, unbox
 #> Warning in read_file(paste0(file_location, "/fund_data.fst")): /home/mauro/git/
 #> pacta-data/2019Q4/cleaned_files/fund_data.fst does not exist
+#> Parsed with column specification:
+#> cols(
+#>   Holding.ID = col_character(),
+#>   Portfolio.Name = col_character(),
+#>   Investor.Name = col_character(),
+#>   ISIN = col_character(),
+#>   MarketValue = col_double(),
+#>   Currency = col_character(),
+#>   NumberofShares = col_logical()
+#> )
 #> [1] "No Equity in portfolio"
+#> `summarise()` regrouping output by 'portfolio_name', 'investor_name', 'asset_type' (override with `.groups` argument)
 #> Warning in dir.create(.x): '/home/mauro/git/PACTA_analysis/working_dir//
 #> 30_Processed_Inputs/TestPortfolio_Input' already exists
 #> Warning in dir.create(.x): '/home/mauro/git/PACTA_analysis/working_dir//
@@ -444,6 +481,13 @@ source("web_tool_script_1.R")
 
 #  Populate working_dir/40_Results/
 source("web_tool_script_2.R")
+#> Parsed with column specification:
+#> cols(
+#>   investor_name = col_character(),
+#>   portfolio_name = col_character(),
+#>   file_name = col_character(),
+#>   loc_name = col_character()
+#> )
 #> Warning in dir.create(.x): '/home/mauro/git/PACTA_analysis/working_dir//
 #> 30_Processed_Inputs/TestPortfolio_Input' already exists
 #> Warning in dir.create(.x): '/home/mauro/git/PACTA_analysis/working_dir//
@@ -451,10 +495,38 @@ source("web_tool_script_2.R")
 #> Warning in dir.create(.x): '/home/mauro/git/PACTA_analysis/working_dir//
 #> 50_Outputs/TestPortfolio_Input' already exists
 #> [1] "1: Test"
+#> `summarise()` regrouping output by 'investor_name', 'portfolio_name', 'company_name', 'id', 'financial_sector', 'current_shares_outstanding_all_classes' (override with `.groups` argument)
+#> `summarise()` regrouping output by 'investor_name', 'portfolio_name', 'scenario', 'allocation', 'equity_market', 'scenario_geography', 'year', 'ald_sector' (override with `.groups` argument)
+#> `summarise()` regrouping output by 'investor_name', 'portfolio_name', 'ald_location', 'year', 'ald_sector', 'technology', 'financial_sector', 'allocation', 'allocation_weight' (override with `.groups` argument)
 
 # Feed previous results plus data from the pacta-data/ into
 # `create_interactive_report()`.
 source("web_tool_script_3.R") 
+#> Parsed with column specification:
+#> cols(
+#>   investor_name = col_character(),
+#>   portfolio_name = col_character(),
+#>   file_name = col_character(),
+#>   loc_name = col_character()
+#> )
+#> Parsed with column specification:
+#> cols(
+#>   investor_name = col_character(),
+#>   portfolio_name = col_character(),
+#>   holding_id = col_character(),
+#>   isin = col_character(),
+#>   value_usd = col_double(),
+#>   company_name = col_character(),
+#>   asset_type = col_character(),
+#>   valid_input = col_logical(),
+#>   direct_holding = col_logical(),
+#>   security_mapped_sector = col_character(),
+#>   financial_sector = col_character(),
+#>   bics_sector = col_character(),
+#>   sectors_with_assets = col_character(),
+#>   has_ald_in_fin_sector = col_logical(),
+#>   flag = col_character()
+#> )
 ```
 
 Ensure the directory “working\_dir/50\_Outputs/” is now populated with
