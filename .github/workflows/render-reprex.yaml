@@ -32,11 +32,15 @@ jobs:
           remotes::install_cran("rmarkdown")
         shell: Rscript {0}
 
-      - name: Install dependencies
+      - name: Install dependencies from CRAN
         run: |
           install.packages("renv")
           dependencies <- renv::dependencies()$Package
           install.packages(dependencies)
+        shell: Rscript {0}
+      - name: Install dependencies from GitHub
+        run: |
+          remotes::install_github("2DegreesInvesting/r2dii.utils")
         shell: Rscript {0}
       - name: Render reprex.Rmd
         run: |
