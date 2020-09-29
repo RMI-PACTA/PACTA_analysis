@@ -14,15 +14,15 @@ library(r2dii.utils)
 library(fs) 
 library(jsonlite)
 library(fst)
+library(here)
 
 source("0_portfolio_test.R")
 source("0_global_functions.R")
 source("0_web_functions.R")
 
-
 if (rstudioapi::isAvailable()) {
   portfolio_name_ref_all <- c("TestPortfolio_Input") # must be the same name as in the _PortfolioParameters.yml
-  working_location <- dirname(rstudioapi::getActiveDocumentContext()$path)
+  working_location <- here::here() 
   set_web_parameters(file_path = paste0(working_location,"/parameter_files/WebParameters_2dii.yml"))
 } else {
   portfolio_name_ref_all = get_portfolio_name()
