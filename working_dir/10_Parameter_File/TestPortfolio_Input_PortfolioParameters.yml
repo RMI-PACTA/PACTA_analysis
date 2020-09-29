@@ -1,5 +1,5 @@
 default:
     parameters:
-        portfolio_name_in: test_portfolio
+        portfolio_name_in: TestPortfolio_Input
         investor_name_in: Test
 
