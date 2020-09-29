@@ -33,9 +33,12 @@ vignettes/*.pdf
 *.knit.md
 
 .Ruserdata
-**/working_dir/30_Processed_Inputs
-**/working_dir/40_Results
-**/working_dir/50_Outputs
+**/working_dir/30_Processed_Inputs/*
+!**/working_dir/30_Processed_Inputs/.gitkeep.txt
+**/working_dir/40_Results/*
+!**/working_dir/40_Results/.gitkeep.txt
+**/working_dir/50_Outputs/*
+!**/working_dir/50_Outputs/.gitkeep.txt
 
 setup.R
 data/isins_missing_bbg_data.csv
