@@ -178,16 +178,16 @@ emissions_totals <- calculate_portfolio_emissions(inc_emission_factors,
 # Identify the portfolios to save; 
 # Subset and Save these files
 
+create_portfolio_subfolders(portfolio_name_ref_all)
 
 file_names <- identify_portfolios(portfolio_total)
-write_csv(file_names, paste0(proc_input_path, "/file_names.csv"))
 
-create_portfolio_subfolders(file_names, portfolio_name_ref_all)
-
-  
 portfolio_name <- file_names$portfolio_name
 
 proc_input_path_ <- paste0(proc_input_path, "/", portfolio_name_ref_all)
+
+write_csv(file_names, paste0(proc_input_path_,"/file_names.csv"))
+
   
 export_audit_information_jsons(audit_file_ = audit_file %>% filter(portfolio_name == portfolio_name), 
                                portfolio_total_ = portfolio_total %>% filter(portfolio_name == portfolio_name),  

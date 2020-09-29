@@ -44,7 +44,7 @@ source(paste0(template_path, "create_interactive_report.R"))
 
 
 
-file_names <- read_csv(paste0(proc_input_path, "/file_names.csv"))
+file_names <- read_csv(paste0(proc_input_path, "/", portfolio_name_ref_all, "/file_names.csv"))
 
 # TODO: Remove different start years
 

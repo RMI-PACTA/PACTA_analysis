@@ -29,12 +29,11 @@ identify_portfolios <- function(portfolio_total){
   
 }
 
-create_portfolio_subfolders <- function(file_names, portfolio_name_ref_all){
+create_portfolio_subfolders <- function(portfolio_name_ref_all){
   
   folders <- c("30_Processed_Inputs", "40_Results", "50_Outputs")
   
   locs_to_create <- folders %>%
-    # purrr::map(~ paste0(project_location, "/", .x, "/", file_names$portfolio_name)) %>% 
     purrr::map(~ paste0(project_location, "/", .x, "/", portfolio_name_ref_all)) %>% 
     flatten_chr()
   
