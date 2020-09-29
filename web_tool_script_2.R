@@ -14,14 +14,21 @@ library(r2dii.utils)
 library(fs) 
 library(jsonlite)
 library(fst)
+library(here)
 
 source("0_portfolio_test.R")
 source("0_global_functions.R")
 source("0_web_functions.R")
 
-portfolio_name_ref_all <- c("TestPortfolio_Input")
-working_location <- here::here() 
-set_web_parameters(file_path = paste0(working_location,"/parameter_files/WebParameters_2dii.yml"))
+if (rstudioapi::isAvailable()) {
+  portfolio_name_ref_all <- c("TestPortfolio_Input") # must be the same name as in the _PortfolioParameters.yml
+  working_location <- here::here() 
+  set_web_parameters(file_path = paste0(working_location,"/parameter_files/WebParameters_2dii.yml"))
+} else {
+  portfolio_name_ref_all = get_portfolio_name()
+  working_location <- getwd()
+  set_web_parameters(file_path = paste0(working_location,"/parameter_files/WebParameters_docker.yml"))
+}
 
 working_location <- paste0(working_location, "/")
 
@@ -39,8 +46,8 @@ analysis_inputs_path <- set_analysis_inputs_path(twodii_internal, data_location_
 unlink(paste0(results_path,"/",portfolio_name_ref_all,"/*"), force = TRUE, recursive = TRUE)
 
 # run again so output folders are available after deleting past results
-file_names <- read_csv(paste0(proc_input_path, "/file_names.csv"))
-create_portfolio_subfolders(file_names, portfolio_name_ref_all)
+file_names <- read_csv(paste0(proc_input_path, "/", portfolio_name_ref_all, "/file_names.csv"))
+create_portfolio_subfolders(portfolio_name_ref_all)
 
 port_col_types <- set_col_types(grouping_variables, "ddddccccddclc")
 
@@ -120,12 +127,6 @@ if(file.exists(equity_input_file)){
     if(data_check(port_all_eq)){write_rds(port_all_eq, paste0(pf_file_results_path, portfolio_name,"_Equity_results_portfolio.rda"))}	
     if(has_map){if(data_check(map_eq)){write_rds(map_eq, paste0(pf_file_results_path, portfolio_name,"_Equity_results_map.rda"))}}
     
-    # investor_results_path <- paste0(results_path,"/", investor_name_select, "/") 
-    # if(!dir.exists(investor_results_path)){dir.create(investor_results_path)}
-    # 
-    # if(data_check(company_all_eq)){write_rds(company_all_eq, paste0(investor_results_path, "Equity_results_company.rda"))}	
-    # if(data_check(port_all_eq)){write_rds(port_all_eq, paste0(investor_results_path, "Equity_results_portfolio.rda"))}	
-    # if(has_map){if(data_check(map_eq)){write_rds(map_eq, paste0(investor_results_path, "Equity_results_map.rda"))}}
     
   }
 }
@@ -203,12 +204,7 @@ if (file.exists(bonds_inputs_file)){
     if(data_check(port_all_cb)){write_rds(port_all_cb, paste0(pf_file_results_path, portfolio_name,"_Bonds_results_portfolio.rda"))}	
     if(has_map){if(data_check(map_cb)){write_rds(map_cb, paste0(pf_file_results_path, portfolio_name,"_Bonds_results_map.rda"))}}
       
-    # investor_results_path <- paste0(results_path,"/", investor_name_select, "/") 
-    # if(!dir.exists(investor_results_path)){dir.create(investor_results_path)}
-    # 
-    # if(data_check(company_all_cb)){ write_rds(company_all_cb, paste0(investor_results_path, "Bonds_results_company.rda"))}	
-    # if(data_check(port_all_cb)){write_rds(port_all_cb, paste0(investor_results_path, "Bonds_results_portfolio.rda"))}	
-    # if(has_map){if(data_check(map_cb)){write_rds(map_cb, paste0(investor_results_path, "Bonds_results_map.rda"))}}
+    
       
   }
 }
