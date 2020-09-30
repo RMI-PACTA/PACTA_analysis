@@ -41,3 +41,4 @@
 ^data/isins_missing_bbg_data\.csv$
 ^data/sector_bridge\.csv$
 ^data-raw$
+^LICENSE\.md$
