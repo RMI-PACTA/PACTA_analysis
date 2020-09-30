@@ -2,8 +2,6 @@
 ^PACTA_analysis\.Rproj$
 ^\.Rproj\.user$
 
-^data$
-^packages\.R$
 ^0_fund_processing\.R$
 ^0_global_functions\.R$
 ^0_graphing_functions\.R$
@@ -31,3 +29,15 @@
 ^web_tool_script_2\.R$
 ^web_tool_script_3\.R$
 ^working_dir$
+^packages\.R$
+^data$
+^data/TranslationFileUTF8\.xlsx$
+^data/bench_regions\.rda$
+^data/bics_bridge\.csv$
+^data/currencies\.rda$
+^data/fin_sector_overrides\.csv$
+^data/fund_isins_without_bbg_data\.csv$
+^data/index_regions\.rda$
+^data/isins_missing_bbg_data\.csv$
+^data/sector_bridge\.csv$
+^data-raw$
