@@ -44,7 +44,7 @@ detect_packages()
 #> Warning in readLines(file, warn = FALSE, encoding =
 #> "UTF-8"): invalid input found on input connection '/home/
 #> mauro/git/PACTA_analysis/0_fund_processing.R'
-#> [8/28] [9/28] [10/28] [11/28] [12/28] [13/28] [14/28] [15/28] [16/28] [17/28] [18/28] [19/28] [20/28] [21/28] [22/28] [23/28] [24/28] [25/28] [26/28] [27/28] [28/28] Done!
+#> [22/28] [23/28] [24/28] [25/28] [26/28] [27/28] [28/28] Done!
 #>  [1] "assertthat"     "base"           "config"        
 #>  [4] "countrycode"    "cowplot"        "devtools"      
 #>  [7] "dplyr"          "extrafont"      "fs"            
@@ -69,7 +69,7 @@ detect_packages()
 
 ``` r
 devtools::session_info()
-#> ─ Session info ──────────────────────────────────────────
+#> ─ Session info ─────────────────────────────────────────
 #>  setting  value                       
 #>  version  R version 4.0.2 (2020-06-22)
 #>  os       Ubuntu 18.04.5 LTS          
@@ -81,7 +81,7 @@ devtools::session_info()
 #>  tz       America/Chicago             
 #>  date     2020-10-01                  
 #> 
-#> ─ Packages ──────────────────────────────────────────────
+#> ─ Packages ─────────────────────────────────────────────
 #>  ! package        * version     date       lib
 #>    assertthat       0.2.1       2019-03-21 [1]
 #>    backports        1.1.10      2020-09-15 [1]
@@ -110,6 +110,7 @@ devtools::session_info()
 #>    fst            * 0.9.4       2020-08-27 [1]
 #>    generics         0.0.2       2018-11-29 [1]
 #>    ggplot2        * 3.3.2       2020-06-19 [1]
+#>    git2r            0.27.1      2020-05-03 [1]
 #>    glue           * 1.4.2       2020-08-27 [1]
 #>    gtable           0.3.0       2019-03-25 [1]
 #>    haven            2.3.1       2020-06-01 [1]
@@ -198,6 +199,7 @@ devtools::session_info()
 #>  CRAN (R 4.0.0)                                
 #>  RSPM (R 4.0.2)                                
 #>  RSPM (R 4.0.2)                                
+#>  CRAN (R 4.0.0)                                
 #>  CRAN (R 4.0.0)                                
 #>  CRAN (R 4.0.0)                                
 #>  RSPM (R 4.0.2)                                
@@ -309,7 +311,8 @@ Ensure the required directories exist, and are empty.
 ``` r
 ensure_empty_directory <- function(directory) {
   if (dir_exists(directory)) {
-    dir_delete(directory)
+    not_hidden <- fs::dir_ls(directory)
+    file_delete(not_hidden)
   }
 
   dir_create(directory)
@@ -416,6 +419,8 @@ Ensure this other configuration file also exists:
 
 ``` r
 config_2 <- here("parameter_files", "WebParameters_2dii.yml")
+config_2_copy <- tempfile()
+fs::file_copy(config_2, config_2_copy)
 
 expect_true(file_exists(config_2))
 ```
@@ -504,13 +509,15 @@ out_2 <- path("working_dir", "40_Results")
 
 expect_false(dir_has_files(out_2))
 source("web_tool_script_2.R")
-#> Warning in dir.create(.x): '/home/mauro/git/PACTA_analysis/
-#> working_dir//30_Processed_Inputs/TestPortfolio_Input'
-#> already exists
-#> Warning in dir.create(.x): '/home/mauro/git/PACTA_analysis/
-#> working_dir//40_Results/TestPortfolio_Input' already exists
-#> Warning in dir.create(.x): '/home/mauro/git/PACTA_analysis/
-#> working_dir//50_Outputs/TestPortfolio_Input' already exists
+#> Warning in dir.create(.x): '/home/mauro/git/
+#> PACTA_analysis/working_dir//30_Processed_Inputs/
+#> TestPortfolio_Input' already exists
+#> Warning in dir.create(.x): '/home/mauro/
+#> git/PACTA_analysis/working_dir//40_Results/
+#> TestPortfolio_Input' already exists
+#> Warning in dir.create(.x): '/home/mauro/
+#> git/PACTA_analysis/working_dir//50_Outputs/
+#> TestPortfolio_Input' already exists
 #> [1] "1: Test"
 expect_true(dir_has_files(out_2))
 ```
@@ -609,4 +616,12 @@ dir_ls(path("..", "pacta-data", "2019Q4", "cleaned_files"))
 #> ../pacta-data/2019Q4/cleaned_files/currencies.fst
 #> ../pacta-data/2019Q4/cleaned_files/debt_fin_data.fst
 #> ../pacta-data/2019Q4/cleaned_files/fin_data.fst
+```
+
+## Cleanup
+
+Restore configuration file.
+
+``` r
+fs::file_copy(config_2_copy, config_2, overwrite = TRUE)
 ```
