@@ -1,5 +1,6 @@
 test_integration <- function (input = "integration-test.Rmd") {
-  rmarkdown::render(input)
+  needless <- tempfile(fileext = ".html")
+  rmarkdown::render(input, output_file = needless)
 }
 
 setup_project <- function() {
