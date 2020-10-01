@@ -28,7 +28,7 @@ if (rstudioapi::isAvailable()) {
   set_web_parameters(file_path = paste0(working_location,"/parameter_files/WebParameters_docker.yml"))
 }
 
-working_location <- paste0(here::here(), "/")
+working_location <- paste0(working_location, "/")
 
 set_webtool_paths()
 
