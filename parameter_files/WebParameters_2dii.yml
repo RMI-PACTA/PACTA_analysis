@@ -1,8 +1,8 @@
 default:
     paths:
-        project_location_ext: /home/mauro/git/PACTA_analysis/
-        data_location_ext: /home/mauro/git/pacta-data/2019Q4/
-        template_location: /home/mauro/git/create_interactive_report/
+        project_location_ext: /Users/jacobkastl/Documents/git/PACTA_analysis/
+        data_location_ext: /Users/jacobkastl/Documents/git/pacta-data/2019Q4/
+        template_location: /Users/jacobkastl/Documents/git/create_interactive_report/
     parameters:
         project_name: working_dir
         twodii_internal: FALSE

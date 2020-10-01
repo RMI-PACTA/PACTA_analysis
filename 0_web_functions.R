@@ -29,12 +29,11 @@ identify_portfolios <- function(portfolio_total){
   
 }
 
-create_portfolio_subfolders <- function(file_names, portfolio_name_ref_all){
+create_portfolio_subfolders <- function(portfolio_name_ref_all){
   
   folders <- c("30_Processed_Inputs", "40_Results", "50_Outputs")
   
   locs_to_create <- folders %>%
-    # purrr::map(~ paste0(project_location, "/", .x, "/", file_names$portfolio_name)) %>% 
     purrr::map(~ paste0(project_location, "/", .x, "/", portfolio_name_ref_all)) %>% 
     flatten_chr()
   
@@ -160,12 +159,17 @@ get_input_files <- function(portfolio_name_ref_all){
     input_file_path <- paste0(input_path, input_files[i])
     portfolio_name_ref = portfolio_name_ref_all[i]
     
-    
     portfolio_ <- read_web_input_file(input_file_path)
     
     portfolio_ <- portfolio_ %>%  select(-contains("X"))
     
     set_portfolio_parameters(file_path = paste0(par_file_path,"/",portfolio_name_ref,"_PortfolioParameters.yml"))
+    
+    # this writes the portfolio and ivestor names that are provided from the parameter file to the pf
+    # as agreed with Constructiva. They ensure grouped portfolios will get one name only.
+    portfolio_ <- portfolio_ %>%
+      mutate(Portfolio.Name = portfolio_name_in,
+             Investor.Name = investor_name_in)
 
     # clean and check column names
     portfolio_ <- check_input_file_contents(portfolio_, portfolio_name_in, investor_name_in)
