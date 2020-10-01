@@ -58,6 +58,12 @@ devtools::session_info()
 
 </details>
 
+## Functions
+
+```{r}
+devtools::load_all()
+```
+
 ## Data
 
 Ensure the example data is available.
