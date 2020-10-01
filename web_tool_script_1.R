@@ -16,6 +16,7 @@ library(r2dii.utils)
 library(fs) 
 library(jsonlite)
 library(fst)
+library(here)
 
 
 # source("0_portfolio_test.R")
@@ -26,9 +27,15 @@ source("0_global_functions.R")
 source("0_web_functions.R")
 source("0_json_functions.R")
 
-portfolio_name_ref_all <- c("TestPortfolio_Input")
-working_location <- here::here()
-set_web_parameters(file_path = paste0(working_location,"/parameter_files/WebParameters_2dii.yml"))
+if (rstudioapi::isAvailable()) {
+  portfolio_name_ref_all <- c("TestPortfolio_Input") # must be the same name as in the _PortfolioParameters.yml
+  working_location <- here::here()
+  set_web_parameters(file_path = paste0(working_location,"/parameter_files/WebParameters_2dii.yml"))
+} else {
+  portfolio_name_ref_all = get_portfolio_name()
+  working_location <- getwd()
+  set_web_parameters(file_path = paste0(working_location,"/parameter_files/WebParameters_docker.yml"))
+  }
 
 working_location <- paste0(working_location, "/")
 
@@ -123,13 +130,6 @@ portfolio <- process_raw_portfolio(portfolio_raw,
                                    currencies,
                                    grouping_variables)
 
-portfolio <- portfolio %>% 
-  mutate(portfolio_name = ifelse(portfolio_name %>% unique() %>% length() > 1,
-                                 portfolio_name_ref_all,
-                                 portfolio_name)
-         )
-
-
 portfolio <- add_revenue_split(has_revenue, portfolio, revenue_data)
 
 portfolio <- create_ald_flag(portfolio, comp_fin_data, debt_fin_data)
@@ -172,16 +172,16 @@ emissions_totals <- calculate_portfolio_emissions(inc_emission_factors,
 # Identify the portfolios to save; 
 # Subset and Save these files
 
+create_portfolio_subfolders(portfolio_name_ref_all)
 
 file_names <- identify_portfolios(portfolio_total)
-write_csv(file_names, paste0(proc_input_path, "/file_names.csv"))
 
-create_portfolio_subfolders(file_names, portfolio_name_ref_all)
-
-  
 portfolio_name <- file_names$portfolio_name
 
 proc_input_path_ <- paste0(proc_input_path, "/", portfolio_name_ref_all)
+
+write_csv(file_names, paste0(proc_input_path_,"/file_names.csv"))
+
   
 export_audit_information_jsons(audit_file_ = audit_file %>% filter(portfolio_name == portfolio_name), 
                                portfolio_total_ = portfolio_total %>% filter(portfolio_name == portfolio_name),  

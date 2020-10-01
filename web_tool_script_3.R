@@ -16,12 +16,19 @@ library(r2dii.utils)
 library(fs) 
 library(jsonlite)
 library(fst)
+library(here)
 
-portfolio_name_ref_all <- c("TestPortfolio_Input")
-working_location <- here::here()
-set_web_parameters(file_path = paste0(working_location,"/parameter_files/WebParameters_2dii.yml"))
+if (rstudioapi::isAvailable()) {
+  portfolio_name_ref_all <- c("TestPortfolio_Input") # must be the same name as in the _PortfolioParameters.yml
+  working_location <- here::here() 
+  set_web_parameters(file_path = paste0(working_location,"/parameter_files/WebParameters_2dii.yml"))
+} else {
+  portfolio_name_ref_all = get_portfolio_name()
+  working_location <- getwd()
+  set_web_parameters(file_path = paste0(working_location,"/parameter_files/WebParameters_docker.yml"))
+}
 
-working_location <- paste0(here::here(), "/")
+working_location <- paste0(working_location, "/")
 
 set_webtool_paths()
 
@@ -38,7 +45,7 @@ source(paste0(template_path, "create_interactive_report.R"))
 
 
 
-file_names <- read_csv(paste0(proc_input_path, "/file_names.csv"))
+file_names <- read_csv(paste0(proc_input_path, "/", portfolio_name_ref_all, "/file_names.csv"))
 
 # TODO: Remove different start years
 
