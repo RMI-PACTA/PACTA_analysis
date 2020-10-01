@@ -27,7 +27,7 @@ source("0_global_functions.R")
 source("0_web_functions.R")
 source("0_json_functions.R")
 
-source("dry/set_portfolio-name-ref-all_working-location_and_web-parameters.R")
+setup_project()
 
 working_location <- paste0(working_location, "/")
 
