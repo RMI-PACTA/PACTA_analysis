@@ -18,7 +18,7 @@ library(jsonlite)
 library(fst)
 library(here)
 
-source("set_portfolio-name-ref-all_working-location_and_web-parameters.R")
+source("dry/set_portfolio-name-ref-all_working-location_and_web-parameters.R")
 
 working_location <- paste0(working_location, "/")
 
