@@ -24,7 +24,8 @@ License: MIT + file LICENSE
 Depends: 
     R (>= 3.5)
 Imports: 
-    rmarkdown
+    rmarkdown,
+    fs
 Suggests: 
     testthat
 Encoding: UTF-8
