@@ -10,7 +10,11 @@ Authors@R:
       person(given = "Clare",
              family = "Murray",
              role = c("aut"),
-             email = "clare@2degrees-investing.org"),   
+             email = "clare@2degrees-investing.org"), 
+      person(given = "Jacob",
+             family = "Kastl",
+             role = c("aut"),
+             email = "jacob.kastl@gmail.org"), 
       person(given = "2 Degrees Investing Initiative",
              role = c("cph", "fnd"),
              email = "contact@2degrees-investing.org"))
