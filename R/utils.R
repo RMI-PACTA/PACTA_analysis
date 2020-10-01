@@ -8,3 +8,8 @@ setup_project <- function() {
       "dry", "set_portfolio-name-ref-all_working-location_and_web-parameters.R"
   ))
 }
+
+in_docker <- function() {
+  system("cat /proc/1/cgroup | grep docker") == 0
+}
+
