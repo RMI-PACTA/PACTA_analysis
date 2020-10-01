@@ -1,5 +1,5 @@
 
-options(encoding = "UTF-8") 
+options(encoding = "UTF-8")
 
 
 source("0_global_functions.R")
@@ -7,26 +7,18 @@ source("0_web_functions.R")
 
 library(tidyr)
 library(dplyr)
-library(scales) 
-library(reshape2) 
-library(tidyverse) 
-library(readxl) 
-library(tidyselect) 
+library(scales)
+library(reshape2)
+library(tidyverse)
+library(readxl)
+library(tidyselect)
 library(r2dii.utils)
-library(fs) 
+library(fs)
 library(jsonlite)
 library(fst)
 library(here)
 
-if (rstudioapi::isAvailable()) {
-  portfolio_name_ref_all <- c("TestPortfolio_Input") # must be the same name as in the _PortfolioParameters.yml
-  working_location <- here::here() 
-  set_web_parameters(file_path = paste0(working_location,"/parameter_files/WebParameters_2dii.yml"))
-} else {
-  portfolio_name_ref_all = get_portfolio_name()
-  working_location <- getwd()
-  set_web_parameters(file_path = paste0(working_location,"/parameter_files/WebParameters_docker.yml"))
-}
+setup_project()
 
 working_location <- paste0(working_location, "/")
 
