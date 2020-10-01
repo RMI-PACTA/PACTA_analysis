@@ -181,6 +181,8 @@ Ensure this other configuration file also exists:
 
 ```{r}
 config_2 <- here("parameter_files", "WebParameters_2dii.yml")
+config_2_copy <- tempfile()
+fs::file_copy(config_2, config_2_copy)
 
 expect_true(file_exists(config_2))
 ```
@@ -309,3 +311,12 @@ In read_file(paste0(file_location, "/fund_data.fst")) :
 ```{r}
 dir_ls(path("..", "pacta-data", "2019Q4", "cleaned_files"))
 ```
+
+## Cleanup
+
+Restore configuration file.
+
+```{r}
+fs::file_copy(config_2_copy, config_2, overwrite = TRUE)
+```
+
