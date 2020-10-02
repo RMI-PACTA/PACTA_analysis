@@ -18,6 +18,7 @@ library(jsonlite)
 library(fst)
 library(here)
 
+devtools::load_all()
 setup_project()
 
 working_location <- paste0(working_location, "/")
