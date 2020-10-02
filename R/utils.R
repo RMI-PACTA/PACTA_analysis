@@ -10,5 +10,5 @@ setup_project <- function() {
 }
 
 in_transitionmonitor <- function() {
-  grepl("^/bond", here::here())
+  grepl("^/bound", here::here())
 }
