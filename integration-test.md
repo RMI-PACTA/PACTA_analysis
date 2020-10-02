@@ -44,19 +44,19 @@ detect_packages()
 #> Warning in readLines(file, warn = FALSE, encoding = "UTF-8"): invalid input
 #> found on input connection '/Users/jacobkastl/Documents/git/PACTA_analysis/
 #> 0_fund_processing.R'
-#> [5/22] [6/22] [7/22] [8/22] [9/22] [10/22] [11/22] [12/22] [13/22] [14/22] [15/22] [16/22] [17/22] [18/22] [19/22] [20/22] [21/22] [22/22] Done!
-#>  [1] "assertthat"   "base"         "config"       "countrycode" 
-#>  [5] "cowplot"      "devtools"     "dplyr"        "extrafont"   
-#>  [9] "fs"           "fst"          "ggforce"      "ggmap"       
-#> [13] "ggplot2"      "ggrepel"      "ggthemes"     "glue"        
-#> [17] "grid"         "gridExtra"    "here"         "janitor"     
-#> [21] "jsonlite"     "knitr"        "lme4"         "matrixStats" 
-#> [25] "plyr"         "purrr"        "r2dii.utils"  "RColorBrewer"
-#> [29] "readr"        "readxl"       "renv"         "reshape2"    
-#> [33] "rlang"        "rmarkdown"    "rstudioapi"   "rworldmap"   
-#> [37] "scales"       "sitools"      "stringr"      "testthat"    
-#> [41] "tidyr"        "tidyselect"   "tidyverse"    "tools"       
-#> [45] "xml2"
+#> [4/26] [5/26] [6/26] [7/26] [8/26] [9/26] [10/26] [11/26] [12/26] [13/26] [14/26] [15/26] [16/26] [17/26] [18/26] [19/26] [20/26] [21/26] [22/26] [23/26] [24/26] [25/26] [26/26] Done!
+#>  [1] "assertthat"     "base"           "config"         "countrycode"   
+#>  [5] "cowplot"        "devtools"       "dplyr"          "extrafont"     
+#>  [9] "fs"             "fst"            "ggforce"        "ggmap"         
+#> [13] "ggplot2"        "ggrepel"        "ggthemes"       "glue"          
+#> [17] "grid"           "gridExtra"      "here"           "janitor"       
+#> [21] "jsonlite"       "knitr"          "lme4"           "matrixStats"   
+#> [25] "PACTA.analysis" "plyr"           "purrr"          "R"             
+#> [29] "r2dii.utils"    "RColorBrewer"   "readr"          "readxl"        
+#> [33] "renv"           "reshape2"       "rlang"          "rmarkdown"     
+#> [37] "rstudioapi"     "rworldmap"      "scales"         "sitools"       
+#> [41] "stringr"        "testthat"       "tidyr"          "tidyselect"    
+#> [45] "tidyverse"      "tools"          "usethis"        "xml2"
 ```
 
 <details>
