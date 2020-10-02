@@ -1,4 +1,3 @@
-in_transitionmonitor <- function() grepl("^/bond", here::here())
 if (in_transitionmonitor()) {
   portfolio_name_ref_all = get_portfolio_name()
   working_location <- getwd()
