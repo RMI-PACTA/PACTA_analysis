@@ -9,12 +9,12 @@ Authors@R:
              comment = c(ORCID = "0000-0002-1986-7988")),
       person(given = "Clare",
              family = "Murray",
-             role = c("aut"),
-             email = "clare@2degrees-investing.org"), 
+             role = "aut",
+             email = "clare@2degrees-investing.org"),
       person(given = "Jacob",
              family = "Kastl",
-             role = c("aut"),
-             email = "jacob.kastl@gmail.com"), 
+             role = "aut",
+             email = "jacob.kastl@gmail.com"),
       person(given = "2 Degrees Investing Initiative",
              role = c("cph", "fnd"),
              email = "contact@2degrees-investing.org"))
@@ -23,6 +23,10 @@ Description: For more information visit
 License: MIT + file LICENSE
 Depends: 
     R (>= 3.5)
+Imports: 
+    fs,
+    here,
+    rmarkdown
 Suggests: 
     testthat
 Encoding: UTF-8
