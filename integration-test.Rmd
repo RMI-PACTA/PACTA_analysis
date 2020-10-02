@@ -102,6 +102,7 @@ ensure_empty_directory <- function(directory) {
   }
 
   dir_create(directory)
+  file_create(path(directory, ".gitkeep.txt"))
 
   invisible(directory)
 }

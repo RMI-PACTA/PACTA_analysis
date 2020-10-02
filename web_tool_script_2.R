@@ -51,7 +51,7 @@ port_col_types <- set_col_types(grouping_variables, "ddddccccddclc")
 ald_scen_eq <- get_ald_scen("Equity")
 ald_raw_eq <- get_ald_raw("Equity")
 
-equity_input_file <- paste0(proc_input_path,"/", portfolio_name_ref_all, "/",file_names$portfolio_name,"_equity_portfolio.rda")
+equity_input_file <- paste0(proc_input_path,"/", portfolio_name_ref_all, "/equity_portfolio.rda")
 portfolio_name <- file_names$portfolio_name
 
 if(file.exists(equity_input_file)){
@@ -116,11 +116,9 @@ if(file.exists(equity_input_file)){
     pf_file_results_path <- paste0(results_path,"/", portfolio_name_ref_all, "/")
     if(!dir.exists(pf_file_results_path)){dir.create(pf_file_results_path)}
 
-    if(data_check(company_all_eq)){write_rds(company_all_eq, paste0(pf_file_results_path, portfolio_name,"_Equity_results_company.rda"))}
-    if(data_check(port_all_eq)){write_rds(port_all_eq, paste0(pf_file_results_path, portfolio_name,"_Equity_results_portfolio.rda"))}
-    if(has_map){if(data_check(map_eq)){write_rds(map_eq, paste0(pf_file_results_path, portfolio_name,"_Equity_results_map.rda"))}}
-
-
+    if(data_check(company_all_eq)){write_rds(company_all_eq, paste0(pf_file_results_path, "Equity_results_company.rda"))}
+    if(data_check(port_all_eq)){write_rds(port_all_eq, paste0(pf_file_results_path, "Equity_results_portfolio.rda"))}
+    if(has_map){if(data_check(map_eq)){write_rds(map_eq, paste0(pf_file_results_path, "Equity_results_map.rda"))}}
   }
 }
 
@@ -132,7 +130,7 @@ if(file.exists(equity_input_file)){
 ald_scen_cb <- get_ald_scen("Bonds")
 ald_raw_cb <- get_ald_raw("Bonds")
 
-bonds_inputs_file <- paste0(proc_input_path,"/", portfolio_name_ref_all,"/",file_names$portfolio_name,"_bonds_portfolio.rda")
+bonds_inputs_file <- paste0(proc_input_path,"/", portfolio_name_ref_all,"/bonds_portfolio.rda")
 portfolio_name <- file_names$portfolio_name
 
 if (file.exists(bonds_inputs_file)){
@@ -193,12 +191,9 @@ if (file.exists(bonds_inputs_file)){
     pf_file_results_path <- paste0(results_path,"/", portfolio_name_ref_all, "/")
     if(!dir.exists(pf_file_results_path)){dir.create(pf_file_results_path)}
 
-    if(data_check(company_all_cb)){ write_rds(company_all_cb, paste0(pf_file_results_path, portfolio_name,"_Bonds_results_company.rda"))}
-    if(data_check(port_all_cb)){write_rds(port_all_cb, paste0(pf_file_results_path, portfolio_name,"_Bonds_results_portfolio.rda"))}
-    if(has_map){if(data_check(map_cb)){write_rds(map_cb, paste0(pf_file_results_path, portfolio_name,"_Bonds_results_map.rda"))}}
-
-
-
+    if(data_check(company_all_cb)){ write_rds(company_all_cb, paste0(pf_file_results_path, "Bonds_results_company.rda"))}
+    if(data_check(port_all_cb)){write_rds(port_all_cb, paste0(pf_file_results_path, "Bonds_results_portfolio.rda"))}
+    if(has_map){if(data_check(map_cb)){write_rds(map_cb, paste0(pf_file_results_path, "Bonds_results_map.rda"))}}
   }
 }
 

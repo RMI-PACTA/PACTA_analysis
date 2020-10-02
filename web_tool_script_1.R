@@ -180,12 +180,11 @@ export_audit_information_jsons(audit_file_ = audit_file %>% filter(portfolio_nam
                                portfolio_total_ = portfolio_total %>% filter(portfolio_name == portfolio_name),
                                folder_path = proc_input_path_)
 
-save_if_exists(audit_file, portfolio_name, paste0(proc_input_path_, "/",portfolio_name,"_audit_file.csv"), csv_or_rds = "csv")
+save_if_exists(audit_file, portfolio_name, paste0(proc_input_path_, "/audit_file.csv"), csv_or_rds = "csv")
 
-save_if_exists(portfolio_total, portfolio_name, paste0(proc_input_path_, "/",portfolio_name,"_total_portfolio.rda"))
-save_if_exists(eq_portfolio, portfolio_name, paste0(proc_input_path_, "/",portfolio_name,"_equity_portfolio.rda"))
-save_if_exists(cb_portfolio, portfolio_name, paste0(proc_input_path_, "/",portfolio_name,"_bonds_portfolio.rda"))
-save_if_exists(portfolio_overview, portfolio_name, paste0(proc_input_path_, "/",portfolio_name,"_overview_portfolio.rda"))
-save_if_exists(audit_file, portfolio_name, paste0(proc_input_path_, "/",portfolio_name,"_audit_file.rda"))
-save_if_exists(emissions_totals, portfolio_name, paste0(proc_input_path_, "/",portfolio_name,"_emissions.rda"))
-
+save_if_exists(portfolio_total, portfolio_name, paste0(proc_input_path_, "/total_portfolio.rda"))
+save_if_exists(eq_portfolio, portfolio_name, paste0(proc_input_path_, "/equity_portfolio.rda"))
+save_if_exists(cb_portfolio, portfolio_name, paste0(proc_input_path_, "/bonds_portfolio.rda"))
+save_if_exists(portfolio_overview, portfolio_name, paste0(proc_input_path_, "/overview_portfolio.rda"))
+save_if_exists(audit_file, portfolio_name, paste0(proc_input_path_, "/audit_file.rda"))
+save_if_exists(emissions_totals, portfolio_name, paste0(proc_input_path_, "/emissions.rda"))
