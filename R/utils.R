@@ -8,3 +8,7 @@ setup_project <- function() {
       "dry", "set_portfolio-name-ref-all_working-location_and_web-parameters.R"
   ))
 }
+
+in_transitionmonitor <- function() {
+  grepl("^/bond", here::here())
+}
