@@ -4,7 +4,7 @@ test_integration <- function (input = "integration-test.Rmd") {
 }
 
 setup_project <- function() {
-  source(path(
+  source(fs::path(
       "dry", "set_portfolio-name-ref-all_working-location_and_web-parameters.R"
   ))
 }
