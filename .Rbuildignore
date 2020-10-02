@@ -42,3 +42,5 @@
 ^data/sector_bridge\.csv$
 ^data-raw$
 ^LICENSE\.md$
+^docker\.sh$
+^dry$

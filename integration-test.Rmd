@@ -58,6 +58,12 @@ devtools::session_info()
 
 </details>
 
+## Functions
+
+```{r}
+devtools::load_all()
+```
+
 ## Data
 
 Ensure the example data is available.
@@ -91,7 +97,8 @@ Ensure the required directories exist, and are empty.
 ```{r}
 ensure_empty_directory <- function(directory) {
   if (dir_exists(directory)) {
-    dir_delete(directory)
+    not_hidden <- fs::dir_ls(directory)
+    file_delete(not_hidden)
   }
 
   dir_create(directory)
@@ -142,14 +149,15 @@ show_pattern_in_file <- function(file, pattern) {
   grep(pattern, readLines(file), value = TRUE)
 }
 
-(files <- dir_ls(regexp = "web_tool_script"))
+pattern <- "set_portfolio-name-ref-all_working-location_and_web-parameters.R"
+(files <- dir_ls("dry", regexp = pattern))
 
 this_pattern <- "portfolio_name_ref_all.*<-"
 matched <- map(files, show_pattern_in_file, pattern = this_pattern)
 walk(matched, writeLines)
 
 script_has_this_pattern <- grepl(this_pattern, matched)
-expect_true(all(script_has_this_pattern))
+expect_true(any(script_has_this_pattern))
 ```
 
 **NOTE: If the value of `portfolio_name_ref_all` comes from the user, we should provide an interface for the user to supply it -- so that the user needs not to change the source code.**
@@ -181,6 +189,8 @@ Ensure this other configuration file also exists:
 
 ```{r}
 config_2 <- here("parameter_files", "WebParameters_2dii.yml")
+config_2_copy <- tempfile()
+fs::file_copy(config_2, config_2_copy)
 
 expect_true(file_exists(config_2))
 ```
@@ -309,3 +319,12 @@ In read_file(paste0(file_location, "/fund_data.fst")) :
 ```{r}
 dir_ls(path("..", "pacta-data", "2019Q4", "cleaned_files"))
 ```
+
+## Cleanup
+
+Restore configuration file.
+
+```{r}
+fs::file_copy(config_2_copy, config_2, overwrite = TRUE)
+```
+
