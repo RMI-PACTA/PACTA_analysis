@@ -197,3 +197,5 @@ if (file.exists(bonds_inputs_file)){
   }
 }
 
+
+# source(paste0(stress_test_path, "Stress test model equity plus temporary bonds.R"))
