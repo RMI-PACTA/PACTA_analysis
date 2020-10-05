@@ -1,7 +1,7 @@
 # TODO: 
 # Clean up sectors options
 
-port_col_types <- set_col_types(grouping_variables, "ddddccccddcl")
+port_col_types <- set_col_types(grouping_variables, "ddddccccddclc")
 ##################
 ##### EQUITY #####
 ##################
@@ -169,3 +169,28 @@ gather_and_save_project_results(results_path, aggregation_level = "company",
                                 year_filter = c(start_year,start_year+5), 
                                 allocation_filter = "portfolio_weight", 
                                 portfolios_per_file = 250)	
+
+
+###############################
+##### RENDER DATA QA FILE #####
+###############################
+
+# currently only works if both equity and corporate bonds results exist
+# should this be checking in "/result_path" OR in "/result_path/Meta Investor"??
+if (
+  (c("Bonds_results_company.rda") %in% list.files(results_path) |
+  c("Equity_results_company.rda") %in% list.files(results_path)) &
+  c(paste0(project_name, "_total_portfolio.rda")) %in% list.files(paste0(proc_input_path, "/"))
+) {
+  rmarkdown::render(input = "pacta_data_qa.Rmd",
+                    output_format = "html_document",
+                    output_file = "pacta_data_qa.html",
+                    output_dir = paste0(project_location,"/30_Processed_Inputs/"))
+} else {
+  print("Could not find the required files to generate data QA html document in the project directory. Skipping!")
+}
+
+
+
+
+

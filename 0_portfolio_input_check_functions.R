@@ -82,6 +82,28 @@ clean_portfolio_col_types <- function(portfolio, grouping_variables){
   
   portfolio$currency <- if_else(portfolio$currency == "Euro","EUR",portfolio$currency)
   
+  if(is.character(portfolio$investor_name) == FALSE) {
+    write_log(msg = paste("Wrong variable class for investor_name. Should be character, but is",
+                          class(portfolio$investor_name)))
+  }
+  if(is.character(portfolio$portfolio_name) == FALSE) {
+    write_log(msg = paste("Wrong variable class for portfolio_name Should be character, but is",
+                          class(portfolio$portfolio_name)))
+  }
+  if(is.numeric(portfolio$market_value) == FALSE) {
+    write_log(msg = paste("Wrong variable class for market_value Should be numeric, but is",
+                          class(portfolio$market_value)))
+  }
+  if(is.character(portfolio$currency) == FALSE) {
+    write_log(msg = paste("Wrong variable class for currency Should be character, but is",
+                          class(portfolio$currency)))
+  }
+  if(is.character(portfolio$isin) == FALSE) {
+    write_log(msg = paste("Wrong variable class for isin Should be character, but is",
+                          class(portfolio$isin)))
+  }
+  ###what about number_of_shares???
+  
   portfolio
 }
 
@@ -839,14 +861,19 @@ get_and_clean_fund_data <- function(){
   
   fund_data <- NA
   # Fund Data
-  if(file.exists(paste0(analysis_inputs_path,"/fund_data_",financial_timestamp,".rda"))){
-    fund_data <- readRDS(paste0(analysis_inputs_path,"/fund_data_",financial_timestamp,".rda"))
-  }else if(file.exists(paste0(analysis_inputs_path,"/fund_data_2018Q4.rda"))){
-    fund_data <- readRDS(paste0(analysis_inputs_path,"/fund_data_2018Q4.rda"))
+  if(file.exists(paste0(analysis_inputs_path,"fund_data_",financial_timestamp,".rda"))){
+    fund_data <- readRDS(paste0(analysis_inputs_path,"fund_data_",financial_timestamp,".rda"))
+  } else if(file.exists(paste0(analysis_inputs_path,"fund_data_",financial_timestamp,".rds"))){
+    fund_data <- readRDS(paste0(analysis_inputs_path,"fund_data_",financial_timestamp,".rds"))
+  } else if(file.exists(paste0(analysis_inputs_path,"fund_data_2018Q4.rda"))){
+    fund_data <- readRDS(paste0(analysis_inputs_path,"fund_data_2018Q4.rda"))
     print("Old Fund Data being used. Replace FundsData2018Q4 or check name of file.")
-  }else if(file.exists(paste0(analysis_inputs_path, "/SFC_26052020_funds.csv"))){
-    fund_data <- read_csv(paste0(analysis_inputs_path, "/SFC_26052020_funds.csv"))
-    print("2020Q2 SFC fund data being used")
+  # }else if(file.exists(paste0(analysis_inputs_path, "/SFC_26052020_funds.csv"))){
+  #   fund_data <- read_csv(paste0(analysis_inputs_path, "/SFC_26052020_funds.csv"))
+  #   print("2020Q2 SFC fund data being used")
+  }else if(file.exists(paste0(analysis_inputs_path, "Liechtenstein_p2020_fund_holdings_2019Q4.csv"))){
+    fund_data <- read_csv(paste0(analysis_inputs_path, "Liechtenstein_p2020_fund_holdings_2019Q4.csv"))
+    print("2019Q4 (?) Liechtenstein fund data being used")
   }else{
     if(!data_check(fund_data)){
       warning("No fund data available")}
@@ -875,7 +902,13 @@ get_and_clean_fin_data <- function(fund_data){
   fin_data_raw <- fin_data_raw %>%
     filter(!(isin %in% rm_duplicates))
   
-  if(!unique(fin_data_raw$financial_timestamp) == financial_timestamp){print("Financial timestamp not equal")}
+  # remove unclear duplicates from raw financial data. This should be moved to DataStore.
+  rm_duplicates <- read_csv("non_distinct_isins.csv")
+  rm_duplicates <- rm_duplicates %>% distinct(isin) %>% pull(isin)
+  fin_data_raw <- fin_data_raw %>%
+    filter(!(isin %in% rm_duplicates))
+
+    if(!unique(fin_data_raw$financial_timestamp) == financial_timestamp){print("Financial timestamp not equal")}
   
   overrides <- read_csv("data/fin_sector_overrides.csv",
                         col_types = "ccdc")
@@ -925,6 +958,8 @@ get_and_clean_fin_data <- function(fund_data){
       sector_override,
       is_sb
     ) %>% 
+    mutate(unit_share_price = round(unit_share_price, 6),
+           exchange_rate_usd = round(exchange_rate_usd, 7)) %>% 
     distinct()
   
   ### TEST
@@ -941,7 +976,9 @@ add_bics_sector <- function(fin_data){
 
   bics_bridge <- read_csv("data/bics_bridge.csv")
 
+
   fin_data <- left_join(fin_data, bics_bridge, by = c("security_bics_subgroup" = "bics_subgroup"))
+
 
 }
 
@@ -977,6 +1014,7 @@ get_and_clean_company_fin_data <- function(){
     company_id, company_name, bloomberg_id, country_of_domicile, corporate_bond_ticker, bics_subgroup,
     icb_subgroup, mapped_sector, has_asset_level_data, has_assets_in_matched_sector, sectors_with_assets, current_shares_outstanding_all_classes, 
     market_cap, bond_debt_out, financial_timestamp
+
   )
   
   sector_bridge <- read_csv("data/sector_bridge.csv", col_types = "ccc")
@@ -1147,7 +1185,8 @@ create_audit_chart <- function(audit_file, proc_input_path){
   
   ## GRAPH VALUES
   base_size <- 12
-  base_family <- "Clear Sans"
+  #base_family <- "Clear Sans"
+  base_family <- "Arial"
   font_color <- "#3D3D3C"
   
   #flag.Numbers.Colors <- brewer.pal(n = 8, name = "RdBu")
@@ -1518,17 +1557,3 @@ add_other_to_sector_classifications <- function(audit){
   audit
 }
 
-
-# add_bics_sector <- function(portfolio){
-#   #join in bics sectors for EQ and CB via bics_bridge
-#   bics_bridge <- read_csv("data/bics_bridge.csv")
-#   portfolio <- portfolio %>% 
-#     left_join(bics_bridge, by = c("security_bics_subgroup" = "bics_subgroup"))
-#   
-#   if ("bics_sector.x" %in% colnames(portfolio)) {
-#     portfolio <- portfolio %>% select(-bics_sector.x) %>% rename(bics_sector = bics_sector.y)
-#   }
-  # 
-  # return(portfolio)
-  # 
-# }
