@@ -364,3 +364,25 @@ write_log <- function(msg, ...) {
 
 
 
+# checks validity of project config
+check_valid_cfg <- function(cfg){
+  stopifnot(exists("cfg")  == T)
+  stopifnot(cfg %>% class() == "list")
+  stopifnot(cfg %>% length() == 2)
+  
+  stopifnot(cfg$project_name %>% is.character() == T)
+  stopifnot(cfg$project_internal$twodii_internal %>% is.logical() == T)
+  
+  invisible(cfg)
+}
+
+
+#write error log for input portfolio - msg should be a string containing the error message
+write_log <- function(msg, ...) {
+  composed <- paste(
+    as.character(Sys.time()),
+    as.character(msg),
+    ...
+  )
+  write(composed, file = paste0(project_location,"/00_Log_Files/error_messages.txt"), append = TRUE)
+}
