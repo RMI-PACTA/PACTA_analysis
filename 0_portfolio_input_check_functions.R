@@ -839,14 +839,19 @@ get_and_clean_fund_data <- function(){
 
   fund_data <- NA
   # Fund Data
-  if(file.exists(paste0(analysis_inputs_path,"/fund_data_",financial_timestamp,".rda"))){
-    fund_data <- readRDS(paste0(analysis_inputs_path,"/fund_data_",financial_timestamp,".rda"))
-  }else if(file.exists(paste0(analysis_inputs_path,"/fund_data_2018Q4.rda"))){
-    fund_data <- readRDS(paste0(analysis_inputs_path,"/fund_data_2018Q4.rda"))
+  if(file.exists(paste0(analysis_inputs_path,"fund_data_",financial_timestamp,".rda"))){
+    fund_data <- readRDS(paste0(analysis_inputs_path,"fund_data_",financial_timestamp,".rda"))
+  } else if(file.exists(paste0(analysis_inputs_path,"fund_data_",financial_timestamp,".rds"))){
+    fund_data <- readRDS(paste0(analysis_inputs_path,"fund_data_",financial_timestamp,".rds"))
+  } else if(file.exists(paste0(analysis_inputs_path,"fund_data_2018Q4.rda"))){
+    fund_data <- readRDS(paste0(analysis_inputs_path,"fund_data_2018Q4.rda"))
     print("Old Fund Data being used. Replace FundsData2018Q4 or check name of file.")
-  }else if(file.exists(paste0(analysis_inputs_path, "/SFC_26052020_funds.csv"))){
-    fund_data <- read_csv(paste0(analysis_inputs_path, "/SFC_26052020_funds.csv"))
-    print("2020Q2 SFC fund data being used")
+  # }else if(file.exists(paste0(analysis_inputs_path, "/SFC_26052020_funds.csv"))){
+  #   fund_data <- read_csv(paste0(analysis_inputs_path, "/SFC_26052020_funds.csv"))
+  #   print("2020Q2 SFC fund data being used")
+  }else if(file.exists(paste0(analysis_inputs_path, "Liechtenstein_p2020_fund_holdings_2019Q4.csv"))){
+    fund_data <- read_csv(paste0(analysis_inputs_path, "Liechtenstein_p2020_fund_holdings_2019Q4.csv"))
+    print("2019Q4 (?) Liechtenstein fund data being used")
   }else{
     if(!data_check(fund_data)){
       warning("No fund data available")}
@@ -1147,7 +1152,8 @@ create_audit_chart <- function(audit_file, proc_input_path){
 
   ## GRAPH VALUES
   base_size <- 12
-  base_family <- "Clear Sans"
+  #base_family <- "Clear Sans"
+  base_family <- "Arial"
   font_color <- "#3D3D3C"
 
   #flag.Numbers.Colors <- brewer.pal(n = 8, name = "RdBu")

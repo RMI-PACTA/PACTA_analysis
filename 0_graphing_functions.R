@@ -136,7 +136,7 @@ define_benchmarks <- function(){
 
     eq_market <<- read_rds(paste0(portcheck_v2_path,"/10_Projects/INDEX_2019/40_Results/Equity_results_portfolio.rda")) %>%
       filter(portfolio_name == eq_market_ref)
-    cb_market <<- read_rds(paste0(portcheck_v2_path,"/10_Projects/INDEX_2019/40_Results/Bonds_results_portfolio.rda"))%>%
+    cb_market <<- read_rds(paste0(portcheck_v2_path,"/10_Projects/0_Indices/40_Results/Bonds_results_portfolio.rda"))%>%
       filter(portfolio_name == cb_market_ref)
     
     
@@ -529,8 +529,8 @@ define_test_variables <- function(test_list){
 
 graph_values <- function(){
   
-  textfont <<- "Calibri"
-  windowsFonts(Calibri=windowsFont(textfont))
+  textfont <<- "Arial"
+  #windowsFonts(Calibri=windowsFont(textfont))
   
   #orangeish
   RenewablesColour <<- "#feedde"
@@ -2856,6 +2856,7 @@ ScopeOfAnalysis <- function(plotnumber, explicit_filename = ""){
              fill=list(valid_value_usd = 0)) %>%
     unique()
   
+  # this seems unnecessary, the following typecasts could be made the tidy way
   over <- as.data.frame(over)
   orderofchart <- c(Bond_translation,EquityTitle,OthersTitle) #
   over$asset_type <- factor(over$asset_type,levels=orderofchart)
@@ -2895,7 +2896,7 @@ ScopeOfAnalysis <- function(plotnumber, explicit_filename = ""){
                        breaks = seq(0, annotate.position$maxsumValueUSD, by = breaks_interval*2)) + #breaks = scales::pretty_breaks(n = 3)) +   #
     # limits = c(0, annotate.position$maxsumValueUSD+0.3*annotate.position$maxsumValueUSD)) +     #
     guides(fill=guide_legend(nrow=1, byrow = TRUE, reverse = TRUE))+
-    theme_barcharts() +
+    theme_barcharts(base_family = textfont) +
     theme(plot.title = element_text(colour="#265b9b",size=11, hjust = 1),
           legend.position = "bottom",
           legend.text=element_text(size=textsize),
