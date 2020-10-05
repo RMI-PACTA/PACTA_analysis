@@ -188,4 +188,3 @@ save_if_exists(cb_portfolio, portfolio_name, paste0(proc_input_path_, "/bonds_po
 save_if_exists(portfolio_overview, portfolio_name, paste0(proc_input_path_, "/overview_portfolio.rda"))
 save_if_exists(audit_file, portfolio_name, paste0(proc_input_path_, "/audit_file.rda"))
 save_if_exists(emissions_totals, portfolio_name, paste0(proc_input_path_, "/emissions.rda"))
-
