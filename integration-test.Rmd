@@ -37,13 +37,6 @@ suppressPackageStartupMessages(library(fs))
 library(here)
 ```
 
-```{r}
-library(conflicted)
-conflicted::conflict_prefer("filter", "dplyr")
-conflicted::conflict_prefer("flatten_chr", "purrr")
-conflicted::conflict_prefer("lag", "dplyr")
-```
-
 All packages detected in the directory PACTA\_analysis:
 
 ```{r}
