@@ -197,6 +197,6 @@ if (file.exists(bonds_inputs_file)){
   }
 }
 
-invisible(set_portfolio_parameters(file_path = paste0(par_file_path,"/",portfolio_name_ref_all,"_PortfolioParameters.yml")))
+invisible(set_portfolio_parameters(file_path = fs::path(par_file_path,paste0(portfolio_name_ref_all,"_PortfolioParameters.yml"))))
 
 source(paste0(stress_test_path, "web_tool_stress_test.R"))
