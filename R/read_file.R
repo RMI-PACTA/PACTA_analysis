@@ -1,9 +1,10 @@
-#' Read files with extension .fst, .csv, and .rda (.rds and .RData)
+#' Read files with supported extensions
 #'
-#' @param file_name Character; path to a file storing a single object.
+#' @param path Character; path to a file storing a single object.
 #'
-#' @noRd
 #' @examples
+#' supported_extensions()
+#'
 #' # Odd case: Read a file saved as .rds but with extension .rda
 #' path <- tempfile(fileext = ".rda")
 #'
@@ -21,6 +22,7 @@
 #' save(data1, data2, file = path)
 #' # Fails
 #' try(read_file(path))
+#' @noRd
 read_file <- function(path) {
   # FIXME: A warning seems like a bad idea. It should likely be an error
   if (!fs::file_exists(path)) {
