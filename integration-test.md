@@ -29,7 +29,6 @@ suppressPackageStartupMessages(library(renv))
 suppressPackageStartupMessages(library(glue))
 suppressPackageStartupMessages(library(fs))
 library(here)
-#> here() starts at /home/mauro/git/PACTA_analysis
 ```
 
 All packages detected in the directory PACTA\_analysis:
