@@ -1,3 +1,4 @@
+devtools::load_all()
 
 ### Portfolio cleaning functions
 read_raw_portfolio_file <- function(project_name){
@@ -219,7 +220,7 @@ map_security_sectors <- function(fin_data, sector_bridge){
   fin_data <- fin_data %>% bind_rows(fin_data_na)
   
   fin_data <- fin_data %>% select(-security_mapped_sector) %>% rename(security_mapped_sector = sector)
-  
+
   fin_data %>% group_by(security_mapped_sector) %>% filter(is.na(security_mapped_sector)) %>% summarise(count = n())
   fin_data_na <- fin_data %>% filter(is.na(security_mapped_sector))
   
@@ -372,11 +373,10 @@ check_fin_mapped_sectors <- function(fin_data){
                                               TRUE ~ security_mapped_sector))
   
   actual_sectors <- unique(fin_data$security_mapped_sector)
-  
   if(any(!actual_sectors %in% c(sector_list, other_sector_list, "Other"))){
     stop("Additional Sectors in fin_data")
   }
-  
+
   fin_data
   
 }
@@ -868,7 +868,7 @@ get_and_clean_fin_data <- function(fund_data){
   
   # Financial Data
   fin_data_raw <- read_file(paste0(analysis_inputs_path,"/security_financial_data.rda")) %>% as_tibble()
-  
+
   # remove unclear duplicates from raw financial data. This should be moved to DataStore.
   rm_duplicates <- read_csv("non_distinct_isins.csv")
   rm_duplicates <- rm_duplicates %>% distinct(isin) %>% pull(isin)
@@ -1261,7 +1261,7 @@ get_average_emission_data <- function(inc_emission_factors){
   average_sector_intensity <- data.frame()
   
   if(inc_emission_factors){
-    
+
     average_sector_intensity <- read_file(paste0(analysis_inputs_path,"average_sector_intensity.rda"))
   }
   return(average_sector_intensity)
@@ -1272,7 +1272,7 @@ get_company_emission_data <- function(inc_emission_factors){
   company_emissions <- data.frame()
   
   if(inc_emission_factors){
-    
+
     company_emissions <- read_file(paste0(analysis_inputs_path,"company_emissions.rda"))
   }
   return(company_emissions)
