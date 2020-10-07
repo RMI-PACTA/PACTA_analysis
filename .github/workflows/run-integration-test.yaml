@@ -65,4 +65,4 @@ jobs:
       - name: Run integration test
         run: |
           cd PACTA_analysis
-          Rscript -e "rmarkdown::render('integration-test.Rmd')"
+          Rscript -e "knitr::knit('integration-test.Rmd')"
