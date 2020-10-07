@@ -4,7 +4,7 @@
 #'
 #' @noRd
 #' @examples
-#' # Odd case: .RData saved with extension .rda
+#' # Odd case: Read a file saved as .rds but with extension .rda
 #' path <- tempfile(fileext = ".rda")
 #'
 #' data1 <- data.frame(x = 1)
