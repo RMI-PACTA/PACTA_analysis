@@ -33,23 +33,28 @@ read_file <- function(path) {
   extension <- fs::path_ext(path)
   switch(
     extension,
-    "rda" = read_rda(path),
-    "fst" = fst::read_fst(path),
     "csv" = readr::read_csv(path),
+    "fst" = fst::read_fst(path),
+    "rda" = read_rda(path),
+    "rds" = readr::read_rds(path),
     rlang::abort("Extension is supported but something unexpected happened.")
   )
 }
 
 abort_unsupported_extension <- function(path) {
-  if (!supported_extension(path)) {
+  if (!extension_is_supported(path)) {
     rlang::abort(glue::glue("Unsupported `path` extension: {path}"))
   }
 
   invisible(path)
 }
 
-supported_extension <- function(path) {
-  fs::path_ext(path) %in% c("rda", "csv", "fst")
+extension_is_supported <- function(path) {
+  fs::path_ext(path) %in% supported_extensions()
+}
+
+supported_extensions <- function() {
+  c("csv", "fst", "rda", "rds")
 }
 
 read_rda <- function(file_name) {

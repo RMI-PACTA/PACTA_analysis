@@ -57,3 +57,12 @@ test_that("with inexistent file, throws a warning", {
   # FIXME: A warning seems like a bad idea. It should likely be an error
   expect_warning(read_file("dont.exist"), "not exist")
 })
+
+test_that("can read an .rds file", {
+  rds <- withr::local_tempfile(fileext = ".rds")
+
+  dataset <- data.frame(x = 1)
+  saveRDS(dataset, file = rds)
+
+  expect_equal(read_file(rds), dataset)
+})
