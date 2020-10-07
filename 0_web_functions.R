@@ -78,6 +78,7 @@ set_web_parameters <- function(file_path){
   project_location_ext <<- cfg$paths$project_location_ext
   data_location_ext <<- cfg$paths$data_location_ext
   template_path <<- cfg$paths$template_location
+  stress_test_path <<- cfg$paths$stress_test_location
 
   project_name <<- cfg$parameters$project_name
   twodii_internal <<- cfg$parameters$twodii_internal

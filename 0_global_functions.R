@@ -21,27 +21,6 @@ is_blank_na <- function(x){
   flag
 }
 
-read_file <- function(file_name){
-  # This function checks the file type and reads it in. 
-  # This should allow switching between fst, rda and csv to happen more simply
-  
-  extension_type = substring(file_name,nchar(file_name)-4+1)
-  if (!extension_type %in% c(".rda", ".csv", ".fst")){stop("Can't read in file. File extension type not applicable.")}  
-  
-  df <- NA
-  
-  if(file.exists(file_name)){
-    
-    if (extension_type == ".rda"){df <- readr::read_rds(file_name)}
-    if (extension_type == ".fst"){df <- fst::read_fst(file_name)}
-    if (extension_type == ".csv"){df <- readr::read_csv(file_name)}
-  }else{
-    warning(paste0(file_name, " does not exist"))
-  }
-  
-  return(df)
-}
-
 save_file <- function(df, file_name){
   
   

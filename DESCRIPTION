@@ -25,8 +25,13 @@ Depends:
     R (>= 3.5)
 Imports: 
     fs,
+    fst,
+    glue,
     here,
-    rmarkdown
+    readr,
+    rlang,
+    rmarkdown,
+    withr
 Suggests: 
     testthat
 Encoding: UTF-8
