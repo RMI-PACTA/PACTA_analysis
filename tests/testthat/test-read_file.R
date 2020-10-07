@@ -54,7 +54,6 @@ test_that("with unsoported extension in path, errors gracefully", {
 })
 
 test_that("with inexistent file, throws a warning", {
-  # FIXME: A warning seems like a bad idea. It should likely be an error
   expect_warning(read_file("dont.exist"), "not exist")
 })
 
