@@ -35,7 +35,7 @@ create_portfolio_subfolders <- function(portfolio_name_ref_all){
 
   locs_to_create <- folders %>%
     purrr::map(~ paste0(project_location, "/", .x, "/", portfolio_name_ref_all)) %>%
-    flatten_chr()
+    purrr::flatten_chr()
 
   locs_to_create %>%
     purrr::map(~ dir.create(.x))

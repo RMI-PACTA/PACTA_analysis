@@ -1,6 +1,6 @@
 Integration test: Run the web tool
 ================
-2020-10-06
+2020-10-07
 
 ## Introduction
 
@@ -20,15 +20,84 @@ instructions](https://bit.ly/2RCRJn7). It is useful in three ways:
 Packages used in this file:
 
 ``` r
-suppressPackageStartupMessages(library(tidyverse))
-suppressPackageStartupMessages(library(devtools))
-suppressPackageStartupMessages(library(testthat))
-suppressPackageStartupMessages(library(config))
-suppressPackageStartupMessages(library(rlang))
-suppressPackageStartupMessages(library(renv))
-suppressPackageStartupMessages(library(glue))
-suppressPackageStartupMessages(library(fs))
+library(tidyverse)
+#> ── Attaching packages ──────────────────── tidyverse 1.3.0 ──
+#> ✓ ggplot2 3.3.2     ✓ purrr   0.3.4
+#> ✓ tibble  3.0.3     ✓ dplyr   1.0.2
+#> ✓ tidyr   1.1.2     ✓ stringr 1.4.0
+#> ✓ readr   1.3.1     ✓ forcats 0.5.0
+#> ── Conflicts ─────────────────────── tidyverse_conflicts() ──
+#> x dplyr::filter() masks stats::filter()
+#> x dplyr::lag()    masks stats::lag()
+library(devtools)
+#> Loading required package: usethis
+library(testthat)
+#> 
+#> Attaching package: 'testthat'
+#> The following object is masked from 'package:devtools':
+#> 
+#>     test_file
+#> The following object is masked from 'package:dplyr':
+#> 
+#>     matches
+#> The following object is masked from 'package:purrr':
+#> 
+#>     is_null
+#> The following object is masked from 'package:tidyr':
+#> 
+#>     matches
+library(config)
+#> 
+#> Attaching package: 'config'
+#> The following objects are masked from 'package:base':
+#> 
+#>     get, merge
+library(rlang)
+#> 
+#> Attaching package: 'rlang'
+#> The following objects are masked from 'package:testthat':
+#> 
+#>     is_false, is_null, is_true
+#> The following objects are masked from 'package:purrr':
+#> 
+#>     %@%, as_function, flatten, flatten_chr, flatten_dbl, flatten_int,
+#>     flatten_lgl, flatten_raw, invoke, list_along, modify, prepend,
+#>     splice
+library(renv)
+#> 
+#> Attaching package: 'renv'
+#> The following object is masked from 'package:rlang':
+#> 
+#>     modify
+#> The following object is masked from 'package:devtools':
+#> 
+#>     install
+#> The following object is masked from 'package:purrr':
+#> 
+#>     modify
+#> The following object is masked from 'package:stats':
+#> 
+#>     update
+#> The following objects are masked from 'package:utils':
+#> 
+#>     history, upgrade
+#> The following objects are masked from 'package:base':
+#> 
+#>     load, remove
+library(glue)
+#> 
+#> Attaching package: 'glue'
+#> The following object is masked from 'package:dplyr':
+#> 
+#>     collapse
+library(fs)
 library(here)
+#> here() starts at /home/mauro/git/PACTA_analysis
+library(conflicted)
+conflicted::conflict_prefer("filter", "dplyr")
+#> [conflicted] Will prefer dplyr::filter over any other package
+conflicted::conflict_prefer("lag", "dplyr")
+#> [conflicted] Will prefer dplyr::lag over any other package
 ```
 
 All packages detected in the directory PACTA\_analysis:
@@ -41,19 +110,19 @@ detect_packages <- function() {
 
 detect_packages()
 #> Finding R package dependencies ... Done!
-#>  [1] "assertthat"     "base"           "config"         "countrycode"   
-#>  [5] "cowplot"        "devtools"       "dplyr"          "extrafont"     
-#>  [9] "fs"             "fst"            "ggforce"        "ggmap"         
-#> [13] "ggplot2"        "ggrepel"        "ggthemes"       "glue"          
-#> [17] "grid"           "gridExtra"      "here"           "janitor"       
-#> [21] "jsonlite"       "knitr"          "lme4"           "matrixStats"   
-#> [25] "PACTA.analysis" "plyr"           "purrr"          "R"             
-#> [29] "r2dii.utils"    "RColorBrewer"   "readr"          "readxl"        
-#> [33] "renv"           "reshape2"       "rlang"          "rmarkdown"     
-#> [37] "rstudioapi"     "rworldmap"      "scales"         "sitools"       
-#> [41] "stringr"        "testthat"       "tidyr"          "tidyselect"    
-#> [45] "tidyverse"      "tools"          "usethis"        "withr"         
-#> [49] "xml2"
+#>  [1] "assertthat"     "base"           "config"         "conflicted"    
+#>  [5] "countrycode"    "cowplot"        "devtools"       "dplyr"         
+#>  [9] "extrafont"      "fs"             "fst"            "ggforce"       
+#> [13] "ggmap"          "ggplot2"        "ggrepel"        "ggthemes"      
+#> [17] "glue"           "grid"           "gridExtra"      "here"          
+#> [21] "janitor"        "jsonlite"       "knitr"          "lme4"          
+#> [25] "matrixStats"    "PACTA.analysis" "plyr"           "purrr"         
+#> [29] "R"              "r2dii.utils"    "RColorBrewer"   "readr"         
+#> [33] "readxl"         "renv"           "reshape2"       "rlang"         
+#> [37] "rmarkdown"      "rstudioapi"     "rworldmap"      "scales"        
+#> [41] "sitools"        "stringr"        "testthat"       "tidyr"         
+#> [45] "tidyselect"     "tidyverse"      "tools"          "usethis"       
+#> [49] "withr"          "xml2"
 ```
 
 <details>
@@ -72,7 +141,7 @@ devtools::session_info()
 #>  collate  en_US.UTF-8                 
 #>  ctype    en_US.UTF-8                 
 #>  tz       America/Chicago             
-#>  date     2020-10-06                  
+#>  date     2020-10-07                  
 #> 
 #> ─ Packages ───────────────────────────────────────────────────────────────────
 #>  package     * version     date       lib source                             
@@ -85,6 +154,7 @@ devtools::session_info()
 #>  cli           2.0.2       2020-02-28 [1] CRAN (R 4.0.0)                     
 #>  colorspace    1.4-1       2019-03-18 [1] CRAN (R 4.0.0)                     
 #>  config      * 0.3         2018-03-27 [1] CRAN (R 4.0.0)                     
+#>  conflicted  * 1.0.4       2019-06-21 [1] CRAN (R 4.0.0)                     
 #>  crayon        1.3.4.9000  2020-09-03 [1] Github (r-lib/crayon@6b3f0c6)      
 #>  DBI           1.1.0       2019-12-15 [1] CRAN (R 4.0.0)                     
 #>  dbplyr        1.4.4       2020-05-27 [1] CRAN (R 4.0.0)                     
@@ -225,6 +295,7 @@ parent directory:
   - “2DegreesInvesting/pacta-data/”
   - “2DegreesInvesting/create\_interactive\_report/”
   - “2DegreesInvesting/PACTA\_analysis/”
+  - “2DegreesInvesting/StressTestingModelDev/”
 
 <!-- end list -->
 
@@ -234,7 +305,7 @@ is_sibling <- function(x) {
   dir_exists(path(parent, x))
 }
 
-repos <- c("pacta-data", "create_interactive_report", "PACTA_analysis")
+repos <- c("pacta-data", "create_interactive_report", "PACTA_analysis", "StressTestingModelDev")
 all_siblings <- all(map_lgl(repos, is_sibling))
 
 expect_true(all_siblings)
@@ -331,7 +402,8 @@ make_paths_portable <- function(x) {
   x %>% 
     root_field_path("project_location_ext", pattern = "PACTA_analysis") %>% 
     root_field_path("data_location_ext", pattern = "pacta-data") %>% 
-    root_field_path("template_location", pattern = "create_interactive_report")
+    root_field_path("template_location", pattern = "create_interactive_report") %>% 
+    root_field_path("stress_test_location", pattern = "StressTestingModelDev")
 }
 
 root_field_path <- function(x, field, pattern) {
@@ -362,6 +434,7 @@ look_into(config_2)
 #>         project_location_ext: /home/mauro/git/PACTA_analysis/
 #>         data_location_ext: /home/mauro/git/pacta-data/2019Q4/
 #>         template_location: /home/mauro/git/create_interactive_report/
+#>         stress_test_location: /home/mauro/git/StressTestingModelDev/
 #>     parameters:
 #>         project_name: working_dir
 #>         twodii_internal: FALSE
@@ -385,8 +458,7 @@ out_1 <- path("working_dir", "30_Processed_Inputs")
 
 expect_false(dir_has_files(out_1))
 source("web_tool_script_1.R")
-#> Warning in read_file(paste0(file_location, "/fund_data.fst")): /home/mauro/git/
-#> pacta-data/2019Q4/cleaned_files/fund_data.fst does not exist
+#> Warning: The `path` does not exist: {path}
 #> [1] "No Equity in portfolio"
 expect_true(dir_has_files(out_1))
 ```
@@ -405,6 +477,201 @@ source("web_tool_script_2.R")
 #> Warning in dir.create(.x): '/home/mauro/git/PACTA_analysis/working_dir//
 #> 50_Outputs/TestPortfolio_Input' already exists
 #> [1] "1: Test"
+#> [1] "Autmotive scenario values for 2035 and 2040 are recalculated as there was an error in the scenario data (we now extrapolate using 2025 and 2030 figures. Check scenario data if error is still present, might be fixed already"
+#> [1] "Autmotive scenario values for 2035 and 2040 are recalculated as there was an error in the scenario data (we now extrapolate using 2025 and 2030 figures. Check scenario data if error is still present, might be fixed already"
+#> [1] "Autmotive scenario values for 2035 and 2040 are recalculated as there was an error in the scenario data (we now extrapolate using 2025 and 2030 figures. Check scenario data if error is still present, might be fixed already"
+#> [1] "Autmotive scenario values for 2035 and 2040 are recalculated as there was an error in the scenario data (we now extrapolate using 2025 and 2030 figures. Check scenario data if error is still present, might be fixed already"
+#> [1] "Autmotive scenario values for 2035 and 2040 are recalculated as there was an error in the scenario data (we now extrapolate using 2025 and 2030 figures. Check scenario data if error is still present, might be fixed already"
+#> [1] "Autmotive scenario values for 2035 and 2040 are recalculated as there was an error in the scenario data (we now extrapolate using 2025 and 2030 figures. Check scenario data if error is still present, might be fixed already"
+#> [1] "Autmotive scenario values for 2035 and 2040 are recalculated as there was an error in the scenario data (we now extrapolate using 2025 and 2030 figures. Check scenario data if error is still present, might be fixed already"
+#> [1] "Autmotive scenario values for 2035 and 2040 are recalculated as there was an error in the scenario data (we now extrapolate using 2025 and 2030 figures. Check scenario data if error is still present, might be fixed already"
+#> [1] "Autmotive scenario values for 2035 and 2040 are recalculated as there was an error in the scenario data (we now extrapolate using 2025 and 2030 figures. Check scenario data if error is still present, might be fixed already"
+#> Warning: `data_frame()` is deprecated as of tibble 1.1.0.
+#> Please use `tibble()` instead.
+#> This warning is displayed once every 8 hours.
+#> Call `lifecycle::last_warnings()` to see where this warning was generated.
+#> [1] "No Equity Portfolio Data available. Skipping!"
+#> [1] "Calculate Stress Test for Bonds Portfolio"
+#> [1] "Integral method selected for calculation of late&sudden production scenarios. \n          Production shocks are function of scenarios (and possibly of company production plans if enabled), they will be calculated in function set_ls_trajectory"
+#> [1] TRUE
+#> Warning in data.table::dcast(., investor_name + portfolio_name + id +
+#> company_name + : The dcast generic in data.table has been passed a grouped_df
+#> and will attempt to redirect to the reshape2::dcast; please note that reshape2
+#> is deprecated, and this redirection is now deprecated as well. Please do this
+#> redirection yourself like reshape2::dcast(.). In the next version, this warning
+#> will become an error.
+#> Warning: `mutate_()` is deprecated as of dplyr 0.7.0.
+#> Please use `mutate()` instead.
+#> See vignette('programming') for more help
+#> This warning is displayed once every 8 hours.
+#> Call `lifecycle::last_warnings()` to see where this warning was generated.
+#> Warning in data.table::melt(., id.vars = c("scenario_name", "year_of_shock", :
+#> The melt generic in data.table has been passed a tbl_df and will attempt
+#> to redirect to the relevant reshape2 method; please note that reshape2 is
+#> deprecated, and this redirection is now deprecated as well. To continue using
+#> melt methods from reshape2 while both libraries are attached, e.g. melt.list,
+#> you can prepend the namespace like reshape2::melt(.). In the next version, this
+#> warning will become an error.
+#> [1] "Integral method selected for calculation of late&sudden production scenarios. \n          Production shocks are function of scenarios (and possibly of company production plans if enabled), they will be calculated in function set_ls_trajectory"
+#> [1] TRUE
+#> Warning in data.table::dcast(., investor_name + portfolio_name + id +
+#> company_name + : The dcast generic in data.table has been passed a grouped_df
+#> and will attempt to redirect to the reshape2::dcast; please note that reshape2
+#> is deprecated, and this redirection is now deprecated as well. Please do this
+#> redirection yourself like reshape2::dcast(.). In the next version, this warning
+#> will become an error.
+
+#> Warning in data.table::dcast(., investor_name + portfolio_name + id +
+#> company_name + : The melt generic in data.table has been passed a tbl_df and
+#> will attempt to redirect to the relevant reshape2 method; please note that
+#> reshape2 is deprecated, and this redirection is now deprecated as well. To
+#> continue using melt methods from reshape2 while both libraries are attached,
+#> e.g. melt.list, you can prepend the namespace like reshape2::melt(.). In the
+#> next version, this warning will become an error.
+#> [1] "Integral method selected for calculation of late&sudden production scenarios. \n          Production shocks are function of scenarios (and possibly of company production plans if enabled), they will be calculated in function set_ls_trajectory"
+#> [1] TRUE
+#> Warning in data.table::dcast(., investor_name + portfolio_name + id +
+#> company_name + : The dcast generic in data.table has been passed a grouped_df
+#> and will attempt to redirect to the reshape2::dcast; please note that reshape2
+#> is deprecated, and this redirection is now deprecated as well. Please do this
+#> redirection yourself like reshape2::dcast(.). In the next version, this warning
+#> will become an error.
+
+#> Warning in data.table::dcast(., investor_name + portfolio_name + id +
+#> company_name + : The melt generic in data.table has been passed a tbl_df and
+#> will attempt to redirect to the relevant reshape2 method; please note that
+#> reshape2 is deprecated, and this redirection is now deprecated as well. To
+#> continue using melt methods from reshape2 while both libraries are attached,
+#> e.g. melt.list, you can prepend the namespace like reshape2::melt(.). In the
+#> next version, this warning will become an error.
+#> [1] "Integral method selected for calculation of late&sudden production scenarios. \n          Production shocks are function of scenarios (and possibly of company production plans if enabled), they will be calculated in function set_ls_trajectory"
+#> [1] TRUE
+#> Warning in data.table::dcast(., investor_name + portfolio_name + id +
+#> company_name + : The dcast generic in data.table has been passed a grouped_df
+#> and will attempt to redirect to the reshape2::dcast; please note that reshape2
+#> is deprecated, and this redirection is now deprecated as well. Please do this
+#> redirection yourself like reshape2::dcast(.). In the next version, this warning
+#> will become an error.
+
+#> Warning in data.table::dcast(., investor_name + portfolio_name + id +
+#> company_name + : The melt generic in data.table has been passed a tbl_df and
+#> will attempt to redirect to the relevant reshape2 method; please note that
+#> reshape2 is deprecated, and this redirection is now deprecated as well. To
+#> continue using melt methods from reshape2 while both libraries are attached,
+#> e.g. melt.list, you can prepend the namespace like reshape2::melt(.). In the
+#> next version, this warning will become an error.
+#> [1] "Integral method selected for calculation of late&sudden production scenarios. \n          Production shocks are function of scenarios (and possibly of company production plans if enabled), they will be calculated in function set_ls_trajectory"
+#> [1] TRUE
+#> Warning in data.table::dcast(., investor_name + portfolio_name + id +
+#> company_name + : The dcast generic in data.table has been passed a grouped_df
+#> and will attempt to redirect to the reshape2::dcast; please note that reshape2
+#> is deprecated, and this redirection is now deprecated as well. Please do this
+#> redirection yourself like reshape2::dcast(.). In the next version, this warning
+#> will become an error.
+
+#> Warning in data.table::dcast(., investor_name + portfolio_name + id +
+#> company_name + : The melt generic in data.table has been passed a tbl_df and
+#> will attempt to redirect to the relevant reshape2 method; please note that
+#> reshape2 is deprecated, and this redirection is now deprecated as well. To
+#> continue using melt methods from reshape2 while both libraries are attached,
+#> e.g. melt.list, you can prepend the namespace like reshape2::melt(.). In the
+#> next version, this warning will become an error.
+#> [1] "Integral method selected for calculation of late&sudden production scenarios. \n          Production shocks are function of scenarios (and possibly of company production plans if enabled), they will be calculated in function set_ls_trajectory"
+#> [1] TRUE
+#> Warning in data.table::dcast(., investor_name + portfolio_name + id +
+#> company_name + : The dcast generic in data.table has been passed a grouped_df
+#> and will attempt to redirect to the reshape2::dcast; please note that reshape2
+#> is deprecated, and this redirection is now deprecated as well. Please do this
+#> redirection yourself like reshape2::dcast(.). In the next version, this warning
+#> will become an error.
+
+#> Warning in data.table::dcast(., investor_name + portfolio_name + id +
+#> company_name + : The melt generic in data.table has been passed a tbl_df and
+#> will attempt to redirect to the relevant reshape2 method; please note that
+#> reshape2 is deprecated, and this redirection is now deprecated as well. To
+#> continue using melt methods from reshape2 while both libraries are attached,
+#> e.g. melt.list, you can prepend the namespace like reshape2::melt(.). In the
+#> next version, this warning will become an error.
+#> [1] "Integral method selected for calculation of late&sudden production scenarios. \n          Production shocks are function of scenarios (and possibly of company production plans if enabled), they will be calculated in function set_ls_trajectory"
+#> [1] TRUE
+#> Warning in data.table::dcast(., investor_name + portfolio_name + id +
+#> company_name + : The dcast generic in data.table has been passed a grouped_df
+#> and will attempt to redirect to the reshape2::dcast; please note that reshape2
+#> is deprecated, and this redirection is now deprecated as well. Please do this
+#> redirection yourself like reshape2::dcast(.). In the next version, this warning
+#> will become an error.
+
+#> Warning in data.table::dcast(., investor_name + portfolio_name + id +
+#> company_name + : The melt generic in data.table has been passed a tbl_df and
+#> will attempt to redirect to the relevant reshape2 method; please note that
+#> reshape2 is deprecated, and this redirection is now deprecated as well. To
+#> continue using melt methods from reshape2 while both libraries are attached,
+#> e.g. melt.list, you can prepend the namespace like reshape2::melt(.). In the
+#> next version, this warning will become an error.
+#> [1] "Integral method selected for calculation of late&sudden production scenarios. \n          Production shocks are function of scenarios (and possibly of company production plans if enabled), they will be calculated in function set_ls_trajectory"
+#> [1] TRUE
+#> Warning in data.table::dcast(., investor_name + portfolio_name + id +
+#> company_name + : The dcast generic in data.table has been passed a grouped_df
+#> and will attempt to redirect to the reshape2::dcast; please note that reshape2
+#> is deprecated, and this redirection is now deprecated as well. Please do this
+#> redirection yourself like reshape2::dcast(.). In the next version, this warning
+#> will become an error.
+
+#> Warning in data.table::dcast(., investor_name + portfolio_name + id +
+#> company_name + : The melt generic in data.table has been passed a tbl_df and
+#> will attempt to redirect to the relevant reshape2 method; please note that
+#> reshape2 is deprecated, and this redirection is now deprecated as well. To
+#> continue using melt methods from reshape2 while both libraries are attached,
+#> e.g. melt.list, you can prepend the namespace like reshape2::melt(.). In the
+#> next version, this warning will become an error.
+#> [1] "Integral method selected for calculation of late&sudden production scenarios. \n          Production shocks are function of scenarios (and possibly of company production plans if enabled), they will be calculated in function set_ls_trajectory"
+#> [1] TRUE
+#> Warning in data.table::dcast(., investor_name + portfolio_name + id +
+#> company_name + : The dcast generic in data.table has been passed a grouped_df
+#> and will attempt to redirect to the reshape2::dcast; please note that reshape2
+#> is deprecated, and this redirection is now deprecated as well. Please do this
+#> redirection yourself like reshape2::dcast(.). In the next version, this warning
+#> will become an error.
+
+#> Warning in data.table::dcast(., investor_name + portfolio_name + id +
+#> company_name + : The melt generic in data.table has been passed a tbl_df and
+#> will attempt to redirect to the relevant reshape2 method; please note that
+#> reshape2 is deprecated, and this redirection is now deprecated as well. To
+#> continue using melt methods from reshape2 while both libraries are attached,
+#> e.g. melt.list, you can prepend the namespace like reshape2::melt(.). In the
+#> next version, this warning will become an error.
+#> [1] "Integral method selected for calculation of late&sudden production scenarios. \n          Production shocks are function of scenarios (and possibly of company production plans if enabled), they will be calculated in function set_ls_trajectory"
+#> [1] TRUE
+#> Warning in data.table::dcast(., investor_name + portfolio_name + id +
+#> company_name + : The dcast generic in data.table has been passed a grouped_df
+#> and will attempt to redirect to the reshape2::dcast; please note that reshape2
+#> is deprecated, and this redirection is now deprecated as well. Please do this
+#> redirection yourself like reshape2::dcast(.). In the next version, this warning
+#> will become an error.
+
+#> Warning in data.table::dcast(., investor_name + portfolio_name + id +
+#> company_name + : The melt generic in data.table has been passed a tbl_df and
+#> will attempt to redirect to the relevant reshape2 method; please note that
+#> reshape2 is deprecated, and this redirection is now deprecated as well. To
+#> continue using melt methods from reshape2 while both libraries are attached,
+#> e.g. melt.list, you can prepend the namespace like reshape2::melt(.). In the
+#> next version, this warning will become an error.
+#> [1] "Integral method selected for calculation of late&sudden production scenarios. \n          Production shocks are function of scenarios (and possibly of company production plans if enabled), they will be calculated in function set_ls_trajectory"
+#> [1] TRUE
+#> Warning in data.table::dcast(., investor_name + portfolio_name + id +
+#> company_name + : The dcast generic in data.table has been passed a grouped_df
+#> and will attempt to redirect to the reshape2::dcast; please note that reshape2
+#> is deprecated, and this redirection is now deprecated as well. Please do this
+#> redirection yourself like reshape2::dcast(.). In the next version, this warning
+#> will become an error.
+
+#> Warning in data.table::dcast(., investor_name + portfolio_name + id +
+#> company_name + : The melt generic in data.table has been passed a tbl_df and
+#> will attempt to redirect to the relevant reshape2 method; please note that
+#> reshape2 is deprecated, and this redirection is now deprecated as well. To
+#> continue using melt methods from reshape2 while both libraries are attached,
+#> e.g. melt.list, you can prepend the namespace like reshape2::melt(.). In the
+#> next version, this warning will become an error.
 expect_true(dir_has_files(out_2))
 ```
 
