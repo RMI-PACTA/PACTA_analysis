@@ -1,0 +1,8 @@
+default:
+
+  project_name: name_of_the_project_folder
+
+  project_internal:
+    twodii_internal: FALSE
+    project_location_ext: ~/path/to/project
+    data_location_ext: ~/path/to/data

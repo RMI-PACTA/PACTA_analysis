@@ -21,12 +21,12 @@ Packages used in this file:
 
 ``` r
 library(tidyverse)
-#> ── Attaching packages ──────────────────── tidyverse 1.3.0 ──
+#> ── Attaching packages ───────────────────── tidyverse 1.3.0 ──
 #> ✓ ggplot2 3.3.2     ✓ purrr   0.3.4
 #> ✓ tibble  3.0.3     ✓ dplyr   1.0.2
 #> ✓ tidyr   1.1.2     ✓ stringr 1.4.0
 #> ✓ readr   1.3.1     ✓ forcats 0.5.0
-#> ── Conflicts ─────────────────────── tidyverse_conflicts() ──
+#> ── Conflicts ──────────────────────── tidyverse_conflicts() ──
 #> x dplyr::filter() masks stats::filter()
 #> x dplyr::lag()    masks stats::lag()
 library(devtools)
@@ -112,17 +112,17 @@ detect_packages()
 #> Finding R package dependencies ... Done!
 #>  [1] "assertthat"     "base"           "config"         "conflicted"    
 #>  [5] "countrycode"    "cowplot"        "devtools"       "dplyr"         
-#>  [9] "extrafont"      "fs"             "fst"            "ggforce"       
-#> [13] "ggmap"          "ggplot2"        "ggrepel"        "ggthemes"      
-#> [17] "glue"           "grid"           "gridExtra"      "here"          
-#> [21] "janitor"        "jsonlite"       "knitr"          "lme4"          
-#> [25] "matrixStats"    "PACTA.analysis" "plyr"           "purrr"         
-#> [29] "R"              "r2dii.utils"    "RColorBrewer"   "readr"         
-#> [33] "readxl"         "renv"           "reshape2"       "rlang"         
-#> [37] "rmarkdown"      "rstudioapi"     "rworldmap"      "scales"        
-#> [41] "sitools"        "stringr"        "testthat"       "tidyr"         
-#> [45] "tidyselect"     "tidyverse"      "tools"          "usethis"       
-#> [49] "withr"          "xml2"
+#>  [9] "DT"             "extrafont"      "fs"             "fst"           
+#> [13] "ggforce"        "ggmap"          "ggplot2"        "ggrepel"       
+#> [17] "ggthemes"       "glue"           "grid"           "gridExtra"     
+#> [21] "here"           "janitor"        "jsonlite"       "knitr"         
+#> [25] "lme4"           "matrixStats"    "PACTA.analysis" "plyr"          
+#> [29] "purrr"          "R"              "r2dii.utils"    "RColorBrewer"  
+#> [33] "readr"          "readxl"         "renv"           "reshape2"      
+#> [37] "rlang"          "rmarkdown"      "rstudioapi"     "rworldmap"     
+#> [41] "scales"         "sitools"        "stringr"        "testthat"      
+#> [45] "tidyr"          "tidyselect"     "tidyverse"      "tools"         
+#> [49] "usethis"        "withr"          "xml2"
 ```
 
 <details>
