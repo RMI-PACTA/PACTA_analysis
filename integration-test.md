@@ -1,6 +1,6 @@
 Integration test: Run the web tool
 ================
-2020-10-02
+2020-10-06
 
 ## Introduction
 
@@ -53,7 +53,8 @@ detect_packages()
 #> [33] "renv"           "reshape2"       "rlang"          "rmarkdown"     
 #> [37] "rstudioapi"     "rworldmap"      "scales"         "sitools"       
 #> [41] "stringr"        "testthat"       "tidyr"          "tidyselect"    
-#> [45] "tidyverse"      "tools"          "usethis"        "xml2"
+#> [45] "tidyverse"      "tools"          "usethis"        "withr"         
+#> [49] "xml2"
 ```
 
 <details>
@@ -72,7 +73,7 @@ devtools::session_info()
 #>  collate  en_US.UTF-8                 
 #>  ctype    en_US.UTF-8                 
 #>  tz       America/Chicago             
-#>  date     2020-10-02                  
+#>  date     2020-10-06                  
 #> 
 #> ─ Packages ───────────────────────────────────────────────────────────────────
 #>  package     * version     date       lib source                             
