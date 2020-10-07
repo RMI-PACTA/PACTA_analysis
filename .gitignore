@@ -45,5 +45,6 @@ data/isins_missing_bbg_data.csv
 data/fund_isins_without_bbg_data.csv
 
 # Mac files
-working_dir/.DS_STORE
+.DS_STORE
+**/.DS_STORE
 integration-test.html
