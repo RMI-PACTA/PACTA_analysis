@@ -26,21 +26,17 @@ knitr::opts_chunk$set(
 Packages used in this file:
 
 ```{r}
-suppressPackageStartupMessages(library(tidyverse))
-suppressPackageStartupMessages(library(devtools))
-suppressPackageStartupMessages(library(testthat))
-suppressPackageStartupMessages(library(config))
-suppressPackageStartupMessages(library(rlang))
-suppressPackageStartupMessages(library(renv))
-suppressPackageStartupMessages(library(glue))
-suppressPackageStartupMessages(library(fs))
+library(tidyverse)
+library(devtools)
+library(testthat)
+library(config)
+library(rlang)
+library(renv)
+library(glue)
+library(fs)
 library(here)
-```
-
-```{r}
 library(conflicted)
 conflicted::conflict_prefer("filter", "dplyr")
-conflicted::conflict_prefer("flatten_chr", "purrr")
 conflicted::conflict_prefer("lag", "dplyr")
 ```
 
