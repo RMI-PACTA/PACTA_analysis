@@ -3,18 +3,7 @@
 # START RUN ANALYIS
 #########################################################################
 
-library(tidyr)
-library(dplyr)
-library(scales)
-library(reshape2)
-library(tidyverse)
-library(readxl)
-library(tidyselect)
-library(r2dii.utils)
-library(fs)
-library(jsonlite)
-library(fst)
-library(here)
+source("dry/packages.R")
 
 source("0_portfolio_test.R")
 source("0_global_functions.R")
