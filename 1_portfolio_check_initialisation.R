@@ -1,7 +1,7 @@
 ## Project Initialisation
-rm(list=ls())
+rm(list = ls())
 
-options(encoding = "UTF-8") 
+options(encoding = "UTF-8")
 
 library(tidyr)
 library(dplyr)
@@ -35,7 +35,7 @@ twodii_internal <- TRUE
 # TRUE or FALSE: TRUE means that the code is running on a 2dii laptop with dropbox connection
 
 #####################################################################
-###ONLY FOR EXTERNAL PROJECTS (twodii_internal <- FALSE):
+### ONLY FOR EXTERNAL PROJECTS (twodii_internal <- FALSE):
 # Variables must exist for internal projects
 project_location_ext <- "C:/Users/clare/Desktop/ExternalTest"
 data_location_ext <- "C:/Users/clare/Desktop/Git/pacta-data/2019Q4"
@@ -47,9 +47,8 @@ set_project_paths(project_name, twodii_internal, project_location_ext)
 
 copy_files(project_name)
 
-options(r2dii_config = paste0(par_file_path,"/AnalysisParameters.yml"))
+options(r2dii_config = paste0(par_file_path, "/AnalysisParameters.yml"))
 
-set_global_parameters(paste0(par_file_path,"/AnalysisParameters.yml"))
+set_global_parameters(paste0(par_file_path, "/AnalysisParameters.yml"))
 
 analysis_inputs_path <- set_analysis_inputs_path(twodii_internal, data_location_ext, dataprep_timestamp)
-
