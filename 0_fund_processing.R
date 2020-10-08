@@ -1,5 +1,4 @@
-library(tidyverse)
-library(xml2)
+source("dry/packages.R")
 
 # FIXME: This paths throw ERROR 1: ... unexpected INCOMPLETE_STRING
 path <- "/Users/vincentjerosch-herold/Dropbox (2? Investing)/PortCheck/00_Data/03_FundData/Morningstar_RawData/XML_files/FundPool_2019Q4/UniverseFiles/"

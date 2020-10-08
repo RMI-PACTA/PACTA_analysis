@@ -3,28 +3,7 @@
 # options(encoding = "native.enc")
 
 # Libraries
-library(grid)
-library(ggplot2)
-library(ggthemes)
-library(dplyr)
-library(reshape2)
-library(gridExtra)
-library(scales)
-library(stringr)
-library(extrafont)
-library(tidyr)
-library(knitr)
-library(RColorBrewer)
-library(matrixStats)
-library(rworldmap)
-library(ggmap)
-library(cowplot)
-library(ggrepel)
-library(readxl)
-library(tidyverse)
-library(ggforce) 
-library(sitools) 
-library(countrycode)
+source("dry/packages.R")
 
 # Set Reporting Parameters
 options(r2dii_config = paste0(par_file_path,"/ReportParameters.yml"))
@@ -51,35 +30,35 @@ if(has_sb){SB.Values = GetSovBondCoverage()}
 i=1
 
 for (i in 1:nrow(report_list)){
-  
+
   investor_name_select <- report_list$investor_name[i]
   portfolio_name_select <- report_list$portfolio_name[i]
   investor_type <- report_list$Type[i]
 
   print(paste0(i, " of ", nrow(report_list)))
-  
+
   #######################
   ### Read in Results ###
   ########################
   set_initial_variables()
   test_list <- create_test_list()
-  
+
   results_call()
-  
+
   #########################
   ### REPORT GENERATION ###
   #########################
   report_handle <- graph_name("00",ParameterFile)
   create_results_folder(project_name,investor_name_select,portfolio_name_select,report_handle)
-  
+
   ReportFigures(explicit_filenames = F)
-  
- 
-  
-  
-  
+
+
+
+
+
 }
-  
+
 
 
 
