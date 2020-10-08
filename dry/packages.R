@@ -1,4 +1,3 @@
-# git grep "library(" | cut -d: -f2 | tr "[ ]+" "-" | sed s/"-"/""/ | sed s/"#"/""/ | grep "^library" | sort | uniq > packages.R
 library(config)
 library(countrycode)
 library(cowplot)
