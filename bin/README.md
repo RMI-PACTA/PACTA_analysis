@@ -1,9 +1,16 @@
-# How to run the web tool on on the docker container from transitionmonitor
+## Running the web tool on transitionmonitor's docker-container
 
-Ensure your working directory is PACTA_analysis.
+Ensure your working directory is PACTA_analysis, then run one of these workflows:
 
-Then run the web tool in a single step with: ./bin/run-web-tool.sh
+* Run the web tool in a single step
 
-Or, run the web tool in two steps:
-1. Start the container with: ./bin/start-container.sh
-2. Run R scripts with: /bound/bin/run-r-scripts.sh
+```bash
+./bin/run-web-tool.sh
+```
+
+* Run the web tool in two steps:
+
+```bash
+./bin/start-container.sh
+/bound/bin/run-r-scripts.sh
+```
