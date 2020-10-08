@@ -829,7 +829,7 @@ create_id_columns <- function(portfolio, portfolio_type){
 # FINAL SCRIPTS
 get_and_clean_currency_data <- function(){
 
-  currencies <- read_in_file("data/currencies.rda")
+  currencies <- read_file("data/currencies.rda")
 
   currencies <- set_currency_timestamp(currencies)
 
@@ -957,7 +957,7 @@ get_and_clean_revenue_data <- function(){
   revenue_data <- data.frame()
 
   if(has_revenue){
-    revenue_data <- read_in_file(paste0(analysis_inputs_path, "/revenue_data_member_ticker.rda"))
+    revenue_data <- read_file(paste0(analysis_inputs_path, "/revenue_data_member_ticker.rda"))
     # col_types = "dcdcclcd")
 
     revenue_data <- revenue_data %>%
