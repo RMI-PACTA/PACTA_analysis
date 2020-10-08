@@ -172,8 +172,8 @@ Ensure this configuration file exists:
 
 ```{r}
 config_1 <- here(
-  "working_dir", 
-  "10_Parameter_File", 
+  "working_dir",
+  "10_Parameter_File",
   "TestPortfolio_Input_PortfolioParameters.yml"
 )
 
@@ -206,15 +206,15 @@ make_config_portable <- function(config) {
   lines <- readLines(config, encoding = "UTF-8")
   lines <- make_paths_portable(lines)
   writeLines(lines, config)
-  
+
   invisible(config)
 }
 
 make_paths_portable <- function(x) {
-  x %>% 
-    root_field_path("project_location_ext", pattern = "PACTA_analysis") %>% 
-    root_field_path("data_location_ext", pattern = "pacta-data") %>% 
-    root_field_path("template_location", pattern = "create_interactive_report") %>% 
+  x %>%
+    root_field_path("project_location_ext", pattern = "PACTA_analysis") %>%
+    root_field_path("data_location_ext", pattern = "pacta-data") %>%
+    root_field_path("template_location", pattern = "create_interactive_report") %>%
     root_field_path("stress_test_location", pattern = "StressTestingModelDev")
 }
 
@@ -250,7 +250,7 @@ Populate the directory for processed inputs:
 ```{r message=FALSE}
 dir_has_files <- function(path) {
   stopifnot(is_dir(path))
-  
+
   contents <- dir_ls(path, recurse = TRUE)
   has_files <- any(map_lgl(contents, is_file))
   has_files
@@ -279,7 +279,7 @@ Populate the directory for outputs:
 out_3 <- path("working_dir", "50_Outputs")
 
 expect_false(dir_has_files(out_3))
-source("web_tool_script_3.R") 
+source("web_tool_script_3.R")
 expect_true(dir_has_files(out_3))
 ```
 
