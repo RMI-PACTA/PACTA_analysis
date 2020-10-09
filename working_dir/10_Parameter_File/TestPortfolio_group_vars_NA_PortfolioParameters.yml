@@ -1,0 +1,5 @@
+default:
+    parameters:
+        portfolio_name_in: Sample Portfolio
+        investor_name_in: Sample Investor
+

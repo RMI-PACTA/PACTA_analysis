@@ -1,37 +1,9 @@
-### MacOS specific ###
-# Folder view configuration files
-.DS_Store
-Desktop.ini
-
-# Thumbnail cache files
-._*
-Thumbs.db
-
-# Files that might appear on external disks
-.Spotlight-V100
-.Trashes
-
-# Compiled Python files
-*.pyc
-
-# Compiled C++ files
-*.out
-
-# Application specific files
-venv
-node_modules
-.sass_cache
-
-### R ###
 # History files
 .Rhistory
 .Rapp.history
 
 # Session Data files
 .RData
-
-# User-specific files
-.Ruserdata
 
 # Example code in package build process
 *-Ex.R
@@ -43,7 +15,7 @@ node_modules
 /*.Rcheck/
 
 # RStudio files
-.Rproj.user/
+.Rproj.user
 
 # produced vignettes
 vignettes/*.html
@@ -53,26 +25,26 @@ vignettes/*.pdf
 .httr-oauth
 
 # knitr and R markdown default cache directories
-*_cache/
+/*_cache/
 /cache/
 
 # Temporary files created by R markdown
 *.utf8.md
 *.knit.md
 
-# R Environment Variables
-.Renviron
-
-### R.Bookdown Stack ###
-# R package: bookdown caching files
-/*_files/
-
-# End of https://www.toptal.com/developers/gitignore/api/r
-
-# user data
 .Ruserdata
+**/working_dir/30_Processed_Inputs/*
+!**/working_dir/30_Processed_Inputs/.gitkeep.txt
+**/working_dir/40_Results/*
+!**/working_dir/40_Results/.gitkeep.txt
+**/working_dir/50_Outputs/*
+!**/working_dir/50_Outputs/.gitkeep.txt
 
-### Project specific ###
-/outputs/
-/r2dii_data/
-web_folders
+setup.R
+data/isins_missing_bbg_data.csv
+data/fund_isins_without_bbg_data.csv
+
+# Mac files
+.DS_Store
+**/.DS_Store
+integration-test.html

@@ -1,0 +1,88 @@
+default:
+
+  GroupingVariables: 
+    - investor_name
+    - portfolio_name
+
+  Methodology:
+    HasMAP: TRUE
+    HasSB: FALSE
+    HasRevenue: FALSE
+    HasCC: FALSE
+    IncEmissionFactors: TRUE
+    
+  data_output:
+    file_type: 
+      - csv
+      - rda
+  
+    
+  TimeStamps:
+    # setting the dates of the data-input for financial and asset-level data: this identifies the input files
+    FinancialData.Timestamp: 2019Q4
+    ALD.Timestamp: 2019Q4
+    DataStore.Export: 240220
+    DataPrep.Timestamp: 2019Q4_250220
+  
+  AnalysisPeriod:
+    # setting the period of time for the analysis: by setting the starting year and the time-horizon 
+    Years.Horizon: 5
+    Years.Startyear: 2020
+  
+  ComparisonBenchmarks:
+    CreateMetaPortfolio: FALSE
+    MetaPortfolioName: Meta Portfolio
+    MetaInvestorName: Meta Investor
+  
+  Lists:
+    AssetTypes:
+      - Equity
+      - Bonds
+      - Funds
+      - Others
+    TechnologyRoadmap.Sector.List: 
+      - Automotive
+      - Power
+      - Oil&Gas
+      - Coal
+    CO2Intensity.Sector.List: 
+      - Shipping
+      - Steel
+      - Aviation
+      - Cement
+    Scenario.Sources.List:
+      - ETP2017
+      - WEO2019
+      - SBTI  
+    Scenario.Geography.List:
+      - Global
+      - GlobalAggregate
+      - NonOECD
+      - OECD
+    Equity.Market.List:
+      - GlobalMarket
+      - Global
+      - EmergingMarket
+      - DevelopedMarket
+  Reporting:
+   Naming: 
+      GraphType: Report
+      Scenariochoose: SDS
+      AccountingPrinciple: PortfolioWeight
+      ScenarioGeographyChoose: GlobalAggregate
+      EquityMarketSelection: Global
+      Language: "EN"
+      Startyear: 2019
+      
+      
+   Benchmarks:
+      PeerGroupSelection: Project
+      EQPeersRef: Project
+      CBPeersRef: Project
+      eq_market_ref: GlobalMarket	
+      cb_market_ref: GlobalMarket
+
+   Contents:
+      templateversion: "GeneralTemplateInput_v6"
+      No.Companies: 15
+

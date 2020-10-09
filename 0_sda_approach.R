@@ -3,15 +3,13 @@
 
 
 sda_portfolio_target <- function(
-  market,
-  portfolio,
-  scenario = "B2DS",
-  geography = "Global",
-  ald_sector = NULL,
-  start_year = NULL,
-  target_year = NULL
-) {
-  
+                                 market,
+                                 portfolio,
+                                 scenario = "B2DS",
+                                 geography = "Global",
+                                 ald_sector = NULL,
+                                 start_year = NULL,
+                                 target_year = NULL) {
   stopifnot(is.data.frame(market), is.data.frame(portfolio))
   old_market <- market
   old_portfolio <- portfolio
@@ -50,12 +48,11 @@ sda_portfolio_target <- function(
     by = c(get_sda_common_by(), "investor_name", "portfolio_name", "year"),
     suffix = c("", "_no_sda")
   ) %>%
-    select(-.data$scen_sec_emissions_factor_no_sda) %>% 
+    select(-.data$scen_sec_emissions_factor_no_sda) %>%
     select(colnames(portfolio))
-  
-  
+
+
   out %>% r2dii.utils::unclean_column_names(unclean = old_market)
-  
 }
 
 check_names_sector_and_geography <- function(market,
@@ -162,7 +159,7 @@ create_distance <- function(market,
                             start_year,
                             target_year) {
   distinct_vars <- dplyr::vars(!!!syms(get_sda_common_vars()), .data$CI)
-  
+
   ci_port <- portfolio %>%
     pick_scenario_sector_and_geography(scenario, ald_sector, geography) %>%
     filter(as.character(.data$year) == as.character(start_year)) %>%
