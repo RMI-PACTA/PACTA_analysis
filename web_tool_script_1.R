@@ -1,23 +1,11 @@
 # web_tool_script.R
-
 options(encoding = "UTF-8")
 # install.packages("devtools")
 # devtools::install_github("2DegreesInvesting/r2dii")
 # install.packages("fst")
 
-library(tidyr)
-library(dplyr)
-library(scales)
-library(reshape2)
-library(tidyverse)
-library(readxl)
-library(tidyselect)
-library(r2dii.utils)
-library(fs)
-library(jsonlite)
-library(fst)
-library(here)
-
+devtools::load_all()
+use_r_packages()
 
 # source("0_portfolio_test.R")
 # source("0_graphing_functions.R")
