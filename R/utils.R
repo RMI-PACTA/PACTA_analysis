@@ -12,3 +12,7 @@ setup_project <- function() {
   )
   source(path)
 }
+
+use_r_packages <- function(path = "deduplicate/load-and-attach-r-packages.R") {
+  source(path)
+}
