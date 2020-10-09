@@ -21,12 +21,12 @@ Packages used in this file:
 
 ``` r
 library(tidyverse)
-#> ── Attaching packages ─────────────────── tidyverse 1.3.0 ──
+#> ── Attaching packages ─────────────────────── tidyverse 1.3.0 ──
 #> ✓ ggplot2 3.3.2     ✓ purrr   0.3.4
 #> ✓ tibble  3.0.3     ✓ dplyr   1.0.2
 #> ✓ tidyr   1.1.2     ✓ stringr 1.4.0
 #> ✓ readr   1.3.1     ✓ forcats 0.5.0
-#> ── Conflicts ────────────────────── tidyverse_conflicts() ──
+#> ── Conflicts ────────────────────────── tidyverse_conflicts() ──
 #> x dplyr::filter() masks stats::filter()
 #> x dplyr::lag()    masks stats::lag()
 library(devtools)
@@ -339,6 +339,7 @@ pattern <- "set_portfolio-name-ref-all_working-location_and_web-parameters.R"
 this_pattern <- "portfolio_name_ref_all.*<-"
 matched <- map(files, show_pattern_in_file, pattern = this_pattern)
 walk(matched, writeLines)
+#>   portfolio_name_ref_all <- get_portfolio_name()
 #>   portfolio_name_ref_all <- c("TestPortfolio_Input") # must be the same name as in the _PortfolioParameters.yml
 
 script_has_this_pattern <- grepl(this_pattern, matched)
@@ -355,8 +356,8 @@ Ensure this configuration file exists:
 
 ``` r
 config_1 <- here(
-  "working_dir", 
-  "10_Parameter_File", 
+  "working_dir",
+  "10_Parameter_File",
   "TestPortfolio_Input_PortfolioParameters.yml"
 )
 
@@ -394,15 +395,15 @@ make_config_portable <- function(config) {
   lines <- readLines(config, encoding = "UTF-8")
   lines <- make_paths_portable(lines)
   writeLines(lines, config)
-  
+
   invisible(config)
 }
 
 make_paths_portable <- function(x) {
-  x %>% 
-    root_field_path("project_location_ext", pattern = "PACTA_analysis") %>% 
-    root_field_path("data_location_ext", pattern = "pacta-data") %>% 
-    root_field_path("template_location", pattern = "create_interactive_report") %>% 
+  x %>%
+    root_field_path("project_location_ext", pattern = "PACTA_analysis") %>%
+    root_field_path("data_location_ext", pattern = "pacta-data") %>%
+    root_field_path("template_location", pattern = "create_interactive_report") %>%
     root_field_path("stress_test_location", pattern = "StressTestingModelDev")
 }
 
@@ -448,7 +449,7 @@ Populate the directory for processed inputs:
 ``` r
 dir_has_files <- function(path) {
   stopifnot(is_dir(path))
-  
+
   contents <- dir_ls(path, recurse = TRUE)
   has_files <- any(map_lgl(contents, is_file))
   has_files
@@ -681,7 +682,7 @@ Populate the directory for outputs:
 out_3 <- path("working_dir", "50_Outputs")
 
 expect_false(dir_has_files(out_3))
-source("web_tool_script_3.R") 
+source("web_tool_script_3.R")
 expect_true(dir_has_files(out_3))
 ```
 

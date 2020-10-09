@@ -10,4 +10,3 @@ use_data(index_regions, overwrite = TRUE)
 
 bench_regions <- readRDS("data-raw/bench_regions.rda")
 use_data(bench_regions, overwrite = TRUE)
-
