@@ -15,7 +15,6 @@ working_location <- paste0(working_location, "/")
 
 set_webtool_paths()
 
-
 # just done once
 options(r2dii_config = paste0(par_file_path, "/AnalysisParameters.yml"))
 
