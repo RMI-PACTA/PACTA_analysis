@@ -1,6 +1,6 @@
 # Website basic Graph Code
 # Set Reporting Parameters
-options(r2dii_config = paste0(par_file_path,"/ReportParameters.yml"))
+options(r2dii_config = paste0(par_file_path, "/ReportParameters.yml"))
 # options(encoding = "native.enc")
 
 devtools::load_all()
