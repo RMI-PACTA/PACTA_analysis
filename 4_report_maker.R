@@ -1,12 +1,11 @@
-# Website basic Graph Code
-
-# options(encoding = "native.enc")
-
-# Libraries
-source("deduplicate/load-and-attach-r-packages.R")
-
 # Set Reporting Parameters
 options(r2dii_config = paste0(par_file_path,"/ReportParameters.yml"))
+# options(encoding = "native.enc")
+
+devtools::load_all()
+use_r_packages()
+
+# Website basic Graph Code
 
 set_report_parameters(paste0(par_file_path,"/ReportParameters.yml"))
 

@@ -1,11 +1,11 @@
 # web_tool_script.R
-
 options(encoding = "UTF-8")
 # install.packages("devtools")
 # devtools::install_github("2DegreesInvesting/r2dii")
 # install.packages("fst")
 
-source("deduplicate/load-and-attach-r-packages.R")
+devtools::load_all()
+use_r_packages()
 
 # source("0_portfolio_test.R")
 # source("0_graphing_functions.R")

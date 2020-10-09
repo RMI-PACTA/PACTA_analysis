@@ -1,9 +1,10 @@
-## Project Initialisation
-rm(list=ls())
-
 options(encoding = "UTF-8")
 
-source("deduplicate/load-and-attach-r-packages.R")
+devtools::load_all()
+use_r_packages()
+
+## Project Initialisation
+rm(list=ls())
 
 if (rstudioapi::isAvailable()) {
   working_location <- dirname(rstudioapi::getActiveDocumentContext()$path)
