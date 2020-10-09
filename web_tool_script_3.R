@@ -1,24 +1,11 @@
-
 options(encoding = "UTF-8")
 
+devtools::load_all()
+use_r_packages()
 
 source("0_global_functions.R")
 source("0_web_functions.R")
 
-library(tidyr)
-library(dplyr)
-library(scales)
-library(reshape2)
-library(tidyverse)
-library(readxl)
-library(tidyselect)
-library(r2dii.utils)
-library(fs)
-library(jsonlite)
-library(fst)
-library(here)
-
-devtools::load_all()
 setup_project()
 
 working_location <- paste0(working_location, "/")

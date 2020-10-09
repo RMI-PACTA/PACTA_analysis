@@ -1,4 +1,3 @@
-# git grep "library(" | cut -d: -f2 | tr "[ ]+" "-" | sed s/"-"/""/ | sed s/"#"/""/ | grep "^library" | sort | uniq > packages.R
 library(config)
 library(countrycode)
 library(cowplot)
@@ -21,7 +20,6 @@ library(knitr)
 library(lme4)
 library(matrixStats)
 library(r2dii.utils)
-library("RColorBrewer")
 library(RColorBrewer)
 library(readxl)
 library(renv)

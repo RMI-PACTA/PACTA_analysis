@@ -333,8 +333,8 @@ show_pattern_in_file <- function(file, pattern) {
 }
 
 pattern <- "set_portfolio-name-ref-all_working-location_and_web-parameters.R"
-(files <- dir_ls("dry", regexp = pattern))
-#> dry/set_portfolio-name-ref-all_working-location_and_web-parameters.R
+(files <- dir_ls("deduplicate", regexp = pattern))
+#> deduplicate/set_portfolio-name-ref-all_working-location_and_web-parameters.R
 
 this_pattern <- "portfolio_name_ref_all.*<-"
 matched <- map(files, show_pattern_in_file, pattern = this_pattern)

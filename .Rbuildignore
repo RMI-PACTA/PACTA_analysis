@@ -43,7 +43,7 @@
 ^data-raw$
 ^LICENSE\.md$
 ^docker\.sh$
-^dry$
 ^README\.Rmd$
 ^pacta_data_qa\.Rmd$
 ^project_settings\.yml$
+^deduplicate$
