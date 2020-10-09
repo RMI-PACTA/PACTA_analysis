@@ -9,12 +9,12 @@ source("0_portfolio_test.R")
 source("0_global_functions.R")
 source("0_web_functions.R")
 
-devtools::load_all()
 setup_project()
 
 working_location <- paste0(working_location, "/")
 
 set_webtool_paths()
+
 
 # just done once
 options(r2dii_config = paste0(par_file_path,"/AnalysisParameters.yml"))
