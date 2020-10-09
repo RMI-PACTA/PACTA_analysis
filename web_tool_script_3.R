@@ -5,7 +5,7 @@ options(encoding = "UTF-8")
 source("0_global_functions.R")
 source("0_web_functions.R")
 
-source("deduplicate/packages.R")
+source("deduplicate/load-and-attach-r-packages.R")
 
 devtools::load_all()
 setup_project()

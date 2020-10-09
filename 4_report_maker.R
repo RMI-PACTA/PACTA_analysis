@@ -3,7 +3,7 @@
 # options(encoding = "native.enc")
 
 # Libraries
-source("deduplicate/packages.R")
+source("deduplicate/load-and-attach-r-packages.R")
 
 # Set Reporting Parameters
 options(r2dii_config = paste0(par_file_path,"/ReportParameters.yml"))

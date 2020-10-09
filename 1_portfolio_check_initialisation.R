@@ -3,7 +3,7 @@ rm(list=ls())
 
 options(encoding = "UTF-8")
 
-source("deduplicate/packages.R")
+source("deduplicate/load-and-attach-r-packages.R")
 
 if (rstudioapi::isAvailable()) {
   working_location <- dirname(rstudioapi::getActiveDocumentContext()$path)
