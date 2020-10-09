@@ -1,4 +1,4 @@
-test_integration <- function (input = "integration-test.Rmd") {
+test_integration <- function(input = "integration-test.Rmd") {
   needless <- tempfile(fileext = ".html")
   rmarkdown::render(input, output_file = needless)
 
@@ -6,7 +6,9 @@ test_integration <- function (input = "integration-test.Rmd") {
 }
 
 setup_project <- function() {
-  source(fs::path(
-      "dry", "set_portfolio-name-ref-all_working-location_and_web-parameters.R"
-  ))
+  path <- fs::path(
+    "deduplicate",
+    "set_portfolio-name-ref-all_working-location_and_web-parameters.R"
+  )
+  source(path)
 }

@@ -1,6 +1,6 @@
 Integration test: Run the web tool
 ================
-2020-10-07
+2020-10-09
 
 ## Introduction
 
@@ -21,12 +21,12 @@ Packages used in this file:
 
 ``` r
 library(tidyverse)
-#> ── Attaching packages ──────────────────── tidyverse 1.3.0 ──
+#> ── Attaching packages ─────────────────── tidyverse 1.3.0 ──
 #> ✓ ggplot2 3.3.2     ✓ purrr   0.3.4
 #> ✓ tibble  3.0.3     ✓ dplyr   1.0.2
 #> ✓ tidyr   1.1.2     ✓ stringr 1.4.0
 #> ✓ readr   1.3.1     ✓ forcats 0.5.0
-#> ── Conflicts ─────────────────────── tidyverse_conflicts() ──
+#> ── Conflicts ────────────────────── tidyverse_conflicts() ──
 #> x dplyr::filter() masks stats::filter()
 #> x dplyr::lag()    masks stats::lag()
 library(devtools)
@@ -141,7 +141,7 @@ devtools::session_info()
 #>  collate  en_US.UTF-8                 
 #>  ctype    en_US.UTF-8                 
 #>  tz       America/Chicago             
-#>  date     2020-10-07                  
+#>  date     2020-10-09                  
 #> 
 #> ─ Packages ───────────────────────────────────────────────────────────────────
 #>  package     * version     date       lib source                             
@@ -174,7 +174,7 @@ devtools::session_info()
 #>  haven         2.3.1       2020-06-01 [1] CRAN (R 4.0.0)                     
 #>  here        * 0.1         2017-05-28 [1] RSPM (R 4.0.0)                     
 #>  hms           0.5.3       2020-01-08 [1] CRAN (R 4.0.0)                     
-#>  htmltools     0.5.0.9001  2020-10-01 [1] Github (rstudio/htmltools@66aa3eb) 
+#>  htmltools     0.5.0.9001  2020-10-08 [1] Github (rstudio/htmltools@5d42d84) 
 #>  httr          1.4.2       2020-07-20 [1] RSPM (R 4.0.2)                     
 #>  jsonlite      1.7.1       2020-09-07 [1] RSPM (R 4.0.2)                     
 #>  knitr         1.30        2020-09-22 [1] RSPM (R 4.0.2)                     
@@ -190,7 +190,7 @@ devtools::session_info()
 #>  pkgload       1.1.0       2020-05-29 [1] CRAN (R 4.0.0)                     
 #>  prettyunits   1.1.1       2020-01-24 [1] CRAN (R 4.0.0)                     
 #>  processx      3.4.4       2020-09-03 [1] CRAN (R 4.0.2)                     
-#>  ps            1.3.4       2020-08-11 [1] CRAN (R 4.0.0)                     
+#>  ps            1.4.0       2020-10-07 [1] CRAN (R 4.0.2)                     
 #>  purrr       * 0.3.4       2020-04-17 [1] CRAN (R 4.0.0)                     
 #>  R6            2.4.1       2019-11-12 [1] CRAN (R 4.0.0)                     
 #>  Rcpp          1.0.5       2020-07-06 [1] CRAN (R 4.0.0)                     
@@ -199,7 +199,7 @@ devtools::session_info()
 #>  remotes       2.2.0       2020-07-21 [1] RSPM (R 4.0.2)                     
 #>  renv        * 0.12.0      2020-08-28 [1] RSPM (R 4.0.0)                     
 #>  reprex        0.3.0       2019-05-16 [1] CRAN (R 4.0.0)                     
-#>  rlang       * 0.4.7       2020-07-09 [1] CRAN (R 4.0.0)                     
+#>  rlang       * 0.4.8       2020-10-08 [1] CRAN (R 4.0.2)                     
 #>  rmarkdown     2.4         2020-09-30 [1] CRAN (R 4.0.2)                     
 #>  rprojroot     1.3-2       2018-01-03 [1] CRAN (R 4.0.0)                     
 #>  rstudioapi    0.11        2020-02-07 [1] CRAN (R 4.0.2)                     
@@ -208,7 +208,7 @@ devtools::session_info()
 #>  sessioninfo   1.1.1       2018-11-05 [1] CRAN (R 4.0.0)                     
 #>  stringi       1.5.3       2020-09-09 [1] RSPM (R 4.0.2)                     
 #>  stringr     * 1.4.0       2019-02-10 [1] CRAN (R 4.0.0)                     
-#>  testthat    * 2.99.0.9000 2020-08-18 [1] Github (r-lib/testthat@9e643d8)    
+#>  testthat    * 2.99.0.9000 2020-10-08 [1] Github (r-lib/testthat@8c4b523)    
 #>  tibble      * 3.0.3       2020-07-10 [1] CRAN (R 4.0.0)                     
 #>  tidyr       * 1.1.2       2020-08-27 [1] RSPM (R 4.0.2)                     
 #>  tidyselect    1.1.0       2020-05-11 [1] CRAN (R 4.0.0)                     
@@ -333,8 +333,8 @@ show_pattern_in_file <- function(file, pattern) {
 }
 
 pattern <- "set_portfolio-name-ref-all_working-location_and_web-parameters.R"
-(files <- dir_ls("dry", regexp = pattern))
-#> dry/set_portfolio-name-ref-all_working-location_and_web-parameters.R
+(files <- dir_ls("deduplicate", regexp = pattern))
+#> deduplicate/set_portfolio-name-ref-all_working-location_and_web-parameters.R
 
 this_pattern <- "portfolio_name_ref_all.*<-"
 matched <- map(files, show_pattern_in_file, pattern = this_pattern)
