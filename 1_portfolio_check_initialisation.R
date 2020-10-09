@@ -1,7 +1,14 @@
+options(encoding = "UTF-8")
+options(r2dii_config = paste0(par_file_path,"/AnalysisParameters.yml"))
+
+devtools::load_all()
+use_r_packages()
+
+# FIXME: Bad practice
 ## Project Initialisation
 rm(list=ls())
 
-options(encoding = "UTF-8") 
+options(encoding = "UTF-8")
 
 library(tidyr)
 library(dplyr)
@@ -46,8 +53,6 @@ create_project_folder(project_name, twodii_internal, project_location_ext)
 set_project_paths(project_name, twodii_internal, project_location_ext)
 
 copy_files(project_name)
-
-options(r2dii_config = paste0(par_file_path,"/AnalysisParameters.yml"))
 
 set_global_parameters(paste0(par_file_path,"/AnalysisParameters.yml"))
 

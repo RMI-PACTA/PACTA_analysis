@@ -6,14 +6,6 @@ path <- "/Users/vincentjerosch-herold/Dropbox (2? Investing)/PortCheck/00_Data/0
 index <- read_csv("/Users/vincentjerosch-herold/Dropbox (2? Investing)/PortCheck/00_Data/03_FundData/Morningstar_RawData/Administration/GlobalUniverse/2dii_fundlist.csv")
 master <- read_csv("/Users/vincentjerosch-herold/Dropbox (2? Investing)/PortCheck/00_Data/03_FundData/Morningstar_RawData/Administration/GlobalUniverse/Global_FundPool_2019Q4.csv")
 
-
-master_fund_list
-portfolio
-
-
-
-
-
 #first cross-reference what isins are associated with funds covered by morningstar.
 project_fund_list <- portfolio %>%
   distinct(isin)

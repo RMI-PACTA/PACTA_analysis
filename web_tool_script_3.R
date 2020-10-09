@@ -1,5 +1,6 @@
 
 options(encoding = "UTF-8")
+options(r2dii_config = paste0(par_file_path,"/AnalysisParameters.yml"))
 
 
 source("0_global_functions.R")
@@ -24,8 +25,6 @@ setup_project()
 working_location <- paste0(working_location, "/")
 
 set_webtool_paths()
-
-options(r2dii_config = paste0(par_file_path,"/AnalysisParameters.yml"))
 
 set_global_parameters(paste0(par_file_path,"/AnalysisParameters.yml"))
 
