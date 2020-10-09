@@ -3,14 +3,11 @@ rm(list = ls())
 
 options(encoding = "UTF-8")
 
-library(tidyr)
-library(dplyr)
-library(scales)
-library(reshape2)
-library(tidyverse)
-library(readxl)
-library(tidyselect)
+devtools::load_all()
+use_r_packages()
 
+## Project Initialisation
+rm(list=ls())
 
 if (rstudioapi::isAvailable()) {
   working_location <- dirname(rstudioapi::getActiveDocumentContext()$path)
@@ -20,8 +17,6 @@ if (rstudioapi::isAvailable()) {
 
 working_location <- paste0(working_location, "/")
 setwd(working_location)
-
-library(r2dii.utils)
 
 source("0_portfolio_test.R")
 source("0_graphing_functions.R")
