@@ -3,7 +3,7 @@
 # START RUN ANALYIS
 #########################################################################
 
-source("dry/packages.R")
+source("deduplicate/packages.R")
 
 source("0_portfolio_test.R")
 source("0_global_functions.R")

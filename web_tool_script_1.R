@@ -5,7 +5,7 @@ options(encoding = "UTF-8")
 # devtools::install_github("2DegreesInvesting/r2dii")
 # install.packages("fst")
 
-source("dry/packages.R")
+source("deduplicate/packages.R")
 
 # source("0_portfolio_test.R")
 # source("0_graphing_functions.R")
