@@ -7,7 +7,7 @@ devtools::load_all()
 use_r_packages()
 
 ## Project Initialisation
-rm(list=ls())
+rm(list = ls())
 
 if (rstudioapi::isAvailable()) {
   working_location <- dirname(rstudioapi::getActiveDocumentContext()$path)
