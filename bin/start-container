@@ -1,0 +1,3 @@
+#! /bin/bash
+
+"$(pwd)"/bin/start-containter-with /bin/bash

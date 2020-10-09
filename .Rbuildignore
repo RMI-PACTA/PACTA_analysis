@@ -46,4 +46,6 @@
 ^README\.Rmd$
 ^pacta_data_qa\.Rmd$
 ^project_settings\.yml$
+^bin$
 ^deduplicate$
+
