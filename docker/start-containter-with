@@ -1,0 +1,14 @@
+#! /bin/bash
+
+analysis=$(pwd)
+data=$(dirname "$(pwd)")/pacta-data
+report=$(dirname "$(pwd)")/create_interactive_report
+stresstest=$(dirname "$(pwd)")/StressTestingModelDev
+
+docker run --rm -ti \
+  --mount type=bind,source="$analysis",target=/bound \
+  --mount type=bind,source="$data",target=/pacta-data \
+  --mount type=bind,source="$report",target=/create_interactive_report \
+  --mount type=bind,source="$stresstest",target=/StressTestingModelDev \
+  maurolepore/2diirunner-with-packages $1
+

@@ -1,0 +1,13 @@
+#! /bin/bash
+
+umask 000
+cd /bound
+
+portfolio=${1:-TestPortfolio_Input}
+# FIXME: Eventually we want to run the Rscripts directly, but it's easier
+# to detect problems if you run them via integration-test.Rmd because some of
+# its tests should allow you to narrow down a bit the cause of the problem
+Rscript -e "rmarkdown::render('integration-test.Rmd')"
+# Rscript --vanilla web_tool_script_1.R portfolio
+# Rscript --vanilla web_tool_script_2.R portfolio
+# Rscript --vanilla web_tool_script_3.R portfolio
