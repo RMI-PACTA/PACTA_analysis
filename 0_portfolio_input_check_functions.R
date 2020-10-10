@@ -628,7 +628,7 @@ check_funds_wo_bbg <- function(fund_data, fin_data) {
     bind_rows(fund_isins_missing_bbg) %>%
     distinct()
 
-  save_file(fund_isins_missing_bbg, "data/fund_isins_without_bbg_data.csv")
+  readr::write_csv(fund_isins_missing_bbg, "data/fund_isins_without_bbg_data.csv")
 
   if (data_check(fund_isins_missing_bbg)) {
     print("Warning: There are funds without bbg data. These are excluded from the analysis.")
