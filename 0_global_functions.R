@@ -23,29 +23,6 @@ is_blank_na <- function(x) {
   flag
 }
 
-save_file <- function(df, file_name) {
-  extension_type <- substring(file_name, nchar(file_name) - 4 + 1)
-  if (!extension_type %in% c(".rda", ".csv", ".fst")) {
-    stop("Can't read in file. File extension type not applicable.")
-  }
-
-  if (data_check(df)) {
-    if (extension_type == ".rda") {
-      df <- readr::write_rds(df, file_name)
-    }
-    if (extension_type == ".fst") {
-      df <- fst::write_fst(df, file_name)
-    }
-    if (extension_type == ".csv") {
-      df <- readr::write_csv(df, file_name)
-    }
-  } else {
-    warning(paste0(df, " has no data to print"))
-  }
-}
-
-
-
 set_location <- function() {
   if (rstudioapi::isAvailable()) {
     working_location <- dirname(rstudioapi::getActiveDocumentContext()$path)

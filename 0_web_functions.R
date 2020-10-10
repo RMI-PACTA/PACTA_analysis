@@ -285,13 +285,13 @@ save_cleaned_files <- function(save_loc,
     dir.create(save_loc)
   }
 
-  save_file(as.data.frame(currencies), paste0(save_loc, "/currencies.fst"))
-  save_file(fund_data, paste0(save_loc, "/fund_data.fst"))
-  save_file(fin_data, paste0(save_loc, "/fin_data.fst"))
-  save_file(comp_fin_data, paste0(save_loc, "/comp_fin_data.fst"))
-  save_file(debt_fin_data, paste0(save_loc, "/debt_fin_data.fst"))
-  save_file(average_sector_intensity, paste0(save_loc, "/average_sector_intensity.fst"))
-  save_file(company_emissions, paste0(save_loc, "/company_emissions.fst"))
+  fst::write_fst(as.data.frame(currencies), paste0(save_loc, "/currencies.fst"))
+  fst::write_fst(fund_data, paste0(save_loc, "/fund_data.fst"))
+  fst::write_fst(fin_data, paste0(save_loc, "/fin_data.fst"))
+  fst::write_fst(comp_fin_data, paste0(save_loc, "/comp_fin_data.fst"))
+  fst::write_fst(debt_fin_data, paste0(save_loc, "/debt_fin_data.fst"))
+  fst::write_fst(average_sector_intensity, paste0(save_loc, "/average_sector_intensity.fst"))
+  fst::write_fst(company_emissions, paste0(save_loc, "/company_emissions.fst"))
 
   if (check_file_size(save_loc)) warning("File size exceeds what can be pushed to GitHub. Check before Committing")
 }
