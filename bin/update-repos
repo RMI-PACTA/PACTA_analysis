@@ -15,3 +15,5 @@ cd ../StressTestingModelDev
 git checkout master
 git pull origin master
 
+cd ../PACTA_analysis
+

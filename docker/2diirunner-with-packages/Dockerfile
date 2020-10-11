@@ -6,6 +6,7 @@ RUN apt-get update && apt-get install -y pandoc
 # This repository has binaries not just for Windows and Mac, but also for Linux
 RUN echo "options(repos = c(CRAN = 'https://packagemanager.rstudio.com/all/__linux__/bionic/latest'))" >> /root/.Rprofile \
     # update-dockerfile-packages-start
+    && Rscript -e "install.packages('conflicted')" \
     && Rscript -e "install.packages('config')" \
     && Rscript -e "install.packages('countrycode')" \
     && Rscript -e "install.packages('cowplot')" \

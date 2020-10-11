@@ -1,3 +1,4 @@
+library(conflicted)
 library(config)
 library(countrycode)
 library(cowplot)
