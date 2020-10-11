@@ -1,6 +1,6 @@
 #! /bin/bash
 
-head=$(git rev-list HEAD -1)
+current_branch=$(git rev-parse --abbrev-ref HEAD)
 git checkout master
 git pull origin master
 
@@ -17,4 +17,4 @@ git checkout master
 git pull origin master
 
 cd ../PACTA_analysis
-git checkout "$head"
+git checkout "$current_branch"
