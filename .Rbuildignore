@@ -46,3 +46,5 @@
 ^deduplicate$
 ^docker$
 ^bin$
+^preconditions\.Rmd$
+^preconditions\.html$
