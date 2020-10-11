@@ -1,0 +1,17 @@
+#! /bin/bash
+
+git checkout master
+git pull origin master
+
+cd ../pacta-data
+git checkout master
+git pull origin master
+
+cd ../create_interactive_report
+git checkout master
+git pull origin master
+
+cd ../StressTestingModelDev
+git checkout master
+git pull origin master
+
