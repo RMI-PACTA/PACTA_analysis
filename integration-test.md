@@ -1,6 +1,6 @@
 Integration test: Run the web tool
 ================
-2020-10-09
+2020-10-11
 
 ## Introduction
 
@@ -21,12 +21,12 @@ Packages used in this file:
 
 ``` r
 library(tidyverse)
-#> ── Attaching packages ─────────────────────── tidyverse 1.3.0 ──
+#> ── Attaching packages ───────────────────── tidyverse 1.3.0 ──
 #> ✓ ggplot2 3.3.2     ✓ purrr   0.3.4
 #> ✓ tibble  3.0.3     ✓ dplyr   1.0.2
 #> ✓ tidyr   1.1.2     ✓ stringr 1.4.0
 #> ✓ readr   1.3.1     ✓ forcats 0.5.0
-#> ── Conflicts ────────────────────────── tidyverse_conflicts() ──
+#> ── Conflicts ──────────────────────── tidyverse_conflicts() ──
 #> x dplyr::filter() masks stats::filter()
 #> x dplyr::lag()    masks stats::lag()
 library(devtools)
@@ -141,7 +141,7 @@ devtools::session_info()
 #>  collate  en_US.UTF-8                 
 #>  ctype    en_US.UTF-8                 
 #>  tz       America/Chicago             
-#>  date     2020-10-09                  
+#>  date     2020-10-11                  
 #> 
 #> ─ Packages ───────────────────────────────────────────────────────────────────
 #>  package     * version     date       lib source                             
@@ -300,12 +300,16 @@ parent directory:
 <!-- end list -->
 
 ``` r
+repos <- c(
+  this_repo(), 
+  "pacta-data", 
+  "create_interactive_report", 
+  "StressTestingModelDev"
+)
 is_sibling <- function(x) {
   parent <- path_dir(here())
   dir_exists(path(parent, x))
 }
-
-repos <- c("pacta-data", "create_interactive_report", "PACTA_analysis", "StressTestingModelDev")
 all_siblings <- all(map_lgl(repos, is_sibling))
 
 expect_true(all_siblings)
@@ -318,7 +322,7 @@ standard branch `master` – it is the branch
 Ensure the expected working directory.
 
 ``` r
-expect_equal(path_file(here()), "PACTA_analysis")
+expect_equal(path_file(here()), this_repo())
 ```
 
 ## `portfolio_name_ref_all <- "TestPortfolio_Input"`
@@ -380,7 +384,10 @@ look_into(config_1)
 Ensure this other configuration file also exists:
 
 ``` r
-config_2 <- here("parameter_files", "WebParameters_2dii.yml")
+normal_params <- here("parameter_files", "WebParameters_2dii.yml")
+docker_params <- here("parameter_files", "WebParameters_docker.yml")
+config_2 <- ifelse(in_transitionmonitor(), docker_params, normal_params)
+
 config_2_copy <- tempfile()
 fs::file_copy(config_2, config_2_copy)
 
@@ -401,7 +408,7 @@ make_config_portable <- function(config) {
 
 make_paths_portable <- function(x) {
   x %>%
-    root_field_path("project_location_ext", pattern = "PACTA_analysis") %>%
+    root_field_path("project_location_ext", pattern = this_repo()) %>%
     root_field_path("data_location_ext", pattern = "pacta-data") %>%
     root_field_path("template_location", pattern = "create_interactive_report") %>%
     root_field_path("stress_test_location", pattern = "StressTestingModelDev")

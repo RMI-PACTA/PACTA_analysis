@@ -51,3 +51,6 @@ marker_end <- function(lines) {
   grep("# update-dockerfile-packages-end", lines)
 }
 
+this_repo <- function() {
+  ifelse(in_transitionmonitor(), "bound", "PACTA_analysis")
+}
