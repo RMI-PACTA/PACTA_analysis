@@ -44,3 +44,4 @@
 ^LICENSE\.md$
 ^docker\.sh$
 ^deduplicate$
+^docker$

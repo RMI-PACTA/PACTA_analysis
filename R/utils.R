@@ -31,7 +31,7 @@ update_dockerfile_packages <- function(path = "docker/Dockerfile") {
 
   raw <- readLines(packages_path(), encoding = "UTF-8")
   pkg <- sub("library\\((.*)\\)", "\\1", raw)
-  pkg <- glue::glue('    && Rscript -e "install.packages(\'{pkg}\')" \\')
+  pkg <- glue('    && Rscript -e "install.packages(\'{pkg}\')" \\')
 
   out <- c(
     dkr[1:marker_start(dkr)],
