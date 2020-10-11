@@ -1,6 +1,12 @@
 ## Running the web tool with maurolepore/r2diirunner-with-packages
 
-Ensure your working directory is PACTA_analysis, then run one of these workflows:
+* Ensure your working directory is PACTA_analysis
+
+* Update local repos to the latest commit on the main branch:
+
+```bash
+./bin/update-repos
+```
 
 * Run the web tool in a single step
 
@@ -8,9 +14,8 @@ Ensure your working directory is PACTA_analysis, then run one of these workflows
 ./bin/run-web-tool
 ```
 
-* Run the web tool in two steps:
+* Or only start the docker container (e.g. to debug)
 
 ```bash
 ./bin/start-container
-/bound/bin/run-r-scripts
 ```
