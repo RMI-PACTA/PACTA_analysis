@@ -1,5 +1,7 @@
 ## Running the web tool with maurolepore/r2diirunner-with-packages
 
+[Video](https://asciinema.org/a/364647)
+
 * Ensure your working directory is PACTA_analysis
 
 * Update local repos to the latest commit on the main branch:
