@@ -7,7 +7,7 @@ docker image import https://tool.transitionmonitor.com/downloads/2diirunner_1.3.
 To build this image locally, change directory to this folder, then run:
 
 ```bash
-docker build --tag 2diirunner-with-packages .
+docker build --tag maurolepore/2diirunner-with-packages .
 ```
 
 Reference: <https://ropenscilabs.github.io/r-docker-tutorial/04-Dockerhub.html>
