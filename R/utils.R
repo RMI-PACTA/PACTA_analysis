@@ -26,7 +26,7 @@ create_install_calls_for_dockerfile <- function(path = packages_path()) {
   glue('    && Rscript -e "install.packages(\'{pkg}\')" \\')
 }
 
-update_dockerfile_packages <- function(path = "docker/Dockerfile") {
+update_dockerfile_packages <- function(path = "docker/2diirunner-with-packages/Dockerfile") {
   dkr <- readLines(path, encoding = "UTF-8")
 
   raw <- readLines(packages_path(), encoding = "UTF-8")
