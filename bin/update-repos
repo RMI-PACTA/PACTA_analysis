@@ -1,5 +1,6 @@
 #! /bin/bash
 
+head=$(git rev-list HEAD -1)
 git checkout master
 git pull origin master
 
@@ -16,4 +17,4 @@ git checkout master
 git pull origin master
 
 cd ../PACTA_analysis
-
+git checkout "$head"
