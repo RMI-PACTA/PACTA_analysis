@@ -109,7 +109,12 @@ get_input_files <- function(portfolio_name_ref_all) {
   input_names <- gsub(".txt", "", input_names)
   input_names <- gsub(".xlsx", "", input_names)
 
-  input_file_type <- unique(tools::file_ext(grep(portfolio_name_ref_all, list.files(path = input_path, full.names = F), value = T)))
+  input_file_type <- unique(
+    # FIXME: Maybe easier with fs::path_ext()?
+    tools::file_ext(
+      grep(portfolio_name_ref_all, list.files(path = input_path, full.names = F), value = T)
+    )
+  )
   if (!input_file_type %in% c("csv", "xlsx", "txt")) {
     write_log(msg = "Input file format not supported. Must be .csv, .xlsx or .txt")
     stop("Input file format not supported. Must be .csv, .xlsx or .txt")
