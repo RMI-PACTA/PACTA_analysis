@@ -1,7 +1,9 @@
 FROM maurolepore/2diirunner:1.3.0
 MAINTAINER "Mauro Lepore" maurolepore@gmail.com
 
-RUN apt-get update && apt-get install -y pandoc
+# Allow host to remove directories created in docker
+RUN echo "umask 000" >> ~/.profile \
+    && apt-get update && apt-get install -y pandoc
 
 # This repository has binaries not just for Windows and Mac, but also for Linux
 RUN echo "options(repos = c(CRAN = 'https://packagemanager.rstudio.com/all/__linux__/bionic/latest'))" >> /root/.Rprofile \
