@@ -15,6 +15,10 @@ setup_project <- function() {
 
 use_r_packages <- function(path = packages_path()) {
   source(path)
+  conflicted::conflict_prefer("filter", "dplyr")
+  conflicted::conflict_prefer("lag", "dplyr")
+
+  invisible(path)
 }
 
 packages_path <- function() {
