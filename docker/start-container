@@ -1,3 +1,0 @@
-#! /bin/bash
-
-"$(pwd)"/docker/start-containter-with /bin/bash
