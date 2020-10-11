@@ -1,0 +1,4 @@
+#! /bin/bash
+
+sudo rm working_dir/50_Outputs/TestPortfolio_Input/ -rf
+
