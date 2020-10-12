@@ -17,13 +17,13 @@ source("0_json_functions.R")
 devtools::load_all()
 setup_project()
 
-working_location <- paste0(working_location, "/")
+working_location <- file.path(working_location)
 
 # create_project_folder(project_name, twodii_internal, project_location_ext)
 
 # replaced with web version
 # set_project_paths(project_name, twodii_internal, project_location_ext)
-# set_web_parameters(file_path = paste0(working_location,"/parameter_files/WebParameters.yml"))
+# set_web_parameters(file_path = file.path(working_location, "parameter_files", "WebParameters.yml"))
 
 # just done once
 # create_project_folder(project_name, twodii_internal, project_location_ext)
@@ -32,9 +32,9 @@ set_webtool_paths()
 
 # just done once
 # copy_files(project_name)
-options(r2dii_config = paste0(par_file_path, "/AnalysisParameters.yml"))
+options(r2dii_config = file.path(par_file_path, "AnalysisParameters.yml"))
 
-set_global_parameters(paste0(par_file_path, "/AnalysisParameters.yml"))
+set_global_parameters(file.path(par_file_path, "AnalysisParameters.yml"))
 
 # need to define an alternative location for data files
 analysis_inputs_path <- set_analysis_inputs_path(twodii_internal, data_location_ext, dataprep_timestamp)
@@ -47,7 +47,7 @@ analysis_inputs_path <- set_analysis_inputs_path(twodii_internal, data_location_
 
 # Files are first cleaned then saved for a faster read in time.
 # Set parameter to ensure data is reprocessed in "new_data" == TRUE in the parameter file
-file_location <- paste0(analysis_inputs_path, "cleaned_files")
+file_location <- file.path(analysis_inputs_path, "cleaned_files")
 
 if (new_data == TRUE) {
   currencies <- get_and_clean_currency_data()
@@ -78,22 +78,22 @@ if (new_data == TRUE) {
     company_emissions
   )
 } else {
-  currencies <- read_file(paste0(file_location, "/currencies.fst"))
+  currencies <- read_file(file.path(file_location, "currencies.fst"))
 
-  fund_data <- read_file(paste0(file_location, "/fund_data.fst"))
+  fund_data <- read_file(file.path(file_location, "fund_data.fst"))
 
-  fin_data <- read_file(paste0(file_location, "/fin_data.fst"))
+  fin_data <- read_file(file.path(file_location, "fin_data.fst"))
 
-  comp_fin_data <- read_file(paste0(file_location, "/comp_fin_data.fst"))
+  comp_fin_data <- read_file(file.path(file_location, "comp_fin_data.fst"))
 
-  debt_fin_data <- read_file(paste0(file_location, "/debt_fin_data.fst"))
+  debt_fin_data <- read_file(file.path(file_location, "debt_fin_data.fst"))
 
-  # revenue_data <- read_file(paste0(file_location, "revenue_data.fst"))
+  # revenue_data <- read_file(file.path(file_location, "revenue_data.fst"))
 
   if (inc_emission_factors) {
-    average_sector_intensity <- read_file(paste0(file_location, "/average_sector_intensity.fst"))
+    average_sector_intensity <- read_file(file.path(file_location, "average_sector_intensity.fst"))
 
-    company_emissions <- read_file(paste0(file_location, "/company_emissions.fst"))
+    company_emissions <- read_file(file.path(file_location, "company_emissions.fst"))
   }
 }
 ####################
@@ -163,9 +163,9 @@ file_names <- identify_portfolios(portfolio_total)
 
 portfolio_name <- file_names$portfolio_name
 
-proc_input_path_ <- paste0(proc_input_path, "/", portfolio_name_ref_all)
+proc_input_path_ <- file.path(proc_input_path, portfolio_name_ref_all)
 
-write_csv(file_names, paste0(proc_input_path_, "/file_names.csv"))
+write_csv(file_names, file.path(proc_input_path_, "file_names.csv"))
 
 
 export_audit_information_jsons(
@@ -174,11 +174,11 @@ export_audit_information_jsons(
   folder_path = proc_input_path_
 )
 
-save_if_exists(audit_file, portfolio_name, paste0(proc_input_path_, "/audit_file.csv"), csv_or_rds = "csv")
+save_if_exists(audit_file, portfolio_name, file.path(proc_input_path_, "audit_file.csv"), csv_or_rds = "csv")
 
-save_if_exists(portfolio_total, portfolio_name, paste0(proc_input_path_, "/total_portfolio.rda"))
-save_if_exists(eq_portfolio, portfolio_name, paste0(proc_input_path_, "/equity_portfolio.rda"))
-save_if_exists(cb_portfolio, portfolio_name, paste0(proc_input_path_, "/bonds_portfolio.rda"))
-save_if_exists(portfolio_overview, portfolio_name, paste0(proc_input_path_, "/overview_portfolio.rda"))
-save_if_exists(audit_file, portfolio_name, paste0(proc_input_path_, "/audit_file.rda"))
-save_if_exists(emissions_totals, portfolio_name, paste0(proc_input_path_, "/emissions.rda"))
+save_if_exists(portfolio_total, portfolio_name, file.path(proc_input_path_, "total_portfolio.rda"))
+save_if_exists(eq_portfolio, portfolio_name, file.path(proc_input_path_, "equity_portfolio.rda"))
+save_if_exists(cb_portfolio, portfolio_name, file.path(proc_input_path_, "bonds_portfolio.rda"))
+save_if_exists(portfolio_overview, portfolio_name, file.path(proc_input_path_, "overview_portfolio.rda"))
+save_if_exists(audit_file, portfolio_name, file.path(proc_input_path_, "audit_file.rda"))
+save_if_exists(emissions_totals, portfolio_name, file.path(proc_input_path_, "emissions.rda"))
