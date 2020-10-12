@@ -50,7 +50,7 @@ sda_portfolio_target <- function(
     select(colnames(portfolio))
 
 
-  out %>% r2dii.utils::unclean_column_names(unclean = old_market)
+  out %>% unclean_column_names(unclean = old_market)
 }
 
 check_names_sector_and_geography <- function(market,
