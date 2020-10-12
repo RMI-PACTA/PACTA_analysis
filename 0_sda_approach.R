@@ -1,3 +1,5 @@
+devtools::load_all()
+
 sda_portfolio_target <- function(
                                  market,
                                  portfolio,
@@ -9,8 +11,8 @@ sda_portfolio_target <- function(
   stopifnot(is.data.frame(market), is.data.frame(portfolio))
   old_market <- market
   old_portfolio <- portfolio
-  market <- r2dii.utils::clean_column_names(market)
-  portfolio <- r2dii.utils::clean_column_names(portfolio)
+  market <- clean_column_names(market)
+  portfolio <- clean_column_names(portfolio)
   check_names_sector_and_geography(market, portfolio, scenario, geography)
   ald_sector <- validate_sector(market, portfolio, ald_sector = ald_sector)
   message("* Using `ald_sector`: ", paste0(ald_sector, collapse = ", "), ".")
