@@ -36,7 +36,8 @@ Imports:
     dplyr,
     janitor,
     purrr,
-    magrittr
+    magrittr,
+    usethis
 Suggests: 
     testthat
 Encoding: UTF-8
