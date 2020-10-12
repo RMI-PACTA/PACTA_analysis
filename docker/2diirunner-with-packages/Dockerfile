@@ -9,6 +9,7 @@ RUN echo "options(repos = c(CRAN = 'https://packagemanager.rstudio.com/all/__lin
     && Rscript -e "install.packages(
              c(
                "conflicted",
+               "assertthat",
                "config",
                "countrycode",
                "cowplot",
@@ -46,6 +47,8 @@ RUN echo "options(repos = c(CRAN = 'https://packagemanager.rstudio.com/all/__lin
                "tidyselect",
                "tidyverse",
                "writexl",
+               "usethis",
+               "withr",
                "xml2"
              )
            )
