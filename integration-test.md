@@ -1,6 +1,6 @@
 Integration test: Run the web tool
 ================
-2020-10-09
+2020-10-12
 
 ## Introduction
 
@@ -21,12 +21,12 @@ Packages used in this file:
 
 ``` r
 library(tidyverse)
-#> ── Attaching packages ─────────────────────── tidyverse 1.3.0 ──
+#> ── Attaching packages ──────────────────────────── tidyverse 1.3.0 ──
 #> ✓ ggplot2 3.3.2     ✓ purrr   0.3.4
 #> ✓ tibble  3.0.3     ✓ dplyr   1.0.2
 #> ✓ tidyr   1.1.2     ✓ stringr 1.4.0
 #> ✓ readr   1.3.1     ✓ forcats 0.5.0
-#> ── Conflicts ────────────────────────── tidyverse_conflicts() ──
+#> ── Conflicts ─────────────────────────────── tidyverse_conflicts() ──
 #> x dplyr::filter() masks stats::filter()
 #> x dplyr::lag()    masks stats::lag()
 library(devtools)
@@ -94,10 +94,17 @@ library(fs)
 library(here)
 #> here() starts at /home/mauro/git/PACTA_analysis
 library(conflicted)
-conflicted::conflict_prefer("filter", "dplyr")
+
+devtools::load_all()
+#> Loading PACTA.analysis
+resolve_conflicts()
 #> [conflicted] Will prefer dplyr::filter over any other package
-conflicted::conflict_prefer("lag", "dplyr")
 #> [conflicted] Will prefer dplyr::lag over any other package
+#> [conflicted] Will prefer dplyr::mutate over any other package
+#> [conflicted] Will prefer here::here over any other package
+#> [conflicted] Will prefer dplyr::rename over any other package
+#> [conflicted] Will prefer dplyr::summarise over any other package
+#> [conflicted] Will prefer dplyr::arrange over any other package
 ```
 
 All packages detected in the directory PACTA\_analysis:
@@ -141,99 +148,175 @@ devtools::session_info()
 #>  collate  en_US.UTF-8                 
 #>  ctype    en_US.UTF-8                 
 #>  tz       America/Chicago             
-#>  date     2020-10-09                  
+#>  date     2020-10-12                  
 #> 
 #> ─ Packages ───────────────────────────────────────────────────────────────────
-#>  package     * version     date       lib source                             
-#>  assertthat    0.2.1       2019-03-21 [1] CRAN (R 4.0.0)                     
-#>  backports     1.1.10      2020-09-15 [1] CRAN (R 4.0.2)                     
-#>  blob          1.2.1       2020-01-20 [1] CRAN (R 4.0.0)                     
-#>  broom         0.7.1       2020-10-02 [1] CRAN (R 4.0.0)                     
-#>  callr         3.4.4       2020-09-07 [1] RSPM (R 4.0.2)                     
-#>  cellranger    1.1.0       2016-07-27 [1] CRAN (R 4.0.0)                     
-#>  cli           2.0.2       2020-02-28 [1] CRAN (R 4.0.0)                     
-#>  colorspace    1.4-1       2019-03-18 [1] CRAN (R 4.0.0)                     
-#>  config      * 0.3         2018-03-27 [1] CRAN (R 4.0.0)                     
-#>  conflicted  * 1.0.4       2019-06-21 [1] CRAN (R 4.0.0)                     
-#>  crayon        1.3.4.9000  2020-09-03 [1] Github (r-lib/crayon@6b3f0c6)      
-#>  DBI           1.1.0       2019-12-15 [1] CRAN (R 4.0.0)                     
-#>  dbplyr        1.4.4       2020-05-27 [1] CRAN (R 4.0.0)                     
-#>  desc          1.2.0       2018-05-01 [1] CRAN (R 4.0.0)                     
-#>  devtools    * 2.3.2       2020-09-18 [1] RSPM (R 4.0.2)                     
-#>  digest        0.6.25      2020-02-23 [1] CRAN (R 4.0.0)                     
-#>  dplyr       * 1.0.2       2020-08-18 [1] RSPM (R 4.0.2)                     
-#>  ellipsis      0.3.1       2020-05-15 [1] CRAN (R 4.0.0)                     
-#>  evaluate      0.14        2019-05-28 [1] CRAN (R 4.0.0)                     
-#>  fansi         0.4.1       2020-01-08 [1] CRAN (R 4.0.0)                     
-#>  forcats     * 0.5.0       2020-03-01 [1] CRAN (R 4.0.0)                     
-#>  fs          * 1.5.0       2020-07-31 [1] RSPM (R 4.0.2)                     
-#>  generics      0.0.2       2018-11-29 [1] CRAN (R 4.0.0)                     
-#>  ggplot2     * 3.3.2       2020-06-19 [1] CRAN (R 4.0.0)                     
-#>  glue        * 1.4.2       2020-08-27 [1] RSPM (R 4.0.2)                     
-#>  gtable        0.3.0       2019-03-25 [1] CRAN (R 4.0.0)                     
-#>  haven         2.3.1       2020-06-01 [1] CRAN (R 4.0.0)                     
-#>  here        * 0.1         2017-05-28 [1] RSPM (R 4.0.0)                     
-#>  hms           0.5.3       2020-01-08 [1] CRAN (R 4.0.0)                     
-#>  htmltools     0.5.0.9001  2020-10-08 [1] Github (rstudio/htmltools@5d42d84) 
-#>  httr          1.4.2       2020-07-20 [1] RSPM (R 4.0.2)                     
-#>  jsonlite      1.7.1       2020-09-07 [1] RSPM (R 4.0.2)                     
-#>  knitr         1.30        2020-09-22 [1] RSPM (R 4.0.2)                     
-#>  lifecycle     0.2.0       2020-03-06 [1] CRAN (R 4.0.0)                     
-#>  lubridate     1.7.9       2020-06-08 [1] CRAN (R 4.0.0)                     
-#>  magrittr      1.5.0.9000  2020-09-28 [1] Github (tidyverse/magrittr@0221e18)
-#>  memoise       1.1.0       2017-04-21 [1] CRAN (R 4.0.0)                     
-#>  modelr        0.1.8       2020-05-19 [1] CRAN (R 4.0.0)                     
-#>  munsell       0.5.0       2018-06-12 [1] CRAN (R 4.0.0)                     
-#>  pillar        1.4.6       2020-07-10 [1] CRAN (R 4.0.0)                     
-#>  pkgbuild      1.1.0       2020-07-13 [1] RSPM (R 4.0.2)                     
-#>  pkgconfig     2.0.3       2019-09-22 [1] CRAN (R 4.0.0)                     
-#>  pkgload       1.1.0       2020-05-29 [1] CRAN (R 4.0.0)                     
-#>  prettyunits   1.1.1       2020-01-24 [1] CRAN (R 4.0.0)                     
-#>  processx      3.4.4       2020-09-03 [1] CRAN (R 4.0.2)                     
-#>  ps            1.4.0       2020-10-07 [1] CRAN (R 4.0.2)                     
-#>  purrr       * 0.3.4       2020-04-17 [1] CRAN (R 4.0.0)                     
-#>  R6            2.4.1       2019-11-12 [1] CRAN (R 4.0.0)                     
-#>  Rcpp          1.0.5       2020-07-06 [1] CRAN (R 4.0.0)                     
-#>  readr       * 1.3.1       2018-12-21 [1] CRAN (R 4.0.0)                     
-#>  readxl        1.3.1       2019-03-13 [1] CRAN (R 4.0.0)                     
-#>  remotes       2.2.0       2020-07-21 [1] RSPM (R 4.0.2)                     
-#>  renv        * 0.12.0      2020-08-28 [1] RSPM (R 4.0.0)                     
-#>  reprex        0.3.0       2019-05-16 [1] CRAN (R 4.0.0)                     
-#>  rlang       * 0.4.8       2020-10-08 [1] CRAN (R 4.0.2)                     
-#>  rmarkdown     2.4         2020-09-30 [1] CRAN (R 4.0.2)                     
-#>  rprojroot     1.3-2       2018-01-03 [1] CRAN (R 4.0.0)                     
-#>  rstudioapi    0.11        2020-02-07 [1] CRAN (R 4.0.2)                     
-#>  rvest         0.3.6       2020-07-25 [1] RSPM (R 4.0.2)                     
-#>  scales        1.1.1       2020-05-11 [1] CRAN (R 4.0.0)                     
-#>  sessioninfo   1.1.1       2018-11-05 [1] CRAN (R 4.0.0)                     
-#>  stringi       1.5.3       2020-09-09 [1] RSPM (R 4.0.2)                     
-#>  stringr     * 1.4.0       2019-02-10 [1] CRAN (R 4.0.0)                     
-#>  testthat    * 2.99.0.9000 2020-10-08 [1] Github (r-lib/testthat@8c4b523)    
-#>  tibble      * 3.0.3       2020-07-10 [1] CRAN (R 4.0.0)                     
-#>  tidyr       * 1.1.2       2020-08-27 [1] RSPM (R 4.0.2)                     
-#>  tidyselect    1.1.0       2020-05-11 [1] CRAN (R 4.0.0)                     
-#>  tidyverse   * 1.3.0       2019-11-21 [1] RSPM (R 4.0.2)                     
-#>  usethis     * 1.6.3       2020-09-17 [1] RSPM (R 4.0.2)                     
-#>  vctrs         0.3.4       2020-08-29 [1] RSPM (R 4.0.2)                     
-#>  withr         2.3.0       2020-09-22 [1] RSPM (R 4.0.2)                     
-#>  xfun          0.18        2020-09-29 [1] RSPM (R 4.0.2)                     
-#>  xml2          1.3.2       2020-04-23 [1] CRAN (R 4.0.0)                     
-#>  yaml          2.2.1       2020-02-01 [1] RSPM (R 4.0.0)                     
+#>  ! package        * version     date       lib
+#>    assertthat       0.2.1       2019-03-21 [1]
+#>    backports        1.1.10      2020-09-15 [1]
+#>    blob             1.2.1       2020-01-20 [1]
+#>    broom            0.7.1       2020-10-02 [1]
+#>    callr            3.5.0       2020-10-08 [1]
+#>    cellranger       1.1.0       2016-07-27 [1]
+#>    cli              2.0.2       2020-02-28 [1]
+#>    colorspace       1.4-1       2019-03-18 [1]
+#>    config         * 0.3         2018-03-27 [1]
+#>    conflicted     * 1.0.4       2019-06-21 [1]
+#>    crayon           1.3.4.9000  2020-09-03 [1]
+#>    DBI              1.1.0       2019-12-15 [1]
+#>    dbplyr           1.4.4       2020-05-27 [1]
+#>    desc             1.2.0       2018-05-01 [1]
+#>    devtools       * 2.3.2       2020-09-18 [1]
+#>    digest           0.6.25      2020-02-23 [1]
+#>    dplyr          * 1.0.2       2020-08-18 [1]
+#>    ellipsis         0.3.1       2020-05-15 [1]
+#>    evaluate         0.14        2019-05-28 [1]
+#>    fansi            0.4.1       2020-01-08 [1]
+#>    forcats        * 0.5.0       2020-03-01 [1]
+#>    fs             * 1.5.0       2020-07-31 [1]
+#>    fst              0.9.4       2020-08-27 [1]
+#>    generics         0.0.2       2018-11-29 [1]
+#>    ggplot2        * 3.3.2       2020-06-19 [1]
+#>    glue           * 1.4.2       2020-08-27 [1]
+#>    gtable           0.3.0       2019-03-25 [1]
+#>    haven            2.3.1       2020-06-01 [1]
+#>    here           * 0.1         2017-05-28 [1]
+#>    hms              0.5.3       2020-01-08 [1]
+#>    htmltools        0.5.0.9001  2020-10-08 [1]
+#>    httr             1.4.2       2020-07-20 [1]
+#>    jsonlite         1.7.1       2020-09-07 [1]
+#>    knitr            1.30        2020-09-22 [1]
+#>    lifecycle        0.2.0       2020-03-06 [1]
+#>    lubridate        1.7.9       2020-06-08 [1]
+#>    magrittr         1.5.0.9000  2020-09-28 [1]
+#>    memoise          1.1.0       2017-04-21 [1]
+#>    modelr           0.1.8       2020-05-19 [1]
+#>    munsell          0.5.0       2018-06-12 [1]
+#>  P PACTA.analysis * 0.0.0.9000  2020-10-01 [?]
+#>    pillar           1.4.6       2020-07-10 [1]
+#>    pkgbuild         1.1.0       2020-07-13 [1]
+#>    pkgconfig        2.0.3       2019-09-22 [1]
+#>    pkgload          1.1.0       2020-05-29 [1]
+#>    prettyunits      1.1.1       2020-01-24 [1]
+#>    processx         3.4.4       2020-09-03 [1]
+#>    ps               1.4.0       2020-10-07 [1]
+#>    purrr          * 0.3.4       2020-04-17 [1]
+#>    R6               2.4.1       2019-11-12 [1]
+#>    Rcpp             1.0.5       2020-07-06 [1]
+#>    readr          * 1.3.1       2018-12-21 [1]
+#>    readxl           1.3.1       2019-03-13 [1]
+#>    remotes          2.2.0       2020-07-21 [1]
+#>    renv           * 0.12.0      2020-08-28 [1]
+#>    reprex           0.3.0       2019-05-16 [1]
+#>    rlang          * 0.4.8       2020-10-08 [1]
+#>    rmarkdown        2.4         2020-09-30 [1]
+#>    rprojroot        1.3-2       2018-01-03 [1]
+#>    rstudioapi       0.11        2020-02-07 [1]
+#>    rvest            0.3.6       2020-07-25 [1]
+#>    scales           1.1.1       2020-05-11 [1]
+#>    sessioninfo      1.1.1       2018-11-05 [1]
+#>    stringi          1.5.3       2020-09-09 [1]
+#>    stringr        * 1.4.0       2019-02-10 [1]
+#>    testthat       * 2.99.0.9000 2020-10-11 [1]
+#>    tibble         * 3.0.3       2020-07-10 [1]
+#>    tidyr          * 1.1.2       2020-08-27 [1]
+#>    tidyselect       1.1.0       2020-05-11 [1]
+#>    tidyverse      * 1.3.0       2019-11-21 [1]
+#>    usethis        * 1.6.3       2020-09-17 [1]
+#>    vctrs            0.3.4       2020-08-29 [1]
+#>    withr            2.3.0       2020-09-22 [1]
+#>    xfun             0.18        2020-09-29 [1]
+#>    xml2             1.3.2       2020-04-23 [1]
+#>    yaml             2.2.1       2020-02-01 [1]
+#>  source                             
+#>  CRAN (R 4.0.0)                     
+#>  CRAN (R 4.0.2)                     
+#>  CRAN (R 4.0.0)                     
+#>  CRAN (R 4.0.0)                     
+#>  RSPM (R 4.0.2)                     
+#>  CRAN (R 4.0.0)                     
+#>  CRAN (R 4.0.0)                     
+#>  CRAN (R 4.0.0)                     
+#>  CRAN (R 4.0.0)                     
+#>  RSPM (R 4.0.2)                     
+#>  Github (r-lib/crayon@6b3f0c6)      
+#>  CRAN (R 4.0.0)                     
+#>  CRAN (R 4.0.0)                     
+#>  CRAN (R 4.0.0)                     
+#>  RSPM (R 4.0.2)                     
+#>  CRAN (R 4.0.0)                     
+#>  RSPM (R 4.0.2)                     
+#>  CRAN (R 4.0.0)                     
+#>  CRAN (R 4.0.0)                     
+#>  CRAN (R 4.0.0)                     
+#>  CRAN (R 4.0.0)                     
+#>  RSPM (R 4.0.2)                     
+#>  RSPM (R 4.0.2)                     
+#>  CRAN (R 4.0.0)                     
+#>  CRAN (R 4.0.0)                     
+#>  RSPM (R 4.0.2)                     
+#>  CRAN (R 4.0.0)                     
+#>  CRAN (R 4.0.0)                     
+#>  RSPM (R 4.0.0)                     
+#>  CRAN (R 4.0.0)                     
+#>  Github (rstudio/htmltools@5d42d84) 
+#>  RSPM (R 4.0.2)                     
+#>  RSPM (R 4.0.2)                     
+#>  RSPM (R 4.0.2)                     
+#>  CRAN (R 4.0.0)                     
+#>  CRAN (R 4.0.0)                     
+#>  Github (tidyverse/magrittr@0221e18)
+#>  CRAN (R 4.0.0)                     
+#>  CRAN (R 4.0.0)                     
+#>  CRAN (R 4.0.0)                     
+#>  local                              
+#>  CRAN (R 4.0.0)                     
+#>  RSPM (R 4.0.2)                     
+#>  CRAN (R 4.0.0)                     
+#>  CRAN (R 4.0.0)                     
+#>  CRAN (R 4.0.0)                     
+#>  CRAN (R 4.0.2)                     
+#>  CRAN (R 4.0.2)                     
+#>  CRAN (R 4.0.0)                     
+#>  CRAN (R 4.0.0)                     
+#>  CRAN (R 4.0.0)                     
+#>  CRAN (R 4.0.0)                     
+#>  CRAN (R 4.0.0)                     
+#>  RSPM (R 4.0.2)                     
+#>  RSPM (R 4.0.0)                     
+#>  CRAN (R 4.0.0)                     
+#>  CRAN (R 4.0.2)                     
+#>  CRAN (R 4.0.2)                     
+#>  CRAN (R 4.0.0)                     
+#>  CRAN (R 4.0.2)                     
+#>  RSPM (R 4.0.2)                     
+#>  CRAN (R 4.0.0)                     
+#>  CRAN (R 4.0.0)                     
+#>  RSPM (R 4.0.2)                     
+#>  CRAN (R 4.0.0)                     
+#>  Github (r-lib/testthat@d10a276)    
+#>  CRAN (R 4.0.0)                     
+#>  RSPM (R 4.0.2)                     
+#>  CRAN (R 4.0.0)                     
+#>  RSPM (R 4.0.2)                     
+#>  RSPM (R 4.0.2)                     
+#>  RSPM (R 4.0.2)                     
+#>  RSPM (R 4.0.2)                     
+#>  RSPM (R 4.0.2)                     
+#>  CRAN (R 4.0.0)                     
+#>  RSPM (R 4.0.0)                     
 #> 
 #> [1] /home/mauro/R/x86_64-pc-linux-gnu-library/4.0
 #> [2] /usr/local/lib/R/site-library
 #> [3] /usr/lib/R/site-library
 #> [4] /usr/lib/R/library
+#> 
+#>  P ── Loaded and on-disk path mismatch.
 ```
 
 </details>
 
 ## Functions
-
-``` r
-devtools::load_all()
-#> Loading PACTA.analysis
-```
 
 ## Data
 
@@ -714,11 +797,11 @@ look_into(index, n = 20L)
 #> 
 #>   <meta charset="utf-8" />
 #>   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-#>   <title>1 Introduction: What to get out of this report and how to read it | Interactive Portfolio Report</title>
+#>   <title>Interactive Portfolio Report</title>
 #>   <meta name="description" content="" />
-#>   <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
+#>   <meta name="generator" content="bookdown 0.19 and GitBook 2.6.7" />
 #> 
-#>   <meta property="og:title" content="1 Introduction: What to get out of this report and how to read it | Interactive Portfolio Report" />
+#>   <meta property="og:title" content="Interactive Portfolio Report" />
 #>   <meta property="og:type" content="book" />
 #>   
 #>   
@@ -726,7 +809,7 @@ look_into(index, n = 20L)
 #>   
 #> 
 #>   <meta name="twitter:card" content="summary" />
-#>   <meta name="twitter:title" content="1 Introduction: What to get out of this report and how to read it | Interactive Portfolio Report" />
+#>   <meta name="twitter:title" content="Interactive Portfolio Report" />
 #> 
 
 dir_tree(path(outputs, "TestPortfolio_Input"), recurse = FALSE)

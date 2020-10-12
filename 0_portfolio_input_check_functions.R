@@ -1520,7 +1520,8 @@ calculate_portfolio_emissions <- function(
       ) %>%
       summarise(
         value_usd = sum(value_usd, na.rm = TRUE),
-        weighted_sector_emissions = sum(weighted_emissions, na.rm = TRUE)
+        weighted_sector_emissions = sum(weighted_emissions, na.rm = TRUE),
+        .groups = "drop_last"
       )
   }
 
