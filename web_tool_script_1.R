@@ -1,14 +1,8 @@
 # web_tool_script.R
-# install.packages("devtools")
-# devtools::install_github("2DegreesInvesting/r2dii")
-# install.packages("fst")
 
 devtools::load_all()
 use_r_packages()
 
-# source("0_portfolio_test.R")
-# source("0_graphing_functions.R")
-# source("0_reporting_functions.R")
 source("0_portfolio_input_check_functions.R")
 source("0_global_functions.R")
 source("0_web_functions.R")
@@ -19,19 +13,7 @@ setup_project()
 
 working_location <- file.path(working_location)
 
-# create_project_folder(project_name, twodii_internal, project_location_ext)
-
-# replaced with web version
-# set_project_paths(project_name, twodii_internal, project_location_ext)
-# set_web_parameters(file_path = file.path(working_location, "parameter_files", "WebParameters.yml"))
-
-# just done once
-# create_project_folder(project_name, twodii_internal, project_location_ext)
-
 set_webtool_paths()
-
-# just done once
-# copy_files(project_name)
 options(r2dii_config = file.path(par_file_path, "AnalysisParameters.yml"))
 
 set_global_parameters(file.path(par_file_path, "AnalysisParameters.yml"))
