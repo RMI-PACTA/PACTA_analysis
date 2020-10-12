@@ -41,7 +41,7 @@ pluck_param <- function(x, file, if_null) {
 
 pluck_param <- function(x, file, if_null) {
   out <- purrr::pluck(config::get(file = file), !!!x)
-  param <- usethis::ui_field(dplyr::last(unlist(x)))
+  param <- ui_field(dplyr::last(unlist(x)))
 
   if (is.null(out) && identical(if_null, stop)) {
     abort(glue(
