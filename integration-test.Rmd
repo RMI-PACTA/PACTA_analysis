@@ -222,8 +222,7 @@ root_field_path <- function(x, field, pattern) {
 }
 
 extract_from <- function(x, pattern) {
-  no_comment <- sub("^#.*", "", trimws(x))
-  line <- grep(pattern, no_comment, value = TRUE)
+  line <- grep(pattern, x, value = TRUE)
   sub(glue(".*({pattern}.*)"), "\\1", line)
 }
 
