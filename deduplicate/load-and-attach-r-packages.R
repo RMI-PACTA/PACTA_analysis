@@ -1,3 +1,6 @@
+# Load plyr before dplyr. TODO: Remove plyr
+library(plyr)
+
 library(RColorBrewer)
 library(assertthat)
 library(config)
@@ -24,7 +27,6 @@ library(knitr)
 library(lme4)
 library(magrittr)
 library(matrixStats)
-library(plyr)
 library(purrr)
 library(readr)
 library(readxl)
