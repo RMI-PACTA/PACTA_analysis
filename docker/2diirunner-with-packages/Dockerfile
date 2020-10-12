@@ -1,4 +1,4 @@
-FROM maurolepore/2diirunner:1.3.0
+FROM maurolepore/2diirunner:latest
 MAINTAINER "Mauro Lepore" maurolepore@gmail.com
 
 RUN apt-get update && apt-get install -y pandoc
