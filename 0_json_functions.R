@@ -339,7 +339,7 @@ export_audit_graph_json <- function(audit_file__, export_path_full) {
   chart_information <- paste0(chart_information, json_tail)
   chart_legend <- paste0(chart_legend, json_tail)
 
-  write(chart_legend, file = paste0(export_path_full, ".json"))
+  write(chart_legend, file = paste0(export_path_full, "legend.json"))
   write(chart_information, file = paste0(export_path_full, ".json"))
 }
 

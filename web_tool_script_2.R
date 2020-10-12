@@ -11,23 +11,23 @@ source("0_web_functions.R")
 
 setup_project()
 
-working_location <- paste0(working_location, "/")
+working_location <- file.path(working_location)
 
 set_webtool_paths()
 
 # just done once
-options(r2dii_config = paste0(par_file_path, "/AnalysisParameters.yml"))
+options(r2dii_config = file.path(par_file_path, "AnalysisParameters.yml"))
 
-set_global_parameters(paste0(par_file_path, "/AnalysisParameters.yml"))
+set_global_parameters(file.path(par_file_path, "AnalysisParameters.yml"))
 
 # need to define an alternative location for data files
 analysis_inputs_path <- set_analysis_inputs_path(twodii_internal, data_location_ext, dataprep_timestamp)
 
 # delete all results files within the current portfolio folder
-unlink(paste0(results_path, "/", portfolio_name_ref_all, "/*"), force = TRUE, recursive = TRUE)
+unlink(file.path(results_path, portfolio_name_ref_all, "*"), force = TRUE, recursive = TRUE)
 
 # run again so output folders are available after deleting past results
-file_names <- read_csv(paste0(proc_input_path, "/", portfolio_name_ref_all, "/file_names.csv"))
+file_names <- read_csv(file.path(proc_input_path, portfolio_name_ref_all, "file_names.csv"))
 create_portfolio_subfolders(portfolio_name_ref_all)
 
 port_col_types <- set_col_types(grouping_variables, "ddddccccddclc")
@@ -38,7 +38,7 @@ port_col_types <- set_col_types(grouping_variables, "ddddccccddclc")
 
 
 
-equity_input_file <- paste0(proc_input_path, "/", portfolio_name_ref_all, "/equity_portfolio.rda")
+equity_input_file <- file.path(proc_input_path, portfolio_name_ref_all, "equity_portfolio.rda")
 portfolio_name <- file_names$portfolio_name
 
 if (file.exists(equity_input_file)) {
@@ -103,20 +103,20 @@ if (file.exists(equity_input_file)) {
 
     company_all_eq <- calculate_scenario_alignment(company_all_eq)
 
-    pf_file_results_path <- paste0(results_path, "/", portfolio_name_ref_all, "/")
+    pf_file_results_path <- file.path(results_path, portfolio_name_ref_all)
     if (!dir.exists(pf_file_results_path)) {
       dir.create(pf_file_results_path)
     }
 
     if (data_check(company_all_eq)) {
-      write_rds(company_all_eq, paste0(pf_file_results_path, "Equity_results_company.rda"))
+      write_rds(company_all_eq, file.path(pf_file_results_path, "Equity_results_company.rda"))
     }
     if (data_check(port_all_eq)) {
-      write_rds(port_all_eq, paste0(pf_file_results_path, "Equity_results_portfolio.rda"))
+      write_rds(port_all_eq, file.path(pf_file_results_path, "Equity_results_portfolio.rda"))
     }
     if (has_map) {
       if (data_check(map_eq)) {
-        write_rds(map_eq, paste0(pf_file_results_path, "Equity_results_map.rda"))
+        write_rds(map_eq, file.path(pf_file_results_path, "Equity_results_map.rda"))
       }
     }
   }
@@ -127,7 +127,11 @@ if (file.exists(equity_input_file)) {
 ##### BONDS #####
 #################
 
-bonds_inputs_file <- paste0(proc_input_path, "/", portfolio_name_ref_all, "/bonds_portfolio.rda")
+ald_scen_cb <- get_ald_scen("Bonds")
+ald_raw_cb <- get_ald_raw("Bonds")
+
+bonds_inputs_file <- file.path(proc_input_path, portfolio_name_ref_all, "bonds_portfolio.rda")
+
 portfolio_name <- file_names$portfolio_name
 
 if (file.exists(bonds_inputs_file)) {
@@ -192,20 +196,20 @@ if (file.exists(bonds_inputs_file)) {
 
     company_all_cb <- calculate_scenario_alignment(company_all_cb)
 
-    pf_file_results_path <- paste0(results_path, "/", portfolio_name_ref_all, "/")
+    pf_file_results_path <- file.path(results_path, portfolio_name_ref_all)
     if (!dir.exists(pf_file_results_path)) {
       dir.create(pf_file_results_path)
     }
 
     if (data_check(company_all_cb)) {
-      write_rds(company_all_cb, paste0(pf_file_results_path, "Bonds_results_company.rda"))
+      write_rds(company_all_cb, file.path(pf_file_results_path, "Bonds_results_company.rda"))
     }
     if (data_check(port_all_cb)) {
-      write_rds(port_all_cb, paste0(pf_file_results_path, "Bonds_results_portfolio.rda"))
+      write_rds(port_all_cb, file.path(pf_file_results_path, "Bonds_results_portfolio.rda"))
     }
     if (has_map) {
       if (data_check(map_cb)) {
-        write_rds(map_cb, paste0(pf_file_results_path, "Bonds_results_map.rda"))
+        write_rds(map_cb, file.path(pf_file_results_path, "Bonds_results_map.rda"))
       }
     }
   }
@@ -214,4 +218,4 @@ if (file.exists(bonds_inputs_file)) {
 
 invisible(set_portfolio_parameters(file_path = fs::path(par_file_path, paste0(portfolio_name_ref_all, "_PortfolioParameters.yml"))))
 
-source(paste0(stress_test_path, "web_tool_stress_test.R"))
+source(file.path(stress_test_path, "web_tool_stress_test.R"))

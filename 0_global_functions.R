@@ -181,7 +181,7 @@ set_git_path <- function() {
 set_analysis_inputs_path <- function(twodii_internal, data_location_ext, dataprep_ref = datastore_timestamp) {
   if (twodii_internal) {
     analysis_inputs_path <- path_dropbox_2dii("PortCheck", "00_Data", "07_AnalysisInputs", dataprep_ref)
-    analysis_inputs_path <- paste0(analysis_inputs_path, "/")
+    analysis_inputs_path <- file.path(analysis_inputs_path)
   } else {
     analysis_inputs_path <- data_location_ext
   }
