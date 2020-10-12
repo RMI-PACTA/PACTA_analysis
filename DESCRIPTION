@@ -37,7 +37,8 @@ Imports:
     janitor,
     purrr,
     magrittr,
-    usethis
+    usethis,
+    config
 Suggests: 
     testthat
 Encoding: UTF-8
