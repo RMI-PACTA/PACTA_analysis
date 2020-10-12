@@ -26,7 +26,7 @@ knitr::opts_chunk$set(
 Packages used in this file:
 
 ```{r}
-library(tidyverse)
+library(purrr)
 library(devtools)
 library(testthat)
 library(config)
@@ -222,7 +222,8 @@ root_field_path <- function(x, field, pattern) {
 }
 
 extract_from <- function(x, pattern) {
-  line <- grep(pattern, x, value = TRUE)
+  no_comment <- sub("^#.*", "", trimws(x))
+  line <- grep(pattern, no_comment, value = TRUE)
   sub(glue(".*({pattern}.*)"), "\\1", line)
 }
 
