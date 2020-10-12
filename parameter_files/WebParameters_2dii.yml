@@ -1,6 +1,7 @@
 default:
     paths:
-        project_location_ext: ./
+        # Prefer "../PACTA_analysis/" -- not "./" nor "/path/to/PACTA_analysis"
+        project_location_ext: ../PACTA_analysis/
         data_location_ext: ../pacta-data/2019Q4/
         template_location: ../create_interactive_report/
         stress_test_location: ../StressTestingModelDev/
