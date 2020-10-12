@@ -32,7 +32,11 @@ Imports:
     rlang,
     rmarkdown,
     withr,
-    conflicted
+    conflicted,
+    dplyr,
+    janitor,
+    purrr,
+    magrittr
 Suggests: 
     testthat
 Encoding: UTF-8
