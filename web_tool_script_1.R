@@ -1,5 +1,4 @@
 # web_tool_script.R
-options(encoding = "UTF-8")
 # install.packages("devtools")
 # devtools::install_github("2DegreesInvesting/r2dii")
 # install.packages("fst")
