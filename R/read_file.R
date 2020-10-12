@@ -39,13 +39,13 @@ read_file <- function(path) {
     "fst" = fst::read_fst(path),
     "rda" = read_rda(path),
     "rds" = readr::read_rds(path),
-    rlang::abort("Extension is supported but something unexpected happened.")
+    abort("Extension is supported but something unexpected happened.")
   )
 }
 
 abort_unsupported_extension <- function(path) {
   if (!extension_is_supported(path)) {
-    rlang::abort(glue::glue("Unsupported `path` extension: {path}"))
+    abort(glue("Unsupported `path` extension: {path}"))
   }
 
   invisible(path)
@@ -80,7 +80,7 @@ read_rdata <- function(path) {
 abort_if_too_long <- function(dataset) {
   nn <- length(dataset)
   if (nn > 1L) {
-    rlang::abort(glue::glue("`path` must have a single object but has {nn}."))
+    abort(glue("`path` must have a single object but has {nn}."))
   }
 
   invisible(dataset)
