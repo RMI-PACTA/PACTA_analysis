@@ -38,9 +38,9 @@ create_portfolio_subfolders <- function(portfolio_name_ref_all) {
     purrr::flatten_chr()
 
   locs_to_create %>%
-    purrr::map(~ dir.create(.x))
+    purrr::map(~ dir.create(.x, showWarnings = FALSE))
 
-  invisible(portfolio_name_ref_all)
+    invisible(portfolio_name_ref_all)
 }
 
 save_if_exists <- function(df, portfolio_name_, save_name, csv_or_rds = "rds") {
@@ -58,14 +58,14 @@ save_if_exists <- function(df, portfolio_name_, save_name, csv_or_rds = "rds") {
 }
 
 set_webtool_paths <- function() {
-  project_location <<- paste0(working_location, "working_dir/")
+  project_location <<- file.path(working_location, "working_dir")
 
-  log_path <<- paste0(project_location, "00_Log_Files")
-  par_file_path <<- paste0(project_location, "10_Parameter_File")
-  raw_input_path <<- paste0(project_location, "20_Raw_Inputs")
-  proc_input_path <<- paste0(project_location, "30_Processed_Inputs")
-  results_path <<- paste0(project_location, "40_Results")
-  outputs_path <<- paste0(project_location, "50_Outputs")
+  log_path <<- file.path(project_location, "00_Log_Files")
+  par_file_path <<- file.path(project_location, "10_Parameter_File")
+  raw_input_path <<- file.path(project_location, "20_Raw_Inputs")
+  proc_input_path <<- file.path(project_location, "30_Processed_Inputs")
+  results_path <<- file.path(project_location, "40_Results")
+  outputs_path <<- file.path(project_location, "50_Outputs")
 }
 
 set_web_parameters <- function(file_path) {
@@ -101,9 +101,9 @@ add_naming_to_portfolio <- function(portfolio_raw) {
 get_input_files <- function(portfolio_name_ref_all) {
   portfolio <- tibble()
 
-  input_path <- paste0(project_location, "/20_Raw_Inputs/")
+  input_path <- file.path(project_location, "20_Raw_Inputs")
 
-  # set_portfolio_parameters(file_path = paste0(par_file_path,"/PortfolioParameters.yml"))
+  # set_portfolio_parameters(file_path = file.path(par_file_path, "PortfolioParameters.yml"))
   # check that the provided reference names match to the input files
 
   input_files <- list.files(path = input_path, full.names = F)
@@ -128,7 +128,7 @@ get_input_files <- function(portfolio_name_ref_all) {
     stop("Missing input argument")
   }
 
-  portfolio_file_names <- list.files(paste0(project_location, "/10_Parameter_File/"))
+  portfolio_file_names <- list.files(file.path(project_location, "10_Parameter_File"))
   portfolio_file_names <- portfolio_file_names[grepl("_PortfolioParameters.yml", portfolio_file_names)]
   portfolio_file_names <- gsub("_PortfolioParameters.yml", "", portfolio_file_names)
 
@@ -145,14 +145,14 @@ get_input_files <- function(portfolio_name_ref_all) {
 
 
   for (i in 1:length(portfolio_name_ref_all)) {
-    input_file_path <- paste0(input_path, input_files[i])
+    input_file_path <- file.path(input_path, input_files[i])
     portfolio_name_ref <- portfolio_name_ref_all[i]
 
     portfolio_ <- read_web_input_file(input_file_path)
 
     portfolio_ <- portfolio_ %>% select(-contains("X"))
 
-    set_portfolio_parameters(file_path = paste0(par_file_path, "/", portfolio_name_ref, "_PortfolioParameters.yml"))
+    set_portfolio_parameters(file_path = file.path(par_file_path, paste0(portfolio_name_ref, "_PortfolioParameters.yml")))
 
     # this writes the portfolio and ivestor names that are provided from the parameter file to the pf
     # as agreed with Constructiva. They ensure grouped portfolios will get one name only.
@@ -272,7 +272,7 @@ website_text <- function(audit_file) {
                 The remainder of the holdings are in asset classes outside the scope of this analysis.
                 For more information as to how each holding is classified, review the chart and audit file below.")
 
-  write(text, paste0(proc_input_path, "/Websitetext.txt"))
+  write(text, file.path(proc_input_path, "Websitetext.txt"))
 }
 
 save_cleaned_files <- function(save_loc,
@@ -287,13 +287,13 @@ save_cleaned_files <- function(save_loc,
     dir.create(save_loc)
   }
 
-  fst::write_fst(as.data.frame(currencies), paste0(save_loc, "/currencies.fst"))
-  fst::write_fst(fund_data, paste0(save_loc, "/fund_data.fst"))
-  fst::write_fst(fin_data, paste0(save_loc, "/fin_data.fst"))
-  fst::write_fst(comp_fin_data, paste0(save_loc, "/comp_fin_data.fst"))
-  fst::write_fst(debt_fin_data, paste0(save_loc, "/debt_fin_data.fst"))
-  fst::write_fst(average_sector_intensity, paste0(save_loc, "/average_sector_intensity.fst"))
-  fst::write_fst(company_emissions, paste0(save_loc, "/company_emissions.fst"))
+  fst::write_fst(as.data.frame(currencies), file.path(save_loc, "currencies.fst"))
+  fst::write_fst(fund_data, file.path(save_loc, "fund_data.fst"))
+  fst::write_fst(fin_data, file.path(save_loc, "fin_data.fst"))
+  fst::write_fst(comp_fin_data, file.path(save_loc, "comp_fin_data.fst"))
+  fst::write_fst(debt_fin_data, file.path(save_loc, "debt_fin_data.fst"))
+  fst::write_fst(average_sector_intensity, file.path(save_loc, "average_sector_intensity.fst"))
+  fst::write_fst(company_emissions, file.path(save_loc, "company_emissions.fst"))
 
   if (check_file_size(save_loc)) warning("File size exceeds what can be pushed to GitHub. Check before Committing")
 }
