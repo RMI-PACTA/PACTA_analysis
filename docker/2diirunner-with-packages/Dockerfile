@@ -3,7 +3,7 @@ MAINTAINER "Mauro Lepore" maurolepore@gmail.com
 
 RUN apt-get update && apt-get install -y pandoc
 
-# This repository has binaries not just for Windows and Mac, but also for Linux
+# This repository has binaries for Linux
 RUN echo "options(repos = c(CRAN = 'https://packagemanager.rstudio.com/all/__linux__/bionic/latest'))" >> /root/.Rprofile \
     # update-dockerfile-packages-start
     && Rscript -e "install.packages(
