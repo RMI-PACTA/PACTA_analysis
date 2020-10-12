@@ -28,9 +28,9 @@ this_repo <- function() {
 update_dockerfile_packages <- function(path = dockerfile_path()) {
   old_dockerfile <- read_dockerfile(path)
   new_dockerfile <- c(
-    dockerfile_header(old_dockerfile),
+    dockerfile_head(old_dockerfile),
     dockerfile_packages(packages_path()),
-    dockerfile_footer(old_dockerfile)
+    dockerfile_tail(old_dockerfile)
   )
   writeLines(new_dockerfile, path)
 
@@ -41,11 +41,11 @@ read_dockerfile <- function(path = dockerfile_path()) {
   readLines(path, encoding = "UTF-8")
 }
 
-dockerfile_header <- function(dockerfile) {
+dockerfile_head <- function(dockerfile = read_dockerfile()) {
   dockerfile[1:end_of_packages_on_dockerfile(dockerfile)]
 }
 
-dockerfile_footer <- function(dockerfile) {
+dockerfile_tail <- function(dockerfile = read_dockerfile()) {
   dockerfile[start_of_packages_on_dockerfile(dockerfile):length(dockerfile)]
 }
 
