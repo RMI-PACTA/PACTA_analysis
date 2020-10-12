@@ -1,7 +1,3 @@
-# sda_approach
-# @author Vincent
-
-
 sda_portfolio_target <- function(
                                  market,
                                  portfolio,
