@@ -58,11 +58,11 @@ check_names_sector_and_geography <- function(market,
                                              scenario,
                                              geography) {
   crucial <- get_sda_crucial_vars()
-  r2dii.utils::check_crucial_names(market, crucial)
-  r2dii.utils::check_crucial_names(portfolio, crucial)
+  check_crucial_names(market, crucial)
+  check_crucial_names(portfolio, crucial)
   check_ref(market, portfolio, ref = scenario, col = "scenario")
   check_ref(market, portfolio, ref = geography, col = "scenario_geography")
-  invisible()
+  invisible(market)
 }
 
 check_ref <- function(market, portfolio, ref, col) {
