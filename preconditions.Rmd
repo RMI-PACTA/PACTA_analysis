@@ -116,8 +116,6 @@ all_siblings <- all(map_lgl(repos, is_sibling))
 expect_true(all_siblings)
 ```
 
-**NOTE: As of this writing the main line of development is not the standard branch `master` -- it is the branch `current_web_functionality`.**
-
 Ensure the expected working directory.
 
 ```{r}

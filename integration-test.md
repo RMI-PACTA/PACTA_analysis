@@ -1,6 +1,6 @@
 Integration test: Run the web tool
 ================
-2020-10-11
+2020-10-12
 
 ## Introduction
 
@@ -21,12 +21,12 @@ Packages used in this file:
 
 ``` r
 library(tidyverse)
-#> ── Attaching packages ───────────────────── tidyverse 1.3.0 ──
+#> ── Attaching packages ─────────────────────────────── tidyverse 1.3.0 ──
 #> ✓ ggplot2 3.3.2     ✓ purrr   0.3.4
 #> ✓ tibble  3.0.3     ✓ dplyr   1.0.2
 #> ✓ tidyr   1.1.2     ✓ stringr 1.4.0
 #> ✓ readr   1.3.1     ✓ forcats 0.5.0
-#> ── Conflicts ──────────────────────── tidyverse_conflicts() ──
+#> ── Conflicts ────────────────────────────────── tidyverse_conflicts() ──
 #> x dplyr::filter() masks stats::filter()
 #> x dplyr::lag()    masks stats::lag()
 library(devtools)
@@ -111,18 +111,18 @@ detect_packages <- function() {
 detect_packages()
 #> Finding R package dependencies ... Done!
 #>  [1] "assertthat"     "base"           "config"         "conflicted"    
-#>  [5] "countrycode"    "cowplot"        "devtools"       "dplyr"         
-#>  [9] "extrafont"      "fs"             "fst"            "ggforce"       
-#> [13] "ggmap"          "ggplot2"        "ggrepel"        "ggthemes"      
-#> [17] "glue"           "grid"           "gridExtra"      "here"          
-#> [21] "janitor"        "jsonlite"       "knitr"          "lme4"          
-#> [25] "matrixStats"    "PACTA.analysis" "plyr"           "purrr"         
-#> [29] "R"              "r2dii.utils"    "RColorBrewer"   "readr"         
-#> [33] "readxl"         "renv"           "reshape2"       "rlang"         
-#> [37] "rmarkdown"      "rstudioapi"     "rworldmap"      "scales"        
-#> [41] "sitools"        "stringr"        "testthat"       "tidyr"         
-#> [45] "tidyselect"     "tidyverse"      "tools"          "usethis"       
-#> [49] "withr"          "xml2"
+#>  [5] "countrycode"    "cowplot"        "data.table"     "devtools"      
+#>  [9] "dplyr"          "extrafont"      "fs"             "fst"           
+#> [13] "ggforce"        "ggmap"          "ggplot2"        "ggrepel"       
+#> [17] "ggthemes"       "glue"           "grid"           "gridExtra"     
+#> [21] "here"           "janitor"        "jsonlite"       "knitr"         
+#> [25] "lme4"           "matrixStats"    "PACTA.analysis" "plyr"          
+#> [29] "purrr"          "R"              "r2dii.utils"    "RColorBrewer"  
+#> [33] "readr"          "readxl"         "renv"           "reshape2"      
+#> [37] "rlang"          "rmarkdown"      "rstudioapi"     "rworldmap"     
+#> [41] "scales"         "sitools"        "stringr"        "testthat"      
+#> [45] "tidyr"          "tidyselect"     "tidyverse"      "tools"         
+#> [49] "usethis"        "withr"          "writexl"        "xml2"
 ```
 
 <details>
@@ -141,7 +141,7 @@ devtools::session_info()
 #>  collate  en_US.UTF-8                 
 #>  ctype    en_US.UTF-8                 
 #>  tz       America/Chicago             
-#>  date     2020-10-11                  
+#>  date     2020-10-12                  
 #> 
 #> ─ Packages ───────────────────────────────────────────────────────────────────
 #>  package     * version     date       lib source                             
@@ -149,12 +149,12 @@ devtools::session_info()
 #>  backports     1.1.10      2020-09-15 [1] CRAN (R 4.0.2)                     
 #>  blob          1.2.1       2020-01-20 [1] CRAN (R 4.0.0)                     
 #>  broom         0.7.1       2020-10-02 [1] CRAN (R 4.0.0)                     
-#>  callr         3.4.4       2020-09-07 [1] RSPM (R 4.0.2)                     
+#>  callr         3.5.0       2020-10-08 [1] RSPM (R 4.0.2)                     
 #>  cellranger    1.1.0       2016-07-27 [1] CRAN (R 4.0.0)                     
 #>  cli           2.0.2       2020-02-28 [1] CRAN (R 4.0.0)                     
 #>  colorspace    1.4-1       2019-03-18 [1] CRAN (R 4.0.0)                     
 #>  config      * 0.3         2018-03-27 [1] CRAN (R 4.0.0)                     
-#>  conflicted  * 1.0.4       2019-06-21 [1] CRAN (R 4.0.0)                     
+#>  conflicted  * 1.0.4       2019-06-21 [1] RSPM (R 4.0.2)                     
 #>  crayon        1.3.4.9000  2020-09-03 [1] Github (r-lib/crayon@6b3f0c6)      
 #>  DBI           1.1.0       2019-12-15 [1] CRAN (R 4.0.0)                     
 #>  dbplyr        1.4.4       2020-05-27 [1] CRAN (R 4.0.0)                     
@@ -208,7 +208,7 @@ devtools::session_info()
 #>  sessioninfo   1.1.1       2018-11-05 [1] CRAN (R 4.0.0)                     
 #>  stringi       1.5.3       2020-09-09 [1] RSPM (R 4.0.2)                     
 #>  stringr     * 1.4.0       2019-02-10 [1] CRAN (R 4.0.0)                     
-#>  testthat    * 2.99.0.9000 2020-10-08 [1] Github (r-lib/testthat@8c4b523)    
+#>  testthat    * 2.99.0.9000 2020-10-11 [1] Github (r-lib/testthat@d10a276)    
 #>  tibble      * 3.0.3       2020-07-10 [1] CRAN (R 4.0.0)                     
 #>  tidyr       * 1.1.2       2020-08-27 [1] RSPM (R 4.0.2)                     
 #>  tidyselect    1.1.0       2020-05-11 [1] CRAN (R 4.0.0)                     
@@ -314,10 +314,6 @@ all_siblings <- all(map_lgl(repos, is_sibling))
 
 expect_true(all_siblings)
 ```
-
-**NOTE: As of this writing the main line of development is not the
-standard branch `master` – it is the branch
-`current_web_functionality`.**
 
 Ensure the expected working directory.
 
@@ -721,11 +717,11 @@ look_into(index, n = 20L)
 #> 
 #>   <meta charset="utf-8" />
 #>   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-#>   <title>1 Introduction: What to get out of this report and how to read it | Interactive Portfolio Report</title>
+#>   <title>Interactive Portfolio Report</title>
 #>   <meta name="description" content="" />
-#>   <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
+#>   <meta name="generator" content="bookdown 0.19 and GitBook 2.6.7" />
 #> 
-#>   <meta property="og:title" content="1 Introduction: What to get out of this report and how to read it | Interactive Portfolio Report" />
+#>   <meta property="og:title" content="Interactive Portfolio Report" />
 #>   <meta property="og:type" content="book" />
 #>   
 #>   
@@ -733,7 +729,7 @@ look_into(index, n = 20L)
 #>   
 #> 
 #>   <meta name="twitter:card" content="summary" />
-#>   <meta name="twitter:title" content="1 Introduction: What to get out of this report and how to read it | Interactive Portfolio Report" />
+#>   <meta name="twitter:title" content="Interactive Portfolio Report" />
 #> 
 
 dir_tree(path(outputs, "TestPortfolio_Input"), recurse = FALSE)
