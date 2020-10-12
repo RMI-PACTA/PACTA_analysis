@@ -26,27 +26,30 @@ this_repo <- function() {
 }
 
 update_dockerfile_packages <- function(path = dockerfile_path()) {
-  dkr <- readLines(path, encoding = "UTF-8")
-
-  updated_dockerfile <- c(
-    dockerfile_header(dkr),
+  old_dockerfile <- read_dockerfile(path)
+  new_dockerfile <- c(
+    dockerfile_header(old_dockerfile),
     dockerfile_packages(packages_path()),
-    dockerfile_footer(dkr)
+    dockerfile_footer(old_dockerfile)
   )
-  writeLines(updated_dockerfile, path)
+  writeLines(new_dockerfile, path)
 
   invisible(path)
 }
 
-dockerfile_header <- function(dkr) {
-  dkr[1:end_of_packages_on_dockerfile(dkr)]
+read_dockerfile <- function(path = dockerfile_path()) {
+  readLines(path, encoding = "UTF-8")
 }
 
-dockerfile_footer <- function(dkr) {
-  dkr[start_of_packages_on_dockerfile(dkr):length(dkr)]
+dockerfile_header <- function(dockerfile) {
+  dockerfile[1:end_of_packages_on_dockerfile(dockerfile)]
 }
 
-dockerfile_packages <- function() {
+dockerfile_footer <- function(dockerfile) {
+  dockerfile[start_of_packages_on_dockerfile(dockerfile):length(dockerfile)]
+}
+
+dockerfile_packages <- function(path = packages_path()) {
   raw <- readLines(path, encoding = "UTF-8")
   pkg <- sub("library\\((.*)\\)", "\\1", raw)
   glue('    && Rscript -e "install.packages(\'{pkg}\')" \\')
