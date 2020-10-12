@@ -38,7 +38,7 @@ create_portfolio_subfolders <- function(portfolio_name_ref_all) {
     purrr::flatten_chr()
 
   locs_to_create %>%
-    purrr::map(~ dir.create(.x))
+    purrr::map(~ dir.create(.x, showWarnings = FALSE))
 }
 
 save_if_exists <- function(df, portfolio_name_, save_name, csv_or_rds = "rds") {
