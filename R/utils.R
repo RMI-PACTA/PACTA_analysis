@@ -21,7 +21,7 @@ use_r_packages <- function(path = packages_path()) {
   invisible(path)
 }
 
-this_repo <- function() {
+name_of_this_repo <- function() {
   ifelse(in_transitionmonitor(), "bound", "PACTA_analysis")
 }
 
