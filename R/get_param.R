@@ -1,7 +1,7 @@
 # Extracted from r2dii.utils, to avoid depending on it
 
 get_config <- function() {
-  getOption("r2dii_config") %||% default_config()
+  getOption("r2dii_config")
 }
 
 get_param <- function(..., if_null = NULL) {
