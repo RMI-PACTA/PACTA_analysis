@@ -25,11 +25,6 @@ packages_path <- function() {
   "deduplicate/load-and-attach-r-packages.R"
 }
 
-create_install_calls_for_dockerfile <- function(path = packages_path()) {
-  pkg <- sub("library\\((.*)\\)", "\\1", readLines(path, encoding = "UTF-8"))
-  glue('    && Rscript -e "install.packages(\'{pkg}\')" \\')
-}
-
 update_dockerfile_packages <- function(path = "docker/2diirunner-with-packages/Dockerfile") {
   dkr <- readLines(path, encoding = "UTF-8")
 
