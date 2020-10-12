@@ -1,5 +1,3 @@
-options(encoding = "UTF-8")
-
 devtools::load_all()
 use_r_packages()
 
