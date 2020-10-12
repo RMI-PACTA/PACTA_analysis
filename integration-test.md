@@ -301,7 +301,7 @@ parent directory:
 
 ``` r
 repos <- c(
-  this_repo(), 
+  name_of_this_repo(), 
   "pacta-data", 
   "create_interactive_report", 
   "StressTestingModelDev"
@@ -322,7 +322,7 @@ standard branch `master` – it is the branch
 Ensure the expected working directory.
 
 ``` r
-expect_equal(path_file(here()), this_repo())
+expect_equal(path_file(here()), name_of_this_repo())
 ```
 
 ## `portfolio_name_ref_all <- "TestPortfolio_Input"`
@@ -408,7 +408,7 @@ make_config_portable <- function(config) {
 
 make_paths_portable <- function(x) {
   x %>%
-    root_field_path("project_location_ext", pattern = this_repo()) %>%
+    root_field_path("project_location_ext", pattern = name_of_this_repo()) %>%
     root_field_path("data_location_ext", pattern = "pacta-data") %>%
     root_field_path("template_location", pattern = "create_interactive_report") %>%
     root_field_path("stress_test_location", pattern = "StressTestingModelDev")
