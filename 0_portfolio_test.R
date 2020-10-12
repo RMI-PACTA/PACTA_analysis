@@ -68,7 +68,8 @@ aggregate_holdings <- function(portfolio) {
       number_holdings = n_distinct(holding_id),
       value_usd = sum(value_usd, na.rm = T),
       number_of_shares = sum(number_of_shares, na.rm = T),
-      port_weight = sum(port_weight)
+      port_weight = sum(port_weight), 
+      .groups = "drop_last"
     )
 
   return(portfolio)
@@ -188,7 +189,8 @@ aggregate_portfolio <- function(df) {
         scen_tech_prod = sum(scen_tech_prod, na.rm = TRUE),
         scen_alloc_wt_tech_prod_all_comp = sum(scen_alloc_wt_tech_prod, na.rm = TRUE),
         scen_carsten = sum(scen_carsten, na.rm = TRUE),
-        scen_emission_factor_all_comp = weighted.mean(scen_emission_factor, scen_alloc_wt_tech_prod, na.rm = TRUE)
+        scen_emission_factor_all_comp = weighted.mean(scen_emission_factor, scen_alloc_wt_tech_prod, na.rm = TRUE), 
+        .groups = "drop_last"
       ) %>%
       mutate( # get sector totals
         plan_sec_prod = sum(plan_tech_prod, na.rm = TRUE),
@@ -216,7 +218,8 @@ aggregate_map_data <- function(portfolio) {
       ald_sector, technology,
       financial_sector, allocation, allocation_weight, ald_production_unit
     ) %>%
-    summarise(plan_alloc_wt_tech_prod = sum(plan_alloc_wt_tech_prod, na.rm = TRUE)) %>%
+    summarise(plan_alloc_wt_tech_prod = sum(plan_alloc_wt_tech_prod, na.rm = TRUE), 
+              .groups = "drop_last") %>%
     mutate(plan_alloc_wt_sec_prod = sum(plan_alloc_wt_tech_prod))
 
   if (data_check(portfolio)) {
