@@ -21,12 +21,12 @@ Packages used in this file:
 
 ``` r
 library(tidyverse)
-#> ── Attaching packages ──────────────────────────── tidyverse 1.3.0 ──
+#> ── Attaching packages ────────────────────── tidyverse 1.3.0 ──
 #> ✓ ggplot2 3.3.2     ✓ purrr   0.3.4
 #> ✓ tibble  3.0.3     ✓ dplyr   1.0.2
 #> ✓ tidyr   1.1.2     ✓ stringr 1.4.0
 #> ✓ readr   1.3.1     ✓ forcats 0.5.0
-#> ── Conflicts ─────────────────────────────── tidyverse_conflicts() ──
+#> ── Conflicts ───────────────────────── tidyverse_conflicts() ──
 #> x dplyr::filter() masks stats::filter()
 #> x dplyr::lag()    masks stats::lag()
 library(devtools)
@@ -123,8 +123,8 @@ detect_packages()
 #> [13] "ggmap"          "ggplot2"        "ggrepel"        "ggthemes"      
 #> [17] "glue"           "grid"           "gridExtra"      "here"          
 #> [21] "janitor"        "jsonlite"       "knitr"          "lme4"          
-#> [25] "matrixStats"    "PACTA.analysis" "plyr"           "purrr"         
-#> [29] "R"              "r2dii.utils"    "RColorBrewer"   "readr"         
+#> [25] "magrittr"       "matrixStats"    "PACTA.analysis" "plyr"          
+#> [29] "purrr"          "R"              "RColorBrewer"   "readr"         
 #> [33] "readxl"         "renv"           "reshape2"       "rlang"         
 #> [37] "rmarkdown"      "rstudioapi"     "rworldmap"      "scales"        
 #> [41] "sitools"        "stringr"        "testthat"       "tidyr"         
@@ -184,6 +184,7 @@ devtools::session_info()
 #>    hms              0.5.3       2020-01-08 [1]
 #>    htmltools        0.5.0.9001  2020-10-08 [1]
 #>    httr             1.4.2       2020-07-20 [1]
+#>    janitor          2.0.1.9000  2020-05-14 [1]
 #>    jsonlite         1.7.1       2020-09-07 [1]
 #>    knitr            1.30        2020-09-22 [1]
 #>    lifecycle        0.2.0       2020-03-06 [1]
@@ -215,6 +216,7 @@ devtools::session_info()
 #>    rvest            0.3.6       2020-07-25 [1]
 #>    scales           1.1.1       2020-05-11 [1]
 #>    sessioninfo      1.1.1       2018-11-05 [1]
+#>    snakecase        0.11.0      2019-05-25 [1]
 #>    stringi          1.5.3       2020-09-09 [1]
 #>    stringr        * 1.4.0       2019-02-10 [1]
 #>    testthat       * 2.99.0.9000 2020-10-11 [1]
@@ -261,6 +263,7 @@ devtools::session_info()
 #>  CRAN (R 4.0.0)                     
 #>  Github (rstudio/htmltools@5d42d84) 
 #>  RSPM (R 4.0.2)                     
+#>  Github (sfirke/janitor@ecc9f4e)    
 #>  RSPM (R 4.0.2)                     
 #>  RSPM (R 4.0.2)                     
 #>  CRAN (R 4.0.0)                     
@@ -290,6 +293,7 @@ devtools::session_info()
 #>  CRAN (R 4.0.0)                     
 #>  CRAN (R 4.0.2)                     
 #>  RSPM (R 4.0.2)                     
+#>  CRAN (R 4.0.0)                     
 #>  CRAN (R 4.0.0)                     
 #>  CRAN (R 4.0.0)                     
 #>  RSPM (R 4.0.2)                     
@@ -554,12 +558,6 @@ out_2 <- path("working_dir", "40_Results")
 
 expect_false(dir_has_files(out_2))
 source("web_tool_script_2.R")
-#> Warning in dir.create(.x): '/home/mauro/git/PACTA_analysis/working_dir//
-#> 30_Processed_Inputs/TestPortfolio_Input' already exists
-#> Warning in dir.create(.x): '/home/mauro/git/PACTA_analysis/working_dir//
-#> 40_Results/TestPortfolio_Input' already exists
-#> Warning in dir.create(.x): '/home/mauro/git/PACTA_analysis/working_dir//
-#> 50_Outputs/TestPortfolio_Input' already exists
 #> [1] "1: Test"
 #> [1] "Autmotive scenario values for 2035 and 2040 are recalculated as there was an error in the scenario data (we now extrapolate using 2025 and 2030 figures. Check scenario data if error is still present, might be fixed already"
 #> [1] "Autmotive scenario values for 2035 and 2040 are recalculated as there was an error in the scenario data (we now extrapolate using 2025 and 2030 figures. Check scenario data if error is still present, might be fixed already"
