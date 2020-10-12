@@ -26,7 +26,7 @@
 read_file <- function(path) {
   # FIXME: A warning seems like a bad idea. It should likely be an error
   if (!fs::file_exists(path)) {
-    rlang::warn(glue("The `path` does not exist: {path}"))
+    rlang::warn(glue::glue("The `path` does not exist: {path}"))
     return(invisible(path))
   }
 
