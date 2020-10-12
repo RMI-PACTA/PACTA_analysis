@@ -105,7 +105,7 @@ warn_unused_sector <- function(unused) {
 }
 
 validate_start_year <- function(market, portfolio, start_year) {
-  start_year <- start_year %||% r2dii.utils::START.YEAR()
+  start_year <- start_year %||% START.YEAR()
   abort_null_start_year(start_year)
   abort_bad_year(market, start_year)
   start_year

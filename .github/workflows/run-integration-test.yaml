@@ -64,10 +64,6 @@ jobs:
           dependencies <- renv::dependencies()$Package
           install.packages(dependencies)
         shell: Rscript {0}
-      - name: Install dependencies from GitHub
-        run: |
-          remotes::install_github("2DegreesInvesting/r2dii.utils")
-        shell: Rscript {0}
       - name: Run integration test
         run: |
           cd PACTA_analysis
