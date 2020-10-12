@@ -1,9 +1,9 @@
 default:
     paths:
-        project_location_ext: /home/mauro/git/PACTA_analysis/
-        data_location_ext: /home/mauro/git/pacta-data/2019Q4/
-        template_location: /home/mauro/git/create_interactive_report/
-        stress_test_location: /home/mauro/git/StressTestingModelDev/
+        project_location_ext: ../PACTA_analysis/
+        data_location_ext: ../pacta-data/2019Q4/
+        template_location: ../create_interactive_report/
+        stress_test_location: ../StressTestingModelDev/
     parameters:
         project_name: working_dir
         twodii_internal: FALSE
