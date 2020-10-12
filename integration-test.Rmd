@@ -36,8 +36,9 @@ library(glue)
 library(fs)
 library(here)
 library(conflicted)
-conflicted::conflict_prefer("filter", "dplyr")
-conflicted::conflict_prefer("lag", "dplyr")
+
+devtools::load_all()
+resolve_conflicts()
 ```
 
 All packages detected in the directory PACTA\_analysis:
@@ -62,10 +63,6 @@ devtools::session_info()
 </details>
 
 ## Functions
-
-```{r}
-devtools::load_all()
-```
 
 ## Data
 

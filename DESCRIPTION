@@ -31,7 +31,8 @@ Imports:
     readr,
     rlang,
     rmarkdown,
-    withr
+    withr,
+    conflicted
 Suggests: 
     testthat
 Encoding: UTF-8
