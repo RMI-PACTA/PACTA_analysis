@@ -291,19 +291,3 @@ look_into(index, n = 20L)
 
 dir_tree(path(outputs, "TestPortfolio_Input"), recurse = FALSE)
 ```
-
-## TODO
-
-* Some warnings may be avoided if required directories are created only if they don't already exist.
-
-```r
-Warning message:
-In read_file(paste0(file_location, "/fund_data.fst")) :
-  ~/git/pacta-data/2019Q4/cleaned_files/fund_data.fst does not exist
-```
-
-* I'm not sure if this dataset is crucial, but it's missing from my clone of pacta-data/:
-
-```{r}
-dir_ls(path("..", "pacta-data", "2019Q4", "cleaned_files"))
-```
