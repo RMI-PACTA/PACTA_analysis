@@ -1,5 +1,3 @@
-# web_tool_script.R
-
 devtools::load_all()
 use_r_packages()
 
@@ -8,7 +6,6 @@ source("0_global_functions.R")
 source("0_web_functions.R")
 source("0_json_functions.R")
 
-devtools::load_all()
 setup_project()
 
 working_location <- file.path(working_location)
