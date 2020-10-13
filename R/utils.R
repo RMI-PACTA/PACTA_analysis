@@ -54,9 +54,9 @@ dockerfile_packages <- function(path = packages_path()) {
   pkg <- sub("library\\((.*)\\)", "\\1", raw)
 
   c(
-    '    && Rscript -e "install.packages(',
-    paste0('             ', format_as_vector(pkg)),
-    '           )'
+    '    && Rscript -e "install.packages( \\',
+    paste0('             ', format_as_vector(pkg), ' \\'),
+    '           )" \\'
   )
 }
 
