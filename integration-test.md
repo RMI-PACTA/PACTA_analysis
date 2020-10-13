@@ -1,6 +1,6 @@
 Integration test: Run the web tool
 ================
-2020-10-13
+2020-10-12
 
 ## Introduction
 
@@ -97,17 +97,20 @@ detect_packages <- function() {
 }
 
 detect_packages()
-#> Finding R package dependencies ... [34/38] [35/38] [36/38] [37/38] [38/38] Done!
-#>  [1] "assertthat"     "base"           "bookdown"       "config"        
-#>  [5] "conflicted"     "countrycode"    "data.table"     "devtools"      
-#>  [9] "dplyr"          "fs"             "fst"            "ggplot2"       
-#> [13] "glue"           "here"           "janitor"        "jsonlite"      
-#> [17] "knitr"          "magrittr"       "PACTA.analysis" "plyr"          
-#> [21] "purrr"          "R"              "readr"          "readxl"        
-#> [25] "renv"           "reshape2"       "rlang"          "rmarkdown"     
-#> [29] "rstudioapi"     "scales"         "stringr"        "testthat"      
-#> [33] "tibble"         "tidyr"          "tidyselect"     "tools"         
-#> [37] "usethis"        "withr"          "writexl"        "zoo"
+#> Finding R package dependencies ... Done!
+#>  [1] "assertthat"     "base"           "config"         "conflicted"    
+#>  [5] "countrycode"    "cowplot"        "devtools"       "dplyr"         
+#>  [9] "extrafont"      "fs"             "fst"            "ggforce"       
+#> [13] "ggmap"          "ggplot2"        "ggrepel"        "ggthemes"      
+#> [17] "glue"           "grid"           "gridExtra"      "here"          
+#> [21] "janitor"        "jsonlite"       "knitr"          "lme4"          
+#> [25] "magrittr"       "matrixStats"    "PACTA.analysis" "plyr"          
+#> [29] "purrr"          "R"              "RColorBrewer"   "readr"         
+#> [33] "readxl"         "renv"           "reshape2"       "rlang"         
+#> [37] "rmarkdown"      "rstudioapi"     "rworldmap"      "scales"        
+#> [41] "sitools"        "stringr"        "testthat"       "tibble"        
+#> [45] "tidyr"          "tidyselect"     "tools"          "usethis"       
+#> [49] "withr"          "xml2"
 ```
 
 <details>
@@ -118,7 +121,7 @@ detect_packages()
 devtools::session_info()
 #> ─ Session info ───────────────────────────────────────────────────────────────
 #>  setting  value                       
-#>  version  R version 4.0.3 (2020-10-10)
+#>  version  R version 4.0.2 (2020-06-22)
 #>  os       Ubuntu 18.04.5 LTS          
 #>  system   x86_64, linux-gnu           
 #>  ui       X11                         
@@ -126,7 +129,7 @@ devtools::session_info()
 #>  collate  en_US.UTF-8                 
 #>  ctype    en_US.UTF-8                 
 #>  tz       America/Chicago             
-#>  date     2020-10-13                  
+#>  date     2020-10-12                  
 #> 
 #> ─ Packages ───────────────────────────────────────────────────────────────────
 #>  ! package        * version     date       lib
@@ -764,6 +767,32 @@ dir_tree(path(outputs, "TestPortfolio_Input"), recurse = FALSE)
 ```
 
 ## TODO
+
+  - Some warnings may be avoided if required directories are created
+    only if they don’t already exist.
+
+<!-- end list -->
+
+``` r
+Warning message:
+In read_file(paste0(file_location, "/fund_data.fst")) :
+  ~/git/pacta-data/2019Q4/cleaned_files/fund_data.fst does not exist
+```
+
+  - I’m not sure if this dataset is crucial, but it’s missing from my
+    clone of pacta-data/:
+
+<!-- end list -->
+
+``` r
+dir_ls(path("..", "pacta-data", "2019Q4", "cleaned_files"))
+#> ../pacta-data/2019Q4/cleaned_files/average_sector_intensity.fst
+#> ../pacta-data/2019Q4/cleaned_files/comp_fin_data.fst
+#> ../pacta-data/2019Q4/cleaned_files/company_emissions.fst
+#> ../pacta-data/2019Q4/cleaned_files/currencies.fst
+#> ../pacta-data/2019Q4/cleaned_files/debt_fin_data.fst
+#> ../pacta-data/2019Q4/cleaned_files/fin_data.fst
+```
 
 ## Cleanup
 
