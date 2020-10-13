@@ -1,5 +1,3 @@
-# web_tool_script.R
-
 devtools::load_all()
 use_r_packages()
 
