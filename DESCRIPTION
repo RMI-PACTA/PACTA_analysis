@@ -24,15 +24,21 @@ License: MIT + file LICENSE
 Depends: 
     R (>= 3.5)
 Imports: 
+    config,
+    conflicted,
+    dplyr,
     fs,
     fst,
     glue,
     here,
+    janitor,
+    magrittr,
+    purrr,
     readr,
     rlang,
     rmarkdown,
-    withr,
-    conflicted
+    usethis,
+    withr
 Suggests: 
     testthat
 Encoding: UTF-8

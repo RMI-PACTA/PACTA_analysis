@@ -1,6 +1,4 @@
-# sda_approach
-# @author Vincent
-
+devtools::load_all()
 
 sda_portfolio_target <- function(
                                  market,
@@ -13,8 +11,8 @@ sda_portfolio_target <- function(
   stopifnot(is.data.frame(market), is.data.frame(portfolio))
   old_market <- market
   old_portfolio <- portfolio
-  market <- r2dii.utils::clean_column_names(market)
-  portfolio <- r2dii.utils::clean_column_names(portfolio)
+  market <- clean_column_names(market)
+  portfolio <- clean_column_names(portfolio)
   check_names_sector_and_geography(market, portfolio, scenario, geography)
   ald_sector <- validate_sector(market, portfolio, ald_sector = ald_sector)
   message("* Using `ald_sector`: ", paste0(ald_sector, collapse = ", "), ".")
@@ -52,7 +50,7 @@ sda_portfolio_target <- function(
     select(colnames(portfolio))
 
 
-  out %>% r2dii.utils::unclean_column_names(unclean = old_market)
+  out %>% unclean_column_names(unclean = old_market)
 }
 
 check_names_sector_and_geography <- function(market,
@@ -60,11 +58,11 @@ check_names_sector_and_geography <- function(market,
                                              scenario,
                                              geography) {
   crucial <- get_sda_crucial_vars()
-  r2dii.utils::check_crucial_names(market, crucial)
-  r2dii.utils::check_crucial_names(portfolio, crucial)
+  check_crucial_names(market, crucial)
+  check_crucial_names(portfolio, crucial)
   check_ref(market, portfolio, ref = scenario, col = "scenario")
   check_ref(market, portfolio, ref = geography, col = "scenario_geography")
-  invisible()
+  invisible(market)
 }
 
 check_ref <- function(market, portfolio, ref, col) {
@@ -107,7 +105,7 @@ warn_unused_sector <- function(unused) {
 }
 
 validate_start_year <- function(market, portfolio, start_year) {
-  start_year <- start_year %||% r2dii.utils::START.YEAR()
+  start_year <- start_year %||% START.YEAR()
   abort_null_start_year(start_year)
   abort_bad_year(market, start_year)
   start_year

@@ -20,15 +20,7 @@ instructions](https://bit.ly/2RCRJn7). It is useful in three ways:
 Packages used in this file:
 
 ``` r
-library(tidyverse)
-#> ── Attaching packages ──────────────────────────── tidyverse 1.3.0 ──
-#> ✓ ggplot2 3.3.2     ✓ purrr   0.3.4
-#> ✓ tibble  3.0.3     ✓ dplyr   1.0.2
-#> ✓ tidyr   1.1.2     ✓ stringr 1.4.0
-#> ✓ readr   1.3.1     ✓ forcats 0.5.0
-#> ── Conflicts ─────────────────────────────── tidyverse_conflicts() ──
-#> x dplyr::filter() masks stats::filter()
-#> x dplyr::lag()    masks stats::lag()
+library(purrr)
 library(devtools)
 #> Loading required package: usethis
 library(testthat)
@@ -37,15 +29,9 @@ library(testthat)
 #> The following object is masked from 'package:devtools':
 #> 
 #>     test_file
-#> The following object is masked from 'package:dplyr':
-#> 
-#>     matches
 #> The following object is masked from 'package:purrr':
 #> 
 #>     is_null
-#> The following object is masked from 'package:tidyr':
-#> 
-#>     matches
 library(config)
 #> 
 #> Attaching package: 'config'
@@ -85,11 +71,6 @@ library(renv)
 #> 
 #>     load, remove
 library(glue)
-#> 
-#> Attaching package: 'glue'
-#> The following object is masked from 'package:dplyr':
-#> 
-#>     collapse
 library(fs)
 library(here)
 #> here() starts at /home/mauro/git/PACTA_analysis
@@ -123,12 +104,12 @@ detect_packages()
 #> [13] "ggmap"          "ggplot2"        "ggrepel"        "ggthemes"      
 #> [17] "glue"           "grid"           "gridExtra"      "here"          
 #> [21] "janitor"        "jsonlite"       "knitr"          "lme4"          
-#> [25] "matrixStats"    "PACTA.analysis" "plyr"           "purrr"         
-#> [29] "R"              "r2dii.utils"    "RColorBrewer"   "readr"         
+#> [25] "magrittr"       "matrixStats"    "PACTA.analysis" "plyr"          
+#> [29] "purrr"          "R"              "RColorBrewer"   "readr"         
 #> [33] "readxl"         "renv"           "reshape2"       "rlang"         
 #> [37] "rmarkdown"      "rstudioapi"     "rworldmap"      "scales"        
-#> [41] "sitools"        "stringr"        "testthat"       "tidyr"         
-#> [45] "tidyselect"     "tidyverse"      "tools"          "usethis"       
+#> [41] "sitools"        "stringr"        "testthat"       "tibble"        
+#> [45] "tidyr"          "tidyselect"     "tools"          "usethis"       
 #> [49] "withr"          "xml2"
 ```
 
@@ -154,44 +135,31 @@ devtools::session_info()
 #>  ! package        * version     date       lib
 #>    assertthat       0.2.1       2019-03-21 [1]
 #>    backports        1.1.10      2020-09-15 [1]
-#>    blob             1.2.1       2020-01-20 [1]
-#>    broom            0.7.1       2020-10-02 [1]
 #>    callr            3.5.0       2020-10-08 [1]
-#>    cellranger       1.1.0       2016-07-27 [1]
 #>    cli              2.0.2       2020-02-28 [1]
-#>    colorspace       1.4-1       2019-03-18 [1]
 #>    config         * 0.3         2018-03-27 [1]
 #>    conflicted     * 1.0.4       2019-06-21 [1]
 #>    crayon           1.3.4.9000  2020-09-03 [1]
-#>    DBI              1.1.0       2019-12-15 [1]
-#>    dbplyr           1.4.4       2020-05-27 [1]
 #>    desc             1.2.0       2018-05-01 [1]
 #>    devtools       * 2.3.2       2020-09-18 [1]
 #>    digest           0.6.25      2020-02-23 [1]
-#>    dplyr          * 1.0.2       2020-08-18 [1]
+#>    dplyr            1.0.2       2020-08-18 [1]
 #>    ellipsis         0.3.1       2020-05-15 [1]
 #>    evaluate         0.14        2019-05-28 [1]
 #>    fansi            0.4.1       2020-01-08 [1]
-#>    forcats        * 0.5.0       2020-03-01 [1]
 #>    fs             * 1.5.0       2020-07-31 [1]
 #>    fst              0.9.4       2020-08-27 [1]
 #>    generics         0.0.2       2018-11-29 [1]
-#>    ggplot2        * 3.3.2       2020-06-19 [1]
 #>    glue           * 1.4.2       2020-08-27 [1]
-#>    gtable           0.3.0       2019-03-25 [1]
-#>    haven            2.3.1       2020-06-01 [1]
 #>    here           * 0.1         2017-05-28 [1]
 #>    hms              0.5.3       2020-01-08 [1]
 #>    htmltools        0.5.0.9001  2020-10-08 [1]
-#>    httr             1.4.2       2020-07-20 [1]
-#>    jsonlite         1.7.1       2020-09-07 [1]
+#>    janitor          2.0.1.9000  2020-05-14 [1]
 #>    knitr            1.30        2020-09-22 [1]
 #>    lifecycle        0.2.0       2020-03-06 [1]
 #>    lubridate        1.7.9       2020-06-08 [1]
 #>    magrittr         1.5.0.9000  2020-09-28 [1]
 #>    memoise          1.1.0       2017-04-21 [1]
-#>    modelr           0.1.8       2020-05-19 [1]
-#>    munsell          0.5.0       2018-06-12 [1]
 #>  P PACTA.analysis * 0.0.0.9000  2020-10-01 [?]
 #>    pillar           1.4.6       2020-07-10 [1]
 #>    pkgbuild         1.1.0       2020-07-13 [1]
@@ -203,71 +171,52 @@ devtools::session_info()
 #>    purrr          * 0.3.4       2020-04-17 [1]
 #>    R6               2.4.1       2019-11-12 [1]
 #>    Rcpp             1.0.5       2020-07-06 [1]
-#>    readr          * 1.3.1       2018-12-21 [1]
-#>    readxl           1.3.1       2019-03-13 [1]
+#>    readr            1.3.1       2018-12-21 [1]
 #>    remotes          2.2.0       2020-07-21 [1]
 #>    renv           * 0.12.0      2020-08-28 [1]
-#>    reprex           0.3.0       2019-05-16 [1]
 #>    rlang          * 0.4.8       2020-10-08 [1]
 #>    rmarkdown        2.4         2020-09-30 [1]
 #>    rprojroot        1.3-2       2018-01-03 [1]
 #>    rstudioapi       0.11        2020-02-07 [1]
-#>    rvest            0.3.6       2020-07-25 [1]
-#>    scales           1.1.1       2020-05-11 [1]
 #>    sessioninfo      1.1.1       2018-11-05 [1]
+#>    snakecase        0.11.0      2019-05-25 [1]
 #>    stringi          1.5.3       2020-09-09 [1]
-#>    stringr        * 1.4.0       2019-02-10 [1]
+#>    stringr          1.4.0       2019-02-10 [1]
 #>    testthat       * 2.99.0.9000 2020-10-11 [1]
-#>    tibble         * 3.0.3       2020-07-10 [1]
-#>    tidyr          * 1.1.2       2020-08-27 [1]
+#>    tibble           3.0.3       2020-07-10 [1]
 #>    tidyselect       1.1.0       2020-05-11 [1]
-#>    tidyverse      * 1.3.0       2019-11-21 [1]
 #>    usethis        * 1.6.3       2020-09-17 [1]
 #>    vctrs            0.3.4       2020-08-29 [1]
 #>    withr            2.3.0       2020-09-22 [1]
 #>    xfun             0.18        2020-09-29 [1]
-#>    xml2             1.3.2       2020-04-23 [1]
 #>    yaml             2.2.1       2020-02-01 [1]
 #>  source                             
 #>  CRAN (R 4.0.0)                     
 #>  CRAN (R 4.0.2)                     
-#>  CRAN (R 4.0.0)                     
-#>  CRAN (R 4.0.0)                     
 #>  RSPM (R 4.0.2)                     
-#>  CRAN (R 4.0.0)                     
-#>  CRAN (R 4.0.0)                     
 #>  CRAN (R 4.0.0)                     
 #>  CRAN (R 4.0.0)                     
 #>  RSPM (R 4.0.2)                     
 #>  Github (r-lib/crayon@6b3f0c6)      
 #>  CRAN (R 4.0.0)                     
-#>  CRAN (R 4.0.0)                     
-#>  CRAN (R 4.0.0)                     
 #>  RSPM (R 4.0.2)                     
 #>  CRAN (R 4.0.0)                     
 #>  RSPM (R 4.0.2)                     
 #>  CRAN (R 4.0.0)                     
 #>  CRAN (R 4.0.0)                     
 #>  CRAN (R 4.0.0)                     
-#>  CRAN (R 4.0.0)                     
 #>  RSPM (R 4.0.2)                     
 #>  RSPM (R 4.0.2)                     
 #>  CRAN (R 4.0.0)                     
-#>  CRAN (R 4.0.0)                     
 #>  RSPM (R 4.0.2)                     
-#>  CRAN (R 4.0.0)                     
-#>  CRAN (R 4.0.0)                     
 #>  RSPM (R 4.0.0)                     
 #>  CRAN (R 4.0.0)                     
 #>  Github (rstudio/htmltools@5d42d84) 
-#>  RSPM (R 4.0.2)                     
-#>  RSPM (R 4.0.2)                     
+#>  Github (sfirke/janitor@ecc9f4e)    
 #>  RSPM (R 4.0.2)                     
 #>  CRAN (R 4.0.0)                     
 #>  CRAN (R 4.0.0)                     
 #>  Github (tidyverse/magrittr@0221e18)
-#>  CRAN (R 4.0.0)                     
-#>  CRAN (R 4.0.0)                     
 #>  CRAN (R 4.0.0)                     
 #>  local                              
 #>  CRAN (R 4.0.0)                     
@@ -281,29 +230,23 @@ devtools::session_info()
 #>  CRAN (R 4.0.0)                     
 #>  CRAN (R 4.0.0)                     
 #>  CRAN (R 4.0.0)                     
-#>  CRAN (R 4.0.0)                     
 #>  RSPM (R 4.0.2)                     
 #>  RSPM (R 4.0.0)                     
-#>  CRAN (R 4.0.0)                     
 #>  CRAN (R 4.0.2)                     
 #>  CRAN (R 4.0.2)                     
 #>  CRAN (R 4.0.0)                     
 #>  CRAN (R 4.0.2)                     
-#>  RSPM (R 4.0.2)                     
 #>  CRAN (R 4.0.0)                     
 #>  CRAN (R 4.0.0)                     
 #>  RSPM (R 4.0.2)                     
 #>  CRAN (R 4.0.0)                     
 #>  Github (r-lib/testthat@d10a276)    
 #>  CRAN (R 4.0.0)                     
-#>  RSPM (R 4.0.2)                     
 #>  CRAN (R 4.0.0)                     
 #>  RSPM (R 4.0.2)                     
 #>  RSPM (R 4.0.2)                     
 #>  RSPM (R 4.0.2)                     
 #>  RSPM (R 4.0.2)                     
-#>  RSPM (R 4.0.2)                     
-#>  CRAN (R 4.0.0)                     
 #>  RSPM (R 4.0.0)                     
 #> 
 #> [1] /home/mauro/R/x86_64-pc-linux-gnu-library/4.0
@@ -515,6 +458,7 @@ expect_true(all_paths_exist)
 look_into(config_2)
 #> default:
 #>     paths:
+#>        # Prefer "../this_repo/" -- not "./" nor "/path/to/this_repo"
 #>         project_location_ext: /home/mauro/git/PACTA_analysis/
 #>         data_location_ext: /home/mauro/git/pacta-data/2019Q4/
 #>         template_location: /home/mauro/git/create_interactive_report/
@@ -542,7 +486,8 @@ out_1 <- path("working_dir", "30_Processed_Inputs")
 
 expect_false(dir_has_files(out_1))
 source("web_tool_script_1.R")
-#> Warning: The `path` does not exist: {path}
+#> Warning: The `path` does not exist: /home/mauro/git/pacta-data/2019Q4//
+#> cleaned_files/fund_data.fst
 #> [1] "No Equity in portfolio"
 expect_true(dir_has_files(out_1))
 ```
@@ -554,12 +499,6 @@ out_2 <- path("working_dir", "40_Results")
 
 expect_false(dir_has_files(out_2))
 source("web_tool_script_2.R")
-#> Warning in dir.create(.x): '/home/mauro/git/PACTA_analysis/working_dir//
-#> 30_Processed_Inputs/TestPortfolio_Input' already exists
-#> Warning in dir.create(.x): '/home/mauro/git/PACTA_analysis/working_dir//
-#> 40_Results/TestPortfolio_Input' already exists
-#> Warning in dir.create(.x): '/home/mauro/git/PACTA_analysis/working_dir//
-#> 50_Outputs/TestPortfolio_Input' already exists
 #> [1] "1: Test"
 #> [1] "Autmotive scenario values for 2035 and 2040 are recalculated as there was an error in the scenario data (we now extrapolate using 2025 and 2030 figures. Check scenario data if error is still present, might be fixed already"
 #> [1] "Autmotive scenario values for 2035 and 2040 are recalculated as there was an error in the scenario data (we now extrapolate using 2025 and 2030 figures. Check scenario data if error is still present, might be fixed already"

@@ -3346,7 +3346,7 @@ CarstenMetricChart <- function(plotnumber, chart_type, explicit_filename = "") {
     port <- bind_rows(combin, market)
 
     Type <- "Corporate bond"
-
+    # FIXME: Replace with dplyr::recode() or other options
     port$portfolio_name <- plyr::mapvalues(port$portfolio_name, c(portfolio_name_select, cb_market_ref), c("Portfolio", cb_market_ref))
 
     port$portfolio_name <- factor(port$portfolio_name, levels = c("Portfolio", cb_market_ref), ordered = TRUE)
@@ -3365,6 +3365,7 @@ CarstenMetricChart <- function(plotnumber, chart_type, explicit_filename = "") {
     Type <- "equity"
 
     port <- subset(port, portfolio_name %in% c(portfolio_name_select, eq_market_ref)) # "ListedEquity"
+    # FIXME: Replace with dplyr::recode() or other options
     port$portfolio_name <- plyr::mapvalues(port$portfolio_name, c(portfolio_name_select, eq_market_ref), c("Portfolio", eq_market_ref)) # "ListedEquity"
     port$portfolio_name <- factor(port$portfolio_name, levels = c("Portfolio", eq_market_ref), ordered = TRUE)
     lab <- wrap_labels(eq_market_ref, 10)
