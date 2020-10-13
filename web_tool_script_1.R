@@ -59,7 +59,16 @@ if (new_data == TRUE) {
 } else {
   currencies <- fst::read_fst(file.path(file_location, "currencies.fst"))
 
-  fund_data <- fst::read_fst(file.path(file_location, "fund_data.fst"))
+  read_fst_or_return_null <- function(fst_file) {
+    if (!file.exists(fst_file)) {
+      return(NULL)
+    }
+
+    fst::read_fst(fst_file)
+  }
+
+  fund_data_path <- file.path(file_location, "fund_data.fst")
+  fund_data <- read_fst_or_return_null(fund_data_path)
 
   fin_data <- fst::read_fst(file.path(file_location, "fin_data.fst"))
 
