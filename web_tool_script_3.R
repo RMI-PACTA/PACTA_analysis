@@ -41,6 +41,7 @@ scenario_geography <- "Global"
 audit_file <- read_csv(file.path(proc_input_path, portfolio_name, "audit_file.csv"))
 emissions <- read_rds(file.path(proc_input_path, portfolio_name, "emissions.rda"))
 
+# load equity portfolio data
 if (file.exists(file.path(results_path, portfolio_name, "Equity_results_portfolio.rda"))) {
   equity_results_portfolio <- read_rds(file.path(results_path, portfolio_name, "Equity_results_portfolio.rda"))
 } else {
@@ -61,8 +62,8 @@ if (file.exists(file.path(results_path, portfolio_name, "Equity_results_portfoli
     "trajectory_deviation" = NA_integer_, "trajectory_alignment" = NA_integer_
   )
 }
-# equity_results_portfolio <- read_rds(file.path(results_path, portfolio_name, paste0(portfolio_name, "_Equity_results_portfolio.rda")))
 
+# load bonds portfolio data
 if (file.exists(file.path(results_path, portfolio_name, "Bonds_results_portfolio.rda"))) {
   bonds_results_portfolio <- read_rds(file.path(results_path, portfolio_name, "Bonds_results_portfolio.rda"))
 } else {
@@ -83,9 +84,8 @@ if (file.exists(file.path(results_path, portfolio_name, "Bonds_results_portfolio
     "trajectory_deviation" = NA_integer_, "trajectory_alignment" = NA_integer_
   )
 }
-# bonds_results_portfolio <- read_rds(file.path(results_path, portfolio_name, paste0(portfolio_name, "_Bonds_results_portfolio.rda")))
-# bonds_results_portfolio <- equity_results_portfolio %>% filter(portfolio_name == "")
 
+# load equity company data
 if (file.exists(file.path(results_path, portfolio_name, "Equity_results_company.rda"))) {
   equity_results_company <- read_rds(file.path(results_path, portfolio_name, "Equity_results_company.rda"))
 } else {
@@ -110,7 +110,8 @@ if (file.exists(file.path(results_path, portfolio_name, "Equity_results_company.
     "trajectory_deviation" = NA_integer_, "trajectory_alignment" = NA_integer_
   )
 }
-# equity_results_company <- read_rds(file.path(results_path, portfolio_name, paste0(portfolio_name, "_Equity_results_company.rda")))
+
+# load bonds company data
 if (file.exists(file.path(results_path, portfolio_name, "Bonds_results_company.rda"))) {
   bonds_results_company <- read_rds(file.path(results_path, portfolio_name, "Bonds_results_company.rda"))
 } else {
@@ -135,10 +136,8 @@ if (file.exists(file.path(results_path, portfolio_name, "Bonds_results_company.r
     "trajectory_deviation" = NA_integer_, "trajectory_alignment" = NA_integer_
   )
 }
-# bonds_results_company <- read_rds(file.path(results_path, portfolio_name, paste0(portfolio_name, "_Bonds_results_company.rda")))
 
-# bonds_results_company <- equity_results_company %>% filter(portfolio_name == "")
-
+# load equity map data
 if (file.exists(file.path(results_path, portfolio_name, "Equity_results_map.rda"))) {
   equity_results_map <- read_rds(file.path(results_path, portfolio_name, "Equity_results_map.rda"))
 } else {
@@ -153,8 +152,8 @@ if (file.exists(file.path(results_path, portfolio_name, "Equity_results_map.rda"
     "scenario_geography" = NA_character_
   )
 }
-# equity_results_map <-read_rds(file.path(results_path, portfolio_name, paste0(portfolio_name, "_Equity_results_map.rda")))
 
+# load bonds map data
 if (file.exists(file.path(results_path, portfolio_name, "Bonds_results_map.rda"))) {
   bonds_results_map <- read_rds(file.path(results_path, portfolio_name, "Bonds_results_map.rda"))
 } else {
@@ -169,9 +168,27 @@ if (file.exists(file.path(results_path, portfolio_name, "Bonds_results_map.rda")
     "scenario_geography" = NA_character_
   )
 }
-# bonds_results_map <-read_rds(file.path(results_path, portfolio_name, paste0(portfolio_name, "_Bonds_results_map.rda")))
 
-# bonds_results_map <- equity_results_map %>% filter(portfolio_name == "")
+# load equity stress test data
+if (file.exists(file.path(results_path, portfolio_name, "Equity_results_stress_test.rda"))) {
+  equity_results_stress_test <- read_rds(file.path(results_path, portfolio_name, "Equity_results_stress_test.rda"))
+} else {
+  equity_results_stress_test <- tibble(
+
+  )
+}
+
+# load bonds stress test data
+if (file.exists(file.path(results_path, portfolio_name, "Bonds_results_stress_test.rda"))) {
+  bonds_results_sress_test <- read_rds(file.path(results_path, portfolio_name, "Bonds_results_stress_test.rda"))
+} else {
+  bonds_results_sress_test <- tibble(
+
+  )
+}
+
+
+
 indicies_equity_results_portfolio <- read_rds(file.path(data_location_ext, "0_Indices_equity_portfolio.rda"))
 indicies_bonds_results_portfolio <- read_rds(file.path(data_location_ext, "0_Indices_bonds_portfolio.rda"))
 peers_equity_results_portfolio <- read_rds(file.path(data_location_ext, "0_Indices_equity_portfolio.rda"))
@@ -201,6 +218,8 @@ create_interactive_report(
   bonds_results_company,
   equity_results_map,
   bonds_results_map,
+  equity_results_stress_test,
+  bonds_results_stress_test,
   indicies_equity_results_portfolio,
   indicies_bonds_results_portfolio,
   peers_equity_results_portfolio,
