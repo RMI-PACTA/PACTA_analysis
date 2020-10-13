@@ -11,6 +11,6 @@ echo 'options(HTTPUserAgent = sprintf("R/%s R (%s)", getRversion(), paste(getRve
 # Rscript -e "update.packages(ask = FALSE)"
 Rscript -e "pkgs_to_install <- c('conflicted', 'here', 'writexl', 'countrycode', 'renv', 'tibble', 'stringr', 'zoo', 'data.table', 'cowplot', 'ggforce', 'ggrepel', 'sitools'); install.packages(setdiff(pkgs_to_install, installed.packages()))"
 # FIXME: TestPortfolio_Input should be a parameter
-Rscript --vanilla web_tool_script_1.R TestPortfolio_Input
-Rscript --vanilla web_tool_script_2.R TestPortfolio_Input
-Rscript --vanilla web_tool_script_3.R TestPortfolio_Input
+Rscript --vanilla web_tool_script_1.R TestPortfolio_Input \
+  && Rscript --vanilla web_tool_script_2.R TestPortfolio_Input \
+  && Rscript --vanilla web_tool_script_3.R TestPortfolio_Input
