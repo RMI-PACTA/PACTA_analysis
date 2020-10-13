@@ -14,7 +14,7 @@ setup_project <- function() {
 }
 
 use_r_packages <- function(path = packages_path()) {
-  source(path)
+  suppressPackageStartupMessages(source(path))
   resolve_conflicts()
 
   invisible(path)

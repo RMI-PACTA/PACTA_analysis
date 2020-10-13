@@ -6,46 +6,42 @@ RUN echo "options(repos = c(CRAN = 'https://packagemanager.rstudio.com/all/__lin
     # update-dockerfile-packages-start
     && Rscript -e "install.packages( \
              c( \
-               'conflicted', \
-               'assertthat', \
-               'config', \
-               'countrycode', \
-               'cowplot', \
-               'devtools', \
-               'data.table', \
-               'dplyr', \
-               'extrafont', \
-               'fs', \
-               'fst', \
-               'ggforce', \
-               'ggmap', \
-               'ggplot2', \
-               'ggrepel', \
-               'ggthemes', \
-               'glue', \
-               'gridExtra', \
-               'here', \
-               'jsonlite', \
-               'knitr', \
-               'lme4', \
-               'matrixStats', \
-               'RColorBrewer', \
-               'readxl', \
-               'renv', \
-               'reshape2', \
-               'rlang', \
-               'rworldmap', \
-               'scales', \
-               'sitools', \
-               'stringr', \
-               'testthat', \
-               'tidyr', \
-               'tidyselect', \
-               'tidyverse', \
-               'writexl', \
-               'usethis', \
-               'withr', \
-               'xml2' \
+               'suppressPackageStartupMessages({', \
+               '  assertthat', \
+               '  bookdown', \
+               '  config', \
+               '  conflicted', \
+               '  countrycode', \
+               '  data.table', \
+               '  devtools', \
+               '  dplyr', \
+               '  fs', \
+               '  fst', \
+               '  ggplot2', \
+               '  glue', \
+               '  here', \
+               '  janitor', \
+               '  jsonlite', \
+               '  knitr', \
+               '  purrr', \
+               '  readr', \
+               '  readxl', \
+               '  renv', \
+               '  reshape2', \
+               '  rlang', \
+               '  rmarkdown', \
+               '  rstudioapi', \
+               '  scales', \
+               '  stringr', \
+               '  testthat', \
+               '  tibble', \
+               '  tidyr', \
+               '  tidyselect', \
+               '  usethis', \
+               '  withr', \
+               '  writexl', \
+               '  zoo', \
+               '})' \
              ) \
            )" \
     # update-dockerfile-packages-end
