@@ -67,8 +67,6 @@ if (new_data == TRUE) {
 
   debt_fin_data <- fst::read_fst(file.path(file_location, "debt_fin_data.fst"))
 
-  # revenue_data <- fst::read_fst(file.path(file_location, "revenue_data.fst"))
-
   if (inc_emission_factors) {
     average_sector_intensity <- fst::read_fst(file.path(file_location, "average_sector_intensity.fst"))
 
