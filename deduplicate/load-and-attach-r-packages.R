@@ -1,3 +1,4 @@
+suppressPackageStartupMessages({
 library(assertthat)
 library(bookdown)
 library(config)
@@ -32,3 +33,4 @@ library(usethis)
 library(withr)
 library(writexl)
 library(zoo)
+})
