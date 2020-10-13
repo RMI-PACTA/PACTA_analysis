@@ -1,64 +1,26 @@
-#' Read files with supported extensions
+#' Read .rda files files with supported extensions
 #'
 #' @param path Character; path to a file storing a single object.
 #'
 #' @examples
-#' supported_extensions()
-#'
 #' # Odd case: Read a file saved as .rds but with extension .rda
 #' path <- tempfile(fileext = ".rda")
 #'
 #' data1 <- data.frame(x = 1)
 #' saveRDS(data1, path)
-#' read_file(path)
+#' read_rda(path)
 #'
 #' # More natural case: .RData saved as .rda
 #' data2 <- data.frame(x = 1)
 #' save(data2, file = path)
-#' read_file(path)
+#' read_rda(path)
 #'
 #' # Fails by design: .RData with more than 1 object
 #'
 #' save(data1, data2, file = path)
 #' # Fails
-#' try(read_file(path))
+#' try(read_rda(path))
 #' @noRd
-read_file <- function(path) {
-  # FIXME: A warning seems like a bad idea. It should likely be an error
-  if (!fs::file_exists(path)) {
-    rlang::warn(glue::glue("The `path` does not exist: {path}"))
-    return(invisible(path))
-  }
-
-  abort_unsupported_extension(path)
-
-  extension <- fs::path_ext(path)
-  switch(
-    extension,
-    "csv" = readr::read_csv(path),
-    "fst" = fst::read_fst(path),
-    "rda" = read_rda(path),
-    "rds" = readr::read_rds(path),
-    abort("Extension is supported but something unexpected happened.")
-  )
-}
-
-abort_unsupported_extension <- function(path) {
-  if (!extension_is_supported(path)) {
-    abort(glue("Unsupported `path` extension: {path}"))
-  }
-
-  invisible(path)
-}
-
-extension_is_supported <- function(path) {
-  fs::path_ext(path) %in% supported_extensions()
-}
-
-supported_extensions <- function() {
-  c("csv", "fst", "rda", "rds")
-}
-
 read_rda <- function(file_name) {
   tryCatch(
     # Unfortunately, legacy code saved .rds files with the extension .rda
