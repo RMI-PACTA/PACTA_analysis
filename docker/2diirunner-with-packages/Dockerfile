@@ -2,7 +2,8 @@ FROM 2dii/system
 MAINTAINER "Mauro Lepore" maurolepore@gmail.com
 
 # This repository has binaries for Linux
-RUN echo "options(repos = c(CRAN = 'https://packagemanager.rstudio.com/all/__linux__/bionic/latest'))" >> /root/.Rprofile \
+RUN echo 'options(repos = c(CRAN = "https://packagemanager.rstudio.com/all/__linux__/bionic/latest"))' >> ~/.Rprofile \
+  && echo 'options(HTTPUserAgent = sprintf("R/%s R (%s)", getRversion(), paste(getRversion(), R.version$platform, R.version$arch, R.version$os)))' >> ~/.Rprofile \
     # update-dockerfile-packages-start
     && Rscript -e "install.packages( \
              c( \
