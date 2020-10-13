@@ -30,16 +30,39 @@ resolve_conflicts <- function() {
   conflicted::conflict_prefer("arrange", "dplyr")
 }
 
-update_dockerfile_packages <- function(path = dockerfile_path()) {
+#' @examples
+#' some_dockerfile <- tempfile()
+#' writeLines(create_empty_dockerfile("library(dplyr)"), some_dockerfile)
+#'
+#' # Before
+#' writeLines(readLines(some_dockerfile))
+#' update_dockerfile_packages(path = some_dockerfile)
+#' # After
+#' writeLines(readLines(some_dockerfile))
+#' @noRd
+update_dockerfile_packages <- function(path = NULL) {
+  path <- path %||% path_to_empty_dockerfile()
+
   old_dockerfile <- read_dockerfile(path)
   new_dockerfile <- c(
     dockerfile_head(old_dockerfile),
     dockerfile_packages(packages_path()),
     dockerfile_tail(old_dockerfile)
   )
+
   writeLines(new_dockerfile, path)
 
   invisible(path)
+}
+
+path_to_empty_dockerfile <- function() {
+  tmp <- tempfile()
+  writeLines(create_empty_dockerfile(), tmp)
+  tmp
+}
+
+create_empty_dockerfile <- function(x = "") {
+  c(mark_start(), x, mark_end())
 }
 
 read_dockerfile <- function(path = dockerfile_path()) {
@@ -47,11 +70,11 @@ read_dockerfile <- function(path = dockerfile_path()) {
 }
 
 dockerfile_head <- function(dockerfile = read_dockerfile()) {
-  dockerfile[1:end_of_packages_on_dockerfile(dockerfile)]
+  dockerfile[1:start_of_packages_on_dockerfile(dockerfile)]
 }
 
 dockerfile_tail <- function(dockerfile = read_dockerfile()) {
-  dockerfile[start_of_packages_on_dockerfile(dockerfile):length(dockerfile)]
+  dockerfile[end_of_packages_on_dockerfile(dockerfile):length(dockerfile)]
 }
 
 dockerfile_packages <- function(path = packages_path()) {
@@ -79,10 +102,18 @@ dockerfile_path <- function() {
   file.path("docker", "2diirunner-with-packages", "Dockerfile")
 }
 
-start_of_packages_on_dockerfile <- function(lines) {
-  grep("# update-dockerfile-packages-end", lines)
+end_of_packages_on_dockerfile <- function(lines) {
+  grep(mark_end(), lines)
 }
 
-end_of_packages_on_dockerfile <- function(lines) {
-  grep("# update-dockerfile-packages-start", lines)
+start_of_packages_on_dockerfile <- function(lines) {
+  grep(mark_start(), lines)
+}
+
+mark_start <- function() {
+  "# update-dockerfile-packages-start"
+}
+
+mark_end <- function() {
+  "# update-dockerfile-packages-end"
 }
