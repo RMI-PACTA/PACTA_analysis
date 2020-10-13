@@ -1,4 +1,4 @@
-FROM maurolepore/2diidockerrunner:latest
+FROM 2dii/system
 MAINTAINER "Mauro Lepore" maurolepore@gmail.com
 
 # This repository has binaries for Linux
