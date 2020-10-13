@@ -12,5 +12,5 @@ docker run --rm -ti \
   --mount type=bind,source="$data",target=/pacta-data \
   --mount type=bind,source="$report",target=/create_interactive_report \
   --mount type=bind,source="$stresstest",target=/StressTestingModelDev \
-  2diirunner:1.3.0 "$1"
+  2dii/2diidockerrunner "$1"
 
