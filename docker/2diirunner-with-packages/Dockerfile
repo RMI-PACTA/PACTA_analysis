@@ -23,14 +23,12 @@ RUN echo "options(repos = c(CRAN = 'https://packagemanager.rstudio.com/all/__lin
                'ggrepel', \
                'ggthemes', \
                'glue', \
-               'grid', \
                'gridExtra', \
                'here', \
                'jsonlite', \
                'knitr', \
                'lme4', \
                'matrixStats', \
-               'r2dii.utils', \
                'RColorBrewer', \
                'readxl', \
                'renv', \
