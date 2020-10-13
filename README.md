@@ -32,8 +32,7 @@ https://rstudio.com/products/rstudio/
 
 **R Environment:**
 
-Ensure you have the required libraries installed on your computer (https://github.com/2DegreesInvesting/r2dii).
-This includes the r2dii.utils library (https://github.com/2DegreesInvesting/r2dii.utils) 
+Ensure you have the required libraries installed on your computer.
 
 Further, the evaluation will require a bunch of package. It is recommanded install the package during the first run of the code. (assess approx. 30 minutes for the installation process during the first usage of the code).
 
