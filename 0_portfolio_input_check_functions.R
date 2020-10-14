@@ -853,7 +853,7 @@ create_id_columns <- function(portfolio, portfolio_type) {
 
 # FINAL SCRIPTS
 get_and_clean_currency_data <- function() {
-  currencies <- read_file("data/currencies.rda")
+  currencies <- read_rda("data/currencies.rda")
 
   currencies <- set_currency_timestamp(currencies)
 
@@ -890,7 +890,7 @@ get_and_clean_fund_data <- function() {
 get_and_clean_fin_data <- function(fund_data) {
 
   # Financial Data
-  fin_data_raw <- read_file(paste0(analysis_inputs_path, "/security_financial_data.rda")) %>% as_tibble()
+  fin_data_raw <- read_rda(paste0(analysis_inputs_path, "/security_financial_data.rda")) %>% as_tibble()
 
   # remove unclear duplicates from raw financial data. This should be moved to DataStore.
   rm_duplicates <- read_csv("non_distinct_isins.csv")
@@ -978,7 +978,7 @@ get_and_clean_revenue_data <- function() {
   revenue_data <- data.frame()
 
   if (has_revenue) {
-    revenue_data <- read_file(paste0(analysis_inputs_path, "/revenue_data_member_ticker.rda"))
+    revenue_data <- read_rda(paste0(analysis_inputs_path, "/revenue_data_member_ticker.rda"))
     # col_types = "dcdcclcd")
 
     revenue_data <- revenue_data %>%
@@ -1295,7 +1295,7 @@ get_average_emission_data <- function(inc_emission_factors) {
   average_sector_intensity <- data.frame()
 
   if (inc_emission_factors) {
-    average_sector_intensity <- read_file(paste0(analysis_inputs_path, "average_sector_intensity.rda"))
+    average_sector_intensity <- read_rda(paste0(analysis_inputs_path, "average_sector_intensity.rda"))
   }
   return(average_sector_intensity)
 }
@@ -1304,7 +1304,7 @@ get_company_emission_data <- function(inc_emission_factors) {
   company_emissions <- data.frame()
 
   if (inc_emission_factors) {
-    company_emissions <- read_file(paste0(analysis_inputs_path, "company_emissions.rda"))
+    company_emissions <- read_rda(paste0(analysis_inputs_path, "company_emissions.rda"))
   }
   return(company_emissions)
 }

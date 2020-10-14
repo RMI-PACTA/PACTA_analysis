@@ -1,6 +1,6 @@
 Integration test: Run the web tool
 ================
-2020-10-12
+2020-10-13
 
 ## Introduction
 
@@ -97,7 +97,7 @@ detect_packages <- function() {
 }
 
 detect_packages()
-#> Finding R package dependencies ... Done!
+#> Finding R package dependencies ... [37/38] [38/38] Done!
 #>  [1] "assertthat"     "base"           "config"         "conflicted"    
 #>  [5] "countrycode"    "cowplot"        "devtools"       "dplyr"         
 #>  [9] "extrafont"      "fs"             "fst"            "ggforce"       
@@ -121,7 +121,7 @@ detect_packages()
 devtools::session_info()
 #> ─ Session info ───────────────────────────────────────────────────────────────
 #>  setting  value                       
-#>  version  R version 4.0.2 (2020-06-22)
+#>  version  R version 4.0.3 (2020-10-10)
 #>  os       Ubuntu 18.04.5 LTS          
 #>  system   x86_64, linux-gnu           
 #>  ui       X11                         
@@ -129,7 +129,7 @@ devtools::session_info()
 #>  collate  en_US.UTF-8                 
 #>  ctype    en_US.UTF-8                 
 #>  tz       America/Chicago             
-#>  date     2020-10-12                  
+#>  date     2020-10-13                  
 #> 
 #> ─ Packages ───────────────────────────────────────────────────────────────────
 #>  ! package        * version     date       lib
@@ -486,8 +486,6 @@ out_1 <- path("working_dir", "30_Processed_Inputs")
 
 expect_false(dir_has_files(out_1))
 source("web_tool_script_1.R")
-#> Warning: The `path` does not exist: /home/mauro/git/pacta-data/2019Q4//
-#> cleaned_files/fund_data.fst
 #> [1] "No Equity in portfolio"
 expect_true(dir_has_files(out_1))
 ```
@@ -767,32 +765,6 @@ dir_tree(path(outputs, "TestPortfolio_Input"), recurse = FALSE)
 ```
 
 ## TODO
-
-  - Some warnings may be avoided if required directories are created
-    only if they don’t already exist.
-
-<!-- end list -->
-
-``` r
-Warning message:
-In read_file(paste0(file_location, "/fund_data.fst")) :
-  ~/git/pacta-data/2019Q4/cleaned_files/fund_data.fst does not exist
-```
-
-  - I’m not sure if this dataset is crucial, but it’s missing from my
-    clone of pacta-data/:
-
-<!-- end list -->
-
-``` r
-dir_ls(path("..", "pacta-data", "2019Q4", "cleaned_files"))
-#> ../pacta-data/2019Q4/cleaned_files/average_sector_intensity.fst
-#> ../pacta-data/2019Q4/cleaned_files/comp_fin_data.fst
-#> ../pacta-data/2019Q4/cleaned_files/company_emissions.fst
-#> ../pacta-data/2019Q4/cleaned_files/currencies.fst
-#> ../pacta-data/2019Q4/cleaned_files/debt_fin_data.fst
-#> ../pacta-data/2019Q4/cleaned_files/fin_data.fst
-```
 
 ## Cleanup
 
