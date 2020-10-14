@@ -174,7 +174,15 @@ if (file.exists(file.path(results_path, portfolio_name, "Equity_results_stress_t
   equity_results_stress_test <- read_rds(file.path(results_path, portfolio_name, "Equity_results_stress_test.rda"))
 } else {
   equity_results_stress_test <- tibble(
-
+    "investor_name" = NA_character_, "portfolio_name" = NA_character_,
+    "ald_sector" = NA_character_, "technology" = NA_character_,
+    "scenario_geography" = NA_character_, "VaR_technology" = NA_real_,
+    "asset_portfolio_value" = NA_real_, "VaR_Sector" = NA_real_,
+    "scenario_name" = NA_character_, "technology_exposure" = NA_real_,
+    "ector_exposure" = NA_real_, "sector_loss" = NA_real_,
+    "climate_relevant_var" = NA_real_, "portfolio_aum" = NA_real_,
+    "portfolio_loss_percentage" = NA_real_, "year_of_shock" = NA_integer_,
+    "duration_of_shock" = NA_integer_, "production_shock_percentage" = NA_real_
   )
 }
 
@@ -182,11 +190,30 @@ if (file.exists(file.path(results_path, portfolio_name, "Equity_results_stress_t
 if (file.exists(file.path(results_path, portfolio_name, "Bonds_results_stress_test.rda"))) {
   bonds_results_sress_test <- read_rds(file.path(results_path, portfolio_name, "Bonds_results_stress_test.rda"))
 } else {
-  bonds_results_sress_test <- tibble(
-
+  bonds_results_stress_test <- tibble(
+    "investor_name" = NA_character_, "portfolio_name" = NA_character_,
+    "ald_sector" = NA_character_, "technology" = NA_character_,
+    "scenario_geography" = NA_character_, "VaR_technology" = NA_real_,
+    "asset_portfolio_value" = NA_real_, "VaR_Sector" = NA_real_,
+    "scenario_name" = NA_character_, "technology_exposure" = NA_real_,
+    "ector_exposure" = NA_real_, "sector_loss" = NA_real_,
+    "climate_relevant_var" = NA_real_, "portfolio_aum" = NA_real_,
+    "portfolio_loss_percentage" = NA_real_, "year_of_shock" = NA_integer_,
+    "duration_of_shock" = NA_integer_, "production_shock_percentage" = NA_real_
   )
 }
 
+# load portfolio overview
+if (file.exists(file.path(proc_input_path, portfolio_name, "overview_portfolio.rda"))) {
+  portfolio_overview <- read_rds(file.path(proc_input_path, portfolio_name, "overview_portfolio.rda"))
+} else {
+  portfolio_overview <- tibble(
+    "investor_name" = NA_character_, "portfolio_name" = NA_character_,
+    "asset_type" = NA_character_, "financial_sector" = NA_character_,
+    "valid_input" = NA, "valid_value_usd" = NA_real_,
+    "asset_value_usd" = NA_real_, "portfolio_value_usd" = NA_real_
+  )
+}
 
 
 indicies_equity_results_portfolio <- read_rds(file.path(data_location_ext, "0_Indices_equity_portfolio.rda"))
@@ -220,6 +247,7 @@ create_interactive_report(
   bonds_results_map,
   equity_results_stress_test,
   bonds_results_stress_test,
+  portfolio_overview,
   indicies_equity_results_portfolio,
   indicies_bonds_results_portfolio,
   peers_equity_results_portfolio,
