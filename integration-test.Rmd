@@ -204,8 +204,8 @@ uses_relative_paths <- function(lines) {
     "template_location:[ ]?\\.\\./",
     "stress_test_location:[ ]?\\.\\./"
   )
-  
-  all(purrr::map_lgl(patterns, ~any(grepl(.x, lines))))
+
+  all(purrr::map_lgl(patterns, ~ any(grepl(.x, lines))))
 }
 
 if (!uses_relative_paths(readLines(config_2))) {
