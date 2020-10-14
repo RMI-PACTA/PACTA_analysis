@@ -44,6 +44,11 @@ jobs:
         run: Rscript -e 'install.packages("styler")'
       - name: Style
         run: Rscript -e 'styler::style_pkg()'
+      - name: Style all source files
+        run: |
+          source("R/style_all.R")
+          style_all()
+        shell: Rscript {0}
       - name: commit
         run: |
           git config --local user.email "actions@github.com"
