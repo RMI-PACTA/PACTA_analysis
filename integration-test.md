@@ -97,20 +97,17 @@ detect_packages <- function() {
 }
 
 detect_packages()
-#> Finding R package dependencies ... [37/38] [38/38] Done!
-#>  [1] "assertthat"     "base"           "config"         "conflicted"    
-#>  [5] "countrycode"    "cowplot"        "devtools"       "dplyr"         
-#>  [9] "extrafont"      "fs"             "fst"            "ggforce"       
-#> [13] "ggmap"          "ggplot2"        "ggrepel"        "ggthemes"      
-#> [17] "glue"           "grid"           "gridExtra"      "here"          
-#> [21] "janitor"        "jsonlite"       "knitr"          "lme4"          
-#> [25] "magrittr"       "matrixStats"    "PACTA.analysis" "plyr"          
-#> [29] "purrr"          "R"              "RColorBrewer"   "readr"         
-#> [33] "readxl"         "renv"           "reshape2"       "rlang"         
-#> [37] "rmarkdown"      "rstudioapi"     "rworldmap"      "scales"        
-#> [41] "sitools"        "stringr"        "testthat"       "tibble"        
-#> [45] "tidyr"          "tidyselect"     "tools"          "usethis"       
-#> [49] "withr"          "xml2"
+#> Finding R package dependencies ... Done!
+#>  [1] "assertthat"     "base"           "bookdown"       "config"        
+#>  [5] "conflicted"     "countrycode"    "data.table"     "devtools"      
+#>  [9] "dplyr"          "fs"             "fst"            "ggplot2"       
+#> [13] "glue"           "here"           "janitor"        "jsonlite"      
+#> [17] "knitr"          "magrittr"       "PACTA.analysis" "plyr"          
+#> [21] "purrr"          "R"              "readr"          "readxl"        
+#> [25] "renv"           "reshape2"       "rlang"          "rmarkdown"     
+#> [29] "rstudioapi"     "scales"         "stringr"        "testthat"      
+#> [33] "tibble"         "tidyr"          "tidyselect"     "tools"         
+#> [37] "usethis"        "withr"          "writexl"        "zoo"
 ```
 
 <details>
@@ -407,8 +404,6 @@ Ensure this other configuration file also exists:
 
 ``` r
 config_2 <- here("parameter_files", "WebParameters_2dii.yml")
-config_2_copy <- tempfile()
-fs::file_copy(config_2, config_2_copy)
 
 expect_true(file_exists(config_2))
 ```
@@ -417,34 +412,22 @@ Ensure the paths in the configuration file work both locally and on
 GitHub actions:
 
 ``` r
-make_config_portable <- function(config) {
-  lines <- readLines(config, encoding = "UTF-8")
-  lines <- make_paths_portable(lines)
-  writeLines(lines, config)
-
-  invisible(config)
+uses_relative_paths <- function(lines) {
+  patterns <- c(
+    "project_location_ext:[ ]?\\.\\./",
+    "data_location_ext:[ ]?\\.\\./",
+    "template_location:[ ]?\\.\\./",
+    "stress_test_location:[ ]?\\.\\./"
+  )
+  
+  all(purrr::map_lgl(patterns, ~any(grepl(.x, lines))))
 }
 
-make_paths_portable <- function(x) {
-  x %>%
-    root_field_path("project_location_ext", pattern = "PACTA_analysis") %>%
-    root_field_path("data_location_ext", pattern = "pacta-data") %>%
-    root_field_path("template_location", pattern = "create_interactive_report") %>%
-    root_field_path("stress_test_location", pattern = "StressTestingModelDev")
+if (!uses_relative_paths(readLines(config_2))) {
+  abort("Paths in the configuration file must use the form ../this_repo/")
 }
 
-root_field_path <- function(x, field, pattern) {
-  parent <- path_dir(here())
-  value <- path(parent, extract_from(x, pattern))
-  sub(glue("({field}:[ ]?).*"), glue("\\1{value}/"), x)
-}
-
-extract_from <- function(x, pattern) {
-  line <- grep(pattern, x, value = TRUE)
-  sub(glue(".*({pattern}.*)"), "\\1", line)
-}
-
-make_config_portable(config_2)
+expect_true(uses_relative_paths(readLines(config_2)))
 ```
 
 ``` r
@@ -458,11 +441,11 @@ expect_true(all_paths_exist)
 look_into(config_2)
 #> default:
 #>     paths:
-#>        # Prefer "../this_repo/" -- not "./" nor "/path/to/this_repo"
-#>         project_location_ext: /home/mauro/git/PACTA_analysis/
-#>         data_location_ext: /home/mauro/git/pacta-data/2019Q4/
-#>         template_location: /home/mauro/git/create_interactive_report/
-#>         stress_test_location: /home/mauro/git/StressTestingModelDev/
+#>        # Use form "../this_repo/" (not "./" or "/path/to/this_repo")
+#>         project_location_ext: ../PACTA_analysis/
+#>         data_location_ext: ../pacta-data/2019Q4/
+#>         template_location: ../create_interactive_report/
+#>         stress_test_location: ../StressTestingModelDev/
 #>     parameters:
 #>         project_name: working_dir
 #>         twodii_internal: FALSE
@@ -762,14 +745,4 @@ dir_tree(path(outputs, "TestPortfolio_Input"), recurse = FALSE)
 #> ├── js
 #> ├── libs
 #> └── search_index.json
-```
-
-## TODO
-
-## Cleanup
-
-Restore configuration file.
-
-``` r
-fs::file_copy(config_2_copy, config_2, overwrite = TRUE)
 ```
