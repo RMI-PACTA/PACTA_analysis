@@ -1,10 +1,10 @@
 default:
     paths:
-       # Prefer "../this_repo/" -- not "./" nor "/path/to/this_repo"
-        project_location_ext: /Users/jacobkastl/Documents/git/PACTA_analysis/
-        data_location_ext: /Users/jacobkastl/Documents/git/pacta-data/2019Q4/
-        template_location: /Users/jacobkastl/Documents/git/create_interactive_report/
-        stress_test_location: /Users/jacobkastl/Documents/git/StressTestingModelDev/
+       # Use form "../this_repo/" (not "./" or "/path/to/this_repo")
+        project_location_ext: ../PACTA_analysis/
+        data_location_ext: ../pacta-data/2019Q4/
+        template_location: ../create_interactive_report/
+        stress_test_location: ../StressTestingModelDev/
     parameters:
         project_name: working_dir
         twodii_internal: FALSE

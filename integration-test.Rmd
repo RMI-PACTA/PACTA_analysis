@@ -190,8 +190,6 @@ Ensure this other configuration file also exists:
 
 ```{r}
 config_2 <- here("parameter_files", "WebParameters_2dii.yml")
-config_2_copy <- tempfile()
-fs::file_copy(config_2, config_2_copy)
 
 expect_true(file_exists(config_2))
 ```
@@ -199,34 +197,22 @@ expect_true(file_exists(config_2))
 Ensure the paths in the configuration file work both locally and on GitHub actions:
 
 ```{r}
-make_config_portable <- function(config) {
-  lines <- readLines(config, encoding = "UTF-8")
-  lines <- make_paths_portable(lines)
-  writeLines(lines, config)
-
-  invisible(config)
+uses_relative_paths <- function(lines) {
+  patterns <- c(
+    "project_location_ext:[ ]?\\.\\./",
+    "data_location_ext:[ ]?\\.\\./",
+    "template_location:[ ]?\\.\\./",
+    "stress_test_location:[ ]?\\.\\./"
+  )
+  
+  all(purrr::map_lgl(patterns, ~any(grepl(.x, lines))))
 }
 
-make_paths_portable <- function(x) {
-  x %>%
-    root_field_path("project_location_ext", pattern = "PACTA_analysis") %>%
-    root_field_path("data_location_ext", pattern = "pacta-data") %>%
-    root_field_path("template_location", pattern = "create_interactive_report") %>%
-    root_field_path("stress_test_location", pattern = "StressTestingModelDev")
+if (!uses_relative_paths(readLines(config_2))) {
+  abort("Paths in the configuration file must use the form ../this_repo/")
 }
 
-root_field_path <- function(x, field, pattern) {
-  parent <- path_dir(here())
-  value <- path(parent, extract_from(x, pattern))
-  sub(glue("({field}:[ ]?).*"), glue("\\1{value}/"), x)
-}
-
-extract_from <- function(x, pattern) {
-  line <- grep(pattern, x, value = TRUE)
-  sub(glue(".*({pattern}.*)"), "\\1", line)
-}
-
-make_config_portable(config_2)
+expect_true(uses_relative_paths(readLines(config_2)))
 ```
 
 ```{r}
@@ -305,28 +291,3 @@ look_into(index, n = 20L)
 
 dir_tree(path(outputs, "TestPortfolio_Input"), recurse = FALSE)
 ```
-
-## TODO
-
-* Some warnings may be avoided if required directories are created only if they don't already exist.
-
-```r
-Warning message:
-In read_file(paste0(file_location, "/fund_data.fst")) :
-  ~/git/pacta-data/2019Q4/cleaned_files/fund_data.fst does not exist
-```
-
-* I'm not sure if this dataset is crucial, but it's missing from my clone of pacta-data/:
-
-```{r}
-dir_ls(path("..", "pacta-data", "2019Q4", "cleaned_files"))
-```
-
-## Cleanup
-
-Restore configuration file.
-
-```{r}
-fs::file_copy(config_2_copy, config_2, overwrite = TRUE)
-```
-
