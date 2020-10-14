@@ -36,7 +36,6 @@ Imports:
     purrr,
     readr,
     rlang,
-    rmarkdown,
     usethis,
     withr
 Suggests: 
