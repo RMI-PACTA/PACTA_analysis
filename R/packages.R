@@ -107,7 +107,7 @@ update_production_packages <- function(path = packages_path()) {
 update_dockerfile_packages <- function(path = NULL) {
   path <- path %||% path_to_empty_dockerfile()
 
-  old_dockerfile <- read_dockerfile(path)
+  old_dockerfile <- readLines(path, encoding = "UTF-8")
   new_dockerfile <- c(
     dockerfile_head(old_dockerfile),
     dockerfile_packages(packages_path()),
@@ -129,16 +129,12 @@ create_empty_dockerfile <- function(x = "") {
   c(mark_start(), x, mark_end())
 }
 
-read_dockerfile <- function(path = dockerfile_path()) {
-  readLines(path, encoding = "UTF-8")
+dockerfile_head <- function(lines) {
+  lines[1:start_of_packages_on_dockerfile(lines)]
 }
 
-dockerfile_head <- function(dockerfile = read_dockerfile()) {
-  dockerfile[1:start_of_packages_on_dockerfile(dockerfile)]
-}
-
-dockerfile_tail <- function(dockerfile = read_dockerfile()) {
-  dockerfile[end_of_packages_on_dockerfile(dockerfile):length(dockerfile)]
+dockerfile_tail <- function(lines) {
+  lines[end_of_packages_on_dockerfile(lines):length(lines)]
 }
 
 dockerfile_packages <- function(path = packages_path()) {
