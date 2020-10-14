@@ -42,3 +42,10 @@ packages <- function() {
     "zoo"
   ))
 }
+
+update_production_packages <- function(path = packages_path()) {
+  library_package <- sprintf("library(%s)", packages())
+  writeLines(library_package)
+
+  invisible(packages_path())
+}
