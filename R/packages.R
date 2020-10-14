@@ -1,4 +1,4 @@
-#' Name of packages we use
+#' Name of the packages we use in production
 #'
 #' @return An alpha-sorted character-vector.
 #' @examples
@@ -43,9 +43,16 @@ packages <- function() {
   ))
 }
 
+#' @examples
+#' tmp <- tempfile()
+#' update_production_packages(tmp)
+#'
+#' # See result
+#' writeLines(readLines(tmp))
+#' @noRd
 update_production_packages <- function(path = packages_path()) {
   library_package <- sprintf("library(%s)", packages())
-  writeLines(library_package)
+  writeLines(library_package, path)
 
   invisible(packages_path())
 }
