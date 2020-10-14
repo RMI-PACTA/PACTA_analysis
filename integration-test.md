@@ -97,20 +97,17 @@ detect_packages <- function() {
 }
 
 detect_packages()
-#> Finding R package dependencies ... [38/38] Done!
-#>  [1] "assertthat"     "base"           "config"         "conflicted"    
-#>  [5] "countrycode"    "cowplot"        "devtools"       "dplyr"         
-#>  [9] "extrafont"      "fs"             "fst"            "ggforce"       
-#> [13] "ggmap"          "ggplot2"        "ggrepel"        "ggthemes"      
-#> [17] "glue"           "grid"           "gridExtra"      "here"          
-#> [21] "janitor"        "jsonlite"       "knitr"          "lme4"          
-#> [25] "magrittr"       "matrixStats"    "PACTA.analysis" "plyr"          
-#> [29] "purrr"          "R"              "RColorBrewer"   "readr"         
-#> [33] "readxl"         "renv"           "reshape2"       "rlang"         
-#> [37] "rmarkdown"      "rstudioapi"     "rworldmap"      "scales"        
-#> [41] "sitools"        "stringr"        "testthat"       "tibble"        
-#> [45] "tidyr"          "tidyselect"     "tools"          "usethis"       
-#> [49] "withr"          "xml2"
+#> Finding R package dependencies ... Done!
+#>  [1] "assertthat"     "base"           "bookdown"       "config"        
+#>  [5] "conflicted"     "countrycode"    "data.table"     "devtools"      
+#>  [9] "dplyr"          "fs"             "fst"            "ggplot2"       
+#> [13] "glue"           "here"           "janitor"        "jsonlite"      
+#> [17] "knitr"          "magrittr"       "PACTA.analysis" "plyr"          
+#> [21] "purrr"          "R"              "readr"          "readxl"        
+#> [25] "renv"           "reshape2"       "rlang"          "rmarkdown"     
+#> [29] "rstudioapi"     "scales"         "stringr"        "testthat"      
+#> [33] "tibble"         "tidyr"          "tidyselect"     "tools"         
+#> [37] "usethis"        "withr"          "writexl"        "zoo"
 ```
 
 <details>
@@ -444,7 +441,7 @@ expect_true(all_paths_exist)
 look_into(config_2)
 #> default:
 #>     paths:
-#>        # Use form "../this_repo/" -- not "./" nor "/path/to/this_repo"
+#>        # Use form "../this_repo/" (not "./" or "/path/to/this_repo")
 #>         project_location_ext: ../PACTA_analysis/
 #>         data_location_ext: ../pacta-data/2019Q4/
 #>         template_location: ../create_interactive_report/
@@ -472,8 +469,6 @@ out_1 <- path("working_dir", "30_Processed_Inputs")
 
 expect_false(dir_has_files(out_1))
 source("web_tool_script_1.R")
-#> Warning: The `path` does not exist: ../pacta-data/2019Q4//cleaned_files/
-#> fund_data.fst
 #> [1] "No Equity in portfolio"
 expect_true(dir_has_files(out_1))
 ```
@@ -750,32 +745,4 @@ dir_tree(path(outputs, "TestPortfolio_Input"), recurse = FALSE)
 #> ├── js
 #> ├── libs
 #> └── search_index.json
-```
-
-## TODO
-
-  - Some warnings may be avoided if required directories are created
-    only if they don’t already exist.
-
-<!-- end list -->
-
-``` r
-Warning message:
-In read_file(paste0(file_location, "/fund_data.fst")) :
-  ~/git/pacta-data/2019Q4/cleaned_files/fund_data.fst does not exist
-```
-
-  - I’m not sure if this dataset is crucial, but it’s missing from my
-    clone of pacta-data/:
-
-<!-- end list -->
-
-``` r
-dir_ls(path("..", "pacta-data", "2019Q4", "cleaned_files"))
-#> ../pacta-data/2019Q4/cleaned_files/average_sector_intensity.fst
-#> ../pacta-data/2019Q4/cleaned_files/comp_fin_data.fst
-#> ../pacta-data/2019Q4/cleaned_files/company_emissions.fst
-#> ../pacta-data/2019Q4/cleaned_files/currencies.fst
-#> ../pacta-data/2019Q4/cleaned_files/debt_fin_data.fst
-#> ../pacta-data/2019Q4/cleaned_files/fin_data.fst
 ```

@@ -57,22 +57,29 @@ if (new_data == TRUE) {
     company_emissions
   )
 } else {
-  currencies <- read_file(file.path(file_location, "currencies.fst"))
+  currencies <- fst::read_fst(file.path(file_location, "currencies.fst"))
 
-  fund_data <- read_file(file.path(file_location, "fund_data.fst"))
+  read_fst_or_return_null <- function(fst_file) {
+    if (!file.exists(fst_file)) {
+      return(NULL)
+    }
 
-  fin_data <- read_file(file.path(file_location, "fin_data.fst"))
+    fst::read_fst(fst_file)
+  }
 
-  comp_fin_data <- read_file(file.path(file_location, "comp_fin_data.fst"))
+  fund_data_path <- file.path(file_location, "fund_data.fst")
+  fund_data <- read_fst_or_return_null(fund_data_path)
 
-  debt_fin_data <- read_file(file.path(file_location, "debt_fin_data.fst"))
+  fin_data <- fst::read_fst(file.path(file_location, "fin_data.fst"))
 
-  # revenue_data <- read_file(file.path(file_location, "revenue_data.fst"))
+  comp_fin_data <- fst::read_fst(file.path(file_location, "comp_fin_data.fst"))
+
+  debt_fin_data <- fst::read_fst(file.path(file_location, "debt_fin_data.fst"))
 
   if (inc_emission_factors) {
-    average_sector_intensity <- read_file(file.path(file_location, "average_sector_intensity.fst"))
+    average_sector_intensity <- fst::read_fst(file.path(file_location, "average_sector_intensity.fst"))
 
-    company_emissions <- read_file(file.path(file_location, "company_emissions.fst"))
+    company_emissions <- fst::read_fst(file.path(file_location, "company_emissions.fst"))
   }
 }
 ####################
