@@ -182,6 +182,7 @@ create_interactive_report(
   template_dir,
   company_charts_dir,
   output_dir,
+  peergroup,
   project_name,
   investor_name,
   portfolio_name,

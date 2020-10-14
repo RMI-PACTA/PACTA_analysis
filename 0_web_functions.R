@@ -89,6 +89,8 @@ set_portfolio_parameters <- function(file_path) {
   portfolio_name_ref <<- cfg$parameters$portfolio_name_ref
   portfolio_name_in <<- cfg$parameters$portfolio_name_in
   investor_name_in <<- cfg$parameters$investor_name_in
+  peergroup <<- cfg$parameters$peergroup
+  user_id <<- cfg$parameters$user_id
 }
 
 add_naming_to_portfolio <- function(portfolio_raw) {
