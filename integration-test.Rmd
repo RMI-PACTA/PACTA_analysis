@@ -209,7 +209,7 @@ uses_relative_paths <- function(lines) {
 }
 
 if (!uses_relative_paths(readLines(config_2))) {
-  abort("Pahts in the configuration file must use the form ../this_repo/")
+  abort("Paths in the configuration file must use the form ../this_repo/")
 }
 
 expect_true(uses_relative_paths(readLines(config_2)))
