@@ -78,12 +78,9 @@ dockerfile_tail <- function(dockerfile = read_dockerfile()) {
 }
 
 dockerfile_packages <- function(path = packages_path()) {
-  raw <- readLines(path, encoding = "UTF-8")
-  pkg <- sub("library\\((.*)\\)", "\\1", raw)
-
   c(
     '    && Rscript -e "install.packages( \\',
-    paste0("             ", format_as_vector(pkg), " \\"),
+    paste0("             ", format_as_vector(packages()), " \\"),
     '           )" \\'
   )
 }
