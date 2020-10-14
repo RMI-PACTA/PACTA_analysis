@@ -51,19 +51,13 @@ jobs:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
 
-      - uses: r-lib/actions/setup-pandoc@v1
-      - name: Install rmarkdown
-        run: |
-          install.packages("remotes")
-          remotes::install_cran("rmarkdown")
-        shell: Rscript {0}
-
       - name: Install dependencies from CRAN
         run: |
           install.packages("renv")
           dependencies <- renv::dependencies()$Package
           install.packages(dependencies)
         shell: Rscript {0}
+
       - name: Test R scripts
         run: |
           source("test_r_scripts.R")
