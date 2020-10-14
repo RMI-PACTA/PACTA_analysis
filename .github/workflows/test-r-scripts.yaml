@@ -1,9 +1,9 @@
 on: [push, pull_request]
 
-name: Run integration test
+name: Test R scripts
 
 jobs:
-  Run-integration-test:
+  Test-r-scripts:
     runs-on: ${{ matrix.config.os }}
     name: ${{ matrix.config.os }} (${{ matrix.config.r }})
     strategy:
