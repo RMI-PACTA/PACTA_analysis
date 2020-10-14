@@ -13,3 +13,20 @@ setup_project <- function() {
   source(path)
 }
 
+#' Style .R and .Rmd files
+#'
+#' To style only R-package sources useuse_tidy_style()
+#'
+#' @examples
+#' style_all()
+#' @noRd
+style_all <- function() {
+  style_pattern("[.]R$")
+  style_pattern("[.]Rmd$")
+}
+
+style_pattern <- function(pattern) {
+  files <- list.files(pattern = pattern, recursive = TRUE)
+  purrr::walk(files, styler::style_file)
+}
+
