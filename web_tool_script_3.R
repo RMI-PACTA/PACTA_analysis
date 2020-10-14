@@ -188,7 +188,7 @@ if (file.exists(file.path(results_path, portfolio_name, "Equity_results_stress_t
 
 # load bonds stress test data
 if (file.exists(file.path(results_path, portfolio_name, "Bonds_results_stress_test.rda"))) {
-  bonds_results_sress_test <- read_rds(file.path(results_path, portfolio_name, "Bonds_results_stress_test.rda"))
+  bonds_results_stress_test <- read_rds(file.path(results_path, portfolio_name, "Bonds_results_stress_test.rda"))
 } else {
   bonds_results_stress_test <- tibble(
     "investor_name" = NA_character_, "portfolio_name" = NA_character_,
