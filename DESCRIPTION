@@ -37,7 +37,8 @@ Imports:
     readr,
     rlang,
     usethis,
-    withr
+    withr,
+    rmarkdown
 Suggests: 
     testthat
 Encoding: UTF-8
