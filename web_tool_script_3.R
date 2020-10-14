@@ -25,8 +25,6 @@ source(file.path(template_path, "create_interactive_report.R"))
 
 file_names <- read_csv(file.path(proc_input_path, portfolio_name_ref_all, "file_names.csv"))
 
-# TODO: Remove different start years
-
 repo_path <- template_path
 template_dir <- fs::path(template_path, "template_beta")
 company_charts_dir <- fs::path(template_path, "company_charts", "Mixed_Portfolio")
@@ -178,6 +176,7 @@ peers_equity_results_portfolio <- read_rds(file.path(data_location_ext, "0_Indic
 peers_bonds_results_portfolio <- read_rds(file.path(data_location_ext, "0_Indices_bonds_portfolio.rda"))
 
 create_interactive_report(
+  language,
   repo_path,
   template_dir,
   company_charts_dir,
@@ -185,6 +184,7 @@ create_interactive_report(
   project_name,
   investor_name,
   portfolio_name,
+  peer_group,
   start_year,
   select_scenario = scenario,
   portfolio_allocation_method,
