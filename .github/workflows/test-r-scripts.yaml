@@ -61,6 +61,6 @@ jobs:
       - name: Test R scripts
         run: |
           setwd("PACTA_analysis")
-          source("test_r_scripts.R")
+          source("R/test_r_scripts.R")
           test_r_scripts()
         shell: Rscript {0}
