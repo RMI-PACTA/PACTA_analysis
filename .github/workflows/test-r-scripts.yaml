@@ -66,6 +66,6 @@ jobs:
         shell: Rscript {0}
       - name: Test R scripts
         run: |
-          source("test_r_scripts")
+          source("test_r_scripts.R")
           test_r_scripts()
         shell: Rscript {0}
