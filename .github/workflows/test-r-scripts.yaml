@@ -64,7 +64,8 @@ jobs:
           dependencies <- renv::dependencies()$Package
           install.packages(dependencies)
         shell: Rscript {0}
-      - name: Run integration test
+      - name: Test R scripts
         run: |
-          cd PACTA_analysis
-          Rscript -e "knitr::knit('integration-test.Rmd')"
+          source("test_r_scripts")
+          test_r_scripts()
+        shell: Rscript {0}
