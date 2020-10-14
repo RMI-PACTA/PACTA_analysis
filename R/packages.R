@@ -99,6 +99,10 @@ update_production_packages <- function(path = packages_path()) {
 #' update_dockerfile_packages(path = some_dockerfile)
 #' # After
 #' writeLines(readLines(some_dockerfile))
+#'
+#' # By defaul it writes to a temporary file
+#' tmp <- update_dockerfile_packages()
+#' writeLines(readLines(tmp))
 #' @noRd
 update_dockerfile_packages <- function(path = NULL) {
   path <- path %||% path_to_empty_dockerfile()
