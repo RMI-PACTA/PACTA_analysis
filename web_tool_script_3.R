@@ -182,7 +182,6 @@ create_interactive_report(
   template_dir = template_dir,
   company_charts_dir = company_charts_dir,
   output_dir = output_dir,
-  peergroup = peergroup,
   project_name = project_name,
   investor_name = investor_name,
   portfolio_name = portfolio_name,
@@ -205,5 +204,7 @@ create_interactive_report(
   indicies_equity_results_portfolio = indicies_equity_results_portfolio,
   indicies_bonds_results_portfolio = indicies_bonds_results_portfolio,
   peers_equity_results_portfolio = peers_equity_results_portfolio,
-  peers_bonds_results_portfolio = peers_bonds_results_portfolio
+  peers_bonds_results_portfolio = peers_bonds_results_portfolio,
+  peergroup = peergroup,
+  user_id = user_id
 )
