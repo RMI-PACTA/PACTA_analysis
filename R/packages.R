@@ -57,23 +57,12 @@ packages <- function() {
 
 use_r_packages <- function(path = packages_path()) {
   suppressPackageStartupMessages(source(path))
-  resolve_conflicts()
-
+  source(file.path("deduplicate", "resolve_conflicts.R"))
   invisible(path)
 }
 
 packages_path <- function() {
   here::here("deduplicate", "production_packages.R")
-}
-
-resolve_conflicts <- function() {
-  conflicted::conflict_prefer("filter", "dplyr")
-  conflicted::conflict_prefer("lag", "dplyr")
-  conflicted::conflict_prefer("mutate", "dplyr")
-  conflicted::conflict_prefer("here", "here")
-  conflicted::conflict_prefer("rename", "dplyr")
-  conflicted::conflict_prefer("summarise", "dplyr")
-  conflicted::conflict_prefer("arrange", "dplyr")
 }
 
 #' @examples
