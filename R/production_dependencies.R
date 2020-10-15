@@ -17,18 +17,9 @@ detected_dependencies <- function(exclude = NULL) {
   sort(unique(deps$package))
 }
 
-find_dependencies <- function(tibble, as_tibble, renv, dependencies) {
-  renv::dependencies(here::here(), progress = FALSE) %>%
-    rlang::set_names(tolower) %>%
-    tibble::as_tibble()
-}
-
-detect_production_path <- function(path, exclude) {
-  !grepl(exclude, path)
-}
-
 not_for_production <- function() {
   patterns <- c(
+    "0_graphing_functions.R",
     "data-raw",
     "deduplicate/load-and-attach-r-packages.R",
     "deduplicate/production_packages.R",
@@ -41,3 +32,17 @@ not_for_production <- function() {
   paste(patterns, collapse = "|")
 }
 
+find_dependencies <- function(tibble, as_tibble, renv, dependencies) {
+  dependencies <- dplyr::bind_rows(
+    dependencies_in("PACTA_analysis"),
+    dependencies_in("create_interactive_report"),
+    dependencies_in("StressTestingModelDev")
+  )
+
+  tibble::as_tibble(rlang::set_names(dependencies, tolower))
+}
+
+dependencies_in <- function(project_name) {
+  path <- fs::path(fs::path_dir(here::here()), project_name)
+  renv::dependencies(path, progress = FALSE)
+}
