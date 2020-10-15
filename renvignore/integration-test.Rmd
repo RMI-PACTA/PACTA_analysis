@@ -238,6 +238,8 @@ dir_has_files <- function(path) {
 out_1 <- here("working_dir", "30_Processed_Inputs")
 
 expect_false(dir_has_files(out_1))
+
+# FIXME: Surprisingly, this line fails from rmd but runs on the console
 source(here("web_tool_script_1.R"))
 expect_true(dir_has_files(out_1))
 ```
@@ -245,20 +247,20 @@ expect_true(dir_has_files(out_1))
 Populate the directory for results:
 
 ```{r message=FALSE}
-out_2 <- path("working_dir", "40_Results")
+out_2 <- here("working_dir", "40_Results")
 
 expect_false(dir_has_files(out_2))
-source("web_tool_script_2.R")
+source(here("web_tool_script_2.R"))
 expect_true(dir_has_files(out_2))
 ```
 
 Populate the directory for outputs:
 
 ```{r message=FALSE}
-out_3 <- path("working_dir", "50_Outputs")
+out_3 <- here("working_dir", "50_Outputs")
 
 expect_false(dir_has_files(out_3))
-source("web_tool_script_3.R")
+source(here("web_tool_script_3.R"))
 expect_true(dir_has_files(out_3))
 ```
 
