@@ -57,12 +57,12 @@ packages <- function() {
 
 use_r_packages <- function(path = packages_path()) {
   suppressPackageStartupMessages(source(path))
-  source(file.path("deduplicate", "resolve_conflicts.R"))
+  source(here::here("deduplicate", "resolve_conflicts.R"))
   invisible(path)
 }
 
 packages_path <- function() {
-  here::here("deduplicate", "production_packages.R")
+  here::here("renvignore", "production_packages.R")
 }
 
 #' @examples

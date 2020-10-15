@@ -20,11 +20,10 @@ detected_dependencies <- function(exclude = NULL) {
 not_for_production <- function() {
   patterns <- c(
     "0_graphing_functions.R",
+    "renvignore",
     "data-raw",
-    "deduplicate/load-and-attach-r-packages.R",
-    "deduplicate/production_packages.R",
-    "DESCRIPTION",
     "integration-test",
+    "DESCRIPTION",
     "R/",
     "tests/"
   )

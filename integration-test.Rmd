@@ -38,18 +38,13 @@ library(here)
 library(conflicted)
 
 devtools::load_all()
-resolve_conflicts()
+source(here::here("deduplicate", "resolve_conflicts.R"))
 ```
 
 All packages detected in the directory PACTA\_analysis:
 
 ```{r}
-detect_packages <- function() {
-  packages <- renv::dependencies()$Package
-  sort(unique(packages))
-}
-
-detect_packages()
+detected_dependencies(exclude = not_for_production())
 ```
 
 <details>

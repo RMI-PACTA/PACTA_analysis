@@ -1,6 +1,6 @@
 Integration test: Run the web tool
 ================
-2020-10-13
+2020-10-14
 
 ## Introduction
 
@@ -78,7 +78,7 @@ library(conflicted)
 
 devtools::load_all()
 #> Loading PACTA.analysis
-resolve_conflicts()
+source(here::here("deduplicate", "resolve_conflicts.R"))
 #> [conflicted] Will prefer dplyr::filter over any other package
 #> [conflicted] Will prefer dplyr::lag over any other package
 #> [conflicted] Will prefer dplyr::mutate over any other package
@@ -97,15 +97,15 @@ detect_packages <- function() {
 }
 
 detect_packages()
-#> Finding R package dependencies ... Done!
-#>  [1] "assertthat"     "base"           "bookdown"       "config"        
-#>  [5] "conflicted"     "countrycode"    "data.table"     "devtools"      
-#>  [9] "dplyr"          "fs"             "fst"            "ggplot2"       
-#> [13] "glue"           "here"           "janitor"        "jsonlite"      
-#> [17] "knitr"          "magrittr"       "PACTA.analysis" "plyr"          
-#> [21] "purrr"          "R"              "readr"          "readxl"        
-#> [25] "renv"           "reshape2"       "rlang"          "rmarkdown"     
-#> [29] "rstudioapi"     "scales"         "stringr"        "testthat"      
+#> Finding R package dependencies ... [40/44] [41/44] [42/44] [43/44] [44/44] Done!
+#>  [1] "assertthat"     "bookdown"       "config"         "conflicted"    
+#>  [5] "countrycode"    "data.table"     "devtools"       "dplyr"         
+#>  [9] "fs"             "fst"            "ggplot2"        "glue"          
+#> [13] "here"           "janitor"        "jsonlite"       "knitr"         
+#> [17] "magrittr"       "PACTA.analysis" "plyr"           "purrr"         
+#> [21] "R"              "readr"          "readxl"         "renv"          
+#> [25] "reshape2"       "rlang"          "rmarkdown"      "rstudioapi"    
+#> [29] "scales"         "stringr"        "styler"         "testthat"      
 #> [33] "tibble"         "tidyr"          "tidyselect"     "tools"         
 #> [37] "usethis"        "withr"          "writexl"        "zoo"
 ```
@@ -126,14 +126,14 @@ devtools::session_info()
 #>  collate  en_US.UTF-8                 
 #>  ctype    en_US.UTF-8                 
 #>  tz       America/Chicago             
-#>  date     2020-10-13                  
+#>  date     2020-10-14                  
 #> 
 #> ─ Packages ───────────────────────────────────────────────────────────────────
 #>  ! package        * version     date       lib
 #>    assertthat       0.2.1       2019-03-21 [1]
 #>    backports        1.1.10      2020-09-15 [1]
-#>    callr            3.5.0       2020-10-08 [1]
-#>    cli              2.0.2       2020-02-28 [1]
+#>    callr            3.5.1       2020-10-13 [1]
+#>    cli              2.1.0       2020-10-12 [1]
 #>    config         * 0.3         2018-03-27 [1]
 #>    conflicted     * 1.0.4       2019-06-21 [1]
 #>    crayon           1.3.4.9000  2020-09-03 [1]
@@ -168,7 +168,7 @@ devtools::session_info()
 #>    purrr          * 0.3.4       2020-04-17 [1]
 #>    R6               2.4.1       2019-11-12 [1]
 #>    Rcpp             1.0.5       2020-07-06 [1]
-#>    readr            1.3.1       2018-12-21 [1]
+#>    readr            1.4.0       2020-10-05 [1]
 #>    remotes          2.2.0       2020-07-21 [1]
 #>    renv           * 0.12.0      2020-08-28 [1]
 #>    rlang          * 0.4.8       2020-10-08 [1]
@@ -179,8 +179,9 @@ devtools::session_info()
 #>    snakecase        0.11.0      2019-05-25 [1]
 #>    stringi          1.5.3       2020-09-09 [1]
 #>    stringr          1.4.0       2019-02-10 [1]
-#>    testthat       * 2.99.0.9000 2020-10-11 [1]
-#>    tibble           3.0.3       2020-07-10 [1]
+#>    styler           1.3.2       2020-02-23 [1]
+#>    testthat       * 2.99.0.9000 2020-10-14 [1]
+#>    tibble           3.0.4       2020-10-12 [1]
 #>    tidyselect       1.1.0       2020-05-11 [1]
 #>    usethis        * 1.6.3       2020-09-17 [1]
 #>    vctrs            0.3.4       2020-08-29 [1]
@@ -190,8 +191,8 @@ devtools::session_info()
 #>  source                             
 #>  CRAN (R 4.0.0)                     
 #>  CRAN (R 4.0.2)                     
-#>  RSPM (R 4.0.2)                     
-#>  CRAN (R 4.0.0)                     
+#>  CRAN (R 4.0.3)                     
+#>  RSPM (R 4.0.3)                     
 #>  CRAN (R 4.0.0)                     
 #>  RSPM (R 4.0.2)                     
 #>  Github (r-lib/crayon@6b3f0c6)      
@@ -226,7 +227,7 @@ devtools::session_info()
 #>  CRAN (R 4.0.0)                     
 #>  CRAN (R 4.0.0)                     
 #>  CRAN (R 4.0.0)                     
-#>  CRAN (R 4.0.0)                     
+#>  RSPM (R 4.0.2)                     
 #>  RSPM (R 4.0.2)                     
 #>  RSPM (R 4.0.0)                     
 #>  CRAN (R 4.0.2)                     
@@ -237,8 +238,9 @@ devtools::session_info()
 #>  CRAN (R 4.0.0)                     
 #>  RSPM (R 4.0.2)                     
 #>  CRAN (R 4.0.0)                     
-#>  Github (r-lib/testthat@d10a276)    
-#>  CRAN (R 4.0.0)                     
+#>  RSPM (R 4.0.0)                     
+#>  Github (r-lib/testthat@12a39de)    
+#>  RSPM (R 4.0.3)                     
 #>  CRAN (R 4.0.0)                     
 #>  RSPM (R 4.0.2)                     
 #>  RSPM (R 4.0.2)                     
@@ -419,8 +421,8 @@ uses_relative_paths <- function(lines) {
     "template_location:[ ]?\\.\\./",
     "stress_test_location:[ ]?\\.\\./"
   )
-  
-  all(purrr::map_lgl(patterns, ~any(grepl(.x, lines))))
+
+  all(purrr::map_lgl(patterns, ~ any(grepl(.x, lines))))
 }
 
 if (!uses_relative_paths(readLines(config_2))) {
