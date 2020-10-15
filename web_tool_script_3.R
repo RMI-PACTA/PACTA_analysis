@@ -20,12 +20,16 @@ set_portfolio_parameters(file_path = fs::path(par_file_path, paste0(portfolio_na
 analysis_inputs_path <- set_analysis_inputs_path(twodii_internal, data_location_ext, dataprep_timestamp)
 
 source(file.path(template_path, "create_interactive_report.R"))
+source(file.path(template_path, "create_executive_summary.R"))
+source(file.path(template_path, "useful_functions.R"))
 
 file_names <- read_csv(file.path(proc_input_path, portfolio_name_ref_all, "file_names.csv"))
 
 repo_path <- template_path
 template_name <- paste0("template_", tolower(language_select))
 template_dir <- fs::path(template_path, template_name)
+template_dir <- paste0(repo_path,"swiss_en_template/_book/")
+
 company_charts_dir <- fs::path(template_path, "company_charts", "Mixed_Portfolio")
 output_dir <- file.path(outputs_path, portfolio_name_ref_all)
 project_name <- "working_dir"
@@ -167,7 +171,7 @@ create_interactive_report(
   template_dir,
   company_charts_dir,
   output_dir,
-  language_select = "EN",
+  language_select,
   project_name,
   investor_name,
   portfolio_name,
