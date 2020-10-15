@@ -21,13 +21,6 @@
 #' # Fails
 #' try(read_rda(path))
 #' @noRd
-read_rda2 <- function(file_name) {
-  tryCatch(
-    read_rdata(file_name),
-    # Unfortunately, legacy code saved .rds files with the extension .rda
-    error = function(e) readr::read_rds(file_name)
-  )
-}
 read_rda <- function(file_name) {
   tryCatch(
     # Unfortunately, legacy code saved .rds files with the extension .rda
