@@ -86,15 +86,16 @@ set_web_parameters <- function(file_path) {
 set_portfolio_parameters <- function(file_path) {
   cfg <- config::get(file = file_path)
 
-  portfolio_name <<- cfg$parameters$portfolio_name_in
-  investor_name <<- cfg$parameters$investor_name_in
+  portfolio_name <<- cfg$parameters$portfolio_name
+  investor_name <<- cfg$parameters$investor_name
   peer_group <<- cfg$parameters$peer_group
   language_select <<- cfg$parameters$language
+  user_id <<- cfg$parameters$user_id
 }
 
 add_naming_to_portfolio <- function(portfolio_raw) {
-  portfolio_raw$portfolio_name <- portfolio_name_in
-  portfolio_raw$investor_name <- investor_name_in
+  portfolio_raw$portfolio_name <- portfolio_name
+  portfolio_raw$investor_name <- investor_name
 
   return(portfolio_raw)
 }
@@ -159,12 +160,12 @@ get_input_files <- function(portfolio_name_ref_all) {
     # as agreed with Constructiva. They ensure grouped portfolios will get one name only.
     portfolio_ <- portfolio_ %>%
       mutate(
-        Portfolio.Name = portfolio_name_in,
-        Investor.Name = investor_name_in
+        Portfolio.Name = portfolio_name,
+        Investor.Name = investor_name
       )
 
     # clean and check column names
-    portfolio_ <- check_input_file_contents(portfolio_, portfolio_name_in, investor_name_in)
+    portfolio_ <- check_input_file_contents(portfolio_, portfolio_name, investor_name)
 
     portfolio_$count <- i
 
@@ -216,17 +217,17 @@ read_web_input_file <- function(input_file_path) {
   return(input_file)
 }
 
-check_input_file_contents <- function(portfolio_, portfolio_name_in, investor_name_in) {
+check_input_file_contents <- function(portfolio_, portfolio_name, investor_name) {
   portfolio_clean <- clean_colnames_portfolio_input_file(portfolio_)
 
   necessary_columns <- c(grouping_variables, "market_value", "currency", "isin")
 
   # if portfolio_name and investor_name are not among the columns of the input file, they are created using the values from the parameter file
   if (!"portfolio_name" %in% colnames(portfolio_clean)) {
-    portfolio_clean$portfolio_name <- portfolio_name_in
+    portfolio_clean$portfolio_name <- portfolio_name
   }
   if (!"investor_name" %in% colnames(portfolio_clean)) {
-    portfolio_clean$investor_name <- investor_name_in
+    portfolio_clean$investor_name <- investor_name
   }
 
   if (length(setdiff(necessary_columns, colnames(portfolio_clean))) > 0) {
