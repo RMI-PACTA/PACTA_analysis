@@ -21,20 +21,14 @@ analysis_inputs_path <- set_analysis_inputs_path(twodii_internal, data_location_
 
 source(file.path(template_path, "create_interactive_report.R"))
 
-
-
 file_names <- read_csv(file.path(proc_input_path, portfolio_name_ref_all, "file_names.csv"))
 
-# TODO: Remove different start years
-
 repo_path <- template_path
-template_dir <- fs::path(template_path, "template_beta")
+template_name <- paste0("template_", tolower(language_select))
+template_dir <- fs::path(template_path, template_name)
 company_charts_dir <- fs::path(template_path, "company_charts", "Mixed_Portfolio")
 output_dir <- file.path(outputs_path, portfolio_name_ref_all)
 project_name <- "working_dir"
-investor_name <- file_names$investor_name
-portfolio_name <- file_names$portfolio_name
-# start_year <- 2020
 scenario <- "B2DS"
 portfolio_allocation_method <- "portfolio_weight"
 scenario_geography <- "Global"
@@ -61,7 +55,6 @@ if (file.exists(file.path(results_path, portfolio_name, "Equity_results_portfoli
     "trajectory_deviation" = NA_integer_, "trajectory_alignment" = NA_integer_
   )
 }
-# equity_results_portfolio <- read_rds(file.path(results_path, portfolio_name, paste0(portfolio_name, "_Equity_results_portfolio.rda")))
 
 if (file.exists(file.path(results_path, portfolio_name, "Bonds_results_portfolio.rda"))) {
   bonds_results_portfolio <- read_rds(file.path(results_path, portfolio_name, "Bonds_results_portfolio.rda"))
@@ -83,8 +76,6 @@ if (file.exists(file.path(results_path, portfolio_name, "Bonds_results_portfolio
     "trajectory_deviation" = NA_integer_, "trajectory_alignment" = NA_integer_
   )
 }
-# bonds_results_portfolio <- read_rds(file.path(results_path, portfolio_name, paste0(portfolio_name, "_Bonds_results_portfolio.rda")))
-# bonds_results_portfolio <- equity_results_portfolio %>% filter(portfolio_name == "")
 
 if (file.exists(file.path(results_path, portfolio_name, "Equity_results_company.rda"))) {
   equity_results_company <- read_rds(file.path(results_path, portfolio_name, "Equity_results_company.rda"))
@@ -110,7 +101,6 @@ if (file.exists(file.path(results_path, portfolio_name, "Equity_results_company.
     "trajectory_deviation" = NA_integer_, "trajectory_alignment" = NA_integer_
   )
 }
-# equity_results_company <- read_rds(file.path(results_path, portfolio_name, paste0(portfolio_name, "_Equity_results_company.rda")))
 if (file.exists(file.path(results_path, portfolio_name, "Bonds_results_company.rda"))) {
   bonds_results_company <- read_rds(file.path(results_path, portfolio_name, "Bonds_results_company.rda"))
 } else {
@@ -135,9 +125,6 @@ if (file.exists(file.path(results_path, portfolio_name, "Bonds_results_company.r
     "trajectory_deviation" = NA_integer_, "trajectory_alignment" = NA_integer_
   )
 }
-# bonds_results_company <- read_rds(file.path(results_path, portfolio_name, paste0(portfolio_name, "_Bonds_results_company.rda")))
-
-# bonds_results_company <- equity_results_company %>% filter(portfolio_name == "")
 
 if (file.exists(file.path(results_path, portfolio_name, "Equity_results_map.rda"))) {
   equity_results_map <- read_rds(file.path(results_path, portfolio_name, "Equity_results_map.rda"))
@@ -153,7 +140,6 @@ if (file.exists(file.path(results_path, portfolio_name, "Equity_results_map.rda"
     "scenario_geography" = NA_character_
   )
 }
-# equity_results_map <-read_rds(file.path(results_path, portfolio_name, paste0(portfolio_name, "_Equity_results_map.rda")))
 
 if (file.exists(file.path(results_path, portfolio_name, "Bonds_results_map.rda"))) {
   bonds_results_map <- read_rds(file.path(results_path, portfolio_name, "Bonds_results_map.rda"))
@@ -169,13 +155,12 @@ if (file.exists(file.path(results_path, portfolio_name, "Bonds_results_map.rda")
     "scenario_geography" = NA_character_
   )
 }
-# bonds_results_map <-read_rds(file.path(results_path, portfolio_name, paste0(portfolio_name, "_Bonds_results_map.rda")))
 
-# bonds_results_map <- equity_results_map %>% filter(portfolio_name == "")
-indicies_equity_results_portfolio <- read_rds(file.path(data_location_ext, "0_Indices_equity_portfolio.rda"))
-indicies_bonds_results_portfolio <- read_rds(file.path(data_location_ext, "0_Indices_bonds_portfolio.rda"))
-peers_equity_results_portfolio <- read_rds(file.path(data_location_ext, "0_Indices_equity_portfolio.rda"))
-peers_bonds_results_portfolio <- read_rds(file.path(data_location_ext, "0_Indices_bonds_portfolio.rda"))
+
+indicies_equity_results_portfolio <- read_rds(file.path(data_location_ext, "Indices_equity_portfolio.rda"))
+indicies_bonds_results_portfolio <- read_rds(file.path(data_location_ext, "Indices_bonds_portfolio.rda"))
+peers_equity_results_portfolio <- read_rds(file.path(data_location_ext, "Equity_results_portfolio.rda"))
+peers_bonds_results_portfolio <- read_rds(file.path(data_location_ext, "Bonds_results_portfolio.rda"))
 
 create_interactive_report(
   repo_path,
@@ -185,13 +170,14 @@ create_interactive_report(
   project_name,
   investor_name,
   portfolio_name,
+  peergroup,
   start_year,
   select_scenario = scenario,
   portfolio_allocation_method,
   scenario_geography,
   twodi_sectors = c("Power", "Automotive", "Shipping", "Oil&Gas", "Coal", "Steel", "Cement", "Aviation"),
   gbtech_sectors = c("Power", "Automotive", "Oil&Gas", "Coal"),
-  green_techs = c("RenewablesCap", "HydroCap", "NuclearCap", "Hybrid", "Electric"),
+  green_techs = c("RenewablesCap", "HydroCap", "NuclearCap", "Hybrid", "Electric", "FuelCell", "Hybrid_HDV", "Electric_HDV", "FuelCell_HDV"),
   tech_roadmap_sectors = c("Automotive", "Power", "Oil&Gas", "Coal"),
   audit_file,
   emissions,
