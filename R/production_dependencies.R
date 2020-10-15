@@ -1,28 +1,33 @@
-production_dependencies <- function() {
-  find_dependencies() %>%
-    dplyr::filter(detect_production_path(source)) %>%
-    dplyr::mutate(source = remove_path_to_here(.data$source)) %>%
-    dplyr::select(.data$source, .data$package) %>%
-    dplyr::distinct() %>%
-    dplyr::arrange(.data$package)
+production_dependencies <- function(path = packages_path()) {
+  sub("library\\((.*)\\)", "\\1", readLines(path))
 }
 
-find_dependencies <- function(tibble, as_tibble, renv, dependencies) {
+#' @examples
+#' detected_dependencies()
+#' detected_dependencies(exclude = not_for_production())
+detected_dependencies <- function(exclude = NULL) {
+  deps <- dependencies_df()
+
+  if (!is.null(exclude)) {
+    is_for_production <- !grepl(exclude, deps$source)
+    deps <- deps[is_for_production, ]
+  }
+
+  sort(unique(deps$package))
+}
+
+dependencies_df <- function(tibble, as_tibble, renv, dependencies) {
   renv::dependencies(progress = FALSE) %>%
     rlang::set_names(tolower) %>%
     tibble::as_tibble()
 }
 
-detect_production_path <- function(path) {
-  !grepl(patterns_to_exclude(), path)
+detect_production_path <- function(path, exclude) {
+  !grepl(exclude, path)
 }
 
-patterns_to_exclude <- function() {
-  paste(exclude_from_production(), collapse = "|")
-}
-
-exclude_from_production <- function() {
-  c(
+not_for_production <- function() {
+  patterns <- c(
     "data-raw",
     "deduplicate/load-and-attach-r-packages.R",
     "deduplicate/production_packages.R",
@@ -31,8 +36,7 @@ exclude_from_production <- function() {
     "R/",
     "tests/"
   )
+
+  paste(patterns, collapse = "|")
 }
 
-remove_path_to_here <- function(x) {
-  sub(paste0(here::here(), "/"), "", x)
-}

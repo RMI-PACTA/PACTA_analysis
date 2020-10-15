@@ -63,7 +63,7 @@ use_r_packages <- function(path = packages_path()) {
 }
 
 packages_path <- function() {
-  file.path("deduplicate", "production_packages.R")
+  here::here("deduplicate", "production_packages.R")
 }
 
 resolve_conflicts <- function() {
@@ -233,10 +233,6 @@ use_r_packages <- function(path = packages_path()) {
   resolve_conflicts()
 
   invisible(path)
-}
-
-packages_path <- function() {
-  file.path("deduplicate", "production_packages.R")
 }
 
 resolve_conflicts <- function() {
