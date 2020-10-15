@@ -86,9 +86,10 @@ set_web_parameters <- function(file_path) {
 set_portfolio_parameters <- function(file_path) {
   cfg <- config::get(file = file_path)
 
-  portfolio_name_ref <<- cfg$parameters$portfolio_name_ref
-  portfolio_name_in <<- cfg$parameters$portfolio_name_in
-  investor_name_in <<- cfg$parameters$investor_name_in
+  portfolio_name <<- cfg$parameters$portfolio_name_in
+  investor_name <<- cfg$parameters$investor_name_in
+  peer_group <<- cfg$parameters$peer_group
+  language_select <<- cfg$parameters$language
 }
 
 add_naming_to_portfolio <- function(portfolio_raw) {
