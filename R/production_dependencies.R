@@ -42,6 +42,9 @@ find_dependencies <- function(tibble, as_tibble, renv, dependencies) {
 }
 
 dependencies_in <- function(project_name) {
-  path <- fs::path(fs::path_dir(here::here()), project_name)
-  renv::dependencies(path, progress = FALSE)
+  renv::dependencies(path_parent(project_name), progress = FALSE)
+}
+
+path_parent <- function(...) {
+  fs::path(fs::path_dir(here::here()), ...)
 }

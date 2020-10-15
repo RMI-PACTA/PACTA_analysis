@@ -91,23 +91,14 @@ source(here::here("deduplicate", "resolve_conflicts.R"))
 All packages detected in the directory PACTA\_analysis:
 
 ``` r
-detect_packages <- function() {
-  packages <- renv::dependencies()$Package
-  sort(unique(packages))
-}
-
-detect_packages()
-#> Finding R package dependencies ... [40/44] [41/44] [42/44] [43/44] [44/44] Done!
-#>  [1] "assertthat"     "bookdown"       "config"         "conflicted"    
-#>  [5] "countrycode"    "data.table"     "devtools"       "dplyr"         
-#>  [9] "fs"             "fst"            "ggplot2"        "glue"          
-#> [13] "here"           "janitor"        "jsonlite"       "knitr"         
-#> [17] "magrittr"       "PACTA.analysis" "plyr"           "purrr"         
-#> [21] "R"              "readr"          "readxl"         "renv"          
-#> [25] "reshape2"       "rlang"          "rmarkdown"      "rstudioapi"    
-#> [29] "scales"         "stringr"        "styler"         "testthat"      
-#> [33] "tibble"         "tidyr"          "tidyselect"     "tools"         
-#> [37] "usethis"        "withr"          "writexl"        "zoo"
+detected_dependencies(exclude = not_for_production())
+#>  [1] "assertthat"  "bookdown"    "config"      "conflicted"  "countrycode"
+#>  [6] "data.table"  "devtools"    "dplyr"       "forcats"     "fs"         
+#> [11] "fst"         "ggplot2"     "here"        "highcharter" "janitor"    
+#> [16] "jsonlite"    "knitr"       "purrr"       "r2dii.utils" "readr"      
+#> [21] "readxl"      "reshape2"    "rlang"       "rmarkdown"   "rstudioapi" 
+#> [26] "scales"      "stringr"     "tibble"      "tidyr"       "tidyselect" 
+#> [31] "tools"       "utils"       "writexl"     "zoo"
 ```
 
 <details>

@@ -146,7 +146,7 @@ show_pattern_in_file <- function(file, pattern) {
 }
 
 pattern <- "set_portfolio-name-ref-all_working-location_and_web-parameters.R"
-(files <- dir_ls("deduplicate", regexp = pattern))
+(files <- dir_ls(here::here("deduplicate"), regexp = pattern))
 
 this_pattern <- "portfolio_name_ref_all.*<-"
 matched <- map(files, show_pattern_in_file, pattern = this_pattern)
@@ -212,6 +212,7 @@ expect_true(uses_relative_paths(readLines(config_2)))
 
 ```{r}
 config_paths <- config::get(file = config_2)$paths
+config_paths <- path_parent(sub("^../(.*)", "\\1", config_paths))
 all_paths_exist <- all(map_lgl(config_paths, dir_exists))
 
 expect_true(all_paths_exist)
@@ -234,10 +235,10 @@ dir_has_files <- function(path) {
   has_files
 }
 
-out_1 <- path("working_dir", "30_Processed_Inputs")
+out_1 <- here("working_dir", "30_Processed_Inputs")
 
 expect_false(dir_has_files(out_1))
-source("web_tool_script_1.R")
+source(here("web_tool_script_1.R"))
 expect_true(dir_has_files(out_1))
 ```
 
