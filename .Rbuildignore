@@ -46,5 +46,4 @@
 ^deduplicate$
 ^bin$
 ^docker$
-^r_packages\.R$
 ^\.renvignore$
