@@ -35,5 +35,11 @@ extdata_path <- function(...) {
 
 r_packages <- function(projects = pacta_projects()) {
   packages <- find_dependencies(projects)$package
+  # Not sure why renv detects R itself as a dependency
+  packages <- exclude(packages, "^R$")
   sort(unique(packages))
+}
+
+exclude <- function(x, pattern) {
+  grep(pattern, x, value = TRUE, invert = TRUE)
 }
