@@ -5,6 +5,7 @@ production_dependencies <- function(path = packages_path()) {
 #' @examples
 #' detected_dependencies()
 #' detected_dependencies(exclude = not_for_production())
+#' @noRd
 detected_dependencies <- function(exclude = NULL) {
   deps <- dependencies_df()
 
@@ -17,7 +18,7 @@ detected_dependencies <- function(exclude = NULL) {
 }
 
 dependencies_df <- function(tibble, as_tibble, renv, dependencies) {
-  renv::dependencies(progress = FALSE) %>%
+  renv::dependencies(here::here(), progress = FALSE) %>%
     rlang::set_names(tolower) %>%
     tibble::as_tibble()
 }
