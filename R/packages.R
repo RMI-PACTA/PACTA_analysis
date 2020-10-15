@@ -30,7 +30,6 @@ packages <- function() {
     "fs",
     "fst",
     "ggplot2",
-    "glue",
     "here",
     "janitor",
     "jsonlite",
