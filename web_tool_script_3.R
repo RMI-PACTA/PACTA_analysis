@@ -159,8 +159,8 @@ if (file.exists(file.path(results_path, portfolio_name, "Bonds_results_map.rda")
 
 indicies_equity_results_portfolio <- read_rds(file.path(data_location_ext, "Indices_equity_portfolio.rda"))
 indicies_bonds_results_portfolio <- read_rds(file.path(data_location_ext, "Indices_bonds_portfolio.rda"))
-peers_equity_results_portfolio <- read_rds(file.path(data_location_ext, "Equity_results_portfolio.rda"))
-peers_bonds_results_portfolio <- read_rds(file.path(data_location_ext, "Bonds_results_portfolio.rda"))
+peers_equity_results_portfolio <- read_rds(file.path(data_location_ext, "Peers_equity_results_portfolio.rda"))
+peers_bonds_results_portfolio <- read_rds(file.path(data_location_ext, "Peers_bonds_results_portfolio.rda"))
 
 create_interactive_report(
   repo_path,
