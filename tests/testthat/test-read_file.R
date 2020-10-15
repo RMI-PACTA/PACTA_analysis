@@ -1,5 +1,4 @@
-# Avoid conflict with renv::load()
-load <- base::load
+conflicted::conflict_prefer("load", "base")
 
 test_that("can read an .RData file saved with extention .rda", {
   rdata <- withr::local_tempfile(fileext = ".rda")
