@@ -7,7 +7,7 @@ production_dependencies <- function(path = packages_path()) {
 #' detected_dependencies(exclude = not_for_production())
 #' @noRd
 detected_dependencies <- function(exclude = NULL) {
-  deps <- dependencies_df()
+  deps <- find_dependencies()
 
   if (!is.null(exclude)) {
     is_for_production <- !grepl(exclude, deps$source)
@@ -17,7 +17,7 @@ detected_dependencies <- function(exclude = NULL) {
   sort(unique(deps$package))
 }
 
-dependencies_df <- function(tibble, as_tibble, renv, dependencies) {
+find_dependencies <- function(tibble, as_tibble, renv, dependencies) {
   renv::dependencies(here::here(), progress = FALSE) %>%
     rlang::set_names(tolower) %>%
     tibble::as_tibble()
