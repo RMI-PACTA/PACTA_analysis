@@ -8,6 +8,7 @@
 #' @noRd
 update_r_packages <- function(path = r_packages_path(),
                               projects = pacta_projects()) {
+
   packages <- r_packages(projects = projects)
   library_calls <- sprintf("library(%s)", packages)
 
@@ -35,11 +36,20 @@ extdata_path <- function(...) {
 
 r_packages <- function(projects = pacta_projects()) {
   packages <- find_dependencies(projects)$package
+  packages <- sort(unique(packages))
+
+  packages <- exclude(packages, anchor("base"))
+  packages <- exclude(packages, anchor("PACTA.analysis"))
   # Not sure why renv detects R itself as a dependency
-  packages <- exclude(packages, "^R$")
-  sort(unique(packages))
+  packages <- exclude(packages, anchor("R"))
+
+  packages
 }
 
 exclude <- function(x, pattern) {
   grep(pattern, x, value = TRUE, invert = TRUE)
+}
+
+anchor <- function(x) {
+  sprintf("^%s$", x)
 }

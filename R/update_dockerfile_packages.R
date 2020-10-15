@@ -1,27 +1,24 @@
 #' @examples
-#' some_dockerfile <- tempfile()
-#' writeLines(create_empty_dockerfile("library(dplyr)"), some_dockerfile)
+#' dockerfile <- tempfile()
+#' writeLines(create_empty_dockerfile("library(dplyr)"), dockerfile)
 #'
 #' # Before
-#' writeLines(readLines(some_dockerfile))
-#' update_dockerfile_packages(path = some_dockerfile)
+#' writeLines(readLines(dockerfile))
+#' update_dockerfile_packages(dockerfile = dockerfile)
 #' # After
-#' writeLines(readLines(some_dockerfile))
-#'
-#' # By defaul it writes to a temporary file
-#' tmp <- update_dockerfile_packages()
-#' writeLines(readLines(tmp))
+#' writeLines(readLines(dockerfile))
 #' @noRd
 update_dockerfile_packages <- function(dockerfile = NULL,
-                                       r_packages = r_packages_path()) {
+                                       pkg_names = r_packages()) {
   dockerfile <- dockerfile %||% path_to_empty_dockerfile()
 
   old_dockerfile <- readLines(dockerfile, encoding = "UTF-8")
   new_dockerfile <- c(
     dockerfile_head(old_dockerfile),
-    dockerfile_packages(r_packages),
+    dockerfile_packages(pkg_names),
     dockerfile_tail(old_dockerfile)
   )
+
 
   writeLines(new_dockerfile, dockerfile)
 
@@ -46,10 +43,10 @@ dockerfile_tail <- function(lines) {
   lines[end_of_packages_on_dockerfile(lines):length(lines)]
 }
 
-dockerfile_packages <- function(path = r_packages_path()) {
+dockerfile_packages <- function(pkgs = r_packages()) {
   c(
     '    && Rscript -e "install.packages( \\',
-    paste0("             ", format_as_vector(readLines(path)), " \\"),
+    paste0("             ", format_as_vector(pkgs), " \\"),
     '           )" \\'
   )
 }
