@@ -1,3 +1,5 @@
+conflicted::conflict_prefer("merge", "base")
+
 wrap_it <- function(x, len) {
   sapply(x, function(y) paste(strwrap(y, len), collapse = "\n"), USE.NAMES = FALSE)
 }
@@ -534,7 +536,7 @@ create_test_list <- function() {
   # missingcols <- rbind(paste0(ald_sectors,".EQ"),paste0(ald_sectors,".CB"))
 
   if (has_debt == TRUE & has_equity == TRUE) {
-    test_list <- base::merge(Equity, Debt, by = ID.COLS)
+    test_list <- merge(Equity, Debt, by = ID.COLS)
     test_list[is.na(test_list)] <- FALSE
     colnames(test_list) <- gsub("\\.x", ".EQ", colnames(test_list))
     colnames(test_list) <- gsub("\\.y", ".CB", colnames(test_list))
@@ -2105,7 +2107,7 @@ CO2IntensityTrend <- function(plotnumber, sector_to_plot, LegendOn = TRUE, expli
     df <- PlotData
 
     colourdf <- data.frame("Colour" = c(eq_line, cb_line), "TargetCol" = c(area_2, area_2), "Type" = c("equity", BondReference))
-    df <- base::merge(df, colourdf, by = "Type")
+    df <- merge(df, colourdf, by = "Type")
 
     outputplot <- ggplot() +
       geom_line(data = df, aes(x = year, y = scen_emission_factor, colour = Type, group = Type), size = 1.5, linetype = 1, colour = area_2) +
@@ -2751,7 +2753,7 @@ MapChart <- function(plotnumber, chart_type, tech_to_plot, plot_year, explicit_f
     # if (nrow(Power)>0){
     tech_map <- joinCountryData2Map(Power, joinCode = "ISO2", nameJoinColumn = "ald_location")
     tech_map_poly <- fortify(tech_map) # extract polygons
-    tech_map_poly <- base::merge(tech_map_poly, tech_map@data, by.x = "id", by.y = "ADMIN", all.x = T)
+    tech_map_poly <- merge(tech_map_poly, tech_map@data, by.x = "id", by.y = "ADMIN", all.x = T)
     tech_map_poly <- tech_map_poly %>% arrange(id, order)
 
     outputplot <- ggplot() +
@@ -3172,7 +3174,7 @@ steel_chart <- function(plotnumber) {
     ProdSnapshot <- filter_by_parameters(CBCompProdSnapshot, "CB", by_equity_market = FALSE)
   }
   ProdSnapshot <- subset(ProdSnapshot, year = start_year + 5)
-  steel <- base::merge(ProdSnapshot, SteelData, by.x = "Name", by.y = "Company") # import steel data
+  steel <- merge(ProdSnapshot, SteelData, by.x = "Name", by.y = "Company") # import steel data
 
 
   nosteel <- nrow(steel)
