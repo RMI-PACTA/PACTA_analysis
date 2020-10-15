@@ -221,6 +221,8 @@ indicies_bonds_results_portfolio <- read_rds(file.path(data_location_ext, "0_Ind
 peers_equity_results_portfolio <- read_rds(file.path(data_location_ext, "0_Indices_equity_portfolio.rda"))
 peers_bonds_results_portfolio <- read_rds(file.path(data_location_ext, "0_Indices_bonds_portfolio.rda"))
 
+shock_year <- 2028 # this should come directly from the stress test
+
 create_interactive_report(
   repo_path = repo_path,
   template_dir = template_dir,
@@ -251,5 +253,7 @@ create_interactive_report(
   indicies_equity_results_portfolio = indicies_equity_results_portfolio,
   indicies_bonds_results_portfolio = indicies_bonds_results_portfolio,
   peers_equity_results_portfolio = peers_equity_results_portfolio,
-  peers_bonds_results_portfolio = peers_bonds_results_portfolio
+  peers_bonds_results_portfolio = peers_bonds_results_portfolio,
+  shock = shock_year,
+  pacta_sectors_not_analysed = c("Aviation","Cement","Shipping","Steel")
 )
