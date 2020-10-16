@@ -29,7 +29,7 @@ file_names <- read_csv(file.path(proc_input_path, portfolio_name_ref_all, "file_
 # TODO: Remove different start years
 
 repo_path <- template_path
-template_dir <- fs::path(template_path, "template_beta")
+template_dir <- fs::path(template_path, "swiss_en_template/_book")
 company_charts_dir <- fs::path(template_path, "company_charts", "Mixed_Portfolio")
 output_dir <- file.path(outputs_path, portfolio_name_ref_all)
 project_name <- "working_dir"
