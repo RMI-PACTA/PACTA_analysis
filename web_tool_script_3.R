@@ -20,6 +20,7 @@ set_portfolio_parameters(file_path = fs::path(par_file_path, paste0(portfolio_na
 analysis_inputs_path <- set_analysis_inputs_path(twodii_internal, data_location_ext, dataprep_timestamp)
 
 source(file.path(template_path, "create_interactive_report.R"))
+source(file.path(template_path, "useful_functions.R"))
 
 
 
