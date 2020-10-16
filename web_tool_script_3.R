@@ -30,6 +30,8 @@ template_name <- paste0("template_", tolower(language_select))
 template_dir <- fs::path(template_path, template_name)
 template_dir <- paste0(repo_path,"swiss_en_template/_book/")
 
+exec_summary_dir <- paste0(repo_path, "swiss_en_exec_summary")
+
 company_charts_dir <- fs::path(template_path, "company_charts", "Mixed_Portfolio")
 output_dir <- file.path(outputs_path, portfolio_name_ref_all)
 project_name <- "working_dir"
@@ -174,7 +176,6 @@ peers_bonds_results_portfolio <- read_rds(file.path(data_location_ext, "Peers_bo
 create_interactive_report(
   repo_path,
   template_dir,
-  company_charts_dir,
   output_dir,
   language_select,
   project_name,
@@ -204,4 +205,29 @@ create_interactive_report(
   peers_equity_results_user,
   peers_bonds_results_user
 
+)
+
+file_name <- paste0(template_path, "swiss_en_executive_summary/executive_summary_en.Rmd")
+
+create_executive_summary(
+  file_name = "template.Rmd",
+  exec_summary_dir = exec_summary_dir,
+  output_dir = output_dir,
+  language_select = "EN",
+  project_name = "working_dir",
+  investor_name = investor_name,
+  portfolio_name = portfolio_name,
+  peer_group = peer_group,
+  start_year = start_year,
+  select_scenario = scenario,
+  portfolio_allocation_method = portfolio_allocation_method,
+  scenario_geography = scenario_geography,
+  twodi_sectors = c("Power", "Automotive", "Shipping", "Oil&Gas", "Coal", "Steel", "Cement", "Aviation"),
+  green_techs = c("RenewablesCap", "HydroCap", "NuclearCap", "Hybrid", "Electric", "FuelCell", "Hybrid_HDV", "Electric_HDV", "FuelCell_HDV"),
+  tech_roadmap_sectors = c("Automotive", "Power", "Oil&Gas", "Coal"),
+  alignment_techs = c("RenewablesCap", "CoalCap", "Coal", "Oil", "Gas", "Electric", "ICE"),
+  equity_results_portfolio,
+  bonds_results_portfolio,
+  peers_equity_results_portfolio,
+  peers_bonds_results_portfolio
 )
