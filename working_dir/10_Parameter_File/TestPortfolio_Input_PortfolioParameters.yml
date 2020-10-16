@@ -4,4 +4,5 @@ default:
         investor_name_in: Test
         peer_group: pensionfund
         language: EN
+        user_id: 130
 
