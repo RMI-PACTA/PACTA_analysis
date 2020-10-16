@@ -74,6 +74,7 @@ if (new_data == TRUE) {
 
   comp_fin_data <- fst::read_fst(file.path(file_location, "comp_fin_data.fst"))
 
+
   debt_fin_data <- fst::read_fst(file.path(file_location, "debt_fin_data.fst"))
 
   if (inc_emission_factors) {
@@ -151,7 +152,7 @@ portfolio_name <- file_names$portfolio_name
 
 proc_input_path_ <- file.path(proc_input_path, portfolio_name_ref_all)
 
-write_csv(file_names, file.path(proc_input_path_, "file_names.csv"))
+# write_csv(file_names, file.path(proc_input_path_, "file_names.csv"))
 
 
 export_audit_information_jsons(
