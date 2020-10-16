@@ -30,7 +30,7 @@ template_name <- paste0("template_", tolower(language_select))
 template_dir <- fs::path(template_path, template_name)
 template_dir <- paste0(repo_path,"swiss_en_template/_book/")
 
-exec_summary_dir <- paste0(repo_path, "swiss_en_exec_summary")
+exec_summary_dir <- paste0(repo_path, "swiss_en_exec_summary/")
 
 company_charts_dir <- fs::path(template_path, "company_charts", "Mixed_Portfolio")
 output_dir <- file.path(outputs_path, portfolio_name_ref_all)
@@ -42,6 +42,7 @@ scenario_geography <- "Global"
 audit_file <- read_csv(file.path(proc_input_path, portfolio_name, "audit_file.csv"))
 emissions <- read_rds(file.path(proc_input_path, portfolio_name, "emissions.rda"))
 
+# load equity portfolio data
 if (file.exists(file.path(results_path, portfolio_name, "Equity_results_portfolio.rda"))) {
   equity_results_portfolio <- read_rds(file.path(results_path, portfolio_name, "Equity_results_portfolio.rda"))
 } else {
@@ -63,6 +64,7 @@ if (file.exists(file.path(results_path, portfolio_name, "Equity_results_portfoli
   )
 }
 
+# load bonds portfolio data
 if (file.exists(file.path(results_path, portfolio_name, "Bonds_results_portfolio.rda"))) {
   bonds_results_portfolio <- read_rds(file.path(results_path, portfolio_name, "Bonds_results_portfolio.rda"))
 } else {
@@ -84,6 +86,7 @@ if (file.exists(file.path(results_path, portfolio_name, "Bonds_results_portfolio
   )
 }
 
+# load equity company data
 if (file.exists(file.path(results_path, portfolio_name, "Equity_results_company.rda"))) {
   equity_results_company <- read_rds(file.path(results_path, portfolio_name, "Equity_results_company.rda"))
 } else {
@@ -108,6 +111,8 @@ if (file.exists(file.path(results_path, portfolio_name, "Equity_results_company.
     "trajectory_deviation" = NA_integer_, "trajectory_alignment" = NA_integer_
   )
 }
+
+# load bonds company data
 if (file.exists(file.path(results_path, portfolio_name, "Bonds_results_company.rda"))) {
   bonds_results_company <- read_rds(file.path(results_path, portfolio_name, "Bonds_results_company.rda"))
 } else {
@@ -133,6 +138,7 @@ if (file.exists(file.path(results_path, portfolio_name, "Bonds_results_company.r
   )
 }
 
+# load equity map data
 if (file.exists(file.path(results_path, portfolio_name, "Equity_results_map.rda"))) {
   equity_results_map <- read_rds(file.path(results_path, portfolio_name, "Equity_results_map.rda"))
 } else {
@@ -148,6 +154,7 @@ if (file.exists(file.path(results_path, portfolio_name, "Equity_results_map.rda"
   )
 }
 
+# load bonds map data
 if (file.exists(file.path(results_path, portfolio_name, "Bonds_results_map.rda"))) {
   bonds_results_map <- read_rds(file.path(results_path, portfolio_name, "Bonds_results_map.rda"))
 } else {
@@ -163,15 +170,59 @@ if (file.exists(file.path(results_path, portfolio_name, "Bonds_results_map.rda")
   )
 }
 
+# load equity stress test data
+if (file.exists(file.path(results_path, portfolio_name, "Equity_results_stress_test.rda"))) {
+  equity_results_stress_test <- read_rds(file.path(results_path, portfolio_name, "Equity_results_stress_test.rda"))
+} else {
+  equity_results_stress_test <- tibble(
+    "investor_name" = NA_character_, "portfolio_name" = NA_character_,
+    "ald_sector" = NA_character_, "technology" = NA_character_,
+    "scenario_geography" = NA_character_, "VaR_technology" = NA_real_,
+    "asset_portfolio_value" = NA_real_, "VaR_Sector" = NA_real_,
+    "scenario_name" = NA_character_, "technology_exposure" = NA_real_,
+    "ector_exposure" = NA_real_, "sector_loss" = NA_real_,
+    "climate_relevant_var" = NA_real_, "portfolio_aum" = NA_real_,
+    "portfolio_loss_percentage" = NA_real_, "year_of_shock" = NA_integer_,
+    "duration_of_shock" = NA_integer_, "production_shock_percentage" = NA_real_
+  )
+}
+
+# load bonds stress test data
+if (file.exists(file.path(results_path, portfolio_name, "Bonds_results_stress_test.rda"))) {
+  bonds_results_stress_test <- read_rds(file.path(results_path, portfolio_name, "Bonds_results_stress_test.rda"))
+} else {
+  bonds_results_stress_test <- tibble(
+    "investor_name" = NA_character_, "portfolio_name" = NA_character_,
+    "ald_sector" = NA_character_, "technology" = NA_character_,
+    "scenario_geography" = NA_character_, "VaR_technology" = NA_real_,
+    "asset_portfolio_value" = NA_real_, "VaR_Sector" = NA_real_,
+    "scenario_name" = NA_character_, "technology_exposure" = NA_real_,
+    "ector_exposure" = NA_real_, "sector_loss" = NA_real_,
+    "climate_relevant_var" = NA_real_, "portfolio_aum" = NA_real_,
+    "portfolio_loss_percentage" = NA_real_, "year_of_shock" = NA_integer_,
+    "duration_of_shock" = NA_integer_, "production_shock_percentage" = NA_real_
+  )
+}
+
+# load portfolio overview
+if (file.exists(file.path(proc_input_path, portfolio_name, "overview_portfolio.rda"))) {
+  portfolio_overview <- read_rds(file.path(proc_input_path, portfolio_name, "overview_portfolio.rda"))
+} else {
+  portfolio_overview <- tibble(
+    "investor_name" = NA_character_, "portfolio_name" = NA_character_,
+    "asset_type" = NA_character_, "financial_sector" = NA_character_,
+    "valid_input" = NA, "valid_value_usd" = NA_real_,
+    "asset_value_usd" = NA_real_, "portfolio_value_usd" = NA_real_
+  )
+}
+
 
 indicies_equity_results_portfolio <- read_rds(file.path(data_location_ext, "Indices_equity_portfolio.rda"))
 indicies_bonds_results_portfolio <- read_rds(file.path(data_location_ext, "Indices_bonds_portfolio.rda"))
-peers_equity_results_user <- read_rds(file.path(data_location_ext, "Peers_equity_results_portfolio_ind.rda")) %>% filter(investor_name == peer_group)
-peers_bonds_results_user <- read_rds(file.path(data_location_ext, "Peers_bonds_results_portfolio_ind.rda")) %>% filter(investor_name == peer_group)
-peers_equity_results_portfolio <- read_rds(file.path(data_location_ext, "Peers_equity_results_portfolio.rda")) %>% filter(investor_name == peer_group)
-peers_bonds_results_portfolio <- read_rds(file.path(data_location_ext, "Peers_bonds_results_portfolio.rda")) %>% filter(investor_name == peer_group)
+peers_equity_results_portfolio <- read_rds(file.path(data_location_ext, "Indices_equity_portfolio.rda"))
+peers_bonds_results_portfolio <- read_rds(file.path(data_location_ext, "Indices_bonds_portfolio.rda"))
 
-
+shock_year <- 2028 # this should come directly from the stress test
 
 create_interactive_report(
   repo_path,
@@ -207,7 +258,6 @@ create_interactive_report(
 
 )
 
-file_name <- paste0(template_path, "swiss_en_executive_summary/executive_summary_en.Rmd")
 
 create_executive_summary(
   file_name = "template.Rmd",
