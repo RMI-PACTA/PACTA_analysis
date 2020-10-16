@@ -274,15 +274,15 @@ map_comp_sectors <- function(comp_fin_data, sector_bridge) {
   comp_fin_data <- comp_fin_data %>% bind_rows(comp_fin_data_na)
 
   comp_fin_data <- comp_fin_data %>%
-    select(-mapped_sector) %>%
-    rename(mapped_sector = sector)
+    select(-financial_sector) %>%
+    rename(financial_sector = sector)
 
   comp_fin_data %>%
-    group_by(mapped_sector) %>%
-    filter(is.na(mapped_sector)) %>%
+    group_by(financial_sector) %>%
+    filter(is.na(financial_sector)) %>%
     summarise(count = n())
 
-  comp_fin_data_na <- comp_fin_data %>% filter(is.na(mapped_sector))
+  comp_fin_data_na <- comp_fin_data %>% filter(is.na(financial_sector))
 
   if (nrow(comp_fin_data) != initial_no_rows) {
     stop("Rows being dropped in mapping sectors")
@@ -995,14 +995,14 @@ get_and_clean_company_fin_data <- function() {
 
   # comp_fin_data_raw <- comp_fin_data_raw %>% select(
   #   company_id, company_name, bloomberg_id, country_of_domicile, corporate_bond_ticker, bics_sector, bics_subgroup,
-  #   icb_subgroup, mapped_sector, has_asset_level_data, has_assets_in_matched_sector, sectors_with_assets,
+  #   icb_subgroup, financial_sector, has_asset_level_data, has_assets_in_matched_sector, sectors_with_assets,
   #   current_shares_outstanding_all_classes, company_status, market_cap, bond_debt_out,
   #   financial_timestamp
   # )
 
   comp_fin_data_raw <- comp_fin_data_raw %>% select(
     company_id, company_name, bloomberg_id, country_of_domicile, corporate_bond_ticker, bics_subgroup,
-    icb_subgroup, mapped_sector, has_asset_level_data, has_assets_in_matched_sector, sectors_with_assets, current_shares_outstanding_all_classes,
+    icb_subgroup, financial_sector, has_asset_level_data, has_assets_in_matched_sector, sectors_with_assets, current_shares_outstanding_all_classes,
     market_cap, bond_debt_out, financial_timestamp
   )
 
@@ -1324,7 +1324,7 @@ prepare_portfolio_emissions <- function(
       company_id,
       bics_sector,
       bics_subgroup,
-      mapped_sector
+      financial_sector
     ) %>%
     filter(!is.na(company_id))
 
@@ -1402,7 +1402,7 @@ prepare_portfolio_emissions <- function(
       ald_sector,
       bics_sector,
       bics_subgroup,
-      mapped_sector,
+      financial_sector,
       emissions,
       estimation_source
     )
@@ -1464,7 +1464,7 @@ prepare_portfolio_emissions <- function(
       asset_type,
       bics_sector,
       bics_subgroup,
-      mapped_sector,
+      financial_sector,
       emissions,
       estimation_source,
       issue
@@ -1531,7 +1531,7 @@ calculate_portfolio_emissions <- function(
 add_other_to_sector_classifications <- function(audit) {
   # fix sector classifications
   audit <- audit %>%
-    mutate(ald_sector = ifelse(mapped_sector != "Other" & is.na(ald_sector), mapped_sector, ald_sector))
+    mutate(ald_sector = ifelse(financial_sector != "Other" & is.na(ald_sector), financial_sector, ald_sector))
 
   # create final sector grouping
   audit <- audit %>%
