@@ -23,7 +23,7 @@ source(file.path(template_path, "create_interactive_report.R"))
 source(file.path(template_path, "create_executive_summary.R"))
 source(file.path(template_path, "useful_functions.R"))
 
-file_names <- read_csv(file.path(proc_input_path, portfolio_name_ref_all, "file_names.csv"))
+# file_names <- read_csv(file.path(proc_input_path, portfolio_name_ref_all, "file_names.csv"))
 
 repo_path <- template_path
 template_name <- paste0("template_", tolower(language_select))
