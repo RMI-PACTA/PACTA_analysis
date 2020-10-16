@@ -247,13 +247,13 @@ create_interactive_report(
   bonds_results_company = bonds_results_company,
   equity_results_map = equity_results_map,
   bonds_results_map = bonds_results_map,
-  equity_results_stress_test = equity_results_stress_test,
-  bonds_results_stress_test = bonds_results_stress_test,
-  portfolio_overview = portfolio_overview,
+  # equity_results_stress_test = equity_results_stress_test,
+  # bonds_results_stress_test = bonds_results_stress_test,
+  # portfolio_overview = portfolio_overview,
   indicies_equity_results_portfolio = indicies_equity_results_portfolio,
   indicies_bonds_results_portfolio = indicies_bonds_results_portfolio,
   peers_equity_results_portfolio = peers_equity_results_portfolio,
   peers_bonds_results_portfolio = peers_bonds_results_portfolio,
-  shock = shock_year,
-  pacta_sectors_not_analysed = c("Aviation","Cement","Shipping","Steel")
+  # shock = shock_year,
+  # pacta_sectors_not_analysed = c("Aviation","Cement","Shipping","Steel")
 )
