@@ -36,6 +36,7 @@ project_name <- "working_dir"
 scenario <- "B2DS"
 portfolio_allocation_method <- "portfolio_weight"
 scenario_geography <- "Global"
+
 audit_file <- read_csv(file.path(proc_input_path, portfolio_name, "audit_file.csv"))
 emissions <- read_rds(file.path(proc_input_path, portfolio_name, "emissions.rda"))
 
@@ -163,8 +164,12 @@ if (file.exists(file.path(results_path, portfolio_name, "Bonds_results_map.rda")
 
 indicies_equity_results_portfolio <- read_rds(file.path(data_location_ext, "Indices_equity_portfolio.rda"))
 indicies_bonds_results_portfolio <- read_rds(file.path(data_location_ext, "Indices_bonds_portfolio.rda"))
-peers_equity_results_portfolio <- read_rds(file.path(data_location_ext, "Peers_equity_results_portfolio.rda"))
-peers_bonds_results_portfolio <- read_rds(file.path(data_location_ext, "Peers_bonds_results_portfolio.rda"))
+peers_equity_results_user <- read_rds(file.path(data_location_ext, "Peers_equity_results_portfolio_ind.rda")) %>% filter(investor_name == peer_group)
+peers_bonds_results_user <- read_rds(file.path(data_location_ext, "Peers_bonds_results_portfolio_ind.rda")) %>% filter(investor_name == peer_group)
+peers_equity_results_portfolio <- read_rds(file.path(data_location_ext, "Peers_equity_results_portfolio.rda")) %>% filter(investor_name == peer_group)
+peers_bonds_results_portfolio <- read_rds(file.path(data_location_ext, "Peers_bonds_results_portfolio.rda")) %>% filter(investor_name == peer_group)
+
+
 
 create_interactive_report(
   repo_path,
@@ -195,5 +200,8 @@ create_interactive_report(
   indicies_equity_results_portfolio,
   indicies_bonds_results_portfolio,
   peers_equity_results_portfolio,
-  peers_bonds_results_portfolio
+  peers_bonds_results_portfolio,
+  peers_equity_results_user,
+  peers_bonds_results_user
+
 )
