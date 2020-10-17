@@ -217,10 +217,10 @@ if (file.exists(file.path(proc_input_path, portfolio_name, "overview_portfolio.r
 
 indicies_equity_results_portfolio <- read_rds(file.path(data_location_ext, "Indices_equity_portfolio.rda"))
 indicies_bonds_results_portfolio <- read_rds(file.path(data_location_ext, "Indices_bonds_portfolio.rda"))
-peers_equity_results_portfolio <- read_rds(file.path(data_location_ext, "Peers_equity_results_portfolio.rda")) %>% filter(investor_name == peer_group)
-peers_bonds_results_portfolio <- read_rds(file.path(data_location_ext, "Peers_bonds_results_portfolio.rda")) %>% filter(investor_name == peer_group)
-peers_equity_results_user <- read_rds(file.path(data_location_ext, "Peers_equity_results_portfolio_ind.rda")) %>% filter(investor_name == peer_group)
-peers_bonds_results_user <- read_rds(file.path(data_location_ext, "Peers_bonds_results_portfolio_ind.rda")) %>% filter(investor_name == peer_group)
+peers_equity_results_portfolio <- read_rds(file.path(data_location_ext, "Peers_equity_results_portfolio.rda"))
+peers_bonds_results_portfolio <- read_rds(file.path(data_location_ext, "Peers_bonds_results_portfolio.rda"))
+peers_equity_results_user <- read_rds(file.path(data_location_ext, "Peers_equity_results_portfolio_ind.rda"))
+peers_bonds_results_user <- read_rds(file.path(data_location_ext, "Peers_bonds_results_portfolio_ind.rda"))
 
 
 
@@ -256,8 +256,9 @@ create_interactive_report(
   peers_equity_results_portfolio = peers_equity_results_portfolio,
   peers_bonds_results_portfolio = peers_bonds_results_portfolio,
   peers_equity_results_user = peers_equity_results_user,
-  peers_bonds_results_user = peers_bonds_results_user
-
+  peers_bonds_results_user = peers_bonds_results_user,
+  equity_results_stress_test = NULL,
+  bonds_results_stress_test = NULL
 )
 
 
