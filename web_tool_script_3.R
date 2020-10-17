@@ -223,7 +223,7 @@ peers_equity_results_user <- read_rds(file.path(data_location_ext, "Peers_equity
 peers_bonds_results_user <- read_rds(file.path(data_location_ext, "Peers_bonds_results_portfolio_ind.rda"))
 
 
-translations <- readr::read_csv(path(template_path,"translation_list.csv"))
+translation_list <- readr::read_csv(path(template_path,"translation_list.csv"))
 shock_year <- 2028 # this should come directly from the stress test
 
 create_interactive_report(
@@ -259,7 +259,7 @@ create_interactive_report(
   peers_bonds_results_user = peers_bonds_results_user,
   equity_results_stress_test = NULL,
   bonds_results_stress_test = NULL,
-  translations = translations
+  translation_list = translation_list
 )
 
 
