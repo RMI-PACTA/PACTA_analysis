@@ -23,16 +23,13 @@ source(file.path(template_path, "create_interactive_report.R"))
 source(file.path(template_path, "create_executive_summary.R"))
 source(file.path(template_path, "useful_functions.R"))
 
-repo_path <- template_path
-template_name <- paste0("template_", tolower(language_select))
-template_dir <- fs::path(template_path, template_name)
-template_dir <- paste0(repo_path,"swiss_en_template/_book/")
+template_dir <- paste0(template_path, "swiss_en_template/_book/")
+exec_summary_dir <- paste0(template_path, "swiss_en_exec_summary/")
+survey_dir <- path(data_location_ext, "survey_data", user_id)
+real_estate_dir <- path(data_location_ext, "real_estate_data", user_id)
 
-exec_summary_dir <- paste0(repo_path, "swiss_en_exec_summary/")
-
-company_charts_dir <- fs::path(template_path, "company_charts", "Mixed_Portfolio")
 output_dir <- file.path(outputs_path, portfolio_name_ref_all)
-project_name <- "working_dir"
+
 scenario <- "B2DS"
 portfolio_allocation_method <- "portfolio_weight"
 scenario_geography <- "Global"
@@ -227,9 +224,11 @@ translation_list <- readr::read_csv(path(template_path,"translation_list.csv"))
 shock_year <- 2028 # this should come directly from the stress test
 
 create_interactive_report(
-  repo_path = repo_path,
+  repo_path = template_path,
   template_dir = template_dir,
   output_dir = output_dir,
+  survey_dir = survey_dir,
+  real_estate_dir = real_estate_dir,
   language_select = language_select,
   project_name = project_name,
   investor_name = investor_name,
