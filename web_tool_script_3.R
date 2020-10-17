@@ -6,7 +6,7 @@ source("0_web_functions.R")
 
 setup_project()
 
-working_location <- file.path(working_location)
+# working_location <- file.path(working_location)
 
 set_webtool_paths()
 
@@ -22,6 +22,8 @@ analysis_inputs_path <- set_analysis_inputs_path(twodii_internal, data_location_
 source(file.path(template_path, "create_interactive_report.R"))
 source(file.path(template_path, "create_executive_summary.R"))
 source(file.path(template_path, "useful_functions.R"))
+
+
 
 template_dir <- paste0(template_path, "swiss_en_template/_book/")
 exec_summary_dir <- paste0(template_path, "swiss_en_exec_summary/")

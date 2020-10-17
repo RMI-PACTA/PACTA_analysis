@@ -5,4 +5,5 @@ default:
         peer_group: pensionfund
         language: EN
         user_id: 130
+        project_code: CHPA2020
 
