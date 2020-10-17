@@ -46,3 +46,4 @@
 ^deduplicate$
 ^bin$
 ^docker$
+^\.renvignore$

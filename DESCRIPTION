@@ -35,8 +35,10 @@ Imports:
     magrittr,
     purrr,
     readr,
+    renv,
     rlang,
     rmarkdown,
+    tibble,
     usethis,
     withr
 Suggests: 

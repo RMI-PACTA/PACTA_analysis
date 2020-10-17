@@ -274,7 +274,7 @@ map_comp_sectors <- function(comp_fin_data, sector_bridge) {
   comp_fin_data <- comp_fin_data %>% bind_rows(comp_fin_data_na)
 
   comp_fin_data <- comp_fin_data %>%
-    select(-mapped_sector) %>%
+    select(-financial_sector) %>%
     rename(financial_sector = sector)
 
   comp_fin_data %>%
@@ -993,16 +993,9 @@ get_and_clean_revenue_data <- function() {
 get_and_clean_company_fin_data <- function() {
   comp_fin_data_raw <- read_rds(paste0(analysis_inputs_path, "/consolidated_financial_data.rda"))
 
-  # comp_fin_data_raw <- comp_fin_data_raw %>% select(
-  #   company_id, company_name, bloomberg_id, country_of_domicile, corporate_bond_ticker, bics_sector, bics_subgroup,
-  #   icb_subgroup, mapped_sector, has_asset_level_data, has_assets_in_matched_sector, sectors_with_assets,
-  #   current_shares_outstanding_all_classes, company_status, market_cap, bond_debt_out,
-  #   financial_timestamp
-  # )
-
-  comp_fin_data_raw <- comp_fin_data_raw %>% select(
-    company_id, company_name, bloomberg_id, country_of_domicile, corporate_bond_ticker, bics_sector,bics_subgroup,
-    icb_subgroup, mapped_sector, has_asset_level_data, has_assets_in_matched_sector, sectors_with_assets, current_shares_outstanding_all_classes,
+comp_fin_data_raw <- comp_fin_data_raw %>% select(
+    company_id, company_name, bloomberg_id, country_of_domicile, corporate_bond_ticker, bics_subgroup,
+    icb_subgroup, financial_sector, has_asset_level_data, has_assets_in_matched_sector, sectors_with_assets, current_shares_outstanding_all_classes,
     market_cap, bond_debt_out, financial_timestamp
   )
 
