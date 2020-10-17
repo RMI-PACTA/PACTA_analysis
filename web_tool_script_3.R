@@ -230,6 +230,7 @@ create_interactive_report(
   project_name = project_name,
   investor_name = investor_name,
   portfolio_name = portfolio_name,
+  user_id = user_id,
   peer_group = peer_group,
   start_year = start_year,
   select_scenario = scenario,
