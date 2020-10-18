@@ -1,4 +1,4 @@
-devtools::load_all()
+# devtools::load_all()
 
 ### Portfolio cleaning functions
 read_raw_portfolio_file <- function(project_name) {
