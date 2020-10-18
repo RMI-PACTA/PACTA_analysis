@@ -23,7 +23,7 @@ source(file.path(template_path, "create_interactive_report.R"))
 
 
 
-file_names <- read_csv(file.path(proc_input_path, portfolio_name_ref_all, "file_names.csv"))
+file_names <- read_csv(file.path(proc_input_path, portfolio_name_ref_all, "file_names.csv"), col_types = cols())
 
 # TODO: Remove different start years
 
@@ -38,7 +38,7 @@ portfolio_name <- file_names$portfolio_name
 scenario <- "B2DS"
 portfolio_allocation_method <- "portfolio_weight"
 scenario_geography <- "Global"
-audit_file <- read_csv(file.path(proc_input_path, portfolio_name, "audit_file.csv"))
+audit_file <- read_csv(file.path(proc_input_path, portfolio_name, "audit_file.csv"), col_types = cols())
 emissions <- read_rds(file.path(proc_input_path, portfolio_name, "emissions.rda"))
 
 # load equity portfolio data

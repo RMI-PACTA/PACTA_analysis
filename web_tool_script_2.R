@@ -27,7 +27,7 @@ analysis_inputs_path <- set_analysis_inputs_path(twodii_internal, data_location_
 unlink(file.path(results_path, portfolio_name_ref_all, "*"), force = TRUE, recursive = TRUE)
 
 # run again so output folders are available after deleting past results
-file_names <- read_csv(file.path(proc_input_path, portfolio_name_ref_all, "file_names.csv"))
+file_names <- read_csv(file.path(proc_input_path, portfolio_name_ref_all, "file_names.csv"), col_types = cols())
 create_portfolio_subfolders(portfolio_name_ref_all)
 
 port_col_types <- set_col_types(grouping_variables, "ddddccccddclc")
