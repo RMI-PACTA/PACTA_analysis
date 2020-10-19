@@ -6,7 +6,7 @@ source("0_web_functions.R")
 
 setup_project()
 
-working_location <- file.path(working_location)
+# working_location <- file.path(working_location)
 
 set_webtool_paths()
 
@@ -23,8 +23,15 @@ source(file.path(template_path, "create_interactive_report.R"))
 source(file.path(template_path, "create_executive_summary.R"))
 source(file.path(template_path, "useful_functions.R"))
 
-template_dir <- paste0(template_path, "swiss_en_template/_book/")
-exec_summary_dir <- paste0(template_path, "swiss_en_exec_summary/")
+report_name = select_report_template(project_code = project_code,
+                       language_select = language_select)
+
+exec_summary_name = select_exec_summary_template(project_code = project_code,
+                                           language_select = language_select)
+
+template_dir <- paste0(template_path, report_name,"/_book/")
+exec_summary_dir <- paste0(template_path, exec_summary_name,"/")
+
 survey_dir <- path(data_location_ext, "survey_data", user_id)
 real_estate_dir <- path(data_location_ext, "real_estate_data", user_id)
 

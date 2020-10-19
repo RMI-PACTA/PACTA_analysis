@@ -91,6 +91,7 @@ set_portfolio_parameters <- function(file_path) {
   peer_group <<- cfg$parameters$peer_group
   language_select <<- cfg$parameters$language
   user_id <<- cfg$parameters$user_id
+  project_code <<- cfg$parameters$project_code
 }
 
 add_naming_to_portfolio <- function(portfolio_raw) {
