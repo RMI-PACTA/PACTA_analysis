@@ -36,8 +36,7 @@ project_name <- "working_dir"
 scenario <- "B2DS"
 portfolio_allocation_method <- "portfolio_weight"
 scenario_geography <- "Global"
-
-audit_file <- read_csv(file.path(proc_input_path, portfolio_name, "audit_file.csv"))
+audit_file <- read_csv(file.path(proc_input_path, portfolio_name, "audit_file.csv"), col_types = cols())
 emissions <- read_rds(file.path(proc_input_path, portfolio_name, "emissions.rda"))
 
 # load equity portfolio data

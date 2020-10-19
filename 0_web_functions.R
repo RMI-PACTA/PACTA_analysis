@@ -187,7 +187,7 @@ read_web_input_file <- function(input_file_path) {
   file_ext <- tools::file_ext(input_file_path)
 
   if (file_ext == "csv") {
-    input_file <- read_csv(input_file_path)
+    input_file <- read_csv(input_file_path, col_types = cols())
   }
   if (file_ext == "xlsx") {
     input_file <- read_xlsx(input_file_path)
