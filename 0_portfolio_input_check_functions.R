@@ -227,7 +227,7 @@ map_security_sectors <- function(fin_data, sector_bridge) {
 
   fin_data_na <- fin_data %>%
     filter(is.na(sector)) %>%
-    select(-sector)
+    select(-c(sector,sector_boe,subsector_boe,sector_dnb,sector_ipr,subsector_ipr))
 
   fin_data <- fin_data %>% filter(!is.na(sector))
 
