@@ -908,7 +908,7 @@ get_and_clean_fin_data <- function(fund_data) {
     col_types = "ccdc"
   )
 
-  sector_bridge <- read_csv("data/sector_bridge.csv", col_types = "ccc")
+  sector_bridge <- read_csv("data/sector_bridge.csv", col_types = "cccccccc")
 
   fin_data <- fin_data_raw
 
@@ -950,7 +950,7 @@ get_and_clean_fin_data <- function(fund_data) {
       asset_type, security_type,
       security_mapped_sector, security_icb_subsector, security_bics_subgroup, bics_sector, # bclass4,
       maturity_date, coupon_value, amount_issued, current_shares_outstanding_all_classes, unit_share_price,
-      sector_override,
+      sector_override, sector_boe, subsector_boe, sector_dnb, sector_ipr, subsector_ipr,
       is_sb
     ) %>%
     distinct()

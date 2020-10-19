@@ -1,1065 +1,1065 @@
-industry_classification,source,sector
-3/1 ARM,BCLASS,Other
-5/1 ARM,BCLASS,Other
-7/1 ARM,BCLASS,Other
-Advanced Materials/Prd,BICS,Other
-Advertising Agencies,BICS,Other
-Advertising & Marketing,BICS,Other
-Advertising Sales,BICS,Other
-Advertising Services,BICS,Other
-Aerospace,ICB,Other
-Aerospace & Defense,BICS,Other
-Aerospace/Defense,BICS,Other
-Aerospace/Defense-Equip,BICS,Other
-Agency CMBS,BICS,Other
-Agency Collat IO,BICS,Other
-Agency Collat Other,BICS,Other
-Agency Collat PAC,BICS,Other
-Agency Collat PAC IO,BICS,Other
-Agency Collat PAC PO,BICS,Other
-Agency Collat PAC Support,BICS,Other
-Agency Collat PAC Z,BICS,Other
-Agency Collat PO,BICS,Other
-Agency Collat Residual,BICS,Other
-Agency Collat Sequential,BICS,Other
-Agency Collat Structured,BICS,Other
-Agency Collat Support,BICS,Other
-Agency Collat Support IO,BICS,Other
-Agency Collat Support PO,BICS,Other
-Agency Collat Support Z,BICS,Other
-Agency Collat TAC,BICS,Other
-Agency Collat Z,BICS,Other
-Agency Credit,BCLASS,Other
-Agency MBS Other,BCLASS,Other
-Aggressive Growth,BICS,Other
-Agricultural Biotech,BICS,Other
-Agricultural Chemicals,BICS,Other
-Agricultural Operations,BICS,Other
-Agriculture,BCLASS,Other
-Airlines,ICB,Aviation
-Air Pollution Control Eq,BICS,Other
-Airport Develop/Maint,BICS,Other
-Airports,BCLASS,Other
-Alternative Electricity,ICB,Other
-Alternative Fuels,ICB,Other
-Alternative Waste Tech,BICS,Other
-Aluminum,ICB,Other
-Apartment REITs,BCLASS,Other
-Apparel Manufacturers,BICS,Other
-Apparel Retailers,ICB,Other
-Apparel & Textile Products,BICS,Other
-Appliances,BICS,Other
-Applications Software,BICS,Other
-ARMs,BCLASS,Other
-Asbestos Abatement,BICS,Other
-Asian Pacific Ex Japan,BICS,Other
-Asset Backed Securities,BICS,Other
-Asset Managers,ICB,Other
-Athletic Equipment,BICS,Other
-Athletic Footwear,BICS,Other
-Auction House/Art Dealer,BICS,Other
-Audio/Video Products,BICS,Other
-Auto-Cars/Light Trucks,BICS,Automotive
-Auto Floor Plan Other,BICS,Automotive
-Auto Floor Plan Sequent,BICS,Automotive
-Auto Loan,BCLASS,Other
-Auto-Med&Heavy Duty Trks,BICS,Automotive
-Automobile ABS Other,BICS,Other
-Automobiles,ICB,Automotive
-Automobile Sequential,BICS,Other
-Automobiles Manufacturing,BICS,Automotive
-Automotive,BCLASS,Other
-Auto Parts,ICB,Other
-Auto Parts Manufacturing,BICS,Other
-Auto Repair Centers,BICS,Other
-Auto/Trk Prts&Equip-Orig,BICS,Other
-Auto/Trk Prts&Equip-Repl,BICS,Other
-Auto-Truck Trailers,BICS,Other
-B2B/E-Commerce,BICS,Other
-Balanced,BICS,Other
-Banking,BCLASS,Other
-Banks,BICS,Other
-Banks,ICB,Other
-Batteries/Battery Sys,BICS,Other
-Beverages-Non-alcoholic,BICS,Other
-Beverages-Wine/Spirits,BICS,Other
-Bicycle Manufacturing,BICS,Other
-Biofuels,BICS,Other
-Biotechnology,ICB,Other
-Biotechnology,BICS,Other
-Bldg Prod-Cement/Aggreg,BICS,Cement
-Bldg-Mobil Home/Mfd Hous,BICS,Other
-Bldg Prod-Air&Heating,BICS,Other
-Bldg&Construct Prod-Misc,BICS,Other
-Bldg Prod-Doors&Windows,BICS,Other
-Bldg Prod-Light Fixtures,BICS,Other
-Bldg Prod-Wood,BICS,Other
-Bldg-Residential/Commer,BICS,Other
-Blood Collection Banking,BICS,Other
-Bloodstock Services,BICS,Other
-Blue Chip,BICS,Other
-Boat Loan Other,BICS,Other
-Brewers,ICB,Other
-Brewery,BICS,Other
-Bridges,BCLASS,Other
-Broadcasting & Entertainment,ICB,Other
-Broadcast Serv/Program,BICS,Other
-Broadline Retailers,ICB,Other
-Brokerage Assetmanagers Exchanges,BCLASS,Other
-Building&Construct-Misc,BICS,Other
-Building-Heavy Construct,BICS,Other
-Building-Maint&Service,BICS,Other
-Building Materials,BCLASS,Other
-Building Materials & Fixtures,ICB,Cement
-Building Societies,BICS,Other
-Building Sub Contractors,BICS,Other
-Business Support Services,ICB,Other
-Business Training Employment Agency,ICB,Other
-Cable Satellite,BCLASS,Other
-Cable & Satellite,BICS,Other
-Cable/Satellite TV,BICS,Other
-Capacitors,BICS,Other
-Capital Goods,BCLASS,Other
-Capital Pools,BICS,Other
-Casino Hotels,BICS,Other
-Casino Services,BICS,Other
-Casinos & Gaming,BICS,Other
-CDO,BCLASS,Other
-Cellular Telecom,BICS,Other
-Central Bank,BICS,Other
-Ceramic Products,BICS,Other
-Charter Schools,BCLASS,Other
-Chemicals,BICS,Other
-Chemicals-Diversified,BICS,Other
-Chemicals-Fibers,BICS,Other
-Chemicals-Other,BICS,Other
-Chemicals-Plastics,BICS,Other
-Chemicals-Specialty,BICS,Other
-Circuit Boards,BICS,Other
-Circuits,BICS,Other
-Civic and Convention Centers,BCLASS,Other
-CLO,BCLASS,Other
-Closed-end Funds,BICS,Other
-Clothing & Accessories,ICB,Other
-CMBS Other,BICS,Other
-CMBS Subordinated,BICS,Other
-CMO,BCLASS,Other
-Coal,ICB,Coal
-Coal Operations,BICS,Coal
-Coatings/Paint,BICS,Other
-Coffee,BICS,Other
-Collectibles,BICS,Other
-Combined Utilities,BCLASS,Other
-Commer Banks-Central US,BICS,Other
-Commer Banks-Eastern US,BICS,Other
-Commer Banks Non-US,BICS,Other
-Commer Banks-Southern US,BICS,Other
-Commer Banks-Western US,BICS,Other
-Commercial Finance,BICS,Other
-Commercial Serv-Finance,BICS,Other
-Commercial Services,BICS,Other
-Commercial Vehicles & Trucks,ICB,Other
-Commodity,BICS,Other
-Commodity Agriculture Fund,BCLASS,Other
-Commodity Chemicals,ICB,Other
-Commodity Energy Fund,BCLASS,Other
-Commodity Industrial Metals Fund,BCLASS,Other
-Commodity Precious Metals Fund,BCLASS,Other
-Communications Equipment,BICS,Other
-Communications Software,BICS,Other
-Computer Aided Design,BICS,Other
-Computer Data Security,BICS,Other
-Computer Graphics,BICS,Other
-Computer Hardware,ICB,Other
-Computers,BICS,Other
-Computer Services,ICB,Other
-Computers-Integrated Sys,BICS,Other
-Computers-Memory Devices,BICS,Other
-Computer Software,BICS,Other
-Computers-Other,BICS,Other
-Computers-Peripher Equip,BICS,Other
-Computers-Voice Recogn,BICS,Other
-Construction Machinery,BCLASS,Other
-Construction Materials Manufacturing,BICS,Other
-Consulting Services,BICS,Other
-Consumer Cyc Services,BCLASS,Other
-Consumer Electronics,ICB,Other
-Consumer Finance,ICB,Other
-Consumer Finance,BICS,Other
-Consumer Products,BICS,Other
-Consumer Products-Misc,BICS,Other
-Consumer Services,BICS,Other
-Containers-Metal/Glass,BICS,Other
-Containers & Packaging,ICB,Other
-Containers & Packaging,BICS,Other
-Containers-Paper/Plastic,BICS,Other
-Contrarian,BICS,Other
-Conventional 10 Yr,BCLASS,Other
-Conventional 15 Yr,BCLASS,Other
-Conventional 20 Yr,BCLASS,Other
-Conventional 30 Yr,BCLASS,Other
-Conventional Balloon,BCLASS,Other
-Conventional Electricity,ICB,Power
-Convertible,BICS,Other
-Cooperative Banks,BICS,Other
-Corporate/Preferred,BICS,Other
-Corp/Pref-High Yield,BICS,Other
-Corp/Pref-Inv Grade,BICS,Other
-Correctional Facilities and Courts,BCLASS,Other
-Cosmetics&Toiletries,BICS,Other
-Country Fund-Australia,BICS,Other
-Country Fund-Austria,BICS,Other
-Country Fund-Brazil,BICS,Other
-Country Fund-Canada,BICS,Other
-Country Fund-China,BICS,Other
-Country Fund-France,BICS,Other
-Country Fund-Germany,BICS,Other
-Country Fund-India,BICS,Other
-Country Fund-Indonesia,BICS,Other
-Country Fund-Italy,BICS,Other
-Country Fund-Japan,BICS,Other
-Country Fund-Korea,BICS,Other
-Country Fund-Malaysia,BICS,Other
-Country Fund-Mexico,BICS,Other
-Country Fund-Netherlands,BICS,Other
-Country Fund-Philippines,BICS,Other
-Country Fund-Russia,BICS,Other
-Country Fund-Singapore,BICS,Other
-Country Fund-Spain,BICS,Other
-Country Fund-Sweden,BICS,Other
-Country Fund-Switzerland,BICS,Other
-Country Fund-Thailand,BICS,Other
-Country Fund-U.K.,BICS,Other
-Country Fund-U.S.,BICS,Other
-Credit Card,BCLASS,Other
-Credit Card Bullet,BICS,Other
-Credit Card Other,BICS,Other
-Cruise Lines,BICS,Other
-Crystal&Giftware,BICS,Other
-Currency,BICS,Other
-Data Processing/Mgmt,BICS,Other
-Decision Support Softwar,BICS,Other
-Defense,ICB,Other
-Delivery Services,ICB,Other
-Dental Supplies&Equip,BICS,Other
-Department Stores,BICS,Other
-Derivative-Asset Alloc,BICS,Other
-Derivative-Asset Allocation,BCLASS,Other
-Derivatives,BICS,Other
-"Design, Manufacturing & Distribution",BICS,Other
-Diagnostic Equipment,BICS,Other
-Diagnostic Kits,BICS,Other
-Dialysis Centers,BICS,Other
-Diamonds & Gemstones,ICB,Other
-Diamonds/Precious Stones,BICS,Other
-Direct Marketing,BICS,Other
-Disposable Medical Prod,BICS,Other
-Distillers & Vintners,ICB,Other
-Distribution/Wholesale,BICS,Other
-Distributors,BCLASS,Other
-Distributors - Consumer Discretionary,BICS,Other
-Diversified Banking Inst,BICS,Other
-Diversified Banks,BICS,Other
-Diversified Finan Serv,BICS,Other
-Diversified Industrials,ICB,Other
-Diversified Manufact Op,BICS,Other
-Diversified Manufacturing,BCLASS,Other
-Diversified Minerals,BICS,Other
-Diversified Operations,BICS,Other
-Diversified REITs,ICB,Other
-Divers Oper/Commer Serv,BICS,Other
-Drug Delivery Systems,BICS,Other
-Drug Detection Systems,BICS,Other
-Drug Retailers,ICB,Other
-Durable Household Products,ICB,Other
-Eastern European,BICS,Other
-E-Commerce/Products,BICS,Other
-E-Commerce/Services,BICS,Other
-Economic Development,BCLASS,Other
-Educational Services,BICS,Other
-Educational Software,BICS,Other
-Elec & Gas Mktg & Trading,BICS,Other
-Electric,BCLASS,Other
-Electrical Components & Equipment,ICB,Other
-Electrical Equipment Manufacturing,BICS,Other
-Electric-Distribution,BICS,Power
-Electric-Generation,BICS,Power
-Electric-Integrated,BICS,Power
-Electricity and Public Power,BCLASS,Power
-Electric Products-Misc,BICS,Power
-Electric-Transmission,BICS,Other
-Electronic Compo-Misc,BICS,Other
-Electronic Compo-Semicon,BICS,Other
-Electronic Connectors,BICS,Other
-Electronic Design Automa,BICS,Other
-Electronic Equipment,ICB,Other
-Electronic Forms,BICS,Other
-Electronic Measur Instr,BICS,Other
-Electronic Office Equipment,ICB,Other
-Electronic Parts Distrib,BICS,Other
-Electronic Secur Devices,BICS,Other
-Electronics-Military,BICS,Other
-E-Marketing/Info,BICS,Other
-Emerging Market-Debt,BICS,Other
-Emerging Market-Equity,BICS,Other
-Emerging Mkt-Asset Alloc,BICS,Other
-Energy-Alternate Sources,BICS,Other
-Energy and Environment,BCLASS,Power
-Engineering/R&D Services,BICS,Other
-Engines-Internal Combust,BICS,Other
-Enterprise Software/Serv,BICS,Other
-Entertainment Content,BICS,Other
-Entertainment Resources,BICS,Other
-Entertainment Software,BICS,Other
-Environ Consulting&Eng,BICS,Other
-Environmental,BCLASS,Other
-Environmentally Friendly,BICS,Other
-Environ Monitoring&Det,BICS,Other
-Eq Directional Long/Shor,BICS,Other
-Eq Fdmntl Mkt Neut,BICS,Other
-Equity Investment Instruments,ICB,Other
-Equity/Islamic,BICS,Other
-E-Services/Consulting,BICS,Other
-Event Driven-Merger Arbi,BICS,Other
-Exploration & Production,ICB,Oil&Gas
-Exploration & Production,BICS,Oil&Gas
-Explosives,BICS,Other
-Export/Import Bank,BICS,Other
-Extended Serv Contracts,BICS,Other
-Farming,ICB,Other
-"Farming, Fishing & Plantations",ICB,Other
-Feminine Health Care Prd,BICS,Other
-FGLMC FHAVA,BICS,Other
-FGLMC Other,BICS,Other
-FGLMC Relocation 15yr,BICS,Other
-FGLMC Relocation 30yr,BICS,Other
-FGLMC Single Family 15yr,BICS,Other
-FGLMC Single Family 20yr,BICS,Other
-FGLMC Single Family 30yr,BICS,Other
-FHLMC ARM,BICS,Other
-FHLMC FHAVA,BICS,Other
-FHLMC Single Family 30yr,BICS,Other
-FI Directional-Asset Bac,BICS,Other
-FI Directional-Fixed Inc,BICS,Other
-Fiduciary Banks,BICS,Other
-Film Processing,BICS,Other
-Filtration/Separat Prod,BICS,Other
-Finance-Auto Loans,BICS,Other
-Finance-Commercial,BICS,Other
-Finance Companies,BCLASS,Other
-Finance-Consumer Loans,BICS,Other
-Finance-Credit Card,BICS,Other
-Finance-Invest Bnkr/Brkr,BICS,Other
-Finance-Investment Fund,BICS,Other
-Finance-Leasing Compan,BICS,Other
-Finance-Mtge Loan/Banker,BICS,Other
-Finance-Other Services,BICS,Other
-Financial Administration,ICB,Other
-Financial Guarantee Ins,BICS,Other
-Financial Services,BICS,Other
-Firearms&Ammunition,BICS,Other
-FI Rel Val-Capital Struc,BICS,Other
-FI Rel Val-Fixed Income,BICS,Other
-Fire Station Equipment,BCLASS,Other
-Fisheries,BICS,Other
-Fixed Line Telecommunications,ICB,Other
-Flexible Portfolio,BICS,Other
-Flood Control and Storm Drain,BCLASS,Other
-FNMA ARM,BICS,Other
-FNMA FHAVA,BICS,Other
-FNMA Other,BICS,Other
-FNMA Relocation 15yr,BICS,Other
-FNMA Relocation 30yr,BICS,Other
-FNMA Single Family 15yr,BICS,Other
-FNMA Single Family 20yr,BICS,Other
-FNMA Single Family 30yr,BICS,Other
-Food and Beverage,BCLASS,Other
-Food-Baking,BICS,Other
-Food & Beverage,BICS,Other
-Food-Canned,BICS,Other
-Food-Catering,BICS,Other
-Food-Confectionery,BICS,Other
-Food-Dairy Products,BICS,Other
-Food-Flour&Grain,BICS,Other
-Food-Meat Products,BICS,Other
-Food-Misc/Diversified,BICS,Other
-Food Products,ICB,Other
-Food-Retail,BICS,Other
-Food Retailers & Wholesalers,ICB,Other
-Food-Wholesale/Distrib,BICS,Other
-Footwear,ICB,Other
-Footwear&Related Apparel,BICS,Other
-Forest & Paper Products Manufacturing,BICS,Other
-Forestry,ICB,Other
-Full Line Insurance,ICB,Other
-Funds & Trusts,BICS,Other
-Funeral Serv&Rel Items,BICS,Other
-Furnishings,ICB,Other
-Gambling,ICB,Other
-Gambling (Non-Hotel),BICS,Other
-Gaming,BCLASS,Other
-Garden Products,BICS,Other
-Gas,BCLASS,Other
-Gas Distribution,ICB,Other
-Gas-Distribution,BICS,Other
-Gas-Transportation,BICS,Other
-General Mining,ICB,Other
-"General Purpose, Public Improvements",BCLASS,Other
-Geo Focus-Debt,BICS,Other
-Geo Focused-Asset Alloc,BICS,Other
-Geo Focus-Equity,BICS,Other
-Global Asset Allocation,BICS,Other
-Global Debt,BICS,Other
-Global Equity,BICS,Other
-Global Macro,BICS,Other
-GNMA 15 Yr,BCLASS,Other
-GNMA2 ARM,BICS,Other
-GNMA2 Mobile Home,BICS,Other
-GNMA2 Other,BICS,Other
-GNMA2 Single Family 15yr,BICS,Other
-GNMA2 Single Family 30yr,BICS,Other
-GNMA 30 Yr,BCLASS,Other
-GNMA Graduated Payment,BICS,Other
-GNMA Project Loan,BICS,Other
-GNMA Single Family 15yr,BICS,Other
-GNMA Single Family 30yr,BICS,Other
-Gold Mining,ICB,Other
-Golf,BICS,Other
-Government Agencies,BICS,Other
-Government/Agency,BICS,Other
-Government/Agency-LT,BICS,Other
-Government and Public Buildings,BCLASS,Other
-Government/Corporate,BICS,Other
-Government Development Banks,BICS,Other
-Government Guaranteed,BCLASS,Other
-"Government Owned, No Guarantee",BCLASS,Other
-Government Regional,BICS,Other
-Government Sponsored,BCLASS,Other
-Govt/Agency-Inter/LT,BICS,Other
-Govt/Agency-Inter Term,BICS,Other
-Govt/Agency-Short Term,BICS,Other
-Govt/Agency-ST/Inter,BICS,Other
-Govt/Agency-Target Term,BICS,Other
-Govt/Corp High Yield,BICS,Other
-Govt/Corp Intermediate,BICS,Other
-Govt/Corp Long Term,BICS,Other
-Govt/Corp Short Term,BICS,Other
-Growth,BICS,Other
-Growth & Income,BICS,Other
-Growth&Income-Large Cap,BICS,Other
-Growth & Income-Mid Cap,BICS,Other
-Growth&Income-Small Cap,BICS,Other
-Growth-Large Cap,BICS,Other
-Growth-Mid Cap,BICS,Other
-Growth-Small Cap,BICS,Other
-Hardware,BICS,Other
-Hazardous Waste Disposal,BICS,Other
-Health & Biotechnology,BICS,Other
-Healthcare,BCLASS,Other
-Health Care Cost Contain,BICS,Other
-Health Care Facilities & Services,BICS,Other
-Health Care Providers,ICB,Other
-Healthcare REITs,BCLASS,Other
-Healthcare Safety Device,BICS,Other
-Health Insurance,BCLASS,Other
-Heart Monitors,BICS,Other
-Heavy Construction,ICB,Other
-Higher Education,BCLASS,Other
-Homebuilders,BICS,Other
-Home Construction,ICB,Other
-Home Decoration Products,BICS,Other
-Home Equity,BCLASS,Other
-Home Equity Other,BICS,Other
-Home Equity Sequential,BICS,Other
-Home Furnishings,BICS,Other
-Home Improvement,BICS,Other
-Home Improvement Retailers,ICB,Other
-Home & Office Products Manufacturing,BICS,Other
-Hospital Beds/Equipment,BICS,Other
-Hospitals,BCLASS,Other
-Hotel & Lodging REITs,ICB,Other
-Hotels,ICB,Other
-Hotels&Motels,BICS,Other
-Housewares,BICS,Other
-Housing Authority,BICS,Other
-Human Resources,BICS,Other
-Hybrid Non-Pfandbriefe,BCLASS,Other
-Identification Sys/Dev,BICS,Other
-Import/Export,BICS,Other
-Inactive/Unknown,BICS,Other
-Income Equity,BICS,Other
-Independent,BCLASS,Other
-Independ Power Producer,BICS,Other
-Index Fund,BICS,Other
-Index Fund-Debt,BICS,Other
-Index Fund-Equity,BCLASS,Other
-Index Fund-Large Cap,BICS,Other
-Index Fund-Mid Cap,BICS,Other
-Index Fund-Small Cap,BICS,Other
-Index Futures,BCLASS,Other
-Indian Subcontinent,BICS,Other
-Industr Audio&Video Prod,BICS,Other
-Industrial Automat/Robot,BICS,Other
-Industrial Development,BCLASS,Other
-Industrial Gases,BICS,Other
-Industrial Machinery,ICB,Other
-Industrial & Office REITs,ICB,Other
-Industrial Other,BICS,Other
-Industrial Suppliers,ICB,Other
-Institutions Only-Natl,BICS,Other
-Institut Only-Second,BICS,Other
-Instruments-Controls,BICS,Other
-Instruments-Scientific,BICS,Other
-Insurance Brokers,ICB,Other
-Integrated,BCLASS,Other
-Integrated Oil & Gas,ICB,Oil&Gas
-Integrated Oils,BICS,Oil&Gas
-Interior Design/Architec,BICS,Other
-International Debt,BICS,Other
-International Equity,BICS,Other
-Internet,ICB,Other
-Internet Applic Sftwr,BICS,Other
-Internet Brokers,BICS,Other
-Internet Connectiv Svcs,BICS,Other
-Internet Content-Entmnt,BICS,Other
-Internet Content-Info/Ne,BICS,Other
-Internet Financial Svcs,BICS,Other
-Internet Gambling,BICS,Other
-Internet Incubators,BICS,Other
-Internet Infrastr Equip,BICS,Other
-Internet Infrastr Sftwr,BICS,Other
-Internet Media,BICS,Other
-Internet Security,BICS,Other
-Internet & Telecom,BICS,Other
-Internet Telephony,BICS,Other
-Intimate Apparel,BICS,Other
-Intl Asset Allocation,BICS,Other
-Invest Comp - Resources,BICS,Other
-Investment Companies,BICS,Other
-Investment Services,ICB,Other
-Invest Mgmnt/Advis Serv,BICS,Other
-Metal-Aluminum,BICS,Other
-Metal-Copper,BICS,Other
-Irrigation,BCLASS,Other
-Land Preservation,BCLASS,Other
-Lasers-Syst/Components,BICS,Other
-Leisure,BCLASS,Other
-Leisure Industry,BICS,Other
-Leisure Products Manufacturing,BICS,Other
-Leisure&Rec/Games,BICS,Other
-Leisure&Rec Products,BICS,Other
-Libraries and Museums,BCLASS,Other
-Life,BCLASS,Other
-Lifecare Retirement Centers,BCLASS,Other
-Life/Health Insurance,BICS,Other
-Life Insurance,ICB,Other
-Life Insurance,BICS,Other
-Lighting Products&Sys,BICS,Other
-Linen Supply&Rel Items,BICS,Other
-Local Authority,BCLASS,Other
-Lodging,BCLASS,Other
-Lottery Services,BICS,Other
-Machinery-Constr&Mining,BICS,Other
-Machinery-Electrical,BICS,Other
-Machinery-Electric Util,BICS,Other
-Machinery-Farm,BICS,Other
-Machinery-General Indust,BICS,Other
-Machinery Manufacturing,BICS,Other
-Machinery-Material Handl,BICS,Other
-Machinery-Print Trade,BICS,Other
-Machinery-Pumps,BICS,Other
-Machinery-Therml Process,BICS,Other
-Mach Tools&Rel Products,BICS,Other
-Malls and Shopping Centers,BCLASS,Other
-Managed Care,BICS,Other
-Manufact Hous ABS Other,BICS,Other
-Manufact Hous Sequential,BICS,Other
-Manufactured Goods,BICS,Other
-Manufactured Housing,BCLASS,Other
-Marine Services,BICS,Other
-Marine Transportation,ICB,Shipping
-Market Neutral-Equity,BICS,Other
-Mass and Rapid Transit,BCLASS,Other
-Mass Merchants,BICS,Other
-Mass & Rapid Transit,BCLASS,Other
-Media Agencies,ICB,Other
-Media Entertainment,BCLASS,Other
-Medical-Biomedical/Gene,BICS,Other
-Medical-Drugs,BICS,Other
-Medical Equipment,ICB,Other
-Medical Equipment & Devices Manufacturing,BICS,Other
-Medical-Generic Drugs,BICS,Other
-Medical-HMO,BICS,Other
-Medical-Hospitals,BICS,Other
-Medical Imaging Systems,BICS,Other
-Medical Information Sys,BICS,Other
-Medical Instruments,BICS,Other
-Medical Labs&Testing Srv,BICS,Other
-Medical Laser Systems,BICS,Other
-Medical-Nursing Homes,BICS,Other
-Medical-Outptnt/Home Med,BICS,Other
-Medical Products,BICS,Other
-Medical Steriliz Product,BICS,Other
-Medical Supplies,ICB,Other
-Medical-Whsle Drug Dist,BICS,Other
-Metal Processors&Fabrica,BICS,Other
-Metal Products-Distrib,BICS,Other
-Metal Products-Fasteners,BICS,Other
-Nonferrous Metals,ICB,Other
-Non-Ferrous Metals,BICS,Other
-Platinum,BICS,Other
-Precious Metals,BICS,Other
-Metals and Mining,BCLASS,Other
-"Metals, Minerals and Materials",BCLASS,Other
-Metals & Mining,BICS,Other
-Metals & Ore Whslrs & Traders,BICS,Other
-Metal Svc Center & Other Whslrs,BICS,Other
-Mgd Futures,BICS,Other
-Midstream,BCLASS,Other
-Military Housing,BCLASS,Other
-Mining Services,BICS,Other
-Miscellaneous Manufactur,BICS,Other
-Mobile Homes,BCLASS,Other
-Mobile Telecommunications,ICB,Other
-Money Center Banks,BICS,Other
-Mortgage Banks,BICS,Other
-Mortgage Finance,ICB,Other
-Mortgage Non Pfandbriefe,BCLASS,Other
-Mortgage REITs,ICB,Other
-Motion Pictures&Services,BICS,Other
-Motorcycle/Motor Scooter,BICS,Other
-MRI Equipment,BICS,Other
-MRI/Medical Diag Imaging,BICS,Other
-Multi-Family Housing,BCLASS,Other
-Multilevel Dir Selling,BICS,Other
-Multi-line Insurance,BICS,Other
-Multimedia,BICS,Other
-Multi-Strat/Style,BICS,Other
-Multiutilities,ICB,Power
-Muni-California,BICS,Other
-Municipal,BICS,Other
-Municipal-City,BICS,Other
-Municipal-County,BICS,Other
-Municipal-Education,BICS,Other
-Municipal-Local Auth,BICS,Other
-Municipal-Title XI,BICS,Other
-Muni-New York,BICS,Other
-Music,BICS,Other
-Mutual Insurance,BICS,Other
-Natural Gas,BCLASS,Oil&Gas
-Networking Products,BICS,Other
-"New, Public Housing",BCLASS,Other
-Night Clubs,BICS,Other
-No Mapping Available,BICS,Other
-Non Agency CMBS,BCLASS,Other
-Non-Captive Consumer Finance,BCLASS,Other
-Non-Captive Diversified Finance,BCLASS,Other
-Nondurable Household Products,ICB,Other
-Nonequity Investment Instruments,ICB,Other
-Quarrying,BICS,Other
-Silver Mining,BICS,Other
-Non-hazardous Waste Disp,BICS,Other
-Non-Profit Charity,BICS,Other
-Non Wood Building Materials,BICS,Other
-Not Classified,BCLASS,Other
-Nursing Homes,BCLASS,Other
-Office Automation&Equip,BICS,Other
-Office Buildings and Land Partners,BCLASS,Other
-Office Furnishings-Orig,BICS,Other
-Office REITs,BCLASS,Other
-Office Supplies&Forms,BICS,Other
-Oil Comp-Explor&Prodtn,BICS,Oil&Gas
-Oil Comp-Integrated,BICS,Oil&Gas
-Oil Equipment & Services,ICB,Other
-Oil Field Mach&Equip,BICS,Other
-Oil Field Services,BCLASS,Other
-Oil-Field Services,BICS,Other
-Oil&Gas Drilling,BICS,Other
-Oil & Gas Services & Equipment,BICS,Other
-Oil Refining&Marketing,BICS,Oil&Gas
-Oil-US Royalty Trusts,BICS,Other
-Open-End Fund,BCLASS,Other
-Optical Recognition Equi,BICS,Other
-Optical Supplies,BICS,Other
-Options,BCLASS,Other
-Other ABS,BICS,Other
-Other Education,BCLASS,Other
-Other Financial,BCLASS,Other
-Other Governmental Public Services,BCLASS,Other
-Other Health Care,BCLASS,Other
-Other Housing,BCLASS,Other
-Other Industrial,BCLASS,Other
-Other Mortgage Secur,BICS,Other
-Other Post-Employment Benefits,BCLASS,Other
-Other Recreation,BCLASS,Other
-Other REITs,BCLASS,Other
-Other Transportation,BCLASS,Other
-Other Utilities,BCLASS,Other
-Other Utility,BCLASS,Other
-Other Wholesalers,BICS,Other
-Packaging,BCLASS,Other
-Paper,ICB,Other
-Paper&Related Products,BICS,Other
-Parking Facilities,BCLASS,Other
-"Parks, Zoos, and Beaches",BCLASS,Other
-Pastoral&Agricultural,BICS,Other
-Patient Monitoring Equip,BICS,Other
-P&C,BCLASS,Other
-Pension Obligations,BCLASS,Other
-Personal Products,ICB,Other
-Petrochemicals,BICS,Oil&Gas
-Pfandbriefe,BCLASS,Other
-Pfandbriefe Jumbo Hypotheken,BCLASS,Other
-Pfandbriefe Jumbo Oeffenliche,BCLASS,Other
-Pfandbriefe Traditional Hypotheken,BCLASS,Other
-Pfandbriefe Traditional Oeffenliche,BCLASS,Other
-Pharmaceuticals,ICB,Other
-Pharmaceuticals,BICS,Other
-Pharmacy Services,BICS,Other
-Photo Equipment&Supplies,BICS,Other
-Phys Practice Mgmnt,BICS,Other
-Phys Therapy/Rehab Cntrs,BICS,Other
-Pipeline,BICS,Other
-Pipelines,ICB,Other
-Iron & Steel,ICB,Steel
-Platinum & Precious Metals,ICB,Other
-Police Station Equipment,BCLASS,Other
-Pollution Control,BICS,Other
-Poultry,BICS,Other
-Power Conv/Supply Equip,BICS,Other
-Power Generation,BICS,Power
-Iron & Steel Foundry,BICS,Steel
-Primary and Secondary Education,BCLASS,Other
-Printing-Commercial,BICS,Other
-Private Equity,BICS,Other
-Private Human Service Providers,BCLASS,Other
-Professional Sports,BICS,Other
-Property/Casualty Ins,BICS,Other
-Property & Casualty Insurance,ICB,Other
-Property & Casualty Insurance,BICS,Other
-Property Trust,BICS,Other
-Protection-Safety,BICS,Other
-PS Loan Non-Pfandbriefe,BCLASS,Other
-Public Human Service Providers,BCLASS,Other
-Public Thoroughfares,BICS,Other
-Publishing,ICB,Other
-Publishing-Books,BICS,Other
-Publishing & Broadcasting,BICS,Other
-Publishing-Newspapers,BICS,Other
-Publishing-Periodicals,BICS,Other
-Metal-Diversified,BICS,Steel
-Racetracks,BICS,Other
-Radio,BICS,Other
-Railroad,BICS,Other
-Railroad Rolling Stock,BICS,Other
-Railroads,ICB,Other
-Real Estate,BICS,Other
-Real Estate Holding & Development,ICB,Other
-Real Estate Mgmnt/Servic,BICS,Other
-Real Estate Oper/Develop,BICS,Other
-Real Estate Services,ICB,Other
-Recreational Centers,BICS,Other
-Recreational Products,ICB,Other
-Recreational Services,ICB,Other
-Recreational Vehicles,BICS,Other
-Recycling,BICS,Other
-Redevelopment and Land Clearance,BCLASS,Other
-Refining,BCLASS,Other
-Refining & Marketing,BICS,Other
-Regional Agencies,BICS,Other
-Regional Authority,BICS,Other
-Regional Banks-Non US,BICS,Other
-Region Fnd-Asian Pacific,BICS,Other
-Region Fund-African,BICS,Other
-Region Fund-ASEAN,BICS,Other
-Region Fund-EU,BICS,Other
-Region Fund-Euro,BICS,Other
-Region Fund-European,BICS,Other
-Region Fund-Europe Ex UK,BICS,Other
-Region Fund-Iberian,BICS,Other
-Region Fund-Latin Amer,BICS,Other
-Region Fund-NAFTA,BICS,Other
-Region Fund-Nordic,BICS,Other
-Region Fund-North Amer,BICS,Other
-Region Fund-OECD,BICS,Other
-Region Fund-Tiger,BICS,Other
-Reinsurance,ICB,Other
-REITs,BCLASS,Other
-REITS-Apartments,BICS,Other
-REITS-Diversified,BICS,Other
-REITS-Health Care,BICS,Other
-REITS-Hotels,BICS,Other
-REITS-Manufactured Homes,BICS,Other
-REITS-Mortgage,BICS,Other
-REITS-Office Property,BICS,Other
-REITS-Regional Malls,BICS,Other
-REITS-Shopping Centers,BICS,Other
-REITS-Single Tenant,BICS,Other
-REITS-Storage,BICS,Other
-REITS-Warehouse/Industr,BICS,Other
-REITS-Whole Loans,BICS,Other
-Religiously Responsible,BICS,Other
-Remediation Services,BICS,Other
-Renewable Energy,BICS,Power
-Renewable Energy Equipment,ICB,Other
-Renewable Energy Project Dev,BICS,Other
-Rental Auto/Equipment,BICS,Other
-Research&Development,BICS,Other
-Residential Mortgage,BCLASS,Other
-Residential REITs,ICB,Other
-Resorts/Theme Parks,BICS,Other
-Respiratory Products,BICS,Other
-Restaurants,BICS,Other
-Restaurants & Bars,ICB,Other
-Retail-Apparel/Shoe,BICS,Other
-Retail-Appliances,BICS,Other
-Retail-Arts&Crafts,BICS,Other
-Retail-Automobile,BICS,Other
-Retail-Auto Parts,BICS,Other
-Retail-Bedding,BICS,Other
-Retail-Bookstore,BICS,Other
-Retail-Building Products,BICS,Other
-Retail-Catalog Shopping,BICS,Other
-Retail-Computer Equip,BICS,Other
-Retail - Consumer Discretionary,BICS,Other
-Retail-Consumer Electron,BICS,Other
-Retail - Consumer Staples,BICS,Other
-Retail-Convenience Store,BICS,Other
-Retail-Cutlery&Cookware,BICS,Other
-Retail-Discount,BICS,Other
-Retail-Drug Store,BICS,Other
-Retailers,BCLASS,Other
-Retail-Fabric Store,BICS,Other
-Retail-Floor Coverings,BICS,Other
-Retail-Gardening Prod,BICS,Other
-Retail-Hair Salons,BICS,Other
-Retail-Home Furnishings,BICS,Other
-Retail-Hypermarkets,BICS,Other
-Retail-Jewelry,BICS,Other
-Retail-Leisure Products,BICS,Other
-Retail-Mail Order,BICS,Other
-Retail-Major Dept Store,BICS,Other
-Retail-Misc/Diversified,BICS,Other
-Retail-Music Store,BICS,Other
-Retail-Office Supplies,BICS,Other
-Retail-Pawn Shops,BICS,Other
-Retail-Perfume&Cosmetics,BICS,Other
-Retail-Pet Food&Supplies,BICS,Other
-Retail-Petroleum Prod,BICS,Other
-Retail-Photo Studio,BICS,Other
-Retail-Propane Distrib,BICS,Other
-Retail-Pubs,BICS,Other
-Retail-Regnl Dept Store,BICS,Other
-Retail REITs,ICB,Other
-Retail-Restaurants,BICS,Other
-Retail-Science&Nature,BICS,Other
-Retail-Sporting Goods,BICS,Other
-Retail-Sunglasses,BICS,Other
-Retail-Toy Store,BICS,Other
-Retail-Variety Store,BICS,Other
-Retail-Video Rental,BICS,Other
-Retail-Vision Serv Cntr,BICS,Other
-Retail-Vitamins/Nutr Sup,BICS,Other
-Retirement/Aged Care,BICS,Other
-Rubber/Plastic Products,BICS,Other
-Rubber-Tires,BICS,Other
-Rubber&Vinyl,BICS,Other
-Sanitation,BCLASS,Other
-Satellite Telecom,BICS,Other
-Schools,BICS,Other
-Schools-Day Care,BICS,Other
-Seaports and Marine Terminals,BCLASS,Other
-Sector Fund-Asset Alloc,BICS,Other
-Sector Fund-Debt,BICS,Other
-Sector Fund-Energy,BICS,Other
-Sector Fund-Real Estate,BICS,Other
-Sector Fund-Technology,BICS,Other
-Sector Fund-Utility,BICS,Other
-Secured Airlines,BCLASS,Aviation
-Security Services,BICS,Other
-Seismic Data Collection,BICS,Other
-Semicon Compo-Intg Circu,BICS,Other
-Semiconductor Equipment,BICS,Other
-Semiconductors,ICB,Other
-Semiconductors,BICS,Other
-Senior Housing Independent Living,BCLASS,Other
-Shipbuilding,BICS,Other
-Metal-Iron,BICS,Steel
-Single-Family Housing,BCLASS,Other
-"Single, Multi-Family Housing",BCLASS,Other
-S&L/Thrifts-Central US,BICS,Other
-S&L/Thrifts-Eastern US,BICS,Other
-S&L/Thrifts-Southern US,BICS,Other
-S&L/Thrifts-Western US,BICS,Other
-Soap&Cleaning Prepar,BICS,Other
-Socially Responsible,BICS,Other
-Soft Drinks,ICB,Other
-Software,ICB,Other
-Software & Services,BICS,Other
-Software Tools,BICS,Other
-Solid Waste Resource Recovery,BCLASS,Other
-Sovereign,BICS,Other
-Sovereign Agency,BICS,Other
-Sovereigns,BICS,Other
-Specialized Consumer Services,ICB,Other
-Special Purpose Banks,BICS,Other
-Special Purpose Entity,BICS,Other
-Specialty Chemicals,ICB,Other
-Specialty Finance,ICB,Other
-Specialty REITs,ICB,Other
-Specialty Retailers,ICB,Other
-Specified Purpose Acquis,BICS,Other
-Stadiums and Sports Complexes,BCLASS,Other
-Steel Pipe&Tube,BICS,Steel
-Steel-Producers,BICS,Steel
-Steel-Specialty,BICS,Steel
-Stevedoring,BICS,Other
-Storage/Warehousing,BICS,Other
-Stranded Cost Utility,BCLASS,Other
-Student Housing,BCLASS,Other
-Student Loan,BCLASS,Other
-Student Loans,BCLASS,Other
-Sugar,BICS,Other
-Superconductor Prod&Sys,BICS,Other
-Supermarkets,BCLASS,Other
-Supermarkets & Pharmacies,BICS,Other
-Super-Regional Banks-US,BICS,Other
-Supranational,BCLASS,Other
-Supranational Bank,BICS,Other
-Supranationals,BICS,Other
-Tannery,BICS,Other
-Taxable First Tier-MMkt,BICS,Other
-Taxable Govt/Agency-MMkt,BICS,Other
-Taxable Treas 100%-MMkt,BICS,Other
-Taxable Treas/Repo-MMkt,BICS,Other
-Tea,BICS,Other
-Technology,BCLASS,Other
-Telecom Carriers,BICS,Other
-Telecom Eq Fiber Optics,BICS,Other
-Telecommunication Equip,BICS,Other
-Telecommunications Equipment,ICB,Other
-Telecom Services,BICS,Other
-Telephone,BCLASS,Other
-Telephone-Integrated,BICS,Other
-Television,BICS,Other
-Textile-Apparel,BICS,Other
-Textile-Home Furnishings,BICS,Other
-Textile-Products,BICS,Other
-Textiles,BCLASS,Other
-Theaters,BICS,Other
-Therapeutics,BICS,Other
-Tires,ICB,Other
-Tobacco,ICB,Other
-"Toll Roads, Streets, and Highways",BCLASS,Other
-Tools-Hand Held,BICS,Other
-Toys,ICB,Other
-Traffic Management Sys,BICS,Other
-Transactional Software,BICS,Other
-Transit Services,BICS,Other
-Transport-Air Freight,BICS,Aviation
-Transportation & Logistics,BICS,Other
-Transportation Services,ICB,Other
-Transport-Equip&Leasng,BICS,Other
-Transport-Marine,BICS,Shipping
-Transport-Rail,BICS,Other
-Transport-Services,BICS,Other
-Transport-Truck,BICS,Other
-Travel & Lodging,BICS,Other
-Travel Services,BICS,Other
-Travel & Tourism,ICB,Other
-Treasury,BCLASS,Other
-Trucking,ICB,Other
-Trucking&Leasing,BICS,Other
-Ultra Sound Imaging Sys,BICS,Other
-Unclassified,BICS,Other
-Undefined Equity,BICS,Other
-Unknown,BCLASS,Other
-Unsecured Airlines,BCLASS,Other
-US Municipals,BICS,Other
-Utilities,BICS,Other
-Value,BICS,Other
-Value-Large Cap,BICS,Other
-Value-Mid Cap,BICS,Other
-Value-Small Cap,BICS,Other
-Various Assets,BICS,Other
-Venture Capital,BICS,Other
-Veterans,BCLASS,Other
-Veterinary Diagnostics,BICS,Other
-Veterinary Products,BICS,Other
-Virtual Reality Products,BICS,Other
-Vitamins&Nutrition Prod,BICS,Other
-Waste & Disposal Services,ICB,Other
-Waste & Environment Services & Equipment,BICS,Other
-Water,ICB,Other
-Water and Sewer,BCLASS,Other
-Water & Sewer,BCLASS,Other
-Water Treatment Systems,BICS,Other
-Web Hosting/Design,BICS,Other
-Web Portals/ISP,BICS,Other
-Whole Business,BCLASS,Other
-Whsing&Harbor Trans Serv,BICS,Other
-Winding Up Agencies,BICS,Other
-Winding-up Agency,BICS,Other
-Wire&Cable Products,BICS,Other
-Wireless,BCLASS,Other
-Wireless Equipment,BICS,Other
-Wireless Telecommunications Services,BICS,Other
-Wirelines,BCLASS,Other
-Wireline Telecommunications Services,BICS,Other
-WL Collat CMO IO,BICS,Other
-WL Collat CMO Mezzanine,BICS,Other
-WL Collat CMO Other,BICS,Other
-WL Collat CMO PO,BICS,Other
-WL Collat CMO Sequential,BICS,Other
-WL Collat CMO Subordinat,BICS,Other
-WL Collat CMO TAC,BICS,Other
-WL Collat PAC,BICS,Other
-WL Collat PAC IO,BICS,Other
-WL Collat PAC Support,BICS,Other
-WL Collat PAC Z,BICS,Other
-WL Collat Support,BICS,Other
-WL Collat Support PO,BICS,Other
-WL Collat Support Z,BICS,Other
-Wool,BICS,Other
-Workers Comp/Injury Serv,BICS,Other
-Wound/Burn & Skin Care,BICS,Other
-X24,BCLASS,Other
-X28,BCLASS,Other
-X29,BCLASS,Other
-X34,BCLASS,Other
-X38,BCLASS,Other
-X42,BCLASS,Other
-X-Ray Equipment,BICS,Other
-Pipelines,BICS,Other
-Gold Mining,BICS,Other
-Forestry,BICS,Other
-Water,BICS,Other
-Reinsurance,BICS,Other
-Coal,BICS,Coal
-Airlines,BICS,Aviation
-Tobacco,BICS,Other
-Computer Services,BICS,Other
-Insurance Brokers,BICS,Other
-Toys,BICS,Other
-UMBS Single Family 30yr,BICS,Other
-UMBS Single Family 20yr,BICS,Other
-GNMA Buydown,BICS,Other
-Country Fund-Belgium,BICS,Other
-Region Fund-G8 Countries,BICS,Other
-Region Fund-Oceania,BICS,Other
-NA,BICS,Other
-Eq Directional Long Bias,BICS,Other
-Emerg Mkt Eqty,BICS,Other
-Region Fund-Middle East,BICS,Other
-Country Fund-Denmark,BICS,Other
-Gaming & Entertainment,BICS,Other
-UMBS Single Family 15yr,BICS,Other
-UMBS Other,BICS,Other
-Event Driven-Distressed,BICS,Other
-FI Rel Val-Convertible A,BICS,Other
-Emerg Mkt Debt,BICS,Other
-Eq Statistical Arb,BICS,Other
-Ast Alloc/Islamic,BICS,Other
-Debt/Islamic,BICS,Other
-WL Collat CMO Residual,BICS,Other
-Other Mortgage Security,BICS,Other
+industry_classification,source,sector,sector_ipr,subsector_ipr,sector_dnb,sector_boe,subsector_boe
+3/1 ARM,BCLASS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+5/1 ARM,BCLASS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+7/1 ARM,BCLASS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Advanced Materials/Prd,BICS,Other,Non-Energy Materials,"Chemical, Plastic and Rubber Materials",C20,Other,NA
+Advertising & Marketing,BICS,Other,Consumer Services,Media and Publishing Services,Other,Other,NA
+Advertising Agencies,BICS,Other,Consumer Services,Media and Publishing Services,M73,Other,NA
+Advertising Sales,BICS,Other,Consumer Services,Media and Publishing Services,M73,Other,NA
+Advertising Services,BICS,Other,Consumer Services,Media and Publishing Services,M73,Other,NA
+Aerospace,ICB,Other,NA,NA,Other,Other,NA
+Aerospace & Defense,BICS,Other,NA,NA,Other,Other,NA
+Aerospace/Defense,BICS,Other,NA,NA,Other,Other,NA
+Aerospace/Defense-Equip,BICS,Other,NA,NA,Other,Other,NA
+Agency CMBS,BICS,Other,NA,NA,Other,Other,NA
+Agency Collat IO,BICS,Other,NA,NA,Other,Other,NA
+Agency Collat Other,BICS,Other,NA,NA,Other,Other,NA
+Agency Collat PAC,BICS,Other,NA,NA,Other,Other,NA
+Agency Collat PAC IO,BICS,Other,NA,NA,Other,Other,NA
+Agency Collat PAC PO,BICS,Other,NA,NA,Other,Other,NA
+Agency Collat PAC Support,BICS,Other,NA,NA,Other,Other,NA
+Agency Collat PAC Z,BICS,Other,NA,NA,Other,Other,NA
+Agency Collat PO,BICS,Other,NA,NA,Other,Other,NA
+Agency Collat Residual,BICS,Other,NA,NA,Other,Other,NA
+Agency Collat Sequential,BICS,Other,NA,NA,Other,Other,NA
+Agency Collat Structured,BICS,Other,NA,NA,Other,Other,NA
+Agency Collat Support,BICS,Other,NA,NA,Other,Other,NA
+Agency Collat Support IO,BICS,Other,NA,NA,Other,Other,NA
+Agency Collat Support PO,BICS,Other,NA,NA,Other,Other,NA
+Agency Collat Support Z,BICS,Other,NA,NA,Other,Other,NA
+Agency Collat TAC,BICS,Other,NA,NA,Other,Other,NA
+Agency Collat Z,BICS,Other,NA,NA,K66,Other,NA
+Agency Credit,BCLASS,Other,NA,NA,Other,Other,NA
+Agency MBS Other,BCLASS,Other,NA,NA,Other,Other,NA
+Aggressive Growth,BICS,Other,NA,NA,Other,Other,NA
+Agricultural Biotech,BICS,Other,Technology,Electronic Components and Manufacturing,C20,Agriculture,NA
+Agricultural Chemicals,BICS,Other,Non-Energy Materials,"Chemical, Plastic and Rubber Materials",C20,Agriculture,NA
+Agricultural Operations,BICS,Other,Consumer Non-Cyclicals,Food and Tobacco Production,Other,Agriculture,NA
+Agriculture,BCLASS,Other,Consumer Non-Cyclicals,Food and Tobacco Production,Other,Agriculture,NA
+Air Pollution Control Eq,BICS,Other,NA,NA,E39,Other,NA
+Airlines,ICB,Aviation,NA,NA,Other,Aviation,NA
+Airlines,BICS,Aviation,NA,NA,Other,Aviation,NA
+Airport Develop/Maint,BICS,Other,NA,NA,Other,Other,NA
+Airports,BCLASS,Other,NA,NA,Other,Other,NA
+Alternative Electricity,ICB,Other,NA,NA,Other,Other,NA
+Alternative Fuels,ICB,Other,NA,NA,Other,Other,NA
+Alternative Waste Tech,BICS,Other,NA,NA,E39,Other,NA
+Aluminum,ICB,Other,Non-Energy Materials,Mining and Mineral Products,Other,Materials,Fossil Fuel Based
+Apartment REITs,BCLASS,Other,Finance,Real Estate,Other,Real estate,NA
+Apparel & Textile Products,BICS,Other,Consumer Cyclicals,Consumer Goods,Other,Other,NA
+Apparel Manufacturers,BICS,Other,Consumer Cyclicals,Consumer Goods,C14,Other,NA
+Apparel Retailers,ICB,Other,Consumer Cyclicals,Consumer Retail,Other,Other,NA
+Appliances,BICS,Other,Consumer Cyclicals,Consumer Goods,Other,Other,NA
+Applications Software,BICS,Other,Technology,Software and Consulting,Other,Other,NA
+ARMs,BCLASS,Other,NA,NA,Other,Other,NA
+Asbestos Abatement,BICS,Other,NA,NA,E39,Other,NA
+Asian Pacific Ex Japan,BICS,Other,NA,NA,Other,Other,NA
+Asset Backed Securities,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Asset Managers,ICB,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Ast Alloc/Islamic,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Athletic Equipment,BICS,Other,Consumer Cyclicals,Consumer Goods,Other,Other,NA
+Athletic Footwear,BICS,Other,Consumer Cyclicals,Consumer Goods,Other,Other,NA
+Auction House/Art Dealer,BICS,Other,NA,NA,M74,Other,NA
+Audio/Video Products,BICS,Other,NA,NA,Other,Other,NA
+Auto Floor Plan Other,BICS,Automotive,NA,NA,Other,Automotive,NA
+Auto Floor Plan Sequent,BICS,Automotive,NA,NA,Other,Automotive,NA
+Auto Loan,BCLASS,Other,Finance,Banking,Other,Other,NA
+Auto Parts,ICB,Other,Consumer Cyclicals,Consumer Vehicles and Parts,Other,Other,NA
+Auto Parts Manufacturing,BICS,Other,Consumer Cyclicals,Consumer Vehicles and Parts,Other,Other,NA
+Auto Repair Centers,BICS,Other,Consumer Cyclicals,Consumer Vehicles and Parts,G45,Other,NA
+Auto/Trk Prts&Equip-Orig,BICS,Other,Consumer Cyclicals,Consumer Vehicles and Parts,C29,Other,NA
+Auto/Trk Prts&Equip-Repl,BICS,Other,Consumer Cyclicals,Consumer Vehicles and Parts,C29,Other,NA
+Auto-Cars/Light Trucks,BICS,Automotive,Consumer Cyclicals,Consumer Vehicles and Parts,C29,Automotive,NA
+Auto-Med&Heavy Duty Trks,BICS,Automotive,Consumer Cyclicals,Consumer Vehicles and Parts,H49,Automotive,NA
+Automobile ABS Other,BICS,Other,Consumer Cyclicals,Consumer Vehicles and Parts,Other,Other,NA
+Automobile Sequential,BICS,Other,Consumer Cyclicals,Consumer Vehicles and Parts,Other,Other,NA
+Automobiles,ICB,Automotive,Consumer Cyclicals,Consumer Vehicles and Parts,Other,Automotive,NA
+Automobiles Manufacturing,BICS,Automotive,Consumer Cyclicals,Consumer Vehicles and Parts,Other,Automotive,NA
+Automotive,BCLASS,Other,Consumer Cyclicals,Consumer Vehicles and Parts,Other,Other,NA
+Auto-Truck Trailers,BICS,Other,Consumer Cyclicals,Consumer Vehicles and Parts,H49,Other,NA
+B2B/E-Commerce,BICS,Other,Consumer Cyclicals,Consumer Retail,J63,Other,NA
+Balanced,BICS,Other,NA,NA,Other,Other,NA
+Banking,BCLASS,Other,Finance,Banking,Other,Other,NA
+Banks,BICS,Other,Finance,Banking,Other,Other,NA
+Banks,ICB,Other,Finance,Banking,Other,Other,NA
+Batteries/Battery Sys,BICS,Other,Technology,Electronic Components and Manufacturing,Other,Other,NA
+Beverages-Non-alcoholic,BICS,Other,Consumer Non-Cyclicals,Food and Tobacco Production,C11,Other,NA
+Beverages-Wine/Spirits,BICS,Other,Consumer Non-Cyclicals,Food and Tobacco Production,Other,Other,NA
+Bicycle Manufacturing,BICS,Other,Non-Energy Materials,Manufactured Products,C30,Other,NA
+Biofuels,BICS,Other,NA,NA,Other,Other,NA
+Biotechnology,ICB,Other,NA,NA,Other,Other,NA
+Biotechnology,BICS,Other,NA,NA,Other,Other,NA
+Bldg Prod-Air&Heating,BICS,Other,NA,NA,C27,Other,NA
+Bldg Prod-Cement/Aggreg,BICS,Cement,NA,NA,Other,Cement,NA
+Bldg Prod-Doors&Windows,BICS,Other,NA,NA,Other,Other,NA
+Bldg Prod-Light Fixtures,BICS,Other,NA,NA,C27,Other,NA
+Bldg Prod-Wood,BICS,Other,NA,NA,C16,Other,NA
+Bldg&Construct Prod-Misc,BICS,Other,NA,NA,Other,Other,NA
+Bldg-Mobil Home/Mfd Hous,BICS,Other,NA,NA,Other,Other,NA
+Bldg-Residential/Commer,BICS,Other,NA,NA,Other,Other,NA
+Blood Collection Banking,BICS,Other,Healthcare,Healthcare Services,Q86,Other,NA
+Bloodstock Services,BICS,Other,Healthcare,Healthcare Services,Other,Other,NA
+Blue Chip,BICS,Other,NA,NA,Other,Other,NA
+Boat Loan Other,BICS,Other,NA,NA,Other,Other,NA
+Brewers,ICB,Other,Consumer Non-Cyclicals,Food and Tobacco Production,Other,Other,NA
+Brewery,BICS,Other,Consumer Non-Cyclicals,Food and Tobacco Production,C11,Other,NA
+Bridges,BCLASS,Other,NA,NA,Other,Other,NA
+Broadcast Serv/Program,BICS,Other,NA,NA,J60,Other,NA
+Broadcasting & Entertainment,ICB,Other,NA,NA,Other,Other,NA
+Broadline Retailers,ICB,Other,NA,NA,Other,Other,NA
+Brokerage Assetmanagers Exchanges,BCLASS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Building Materials,BCLASS,Other,NA,NA,Other,Materials,Other
+Building Materials & Fixtures,ICB,Cement,NA,NA,Other,Materials,Other
+Building Societies,BICS,Other,NA,NA,K64,Other,NA
+Building Sub Contractors,BICS,Other,NA,NA,Other,Other,NA
+Building&Construct-Misc,BICS,Other,NA,NA,F41,Other,NA
+Building-Heavy Construct,BICS,Other,NA,NA,F42,Other,NA
+Building-Maint&Service,BICS,Other,NA,NA,N81,Other,NA
+Business Support Services,ICB,Other,Business Services,Business Services,Other,Other,NA
+Business Training Employment Agency,ICB,Other,Business Services,Business Services,Other,Other,NA
+Cable & Satellite,BICS,Other,NA,NA,Other,Other,NA
+Cable Satellite,BCLASS,Other,NA,NA,Other,Other,NA
+Cable/Satellite TV,BICS,Other,NA,NA,J60,Other,NA
+Capacitors,BICS,Other,NA,NA,Other,Other,NA
+Capital Goods,BCLASS,Other,NA,NA,Other,Other,NA
+Capital Pools,BICS,Other,NA,NA,K64,Other,NA
+Casino Hotels,BICS,Other,Consumer Services,Hospitality Services,I55,Real estate,NA
+Casino Services,BICS,Other,Consumer Services,Hospitality Services,Other,Other,NA
+Casinos & Gaming,BICS,Other,Consumer Services,Hospitality Services,Other,Other,NA
+CDO,BCLASS,Other,NA,NA,Other,Other,NA
+Cellular Telecom,BICS,Other,NA,NA,Other,Other,NA
+Central Bank,BICS,Other,NA,NA,Other,Other,NA
+Ceramic Products,BICS,Other,NA,NA,Other,Other,NA
+Charter Schools,BCLASS,Other,NA,NA,Other,Other,NA
+Chemicals,BICS,Other,Non-Energy Materials,"Chemical, Plastic and Rubber Materials",Other,Other,NA
+Chemicals-Diversified,BICS,Other,Non-Energy Materials,"Chemical, Plastic and Rubber Materials",C20,Other,NA
+Chemicals-Fibers,BICS,Other,Non-Energy Materials,"Chemical, Plastic and Rubber Materials",C20,Other,NA
+Chemicals-Other,BICS,Other,Non-Energy Materials,"Chemical, Plastic and Rubber Materials",C20,Other,NA
+Chemicals-Plastics,BICS,Other,Non-Energy Materials,"Chemical, Plastic and Rubber Materials",C20,Other,NA
+Chemicals-Specialty,BICS,Other,Non-Energy Materials,"Chemical, Plastic and Rubber Materials",C20,Other,NA
+Circuit Boards,BICS,Other,NA,NA,Other,Other,NA
+Circuits,BICS,Other,NA,NA,Other,Other,NA
+Civic and Convention Centers,BCLASS,Other,NA,NA,Other,Other,NA
+CLO,BCLASS,Other,NA,NA,Other,Other,NA
+Closed-end Funds,BICS,Other,NA,NA,Other,Other,NA
+Clothing & Accessories,ICB,Other,Consumer Cyclicals,Consumer Goods,Other,Other,NA
+CMBS Other,BICS,Other,NA,NA,Other,Other,NA
+CMBS Subordinated,BICS,Other,NA,NA,K66,Other,NA
+CMO,BCLASS,Other,NA,NA,Other,Other,NA
+Coal,ICB,Coal,Energy,Upstream Energy,Other,Coal,NA
+Coal,BICS,Coal,Energy,Upstream Energy,Other,Coal,NA
+Coal Operations,BICS,Coal,Energy,Upstream Energy,Other,Coal,NA
+Coatings/Paint,BICS,Other,Consumer Cyclicals,Consumer Goods,C20,Other,NA
+Coffee,BICS,Other,Consumer Non-Cyclicals,Food and Tobacco Production,Other,Other,NA
+Collectibles,BICS,Other,NA,NA,Other,Other,NA
+Combined Utilities,BCLASS,Other,NA,NA,Other,Other,NA
+Commer Banks Non-US,BICS,Other,Finance,Banking,K64,Other,NA
+Commer Banks-Central US,BICS,Other,Finance,Banking,K64,Other,NA
+Commer Banks-Eastern US,BICS,Other,Finance,Banking,K64,Other,NA
+Commer Banks-Southern US,BICS,Other,Finance,Banking,K64,Other,NA
+Commer Banks-Western US,BICS,Other,Finance,Banking,K64,Other,NA
+Commercial Finance,BICS,Other,Finance,Banking,Other,Other,NA
+Commercial Serv-Finance,BICS,Other,Finance,Specialty Finance and Services,M74,Other,NA
+Commercial Services,BICS,Other,Finance,Specialty Finance and Services,M70,Other,NA
+Commercial Vehicles & Trucks,ICB,Other,Consumer Cyclicals,Consumer Vehicles and Parts,Other,Other,NA
+Commodity,BICS,Other,NA,NA,K64,Other,NA
+Commodity Agriculture Fund,BCLASS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Commodity Chemicals,ICB,Other,Non-Energy Materials,"Chemical, Plastic and Rubber Materials",Other,Other,NA
+Commodity Energy Fund,BCLASS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Commodity Industrial Metals Fund,BCLASS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Commodity Precious Metals Fund,BCLASS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Communications Equipment,BICS,Other,Telecommunications,Telecommunications,Other,Other,NA
+Communications Software,BICS,Other,Technology,Software and Consulting,Other,Other,NA
+Computer Aided Design,BICS,Other,Technology,Software and Consulting,Other,Other,NA
+Computer Data Security,BICS,Other,Technology,Software and Consulting,Other,Other,NA
+Computer Graphics,BICS,Other,Technology,Software and Consulting,Other,Other,NA
+Computer Hardware,ICB,Other,Technology,Hardware,Other,Other,NA
+Computer Services,ICB,Other,Technology,Software and Consulting,Other,Other,NA
+Computer Services,BICS,Other,Technology,Software and Consulting,Other,Other,NA
+Computer Software,BICS,Other,Technology,Software and Consulting,Other,Other,NA
+Computers,BICS,Other,Technology,Hardware,C26,Other,NA
+Computers-Integrated Sys,BICS,Other,Technology,Software and Consulting,C26,Other,NA
+Computers-Memory Devices,BICS,Other,Technology,Hardware,C26,Other,NA
+Computers-Other,BICS,Other,Technology,Software and Consulting,C26,Other,NA
+Computers-Peripher Equip,BICS,Other,Technology,Hardware,C26,Other,NA
+Computers-Voice Recogn,BICS,Other,Technology,Software and Consulting,C26,Other,NA
+Construction Machinery,BCLASS,Other,Non-Energy Materials,Manufactured Products,Other,Other,NA
+Construction Materials Manufacturing,BICS,Other,Non-Energy Materials,Manufactured Products,Other,Other,NA
+Consulting Services,BICS,Other,Business Services,Business Services,M69,Other,NA
+Consumer Cyc Services,BCLASS,Other,Consumer Cyclicals,NA,Other,Other,NA
+Consumer Electronics,ICB,Other,Consumer Cyclicals,Consumer Goods,Other,Other,NA
+Consumer Finance,ICB,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Consumer Finance,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Consumer Products,BICS,Other,Consumer Cyclicals,Consumer Goods,Other,Other,NA
+Consumer Products-Misc,BICS,Other,Consumer Cyclicals,Miscellaneous Retail,Other,Other,NA
+Consumer Services,BICS,Other,Consumer Services,NA,Other,Other,NA
+Containers & Packaging,ICB,Other,Non-Energy Materials,Manufactured Products,Other,Other,NA
+Containers & Packaging,BICS,Other,Non-Energy Materials,Manufactured Products,Other,Other,NA
+Containers-Metal/Glass,BICS,Other,Non-Energy Materials,Manufactured Products,Other,Other,NA
+Containers-Paper/Plastic,BICS,Other,Non-Energy Materials,Manufactured Products,C22,Other,NA
+Contrarian,BICS,Other,NA,NA,Other,Other,NA
+Conventional 10 Yr,BCLASS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Conventional 15 Yr,BCLASS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Conventional 20 Yr,BCLASS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Conventional 30 Yr,BCLASS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Conventional Balloon,BCLASS,Other,NA,NA,Other,Other,NA
+Conventional Electricity,ICB,Power,Utilities,Utilities,Other,Power,NA
+Convertible,BICS,Other,NA,NA,Other,Other,NA
+Cooperative Banks,BICS,Other,Finance,Banking,K64,Other,NA
+Corp/Pref-High Yield,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Corp/Pref-Inv Grade,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Corporate/Preferred,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Correctional Facilities and Courts,BCLASS,Other,NA,NA,Other,Other,NA
+Cosmetics&Toiletries,BICS,Other,Consumer Cyclicals,Consumer Goods,Other,Other,NA
+Country Fund-Australia,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Country Fund-Austria,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Country Fund-Belgium,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Country Fund-Brazil,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Country Fund-Canada,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Country Fund-China,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Country Fund-Denmark,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Country Fund-France,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Country Fund-Germany,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Country Fund-India,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Country Fund-Indonesia,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Country Fund-Italy,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Country Fund-Japan,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Country Fund-Korea,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Country Fund-Malaysia,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Country Fund-Mexico,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Country Fund-Netherlands,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Country Fund-Philippines,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Country Fund-Russia,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Country Fund-Singapore,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Country Fund-Spain,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Country Fund-Sweden,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Country Fund-Switzerland,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Country Fund-Thailand,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Country Fund-U.K.,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Country Fund-U.S.,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Credit Card,BCLASS,Other,Finance,Banking,Other,Other,NA
+Credit Card Bullet,BICS,Other,Finance,Banking,Other,Other,NA
+Credit Card Other,BICS,Other,Finance,Banking,Other,Other,NA
+Cruise Lines,BICS,Other,Consumer Services,Hospitality Services,I55,Other,NA
+Crystal&Giftware,BICS,Other,Consumer Cyclicals,Consumer Goods,Other,Other,NA
+Currency,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Data Processing/Mgmt,BICS,Other,Technology,Software and Consulting,Other,Other,NA
+Debt/Islamic,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Decision Support Softwar,BICS,Other,Technology,Software and Consulting,Other,Other,NA
+Defense,ICB,Other,NA,NA,Other,Other,NA
+Delivery Services,ICB,Other,Business Services,Business Services,Other,Other,NA
+Dental Supplies&Equip,BICS,Other,Healthcare,Healthcare Equipment,Other,Other,NA
+Department Stores,BICS,Other,Consumer Cyclicals,Consumer Retail,Other,Other,NA
+Derivative-Asset Alloc,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Derivative-Asset Allocation,BCLASS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Derivatives,BICS,Other,Finance,Specialty Finance and Services,K64,Other,NA
+"Design, Manufacturing & Distribution",BICS,Other,Business Services,Business Services,Other,Other,NA
+Diagnostic Equipment,BICS,Other,Healthcare,Healthcare Equipment,Other,Other,NA
+Diagnostic Kits,BICS,Other,Healthcare,Healthcare Equipment,Other,Other,NA
+Dialysis Centers,BICS,Other,Healthcare,Healthcare Services,Q86,Other,NA
+Diamonds & Gemstones,ICB,Other,Consumer Cyclicals,Miscellaneous Retail,Other,Other,NA
+Diamonds/Precious Stones,BICS,Other,Consumer Cyclicals,Miscellaneous Retail,Other,Other,NA
+Direct Marketing,BICS,Other,Business Services,Business Services,M73,Other,NA
+Disposable Medical Prod,BICS,Other,Healthcare,Healthcare Equipment,Other,Other,NA
+Distillers & Vintners,ICB,Other,Consumer Non-Cyclicals,Food and Tobacco Production,Other,Other,NA
+Distribution/Wholesale,BICS,Other,Business Services,Business Services,G46,Other,NA
+Distributors,BCLASS,Other,Business Services,Business Services,Other,Other,NA
+Distributors - Consumer Discretionary,BICS,Other,Business Services,Business Services,Other,Other,NA
+Divers Oper/Commer Serv,BICS,Other,Business Services,Business Services,Other,Other,NA
+Diversified Banking Inst,BICS,Other,Finance,Specialty Finance and Services,K64,Other,NA
+Diversified Banks,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Diversified Finan Serv,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Diversified Industrials,ICB,Other,Industrials,Industrial Services,Other,Other,NA
+Diversified Manufact Op,BICS,Other,Industrials,Industrial Manufacturing,C32,Other,NA
+Diversified Manufacturing,BCLASS,Other,Industrials,Industrial Manufacturing,Other,Other,NA
+Diversified Minerals,BICS,Other,Non-Energy Materials,Mining and Mineral Products,Other,Other,NA
+Diversified Operations,BICS,Other,Business Services,Business Services,Other,Other,NA
+Diversified REITs,ICB,Other,Finance,Real Estate,Other,Real estate,NA
+Drug Delivery Systems,BICS,Other,Healthcare,Healthcare Services,C21,Other,NA
+Drug Detection Systems,BICS,Other,NA,NA,Other,Other,NA
+Drug Retailers,ICB,Other,Healthcare,Healthcare Services,Other,Other,NA
+Durable Household Products,ICB,Other,Consumer Cyclicals,Consumer Goods,Other,Other,NA
+Eastern European,BICS,Other,NA,NA,Other,Other,NA
+E-Commerce/Products,BICS,Other,Business Services,Business Services,G47,Other,NA
+E-Commerce/Services,BICS,Other,Business Services,Business Services,J63,Other,NA
+Economic Development,BCLASS,Other,NA,NA,Other,Other,NA
+Educational Services,BICS,Other,NA,NA,Other,Other,NA
+Educational Software,BICS,Other,NA,NA,Other,Other,NA
+Elec & Gas Mktg & Trading,BICS,Other,NA,NA,Other,Other,NA
+Electric,BCLASS,Other,Technology,Electronic Components and Manufacturing,Other,Other,NA
+Electric Products-Misc,BICS,Power,Utilities,Utilities,C27,Power,NA
+Electrical Components & Equipment,ICB,Other,Technology,Electronic Components and Manufacturing,Other,Other,NA
+Electrical Equipment Manufacturing,BICS,Other,Technology,Electronic Components and Manufacturing,Other,Other,NA
+Electric-Distribution,BICS,Power,Utilities,Utilities,D35,Power,NA
+Electric-Generation,BICS,Power,Utilities,Utilities,D35,Power,NA
+Electric-Integrated,BICS,Power,Utilities,Utilities,D35,Power,NA
+Electricity and Public Power,BCLASS,Power,Utilities,Utilities,Other,Power,NA
+Electric-Transmission,BICS,Other,NA,NA,D35,Other,NA
+Electronic Compo-Misc,BICS,Other,Technology,Electronic Components and Manufacturing,C26,Other,NA
+Electronic Compo-Semicon,BICS,Other,Technology,Electronic Components and Manufacturing,C26,Other,NA
+Electronic Connectors,BICS,Other,Technology,Electronic Components and Manufacturing,C27,Other,NA
+Electronic Design Automa,BICS,Other,Technology,Electronic Components and Manufacturing,Other,Other,NA
+Electronic Equipment,ICB,Other,Technology,Electronic Components and Manufacturing,Other,Other,NA
+Electronic Forms,BICS,Other,Technology,Electronic Components and Manufacturing,Other,Other,NA
+Electronic Measur Instr,BICS,Other,Technology,Electronic Components and Manufacturing,C27,Other,NA
+Electronic Office Equipment,ICB,Other,Technology,Electronic Components and Manufacturing,Other,Other,NA
+Electronic Parts Distrib,BICS,Other,Technology,Electronic Components and Manufacturing,C27,Other,NA
+Electronic Secur Devices,BICS,Other,Technology,Electronic Components and Manufacturing,C27,Other,NA
+Electronics-Military,BICS,Other,Technology,Electronic Components and Manufacturing,Other,Other,NA
+E-Marketing/Info,BICS,Other,Business Services,Business Services,M73,Other,NA
+Emerg Mkt Debt,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Emerg Mkt Eqty,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Emerging Market-Debt,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Emerging Market-Equity,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Emerging Mkt-Asset Alloc,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Energy and Environment,BCLASS,Power,Utilities,Utilities,Other,Power,NA
+Energy-Alternate Sources,BICS,Other,NA,NA,Other,Other,NA
+Engineering/R&D Services,BICS,Other,Industrials,Industrial Services,Other,Other,NA
+Engines-Internal Combust,BICS,Other,Industrials,Industrial Manufacturing,Other,Other,NA
+Enterprise Software/Serv,BICS,Other,Technology,Software and Consulting,Other,Other,NA
+Entertainment Content,BICS,Other,Consumer Services,Media and Publishing Services,Other,Other,NA
+Entertainment Resources,BICS,Other,Consumer Services,Media and Publishing Services,Other,Other,NA
+Entertainment Software,BICS,Other,Consumer Services,Media and Publishing Services,Other,Other,NA
+Environ Consulting&Eng,BICS,Other,Business Services,Business Services,E39,Other,NA
+Environ Monitoring&Det,BICS,Other,Business Services,Business Services,E39,Other,NA
+Environmental,BCLASS,Other,NA,NA,Other,Other,NA
+Environmentally Friendly,BICS,Other,NA,NA,Other,Other,NA
+Eq Directional Long Bias,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Eq Directional Long/Shor,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Eq Fdmntl Mkt Neut,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Eq Statistical Arb,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Equity Investment Instruments,ICB,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Equity/Islamic,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+E-Services/Consulting,BICS,Other,Business Services,Business Services,Other,Other,NA
+Event Driven-Distressed,BICS,Other,NA,NA,Other,Other,NA
+Event Driven-Merger Arbi,BICS,Other,NA,NA,Other,Other,NA
+Exploration & Production,ICB,Oil&Gas,Energy,Upstream Energy,Other,Oil&Gas,NA
+Exploration & Production,BICS,Oil&Gas,Energy,Upstream Energy,Other,Oil&Gas,NA
+Explosives,BICS,Other,NA,NA,C20,Other,NA
+Export/Import Bank,BICS,Other,Finance,Banking,Other,Other,NA
+Extended Serv Contracts,BICS,Other,Business Services,Business Services,K65,Other,NA
+Farming,ICB,Other,Consumer Non-Cyclicals,Food and Tobacco Production,Other,Agriculture,NA
+"Farming, Fishing & Plantations",ICB,Other,Consumer Non-Cyclicals,Food and Tobacco Production,Other,Agriculture,NA
+Feminine Health Care Prd,BICS,Other,Healthcare,Healthcare Equipment,Other,Other,NA
+FGLMC FHAVA,BICS,Other,Finance,Specialty Finance and Services,L68,Other,NA
+FGLMC Other,BICS,Other,Finance,Specialty Finance and Services,L68,Other,NA
+FGLMC Relocation 15yr,BICS,Other,Finance,Specialty Finance and Services,L68,Other,NA
+FGLMC Relocation 30yr,BICS,Other,Finance,Specialty Finance and Services,L68,Other,NA
+FGLMC Single Family 15yr,BICS,Other,Finance,Specialty Finance and Services,L68,Other,NA
+FGLMC Single Family 20yr,BICS,Other,Finance,Specialty Finance and Services,L68,Other,NA
+FGLMC Single Family 30yr,BICS,Other,Finance,Specialty Finance and Services,L68,Other,NA
+FHLMC ARM,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+FHLMC FHAVA,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+FHLMC Single Family 30yr,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+FI Directional-Asset Bac,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+FI Directional-Fixed Inc,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+FI Rel Val-Capital Struc,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+FI Rel Val-Convertible A,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+FI Rel Val-Fixed Income,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Fiduciary Banks,BICS,Other,Finance,Banking,K64,Other,NA
+Film Processing,BICS,Other,Consumer Services,Media and Publishing Services,M74,Other,NA
+Filtration/Separat Prod,BICS,Other,NA,NA,E39,Other,NA
+Finance Companies,BCLASS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Finance-Auto Loans,BICS,Other,Finance,Banking,K64,Other,NA
+Finance-Commercial,BICS,Other,Finance,Specialty Finance and Services,K64,Other,NA
+Finance-Consumer Loans,BICS,Other,Finance,Banking,K64,Other,NA
+Finance-Credit Card,BICS,Other,Finance,Banking,K64,Other,NA
+Finance-Invest Bnkr/Brkr,BICS,Other,Finance,Investment Services,K66,Other,NA
+Finance-Investment Fund,BICS,Other,Finance,Investment Services,Other,Other,NA
+Finance-Leasing Compan,BICS,Other,Finance,Specialty Finance and Services,K64,Other,NA
+Finance-Mtge Loan/Banker,BICS,Other,Finance,Real Estate,K64,Other,NA
+Finance-Other Services,BICS,Other,Finance,Specialty Finance and Services,K66,Other,NA
+Financial Administration,ICB,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Financial Guarantee Ins,BICS,Other,Finance,Specialty Finance and Services,K65,Other,NA
+Financial Services,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Fire Station Equipment,BCLASS,Other,NA,NA,Other,Other,NA
+Firearms&Ammunition,BICS,Other,NA,NA,Other,Other,NA
+Fisheries,BICS,Other,Consumer Non-Cyclicals,Food and Tobacco Production,Other,Other,NA
+Fixed Line Telecommunications,ICB,Other,Telecommunications,Telecommunications,Other,Other,NA
+Flexible Portfolio,BICS,Other,Finance,Investment Services,Other,Other,NA
+Flood Control and Storm Drain,BCLASS,Other,NA,NA,Other,Other,NA
+FNMA ARM,BICS,Other,Finance,Specialty Finance and Services,L68,Other,NA
+FNMA FHAVA,BICS,Other,Finance,Specialty Finance and Services,L68,Other,NA
+FNMA Other,BICS,Other,Finance,Specialty Finance and Services,L68,Other,NA
+FNMA Relocation 15yr,BICS,Other,Finance,Specialty Finance and Services,L68,Other,NA
+FNMA Relocation 30yr,BICS,Other,Finance,Specialty Finance and Services,L68,Other,NA
+FNMA Single Family 15yr,BICS,Other,Finance,Specialty Finance and Services,L68,Other,NA
+FNMA Single Family 20yr,BICS,Other,Finance,Specialty Finance and Services,L68,Other,NA
+FNMA Single Family 30yr,BICS,Other,Finance,Specialty Finance and Services,L68,Other,NA
+Food & Beverage,BICS,Other,Consumer Non-Cyclicals,Food and Tobacco Production,Other,Other,NA
+Food and Beverage,BCLASS,Other,Consumer Non-Cyclicals,Food and Tobacco Production,Other,Other,NA
+Food Products,ICB,Other,Consumer Non-Cyclicals,Food and Tobacco Production,Other,Other,NA
+Food Retailers & Wholesalers,ICB,Other,Consumer Non-Cyclicals,Food and Staples Retail,Other,Other,NA
+Food-Baking,BICS,Other,Consumer Non-Cyclicals,Food and Tobacco Production,C10,Other,NA
+Food-Canned,BICS,Other,Consumer Non-Cyclicals,Food and Tobacco Production,C10,Other,NA
+Food-Catering,BICS,Other,Consumer Non-Cyclicals,Food and Tobacco Production,M74,Other,NA
+Food-Confectionery,BICS,Other,Consumer Non-Cyclicals,Food and Tobacco Production,C10,Other,NA
+Food-Dairy Products,BICS,Other,Consumer Non-Cyclicals,Food and Tobacco Production,C10,Other,NA
+Food-Flour&Grain,BICS,Other,Consumer Non-Cyclicals,Food and Tobacco Production,C10,Other,NA
+Food-Meat Products,BICS,Other,Consumer Non-Cyclicals,Food and Tobacco Production,C10,Other,NA
+Food-Misc/Diversified,BICS,Other,Consumer Non-Cyclicals,Food and Tobacco Production,C10,Other,NA
+Food-Retail,BICS,Other,Consumer Non-Cyclicals,Food and Staples Retail,Other,Other,NA
+Food-Wholesale/Distrib,BICS,Other,Consumer Non-Cyclicals,Food and Staples Retail,G46,Food logistics,NA
+Footwear,ICB,Other,Consumer Cyclicals,Consumer Goods,Other,Other,NA
+Footwear&Related Apparel,BICS,Other,Consumer Cyclicals,Consumer Goods,C14,Other,NA
+Forest & Paper Products Manufacturing,BICS,Other,Industrials,Industrial Services,Other,Other,NA
+Forestry,ICB,Other,Industrials,Industrial Services,Other,Other,NA
+Forestry,BICS,Other,Industrials,Industrial Services,Other,Other,NA
+Full Line Insurance,ICB,Other,Finance,Insurance,Other,Other,NA
+Funds & Trusts,BICS,Other,Finance,Investment Services,Other,Other,NA
+Funeral Serv&Rel Items,BICS,Other,Business Services,Business Services,M74,Other,NA
+Furnishings,ICB,Other,Consumer Cyclicals,Consumer Goods,Other,Other,NA
+Gambling,ICB,Other,Consumer Services,Hospitality Services,Other,Other,NA
+Gambling (Non-Hotel),BICS,Other,Consumer Services,Hospitality Services,R92,Other,NA
+Gaming,BCLASS,Other,Consumer Services,Hospitality Services,Other,Other,NA
+Gaming & Entertainment,BICS,Other,Consumer Services,Hospitality Services,Other,Other,NA
+Garden Products,BICS,Other,Consumer Cyclicals,Consumer Goods,Other,Other,NA
+Gas,BCLASS,Other,Energy,Upstream Energy,Other,Other,NA
+Gas Distribution,ICB,Other,Energy,Downstream and Midstream Energy,Other,Other,NA
+Gas-Distribution,BICS,Other,Energy,Downstream and Midstream Energy,D35,Other,NA
+Gas-Transportation,BICS,Other,Energy,Downstream and Midstream Energy,D35,Other,NA
+General Mining,ICB,Other,Non-Energy Materials,Mining and Mineral Products,Other,Materials,Other
+"General Purpose, Public Improvements",BCLASS,Other,NA,NA,Other,Other,NA
+Geo Focus-Debt,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Geo Focused-Asset Alloc,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Geo Focus-Equity,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Global Asset Allocation,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Global Debt,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Global Equity,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Global Macro,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+GNMA 15 Yr,BCLASS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+GNMA 30 Yr,BCLASS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+GNMA Buydown,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+GNMA Graduated Payment,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+GNMA Project Loan,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+GNMA Single Family 15yr,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+GNMA Single Family 30yr,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+GNMA2 ARM,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+GNMA2 Mobile Home,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+GNMA2 Other,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+GNMA2 Single Family 15yr,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+GNMA2 Single Family 30yr,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Gold Mining,ICB,Other,Non-Energy Materials,Mining and Mineral Products,Other,Materials,Other
+Gold Mining,BICS,Other,Non-Energy Materials,Mining and Mineral Products,Other,Materials,Other
+Golf,BICS,Other,Consumer Services,Hospitality Services,Other,Other,NA
+Government Agencies,BICS,Other,NA,NA,Other,Other,NA
+Government and Public Buildings,BCLASS,Other,NA,NA,Other,Other,NA
+Government Development Banks,BICS,Other,NA,NA,Other,Other,NA
+Government Guaranteed,BCLASS,Other,NA,NA,Other,Other,NA
+"Government Owned, No Guarantee",BCLASS,Other,NA,NA,Other,Other,NA
+Government Regional,BICS,Other,NA,NA,Other,Other,NA
+Government Sponsored,BCLASS,Other,NA,NA,Other,Other,NA
+Government/Agency,BICS,Other,NA,NA,Other,Other,NA
+Government/Agency-LT,BICS,Other,NA,NA,Other,Other,NA
+Government/Corporate,BICS,Other,NA,NA,Other,Other,NA
+Govt/Agency-Inter Term,BICS,Other,NA,NA,Other,Other,NA
+Govt/Agency-Inter/LT,BICS,Other,NA,NA,Other,Other,NA
+Govt/Agency-Short Term,BICS,Other,NA,NA,Other,Other,NA
+Govt/Agency-ST/Inter,BICS,Other,NA,NA,Other,Other,NA
+Govt/Agency-Target Term,BICS,Other,NA,NA,Other,Other,NA
+Govt/Corp High Yield,BICS,Other,NA,NA,Other,Other,NA
+Govt/Corp Intermediate,BICS,Other,NA,NA,Other,Other,NA
+Govt/Corp Long Term,BICS,Other,NA,NA,Other,Other,NA
+Govt/Corp Short Term,BICS,Other,NA,NA,Other,Other,NA
+Growth,BICS,Other,NA,NA,Other,Other,NA
+Growth & Income,BICS,Other,NA,NA,Other,Other,NA
+Growth & Income-Mid Cap,BICS,Other,NA,NA,Other,Other,NA
+Growth&Income-Large Cap,BICS,Other,NA,NA,Other,Other,NA
+Growth&Income-Small Cap,BICS,Other,NA,NA,Other,Other,NA
+Growth-Large Cap,BICS,Other,NA,NA,Other,Other,NA
+Growth-Mid Cap,BICS,Other,NA,NA,Other,Other,NA
+Growth-Small Cap,BICS,Other,NA,NA,Other,Other,NA
+Hardware,BICS,Other,Technology,Hardware,Other,Other,NA
+Hazardous Waste Disposal,BICS,Other,NA,NA,E38,Other,NA
+Health & Biotechnology,BICS,Other,Healthcare,Biopharmaceuticals,Other,Other,NA
+Health Care Cost Contain,BICS,Other,Healthcare,Healthcare Services,Other,Other,NA
+Health Care Facilities & Services,BICS,Other,Healthcare,Healthcare Services,Other,Other,NA
+Health Care Providers,ICB,Other,Healthcare,Healthcare Services,Other,Other,NA
+Health Insurance,BCLASS,Other,Finance,Insurance,Other,Other,NA
+Healthcare,BCLASS,Other,Healthcare,Healthcare Services,Other,Other,NA
+Healthcare REITs,BCLASS,Other,Finance,Real Estate,Other,Real estate,NA
+Healthcare Safety Device,BICS,Other,Healthcare,Healthcare Equipment,Other,Other,NA
+Heart Monitors,BICS,Other,Healthcare,Healthcare Equipment,Other,Other,NA
+Heavy Construction,ICB,Other,Industrials,Industrial Services,Other,Other,NA
+Higher Education,BCLASS,Other,NA,NA,Other,Other,NA
+Home & Office Products Manufacturing,BICS,Other,Industrials,Industrial Manufacturing,Other,Other,NA
+Home Construction,ICB,Other,Industrials,Industrial Services,Other,Other,NA
+Home Decoration Products,BICS,Other,Consumer Cyclicals,Consumer Goods,Other,Other,NA
+Home Equity,BCLASS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Home Equity Other,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Home Equity Sequential,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Home Furnishings,BICS,Other,Consumer Cyclicals,Consumer Goods,C31,Other,NA
+Home Improvement,BICS,Other,Consumer Cyclicals,Consumer Goods,Other,Other,NA
+Home Improvement Retailers,ICB,Other,Consumer Cyclicals,Consumer Goods,Other,Other,NA
+Homebuilders,BICS,Other,Industrials,Industrial Services,Other,Other,NA
+Hospital Beds/Equipment,BICS,Other,Healthcare,Healthcare Equipment,Other,Other,NA
+Hospitals,BCLASS,Other,Healthcare,Healthcare Services,Other,Other,NA
+Hotel & Lodging REITs,ICB,Other,Consumer Services,Hospitality Services,Other,Real estate,NA
+Hotels,ICB,Other,Consumer Services,Hospitality Services,Other,Real estate,NA
+Hotels&Motels,BICS,Other,Consumer Services,Hospitality Services,I55,Real estate,NA
+Housewares,BICS,Other,Consumer Cyclicals,Consumer Goods,Other,Other,NA
+Housing Authority,BICS,Other,NA,NA,L68,Other,NA
+Human Resources,BICS,Other,NA,NA,N78,Other,NA
+Hybrid Non-Pfandbriefe,BCLASS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Identification Sys/Dev,BICS,Other,NA,NA,Other,Other,NA
+Import/Export,BICS,Other,NA,NA,Other,Other,NA
+Inactive/Unknown,BICS,Other,NA,NA,Other,Other,NA
+Income Equity,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Independ Power Producer,BICS,Other,NA,NA,D35,Other,NA
+Independent,BCLASS,Other,NA,NA,Other,Other,NA
+Index Fund,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Index Fund-Debt,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Index Fund-Equity,BCLASS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Index Fund-Large Cap,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Index Fund-Mid Cap,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Index Fund-Small Cap,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Index Futures,BCLASS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Indian Subcontinent,BICS,Other,NA,NA,Other,Other,NA
+Industr Audio&Video Prod,BICS,Other,Industrials,Industrial Manufacturing,Other,Other,NA
+Industrial & Office REITs,ICB,Other,Finance,Real Estate,Other,Real estate,NA
+Industrial Automat/Robot,BICS,Other,Industrials,Industrial Manufacturing,Other,Other,NA
+Industrial Development,BCLASS,Other,Industrials,Industrial Manufacturing,Other,Other,NA
+Industrial Gases,BICS,Other,Industrials,Industrial Manufacturing,C20,Other,NA
+Industrial Machinery,ICB,Other,Industrials,Industrial Manufacturing,Other,Other,NA
+Industrial Other,BICS,Other,Industrials,Industrial Manufacturing,Other,Other,NA
+Industrial Suppliers,ICB,Other,Industrials,Industrial Services,Other,Other,NA
+Institut Only-Second,BICS,Other,NA,NA,Other,Other,NA
+Institutions Only-Natl,BICS,Other,NA,NA,Other,Other,NA
+Instruments-Controls,BICS,Other,NA,NA,C27,Other,NA
+Instruments-Scientific,BICS,Other,NA,NA,C27,Other,NA
+Insurance Brokers,ICB,Other,Finance,Insurance,K65,Other,NA
+Insurance Brokers,BICS,Other,Finance,Insurance,K65,Other,NA
+Integrated,BCLASS,Other,NA,NA,Other,Other,NA
+Integrated Oil & Gas,ICB,Oil&Gas,Energy,Integrated Oil and Gas Exploration and Production,Other,Oil&Gas,NA
+Integrated Oils,BICS,Oil&Gas,Energy,Integrated Oil and Gas Exploration and Production,Other,Oil&Gas,NA
+Interior Design/Architec,BICS,Other,NA,NA,M71,Other,NA
+International Debt,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+International Equity,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Internet,ICB,Other,Telecommunications,Telecommunications,Other,Other,NA
+Internet & Telecom,BICS,Other,Telecommunications,Telecommunications,Other,Other,NA
+Internet Applic Sftwr,BICS,Other,Telecommunications,Telecommunications,Other,Other,NA
+Internet Brokers,BICS,Other,Telecommunications,Telecommunications,K64,Other,NA
+Internet Connectiv Svcs,BICS,Other,Telecommunications,Telecommunications,J63,Other,NA
+Internet Content-Entmnt,BICS,Other,Telecommunications,Telecommunications,J63,Other,NA
+Internet Content-Info/Ne,BICS,Other,Telecommunications,Telecommunications,J63,Other,NA
+Internet Financial Svcs,BICS,Other,Telecommunications,Telecommunications,Other,Other,NA
+Internet Gambling,BICS,Other,Telecommunications,Telecommunications,R92,Other,NA
+Internet Incubators,BICS,Other,Telecommunications,Telecommunications,K64,Other,NA
+Internet Infrastr Equip,BICS,Other,Telecommunications,Telecommunications,Other,Other,NA
+Internet Infrastr Sftwr,BICS,Other,Telecommunications,Telecommunications,Other,Other,NA
+Internet Media,BICS,Other,Telecommunications,Telecommunications,Other,Other,NA
+Internet Security,BICS,Other,Telecommunications,Telecommunications,Other,Other,NA
+Internet Telephony,BICS,Other,Telecommunications,Telecommunications,Other,Other,NA
+Intimate Apparel,BICS,Other,Consumer Cyclicals,Consumer Goods,C14,Other,NA
+Intl Asset Allocation,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Invest Comp - Resources,BICS,Other,Finance,Investment Services,K64,Other,NA
+Invest Mgmnt/Advis Serv,BICS,Other,Finance,Investment Services,K66,Other,NA
+Investment Companies,BICS,Other,Finance,Investment Services,K64,Other,NA
+Investment Services,ICB,Other,Finance,Investment Services,Other,Other,NA
+Iron & Steel,ICB,Steel,NA,NA,Other,Steel,NA
+Iron & Steel Foundry,BICS,Steel,NA,NA,Other,Steel,NA
+Irrigation,BCLASS,Other,NA,NA,Other,Other,NA
+Land Preservation,BCLASS,Other,NA,NA,Other,Other,NA
+Lasers-Syst/Components,BICS,Other,Technology,Electronic Components and Manufacturing,C27,Other,NA
+Leisure,BCLASS,Other,Consumer Services,Hospitality Services,Other,Other,NA
+Leisure Industry,BICS,Other,Consumer Services,Hospitality Services,Other,Other,NA
+Leisure Products Manufacturing,BICS,Other,Consumer Services,Hospitality Services,Other,Other,NA
+Leisure&Rec Products,BICS,Other,Consumer Services,Hospitality Services,Other,Other,NA
+Leisure&Rec/Games,BICS,Other,Consumer Services,Hospitality Services,R93,Other,NA
+Libraries and Museums,BCLASS,Other,Consumer Services,Hospitality Services,Other,Other,NA
+Life,BCLASS,Other,NA,NA,Other,Other,NA
+Life Insurance,ICB,Other,Finance,Insurance,Other,Other,NA
+Life Insurance,BICS,Other,Finance,Insurance,Other,Other,NA
+Life/Health Insurance,BICS,Other,Finance,Insurance,K65,Other,NA
+Lifecare Retirement Centers,BCLASS,Other,Healthcare,Healthcare Services,Other,Other,NA
+Lighting Products&Sys,BICS,Other,Technology,Electronic Components and Manufacturing,C27,Other,NA
+Linen Supply&Rel Items,BICS,Other,Consumer Cyclicals,Consumer Goods,Other,Other,NA
+Local Authority,BCLASS,Other,NA,NA,Other,Other,NA
+Lodging,BCLASS,Other,Consumer Services,Hospitality Services,Other,Other,NA
+Lottery Services,BICS,Other,NA,NA,Other,Other,NA
+Mach Tools&Rel Products,BICS,Other,Non-Energy Materials,Manufactured Products,Other,Other,NA
+Machinery Manufacturing,BICS,Other,Non-Energy Materials,Manufactured Products,Other,Other,NA
+Machinery-Constr&Mining,BICS,Other,Non-Energy Materials,Manufactured Products,C28,Other,NA
+Machinery-Electric Util,BICS,Other,Non-Energy Materials,Manufactured Products,C27,Other,NA
+Machinery-Electrical,BICS,Other,Non-Energy Materials,Manufactured Products,C28,Other,NA
+Machinery-Farm,BICS,Other,Non-Energy Materials,Manufactured Products,C28,Other,NA
+Machinery-General Indust,BICS,Other,Non-Energy Materials,Manufactured Products,C28,Other,NA
+Machinery-Material Handl,BICS,Other,Non-Energy Materials,Manufactured Products,C28,Other,NA
+Machinery-Print Trade,BICS,Other,Non-Energy Materials,Manufactured Products,C28,Other,NA
+Machinery-Pumps,BICS,Other,Non-Energy Materials,Manufactured Products,C28,Other,NA
+Machinery-Therml Process,BICS,Other,Non-Energy Materials,Manufactured Products,C28,Other,NA
+Malls and Shopping Centers,BCLASS,Other,Consumer Cyclicals,Consumer Retail,Other,Other,NA
+Managed Care,BICS,Other,Healthcare,Healthcare Services,Other,Other,NA
+Manufact Hous ABS Other,BICS,Other,Non-Energy Materials,Manufactured Products,Other,Other,NA
+Manufact Hous Sequential,BICS,Other,Non-Energy Materials,Manufactured Products,Other,Other,NA
+Manufactured Goods,BICS,Other,Non-Energy Materials,Manufactured Products,Other,Other,NA
+Manufactured Housing,BCLASS,Other,Non-Energy Materials,Manufactured Products,Other,Other,NA
+Marine Services,BICS,Other,NA,NA,H50,Other,NA
+Marine Transportation,ICB,Shipping,NA,NA,Other,Shipping,NA
+Market Neutral-Equity,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Mass & Rapid Transit,BCLASS,Other,NA,NA,Other,Other,NA
+Mass and Rapid Transit,BCLASS,Other,NA,NA,Other,Other,NA
+Mass Merchants,BICS,Other,Consumer Cyclicals,Miscellaneous Retail,Other,Other,NA
+Media Agencies,ICB,Other,Consumer Services,Media and Publishing Services,Other,Other,NA
+Media Entertainment,BCLASS,Other,Consumer Services,Media and Publishing Services,Other,Other,NA
+Medical Equipment,ICB,Other,Healthcare,Healthcare Equipment,Other,Other,NA
+Medical Equipment & Devices Manufacturing,BICS,Other,Healthcare,Healthcare Equipment,Other,Other,NA
+Medical Imaging Systems,BICS,Other,Healthcare,Healthcare Equipment,Other,Other,NA
+Medical Information Sys,BICS,Other,Healthcare,Healthcare Equipment,Other,Other,NA
+Medical Instruments,BICS,Other,Healthcare,Healthcare Equipment,Other,Other,NA
+Medical Labs&Testing Srv,BICS,Other,Healthcare,Healthcare Equipment,Q86,Other,NA
+Medical Laser Systems,BICS,Other,Healthcare,Healthcare Equipment,Other,Other,NA
+Medical Products,BICS,Other,Healthcare,Healthcare Equipment,Other,Other,NA
+Medical Steriliz Product,BICS,Other,Healthcare,Healthcare Equipment,Other,Other,NA
+Medical Supplies,ICB,Other,Healthcare,Healthcare Equipment,Other,Other,NA
+Medical-Biomedical/Gene,BICS,Other,Healthcare,Healthcare Equipment,Q86,Other,NA
+Medical-Drugs,BICS,Other,Healthcare,Healthcare Equipment,C21,Other,NA
+Medical-Generic Drugs,BICS,Other,Healthcare,Healthcare Equipment,C21,Other,NA
+Medical-HMO,BICS,Other,Healthcare,Healthcare Services,Other,Other,NA
+Medical-Hospitals,BICS,Other,Healthcare,Healthcare Services,Q86,Other,NA
+Medical-Nursing Homes,BICS,Other,Healthcare,Healthcare Services,Q87,Other,NA
+Medical-Outptnt/Home Med,BICS,Other,Healthcare,Healthcare Services,Q86,Other,NA
+Medical-Whsle Drug Dist,BICS,Other,Healthcare,Healthcare Services,C21,Other,NA
+Metal Processors&Fabrica,BICS,Other,Non-Energy Materials,Mining and Mineral Products,C25,Other,NA
+Metal Products-Distrib,BICS,Other,Non-Energy Materials,Mining and Mineral Products,C25,Other,NA
+Metal Products-Fasteners,BICS,Other,Non-Energy Materials,Mining and Mineral Products,C25,Other,NA
+Metal Svc Center & Other Whslrs,BICS,Other,Non-Energy Materials,Mining and Mineral Products,Other,Other,NA
+Metal-Aluminum,BICS,Other,Non-Energy Materials,Mining and Mineral Products,C25,Materials,Other
+Metal-Copper,BICS,Other,Non-Energy Materials,Mining and Mineral Products,Other,Materials,Other
+Metal-Diversified,BICS,Steel,NA,NA,Other,Steel,NA
+Metal-Iron,BICS,Steel,NA,NA,Other,Steel,NA
+Metals & Mining,BICS,Other,Non-Energy Materials,Mining and Mineral Products,Other,Materials,Other
+Metals & Ore Whslrs & Traders,BICS,Other,Non-Energy Materials,Mining and Mineral Products,Other,Other,NA
+Metals and Mining,BCLASS,Other,Non-Energy Materials,Mining and Mineral Products,Other,Materials,Other
+"Metals, Minerals and Materials",BCLASS,Other,Non-Energy Materials,Mining and Mineral Products,Other,Other,NA
+Mgd Futures,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Midstream,BCLASS,Other,Energy,Downstream and Midstream Energy,Other,Other,NA
+Military Housing,BCLASS,Other,NA,NA,Other,Other,NA
+Mining Services,BICS,Other,Non-Energy Materials,Mining and Mineral Products,Other,Other,NA
+Miscellaneous Manufactur,BICS,Other,Non-Energy Materials,Manufactured Products,C33,Other,NA
+Mobile Homes,BCLASS,Other,NA,NA,Other,Other,NA
+Mobile Telecommunications,ICB,Other,Telecommunications,Telecommunications,Other,Other,NA
+Money Center Banks,BICS,Other,Finance,Banking,K64,Other,NA
+Mortgage Banks,BICS,Other,Finance,Banking,K64,Other,NA
+Mortgage Finance,ICB,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Mortgage Non Pfandbriefe,BCLASS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Mortgage REITs,ICB,Other,Finance,Real Estate,Other,Real estate,NA
+Motion Pictures&Services,BICS,Other,Consumer Services,Media and Publishing Services,J59,Other,NA
+Motorcycle/Motor Scooter,BICS,Other,Consumer Cyclicals,Consumer Vehicles and Parts,C29,Other,NA
+MRI Equipment,BICS,Other,Healthcare,Healthcare Equipment,Other,Other,NA
+MRI/Medical Diag Imaging,BICS,Other,Healthcare,Healthcare Equipment,Q86,Other,NA
+Multi-Family Housing,BCLASS,Other,Finance,Real Estate,Other,Other,NA
+Multilevel Dir Selling,BICS,Other,Business Services,Business Services,G47,Other,NA
+Multi-line Insurance,BICS,Other,Finance,Insurance,K65,Other,NA
+Multimedia,BICS,Other,Consumer Services,Media and Publishing Services,J59,Other,NA
+Multi-Strat/Style,BICS,Other,NA,NA,Other,Other,NA
+Multiutilities,ICB,Power,Utilities,Utilities,Other,Power,NA
+Muni-California,BICS,Other,NA,NA,Other,Other,NA
+Municipal,BICS,Other,NA,NA,Other,Other,NA
+Municipal-City,BICS,Other,NA,NA,Other,Other,NA
+Municipal-County,BICS,Other,NA,NA,Other,Other,NA
+Municipal-Education,BICS,Other,NA,NA,P85,Other,NA
+Municipal-Local Auth,BICS,Other,NA,NA,Other,Other,NA
+Municipal-Title XI,BICS,Other,NA,NA,H52,Other,NA
+Muni-New York,BICS,Other,NA,NA,Other,Other,NA
+Music,BICS,Other,Consumer Services,Media and Publishing Services,J59,Other,NA
+Mutual Insurance,BICS,Other,Finance,Insurance,K65,Other,NA
+NA,BICS,Other,NA,NA,Other,Other,NA
+Natural Gas,BCLASS,Oil&Gas,Energy,Upstream Energy,Other,Oil&Gas,NA
+Networking Products,BICS,Other,NA,NA,Other,Other,NA
+"New, Public Housing",BCLASS,Other,Finance,Real Estate,Other,Other,NA
+Night Clubs,BICS,Other,Consumer Services,Hospitality Services,R90,Other,NA
+No Mapping Available,BICS,Other,NA,NA,Other,Other,NA
+Non Agency CMBS,BCLASS,Other,NA,NA,Other,Other,NA
+Non Wood Building Materials,BICS,Other,Industrials,Industrial Manufacturing,Other,Other,NA
+Non-Captive Consumer Finance,BCLASS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Non-Captive Diversified Finance,BCLASS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Nondurable Household Products,ICB,Other,Consumer Non-Cyclicals,Household Products,Other,Other,NA
+Nonequity Investment Instruments,ICB,Other,Finance,Investment Services,Other,Other,NA
+Nonferrous Metals,ICB,Other,Non-Energy Materials,Mining and Mineral Products,Other,Materials,Other
+Non-Ferrous Metals,BICS,Other,Non-Energy Materials,Mining and Mineral Products,Other,Materials,Other
+Non-hazardous Waste Disp,BICS,Other,NA,NA,E38,Other,NA
+Non-Profit Charity,BICS,Other,NA,NA,M74,Other,NA
+Not Classified,BCLASS,Other,NA,NA,Other,Other,NA
+Nursing Homes,BCLASS,Other,Healthcare,Healthcare Services,Other,Other,NA
+Office Automation&Equip,BICS,Other,NA,NA,Other,Other,NA
+Office Buildings and Land Partners,BCLASS,Other,NA,NA,Other,Other,NA
+Office Furnishings-Orig,BICS,Other,NA,NA,C31,Other,NA
+Office REITs,BCLASS,Other,Finance,Real Estate,Other,Real estate,NA
+Office Supplies&Forms,BICS,Other,NA,NA,Other,Other,NA
+Oil & Gas Services & Equipment,BICS,Other,Energy,Downstream and Midstream Energy,Other,Other,NA
+Oil Comp-Explor&Prodtn,BICS,Oil&Gas,Energy,Upstream Energy,Other,Oil&Gas,NA
+Oil Comp-Integrated,BICS,Oil&Gas,Energy,Integrated Oil and Gas Exploration and Production,Other,Oil&Gas,NA
+Oil Equipment & Services,ICB,Other,NA,NA,Other,Other,NA
+Oil Field Mach&Equip,BICS,Other,NA,NA,Other,Other,NA
+Oil Field Services,BCLASS,Other,NA,NA,Other,Other,NA
+Oil Refining&Marketing,BICS,Oil&Gas,Energy,Downstream and Midstream Energy,Other,Oil&Gas,NA
+Oil&Gas Drilling,BICS,Other,Energy,Upstream Energy,Other,Other,NA
+Oil-Field Services,BICS,Other,Energy,Upstream Energy,Other,Other,NA
+Oil-US Royalty Trusts,BICS,Other,NA,NA,Other,Other,NA
+Open-End Fund,BCLASS,Other,Finance,Investment Services,Other,Other,NA
+Optical Recognition Equi,BICS,Other,Technology,Electronic Components and Manufacturing,Other,Other,NA
+Optical Supplies,BICS,Other,Technology,Electronic Components and Manufacturing,Other,Other,NA
+Options,BCLASS,Other,Technology,Electronic Components and Manufacturing,Other,Other,NA
+Other ABS,BICS,Other,Technology,Electronic Components and Manufacturing,Other,Other,NA
+Other Education,BCLASS,Other,NA,NA,Other,Other,NA
+Other Financial,BCLASS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Other Governmental Public Services,BCLASS,Other,NA,NA,Other,Other,NA
+Other Health Care,BCLASS,Other,Healthcare,Healthcare Services,Other,Other,NA
+Other Housing,BCLASS,Other,Finance,Real Estate,Other,Real estate,NA
+Other Industrial,BCLASS,Other,NA,NA,Other,Other,NA
+Other Mortgage Secur,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Other Mortgage Security,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Other Post-Employment Benefits,BCLASS,Other,NA,NA,Other,Other,NA
+Other Recreation,BCLASS,Other,NA,NA,Other,Other,NA
+Other REITs,BCLASS,Other,Finance,Real Estate,Other,Real estate,NA
+Other Transportation,BCLASS,Other,NA,NA,Other,Other,NA
+Other Utilities,BCLASS,Other,Utilities,Utilities,Other,Other,NA
+Other Utility,BCLASS,Other,Utilities,Utilities,Other,Other,NA
+Other Wholesalers,BICS,Other,NA,NA,Other,Other,NA
+P&C,BCLASS,Other,NA,NA,Other,Other,NA
+Packaging,BCLASS,Other,Industrials,Industrial Services,Other,Other,NA
+Paper,ICB,Other,Industrials,Industrial Manufacturing,Other,Other,NA
+Paper&Related Products,BICS,Other,Industrials,Industrial Manufacturing,Other,Other,NA
+Parking Facilities,BCLASS,Other,NA,NA,Other,Other,NA
+"Parks, Zoos, and Beaches",BCLASS,Other,Consumer Services,Hospitality Services,Other,Other,NA
+Pastoral&Agricultural,BICS,Other,NA,NA,Other,Other,NA
+Patient Monitoring Equip,BICS,Other,Healthcare,Healthcare Equipment,Other,Other,NA
+Pension Obligations,BCLASS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Personal Products,ICB,Other,Consumer Cyclicals,Consumer Goods,Other,Other,NA
+Petrochemicals,BICS,Oil&Gas,Energy,Integrated Oil and Gas Exploration and Production,C19,Oil&Gas,NA
+Pfandbriefe,BCLASS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Pfandbriefe Jumbo Hypotheken,BCLASS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Pfandbriefe Jumbo Oeffenliche,BCLASS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Pfandbriefe Traditional Hypotheken,BCLASS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Pfandbriefe Traditional Oeffenliche,BCLASS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Pharmaceuticals,ICB,Other,Healthcare,Biopharmaceuticals,Other,Other,NA
+Pharmaceuticals,BICS,Other,Healthcare,Biopharmaceuticals,Other,Other,NA
+Pharmacy Services,BICS,Other,Healthcare,Healthcare Services,Q86,Other,NA
+Photo Equipment&Supplies,BICS,Other,Technology,Electronic Components and Manufacturing,Other,Other,NA
+Phys Practice Mgmnt,BICS,Other,Healthcare,Healthcare Services,Q86,Other,NA
+Phys Therapy/Rehab Cntrs,BICS,Other,Healthcare,Healthcare Services,Q86,Other,NA
+Pipeline,BICS,Other,NA,NA,Other,Other,NA
+Pipelines,ICB,Other,NA,NA,Other,Other,NA
+Pipelines,BICS,Other,NA,NA,Other,Other,NA
+Platinum,BICS,Other,Non-Energy Materials,Mining and Mineral Products,Other,Materials,Other
+Platinum & Precious Metals,ICB,Other,Non-Energy Materials,Mining and Mineral Products,Other,Materials,Other
+Police Station Equipment,BCLASS,Other,NA,NA,Other,Other,NA
+Pollution Control,BICS,Other,NA,NA,E39,Other,NA
+Poultry,BICS,Other,Consumer Non-Cyclicals,Food and Tobacco Production,Other,Other,NA
+Power Conv/Supply Equip,BICS,Other,NA,NA,Other,Other,NA
+Power Generation,BICS,Power,Utilities,Utilities,Other,Power,NA
+Precious Metals,BICS,Other,Non-Energy Materials,Mining and Mineral Products,Other,Materials,Other
+Primary and Secondary Education,BCLASS,Other,NA,NA,Other,Other,NA
+Printing-Commercial,BICS,Other,NA,NA,M74,Other,NA
+Private Equity,BICS,Other,Finance,Specialty Finance and Services,K64,Other,NA
+Private Human Service Providers,BCLASS,Other,NA,NA,Other,Other,NA
+Professional Sports,BICS,Other,NA,NA,R93,Other,NA
+Property & Casualty Insurance,ICB,Other,Finance,Insurance,Other,Other,NA
+Property & Casualty Insurance,BICS,Other,Finance,Insurance,Other,Other,NA
+Property Trust,BICS,Other,Finance,Specialty Finance and Services,L68,Other,NA
+Property/Casualty Ins,BICS,Other,Finance,Insurance,K65,Other,NA
+Protection-Safety,BICS,Other,NA,NA,M74,Other,NA
+PS Loan Non-Pfandbriefe,BCLASS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Public Human Service Providers,BCLASS,Other,NA,NA,Other,Other,NA
+Public Thoroughfares,BICS,Other,NA,NA,Other,Other,NA
+Publishing,ICB,Other,Consumer Services,Media and Publishing Services,Other,Other,NA
+Publishing & Broadcasting,BICS,Other,Consumer Services,Media and Publishing Services,Other,Other,NA
+Publishing-Books,BICS,Other,Consumer Services,Media and Publishing Services,J58,Other,NA
+Publishing-Newspapers,BICS,Other,Consumer Services,Media and Publishing Services,J58,Other,NA
+Publishing-Periodicals,BICS,Other,Consumer Services,Media and Publishing Services,J58,Other,NA
+Quarrying,BICS,Other,Non-Energy Materials,Mining and Mineral Products,Other,Other,NA
+Racetracks,BICS,Other,Consumer Services,Hospitality Services,Other,Other,NA
+Radio,BICS,Other,Consumer Services,Media and Publishing Services,J60,Other,NA
+Railroad,BICS,Other,NA,NA,Other,Other,NA
+Railroad Rolling Stock,BICS,Other,NA,NA,Other,Other,NA
+Railroads,ICB,Other,NA,NA,Other,Other,NA
+Real Estate,BICS,Other,Finance,Real Estate,Other,Real estate,NA
+Real Estate Holding & Development,ICB,Other,Finance,Real Estate,Other,Real estate,NA
+Real Estate Mgmnt/Servic,BICS,Other,Finance,Real Estate,L68,Real estate,NA
+Real Estate Oper/Develop,BICS,Other,Finance,Real Estate,L68,Real estate,NA
+Real Estate Services,ICB,Other,Finance,Real Estate,Other,Real estate,NA
+Recreational Centers,BICS,Other,Consumer Services,Hospitality Services,R93,Other,NA
+Recreational Products,ICB,Other,Consumer Cyclicals,Consumer Goods,Other,Other,NA
+Recreational Services,ICB,Other,Consumer Services,Hospitality Services,Other,Other,NA
+Recreational Vehicles,BICS,Other,Consumer Cyclicals,Consumer Vehicles and Parts,C30,Other,NA
+Recycling,BICS,Other,NA,NA,E38,Other,NA
+Redevelopment and Land Clearance,BCLASS,Other,NA,NA,Other,Other,NA
+Refining,BCLASS,Other,NA,NA,Other,Other,NA
+Refining & Marketing,BICS,Other,NA,NA,Other,Other,NA
+Region Fnd-Asian Pacific,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Region Fund-African,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Region Fund-ASEAN,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Region Fund-EU,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Region Fund-Euro,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Region Fund-Europe Ex UK,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Region Fund-European,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Region Fund-G8 Countries,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Region Fund-Iberian,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Region Fund-Latin Amer,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Region Fund-Middle East,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Region Fund-NAFTA,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Region Fund-Nordic,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Region Fund-North Amer,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Region Fund-Oceania,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Region Fund-OECD,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Region Fund-Tiger,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Regional Agencies,BICS,Other,NA,NA,Other,Other,NA
+Regional Authority,BICS,Other,NA,NA,Other,Other,NA
+Regional Banks-Non US,BICS,Other,Finance,Banking,K64,Other,NA
+Reinsurance,ICB,Other,Finance,Insurance,K65,Other,NA
+Reinsurance,BICS,Other,Finance,Insurance,K65,Other,NA
+REITs,BCLASS,Other,Finance,Real Estate,Other,Real estate,NA
+REITS-Apartments,BICS,Other,Finance,Real Estate,L68,Real estate,NA
+REITS-Diversified,BICS,Other,Finance,Real Estate,L68,Real estate,NA
+REITS-Health Care,BICS,Other,Finance,Real Estate,L68,Real estate,NA
+REITS-Hotels,BICS,Other,Finance,Real Estate,L68,Real estate,NA
+REITS-Manufactured Homes,BICS,Other,Finance,Real Estate,L68,Real estate,NA
+REITS-Mortgage,BICS,Other,Finance,Real Estate,L68,Real estate,NA
+REITS-Office Property,BICS,Other,Finance,Real Estate,L68,Real estate,NA
+REITS-Regional Malls,BICS,Other,Finance,Real Estate,L68,Real estate,NA
+REITS-Shopping Centers,BICS,Other,Finance,Real Estate,L68,Real estate,NA
+REITS-Single Tenant,BICS,Other,Finance,Real Estate,L68,Real estate,NA
+REITS-Storage,BICS,Other,Finance,Real Estate,L68,Real estate,NA
+REITS-Warehouse/Industr,BICS,Other,Finance,Real Estate,L68,Real estate,NA
+REITS-Whole Loans,BICS,Other,Finance,Real Estate,L68,Real estate,NA
+Religiously Responsible,BICS,Other,NA,NA,Other,Other,NA
+Remediation Services,BICS,Other,NA,NA,E39,Other,NA
+Renewable Energy,BICS,Power,Utilities,Utilities,Other,Power,NA
+Renewable Energy Equipment,ICB,Other,NA,NA,Other,Other,NA
+Renewable Energy Project Dev,BICS,Other,NA,NA,Other,Other,NA
+Rental Auto/Equipment,BICS,Other,Consumer Cyclicals,Consumer Vehicles and Parts,M74,Other,NA
+Research&Development,BICS,Other,NA,NA,Q86,Other,NA
+Residential Mortgage,BCLASS,Other,Finance,Real Estate,Other,Other,NA
+Residential REITs,ICB,Other,Finance,Real Estate,Other,Real estate,NA
+Resorts/Theme Parks,BICS,Other,Consumer Services,Hospitality Services,R93,Other,NA
+Respiratory Products,BICS,Other,Healthcare,Healthcare Equipment,Other,Other,NA
+Restaurants,BICS,Other,Consumer Services,Hospitality Services,Other,Other,NA
+Restaurants & Bars,ICB,Other,Consumer Services,Hospitality Services,Other,Other,NA
+Retail - Consumer Discretionary,BICS,Other,Consumer Cyclicals,Consumer Retail,Other,Other,NA
+Retail - Consumer Staples,BICS,Other,Consumer Cyclicals,Consumer Retail,Other,Other,NA
+Retail REITs,ICB,Other,Finance,Real Estate,Other,Real estate,NA
+Retail-Apparel/Shoe,BICS,Other,Consumer Cyclicals,Consumer Retail,G47,Other,NA
+Retail-Appliances,BICS,Other,Consumer Cyclicals,Consumer Retail,G47,Other,NA
+Retail-Arts&Crafts,BICS,Other,Consumer Cyclicals,Consumer Retail,G47,Other,NA
+Retail-Auto Parts,BICS,Other,Consumer Cyclicals,Consumer Vehicles and Parts,G45,Other,NA
+Retail-Automobile,BICS,Other,Consumer Cyclicals,Consumer Vehicles and Parts,G45,Other,NA
+Retail-Bedding,BICS,Other,Consumer Cyclicals,Consumer Retail,G47,Other,NA
+Retail-Bookstore,BICS,Other,Consumer Cyclicals,Consumer Retail,G47,Other,NA
+Retail-Building Products,BICS,Other,Consumer Cyclicals,Miscellaneous Retail,G47,Other,NA
+Retail-Catalog Shopping,BICS,Other,Consumer Cyclicals,Consumer Retail,Other,Other,NA
+Retail-Computer Equip,BICS,Other,Consumer Cyclicals,Consumer Retail,G47,Other,NA
+Retail-Consumer Electron,BICS,Other,Consumer Cyclicals,Consumer Retail,G47,Other,NA
+Retail-Convenience Store,BICS,Other,Consumer Cyclicals,Consumer Retail,Other,Other,NA
+Retail-Cutlery&Cookware,BICS,Other,Consumer Cyclicals,Consumer Retail,G47,Other,NA
+Retail-Discount,BICS,Other,Consumer Cyclicals,Consumer Retail,Other,Other,NA
+Retail-Drug Store,BICS,Other,Healthcare,Healthcare Services,Other,Other,NA
+Retailers,BCLASS,Other,Consumer Cyclicals,Miscellaneous Retail,Other,Other,NA
+Retail-Fabric Store,BICS,Other,Consumer Cyclicals,Consumer Retail,G47,Other,NA
+Retail-Floor Coverings,BICS,Other,Consumer Cyclicals,Consumer Retail,G47,Other,NA
+Retail-Gardening Prod,BICS,Other,Consumer Cyclicals,Consumer Retail,G47,Other,NA
+Retail-Hair Salons,BICS,Other,Consumer Cyclicals,Consumer Retail,M74,Other,NA
+Retail-Home Furnishings,BICS,Other,Consumer Cyclicals,Consumer Retail,G47,Other,NA
+Retail-Hypermarkets,BICS,Other,Consumer Cyclicals,Consumer Retail,Other,Other,NA
+Retail-Jewelry,BICS,Other,Consumer Cyclicals,Consumer Retail,G47,Other,NA
+Retail-Leisure Products,BICS,Other,Consumer Cyclicals,Consumer Retail,G47,Other,NA
+Retail-Mail Order,BICS,Other,Consumer Cyclicals,Consumer Retail,G47,Other,NA
+Retail-Major Dept Store,BICS,Other,Consumer Cyclicals,Miscellaneous Retail,Other,Other,NA
+Retail-Misc/Diversified,BICS,Other,Consumer Cyclicals,Miscellaneous Retail,G47,Other,NA
+Retail-Music Store,BICS,Other,Consumer Cyclicals,Consumer Retail,G47,Other,NA
+Retail-Office Supplies,BICS,Other,Consumer Cyclicals,Consumer Retail,G47,Other,NA
+Retail-Pawn Shops,BICS,Other,Consumer Cyclicals,Consumer Retail,G47,Other,NA
+Retail-Perfume&Cosmetics,BICS,Other,Consumer Cyclicals,Consumer Retail,G47,Other,NA
+Retail-Pet Food&Supplies,BICS,Other,Consumer Cyclicals,Consumer Retail,G47,Food logistics,NA
+Retail-Petroleum Prod,BICS,Other,Consumer Cyclicals,Miscellaneous Retail,Other,Other,NA
+Retail-Photo Studio,BICS,Other,Consumer Cyclicals,Consumer Retail,M74,Other,NA
+Retail-Propane Distrib,BICS,Other,Business Services,Business Services,D35,Other,NA
+Retail-Pubs,BICS,Other,Consumer Services,Hospitality Services,I56,Other,NA
+Retail-Regnl Dept Store,BICS,Other,Consumer Cyclicals,Miscellaneous Retail,Other,Other,NA
+Retail-Restaurants,BICS,Other,Consumer Services,Hospitality Services,I56,Other,NA
+Retail-Science&Nature,BICS,Other,Consumer Cyclicals,Consumer Retail,G47,Other,NA
+Retail-Sporting Goods,BICS,Other,Consumer Cyclicals,Consumer Retail,G47,Other,NA
+Retail-Sunglasses,BICS,Other,Consumer Cyclicals,Consumer Retail,G47,Other,NA
+Retail-Toy Store,BICS,Other,Consumer Cyclicals,Consumer Retail,G47,Other,NA
+Retail-Variety Store,BICS,Other,Consumer Cyclicals,Consumer Retail,Other,Other,NA
+Retail-Video Rental,BICS,Other,Consumer Cyclicals,Consumer Retail,G47,Other,NA
+Retail-Vision Serv Cntr,BICS,Other,Consumer Cyclicals,Consumer Retail,G47,Other,NA
+Retail-Vitamins/Nutr Sup,BICS,Other,Consumer Cyclicals,Consumer Retail,G47,Other,NA
+Retirement/Aged Care,BICS,Other,Healthcare,Healthcare Services,Q87,Other,NA
+Rubber&Vinyl,BICS,Other,Non-Energy Materials,"Chemical, Plastic and Rubber Materials",C20,Other,NA
+Rubber/Plastic Products,BICS,Other,Non-Energy Materials,"Chemical, Plastic and Rubber Materials",C29,Other,NA
+Rubber-Tires,BICS,Other,Non-Energy Materials,"Chemical, Plastic and Rubber Materials",C29,Other,NA
+S&L/Thrifts-Central US,BICS,Other,NA,NA,K64,Other,NA
+S&L/Thrifts-Eastern US,BICS,Other,NA,NA,K64,Other,NA
+S&L/Thrifts-Southern US,BICS,Other,NA,NA,K64,Other,NA
+S&L/Thrifts-Western US,BICS,Other,NA,NA,K64,Other,NA
+Sanitation,BCLASS,Other,NA,NA,Other,Other,NA
+Satellite Telecom,BICS,Other,Telecommunications,Telecommunications,Other,Other,NA
+Schools,BICS,Other,NA,NA,P85,Other,NA
+Schools-Day Care,BICS,Other,NA,NA,P85,Other,NA
+Seaports and Marine Terminals,BCLASS,Other,NA,NA,Other,Other,NA
+Sector Fund-Asset Alloc,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Sector Fund-Debt,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Sector Fund-Energy,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Sector Fund-Real Estate,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Sector Fund-Technology,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Sector Fund-Utility,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Secured Airlines,BCLASS,Aviation,NA,NA,Other,Aviation,NA
+Security Services,BICS,Other,NA,NA,N80,Other,NA
+Seismic Data Collection,BICS,Other,Technology,Software and Consulting,Other,Other,NA
+Semicon Compo-Intg Circu,BICS,Other,Technology,Electronic Components and Manufacturing,Other,Other,NA
+Semiconductor Equipment,BICS,Other,Technology,Electronic Components and Manufacturing,Other,Other,NA
+Semiconductors,ICB,Other,Technology,Electronic Components and Manufacturing,Other,Other,NA
+Semiconductors,BICS,Other,Technology,Electronic Components and Manufacturing,Other,Other,NA
+Senior Housing Independent Living,BCLASS,Other,Healthcare,Healthcare Services,Other,Other,NA
+Shipbuilding,BICS,Other,Industrials,Industrial Manufacturing,F43,Other,NA
+Silver Mining,BICS,Other,Non-Energy Materials,Mining and Mineral Products,Other,Materials,Other
+"Single, Multi-Family Housing",BCLASS,Other,Finance,Real Estate,Other,Other,NA
+Single-Family Housing,BCLASS,Other,Finance,Real Estate,Other,Other,NA
+Soap&Cleaning Prepar,BICS,Other,Industrials,Industrial Manufacturing,Other,Other,NA
+Socially Responsible,BICS,Other,NA,NA,Other,Other,NA
+Soft Drinks,ICB,Other,Consumer Non-Cyclicals,Food and Tobacco Production,Other,Other,NA
+Software,ICB,Other,Technology,Software and Consulting,Other,Other,NA
+Software & Services,BICS,Other,Technology,Software and Consulting,Other,Other,NA
+Software Tools,BICS,Other,Technology,Software and Consulting,Other,Other,NA
+Solid Waste Resource Recovery,BCLASS,Other,NA,NA,Other,Other,NA
+Sovereign,BICS,Other,NA,NA,Other,Other,NA
+Sovereign Agency,BICS,Other,NA,NA,Other,Other,NA
+Sovereigns,BICS,Other,NA,NA,Other,Other,NA
+Special Purpose Banks,BICS,Other,Finance,Banking,K64,Other,NA
+Special Purpose Entity,BICS,Other,Finance,Specialty Finance and Services,K66,Other,NA
+Specialized Consumer Services,ICB,Other,Business Services,Business Services,Other,Other,NA
+Specialty Chemicals,ICB,Other,Non-Energy Materials,"Chemical, Plastic and Rubber Materials",Other,Other,NA
+Specialty Finance,ICB,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Specialty REITs,ICB,Other,Finance,Real Estate,Other,Real estate,NA
+Specialty Retailers,ICB,Other,Consumer Cyclicals,Miscellaneous Retail,Other,Other,NA
+Specified Purpose Acquis,BICS,Other,NA,NA,K66,Other,NA
+Stadiums and Sports Complexes,BCLASS,Other,Consumer Services,Hospitality Services,Other,Other,NA
+Steel Pipe&Tube,BICS,Steel,NA,NA,C25,Steel,NA
+Steel-Producers,BICS,Steel,NA,NA,C25,Steel,NA
+Steel-Specialty,BICS,Steel,NA,NA,C25,Steel,NA
+Stevedoring,BICS,Other,Business Services,Business Services,H50,Other,NA
+Storage/Warehousing,BICS,Other,Business Services,Business Services,H52,Other,NA
+Stranded Cost Utility,BCLASS,Other,NA,NA,Other,Other,NA
+Student Housing,BCLASS,Other,Finance,Real Estate,Other,Other,NA
+Student Loan,BCLASS,Other,Finance,Banking,Other,Other,NA
+Student Loans,BCLASS,Other,Finance,Banking,Other,Other,NA
+Sugar,BICS,Other,Consumer Non-Cyclicals,Food and Tobacco Production,Other,Other,NA
+Superconductor Prod&Sys,BICS,Other,Technology,Electronic Components and Manufacturing,C27,Other,NA
+Supermarkets,BCLASS,Other,Consumer Non-Cyclicals,Food and Staples Retail,Other,Other,NA
+Supermarkets & Pharmacies,BICS,Other,Consumer Non-Cyclicals,Food and Staples Retail,Other,Other,NA
+Super-Regional Banks-US,BICS,Other,Finance,Banking,K64,Other,NA
+Supranational,BCLASS,Other,NA,NA,Other,Other,NA
+Supranational Bank,BICS,Other,Finance,Banking,Other,Other,NA
+Supranationals,BICS,Other,NA,NA,Other,Other,NA
+Tannery,BICS,Other,Non-Energy Materials,Manufactured Products,Other,Other,NA
+Taxable First Tier-MMkt,BICS,Other,NA,NA,Other,Other,NA
+Taxable Govt/Agency-MMkt,BICS,Other,NA,NA,Other,Other,NA
+Taxable Treas 100%-MMkt,BICS,Other,NA,NA,Other,Other,NA
+Taxable Treas/Repo-MMkt,BICS,Other,NA,NA,Other,Other,NA
+Tea,BICS,Other,Consumer Non-Cyclicals,Food and Tobacco Production,Other,Other,NA
+Technology,BCLASS,Other,Technology,NA,Other,Other,NA
+Telecom Carriers,BICS,Other,Telecommunications,Telecommunications,Other,Other,NA
+Telecom Eq Fiber Optics,BICS,Other,Telecommunications,Telecommunications,Other,Other,NA
+Telecom Services,BICS,Other,Telecommunications,Telecommunications,J61,Other,NA
+Telecommunication Equip,BICS,Other,Telecommunications,Telecommunications,Other,Other,NA
+Telecommunications Equipment,ICB,Other,Telecommunications,Telecommunications,Other,Other,NA
+Telephone,BCLASS,Other,Telecommunications,Telecommunications,Other,Other,NA
+Telephone-Integrated,BICS,Other,Telecommunications,Telecommunications,J62,Other,NA
+Television,BICS,Other,Consumer Services,Media and Publishing Services,J60,Other,NA
+Textile-Apparel,BICS,Other,Consumer Cyclicals,Consumer Goods,C14,Other,NA
+Textile-Home Furnishings,BICS,Other,Consumer Cyclicals,Consumer Goods,C13,Other,NA
+Textile-Products,BICS,Other,Consumer Cyclicals,Consumer Goods,C14,Other,NA
+Textiles,BCLASS,Other,Non-Energy Materials,Manufactured Products,Other,Other,NA
+Theaters,BICS,Other,Consumer Services,Hospitality Services,R90,Other,NA
+Therapeutics,BICS,Other,Healthcare,Healthcare Services,C21,Other,NA
+Tires,ICB,Other,Non-Energy Materials,"Chemical, Plastic and Rubber Materials",Other,Other,NA
+Tobacco,ICB,Other,Consumer Non-Cyclicals,Food and Tobacco Production,C12,Other,NA
+Tobacco,BICS,Other,Consumer Non-Cyclicals,Food and Tobacco Production,C12,Other,NA
+"Toll Roads, Streets, and Highways",BCLASS,Other,NA,NA,Other,Other,NA
+Tools-Hand Held,BICS,Other,Consumer Non-Cyclicals,Household Products,Other,Other,NA
+Toys,ICB,Other,Consumer Cyclicals,Consumer Goods,Other,Other,NA
+Toys,BICS,Other,Consumer Cyclicals,Consumer Goods,Other,Other,NA
+Traffic Management Sys,BICS,Other,Technology,Software and Consulting,Other,Other,NA
+Transactional Software,BICS,Other,Technology,Software and Consulting,Other,Other,NA
+Transit Services,BICS,Other,Business Services,Business Services,Other,Other,NA
+Transport-Air Freight,BICS,Aviation,NA,NA,H51,Aviation,NA
+Transportation & Logistics,BICS,Other,Business Services,Business Services,Other,Other,NA
+Transportation Services,ICB,Other,Business Services,Business Services,Other,Other,NA
+Transport-Equip&Leasng,BICS,Other,Business Services,Business Services,K64,Other,NA
+Transport-Marine,BICS,Shipping,NA,NA,H50,Shipping,NA
+Transport-Rail,BICS,Other,Business Services,Business Services,Other,Other,NA
+Transport-Services,BICS,Other,Business Services,Business Services,H49,Other,NA
+Transport-Truck,BICS,Other,Business Services,Business Services,H49,Other,NA
+Travel & Lodging,BICS,Other,Consumer Services,Hospitality Services,Other,Other,NA
+Travel & Tourism,ICB,Other,Consumer Services,Hospitality Services,Other,Other,NA
+Travel Services,BICS,Other,Consumer Services,Hospitality Services,N79,Other,NA
+Treasury,BCLASS,Other,NA,NA,Other,Other,NA
+Trucking,ICB,Other,Business Services,Business Services,Other,Other,NA
+Trucking&Leasing,BICS,Other,Business Services,Business Services,K64,Other,NA
+Ultra Sound Imaging Sys,BICS,Other,Technology,Software and Consulting,Other,Other,NA
+UMBS Other,BICS,Other,Finance,Specialty Finance and Services,L68,Other,NA
+UMBS Single Family 15yr,BICS,Other,Finance,Specialty Finance and Services,L68,Other,NA
+UMBS Single Family 20yr,BICS,Other,Finance,Specialty Finance and Services,L68,Other,NA
+UMBS Single Family 30yr,BICS,Other,Finance,Specialty Finance and Services,L68,Other,NA
+Unclassified,BICS,Other,NA,NA,Other,Other,NA
+Undefined Equity,BICS,Other,NA,NA,Other,Other,NA
+Unknown,BCLASS,Other,NA,NA,Other,Other,NA
+Unsecured Airlines,BCLASS,Other,NA,NA,Other,Other,NA
+US Municipals,BICS,Other,NA,NA,Other,Other,NA
+Utilities,BICS,Other,Utilities,Utilities,Other,Other,NA
+Value,BICS,Other,NA,NA,Other,Other,NA
+Value-Large Cap,BICS,Other,NA,NA,Other,Other,NA
+Value-Mid Cap,BICS,Other,NA,NA,Other,Other,NA
+Value-Small Cap,BICS,Other,NA,NA,Other,Other,NA
+Various Assets,BICS,Other,NA,NA,Other,Other,NA
+Venture Capital,BICS,Other,Finance,Specialty Finance and Services,K64,Other,NA
+Veterans,BCLASS,Other,NA,NA,Other,Other,NA
+Veterinary Diagnostics,BICS,Other,Healthcare,Healthcare Services,C21,Other,NA
+Veterinary Products,BICS,Other,Healthcare,Healthcare Equipment,C21,Other,NA
+Virtual Reality Products,BICS,Other,Technology,Electronic Components and Manufacturing,Other,Other,NA
+Vitamins&Nutrition Prod,BICS,Other,Consumer Non-Cyclicals,Food and Tobacco Production,C21,Other,NA
+Waste & Disposal Services,ICB,Other,NA,NA,Other,Other,NA
+Waste & Environment Services & Equipment,BICS,Other,NA,NA,Other,Other,NA
+Water,ICB,Other,NA,NA,E36,Other,NA
+Water,BICS,Other,NA,NA,E36,Other,NA
+Water & Sewer,BCLASS,Other,NA,NA,Other,Other,NA
+Water and Sewer,BCLASS,Other,NA,NA,Other,Other,NA
+Water Treatment Systems,BICS,Other,NA,NA,E36,Other,NA
+Web Hosting/Design,BICS,Other,Technology,Software and Consulting,J62,Other,NA
+Web Portals/ISP,BICS,Other,Technology,Software and Consulting,J62,Other,NA
+Whole Business,BCLASS,Other,NA,NA,Other,Other,NA
+Whsing&Harbor Trans Serv,BICS,Other,NA,NA,H52,Other,NA
+Winding Up Agencies,BICS,Other,NA,NA,Other,Other,NA
+Winding-up Agency,BICS,Other,NA,NA,Other,Other,NA
+Wire&Cable Products,BICS,Other,Technology,Electronic Components and Manufacturing,C27,Other,NA
+Wireless,BCLASS,Other,NA,NA,Other,Other,NA
+Wireless Equipment,BICS,Other,Technology,Electronic Components and Manufacturing,Other,Other,NA
+Wireless Telecommunications Services,BICS,Other,Telecommunications,Telecommunications,Other,Other,NA
+Wireline Telecommunications Services,BICS,Other,Telecommunications,Telecommunications,Other,Other,NA
+Wirelines,BCLASS,Other,Telecommunications,Telecommunications,Other,Other,NA
+WL Collat CMO IO,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+WL Collat CMO Mezzanine,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+WL Collat CMO Other,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+WL Collat CMO PO,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+WL Collat CMO Residual,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+WL Collat CMO Sequential,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+WL Collat CMO Subordinat,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+WL Collat CMO TAC,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+WL Collat PAC,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+WL Collat PAC IO,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+WL Collat PAC Support,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+WL Collat PAC Z,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+WL Collat Support,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+WL Collat Support PO,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+WL Collat Support Z,BICS,Other,Finance,Specialty Finance and Services,Other,Other,NA
+Wool,BICS,Other,Non-Energy Materials,Manufactured Products,Other,Other,NA
+Workers Comp/Injury Serv,BICS,Other,NA,NA,Other,Other,NA
+Wound/Burn & Skin Care,BICS,Other,Healthcare,Healthcare Equipment,C21,Other,NA
+X24,BCLASS,Other,NA,NA,Other,Other,NA
+X28,BCLASS,Other,NA,NA,Other,Other,NA
+X29,BCLASS,Other,NA,NA,Other,Other,NA
+X34,BCLASS,Other,NA,NA,Other,Other,NA
+X38,BCLASS,Other,NA,NA,Other,Other,NA
+X42,BCLASS,Other,NA,NA,Other,Other,NA
+X-Ray Equipment,BICS,Other,Healthcare,Healthcare Equipment,Other,Other,NA
