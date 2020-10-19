@@ -1170,7 +1170,7 @@ create_audit_chart <- function(audit_file, proc_input_path) {
 
   flag_numbers <- audit_file %>%
     group_by(flag) %>%
-    summarise(n = n()) %>%
+    summarise(n = n(), .groups = "drop_last") %>%
     mutate(perc_n = n / sum(n))
 
   flag_numbers_colors <- c(
