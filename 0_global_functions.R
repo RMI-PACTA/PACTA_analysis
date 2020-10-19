@@ -82,9 +82,9 @@ set_global_parameters <- function(file_path) {
 
   equity_market_list <<- cfg$Lists$Equity.Market.List
 
-  allowable_asset_list <- cfg$Lists$AssetTypes
+  allowable_asset_list <<- cfg$Lists$AssetTypes
   if (is.null(allowable_asset_list)) {
-    allowable_asset_list <- c("Funds", "Equity", "Bonds", "Others")
+    allowable_asset_list <<- c("Funds", "Equity", "Bonds", "Others")
   }
   # allowable_asset_list <<- allowable_asset_list
 
@@ -99,18 +99,6 @@ set_global_parameters <- function(file_path) {
   if (is.null(inc_meta_portfolio)) {
     inc_meta_portfolio <<- FALSE
   }
-
-
-
-  # inc_project_metaportfolio <<- cfg$ComparisonBenchmarks$CreateProjectMetaPortfolio
-  #
-  # if(is.null(inc_project_metaportfolio)){
-  #   inc_project_metaportfolio <<- FALSE
-  # }
-  # if(inc_project_metaportfolio){
-  #   project_meta_investor_name <<- paste0("Project ", meta_investor_name)
-  #   project_meta_portfolio_name <<- paste0("Project ", meta_portfolio_name)
-  # }
 
   has_map <<- cfg$Methodology$HasMAP
   if (is.null(has_map)) {
@@ -179,6 +167,7 @@ set_git_path <- function() {
 }
 
 set_analysis_inputs_path <- function(twodii_internal, data_location_ext, dataprep_ref = datastore_timestamp) {
+
   if (twodii_internal) {
     analysis_inputs_path <- path_dropbox_2dii("PortCheck", "00_Data", "07_AnalysisInputs", dataprep_ref)
     analysis_inputs_path <- file.path(analysis_inputs_path)

@@ -349,9 +349,9 @@ check_asset_types <- function(fin_data) {
   fin_data$asset_type <- first_char_up(fin_data$asset_type)
 
   ### TEST
-  if (!any(unique(fin_data$asset_type) %in% allowable_asset_list())) {
-    stop("Check Financial Data Asset Types")
-  }
+  # if (!any(unique(fin_data$asset_type) %in% allowable_asset_list())) {
+  #   stop("Check Financial Data Asset Types")
+  # }
 
   fin_data
 }
@@ -993,14 +993,7 @@ get_and_clean_revenue_data <- function() {
 get_and_clean_company_fin_data <- function() {
   comp_fin_data_raw <- read_rds(paste0(analysis_inputs_path, "/consolidated_financial_data.rda"))
 
-  # comp_fin_data_raw <- comp_fin_data_raw %>% select(
-  #   company_id, company_name, bloomberg_id, country_of_domicile, corporate_bond_ticker, bics_sector, bics_subgroup,
-  #   icb_subgroup, financial_sector, has_asset_level_data, has_assets_in_matched_sector, sectors_with_assets,
-  #   current_shares_outstanding_all_classes, company_status, market_cap, bond_debt_out,
-  #   financial_timestamp
-  # )
-
-  comp_fin_data_raw <- comp_fin_data_raw %>% select(
+comp_fin_data_raw <- comp_fin_data_raw %>% select(
     company_id, company_name, bloomberg_id, country_of_domicile, corporate_bond_ticker, bics_subgroup,
     icb_subgroup, financial_sector, has_asset_level_data, has_assets_in_matched_sector, sectors_with_assets, current_shares_outstanding_all_classes,
     market_cap, bond_debt_out, financial_timestamp

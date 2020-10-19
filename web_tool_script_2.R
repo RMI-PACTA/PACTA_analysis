@@ -27,7 +27,7 @@ analysis_inputs_path <- set_analysis_inputs_path(twodii_internal, data_location_
 unlink(file.path(results_path, portfolio_name_ref_all, "*"), force = TRUE, recursive = TRUE)
 
 # run again so output folders are available after deleting past results
-file_names <- read_csv(file.path(proc_input_path, portfolio_name_ref_all, "file_names.csv"), col_types = cols())
+# file_names <- read_csv(file.path(proc_input_path, portfolio_name_ref_all, "file_names.csv"))
 create_portfolio_subfolders(portfolio_name_ref_all)
 
 port_col_types <- set_col_types(grouping_variables, "ddddccccddclc")
@@ -36,13 +36,13 @@ port_col_types <- set_col_types(grouping_variables, "ddddccccddclc")
 ##### EQUITY #####
 ##################
 
-ald_scen_eq <- get_ald_scen("Equity")
-ald_raw_eq <- get_ald_raw("Equity")
-
 equity_input_file <- file.path(proc_input_path, portfolio_name_ref_all, "equity_portfolio.rda")
-portfolio_name <- file_names$portfolio_name
+# portfolio_name <- file_names$portfolio_name
 
 if (file.exists(equity_input_file)) {
+  ald_scen_eq <- get_ald_scen("Equity")
+  ald_raw_eq <- get_ald_raw("Equity")
+
   port_raw_all_eq <- read_rds(equity_input_file) %>%
     mutate(id = as.character(id))
 
@@ -125,13 +125,14 @@ if (file.exists(equity_input_file)) {
 ##### BONDS #####
 #################
 
-ald_scen_cb <- get_ald_scen("Bonds")
-ald_raw_cb <- get_ald_raw("Bonds")
-
 bonds_inputs_file <- file.path(proc_input_path, portfolio_name_ref_all, "bonds_portfolio.rda")
-portfolio_name <- file_names$portfolio_name
+# portfolio_name <- file_names$portfolio_name
 
 if (file.exists(bonds_inputs_file)) {
+
+  ald_scen_cb <- get_ald_scen("Bonds")
+  ald_raw_cb <- get_ald_raw("Bonds")
+
   port_raw_all_cb <- read_rds(bonds_inputs_file) %>%
     mutate(id = as.character(id))
 

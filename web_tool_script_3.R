@@ -20,21 +20,19 @@ set_portfolio_parameters(file_path = fs::path(par_file_path, paste0(portfolio_na
 analysis_inputs_path <- set_analysis_inputs_path(twodii_internal, data_location_ext, dataprep_timestamp)
 
 source(file.path(template_path, "create_interactive_report.R"))
-
-
-
-file_names <- read_csv(file.path(proc_input_path, portfolio_name_ref_all, "file_names.csv"), col_types = cols())
-
-# TODO: Remove different start years
+source(file.path(template_path, "create_executive_summary.R"))
+source(file.path(template_path, "useful_functions.R"))
 
 repo_path <- template_path
-template_dir <- fs::path(template_path, "template_beta")
+template_name <- paste0("template_", tolower(language_select))
+template_dir <- fs::path(template_path, template_name)
+template_dir <- paste0(repo_path,"swiss_en_template/_book/")
+
+exec_summary_dir <- paste0(repo_path, "swiss_en_exec_summary/")
+
 company_charts_dir <- fs::path(template_path, "company_charts", "Mixed_Portfolio")
 output_dir <- file.path(outputs_path, portfolio_name_ref_all)
 project_name <- "working_dir"
-investor_name <- file_names$investor_name
-portfolio_name <- file_names$portfolio_name
-# start_year <- 2020
 scenario <- "B2DS"
 portfolio_allocation_method <- "portfolio_weight"
 scenario_geography <- "Global"
@@ -226,18 +224,19 @@ shock_year <- 2028 # this should come directly from the stress test
 create_interactive_report(
   repo_path = repo_path,
   template_dir = template_dir,
-  company_charts_dir = company_charts_dir,
   output_dir = output_dir,
+  language_select = language_select,
   project_name = project_name,
   investor_name = investor_name,
   portfolio_name = portfolio_name,
+  peer_group = peer_group,
   start_year = start_year,
   select_scenario = scenario,
   portfolio_allocation_method = portfolio_allocation_method,
   scenario_geography = scenario_geography,
   twodi_sectors = c("Power", "Automotive", "Shipping", "Oil&Gas", "Coal", "Steel", "Cement", "Aviation"),
   gbtech_sectors = c("Power", "Automotive", "Oil&Gas", "Coal"),
-  green_techs = c("RenewablesCap", "HydroCap", "NuclearCap", "Hybrid", "Electric"),
+  green_techs = c("RenewablesCap", "HydroCap", "NuclearCap", "Hybrid", "Electric", "FuelCell", "Hybrid_HDV", "Electric_HDV", "FuelCell_HDV"),
   tech_roadmap_sectors = c("Automotive", "Power", "Oil&Gas", "Coal"),
   audit_file = audit_file,
   emissions = emissions,
@@ -247,13 +246,35 @@ create_interactive_report(
   bonds_results_company = bonds_results_company,
   equity_results_map = equity_results_map,
   bonds_results_map = bonds_results_map,
-  equity_results_stress_test = equity_results_stress_test,
-  bonds_results_stress_test = bonds_results_stress_test,
-  portfolio_overview = portfolio_overview,
   indicies_equity_results_portfolio = indicies_equity_results_portfolio,
   indicies_bonds_results_portfolio = indicies_bonds_results_portfolio,
   peers_equity_results_portfolio = peers_equity_results_portfolio,
   peers_bonds_results_portfolio = peers_bonds_results_portfolio,
-  shock = shock_year,
-  pacta_sectors_not_analysed = c("Aviation","Cement","Shipping","Steel")
+  peers_equity_results_user = peers_equity_results_user,
+  peers_bonds_results_user = peers_bonds_results_user
+
+)
+
+
+create_executive_summary(
+  file_name = "template.Rmd",
+  exec_summary_dir = exec_summary_dir,
+  output_dir = output_dir,
+  language_select = "EN",
+  project_name = "working_dir",
+  investor_name = investor_name,
+  portfolio_name = portfolio_name,
+  peer_group = peer_group,
+  start_year = start_year,
+  select_scenario = scenario,
+  portfolio_allocation_method = portfolio_allocation_method,
+  scenario_geography = scenario_geography,
+  twodi_sectors = c("Power", "Automotive", "Shipping", "Oil&Gas", "Coal", "Steel", "Cement", "Aviation"),
+  green_techs = c("RenewablesCap", "HydroCap", "NuclearCap", "Hybrid", "Electric", "FuelCell", "Hybrid_HDV", "Electric_HDV", "FuelCell_HDV"),
+  tech_roadmap_sectors = c("Automotive", "Power", "Oil&Gas", "Coal"),
+  alignment_techs = c("RenewablesCap", "CoalCap", "Coal", "Oil", "Gas", "Electric", "ICE"),
+  equity_results_portfolio,
+  bonds_results_portfolio,
+  peers_equity_results_portfolio,
+  peers_bonds_results_portfolio
 )
