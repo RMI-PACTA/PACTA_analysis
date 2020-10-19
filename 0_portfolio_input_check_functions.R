@@ -1162,7 +1162,7 @@ create_audit_chart <- function(audit_file, proc_input_path) {
 
   ## GRAPH VALUES
   base_size <- 12
-  base_family <- "Clear Sans"
+  base_family <- "sans"
   font_color <- "#3D3D3C"
 
   # flag.Numbers.Colors <- brewer.pal(n = 8, name = "RdBu")
