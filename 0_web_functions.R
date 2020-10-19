@@ -254,7 +254,7 @@ website_text <- function(audit_file) {
     ungroup() %>%
     group_by(asset_type) %>%
     filter(valid_input == TRUE) %>%
-    summarise(Tot = sum(value_usd))
+    summarise(Tot = sum(value_usd), .groups = "drop_last")
 
   asset_types <- c("Equity", "Bonds")
 
