@@ -278,12 +278,13 @@ create_interactive_report(
   peers_bonds_results_portfolio = peers_bonds_results_portfolio,
   peers_equity_results_user = peers_equity_results_user,
   peers_bonds_results_user = peers_bonds_results_user,
-  equity_results_stress_test = NULL,
-  bonds_results_stress_test = NULL,
+  equity_results_stress_test = equity_results_stress_test,
+  bonds_results_stress_test = bonds_results_stress_test,
   translation_list = translation_list,
   ipr_results_stress_test = ipr_results_stress_test,
   shock = shock_year,
-  pacta_sectors_not_analysed = pacta_sectors_not_analysed
+  pacta_sectors_not_analysed = pacta_sectors_not_analysed,
+  portfolio_overview = portfolio_overview
 )
 
 
