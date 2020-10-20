@@ -1134,6 +1134,7 @@ create_merged_portfolio <- function(eq_portfolio, cb_portfolio) {
 }
 
 create_portfolio_subset <- function(portfolio, portfolio_type, relevant_fin_data) {
+
   if (portfolio_type %in% unique(portfolio$asset_type)) {
     portfolio_subset <- portfolio %>%
       ungroup() %>%
@@ -1538,16 +1539,26 @@ add_other_to_sector_classifications <- function(audit) {
 }
 
 
-# add_bics_sector <- function(portfolio){
-#   #join in bics sectors for EQ and CB via bics_bridge
-#   bics_bridge <- read_csv("data/bics_bridge.csv")
-#   portfolio <- portfolio %>%
-#     left_join(bics_bridge, by = c("security_bics_subgroup" = "bics_subgroup"))
-#
-#   if ("bics_sector.x" %in% colnames(portfolio)) {
-#     portfolio <- portfolio %>% select(-bics_sector.x) %>% rename(bics_sector = bics_sector.y)
-#   }
-#
-# return(portfolio)
-#
-# }
+pw_calculations <- function(eq_portfolio, cb_portfolio){
+
+  if(data_check(eq_portfolio)){
+
+    eq_pw <- calculate_port_weight(eq_portfolio, grouping_variables)
+    eq_pw <- eq_pw %>% ungroup() %>% select(company_id, port_weight)
+
+  }
+
+  if(data_check(cb_portfolio)){
+
+    cb_pw <- calculate_port_weight(cb_portfolio, grouping_variables)
+    cb_pw <- cb_pw %>% ungroup() %>% select(company_id, port_weight)
+  }
+
+  pw <- bind_rows(eq_pw, cb_pw)
+  pw <- pw %>%
+    group_by(company_id) %>%
+    summarise(port_weight = sum(port_weight), .groups = "drop")
+
+  return(pw)
+
+}
