@@ -68,7 +68,7 @@ aggregate_holdings <- function(portfolio) {
       number_holdings = n_distinct(holding_id),
       value_usd = sum(value_usd, na.rm = T),
       number_of_shares = sum(number_of_shares, na.rm = T),
-      port_weight = sum(port_weight), 
+      port_weight = sum(port_weight),
       .groups = "drop_last"
     )
 
@@ -83,6 +83,7 @@ calculate_ownership_weight <- function(portfolio) {
 }
 
 calculate_port_weight <- function(portfolio, grouping_variables) {
+
   portfolio <- portfolio %>%
     ungroup() %>%
     group_by(!!!rlang::syms(grouping_variables)) %>%
@@ -90,14 +91,6 @@ calculate_port_weight <- function(portfolio, grouping_variables) {
       port_total_aum = sum(value_usd, na.rm = T),
       port_weight = value_usd / port_total_aum
     )
-
-  # temp <- portfolio %>%
-  #   group_by(!!!rlang::syms(grouping_variables)) %>%
-  #   mutate(total_port_weight = sum(port_weight))
-  #
-  # total_port_weight_per_portfolio <- signif(unique(temp$total_port_weight),2)
-  # # check that all portfolio port_weight's sum to 1
-  # if (!all(total_port_weight_per_portfolio == 1.0)) {stop("Port weight calculation error")}
 
   portfolio
 }
@@ -189,7 +182,7 @@ aggregate_portfolio <- function(df) {
         scen_tech_prod = sum(scen_tech_prod, na.rm = TRUE),
         scen_alloc_wt_tech_prod_all_comp = sum(scen_alloc_wt_tech_prod, na.rm = TRUE),
         scen_carsten = sum(scen_carsten, na.rm = TRUE),
-        scen_emission_factor_all_comp = weighted.mean(scen_emission_factor, scen_alloc_wt_tech_prod, na.rm = TRUE), 
+        scen_emission_factor_all_comp = weighted.mean(scen_emission_factor, scen_alloc_wt_tech_prod, na.rm = TRUE),
         .groups = "drop_last"
       ) %>%
       mutate( # get sector totals
@@ -218,7 +211,7 @@ aggregate_map_data <- function(portfolio) {
       ald_sector, technology,
       financial_sector, allocation, allocation_weight, ald_production_unit
     ) %>%
-    summarise(plan_alloc_wt_tech_prod = sum(plan_alloc_wt_tech_prod, na.rm = TRUE), 
+    summarise(plan_alloc_wt_tech_prod = sum(plan_alloc_wt_tech_prod, na.rm = TRUE),
               .groups = "drop_last") %>%
     mutate(plan_alloc_wt_sec_prod = sum(plan_alloc_wt_tech_prod))
 
