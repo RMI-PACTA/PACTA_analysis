@@ -219,6 +219,19 @@ if (file.exists(file.path(proc_input_path, portfolio_name, "overview_portfolio.r
   )
 }
 
+# load IPR stress test results
+if (file.exists(file.path(results_path, portfolio_name, "Stress_test_results_IPR.rds"))) {
+  ipr_results_stress_test <- read_rds(file.path(results_path, portfolio_name, "Stress_test_results_IPR.rds"))
+} else {
+  ipr_results_stress_test <- tibble(
+    "investor_name" = NA_character_, "portfolio_name" = NA_character_,
+    "sector" = NA_character_, "subsector" = NA_character_,
+    "exposure" = NA_real_, "description" = NA_character_,
+    "scenario" = NA_character_, "shock" = NA_real_,
+    "loss" = NA_real_
+  )
+}
+
 
 indicies_equity_results_portfolio <- read_rds(file.path(data_location_ext, "Indices_equity_portfolio.rda"))
 indicies_bonds_results_portfolio <- read_rds(file.path(data_location_ext, "Indices_bonds_portfolio.rda"))
@@ -230,6 +243,7 @@ peers_bonds_results_user <- read_rds(file.path(data_location_ext, "Peers_bonds_r
 
 translation_list <- readr::read_csv(path(template_path, "translation_list.csv"), col_types = cols())
 shock_year <- 2028 # this should come directly from the stress test
+pacta_sectors_not_analysed <- c("Aviation","Cement","Shipping","Steel")
 
 create_interactive_report(
   repo_path = template_path,
@@ -266,7 +280,10 @@ create_interactive_report(
   peers_bonds_results_user = peers_bonds_results_user,
   equity_results_stress_test = NULL,
   bonds_results_stress_test = NULL,
-  translation_list = translation_list
+  translation_list = translation_list,
+  ipr_results_stress_test = ipr_results_stress_test,
+  shock = shock_year,
+  pacta_sectors_not_analysed = pacta_sectors_not_analysed
 )
 
 
