@@ -1541,23 +1541,34 @@ add_other_to_sector_classifications <- function(audit) {
 
 pw_calculations <- function(eq_portfolio, cb_portfolio){
 
+  port_all <- data.frame()
+
   if(data_check(eq_portfolio)){
 
-    eq_pw <- calculate_port_weight(eq_portfolio, grouping_variables)
-    eq_pw <- eq_pw %>% ungroup() %>% select(company_id, port_weight)
-
+    port_all <- bind_rows(port_all, eq_portfolio)
   }
 
   if(data_check(cb_portfolio)){
 
-    cb_pw <- calculate_port_weight(cb_portfolio, grouping_variables)
-    cb_pw <- cb_pw %>% ungroup() %>% select(company_id, port_weight)
+    port_all <- bind_rows(port_all, cb_portfolio)
+
   }
 
-  pw <- bind_rows(eq_pw, cb_pw)
-  pw <- pw %>%
-    group_by(company_id) %>%
-    summarise(port_weight = sum(port_weight), .groups = "drop")
+  if(data_check(port_all)){
+
+  port_all <- port_all %>%  select(grouping_variables,company_id, value_usd)
+
+  port_all <- calculate_port_weight(port_all, grouping_variables)
+
+
+  pw <- port_all %>%
+    group_by(!!!rlang::syms(grouping_variables), company_id) %>%
+    summarise(port_weight = sum(port_weight), .groups = "drop") %>%
+    select(company_id, port_weight)
+
+  }else{
+    pw <- data.frame(company_id = "No companies in portfolio", port_weight = "0")
+  }
 
   return(pw)
 
