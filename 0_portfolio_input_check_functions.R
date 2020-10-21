@@ -1556,7 +1556,7 @@ pw_calculations <- function(eq_portfolio, cb_portfolio){
 
   if(data_check(port_all)){
 
-  port_all <- port_all %>%  select(grouping_variables,company_id, value_usd)
+  port_all <- port_all %>%  select(!!!rlang::syms(grouping_variables),company_id, value_usd)
 
   port_all <- calculate_port_weight(port_all, grouping_variables)
 
