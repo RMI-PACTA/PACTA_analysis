@@ -31,8 +31,8 @@ exec_summary_name = select_exec_summary_template(project_code = project_code,
 template_dir <- paste0(template_path, report_name,"/_book/")
 exec_summary_dir <- paste0(template_path, exec_summary_name,"/")
 
-survey_dir <- path(user_results_path, project_code, "survey_data")
-real_estate_dir <- path(user_results_path, project_code, "real_estate_data")
+survey_dir <- path(user_results_path, project_code, "survey")
+real_estate_dir <- path(user_results_path, project_code, "real_estate")
 
 output_dir <- file.path(outputs_path, portfolio_name_ref_all)
 
@@ -226,7 +226,8 @@ peers_bonds_results_user <- read_rds(file.path(data_location_ext, "Peers_bonds_r
 
 
 translation_list <- readr::read_csv(path(template_path, "translation_list.csv"), col_types = cols())
-shock_year <- 2028 # this should come directly from the stress test
+shock_year <- 2030 # this should come directly from the stress test
+
 
 create_interactive_report(
   repo_path = template_path,
