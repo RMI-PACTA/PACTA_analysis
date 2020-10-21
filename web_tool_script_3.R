@@ -8,8 +8,6 @@ source("0_web_functions.R")
 
 setup_project()
 
-# working_location <- file.path(working_location)
-
 set_webtool_paths()
 
 options(r2dii_config = file.path(par_file_path, "AnalysisParameters.yml"))
@@ -18,7 +16,6 @@ set_global_parameters(file.path(par_file_path, "AnalysisParameters.yml"))
 
 set_portfolio_parameters(file_path = fs::path(par_file_path, paste0(portfolio_name_ref_all, "_PortfolioParameters.yml")))
 
-# need to define an alternative location for data files
 analysis_inputs_path <- set_analysis_inputs_path(twodii_internal, data_location_ext, dataprep_timestamp)
 
 source(file.path(template_path, "create_interactive_report.R"))
@@ -34,8 +31,8 @@ exec_summary_name = select_exec_summary_template(project_code = project_code,
 template_dir <- paste0(template_path, report_name,"/_book/")
 exec_summary_dir <- paste0(template_path, exec_summary_name,"/")
 
-survey_dir <- path(data_location_ext, "survey_data", user_id)
-real_estate_dir <- path(data_location_ext, "real_estate_data", user_id)
+survey_dir <- path(user_results_path, project_code, "survey_data")
+real_estate_dir <- path(user_results_path, project_code, "real_estate_data")
 
 output_dir <- file.path(outputs_path, portfolio_name_ref_all)
 
@@ -238,10 +235,10 @@ create_interactive_report(
   survey_dir = survey_dir,
   real_estate_dir = real_estate_dir,
   language_select = language_select,
+  report_name = report_name,
   project_name = project_name,
   investor_name = investor_name,
   portfolio_name = portfolio_name,
-  user_id = user_id,
   peer_group = peer_group,
   start_year = start_year,
   select_scenario = scenario,
