@@ -262,7 +262,7 @@ create_interactive_report(
   portfolio_allocation_method = portfolio_allocation_method,
   scenario_geography = scenario_geography,
   twodi_sectors = c("Power", "Automotive", "Shipping", "Oil&Gas", "Coal", "Steel", "Cement", "Aviation"),
-  green_techs = c("RenewablesCap", "HydroCap", "NuclearCap", "Hybrid", "Electric", "FuelCell", "Hybrid_HDV", "Electric_HDV", "FuelCell_HDV"),
+  green_techs = c("RenewablesCap", "HydroCap", "NuclearCap", "Hybrid", "Electric", "FuelCell", "Hybrid_HDV", "Electric_HDV", "FuelCell_HDV","Ac-Electric Arc Furnace","Ac-Electric Arc Furnace"),
   tech_roadmap_sectors = c("Automotive", "Power", "Oil&Gas", "Coal"),
   audit_file = audit_file,
   emissions = emissions,
