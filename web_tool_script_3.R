@@ -284,7 +284,8 @@ create_interactive_report(
   ipr_results_stress_test = ipr_results_stress_test,
   shock = shock_year,
   pacta_sectors_not_analysed = pacta_sectors_not_analysed,
-  portfolio_overview = portfolio_overview
+  portfolio_overview = portfolio_overview,
+  display_currency = "CHF"
 )
 
 
