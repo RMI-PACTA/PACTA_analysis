@@ -228,7 +228,6 @@ peers_bonds_results_user <- read_rds(file.path(data_location_ext, "Peers_bonds_r
 translation_list <- readr::read_csv(path(template_path, "translation_list.csv"), col_types = cols())
 shock_year <- 2030 # this should come directly from the stress test
 
-
 create_interactive_report(
   repo_path = template_path,
   template_dir = template_dir,
@@ -242,14 +241,17 @@ create_interactive_report(
   portfolio_name = portfolio_name,
   peer_group = peer_group,
   start_year = start_year,
+  shock = shock_year,
   select_scenario = scenario,
   portfolio_allocation_method = portfolio_allocation_method,
   scenario_geography = scenario_geography,
   twodi_sectors = c("Power", "Automotive", "Shipping", "Oil&Gas", "Coal", "Steel", "Cement", "Aviation"),
   green_techs = c("RenewablesCap", "HydroCap", "NuclearCap", "Hybrid", "Electric", "FuelCell", "Hybrid_HDV", "Electric_HDV", "FuelCell_HDV"),
   tech_roadmap_sectors = c("Automotive", "Power", "Oil&Gas", "Coal"),
+  pacta_sectors_not_analysed = c("Aviation","Cement","Shipping","Steel"),
   audit_file = audit_file,
   emissions = emissions,
+  portfolio_overview = portfolio_overview,
   equity_results_portfolio = equity_results_portfolio,
   bonds_results_portfolio = bonds_results_portfolio,
   equity_results_company = equity_results_company,
@@ -262,8 +264,8 @@ create_interactive_report(
   peers_bonds_results_portfolio = peers_bonds_results_portfolio,
   peers_equity_results_user = peers_equity_results_user,
   peers_bonds_results_user = peers_bonds_results_user,
-  equity_results_stress_test = NULL,
-  bonds_results_stress_test = NULL,
+  equity_results_stress_test = equity_results_stress_test,
+  bonds_results_stress_test = bonds_results_stress_test,
   translation_list = translation_list
 )
 
