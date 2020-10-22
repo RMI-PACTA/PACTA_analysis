@@ -241,8 +241,18 @@ peers_equity_results_user <- read_rds(file.path(data_location_ext, "Peers_equity
 peers_bonds_results_user <- read_rds(file.path(data_location_ext, "Peers_bonds_results_portfolio_ind.rda"))
 
 
-translation_list <- readr::read_csv(path(template_path, "translation_list.csv"), col_types = cols())
+dataframe_labels <- readr::read_csv(
+  path(template_path, "data/translation/dataframe_labels.csv"),
+  col_types = cols()
+  )
+
+js_labels <- readr::read_csv(
+  path(template_path, "data/translation/js_labels.csv"),
+  col_types = cols()
+)
+
 shock_year <- 2030 # this should come directly from the stress test.. 2030 based on current discussions in CHPA2020 case
+
 pacta_sectors_not_analysed <- c("Aviation","Cement","Shipping","Steel")
 
 create_interactive_report(
