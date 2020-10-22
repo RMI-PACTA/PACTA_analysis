@@ -1,0 +1,50 @@
+setwd(here::here())
+source("clean_data.R")
+
+
+# get_currency_data_for_timestamp() --------------------------------------------
+
+result <- get_currency_data_for_timestamp()
+
+test_that("get_currency_data_for_timestamp() function exists", {
+  expect_false(
+    is.null(get_currency_data_for_timestamp)
+  )
+})
+
+test_that("get_currency_data_for_timestamp() returns a tibble", {
+  expect_true(
+    inherits(result, "tbl_df")
+  )
+})
+
+test_that("get_currency_data_for_timestamp() returns a tibble with 2 columns", {
+  expect_true(
+    ncol(result) == 2
+  )
+})
+
+test_that("get_currency_data_for_timestamp() returns a tibble with the proper column names", {
+  expect_equal(
+    names(result),
+    c("currency", "exchange_rate")
+  )
+})
+
+test_that("get_currency_data_for_timestamp() returns a tibble with a character class currency column", {
+  expect_true(
+    inherits(result$currency, "character")
+  )
+})
+
+test_that("get_currency_data_for_timestamp() returns a tibble with a currency column that does not contain any duplicates", {
+  expect_false(
+    any(duplicated(result$currency))
+  )
+})
+
+test_that("get_currency_data_for_timestamp() returns a tibble with a numeric class exchange_rate column", {
+  expect_true(
+    inherits(result$exchange_rate, "numeric")
+  )
+})
