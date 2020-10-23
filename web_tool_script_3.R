@@ -241,12 +241,12 @@ peers_equity_results_user <- read_rds(file.path(data_location_ext, "Peers_equity
 peers_bonds_results_user <- read_rds(file.path(data_location_ext, "Peers_bonds_results_portfolio_ind.rda"))
 
 
-dataframe_labels <- readr::read_csv(
+dataframe_translations <- readr::read_csv(
   path(template_path, "data/translation/dataframe_labels.csv"),
   col_types = cols()
   )
 
-js_labels <- readr::read_csv(
+js_translations <- readr::read_csv(
   path(template_path, "data/translation/js_labels.csv"),
   col_types = cols()
 )
@@ -290,7 +290,8 @@ create_interactive_report(
   peers_bonds_results_user = peers_bonds_results_user,
   equity_results_stress_test = equity_results_stress_test,
   bonds_results_stress_test = bonds_results_stress_test,
-  translation_list = translation_list,
+  dataframe_translations = dataframe_translations,
+  js_translations = js_translations,
   ipr_results_stress_test = ipr_results_stress_test,
   shock = shock_year,
   pacta_sectors_not_analysed = pacta_sectors_not_analysed,
