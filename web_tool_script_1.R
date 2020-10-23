@@ -175,5 +175,7 @@ save_if_exists(portfolio_overview, portfolio_name, file.path(proc_input_path_, "
 save_if_exists(audit_file, portfolio_name, file.path(proc_input_path_, "audit_file.rda"))
 save_if_exists(emissions_totals, portfolio_name, file.path(proc_input_path_, "emissions.rda"))
 
-save_if_exists(port_weights, portfolio_name, file.path(proc_input_path_, "portfolio_weights.rda"))
-
+if(data_check(port_weights)){
+  port_weights <- jsonlite::toJSON(x=port_weights)
+  write(x = port_weights, file = file.path(proc_input_path_,"portfolio_weights.json"))
+  }
