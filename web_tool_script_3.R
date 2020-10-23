@@ -290,8 +290,6 @@ create_interactive_report(
   bonds_results_stress_test = bonds_results_stress_test,
   translation_list = translation_list,
   ipr_results_stress_test = ipr_results_stress_test,
-  shock = shock_year,
-  pacta_sectors_not_analysed = pacta_sectors_not_analysed,
   display_currency = "CHF",
   currency_exchange_value
 )
