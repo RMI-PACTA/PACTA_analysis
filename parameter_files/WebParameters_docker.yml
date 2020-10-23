@@ -4,6 +4,7 @@ default:
         data_location_ext: /pacta-data/2019Q4/
         template_location: /create_interactive_report/
         stress_test_location: /StressTestingModelDev/
+        user_data_location: /user_results/
     parameters:
         project_name: working_dir
         twodii_internal: FALSE
