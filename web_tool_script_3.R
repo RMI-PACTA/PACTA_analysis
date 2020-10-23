@@ -266,7 +266,7 @@ create_interactive_report(
   survey_dir = survey_dir,
   real_estate_dir = real_estate_dir,
   language_select = language_select,
-  report_name = report_name,
+  # report_name = report_name,
   project_name = project_name,
   investor_name = investor_name,
   portfolio_name = portfolio_name,
