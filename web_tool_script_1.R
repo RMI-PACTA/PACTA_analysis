@@ -7,6 +7,7 @@ source("0_portfolio_input_check_functions.R")
 source("0_global_functions.R")
 source("0_web_functions.R")
 source("0_json_functions.R")
+source("0_portfolio_test.R")
 
 setup_project()
 
@@ -122,7 +123,6 @@ portfolio_overview <- portfolio_summary(portfolio_total)
 
 identify_missing_data(portfolio_total)
 
-
 audit_file <- create_audit_file(portfolio_total)
 
 create_audit_chart(audit_file, proc_input_path)
@@ -137,6 +137,9 @@ emissions_totals <- calculate_portfolio_emissions(
   average_sector_intensity,
   company_emissions
 )
+
+port_weights <- pw_calculations(eq_portfolio, cb_portfolio)
+
 
 ################
 #### SAVING ####
@@ -171,3 +174,6 @@ save_if_exists(cb_portfolio, portfolio_name, file.path(proc_input_path_, "bonds_
 save_if_exists(portfolio_overview, portfolio_name, file.path(proc_input_path_, "overview_portfolio.rda"))
 save_if_exists(audit_file, portfolio_name, file.path(proc_input_path_, "audit_file.rda"))
 save_if_exists(emissions_totals, portfolio_name, file.path(proc_input_path_, "emissions.rda"))
+
+save_if_exists(port_weights, portfolio_name, file.path(proc_input_path_, "portfolio_weights.rda"))
+

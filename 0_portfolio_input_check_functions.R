@@ -227,7 +227,7 @@ map_security_sectors <- function(fin_data, sector_bridge) {
 
   fin_data_na <- fin_data %>%
     filter(is.na(sector)) %>%
-    select(-sector)
+    select(-c(sector,sector_boe,subsector_boe,sector_dnb,sector_ipr,subsector_ipr))
 
   fin_data <- fin_data %>% filter(!is.na(sector))
 
@@ -908,7 +908,7 @@ get_and_clean_fin_data <- function(fund_data) {
     col_types = "ccdc"
   )
 
-  sector_bridge <- read_csv("data/sector_bridge.csv", col_types = "ccc")
+  sector_bridge <- read_csv("data/sector_bridge.csv", col_types = "cccccccc")
 
   fin_data <- fin_data_raw
 
@@ -950,7 +950,7 @@ get_and_clean_fin_data <- function(fund_data) {
       asset_type, security_type,
       security_mapped_sector, security_icb_subsector, security_bics_subgroup, bics_sector, # bclass4,
       maturity_date, coupon_value, amount_issued, current_shares_outstanding_all_classes, unit_share_price,
-      sector_override,
+      sector_override, sector_boe, subsector_boe, sector_dnb, sector_ipr, subsector_ipr,
       is_sb
     ) %>%
     distinct()
@@ -1134,6 +1134,7 @@ create_merged_portfolio <- function(eq_portfolio, cb_portfolio) {
 }
 
 create_portfolio_subset <- function(portfolio, portfolio_type, relevant_fin_data) {
+
   if (portfolio_type %in% unique(portfolio$asset_type)) {
     portfolio_subset <- portfolio %>%
       ungroup() %>%
@@ -1538,16 +1539,37 @@ add_other_to_sector_classifications <- function(audit) {
 }
 
 
-# add_bics_sector <- function(portfolio){
-#   #join in bics sectors for EQ and CB via bics_bridge
-#   bics_bridge <- read_csv("data/bics_bridge.csv")
-#   portfolio <- portfolio %>%
-#     left_join(bics_bridge, by = c("security_bics_subgroup" = "bics_subgroup"))
-#
-#   if ("bics_sector.x" %in% colnames(portfolio)) {
-#     portfolio <- portfolio %>% select(-bics_sector.x) %>% rename(bics_sector = bics_sector.y)
-#   }
-#
-# return(portfolio)
-#
-# }
+pw_calculations <- function(eq_portfolio, cb_portfolio){
+
+  port_all <- data.frame()
+
+  if(data_check(eq_portfolio)){
+
+    port_all <- bind_rows(port_all, eq_portfolio)
+  }
+
+  if(data_check(cb_portfolio)){
+
+    port_all <- bind_rows(port_all, cb_portfolio)
+
+  }
+
+  if(data_check(port_all)){
+
+  port_all <- port_all %>%  select(!!!rlang::syms(grouping_variables),company_id, value_usd)
+
+  port_all <- calculate_port_weight(port_all, grouping_variables)
+
+
+  pw <- port_all %>%
+    group_by(!!!rlang::syms(grouping_variables), company_id) %>%
+    summarise(port_weight = sum(port_weight), .groups = "drop") %>%
+    select(company_id, port_weight)
+
+  }else{
+    pw <- data.frame(company_id = "No companies in portfolio", port_weight = "0")
+  }
+
+  return(pw)
+
+}
