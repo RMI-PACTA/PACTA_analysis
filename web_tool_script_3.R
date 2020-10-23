@@ -241,6 +241,14 @@ peers_bonds_results_user <- read_rds(file.path(data_location_ext, "Peers_bonds_r
 translation_list <- readr::read_csv(path(template_path, "translation_list.csv"), col_types = cols())
 shock_year <- 2030 # this should come directly from the stress test.. 2030 based on current discussions in CHPA2020 case
 pacta_sectors_not_analysed <- c("Aviation","Cement","Shipping","Steel")
+select_scenario = scenario
+twodi_sectors = c("Power", "Automotive", "Shipping", "Oil&Gas", "Coal", "Steel", "Cement", "Aviation")
+green_techs = c("RenewablesCap", "HydroCap", "NuclearCap", "Hybrid", "Electric", "FuelCell", "Hybrid_HDV", "Electric_HDV", "FuelCell_HDV","Ac-Electric Arc Furnace","Ac-Electric Arc Furnace")
+tech_roadmap_sectors = c("Automotive", "Power", "Oil&Gas", "Coal")
+
+display_currency = "CHF"
+currency_exchange_value <- 1.03
+# TODO: update this from the currencies file
 
 create_interactive_report(
   repo_path = template_path,
@@ -260,7 +268,7 @@ create_interactive_report(
   portfolio_allocation_method = portfolio_allocation_method,
   scenario_geography = scenario_geography,
   twodi_sectors = c("Power", "Automotive", "Shipping", "Oil&Gas", "Coal", "Steel", "Cement", "Aviation"),
-  green_techs = c("RenewablesCap", "HydroCap", "NuclearCap", "Hybrid", "Electric", "FuelCell", "Hybrid_HDV", "Electric_HDV", "FuelCell_HDV"),
+  green_techs = c("RenewablesCap", "HydroCap", "NuclearCap", "Hybrid", "Electric", "FuelCell", "Hybrid_HDV", "Electric_HDV", "FuelCell_HDV","Ac-Electric Arc Furnace","Ac-Electric Arc Furnace"),
   tech_roadmap_sectors = c("Automotive", "Power", "Oil&Gas", "Coal"),
   pacta_sectors_not_analysed = c("Aviation","Cement","Shipping","Steel"),
   audit_file = audit_file,
@@ -281,14 +289,16 @@ create_interactive_report(
   equity_results_stress_test = equity_results_stress_test,
   bonds_results_stress_test = bonds_results_stress_test,
   translation_list = translation_list,
-  ipr_results_stress_test = ipr_results_stress_test
+  ipr_results_stress_test = ipr_results_stress_test,
+  display_currency = "CHF",
+  currency_exchange_value
 )
 
 
 create_executive_summary(
   file_name = "template.Rmd",
   exec_summary_dir = exec_summary_dir,
-  output_dir = output_dir,
+  output_dir = file.path(output_dir, "executive_summary"),
   language_select = "EN",
   project_name = "working_dir",
   investor_name = investor_name,
@@ -299,7 +309,7 @@ create_executive_summary(
   portfolio_allocation_method = portfolio_allocation_method,
   scenario_geography = scenario_geography,
   twodi_sectors = c("Power", "Automotive", "Shipping", "Oil&Gas", "Coal", "Steel", "Cement", "Aviation"),
-  green_techs = c("RenewablesCap", "HydroCap", "NuclearCap", "Hybrid", "Electric", "FuelCell", "Hybrid_HDV", "Electric_HDV", "FuelCell_HDV"),
+  green_techs = c("RenewablesCap", "HydroCap", "NuclearCap", "Hybrid", "Electric", "FuelCell", "Hybrid_HDV", "Electric_HDV", "FuelCell_HDV","Ac-Electric Arc Furnace","Ac-Electric Arc Furnace"),
   tech_roadmap_sectors = c("Automotive", "Power", "Oil&Gas", "Coal"),
   alignment_techs = c("RenewablesCap", "CoalCap", "Coal", "Oil", "Gas", "Electric", "ICE"),
   equity_results_portfolio,
