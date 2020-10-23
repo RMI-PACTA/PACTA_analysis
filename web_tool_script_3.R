@@ -243,9 +243,8 @@ dataframe_translations <- readr::read_csv(
   col_types = cols()
   )
 
-js_translations <- readr::read_csv(
-  path(template_path, "data/translation/js_labels.csv"),
-  col_types = cols()
+js_translations <- jsonlite::fromJSON(
+  txt = path(template_path, "data/translation/js_labels.JSON")
 )
 
 shock_year <- 2030 # this should come directly from the stress test.. 2030 based on current discussions in CHPA2020 case
