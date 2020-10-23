@@ -230,8 +230,8 @@ if (file.exists(file.path(results_path, portfolio_name, "Stress_test_results_IPR
 }
 
 
-indicies_equity_results_portfolio <- read_rds(file.path(data_location_ext, "Indices_equity_portfolio.rda"))
-indicies_bonds_results_portfolio <- read_rds(file.path(data_location_ext, "Indices_bonds_portfolio.rda"))
+indices_equity_results_portfolio <- read_rds(file.path(data_location_ext, "Indices_equity_portfolio.rda"))
+indices_bonds_results_portfolio <- read_rds(file.path(data_location_ext, "Indices_bonds_portfolio.rda"))
 peers_equity_results_portfolio <- read_rds(file.path(data_location_ext, "Peers_equity_results_portfolio.rda"))
 peers_bonds_results_portfolio <- read_rds(file.path(data_location_ext, "Peers_bonds_results_portfolio.rda"))
 peers_equity_results_user <- read_rds(file.path(data_location_ext, "Peers_equity_results_portfolio_ind.rda"))
@@ -289,8 +289,8 @@ create_interactive_report(
   bonds_results_company = bonds_results_company,
   equity_results_map = equity_results_map,
   bonds_results_map = bonds_results_map,
-  indicies_equity_results_portfolio = indicies_equity_results_portfolio,
-  indicies_bonds_results_portfolio = indicies_bonds_results_portfolio,
+  indices_equity_results_portfolio = indices_equity_results_portfolio,
+  indices_bonds_results_portfolio = indices_bonds_results_portfolio,
   peers_equity_results_portfolio = peers_equity_results_portfolio,
   peers_bonds_results_portfolio = peers_bonds_results_portfolio,
   peers_equity_results_user = peers_equity_results_user,
