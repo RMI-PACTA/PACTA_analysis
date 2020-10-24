@@ -36,7 +36,7 @@ real_estate_dir <- path(user_results_path, project_code, "real_estate")
 
 output_dir <- file.path(outputs_path, portfolio_name_ref_all)
 
-scenario <- "B2DS"
+scenario <- "SDS"
 portfolio_allocation_method <- "portfolio_weight"
 scenario_geography <- "Global"
 audit_file <- read_csv(file.path(proc_input_path, portfolio_name, "audit_file.csv"), col_types = cols())
@@ -245,6 +245,8 @@ select_scenario = scenario
 twodi_sectors = c("Power", "Automotive", "Shipping", "Oil&Gas", "Coal", "Steel", "Cement", "Aviation")
 green_techs = c("RenewablesCap", "HydroCap", "NuclearCap", "Hybrid", "Electric", "FuelCell", "Hybrid_HDV", "Electric_HDV", "FuelCell_HDV","Ac-Electric Arc Furnace","Ac-Electric Arc Furnace")
 tech_roadmap_sectors = c("Automotive", "Power", "Oil&Gas", "Coal")
+repo_path = template_path
+output_dir <- file.path(outputs_path, portfolio_name_ref_all)
 
 display_currency = "CHF"
 currency_exchange_value <- 1.03
@@ -268,7 +270,7 @@ create_interactive_report(
   portfolio_allocation_method = portfolio_allocation_method,
   scenario_geography = scenario_geography,
   twodi_sectors = c("Power", "Automotive", "Shipping", "Oil&Gas", "Coal", "Steel", "Cement", "Aviation"),
-  green_techs = c("RenewablesCap", "HydroCap", "NuclearCap", "Hybrid", "Electric", "FuelCell", "Hybrid_HDV", "Electric_HDV", "FuelCell_HDV","Ac-Electric Arc Furnace","Ac-Electric Arc Furnace"),
+  green_techs = c("RenewablesCap", "HydroCap", "NuclearCap", "Hybrid", "Electric", "FuelCell", "Hybrid_HDV", "Electric_HDV", "FuelCell_HDV","Ac-Electric Arc Furnace","Dc-Electric Arc Furnace"),
   tech_roadmap_sectors = c("Automotive", "Power", "Oil&Gas", "Coal"),
   pacta_sectors_not_analysed = c("Aviation","Cement","Shipping","Steel"),
   audit_file = audit_file,
