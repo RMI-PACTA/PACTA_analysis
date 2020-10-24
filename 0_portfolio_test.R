@@ -6,7 +6,6 @@
 get_ald_scen <- function(portfolio_type) {
   if (portfolio_type == "Equity") {
     ald <- read_rds(paste0(analysis_inputs_path, "/equity_ald_scenario.rda"))
-
     ald <- ald %>%
       filter(equity_market %in% equity_market_list) # %>%
     # rename(bloomberg_id = id)
@@ -17,7 +16,6 @@ get_ald_scen <- function(portfolio_type) {
   }
   if (portfolio_type == "Bonds") {
     ald <- read_rds(paste0(analysis_inputs_path, "/bonds_ald_scenario.rda"))
-
     # ald <- ald %>%
     #   rename(corporate_bond_ticker = id)
   }
@@ -117,7 +115,7 @@ aggregate_company <- function(df) {
     df <- df %>%
       ungroup() %>%
       select(
-        all_of(grouping_variables), scenario, allocation,
+        all_of(grouping_variables), scenario_source, scenario, allocation,
         id, company_name, financial_sector, port_weight,
         allocation_weight, plan_br_dist_alloc_wt, scen_br_dist_alloc_wt,
         equity_market, scenario_geography, year,
@@ -126,7 +124,7 @@ aggregate_company <- function(df) {
         scen_tech_prod, scen_alloc_wt_tech_prod, scen_carsten, scen_emission_factor
       ) %>%
       group_by(
-        !!!rlang::syms(grouping_variables), scenario, allocation,
+        !!!rlang::syms(grouping_variables), scenario_source, scenario, allocation,
         id, company_name, financial_sector,
         allocation_weight, plan_br_dist_alloc_wt, scen_br_dist_alloc_wt,
         equity_market, scenario_geography, year,
@@ -163,14 +161,14 @@ aggregate_portfolio <- function(df) {
   if (data_check(df)) {
     df <- df %>%
       select(
-        all_of(grouping_variables), scenario, allocation,
+        all_of(grouping_variables), scenario_source, scenario, allocation,
         equity_market, scenario_geography, year,
         ald_sector, technology,
         plan_tech_prod, plan_alloc_wt_tech_prod, plan_carsten, plan_emission_factor,
         scen_tech_prod, scen_alloc_wt_tech_prod, scen_carsten, scen_emission_factor
       ) %>%
       group_by(
-        !!!rlang::syms(grouping_variables), scenario, allocation,
+        !!!rlang::syms(grouping_variables), scenario_source, scenario, allocation,
         equity_market, scenario_geography, year,
         ald_sector, technology
       ) %>%
