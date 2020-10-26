@@ -13,9 +13,9 @@ r_script_command <- function(x) {
   sprintf("Rscript --vanilla web_tool_script_%s.R TestPortfolio_Input", x)
 }
 
-stop_on_error <- function(exit_code, script_id) {
+stop_on_error <- function(exit_code) {
   if (exit_code > 0) {
-    stop("Script ", script_id, " throwed an error.", call. = FALSE)
+    stop("This script throwed an error.", call. = FALSE)
   }
 
   invisible(exit_code)
