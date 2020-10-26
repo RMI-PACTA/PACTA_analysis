@@ -60,7 +60,6 @@ if (file.exists(equity_input_file)) {
     port_all_eq <- NA
 
     investor_name_select <- list_investors_eq[e]
-    print(paste0(e, ": ", investor_name_select))
 
     port_raw_eq <- port_raw_all_eq %>% filter(investor_name == investor_name_select)
 
@@ -150,8 +149,6 @@ if (file.exists(bonds_inputs_file)) {
     port_all_cb <- NA
 
     investor_name_select <- list_investors_cb[b]
-
-    print(paste0(b, ": ", investor_name_select))
 
     port_raw_cb <- port_raw_all_cb %>% filter(investor_name == investor_name_select)
 
