@@ -255,10 +255,6 @@ twodi_sectors = c("Power", "Automotive", "Shipping", "Oil&Gas", "Coal", "Steel",
 green_techs = c("RenewablesCap", "HydroCap", "NuclearCap", "Hybrid", "Electric", "FuelCell", "Hybrid_HDV", "Electric_HDV", "FuelCell_HDV","Ac-Electric Arc Furnace","Ac-Electric Arc Furnace")
 tech_roadmap_sectors = c("Automotive", "Power", "Oil&Gas", "Coal")
 
-display_currency = "CHF"
-currency_exchange_value <- 1.03
-# TODO: update this from the currencies file
-
 create_interactive_report(
   repo_path = template_path,
   template_dir = template_dir,
@@ -266,7 +262,7 @@ create_interactive_report(
   survey_dir = survey_dir,
   real_estate_dir = real_estate_dir,
   language_select = language_select,
-  # report_name = report_name,
+  report_name = report_name,
   project_name = project_name,
   investor_name = investor_name,
   portfolio_name = portfolio_name,
@@ -299,9 +295,7 @@ create_interactive_report(
   bonds_results_stress_test = bonds_results_stress_test,
   dataframe_translations = dataframe_translations,
   js_translations = js_translations,
-  ipr_results_stress_test = ipr_results_stress_test,
-  display_currency = "CHF",
-  currency_exchange_value
+  ipr_results_stress_test = ipr_results_stress_test
 )
 
 
