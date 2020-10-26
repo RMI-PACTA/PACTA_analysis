@@ -53,31 +53,12 @@ default:
     Scenario.Sources.List:
       - ETP2017
       - WEO2019
-      - SBTI  
+      - WEO2020
+      - GECO2019
     Scenario.Geography.List:
       - Global
       - GlobalAggregate
       - NonOECD
       - OECD
-  Reporting:
-   Naming: 
-      GraphType: Report
-      Scenariochoose: SDS
-      AccountingPrinciple: PortfolioWeight
-      ScenarioGeographyChoose: GlobalAggregate
-      EquityMarketSelection: Global
-      Language: "EN"
-      Startyear: 2020
-      
-      
-   Benchmarks:
-      PeerGroupSelection: Project
-      EQPeersRef: Project
-      CBPeersRef: Project
-      eq_market_ref: GlobalMarket	
-      cb_market_ref: GlobalMarket
-
-   Contents:
-      templateversion: "GeneralTemplateInput_v6"
-      No.Companies: 15
+ 
 
