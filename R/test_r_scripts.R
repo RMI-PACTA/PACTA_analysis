@@ -3,7 +3,7 @@ test_r_scripts <- function(x = 1:3) {
 
   for (i in seq_along(command)) {
     message("Testing: ", command[[i]])
-    stop_on_error(system(command[[i]]), i)
+    stop_on_error(system(command[[i]]))
   }
 
   invisible(x)
