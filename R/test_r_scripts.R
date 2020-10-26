@@ -3,7 +3,7 @@ test_r_scripts <- function(x = 1:3) {
 
   for (i in seq_along(command)) {
     message("Testing: ", command[[i]])
-    system(command[[i]])
+    stop_on_error(system(command[[i]]), i)
   }
 
   invisible(x)
@@ -11,4 +11,12 @@ test_r_scripts <- function(x = 1:3) {
 
 r_script_command <- function(x) {
   sprintf("Rscript --vanilla web_tool_script_%s.R TestPortfolio_Input", x)
+}
+
+stop_on_error <- function(exit_code, script_id) {
+  if (exit_code > 0) {
+    stop("Script ", script_id, " throwed an error.", call. = FALSE)
+  }
+
+  invisible(exit_code)
 }
