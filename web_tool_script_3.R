@@ -245,18 +245,15 @@ if ("scenario_source" %in% colnames(bonds_results_company)){bonds_results_compan
 
 
 
-
 dataframe_translations <- readr::read_csv(
   path(template_path, "data/translation/dataframe_labels.csv"),
   col_types = cols()
   )
-
 js_translations <- jsonlite::fromJSON(
-  txt = path(template_path, "data/translation/js_labels.JSON")
+  txt = path(template_path, "data/translation/js_labels.json")
 )
 
 shock_year <- 2030 # this should come directly from the stress test.. 2030 based on current discussions in CHPA2020 case
-
 pacta_sectors_not_analysed <- c("Aviation","Cement","Shipping","Steel")
 select_scenario = scenario
 twodi_sectors = c("Power", "Automotive", "Shipping", "Oil&Gas", "Coal", "Steel", "Cement", "Aviation")
@@ -278,7 +275,7 @@ create_interactive_report(
   survey_dir = survey_dir,
   real_estate_dir = real_estate_dir,
   language_select = language_select,
-  # report_name = report_name,
+  report_name = report_name,
   project_name = project_name,
   investor_name = investor_name,
   portfolio_name = portfolio_name,
@@ -313,7 +310,7 @@ create_interactive_report(
   js_translations = js_translations,
   ipr_results_stress_test = ipr_results_stress_test,
   display_currency = "CHF",
-  currency_exchange_value
+  currency_exchange_value = currency_exchange_value
 )
 
 
