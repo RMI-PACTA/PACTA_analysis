@@ -36,7 +36,7 @@ real_estate_dir <- path(user_results_path, project_code, "real_estate")
 
 output_dir <- file.path(outputs_path, portfolio_name_ref_all)
 
-scenario <- "B2DS"
+scenario <- "SDS"
 portfolio_allocation_method <- "portfolio_weight"
 scenario_geography <- "Global"
 audit_file <- read_csv(file.path(proc_input_path, portfolio_name, "audit_file.csv"), col_types = cols())
@@ -238,26 +238,35 @@ peers_equity_results_user <- read_rds(file.path(data_location_ext, "Peers_equity
 peers_bonds_results_user <- read_rds(file.path(data_location_ext, "Peers_bonds_results_portfolio_ind.rda"))
 
 
+if ("scenario_source" %in% colnames(equity_results_portfolio)){equity_results_portfolio <-equity_results_portfolio %>%  filter(scenario_source %in% c("ETP2017","WEO2019"))}
+if ("scenario_source" %in% colnames(bonds_results_portfolio)){bonds_results_portfolio <-bonds_results_portfolio %>%  filter(scenario_source  %in% c("ETP2017","WEO2019"))}
+if ("scenario_source" %in% colnames(equity_results_company)){equity_results_company <-equity_results_company %>%  filter(scenario_source  %in% c("ETP2017","WEO2019"))}
+if ("scenario_source" %in% colnames(bonds_results_company)){bonds_results_company <-bonds_results_company %>%  filter(scenario_source  %in% c("ETP2017","WEO2019"))}
+
+
+
 dataframe_translations <- readr::read_csv(
   path(template_path, "data/translation/dataframe_labels.csv"),
   col_types = cols()
   )
-
 js_translations <- jsonlite::fromJSON(
-  txt = path(template_path, "data/translation/js_labels.JSON")
+  txt = path(template_path, "data/translation/js_labels.json")
 )
 
 shock_year <- 2030 # this should come directly from the stress test.. 2030 based on current discussions in CHPA2020 case
-
 pacta_sectors_not_analysed <- c("Aviation","Cement","Shipping","Steel")
 select_scenario = scenario
 twodi_sectors = c("Power", "Automotive", "Shipping", "Oil&Gas", "Coal", "Steel", "Cement", "Aviation")
 green_techs = c("RenewablesCap", "HydroCap", "NuclearCap", "Hybrid", "Electric", "FuelCell", "Hybrid_HDV", "Electric_HDV", "FuelCell_HDV","Ac-Electric Arc Furnace","Ac-Electric Arc Furnace")
 tech_roadmap_sectors = c("Automotive", "Power", "Oil&Gas", "Coal")
+alignment_techs = c("RenewablesCap", "CoalCap", "Coal", "Oil", "Gas", "Electric", "ICE")
+repo_path = template_path
+output_dir <- file.path(outputs_path, portfolio_name_ref_all)
 
 display_currency = "CHF"
 currency_exchange_value <- 1.03
 # TODO: update this from the currencies file
+file_name = "template.Rmd"
 
 create_interactive_report(
   repo_path = template_path,
@@ -266,7 +275,7 @@ create_interactive_report(
   survey_dir = survey_dir,
   real_estate_dir = real_estate_dir,
   language_select = language_select,
-  # report_name = report_name,
+  report_name = report_name,
   project_name = project_name,
   investor_name = investor_name,
   portfolio_name = portfolio_name,
@@ -277,7 +286,7 @@ create_interactive_report(
   portfolio_allocation_method = portfolio_allocation_method,
   scenario_geography = scenario_geography,
   twodi_sectors = c("Power", "Automotive", "Shipping", "Oil&Gas", "Coal", "Steel", "Cement", "Aviation"),
-  green_techs = c("RenewablesCap", "HydroCap", "NuclearCap", "Hybrid", "Electric", "FuelCell", "Hybrid_HDV", "Electric_HDV", "FuelCell_HDV","Ac-Electric Arc Furnace","Ac-Electric Arc Furnace"),
+  green_techs = c("RenewablesCap", "HydroCap", "NuclearCap", "Hybrid", "Electric", "FuelCell", "Hybrid_HDV", "Electric_HDV", "FuelCell_HDV","Ac-Electric Arc Furnace","Dc-Electric Arc Furnace"),
   tech_roadmap_sectors = c("Automotive", "Power", "Oil&Gas", "Coal"),
   pacta_sectors_not_analysed = c("Aviation","Cement","Shipping","Steel"),
   audit_file = audit_file,
@@ -301,7 +310,7 @@ create_interactive_report(
   js_translations = js_translations,
   ipr_results_stress_test = ipr_results_stress_test,
   display_currency = "CHF",
-  currency_exchange_value
+  currency_exchange_value = currency_exchange_value
 )
 
 
@@ -325,5 +334,8 @@ create_executive_summary(
   equity_results_portfolio,
   bonds_results_portfolio,
   peers_equity_results_portfolio,
-  peers_bonds_results_portfolio
+  peers_bonds_results_portfolio,
+  peers_equity_results_user,
+  peers_bonds_results_user
+
 )
