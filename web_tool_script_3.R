@@ -230,8 +230,8 @@ if (file.exists(file.path(results_path, portfolio_name, "Stress_test_results_IPR
 }
 
 
-indicies_equity_results_portfolio <- read_rds(file.path(data_location_ext, "Indices_equity_portfolio.rda"))
-indicies_bonds_results_portfolio <- read_rds(file.path(data_location_ext, "Indices_bonds_portfolio.rda"))
+indices_equity_results_portfolio <- read_rds(file.path(data_location_ext, "Indices_equity_portfolio.rda"))
+indices_bonds_results_portfolio <- read_rds(file.path(data_location_ext, "Indices_bonds_portfolio.rda"))
 peers_equity_results_portfolio <- read_rds(file.path(data_location_ext, "Peers_equity_results_portfolio.rda"))
 peers_bonds_results_portfolio <- read_rds(file.path(data_location_ext, "Peers_bonds_results_portfolio.rda"))
 peers_equity_results_user <- read_rds(file.path(data_location_ext, "Peers_equity_results_portfolio_ind.rda"))
@@ -246,8 +246,17 @@ if ("scenario_source" %in% colnames(bonds_results_company)){bonds_results_compan
 
 
 
-translation_list <- readr::read_csv(path(template_path, "translation_list.csv"), col_types = cols())
+dataframe_translations <- readr::read_csv(
+  path(template_path, "data/translation/dataframe_labels.csv"),
+  col_types = cols()
+  )
+
+js_translations <- jsonlite::fromJSON(
+  txt = path(template_path, "data/translation/js_labels.JSON")
+)
+
 shock_year <- 2030 # this should come directly from the stress test.. 2030 based on current discussions in CHPA2020 case
+
 pacta_sectors_not_analysed <- c("Aviation","Cement","Shipping","Steel")
 select_scenario = scenario
 twodi_sectors = c("Power", "Automotive", "Shipping", "Oil&Gas", "Coal", "Steel", "Cement", "Aviation")
@@ -269,7 +278,7 @@ create_interactive_report(
   survey_dir = survey_dir,
   real_estate_dir = real_estate_dir,
   language_select = language_select,
-  report_name = report_name,
+  # report_name = report_name,
   project_name = project_name,
   investor_name = investor_name,
   portfolio_name = portfolio_name,
@@ -292,15 +301,16 @@ create_interactive_report(
   bonds_results_company = bonds_results_company,
   equity_results_map = equity_results_map,
   bonds_results_map = bonds_results_map,
-  indicies_equity_results_portfolio = indicies_equity_results_portfolio,
-  indicies_bonds_results_portfolio = indicies_bonds_results_portfolio,
+  indices_equity_results_portfolio = indices_equity_results_portfolio,
+  indices_bonds_results_portfolio = indices_bonds_results_portfolio,
   peers_equity_results_portfolio = peers_equity_results_portfolio,
   peers_bonds_results_portfolio = peers_bonds_results_portfolio,
   peers_equity_results_user = peers_equity_results_user,
   peers_bonds_results_user = peers_bonds_results_user,
   equity_results_stress_test = equity_results_stress_test,
   bonds_results_stress_test = bonds_results_stress_test,
-  translation_list = translation_list,
+  dataframe_translations = dataframe_translations,
+  js_translations = js_translations,
   ipr_results_stress_test = ipr_results_stress_test,
   display_currency = "CHF",
   currency_exchange_value
