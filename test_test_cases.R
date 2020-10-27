@@ -5,6 +5,10 @@ test_cases_dir <- "~/Dropbox (2° Investing)/2° Investing Team/People/Jacob/p20
 
 test_cases_csvs <- list.files(test_cases_dir, pattern = "\\.csv", full.names = TRUE)
 
+test_cases_output_dir <- "test_cases"
+
+unlink(test_cases_output_dir, recursive = TRUE)
+
 for (i in seq_along(test_cases_csvs)) {
   filepath <- test_cases_csvs[[i]]
 
@@ -26,7 +30,7 @@ for (i in seq_along(test_cases_csvs)) {
     ))
 
 
-  out_dir <- file.path("test_cases", portfolio_name)
+  out_dir <- file.path(test_cases_output_dir, portfolio_name)
 
   dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
   dir.create(file.path(out_dir, "00_Log_Files"), showWarnings = FALSE, recursive = TRUE)
@@ -48,7 +52,7 @@ for (i in seq_along(test_cases_csvs)) {
   filepath <- test_cases_csvs[[i]]
   test_case <- read_csv(filepath, col_types = cols())
   portfolio_name <- unique(test_case$Portfolio.Name)[[1]]
-  out_dir <- file.path("test_cases", portfolio_name)
+  out_dir <- file.path(test_cases_output_dir, portfolio_name)
 
   portfolio_name_ref_all <- portfolio_name
   portfolio_root_dir <- out_dir
