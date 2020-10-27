@@ -155,9 +155,9 @@ proc_input_path_ <- file.path(proc_input_path, portfolio_name_ref_all)
 
 # write_csv(file_names, file.path(proc_input_path_, "file_names.csv"))
 
-create_audit_chart(audit_file, proc_input_path = proc_input_path_)
+# create_audit_chart(audit_file, proc_input_path = proc_input_path_)
 
-website_text(audit_file, proc_input_path = proc_input_path_)
+# website_text(audit_file, proc_input_path = proc_input_path_)
 
 export_audit_information_jsons(
   audit_file_ = audit_file %>% filter(portfolio_name == portfolio_name),
