@@ -125,10 +125,6 @@ identify_missing_data(portfolio_total)
 
 audit_file <- create_audit_file(portfolio_total)
 
-create_audit_chart(audit_file, proc_input_path)
-
-website_text(audit_file)
-
 emissions_totals <- calculate_portfolio_emissions(
   inc_emission_factors,
   audit_file,
@@ -159,6 +155,9 @@ proc_input_path_ <- file.path(proc_input_path, portfolio_name_ref_all)
 
 # write_csv(file_names, file.path(proc_input_path_, "file_names.csv"))
 
+# create_audit_chart(audit_file, proc_input_path = proc_input_path_)
+
+# website_text(audit_file, proc_input_path = proc_input_path_)
 
 export_audit_information_jsons(
   audit_file_ = audit_file %>% filter(portfolio_name == portfolio_name),
