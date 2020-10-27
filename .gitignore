@@ -48,3 +48,6 @@ data/fund_isins_without_bbg_data.csv
 .DS_Store
 **/.DS_Store
 integration-test.html
+
+# local test case test output
+test_cases/*
