@@ -56,6 +56,9 @@ for (i in seq_along(test_cases_csvs)) {
 
   portfolio_name_ref_all <- portfolio_name
   portfolio_root_dir <- out_dir
+  
+  cli::cli_h1(paste0("running for: ", portfolio_name_ref_all))
+  cli::cli_h1(paste0("in: ", portfolio_root_dir))
 
   source("web_tool_script_1.R")
   source("web_tool_script_2.R")
