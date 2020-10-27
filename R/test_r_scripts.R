@@ -15,7 +15,7 @@ r_script_command <- function(x) {
 
 stop_on_error <- function(exit_code) {
   if (exit_code > 0) {
-    stop("This script throwed an error.", call. = FALSE)
+    stop("This script threw an error.", call. = FALSE)
   }
 
   invisible(exit_code)
