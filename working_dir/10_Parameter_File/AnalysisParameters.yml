@@ -55,6 +55,7 @@ default:
       - WEO2019
       - WEO2020
       - GECO2019
+      - SBTI
     Scenario.Geography.List:
       - Global
       - GlobalAggregate
