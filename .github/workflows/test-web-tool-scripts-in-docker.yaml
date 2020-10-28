@@ -39,11 +39,11 @@ jobs:
     container:
       image: 2dii/r-packages
       volumes:
-        - /home/runner/work/setup-gleam/setup-gleam/PACTA_analysis:/bound
-        - /home/runner/work/setup-gleam/setup-gleam/pacta-data:/pacta-data
-        - /home/runner/work/setup-gleam/setup-gleam/create_interactive_report:/create_interactive_report
-        - /home/runner/work/setup-gleam/setup-gleam/StressTestingModelDev:/StressTestingModelDev
-        - /home/runner/work/setup-gleam/setup-gleam/user_results:/user_results
+        - ./PACTA_analysis:/bound
+        - ./pacta-data:/pacta-data
+        - ./create_interactive_report:/create_interactive_report
+        - ./StressTestingModelDev:/StressTestingModelDev
+        - ./user_results:/user_results
     steps:
       - name: cd to working directory
         run: cd /bound
