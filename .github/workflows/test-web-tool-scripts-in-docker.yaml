@@ -47,15 +47,21 @@ jobs:
         run: pwd
       - name: list files in working directory
         run: ls -al
-      - name: list files in ./PACTA_analysis
-        run: ls -al ./PACTA_analysis
-      - name: change to /__w/PACTA_analysis/PACTA_analysis/PACTA_analysiss directriy
-        run: cd /__w/PACTA_analysis/PACTA_analysis/PACTA_analysis
+      - name: list files in StressTestingModelDev
+        run: ls -al StressTestingModelDev
+      - name: change to StressTestingModelDev
+        run: cd StressTestingModelDev
       - name: print working directory
         run: pwd
       - name: list files in working directory
         run: ls -al
-      - name: list files in bin
-        run: ls -al bin
+      - name: list files in /
+        run: ls -al /
+      - name: list files in /mnt
+        run: ls -al /mnt
+      - name: change to /
+        run: cd /
+      - name: list files in working directory
+        run: ls -al
       - name: run web tool scripts
         run: ./bin/run-web-tool
