@@ -49,6 +49,10 @@ jobs:
         run: cd /bound
       - name: list files in root directory
         run: ls -al /
+      - name: list files in bound directory
+        run: ls -al /bound
+      - name: list files in bound bin directory
+        run: ls -al /bound/bin
       - name: list files in working directory
         run: ls -al
       - name: list files in bin directory
