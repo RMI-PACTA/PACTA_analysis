@@ -55,8 +55,8 @@ jobs:
         run: cd /bound
       - name: list files in /github/home directory
         run: ls -al /github/home
-      - name: list files in /github/workspace directory
-        run: ls -al /github/workspace
+      - name: list files in /github/workflow directory
+        run: ls -al /github/workflow
       - name: list files in root directory
         run: ls -al /
       - name: list files in bound directory
