@@ -1,19 +1,4 @@
 #! /bin/bash
 
-Rscript -e 'git2r::branch_get_upstream(git2r::repository_head("../PACTA_analysis"))'
-Rscript -e 'git2r::status("../PACTA_analysis")'
-
-Rscript -e 'git2r::branch_get_upstream(git2r::repository_head("../create_interactive_report"))'
-Rscript -e 'git2r::status("../create_interactive_report")'
-
-Rscript -e 'git2r::branch_get_upstream(git2r::repository_head("../StressTestingModelDev"))'
-Rscript -e 'git2r::status("../StressTestingModelDev")'
-
-Rscript -e 'git2r::branch_get_upstream(git2r::repository_head("../pacta-data"))'
-Rscript -e 'git2r::status("../pacta-data")'
-
-Rscript -e 'git2r::branch_get_upstream(git2r::repository_head("../user_results"))'
-Rscript -e 'git2r::status("../user_results")'
-
-
+"$(pwd)"/bin/show-upstream-and-status-at-pacta-repos
 "$(pwd)"/bin/start-containter-with /bound/bin/run-r-scripts
