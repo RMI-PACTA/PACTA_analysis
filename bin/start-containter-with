@@ -13,5 +13,6 @@ docker run --rm -ti \
   --mount type=bind,source="$data",target=/pacta-data \
   --mount type=bind,source="$report",target=/create_interactive_report \
   --mount type=bind,source="$stresstest",target=/StressTestingModelDev \
-  2dii/r-packages "$1" "$2"
+  --mount type=bind,source="$userresults",target=/user_results \
+  2dii/r-packages "$1"
 
