@@ -39,9 +39,9 @@ jobs:
     container:
       image: 2dii/r-packages
       volumes:
-        - ${{ github.workspace }}/PACTA_analysis:bound
-        - ${{ github.workspace }}/create_interactive_report:create_interactive_report
-        - ${{ github.workspace }}/StressTestingModelDev:StressTestingModelDev
+        - ${{ github.workspace }}/PACTA_analysis:/bound
+        - ${{ github.workspace }}/create_interactive_report:/create_interactive_report
+        - ${{ github.workspace }}/StressTestingModelDev:/StressTestingModelDev
     steps:
       - name: print working directory
         run: pwd
