@@ -47,5 +47,9 @@ jobs:
     steps:
       - name: cd to working directory
         run: cd /bound
+      - name: list files in working directory
+        run: ls -al
+      - name: list files in bin directory
+        run: ls -al bin
       - name: run web tool scripts
         run: ./bin/run-web-tool
