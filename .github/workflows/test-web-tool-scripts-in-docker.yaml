@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 jobs:
   setup_docker_host:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-16.04
     steps:
       - name: Checkout PACTA_analysis
         uses: actions/checkout@v2
@@ -44,24 +44,11 @@ jobs:
         - ${{ github.workspace }}/StressTestingModelDev:/StressTestingModelDev
     steps:
       - name: print working directory
-        run: pwd
-      - name: list files in working directory
-        run: ls -al
-      - name: list files in StressTestingModelDev
-        run: ls -al StressTestingModelDev
-      - name: change to StressTestingModelDev
-        run: cd StressTestingModelDev
-      - name: print working directory
-        run: pwd
-      - name: list files in working directory
-        run: ls -al
-      - name: list files in /
-        run: ls -al /
-      - name: list files in /mnt
-        run: ls -al /mnt
-      - name: change to /
-        run: cd /
-      - name: list files in working directory
-        run: ls -al
-      - name: run web tool scripts
-        run: ./bin/run-web-tool
+        run: |
+          pwd
+          ls -al
+          cd PACTA_analysis
+          pwd
+          ls -al
+          ls -al bin
+          ./bin/run-web-tool
