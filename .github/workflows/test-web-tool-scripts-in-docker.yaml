@@ -45,6 +45,7 @@ jobs:
         - StressTestingModelDev:/StressTestingModelDev
         - user_results:/user_results
     steps:
-      - name: show working directory
+      - name: cd to working directory
         run: cd /bound
+      - name: run web tool scripts
         run: ./bin/run-web-tool
