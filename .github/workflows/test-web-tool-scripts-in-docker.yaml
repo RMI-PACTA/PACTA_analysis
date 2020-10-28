@@ -34,23 +34,10 @@ jobs:
           repository: 2DegreesInvesting/user_results
           token: ${{ secrets.MAURO_PAT_FOR_2DII }}
           path: user_results
-      - name: list files in working directory
-        run: ls -al
-      - name: print working directory
-        run: pwd
-      - name: list files in bin directory
-        run: ls -al /home/runner/work/PACTA_analysis/PACTA_analysis/PACTA_analysis/bin
   setup_docker_instance:
     runs-on: ubuntu-18.04
     container:
       image: 2dii/r-packages
-      volumes:
-        - /home/runner/work/PACTA_analysis/PACTA_analysis/PACTA_analysis:/bound
-        - /home/runner/work/PACTA_analysis/PACTA_analysis/PACTA_analysis/bin:/XXX
-        - /home/runner/work/PACTA_analysis/PACTA_analysis/pacta-data:/pacta-data
-        - /home/runner/work/PACTA_analysis/PACTA_analysis/create_interactive_report:/create_interactive_report
-        - /home/runner/work/PACTA_analysis/PACTA_analysis/StressTestingModelDev:/StressTestingModelDev
-        - /home/runner/work/PACTA_analysis/PACTA_analysis/user_results:/user_results
     steps:
       - name: print working directory
         run: pwd
@@ -59,7 +46,7 @@ jobs:
       - name: list files in PACTA_analysis
         run: ls -al PACTA_analysis
       - name: change to PACTA_analysis directriy
-        run: cd PACTA_analysis
+        run: cd ./PACTA_analysis
       - name: print working directory
         run: pwd
       - name: list files in working directory
