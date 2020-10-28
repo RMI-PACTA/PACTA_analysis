@@ -53,7 +53,13 @@ jobs:
         - /home/runner/work/PACTA_analysis/PACTA_analysis/user_results:/user_results
     steps:
       - name: sleep for 1 minute so the checkouts above have time to finish
-        run: sleep 60
+        run: sleep 120
+      - name: print working directory
+        run: pwd
+      - name: list files in working directory
+        run: ls -al
+      - name: list files in ./PACTA_analysis/bin
+        run: ls -al ./PACTA_analysis/bin
       - name: change to /bound directriy
         run: cd /bound
       - name: list files in /mnt directory
