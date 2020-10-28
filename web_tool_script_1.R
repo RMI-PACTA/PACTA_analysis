@@ -7,6 +7,7 @@ source("0_portfolio_input_check_functions.R")
 source("0_global_functions.R")
 source("0_web_functions.R")
 source("0_json_functions.R")
+source("0_portfolio_test.R")
 
 setup_project()
 
@@ -122,12 +123,7 @@ portfolio_overview <- portfolio_summary(portfolio_total)
 
 identify_missing_data(portfolio_total)
 
-
 audit_file <- create_audit_file(portfolio_total)
-
-create_audit_chart(audit_file, proc_input_path)
-
-website_text(audit_file)
 
 emissions_totals <- calculate_portfolio_emissions(
   inc_emission_factors,
@@ -137,6 +133,9 @@ emissions_totals <- calculate_portfolio_emissions(
   average_sector_intensity,
   company_emissions
 )
+
+port_weights <- pw_calculations(eq_portfolio, cb_portfolio)
+
 
 ################
 #### SAVING ####
@@ -156,6 +155,9 @@ proc_input_path_ <- file.path(proc_input_path, portfolio_name_ref_all)
 
 # write_csv(file_names, file.path(proc_input_path_, "file_names.csv"))
 
+# create_audit_chart(audit_file, proc_input_path = proc_input_path_)
+
+# website_text(audit_file, proc_input_path = proc_input_path_)
 
 export_audit_information_jsons(
   audit_file_ = audit_file %>% filter(portfolio_name == portfolio_name),
@@ -171,3 +173,8 @@ save_if_exists(cb_portfolio, portfolio_name, file.path(proc_input_path_, "bonds_
 save_if_exists(portfolio_overview, portfolio_name, file.path(proc_input_path_, "overview_portfolio.rda"))
 save_if_exists(audit_file, portfolio_name, file.path(proc_input_path_, "audit_file.rda"))
 save_if_exists(emissions_totals, portfolio_name, file.path(proc_input_path_, "emissions.rda"))
+
+if(data_check(port_weights)){
+  port_weights <- jsonlite::toJSON(x=port_weights)
+  write(x = port_weights, file = file.path(proc_input_path_,"portfolio_weights.json"))
+  }

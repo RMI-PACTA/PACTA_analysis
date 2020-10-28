@@ -283,21 +283,3 @@ write_log <- function(msg, ...) {
   write(composed, file = paste0(project_location, "/00_Log_Files/error_messages.txt"), append = TRUE)
 }
 
-
-
-# clean_punctuation <- function(x){
-#
-#   x <- gsub("ó","o",x)
-#   x <- gsub("&"," and ",x)
-#   x <- gsub("á","a",x)
-#   x <- gsub("/"," ",x)
-#   x <- gsub("ä","ae", x)
-#   x <- gsub("ö","oe", x)
-#   x <- gsub("ü","ue", x)
-#   x <- gsub("Ä","Ae", x)
-#   x <- gsub("Ö","Oe", x)
-#   x <- gsub("Ü","Ue", x)
-#
-#   x
-#
-# }

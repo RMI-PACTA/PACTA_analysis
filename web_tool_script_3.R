@@ -8,8 +8,6 @@ source("0_web_functions.R")
 
 setup_project()
 
-# working_location <- file.path(working_location)
-
 set_webtool_paths()
 
 options(r2dii_config = file.path(par_file_path, "AnalysisParameters.yml"))
@@ -18,7 +16,6 @@ set_global_parameters(file.path(par_file_path, "AnalysisParameters.yml"))
 
 set_portfolio_parameters(file_path = fs::path(par_file_path, paste0(portfolio_name_ref_all, "_PortfolioParameters.yml")))
 
-# need to define an alternative location for data files
 analysis_inputs_path <- set_analysis_inputs_path(twodii_internal, data_location_ext, dataprep_timestamp)
 
 source(file.path(template_path, "create_interactive_report.R"))
@@ -34,12 +31,12 @@ exec_summary_name = select_exec_summary_template(project_code = project_code,
 template_dir <- paste0(template_path, report_name,"/_book/")
 exec_summary_dir <- paste0(template_path, exec_summary_name,"/")
 
-survey_dir <- path(data_location_ext, "survey_data", user_id)
-real_estate_dir <- path(data_location_ext, "real_estate_data", user_id)
+survey_dir <- path(user_results_path, project_code, "survey")
+real_estate_dir <- path(user_results_path, project_code, "real_estate")
 
 output_dir <- file.path(outputs_path, portfolio_name_ref_all)
 
-scenario <- "B2DS"
+scenario <- "SDS"
 portfolio_allocation_method <- "portfolio_weight"
 scenario_geography <- "Global"
 audit_file <- read_csv(file.path(proc_input_path, portfolio_name, "audit_file.csv"), col_types = cols())
@@ -233,17 +230,43 @@ if (file.exists(file.path(results_path, portfolio_name, "Stress_test_results_IPR
 }
 
 
-indicies_equity_results_portfolio <- read_rds(file.path(data_location_ext, "Indices_equity_portfolio.rda"))
-indicies_bonds_results_portfolio <- read_rds(file.path(data_location_ext, "Indices_bonds_portfolio.rda"))
+indices_equity_results_portfolio <- read_rds(file.path(data_location_ext, "Indices_equity_portfolio.rda"))
+indices_bonds_results_portfolio <- read_rds(file.path(data_location_ext, "Indices_bonds_portfolio.rda"))
 peers_equity_results_portfolio <- read_rds(file.path(data_location_ext, "Peers_equity_results_portfolio.rda"))
 peers_bonds_results_portfolio <- read_rds(file.path(data_location_ext, "Peers_bonds_results_portfolio.rda"))
 peers_equity_results_user <- read_rds(file.path(data_location_ext, "Peers_equity_results_portfolio_ind.rda"))
 peers_bonds_results_user <- read_rds(file.path(data_location_ext, "Peers_bonds_results_portfolio_ind.rda"))
 
 
-translation_list <- readr::read_csv(path(template_path, "translation_list.csv"), col_types = cols())
-shock_year <- 2028 # this should come directly from the stress test
+if ("scenario_source" %in% colnames(equity_results_portfolio)){equity_results_portfolio <-equity_results_portfolio %>%  filter(scenario_source %in% c("ETP2017","WEO2019"))}
+if ("scenario_source" %in% colnames(bonds_results_portfolio)){bonds_results_portfolio <-bonds_results_portfolio %>%  filter(scenario_source  %in% c("ETP2017","WEO2019"))}
+if ("scenario_source" %in% colnames(equity_results_company)){equity_results_company <-equity_results_company %>%  filter(scenario_source  %in% c("ETP2017","WEO2019"))}
+if ("scenario_source" %in% colnames(bonds_results_company)){bonds_results_company <-bonds_results_company %>%  filter(scenario_source  %in% c("ETP2017","WEO2019"))}
+
+
+
+dataframe_translations <- readr::read_csv(
+  path(template_path, "data/translation/dataframe_labels.csv"),
+  col_types = cols()
+  )
+js_translations <- jsonlite::fromJSON(
+  txt = path(template_path, "data/translation/js_labels.json")
+)
+
+shock_year <- 2030 # this should come directly from the stress test.. 2030 based on current discussions in CHPA2020 case
 pacta_sectors_not_analysed <- c("Aviation","Cement","Shipping","Steel")
+select_scenario = scenario
+twodi_sectors = c("Power", "Automotive", "Shipping", "Oil&Gas", "Coal", "Steel", "Cement", "Aviation")
+green_techs = c("RenewablesCap", "HydroCap", "NuclearCap", "Hybrid", "Electric", "FuelCell", "Hybrid_HDV", "Electric_HDV", "FuelCell_HDV","Ac-Electric Arc Furnace","Ac-Electric Arc Furnace")
+tech_roadmap_sectors = c("Automotive", "Power", "Oil&Gas", "Coal")
+alignment_techs = c("RenewablesCap", "CoalCap", "Coal", "Oil", "Gas", "Electric", "ICE")
+repo_path = template_path
+output_dir <- file.path(outputs_path, portfolio_name_ref_all)
+
+display_currency = "CHF"
+currency_exchange_value <- 1.03
+# TODO: update this from the currencies file
+file_name = "template.Rmd"
 
 create_interactive_report(
   repo_path = template_path,
@@ -252,46 +275,49 @@ create_interactive_report(
   survey_dir = survey_dir,
   real_estate_dir = real_estate_dir,
   language_select = language_select,
+  report_name = report_name,
   project_name = project_name,
   investor_name = investor_name,
   portfolio_name = portfolio_name,
-  user_id = user_id,
   peer_group = peer_group,
   start_year = start_year,
+  shock = shock_year,
   select_scenario = scenario,
   portfolio_allocation_method = portfolio_allocation_method,
   scenario_geography = scenario_geography,
   twodi_sectors = c("Power", "Automotive", "Shipping", "Oil&Gas", "Coal", "Steel", "Cement", "Aviation"),
-  green_techs = c("RenewablesCap", "HydroCap", "NuclearCap", "Hybrid", "Electric", "FuelCell", "Hybrid_HDV", "Electric_HDV", "FuelCell_HDV"),
+  green_techs = c("RenewablesCap", "HydroCap", "NuclearCap", "Hybrid", "Electric", "FuelCell", "Hybrid_HDV", "Electric_HDV", "FuelCell_HDV","Ac-Electric Arc Furnace","Dc-Electric Arc Furnace"),
   tech_roadmap_sectors = c("Automotive", "Power", "Oil&Gas", "Coal"),
+  pacta_sectors_not_analysed = c("Aviation","Cement","Shipping","Steel"),
   audit_file = audit_file,
   emissions = emissions,
+  portfolio_overview = portfolio_overview,
   equity_results_portfolio = equity_results_portfolio,
   bonds_results_portfolio = bonds_results_portfolio,
   equity_results_company = equity_results_company,
   bonds_results_company = bonds_results_company,
   equity_results_map = equity_results_map,
   bonds_results_map = bonds_results_map,
-  indicies_equity_results_portfolio = indicies_equity_results_portfolio,
-  indicies_bonds_results_portfolio = indicies_bonds_results_portfolio,
+  indices_equity_results_portfolio = indices_equity_results_portfolio,
+  indices_bonds_results_portfolio = indices_bonds_results_portfolio,
   peers_equity_results_portfolio = peers_equity_results_portfolio,
   peers_bonds_results_portfolio = peers_bonds_results_portfolio,
   peers_equity_results_user = peers_equity_results_user,
   peers_bonds_results_user = peers_bonds_results_user,
   equity_results_stress_test = equity_results_stress_test,
   bonds_results_stress_test = bonds_results_stress_test,
-  translation_list = translation_list,
+  dataframe_translations = dataframe_translations,
+  js_translations = js_translations,
   ipr_results_stress_test = ipr_results_stress_test,
-  shock = shock_year,
-  pacta_sectors_not_analysed = pacta_sectors_not_analysed,
-  portfolio_overview = portfolio_overview
+  display_currency = "CHF",
+  currency_exchange_value = currency_exchange_value
 )
 
 
 create_executive_summary(
   file_name = "template.Rmd",
   exec_summary_dir = exec_summary_dir,
-  output_dir = output_dir,
+  output_dir = file.path(output_dir, "executive_summary"),
   language_select = "EN",
   project_name = "working_dir",
   investor_name = investor_name,
@@ -302,11 +328,14 @@ create_executive_summary(
   portfolio_allocation_method = portfolio_allocation_method,
   scenario_geography = scenario_geography,
   twodi_sectors = c("Power", "Automotive", "Shipping", "Oil&Gas", "Coal", "Steel", "Cement", "Aviation"),
-  green_techs = c("RenewablesCap", "HydroCap", "NuclearCap", "Hybrid", "Electric", "FuelCell", "Hybrid_HDV", "Electric_HDV", "FuelCell_HDV"),
+  green_techs = c("RenewablesCap", "HydroCap", "NuclearCap", "Hybrid", "Electric", "FuelCell", "Hybrid_HDV", "Electric_HDV", "FuelCell_HDV","Ac-Electric Arc Furnace","Dc-Electric Arc Furnace"),
   tech_roadmap_sectors = c("Automotive", "Power", "Oil&Gas", "Coal"),
   alignment_techs = c("RenewablesCap", "CoalCap", "Coal", "Oil", "Gas", "Electric", "ICE"),
   equity_results_portfolio,
   bonds_results_portfolio,
   peers_equity_results_portfolio,
-  peers_bonds_results_portfolio
+  peers_bonds_results_portfolio,
+  peers_equity_results_user,
+  peers_bonds_results_user
+
 )

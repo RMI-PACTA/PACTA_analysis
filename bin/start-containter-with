@@ -6,6 +6,7 @@ analysis=$(pwd)
 data=$(dirname "$(pwd)")/pacta-data
 report=$(dirname "$(pwd)")/create_interactive_report
 stresstest=$(dirname "$(pwd)")/StressTestingModelDev
+userresults=$(dirname "$(pwd)")/user_results
 
 docker run --rm -ti \
   --mount type=bind,source="$analysis",target=/bound \

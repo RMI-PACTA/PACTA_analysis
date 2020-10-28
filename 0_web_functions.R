@@ -75,6 +75,7 @@ set_web_parameters <- function(file_path) {
   data_location_ext <<- cfg$paths$data_location_ext
   template_path <<- cfg$paths$template_location
   stress_test_path <<- cfg$paths$stress_test_location
+  user_results_path <<- cfg$paths$user_data_location
 
   project_name <<- cfg$parameters$project_name
   twodii_internal <<- cfg$parameters$twodii_internal
@@ -245,7 +246,7 @@ check_input_file_contents <- function(portfolio_, portfolio_name, investor_name)
   return(portfolio_clean)
 }
 
-website_text <- function(audit_file) {
+website_text <- function(audit_file, proc_input_path) {
   PortValues <- audit_file %>%
     ungroup() %>%
     filter(valid_input == TRUE) %>%
@@ -275,7 +276,7 @@ website_text <- function(audit_file) {
                 The remainder of the holdings are in asset classes outside the scope of this analysis.
                 For more information as to how each holding is classified, review the chart and audit file below.")
 
-  write(text, file.path(proc_input_path, "Websitetext.txt"))
+  write(text, file = file.path(proc_input_path, "Websitetext.txt"))
 }
 
 save_cleaned_files <- function(save_loc,
