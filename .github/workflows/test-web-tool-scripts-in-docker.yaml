@@ -6,20 +6,20 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/checkout@v2
-          with:
-            repository: 2DegreesInvesting/create_interactive_report
-            token: ${{ secrets.MAURO_PAT_FOR_2DII }}
+        with:
+          repository: 2DegreesInvesting/create_interactive_report
+          token: ${{ secrets.MAURO_PAT_FOR_2DII }}
       - uses: actions/checkout@v2
-          with:
-            repository: 2DegreesInvesting/StressTestingModelDev
-            token: ${{ secrets.MAURO_PAT_FOR_2DII }}
+        with:
+          repository: 2DegreesInvesting/StressTestingModelDev
+          token: ${{ secrets.MAURO_PAT_FOR_2DII }}
       - uses: actions/checkout@v2
-          with:
-            repository: 2DegreesInvesting/pacta-data
-            token: ${{ secrets.MAURO_PAT_FOR_2DII }}
+        with:
+          repository: 2DegreesInvesting/pacta-data
+          token: ${{ secrets.MAURO_PAT_FOR_2DII }}
       - uses: actions/checkout@v2
-          with:
-            repository: 2DegreesInvesting/user_reports
-            token: ${{ secrets.MAURO_PAT_FOR_2DII }}
+        with:
+          repository: 2DegreesInvesting/user_reports
+          token: ${{ secrets.MAURO_PAT_FOR_2DII }}
       - run: ls -al
       - run: ./bin/run-web-tool
