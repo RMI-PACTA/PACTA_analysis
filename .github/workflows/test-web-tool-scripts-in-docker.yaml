@@ -38,6 +38,8 @@ jobs:
         run: ls -al
       - name: print working directory
         run: pwd
+      - name: list files in bin directory
+        run: ls -al /home/runner/work/PACTA_analysis/PACTA_analysis/PACTA_analysis
   setup_docker_instance:
     runs-on: ubuntu-18.04
     container:
