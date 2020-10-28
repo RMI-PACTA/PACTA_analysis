@@ -38,6 +38,13 @@ jobs:
     runs-on: ubuntu-18.04
     container:
       image: 2dii/r-packages
+      volumes:
+        - /home/runner/work/PACTA_analysis/PACTA_analysis/PACTA_analysis:/bound
+        - /home/runner/work/PACTA_analysis/PACTA_analysis/PACTA_analysis:/PACTA_analysis
+        - /home/runner/work/PACTA_analysis/PACTA_analysis/pacta-data:/pacta-data
+        - /home/runner/work/PACTA_analysis/PACTA_analysis/create_interactive_report:/create_interactive_report
+        - /home/runner/work/PACTA_analysis/PACTA_analysis/StressTestingModelDev:/StressTestingModelDev
+        - /home/runner/work/PACTA_analysis/PACTA_analysis/user_results:/user_results
     steps:
       - name: print working directory
         run: pwd
