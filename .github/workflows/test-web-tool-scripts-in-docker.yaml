@@ -36,6 +36,8 @@ jobs:
           path: user_results
       - name: list files in working directory
         run: ls -al
+      - name: print working directory
+        run: pwd
   setup_docker_instance:
     runs-on: ubuntu-18.04
     container:
