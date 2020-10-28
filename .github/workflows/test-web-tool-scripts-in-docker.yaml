@@ -46,6 +46,7 @@ jobs:
       image: 2dii/r-packages
       volumes:
         - /home/runner/work/PACTA_analysis/PACTA_analysis/PACTA_analysis:/bound
+        - /home/runner/work/PACTA_analysis/PACTA_analysis/PACTA_analysis/bin:/XXX
         - /home/runner/work/PACTA_analysis/PACTA_analysis/pacta-data:/pacta-data
         - /home/runner/work/PACTA_analysis/PACTA_analysis/create_interactive_report:/create_interactive_report
         - /home/runner/work/PACTA_analysis/PACTA_analysis/StressTestingModelDev:/StressTestingModelDev
@@ -53,6 +54,8 @@ jobs:
     steps:
       - name: cd to working directory
         run: cd /bound
+      - name: list files in /mnt directory
+        run: ls -al /mnt
       - name: list files in /github directory
         run: ls -al /github
       - name: list files in /github/home directory
