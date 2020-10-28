@@ -52,7 +52,8 @@ jobs:
         - /home/runner/work/PACTA_analysis/PACTA_analysis/StressTestingModelDev:/StressTestingModelDev
         - /home/runner/work/PACTA_analysis/PACTA_analysis/user_results:/user_results
     steps:
-      - name: cd to working directory
+      - name: sleep for 1 minute so the checkouts above have time to finish
+      - name: sleep 60
         run: cd /bound
       - name: list files in /mnt directory
         run: ls -al /mnt
