@@ -52,33 +52,19 @@ jobs:
         - /home/runner/work/PACTA_analysis/PACTA_analysis/StressTestingModelDev:/StressTestingModelDev
         - /home/runner/work/PACTA_analysis/PACTA_analysis/user_results:/user_results
     steps:
-      - name: sleep for 1 minute so the checkouts above have time to finish
-        run: sleep 120
       - name: print working directory
         run: pwd
       - name: list files in working directory
         run: ls -al
-      - name: list files in ./PACTA_analysis/bin
-        run: ls -al ./PACTA_analysis/bin
-      - name: change to /bound directriy
-        run: cd /bound
-      - name: list files in /mnt directory
-        run: ls -al /mnt
-      - name: list files in /github directory
-        run: ls -al /github
-      - name: list files in /github/home directory
-        run: ls -al /github/home
-      - name: list files in /github/workflow directory
-        run: ls -al /github/workflow
-      - name: list files in root directory
-        run: ls -al /
-      - name: list files in bound directory
-        run: ls -al /bound
-      - name: list files in bound bin directory
-        run: ls -al /bound/bin
+      - name: list files in PACTA_analysis
+        run: ls -al PACTA_analysis
+      - name: change to PACTA_analysis directriy
+        run: cd PACTA_analysis
+      - name: print working directory
+        run: pwd
       - name: list files in working directory
         run: ls -al
-      - name: list files in bin directory
+      - name: list files in bin
         run: ls -al bin
       - name: run web tool scripts
         run: ./bin/run-web-tool
