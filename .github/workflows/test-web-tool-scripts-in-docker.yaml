@@ -47,6 +47,8 @@ jobs:
     steps:
       - name: cd to working directory
         run: cd /bound
+      - name: list files in root directory
+        run: ls -al /
       - name: list files in working directory
         run: ls -al
       - name: list files in bin directory
