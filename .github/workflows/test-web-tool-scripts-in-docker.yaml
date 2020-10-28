@@ -3,7 +3,7 @@ name: Run web tool scripts on custom docker
 on: [push, pull_request]
 
 jobs:
-  setup docker host:
+  setup_docker_host:
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout PACTA_analysis
@@ -34,7 +34,7 @@ jobs:
           repository: 2DegreesInvesting/user_results
           token: ${{ secrets.MAURO_PAT_FOR_2DII }}
           path: user_results
-  setup docker instance:
+  setup_docker_instance:
     runs-on: ubuntu-18.04
     container:
       image: 2dii/r-packages
