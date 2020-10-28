@@ -35,6 +35,7 @@ jobs:
           token: ${{ secrets.MAURO_PAT_FOR_2DII }}
           path: user_results
   setup docker instance:
+    runs-on: ubuntu-18.04
     container:
       image: 2dii/r-packages
       volumes:
