@@ -53,6 +53,8 @@ jobs:
     steps:
       - name: cd to working directory
         run: cd /bound
+      - name: list files in /github/home directory
+        run: ls -al /github/home
       - name: list files in root directory
         run: ls -al /
       - name: list files in bound directory
