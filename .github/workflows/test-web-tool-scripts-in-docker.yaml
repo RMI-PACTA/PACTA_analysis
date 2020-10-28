@@ -47,12 +47,8 @@ jobs:
     steps:
       - name: print working directory
         run: |
-          pwd
-          ls -al
-          cd /
-          pwd
-          ls -al
           cd /bound
+          pwd
+          sleep 60
           ls -al
-          ls -al bin
           ./bin/run-web-tool
