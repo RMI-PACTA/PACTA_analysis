@@ -39,17 +39,17 @@ jobs:
       - name: print working directory
         run: pwd
       - name: list files in bin directory
-        run: ls -al /home/runner/work/PACTA_analysis/PACTA_analysis/PACTA_analysis
+        run: ls -al /home/runner/work/PACTA_analysis/PACTA_analysis/PACTA_analysis/bin
   setup_docker_instance:
     runs-on: ubuntu-18.04
     container:
       image: 2dii/r-packages
       volumes:
-        - ${{ github.workspace }}/PACTA_analysis:/bound
-        - ${{ github.workspace }}/pacta-data:/pacta-data
-        - ${{ github.workspace }}/create_interactive_report:/create_interactive_report
-        - ${{ github.workspace }}/StressTestingModelDev:/StressTestingModelDev
-        - ${{ github.workspace }}/user_results:/user_results
+        - /home/runner/work/PACTA_analysis/PACTA_analysis/PACTA_analysis:/bound
+        - /home/runner/work/PACTA_analysis/PACTA_analysis/pacta-data:/pacta-data
+        - /home/runner/work/PACTA_analysis/PACTA_analysis/create_interactive_report:/create_interactive_report
+        - /home/runner/work/PACTA_analysis/PACTA_analysis/StressTestingModelDev:/StressTestingModelDev
+        - /home/runner/work/PACTA_analysis/PACTA_analysis/user_results:/user_results
     steps:
       - name: cd to working directory
         run: cd /bound
