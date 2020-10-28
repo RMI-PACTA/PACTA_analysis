@@ -46,4 +46,4 @@ jobs:
         - user_results:/user_results
     steps:
       - name: show working directory
-        run: ls -al
+        run: ls -al /
