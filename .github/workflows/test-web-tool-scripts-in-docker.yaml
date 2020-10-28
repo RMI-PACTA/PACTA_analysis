@@ -39,11 +39,11 @@ jobs:
     container:
       image: 2dii/r-packages
       volumes:
-        - PACTA_analysis:/bound
-        - pacta-data:/pacta-data
-        - create_interactive_report:/create_interactive_report
-        - StressTestingModelDev:/StressTestingModelDev
-        - user_results:/user_results
+        - $GITHUB_WORKSPACE/PACTA_analysis:/bound
+        - $GITHUB_WORKSPACE/pacta-data:/pacta-data
+        - $GITHUB_WORKSPACE/create_interactive_report:/create_interactive_report
+        - $GITHUB_WORKSPACE/StressTestingModelDev:/StressTestingModelDev
+        - $GITHUB_WORKSPACE/user_results:/user_results
     steps:
       - name: cd to working directory
         run: cd /bound
