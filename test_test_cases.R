@@ -60,7 +60,7 @@ for (csv_num in seq_along(test_cases_csvs)) {
   cli::cli_h1(paste0("running for: ", portfolio_name_ref_all, " (test #", csv_num, ")"))
   cli::cli_h1(paste0("in: ", portfolio_root_dir))
 
-  source("web_tool_script_1.R")
-  source("web_tool_script_2.R")
-  source("web_tool_script_3.R")
+  try(source("web_tool_script_1.R"))
+  try(source("web_tool_script_2.R"))
+  try(source("web_tool_script_3.R"))
 }
