@@ -1,0 +1,12 @@
+#! /bin/bash
+
+cd $1
+echo $(basename $(pwd))
+current_branch=$(git rev-parse --abbrev-ref HEAD)
+git branch -vv | \
+  grep " $current_branch " | \
+  # Remove leading "* " in "* <current branch> ..."
+  sed s/"^* "/""/ | \
+  # Replace duplicated white space with a single white space
+  sed s/"  \+"/" "/
+git status
