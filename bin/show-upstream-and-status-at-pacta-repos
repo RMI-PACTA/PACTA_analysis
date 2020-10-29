@@ -1,0 +1,26 @@
+#! /bin/bash
+
+"$(pwd)"/bin/show-upstream-and-status-at ../PACTA_analysis
+echo "."
+echo "."
+echo "."
+
+"$(pwd)"/bin/show-upstream-and-status-at ../create_interactive_report
+echo "."
+echo "."
+echo "."
+
+"$(pwd)"/bin/show-upstream-and-status-at ../StressTestingModelDev
+echo "."
+echo "."
+echo "."
+
+"$(pwd)"/bin/show-upstream-and-status-at ../pacta-data
+echo "."
+echo "."
+echo "."
+
+"$(pwd)"/bin/show-upstream-and-status-at ../user_results
+echo "."
+echo "."
+echo "."

@@ -331,11 +331,11 @@ create_executive_summary(
   green_techs = c("RenewablesCap", "HydroCap", "NuclearCap", "Hybrid", "Electric", "FuelCell", "Hybrid_HDV", "Electric_HDV", "FuelCell_HDV","Ac-Electric Arc Furnace","Dc-Electric Arc Furnace"),
   tech_roadmap_sectors = c("Automotive", "Power", "Oil&Gas", "Coal"),
   alignment_techs = c("RenewablesCap", "CoalCap", "Coal", "Oil", "Gas", "Electric", "ICE"),
-  equity_results_portfolio,
-  bonds_results_portfolio,
-  peers_equity_results_portfolio,
-  peers_bonds_results_portfolio,
-  peers_equity_results_user,
-  peers_bonds_results_user
+  equity_results_portfolio = equity_results_portfolio,
+  bonds_results_portfolio = bonds_results_portfolio,
+  peers_equity_results_portfolio = peers_equity_results_portfolio,
+  peers_bonds_results_portfolio = peers_bonds_results_portfolio,
+  peers_equity_results_user = peers_equity_results_user,
+  peers_bonds_results_user = peers_bonds_results_user
 
 )
