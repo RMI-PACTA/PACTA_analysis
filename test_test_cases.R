@@ -48,16 +48,16 @@ for (i in seq_along(test_cases_csvs)) {
 }
 
 
-for (i in seq_along(test_cases_csvs)) {
-  filepath <- test_cases_csvs[[i]]
+for (csv_num in seq_along(test_cases_csvs)) {
+  filepath <- test_cases_csvs[[csv_num]]
   test_case <- read_csv(filepath, col_types = cols())
   portfolio_name <- unique(test_case$Portfolio.Name)[[1]]
   out_dir <- file.path(test_cases_output_dir, portfolio_name)
 
   portfolio_name_ref_all <- portfolio_name
   portfolio_root_dir <- out_dir
-  
-  cli::cli_h1(paste0("running for: ", portfolio_name_ref_all))
+
+  cli::cli_h1(paste0("running for: ", portfolio_name_ref_all, " (test #", csv_num, ")"))
   cli::cli_h1(paste0("in: ", portfolio_root_dir))
 
   source("web_tool_script_1.R")
