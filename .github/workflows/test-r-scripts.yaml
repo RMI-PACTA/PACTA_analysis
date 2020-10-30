@@ -24,7 +24,9 @@ jobs:
 
     steps:
 
-      - uses: r-lib/actions/setup-pandoc@master
+      - name: Setup system dependencies
+        uses: r-lib/actions/setup-pandoc@master
+        uses: r-lib/actions/setup-tinytex@v1
 
       - name: Checkout PACTA_analysis
         uses: actions/checkout@v2
