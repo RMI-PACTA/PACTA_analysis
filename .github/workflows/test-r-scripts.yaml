@@ -61,15 +61,6 @@ jobs:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
 
-      - name: Install dependencies from CRAN
-        run: |
-          install.packages("rmarkdown")
-          install.packages("knitr")
-          install.packages("renv")
-          dependencies <- renv::dependencies()$Package
-          install.packages(dependencies)
-        shell: Rscript {0}
-
       - name: Test R scripts
         run: |
           setwd("PACTA_analysis")
