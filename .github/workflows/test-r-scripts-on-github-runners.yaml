@@ -1,6 +1,6 @@
 on: [push, pull_request]
 
-name: Test R scripts
+name: Test R scripts on GitHub runners
 
 jobs:
   Test-r-scripts:
