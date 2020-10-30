@@ -30,17 +30,17 @@ identify_portfolios <- function(portfolio_total) {
   return(port_names)
 }
 
-create_portfolio_subfolders <- function(portfolio_name_ref_all) {
-  folders <- c("30_Processed_Inputs", "40_Results", "50_Outputs")
+create_portfolio_subfolders <- function(portfolio_name_ref_all = NULL, project_location = NULL) {
+  folders <- c("00_Log_Files", "30_Processed_Inputs", "40_Results", "50_Outputs")
 
   locs_to_create <- folders %>%
-    purrr::map(~ paste0(project_location, "/", .x, "/", portfolio_name_ref_all)) %>%
+    purrr::map(~ file.path(project_location, .x, portfolio_name_ref_all)) %>%
     purrr::flatten_chr()
 
   locs_to_create %>%
     purrr::map(~ dir.create(.x, showWarnings = FALSE))
 
-    invisible(portfolio_name_ref_all)
+  invisible(portfolio_name_ref_all)
 }
 
 save_if_exists <- function(df, portfolio_name_, save_name, csv_or_rds = "rds") {
@@ -60,7 +60,7 @@ save_if_exists <- function(df, portfolio_name_, save_name, csv_or_rds = "rds") {
 set_webtool_paths <- function(project_root_dir = "working_dir") {
   project_location <<- file.path(working_location, project_root_dir)
 
-  log_path <<- file.path(project_location, "00_Log_Files")
+  log_path <<- file.path(project_location, "00_Log_Files", portfolio_name_ref_all)
   par_file_path <<- file.path(project_location, "10_Parameter_File")
   raw_input_path <<- file.path(project_location, "20_Raw_Inputs")
   proc_input_path <<- file.path(project_location, "30_Processed_Inputs")

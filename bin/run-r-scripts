@@ -10,7 +10,6 @@ echo 'options(repos = c(CRAN = "https://packagemanager.rstudio.com/all/__linux__
 echo 'options(HTTPUserAgent = sprintf("R/%s R (%s)", getRversion(), paste(getRversion(), R.version$platform, R.version$arch, R.version$os)))' >> ~/.Rprofile
 # Rscript -e "update.packages(ask = FALSE)"
 Rscript -e 'pkgs_to_install <- c("assertthat", "bookdown", "config", "conflicted", "countrycode", "data.table", "devtools", "dplyr", "forcats", "fs", "fst", "ggplot2", "glue", "here", "highcharter", "janitor", "jsonlite", "knitr", "purrr", "readr", "readxl", "renv", "reshape2", "rlang", "rmarkdown", "rstudioapi", "scales", "stringr", "testthat", "tibble", "tidyr", "tidyselect", "usethis", "withr", "writexl", "zoo"); install.packages(setdiff(pkgs_to_install, installed.packages()))'
-# FIXME: TestPortfolio_Input should be a parameter
-Rscript --vanilla web_tool_script_1.R TestPortfolio_Input \
-  && Rscript --vanilla web_tool_script_2.R TestPortfolio_Input \
-  && Rscript --vanilla web_tool_script_3.R TestPortfolio_Input
+Rscript --vanilla web_tool_script_1.R "${1:-TestPortfolio_Input}" \
+  && Rscript --vanilla web_tool_script_2.R "${1:-TestPortfolio_Input}" \
+  && Rscript --vanilla web_tool_script_3.R "${1:-TestPortfolio_Input}"
