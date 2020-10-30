@@ -23,6 +23,12 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
+
+      - name: Install system dependencies
+        run: |
+          apt-get update && apt-get -y install \
+            pandoc
+
       - name: Checkout PACTA_analysis
         uses: actions/checkout@v2
         with:
