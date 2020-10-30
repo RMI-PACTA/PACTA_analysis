@@ -24,7 +24,6 @@ jobs:
 
     steps:
 
-      - name: Setup system dependencies
         uses: r-lib/actions/setup-pandoc@master
         uses: r-lib/actions/setup-tinytex@v1
 
