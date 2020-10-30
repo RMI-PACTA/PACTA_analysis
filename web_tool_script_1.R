@@ -1,6 +1,6 @@
 cli::cli_h1("web_tool_script_1.R")
 
-devtools::load_all()
+devtools::load_all(quiet = TRUE)
 use_r_packages()
 
 source("0_portfolio_input_check_functions.R")

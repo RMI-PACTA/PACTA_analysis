@@ -23,7 +23,10 @@ identify_portfolios <- function(portfolio_total) {
 
 
   if (length(port_names %>% select(investor_name) %>% distinct()) > 1) {
-    write_log("There is more than one investor name within a portfolio. Please correct the input data and retry.")
+    write_log(
+      msg = "There is more than one investor name within a portfolio. Please correct the input data and retry.",
+      file_path = log_path
+    )
     stop("More than one investor in portfolio")
   }
 
@@ -117,18 +120,27 @@ get_input_files <- function(portfolio_name_ref_all) {
 
   input_file_type <- unique(tools::file_ext(grep(portfolio_name_ref_all, list.files(path = input_path, full.names = F), value = T)))
   if (!input_file_type %in% c("csv", "xlsx", "txt")) {
-    write_log(msg = "Input file format not supported. Must be .csv, .xlsx or .txt")
+    write_log(
+      msg = "Input file format not supported. Must be .csv, .xlsx or .txt",
+      file_path = log_path
+      )
     stop("Input file format not supported. Must be .csv, .xlsx or .txt")
   }
 
 
   if (!all(portfolio_name_ref_all %in% input_names)) {
-    write_log(msg = "Difference in input files and input argument portfolio names.")
+    write_log(
+      msg = "Difference in input files and input argument portfolio names.",
+      file_path = log_path
+      )
     stop("Difference in input files and input argument portfolio names.")
   }
 
   if (any(!portfolio_name_ref_all %in% input_names)) {
-    write_log(msg = "Missing input argument")
+    write_log(
+      msg = "Missing input argument",
+      file_path = log_path
+      )
     stop("Missing input argument")
   }
 
@@ -137,11 +149,17 @@ get_input_files <- function(portfolio_name_ref_all) {
   portfolio_file_names <- gsub("_PortfolioParameters.yml", "", portfolio_file_names)
 
   if (!all(portfolio_name_ref_all %in% portfolio_file_names)) {
-    write_log(msg = "Difference in parameter files and input argument portfolio names.")
+    write_log(
+      msg = "Difference in parameter files and input argument portfolio names.",
+      file_path = log_path
+      )
     stop("Difference in parameter files and input argument portfolio names.")
   }
   if (any(!portfolio_name_ref_all %in% portfolio_file_names)) {
-    write_log(msg = "Missing portfolio parameter file")
+    write_log(
+      msg = "Missing portfolio parameter file",
+      file_path = log_path
+      )
     stop("Missing portfolio parameter file")
   }
   # this is already tested above -- duplicate
@@ -178,7 +196,10 @@ get_input_files <- function(portfolio_name_ref_all) {
   portfolio <- clear_portfolio_input_blanks(portfolio)
 
   if (portfolio %>% pull(investor_name) %>% unique() %>% length() > 1) {
-    write_log(msg = "Multiple investors detected. Only one investor at a time can be anaylsed")
+    write_log(
+      msg = "Multiple investors detected. Only one investor at a time can be anaylsed",
+      file_path = log_path
+      )
     stop("Multiple investors detected. Only one investor at a time can be anaylsed")
   }
 
@@ -210,9 +231,14 @@ read_web_input_file <- function(input_file_path) {
   if (data_check(input_file) == FALSE) {
     warning("Input file not readable")
     ifelse(nrow(input_file) == 0,
-      write_log(msg = "Input file has 0 rows. Please ensure the uploaded file is not empty."),
-      write_log(msg = "Input file could not be transformed into a data.frame.
-                     Please check the uploaded file has the correct format.")
+      write_log(
+        msg = "Input file has 0 rows. Please ensure the uploaded file is not empty.",
+        file_path = log_path
+        ),
+      write_log(
+        msg = "Input file could not be transformed into a data.frame. Please check the uploaded file has the correct format.",
+        file_path = log_path
+      )
     )
   }
 
