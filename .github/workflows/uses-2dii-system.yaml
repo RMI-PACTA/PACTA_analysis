@@ -3,13 +3,11 @@ on: [push, pull_request]
 name: Uses r2dii/system
 
 jobs:
-  docker-example:
+  testbox:
     runs-on: ubuntu-latest
+    container:
+      image: 2dii/system:latest
     steps:
     - uses: actions/checkout@v2
-    - name: Run 2dii system version
-      uses: docker://2dii/system:latest
-      with:
-        entrypoint: /bin/bash
-        args: version
-
+    - name: What OS is running
+      run: uname -a
