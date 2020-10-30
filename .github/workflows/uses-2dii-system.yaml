@@ -22,24 +22,13 @@ jobs:
       RSPM: ${{ matrix.config.rspm }}
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
-
-
     container:
       image: 2dii/r-packages:latest
     steps:
-    - uses: actions/checkout@v2
-    - name: What OS is running
-      run: uname -a
-
-
       - name: Checkout PACTA_analysis
         uses: actions/checkout@v2
         with:
           path: PACTA_analysis
-
-
-
-
       - name: Checkout pacta-data
         uses: actions/checkout@v2
         with:
@@ -64,7 +53,8 @@ jobs:
           repository: 2DegreesInvesting/user_results
           token: ${{ secrets.MAURO_PAT_FOR_2DII }}
           path: user_results
-#
+
+# R should be setup from the container
 #       - uses: r-lib/actions/setup-r@master
 #         with:
 #           r-version: ${{ matrix.config.r }}
@@ -76,7 +66,10 @@ jobs:
 #           dependencies <- renv::dependencies()$Package
 #           install.packages(dependencies)
 #         shell: Rscript {0}
-#
+
+
+
+
 #       - name: Test R scripts
 #         run: |
 #           setwd("PACTA_analysis")
