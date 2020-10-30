@@ -14,13 +14,13 @@ use_r_packages <- function(path = packages_path()) {
 }
 
 resolve_conflicts <- function() {
-  conflicted::conflict_prefer("filter", "dplyr")
-  conflicted::conflict_prefer("lag", "dplyr")
-  conflicted::conflict_prefer("mutate", "dplyr")
-  conflicted::conflict_prefer("here", "here")
-  conflicted::conflict_prefer("rename", "dplyr")
-  conflicted::conflict_prefer("summarise", "dplyr")
-  conflicted::conflict_prefer("arrange", "dplyr")
+  conflicted::conflict_prefer("filter", "dplyr", quiet = TRUE)
+  conflicted::conflict_prefer("lag", "dplyr", quiet = TRUE)
+  conflicted::conflict_prefer("mutate", "dplyr", quiet = TRUE)
+  conflicted::conflict_prefer("here", "here", quiet = TRUE)
+  conflicted::conflict_prefer("rename", "dplyr", quiet = TRUE)
+  conflicted::conflict_prefer("summarise", "dplyr", quiet = TRUE)
+  conflicted::conflict_prefer("arrange", "dplyr", quiet = TRUE)
 }
 
 #' @examples
