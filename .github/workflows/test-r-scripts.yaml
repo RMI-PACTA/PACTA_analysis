@@ -24,8 +24,7 @@ jobs:
 
     steps:
 
-      - name: Install system dependencies
-        run: sudo apt-get update && apt-get -y install pandoc
+      - uses: r-lib/actions/setup-pandoc@master
 
       - name: Checkout PACTA_analysis
         uses: actions/checkout@v2
