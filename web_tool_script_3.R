@@ -39,7 +39,10 @@ real_estate_dir <- path(user_results_path, project_code, "real_estate")
 
 output_dir <- file.path(outputs_path, portfolio_name_ref_all)
 
-scenario <- "SDS"
+scenario <- "WEO2019_SDS"
+scenario_auto <- "ETP2017_B2DS"
+scenario_other <- "ETP2017_B2DS"
+scenario_shipping <- "SBTI_SBTI"
 portfolio_allocation_method <- "portfolio_weight"
 scenario_geography <- "Global"
 audit_file <- read_csv(file.path(proc_input_path, portfolio_name, "audit_file.csv"), col_types = cols())
@@ -232,21 +235,12 @@ if (file.exists(file.path(results_path, portfolio_name, "Stress_test_results_IPR
   )
 }
 
-
 indices_equity_results_portfolio <- read_rds(file.path(data_location_ext, "Indices_equity_portfolio.rda"))
 indices_bonds_results_portfolio <- read_rds(file.path(data_location_ext, "Indices_bonds_portfolio.rda"))
 peers_equity_results_portfolio <- read_rds(file.path(data_location_ext, "Peers_equity_results_portfolio.rda"))
 peers_bonds_results_portfolio <- read_rds(file.path(data_location_ext, "Peers_bonds_results_portfolio.rda"))
 peers_equity_results_user <- read_rds(file.path(data_location_ext, "Peers_equity_results_portfolio_ind.rda"))
 peers_bonds_results_user <- read_rds(file.path(data_location_ext, "Peers_bonds_results_portfolio_ind.rda"))
-
-
-if ("scenario_source" %in% colnames(equity_results_portfolio)){equity_results_portfolio <-equity_results_portfolio %>%  filter(scenario_source %in% c("ETP2017","WEO2019"))}
-if ("scenario_source" %in% colnames(bonds_results_portfolio)){bonds_results_portfolio <-bonds_results_portfolio %>%  filter(scenario_source  %in% c("ETP2017","WEO2019"))}
-if ("scenario_source" %in% colnames(equity_results_company)){equity_results_company <-equity_results_company %>%  filter(scenario_source  %in% c("ETP2017","WEO2019"))}
-if ("scenario_source" %in% colnames(bonds_results_company)){bonds_results_company <-bonds_results_company %>%  filter(scenario_source  %in% c("ETP2017","WEO2019"))}
-
-
 
 dataframe_translations <- readr::read_csv(
   path(template_path, "data/translation/dataframe_labels.csv"),
@@ -259,10 +253,16 @@ js_translations <- jsonlite::fromJSON(
 shock_year <- 2030 # this should come directly from the stress test.. 2030 based on current discussions in CHPA2020 case
 pacta_sectors_not_analysed <- c("Aviation","Cement","Shipping","Steel")
 select_scenario = scenario
+select_scenario_auto = scenario_auto
+select_scenario_other = scenario_other
+select_scenario_shipping = scenario_shipping
+
 twodi_sectors = c("Power", "Automotive", "Shipping", "Oil&Gas", "Coal", "Steel", "Cement", "Aviation")
 green_techs = c("RenewablesCap", "HydroCap", "NuclearCap", "Hybrid", "Electric", "FuelCell", "Hybrid_HDV", "Electric_HDV", "FuelCell_HDV","Ac-Electric Arc Furnace","Ac-Electric Arc Furnace")
 tech_roadmap_sectors = c("Automotive", "Power", "Oil&Gas", "Coal")
 alignment_techs = c("RenewablesCap", "CoalCap", "Coal", "Oil", "Gas", "Electric", "ICE")
+
+
 repo_path = template_path
 output_dir <- file.path(outputs_path, portfolio_name_ref_all)
 
@@ -286,6 +286,9 @@ create_interactive_report(
   start_year = start_year,
   shock = shock_year,
   select_scenario = scenario,
+  select_scenario_auto = scenario_auto,
+  select_scenario_shipping = scenario_shipping,
+  select_scenario_other = scenario_other,
   portfolio_allocation_method = portfolio_allocation_method,
   scenario_geography = scenario_geography,
   twodi_sectors = c("Power", "Automotive", "Shipping", "Oil&Gas", "Coal", "Steel", "Cement", "Aviation"),
