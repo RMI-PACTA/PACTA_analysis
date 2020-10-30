@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Run box version
+    - name: Run 2dii system version
       uses: docker://2dii/system:latest
       with:
         entrypoint: /bin/bash
