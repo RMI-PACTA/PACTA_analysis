@@ -9,5 +9,5 @@ git branch -vv | \
   # Remove leading "* " in "* <current branch> ..."
   sed s/"^* "/""/ | \
   # Replace duplicated white space with a single white space
-  sed s/"  \+"/" "/
+  sed 's/  */ /g'
 git status
