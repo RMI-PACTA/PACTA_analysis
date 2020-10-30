@@ -274,12 +274,12 @@ first_char_up <- function(x) {
 
 
 # write error log for input portfolio - msg should be a string containing the error message
-write_log <- function(msg, ...) {
+write_log <- function(msg, file_path = log_path, ...) {
   composed <- paste(
     as.character(Sys.time()),
     as.character(msg),
     ...
   )
-  write(composed, file = file.path(log_path,"error_messages.txt"), append = TRUE)
+  write(composed, file = file.path(file_path,"error_messages.txt"), append = TRUE)
 }
 
