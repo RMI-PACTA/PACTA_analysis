@@ -33,6 +33,8 @@ vignettes/*.pdf
 *.knit.md
 
 .Ruserdata
+**/working_dir/00_Log_Files/*
+!**/working_dir/00_Log_Files/.gitkeep.txt
 **/working_dir/30_Processed_Inputs/*
 !**/working_dir/30_Processed_Inputs/.gitkeep.txt
 **/working_dir/40_Results/*
