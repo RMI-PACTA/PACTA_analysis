@@ -5,6 +5,8 @@ name: Test R scripts
 jobs:
   Test-r-scripts:
     runs-on: ${{ matrix.config.os }}
+    container:
+      image: 2dii/r-packages:latest
     name: ${{ matrix.config.os }} (${{ matrix.config.r }})
     strategy:
       fail-fast: false
@@ -21,9 +23,6 @@ jobs:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
       RSPM: ${{ matrix.config.rspm }}
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-
-    container:
-      image: 2dii/r-packages:latest
     steps:
       - name: Checkout PACTA_analysis
         uses: actions/checkout@v2
@@ -53,7 +52,6 @@ jobs:
           repository: 2DegreesInvesting/user_results
           token: ${{ secrets.MAURO_PAT_FOR_2DII }}
           path: user_results
-
 # R should be setup from the container
 #       - uses: r-lib/actions/setup-r@master
 #         with:
@@ -66,13 +64,13 @@ jobs:
 #           dependencies <- renv::dependencies()$Package
 #           install.packages(dependencies)
 #         shell: Rscript {0}
+      - name: Test R scripts
+        run: |
+          setwd("PACTA_analysis")
+          source("R/test_r_scripts.R")
+          test_r_scripts()
+        shell: Rscript {0}
 
 
 
 
-#       - name: Test R scripts
-#         run: |
-#           setwd("PACTA_analysis")
-#           source("R/test_r_scripts.R")
-#           test_r_scripts()
-#         shell: Rscript {0}
