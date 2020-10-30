@@ -145,7 +145,8 @@ port_weights <- pw_calculations(eq_portfolio, cb_portfolio)
 # Identify the portfolios to save;
 # Subset and Save these files
 
-create_portfolio_subfolders(portfolio_name_ref_all)
+# create_portfolio_subfolders(portfolio_name_ref_all)
+create_portfolio_subfolders_2(portfolio_name_ref_all = portfolio_name_ref_all, project_location = project_location)
 
 file_names <- identify_portfolios(portfolio_total)
 

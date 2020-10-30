@@ -44,7 +44,7 @@ create_portfolio_subfolders <- function(portfolio_name_ref_all) {
 }
 
 create_portfolio_subfolders_2 <- function(portfolio_name_ref_all = NULL, project_location = NULL) {
-  folders <- c("30_Processed_Inputs", "40_Results", "50_Outputs")
+  folders <- c("00_Log_Files", "30_Processed_Inputs", "40_Results", "50_Outputs")
 
   locs_to_create <- folders %>%
     purrr::map(~ paste0(project_location, "/", .x, "/", portfolio_name_ref_all)) %>%
