@@ -23,6 +23,9 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
+
+      - uses: r-lib/actions/setup-pandoc@master
+
       - name: Checkout PACTA_analysis
         uses: actions/checkout@v2
         with:
