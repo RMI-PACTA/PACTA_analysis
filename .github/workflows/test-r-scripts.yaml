@@ -52,6 +52,8 @@ jobs:
           token: ${{ secrets.MAURO_PAT_FOR_2DII }}
           path: user_results
 
+      - uses: docker://pandoc/latex
+        
       - uses: r-lib/actions/setup-r@master
         with:
           r-version: ${{ matrix.config.r }}
