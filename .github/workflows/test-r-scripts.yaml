@@ -59,6 +59,8 @@ jobs:
 
       - name: Install dependencies from CRAN
         run: |
+          install.packages("rmarkdown")
+          install.packages("knitr")
           install.packages("renv")
           dependencies <- renv::dependencies()$Package
           install.packages(dependencies)
