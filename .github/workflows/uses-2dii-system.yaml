@@ -24,20 +24,6 @@ jobs:
       RSPM: ${{ matrix.config.rspm }}
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
-
-
-
-       # FIXME: Install this on 2dii/system
-      - uses: r-lib/actions/setup-pandoc@master
-      - uses: r-lib/actions/setup-tinytex@v1
-      - name: Install sudo
-        run: apt update && apt install sudo
-      - name: Install missing dependencies
-        # https://github.com/rmsrosa/nbbinder/issues/5
-        run: sudo apt-get install texlive-xetex tlmgr
-
-
-
       - name: Checkout PACTA_analysis
         uses: actions/checkout@v2
         with:
