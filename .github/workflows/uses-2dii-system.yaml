@@ -32,11 +32,10 @@ jobs:
       run: uname -a
 
 
-#     steps:
-#       - name: Checkout PACTA_analysis
-#         uses: actions/checkout@v2
-#         with:
-#           path: PACTA_analysis
+      - name: Checkout PACTA_analysis
+        uses: actions/checkout@v2
+        with:
+          path: PACTA_analysis
 #       - name: Checkout pacta-data
 #         uses: actions/checkout@v2
 #         with:
