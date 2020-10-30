@@ -29,7 +29,8 @@ jobs:
 
        # FIXME: Install this on 2dii/system
       - uses: r-lib/actions/setup-tinytex@v1
-      - run: sudo apt-get update && apt-get install xelatex
+      - name: setup xelatex
+        run: sudo apt-get install texlive-xetex
 
 
 
