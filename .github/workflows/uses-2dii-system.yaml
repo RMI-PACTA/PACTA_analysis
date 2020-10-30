@@ -32,9 +32,9 @@ jobs:
       - uses: r-lib/actions/setup-tinytex@v1
       - name: Install sudo
         run: apt update && apt install sudo
-      - name: Setup xelatex
+      - name: Install missing dependencies
         # https://github.com/rmsrosa/nbbinder/issues/5
-        run: sudo apt-get install texlive-xetex
+        run: sudo apt-get install texlive-xetex tlmgr
 
 
 
