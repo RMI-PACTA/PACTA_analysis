@@ -1,0 +1,15 @@
+on: [push, pull_request]
+
+name: Uses r2dii/system
+
+jobs:
+  docker-example:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run box version
+      uses: docker://foundeo/minibox:latest
+      with:
+        entrypoint: /opt/box/box
+        args: version
+
