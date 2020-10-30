@@ -24,6 +24,14 @@ jobs:
       RSPM: ${{ matrix.config.rspm }}
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
+
+
+
+       # FIXME: Install this on 2dii/system
+      - uses: r-lib/actions/setup-tinytex@v1
+
+
+
       - name: Checkout PACTA_analysis
         uses: actions/checkout@v2
         with:
@@ -52,18 +60,6 @@ jobs:
           repository: 2DegreesInvesting/user_results
           token: ${{ secrets.MAURO_PAT_FOR_2DII }}
           path: user_results
-# R should be setup from the container
-#       - uses: r-lib/actions/setup-r@master
-#         with:
-#           r-version: ${{ matrix.config.r }}
-#           http-user-agent: ${{ matrix.config.http-user-agent }}
-#
-#       - name: Install dependencies from CRAN
-#         run: |
-#           install.packages("renv")
-#           dependencies <- renv::dependencies()$Package
-#           install.packages(dependencies)
-#         shell: Rscript {0}
       - name: Test R scripts
         run: |
           setwd("PACTA_analysis")
