@@ -1,6 +1,6 @@
 cli::cli_h1("web_tool_script_3.R")
 
-devtools::load_all()
+devtools::load_all(quiet = TRUE)
 use_r_packages()
 
 source("0_global_functions.R")
