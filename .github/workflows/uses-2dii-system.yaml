@@ -28,8 +28,12 @@ jobs:
 
 
        # FIXME: Install this on 2dii/system
+      - uses: r-lib/actions/setup-pandoc@master
       - uses: r-lib/actions/setup-tinytex@v1
-      - name: setup xelatex
+      - name: Install sudo
+        run: apt update && apt install sudo
+      - name: Setup xelatex
+        # https://github.com/rmsrosa/nbbinder/issues/5
         run: sudo apt-get install texlive-xetex
 
 
