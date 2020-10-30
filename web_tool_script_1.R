@@ -21,7 +21,8 @@ set_global_parameters(file.path(par_file_path, "AnalysisParameters.yml"))
 # need to define an alternative location for data files
 analysis_inputs_path <- set_analysis_inputs_path(twodii_internal, data_location_ext, dataprep_timestamp)
 
-create_portfolio_subfolders_2(portfolio_name_ref_all = portfolio_name_ref_all, project_location = project_location)
+# To save, files need to go in the portfolio specific folder, created here
+create_portfolio_subfolders(portfolio_name_ref_all = portfolio_name_ref_all, project_location = project_location)
 
 ######################################################################
 
@@ -143,11 +144,8 @@ port_weights <- pw_calculations(eq_portfolio, cb_portfolio)
 #### SAVING ####
 ################
 
-# To save, files need to go in the portfolio specific folder.
 # Identify the portfolios to save;
 # Subset and Save these files
-
-# create_portfolio_subfolders(portfolio_name_ref_all)
 
 file_names <- identify_portfolios(portfolio_total)
 
