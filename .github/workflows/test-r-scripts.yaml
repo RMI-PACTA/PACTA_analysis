@@ -23,6 +23,10 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
+
+      - uses: r-lib/actions/setup-pandoc@master
+      - uses: r-lib/actions/setup-tinytex@v1
+
       - name: Checkout PACTA_analysis
         uses: actions/checkout@v2
         with:
@@ -59,6 +63,8 @@ jobs:
 
       - name: Install dependencies from CRAN
         run: |
+          install.packages("rmarkdown")
+          install.packages("knitr")
           install.packages("renv")
           dependencies <- renv::dependencies()$Package
           install.packages(dependencies)
