@@ -23,8 +23,7 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
-      - name: Checkout PACTA_analysis
-        uses: 2DegreesInvesting/PACTA_analysis/checkout@new-action-checkout
+      - uses: 2DegreesInvesting/PACTA_analysis/checkout@new-action-checkout
       - uses: r-lib/actions/setup-pandoc@master
       - uses: r-lib/actions/setup-tinytex@v1
       - uses: r-lib/actions/setup-r@master
