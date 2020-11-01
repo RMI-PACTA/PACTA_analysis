@@ -40,6 +40,10 @@ jobs:
           install.packages(dependencies)
         shell: Rscript {0}
 
+      - name: pwd
+        run: pwd && ls && ls ..
+        shell: bash
+
       - name: Test R scripts
         run: |
           # setwd("PACTA_analysis")
