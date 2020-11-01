@@ -18,4 +18,4 @@ jobs:
 
     steps:
       - name: Checkout PACTA_analysis
-        uses: PACTA_analysis/checkout@master
+        uses: 2DegreesInvesting/PACTA_analysis/checkout@master
