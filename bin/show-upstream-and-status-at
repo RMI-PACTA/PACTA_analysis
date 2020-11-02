@@ -3,9 +3,7 @@
 cd $1
 echo $(basename $(pwd))
 current_branch=$(git rev-parse --abbrev-ref HEAD)
-
 git fetch --quiet
-
 echo "$(git log --pretty='%an commited %cr:' | head -1)"
 git branch -vv | \
   grep " $current_branch " | \
