@@ -37,13 +37,14 @@ for (i in seq_along(test_cases_csvs)) {
   out_dir <- file.path(test_cases_output_dir, portfolio_name)
 
   dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
-  dir.create(file.path(out_dir, "00_Log_Files"), showWarnings = FALSE, recursive = TRUE)
-  dir.create(file.path(out_dir, "10_Parameter_File"), showWarnings = FALSE, recursive = TRUE)
-  dir.create(file.path(out_dir, "20_Raw_Inputs"), showWarnings = FALSE, recursive = TRUE)
-  dir.create(file.path(out_dir, "30_Processed_Inputs"), showWarnings = FALSE, recursive = TRUE)
-  dir.create(file.path(out_dir, "40_Results"), showWarnings = FALSE, recursive = TRUE)
-  dir.create(file.path(out_dir, "50_Outputs"), showWarnings = FALSE, recursive = TRUE)
 
+  sub_directories_needed <-
+    c("00_Log_Files", "10_Parameter_File", "20_Raw_Inputs",
+      "30_Processed_Inputs", "40_Results", "50_Outputs")
+
+  lapply(sub_directories_needed, function(sub_dir) {
+    fs::dir_create(fs::path(out_dir, sub_dir), recurse = TRUE)
+  })
 
   write_csv(test_case, file.path(out_dir, "20_Raw_Inputs", paste0(portfolio_name, ".csv")))
   write_yaml(yaml_data, file.path(out_dir, "10_Parameter_File", paste0(portfolio_name, "_PortfolioParameters.yml")), indent = 4)
