@@ -2,7 +2,8 @@ library(fs)
 library(readr)
 library(yaml)
 
-test_cases_dir <- "~/Dropbox (2° Investing)/2° Investing Team/People/Jacob/p2020_test_cases"
+test_cases_dir <- "~/Dropbox (2° Investing)/2° Investing Team/People/Jacob/p2020_test_casesss"
+stopifnot(fs::dir_exists(test_cases_dir))
 
 test_cases_csvs <- fs::dir_ls(test_cases_dir, regexp = "[.]csv")
 
