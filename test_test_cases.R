@@ -1,19 +1,20 @@
+library(fs)
 library(readr)
 library(yaml)
 
 test_cases_dir <- "~/Dropbox (2° Investing)/2° Investing Team/People/Jacob/p2020_test_cases"
 
-test_cases_csvs <- list.files(test_cases_dir, pattern = "[.]csv", full.names = TRUE)
+test_cases_csvs <- fs::dir_ls(test_cases_dir, regexp = "[.]csv")
 
 test_cases_output_dir <- "test_cases"
 
-unlink(test_cases_output_dir, recursive = TRUE)
+fs::dir_delete(test_cases_output_dir)
 
 for (i in seq_along(test_cases_csvs)) {
   filepath <- test_cases_csvs[[i]]
 
   test_case <- read_csv(filepath, col_types = cols())
-  filename <- tools::file_path_sans_ext(basename(filepath))
+  filename <- fs::path_file(fs::path_ext_remove(filepath))
   portfolio_name <- unique(test_case$Portfolio.Name)
   investor_name <- unique(test_case$Investor.Name)
 
@@ -34,9 +35,9 @@ for (i in seq_along(test_cases_csvs)) {
     ))
 
 
-  out_dir <- file.path(test_cases_output_dir, portfolio_name)
+  out_dir <- fs::path(test_cases_output_dir, portfolio_name)
 
-  dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
+  fs::dir_create(out_dir, recurse = TRUE)
 
   sub_directories_needed <-
     c("00_Log_Files", "10_Parameter_File", "20_Raw_Inputs",
@@ -46,17 +47,17 @@ for (i in seq_along(test_cases_csvs)) {
     fs::dir_create(fs::path(out_dir, sub_dir), recurse = TRUE)
   })
 
-  write_csv(test_case, file.path(out_dir, "20_Raw_Inputs", paste0(portfolio_name, ".csv")))
-  write_yaml(yaml_data, file.path(out_dir, "10_Parameter_File", paste0(portfolio_name, "_PortfolioParameters.yml")), indent = 4)
-  file.copy("working_dir/10_Parameter_File/AnalysisParameters.yml",
-            file.path(out_dir, "10_Parameter_File", "AnalysisParameters.yml"))
+  write_csv(test_case, fs::path(out_dir, "20_Raw_Inputs", paste0(portfolio_name, ".csv")))
+  write_yaml(yaml_data, fs::path(out_dir, "10_Parameter_File", paste0(portfolio_name, "_PortfolioParameters.yml")), indent = 4)
+  fs::file_copy("working_dir/10_Parameter_File/AnalysisParameters.yml",
+                fs::path(out_dir, "10_Parameter_File", "AnalysisParameters.yml"))
 }
 
 
 for (csv_num in seq_along(test_cases_csvs)) {
   filepath <- test_cases_csvs[[csv_num]]
   test_case <- read_csv(filepath, col_types = cols())
-  filename <- tools::file_path_sans_ext(basename(filepath))
+  filename <- fs::path_file(fs::path_ext_remove(filepath))
   portfolio_name <- unique(test_case$Portfolio.Name)
   sub_directory <- portfolio_name
 
@@ -66,7 +67,7 @@ for (csv_num in seq_along(test_cases_csvs)) {
   # if no unique, valid portfolio_name, use the filename
   if (length(sub_directory) != 1) { sub_directory <- filename }
 
-  out_dir <- file.path(test_cases_output_dir, sub_directory)
+  out_dir <- fs::path(test_cases_output_dir, sub_directory)
 
   portfolio_name_ref_all <- portfolio_name
   portfolio_root_dir <- out_dir
