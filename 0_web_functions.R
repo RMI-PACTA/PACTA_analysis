@@ -60,8 +60,8 @@ save_if_exists <- function(df, portfolio_name_, save_name, csv_or_rds = "rds") {
   }
 }
 
-set_webtool_paths <- function() {
-  project_location <<- file.path(working_location, "working_dir")
+set_webtool_paths <- function(project_root_dir = "working_dir") {
+  project_location <<- file.path(working_location, project_root_dir)
 
   log_path <<- file.path(project_location, "00_Log_Files", portfolio_name_ref_all)
   par_file_path <<- file.path(project_location, "10_Parameter_File")

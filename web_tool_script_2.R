@@ -11,11 +11,14 @@ source("0_portfolio_test.R")
 source("0_global_functions.R")
 source("0_web_functions.R")
 
+if (!exists("portfolio_name_ref_all")) { portfolio_name_ref_all <- "TestPortfolio_Input" }
+if (!exists("portfolio_root_dir")) { portfolio_root_dir <- "working_dir" }
+
 setup_project()
 
 working_location <- file.path(working_location)
 
-set_webtool_paths()
+set_webtool_paths(portfolio_root_dir)
 
 # just done once
 options(r2dii_config = file.path(par_file_path, "AnalysisParameters.yml"))
