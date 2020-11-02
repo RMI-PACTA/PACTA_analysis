@@ -3,7 +3,7 @@ library(yaml)
 
 test_cases_dir <- "~/Dropbox (2° Investing)/2° Investing Team/People/Jacob/p2020_test_cases"
 
-test_cases_csvs <- list.files(test_cases_dir, pattern = "\\.csv", full.names = TRUE)
+test_cases_csvs <- list.files(test_cases_dir, pattern = "[.]csv", full.names = TRUE)
 
 test_cases_output_dir <- "test_cases"
 
