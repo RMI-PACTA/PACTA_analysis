@@ -14,8 +14,12 @@ for (i in seq_along(test_cases_csvs)) {
 
   test_case <- read_csv(filepath, col_types = cols())
   filename <- tools::file_path_sans_ext(basename(filepath))
-  portfolio_name <- unique(test_case$Portfolio.Name)[[1]]
-  investor_name <- unique(test_case$Investor.Name)[[1]]
+  portfolio_name <- unique(test_case$Portfolio.Name)
+  investor_name <- unique(test_case$Investor.Name)
+
+  # if no unique, valid portfolio_name or investor_name, use the filename
+  if (length(portfolio_name) != 1) { portfolio_name <- filename }
+  if (length(investor_name) != 1) { investor_name <- filename }
 
   yaml_data <-
     list(default = list(
@@ -51,8 +55,17 @@ for (i in seq_along(test_cases_csvs)) {
 for (csv_num in seq_along(test_cases_csvs)) {
   filepath <- test_cases_csvs[[csv_num]]
   test_case <- read_csv(filepath, col_types = cols())
-  portfolio_name <- unique(test_case$Portfolio.Name)[[1]]
-  out_dir <- file.path(test_cases_output_dir, portfolio_name)
+  filename <- tools::file_path_sans_ext(basename(filepath))
+  portfolio_name <- unique(test_case$Portfolio.Name)
+  sub_directory <- portfolio_name
+
+  # if no unique, valid portfolio_name, use an empty string
+  if (length(portfolio_name) != 1) { portfolio_name <- "" }
+
+  # if no unique, valid portfolio_name, use the filename
+  if (length(sub_directory) != 1) { sub_directory <- filename }
+
+  out_dir <- file.path(test_cases_output_dir, sub_directory)
 
   portfolio_name_ref_all <- portfolio_name
   portfolio_root_dir <- out_dir
