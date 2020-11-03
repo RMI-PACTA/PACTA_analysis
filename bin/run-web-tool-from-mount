@@ -1,0 +1,5 @@
+#! /bin/bash
+
+# --fetch will fetch all repos (requires permission to private repos)
+./bin/show-upstream-and-status-at-pacta-repos $1
+./bin/start-container-with /bound/bin/run-r-scripts
