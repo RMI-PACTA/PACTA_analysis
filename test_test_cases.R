@@ -9,7 +9,7 @@ test_cases_csvs <- fs::dir_ls(test_cases_dir, regexp = "[.]csv")
 
 test_cases_output_dir <- "test_cases"
 
-fs::dir_delete(test_cases_output_dir)
+try(fs::dir_delete(test_cases_output_dir))
 
 for (i in seq_along(test_cases_csvs)) {
   filepath <- test_cases_csvs[[i]]
