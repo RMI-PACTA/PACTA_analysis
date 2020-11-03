@@ -1,4 +1,5 @@
 #! /bin/bash
 
-"$(pwd)"/bin/show-upstream-and-status-at-pacta-repos
+# --fetch will fetch all repos (requires permission to private repos)
+"$(pwd)"/bin/show-upstream-and-status-at-pacta-repos $1
 "$(pwd)"/bin/start-container-with /bound/bin/run-r-scripts

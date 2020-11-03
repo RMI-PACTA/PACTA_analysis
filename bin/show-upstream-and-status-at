@@ -1,9 +1,18 @@
 #! /bin/bash
 
+# $1: Directory
+# $2: --fetch will fetch from GitHub; requires permisison to private repos
+
 cd $1
 echo $(basename $(pwd))
 current_branch=$(git rev-parse --abbrev-ref HEAD)
-git fetch --quiet
+
+fetch_or_not="${2:- --dont-fetch}"
+if [ $fetch_or_not == --fetch ]; then
+  echo "Fetching from GitHub"
+  git fetch --quiet
+fi
+
 echo "$(git log --pretty='%an commited %cr:' | head -1)"
 git branch -vv | \
   grep " $current_branch " | \
@@ -12,3 +21,4 @@ git branch -vv | \
   # Replace duplicated white space with a single white space
   sed 's/  */ /g'
 git status
+
