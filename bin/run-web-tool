@@ -1,4 +1,4 @@
 #! /bin/bash
 
 "$(pwd)"/bin/show-upstream-and-status-at-pacta-repos
-"$(pwd)"/bin/start-containter-with /bound/bin/run-r-scripts
+"$(pwd)"/bin/start-container-with /bound/bin/run-r-scripts
