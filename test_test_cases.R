@@ -55,6 +55,24 @@ for (i in seq_along(test_cases_csvs)) {
 }
 
 
+report_git_status <-
+  function(repo_root = ".") {
+    for (i in  repo_root) {
+      cli::cli_h1(paste0("repo status for: ", i))
+      print(git2r::branch_get_upstream(git2r::repository_head(i)))
+      print(git2r::status(i))
+    }
+  }
+
+report_git_status(
+  c(".",
+    "../create_interactive_report",
+    "../StressTestingModelDev/",
+    "../pacta-data/"
+  )
+)
+
+
 for (csv_num in seq_along(test_cases_csvs)) {
   filepath <- test_cases_csvs[[csv_num]]
   test_case <- read_csv(filepath, col_types = cols())
