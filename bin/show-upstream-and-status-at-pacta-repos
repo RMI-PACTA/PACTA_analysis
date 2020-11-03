@@ -1,26 +1,28 @@
 #! /bin/bash
 
-"$(pwd)"/bin/show-upstream-and-status-at ../PACTA_analysis
+# $1: --fetch will fetch from GitHub; requires permisison to private repos
+
+"$(pwd)"/bin/show-upstream-and-status-at ../PACTA_analysis $1
 echo "."
 echo "."
 echo "."
 
-"$(pwd)"/bin/show-upstream-and-status-at ../create_interactive_report
+"$(pwd)"/bin/show-upstream-and-status-at ../create_interactive_report $1
 echo "."
 echo "."
 echo "."
 
-"$(pwd)"/bin/show-upstream-and-status-at ../StressTestingModelDev
+"$(pwd)"/bin/show-upstream-and-status-at ../StressTestingModelDev $1
 echo "."
 echo "."
 echo "."
 
-"$(pwd)"/bin/show-upstream-and-status-at ../pacta-data
+"$(pwd)"/bin/show-upstream-and-status-at ../pacta-data $1
 echo "."
 echo "."
 echo "."
 
-"$(pwd)"/bin/show-upstream-and-status-at ../user_results
+"$(pwd)"/bin/show-upstream-and-status-at ../user_results $1
 echo "."
 echo "."
 echo "."
