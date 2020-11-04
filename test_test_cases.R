@@ -59,6 +59,7 @@ report_git_status <-
   function(repo_root = ".") {
     for (i in  repo_root) {
       cli::cli_h1(paste0("repo status for: ", i))
+      system2("git", c("-C", i, "fetch"), stdout = FALSE)
       print(git2r::branch_get_upstream(git2r::repository_head(i)))
       print(git2r::status(i))
     }
