@@ -167,6 +167,8 @@ aggregate_portfolio <- function(df) {
         plan_tech_prod, plan_alloc_wt_tech_prod, plan_carsten, plan_emission_factor,
         scen_tech_prod, scen_alloc_wt_tech_prod, scen_carsten, scen_emission_factor
       ) %>%
+      mutate(plan_emission_factor = ifelse(is.na(plan_emission_factor), 0, plan_emission_factor),
+             scen_emission_factor = ifelse(is.na(scen_emission_factor), 0, scen_emission_factor)) %>%
       group_by(
         !!!rlang::syms(grouping_variables), scenario, allocation,
         equity_market, scenario_geography, year,
