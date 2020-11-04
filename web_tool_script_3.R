@@ -324,7 +324,7 @@ create_executive_summary(
   file_name = "template.Rmd",
   exec_summary_dir = exec_summary_dir,
   output_dir = file.path(output_dir, "executive_summary"),
-  language_select = "EN",
+  language_select = language_select,
   project_name = "working_dir",
   investor_name = investor_name,
   portfolio_name = portfolio_name,
