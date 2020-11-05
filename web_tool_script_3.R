@@ -246,6 +246,12 @@ dataframe_translations <- readr::read_csv(
   path(template_path, "data/translation/dataframe_labels.csv"),
   col_types = cols()
   )
+
+header_dictionary <- readr::read_csv(
+  path(template_path, "data/translation/dataframe_headers.csv"),
+  col_types = cols()
+)
+
 js_translations <- jsonlite::fromJSON(
   txt = path(template_path, "data/translation/js_labels.json")
 )
@@ -316,7 +322,8 @@ create_interactive_report(
   js_translations = js_translations,
   ipr_results_stress_test = ipr_results_stress_test,
   display_currency = "CHF",
-  currency_exchange_value = currency_exchange_value
+  currency_exchange_value = currency_exchange_value,
+  header_dictionary = header_dictionary
 )
 
 
