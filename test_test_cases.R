@@ -56,20 +56,52 @@ for (i in seq_along(test_cases_csvs)) {
 
 
 report_git_status <-
-  function(repo_root = ".") {
-    for (i in  repo_root) {
-      cli::cli_h1(paste0("repo status for: ", i))
-      system2("git", c("-C", i, "fetch"), stdout = FALSE)
-      print(git2r::branch_get_upstream(git2r::repository_head(i)))
-      print(git2r::status(i))
+  function(repo_roots = ".") {
+    for (repo_root in  repo_roots) {
+      cli::cli_h1(paste0("repo status for: ", repo_root))
+
+      system2("git", c("-C", repo_root, "fetch"), stdout = FALSE)
+
+      repo <- git2r::repository(repo_root)
+      local_head <- git2r::revparse_single(repo, "HEAD")
+      upstream_head <- git2r::revparse_single(repo, "origin/HEAD")
+      local_repo_head <- git2r::repository_head(repo)
+      upstream_branch <- git2r::branch_get_upstream(local_repo_head)
+      remote_url <- git2r::branch_remote_url(upstream_branch)
+      repo_ahead_behind <- git2r::ahead_behind(local_head, upstream_head)
+
+      cat(paste0("Upstream branch: ", upstream_branch$name, " from ", remote_url), "\n")
+      if (!all(repo_ahead_behind == 0)) {
+        cat(cli::col_red(paste0(c("ahead: ", "behind: "), repo_ahead_behind, collapse = " - "), "\n"))
+        cat(paste0("Remote HEAD: ", format(upstream_head)), "\n")
+        cat(paste0("Local HEAD: ", format(local_head)), "\n")
+      } else {
+        cat(cli::col_green("in sync with remote origin"), "\n")
+      }
+      print(git2r::status(repo))
+
+      owner <- "2DegreesInvesting"
+      repo_name <- basename(repo_root)
+      open_pr_list <-
+        gh::gh("/repos/:owner/:repo/pulls", owner = owner, repo = repo_name,
+               state = "open", .limit = Inf)
+
+      if (length(open_pr_list) > 0) {
+        infos <-
+          lapply(open_pr_list, function(pr) {
+            paste0("#", pr$number, " - ", pr$title, ifelse(pr$draft, " (DRAFT)", ""))
+          })
+        cat(paste0("Open PRs (", length(open_pr_list), "):\n", paste0(infos, collapse = "\n")), "\n")
+      }
     }
   }
 
 report_git_status(
-  c(".",
+  c("../PACTA_analysis",
     "../create_interactive_report",
-    "../StressTestingModelDev/",
-    "../pacta-data/"
+    "../StressTestingModelDev",
+    "../pacta-data",
+    "../user_results"
   )
 )
 
