@@ -26,10 +26,10 @@ source(file.path(template_path, "create_executive_summary.R"))
 source(file.path(template_path, "useful_functions.R"))
 
 report_name = select_report_template(project_code = project_code,
-                       language_select = language_select)
+                                     language_select = language_select)
 
 exec_summary_name = select_exec_summary_template(project_code = project_code,
-                                           language_select = language_select)
+                                                 language_select = language_select)
 
 template_dir <- paste0(template_path, report_name,"/_book/")
 exec_summary_dir <- paste0(template_path, exec_summary_name,"/")
@@ -45,8 +45,22 @@ scenario_other <- "ETP2017_B2DS"
 scenario_shipping <- "SBTI_SBTI"
 portfolio_allocation_method <- "portfolio_weight"
 scenario_geography <- "Global"
-audit_file <- read_csv(file.path(proc_input_path, portfolio_name_ref_all, "audit_file.csv"), col_types = cols())
-emissions <- read_rds(file.path(proc_input_path, portfolio_name_ref_all, "emissions.rda"))
+
+if (file.exists(file.path(proc_input_path, portfolio_name_ref_all, "audit_file.csv"))){
+  audit_file <- read_csv(file.path(proc_input_path, portfolio_name_ref_all, "audit_file.csv"), col_types = cols())
+}else{
+  audit_file <- tibble("investor_name" = NA_character_, "portfolio_name" = NA_character_,
+                       "asset_type" = NA_character_, "valid_input" = NA, "isin" = NA_character_,
+                       "direct_holding" = NA, "value_usd" = NA_real_)
+
+}
+
+if (file.exists(file.path(proc_input_path, portfolio_name_ref_all, "emissions.rda"))){
+  emissions <- read_rds(file.path(proc_input_path, portfolio_name_ref_all, "emissions.rda"))
+  }else{
+    emissions <- tibble("investor_name" = NA_character_, "portfolio_name" = NA_character_,
+                        "asset_type" = NA_character_, "sector" = NA_character_,
+                        "weighted_sector_emissions" = NA_real_)}
 
 # load equity portfolio data
 if (file.exists(file.path(results_path, portfolio_name_ref_all, "Equity_results_portfolio.rda"))) {
@@ -245,7 +259,7 @@ peers_bonds_results_user <- read_rds(file.path(data_location_ext, "Peers_bonds_r
 dataframe_translations <- readr::read_csv(
   path(template_path, "data/translation/dataframe_labels.csv"),
   col_types = cols()
-  )
+)
 
 header_dictionary <- readr::read_csv(
   path(template_path, "data/translation/dataframe_headers.csv"),
