@@ -106,6 +106,7 @@ add_naming_to_portfolio <- function(portfolio_raw) {
 }
 
 get_input_files <- function(portfolio_name_ref_all) {
+
   portfolio <- tibble()
 
   input_path <- file.path(project_location, "20_Raw_Inputs")
@@ -123,16 +124,15 @@ get_input_files <- function(portfolio_name_ref_all) {
     write_log(
       msg = "Input file format not supported. Must be .csv, .xlsx or .txt",
       file_path = log_path
-      )
+    )
     stop("Input file format not supported. Must be .csv, .xlsx or .txt")
   }
-
 
   if (!all(portfolio_name_ref_all %in% input_names)) {
     write_log(
       msg = "Difference in input files and input argument portfolio names.",
       file_path = log_path
-      )
+    )
     stop("Difference in input files and input argument portfolio names.")
   }
 
@@ -140,7 +140,7 @@ get_input_files <- function(portfolio_name_ref_all) {
     write_log(
       msg = "Missing input argument",
       file_path = log_path
-      )
+    )
     stop("Missing input argument")
   }
 
@@ -152,46 +152,36 @@ get_input_files <- function(portfolio_name_ref_all) {
     write_log(
       msg = "Difference in parameter files and input argument portfolio names.",
       file_path = log_path
-      )
+    )
     stop("Difference in parameter files and input argument portfolio names.")
   }
   if (any(!portfolio_name_ref_all %in% portfolio_file_names)) {
     write_log(
       msg = "Missing portfolio parameter file",
       file_path = log_path
-      )
+    )
     stop("Missing portfolio parameter file")
   }
-  # this is already tested above -- duplicate
-  # if(any(!portfolio_name_ref_all %in% input_names)){stop("Missing input argument")}
 
+  input_file_path <- path(input_path, paste0(portfolio_name_ref_all, ".csv"))
 
-  for (i in 1:length(portfolio_name_ref_all)) {
-    input_file_path <- file.path(input_path, input_files[i])
-    portfolio_name_ref <- portfolio_name_ref_all[i]
+  portfolio <- read_web_input_file(input_file_path)
 
-    portfolio_ <- read_web_input_file(input_file_path)
+  portfolio <- portfolio %>% select(-contains("X"))
 
-    portfolio_ <- portfolio_ %>% select(-contains("X"))
+  set_portfolio_parameters(file_path = file.path(par_file_path, paste0(portfolio_name_ref_all, "_PortfolioParameters.yml")))
 
-    set_portfolio_parameters(file_path = file.path(par_file_path, paste0(portfolio_name_ref, "_PortfolioParameters.yml")))
+  # this writes the portfolio and ivestor names that are provided from the parameter file to the pf
+  # as agreed with Constructiva. They ensure grouped portfolios will get one name only.
+  portfolio <- portfolio %>%
+    mutate(
+      Portfolio.Name = portfolio_name,
+      Investor.Name = investor_name
+    )
 
-    # this writes the portfolio and ivestor names that are provided from the parameter file to the pf
-    # as agreed with Constructiva. They ensure grouped portfolios will get one name only.
-    portfolio_ <- portfolio_ %>%
-      mutate(
-        Portfolio.Name = portfolio_name,
-        Investor.Name = investor_name
-      )
+  # clean and check column names
+  portfolio <- check_input_file_contents(portfolio, portfolio_name, investor_name)
 
-    # clean and check column names
-    portfolio_ <- check_input_file_contents(portfolio_, portfolio_name, investor_name)
-
-    portfolio_$count <- i
-
-    portfolio <- rbind(portfolio, portfolio_)
-    # create warning here for user.
-  }
   portfolio <- clean_portfolio_col_types(portfolio)
   portfolio <- clear_portfolio_input_blanks(portfolio)
 
@@ -199,7 +189,7 @@ get_input_files <- function(portfolio_name_ref_all) {
     write_log(
       msg = "Multiple investors detected. Only one investor at a time can be anaylsed",
       file_path = log_path
-      )
+    )
     stop("Multiple investors detected. Only one investor at a time can be anaylsed")
   }
 
@@ -231,14 +221,14 @@ read_web_input_file <- function(input_file_path) {
   if (data_check(input_file) == FALSE) {
     warning("Input file not readable")
     ifelse(nrow(input_file) == 0,
-      write_log(
-        msg = "Input file has 0 rows. Please ensure the uploaded file is not empty.",
-        file_path = log_path
-        ),
-      write_log(
-        msg = "Input file could not be transformed into a data.frame. Please check the uploaded file has the correct format.",
-        file_path = log_path
-      )
+           write_log(
+             msg = "Input file has 0 rows. Please ensure the uploaded file is not empty.",
+             file_path = log_path
+           ),
+           write_log(
+             msg = "Input file could not be transformed into a data.frame. Please check the uploaded file has the correct format.",
+             file_path = log_path
+           )
     )
   }
 
