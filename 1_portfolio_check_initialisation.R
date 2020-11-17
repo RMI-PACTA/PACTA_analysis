@@ -1,14 +1,9 @@
 ## Project Initialisation
-rm(list = ls())
-
-options(encoding = "UTF-8")
-
 devtools::load_all()
 use_r_packages()
+library(r2dii.utils)
 
 ## Project Initialisation
-rm(list = ls())
-
 if (rstudioapi::isAvailable()) {
   working_location <- dirname(rstudioapi::getActiveDocumentContext()$path)
 } else {
