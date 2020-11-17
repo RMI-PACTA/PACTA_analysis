@@ -82,10 +82,10 @@ set_global_parameters <- function(file_path) {
 
   equity_market_list <<- cfg$Lists$Equity.Market.List
 
-  allowable_asset_list <<- cfg$Lists$AssetTypes
-  if (is.null(allowable_asset_list)) {
-    allowable_asset_list <<- c("Funds", "Equity", "Bonds", "Others")
-  }
+  # allowable_asset_list <<- cfg$Lists$AssetTypes
+  # if (is.null(allowable_asset_list)) {
+  #   allowable_asset_list <<- c("Funds", "Equity", "Bonds", "Others")
+  # }
   # allowable_asset_list <<- allowable_asset_list
 
   global_aggregate_sector_list <<- cfg$Lists$Global.Aggregate.Sector.List
