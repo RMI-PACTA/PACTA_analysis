@@ -57,13 +57,9 @@ if (new_data == TRUE) {
 
   if (inc_emission_factors) {
     average_sector_intensity <- get_average_sector_intensity_data(analysis_inputs_path)
-  } else {
-    average_sector_intensity <- data.frame()
-  }
-
-  if (inc_emission_factors) {
     company_emissions <- get_company_emissions_data(analysis_inputs_path)
   } else {
+    average_sector_intensity <- data.frame()
     company_emissions <- data.frame()
   }
 

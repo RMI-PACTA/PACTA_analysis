@@ -79,13 +79,11 @@ get_currency_data_for_timestamp <-
     stopifnot(inherits(currency_data[[currency_code_colname]], "character"))
     stopifnot(inherits(currency_data[[exchange_rate_colname]], "numeric"))
 
-    currency_data <-
-      currency_data[, c(currency_code_colname, exchange_rate_colname)]
+    currency_data <- currency_data[, c(currency_code_colname, exchange_rate_colname)]
     names(currency_data) <- c("currency", "exchange_rate")
-    currency_data <-
-      currency_data[!is.na(currency_data$currency) &
-                      currency_data$currency != "",]
-    currency_data <- currency_data[!duplicated(currency_data),]
+    currency_data <- currency_data[!is.na(currency_data$currency), ]
+    currency_data <- currency_data[currency_data$currency != "", ]
+    currency_data <- currency_data[!duplicated(currency_data), ]
 
     currency_data
   }
