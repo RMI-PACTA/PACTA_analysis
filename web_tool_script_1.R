@@ -38,22 +38,34 @@ create_portfolio_subfolders(portfolio_name_ref_all = portfolio_name_ref_all, pro
 file_location <- file.path(analysis_inputs_path, "cleaned_files")
 
 if (new_data == TRUE) {
-  currencies <- get_and_clean_currency_data()
+  currencies <- get_currency_data_for_timestamp(financial_timestamp)
 
   # fund_data <- get_and_clean_fund_data()
   fund_data <- data.frame()
 
   fin_data <- get_and_clean_fin_data(fund_data)
 
-  comp_fin_data <- get_and_clean_company_fin_data()
+  comp_fin_data <- get_and_clean_company_fin_data(analysis_inputs_path)
 
-  debt_fin_data <- get_and_clean_debt_fin_data()
+  debt_fin_data <- get_debt_fin_data(analysis_inputs_path)
 
-  # revenue_data <- get_and_clean_revenue_data()
+  if (has_revenue) {
+    revenue_data <- get_revenue_data(analysis_inputs_path)
+  } else {
+    revenue_data <- data.frame()
+  }
 
-  average_sector_intensity <- get_average_emission_data(inc_emission_factors)
+  if (inc_emission_factors) {
+    average_sector_intensity <- get_average_sector_intensity_data(analysis_inputs_path)
+  } else {
+    average_sector_intensity <- data.frame()
+  }
 
-  company_emissions <- get_company_emission_data(inc_emission_factors)
+  if (inc_emission_factors) {
+    company_emissions <- get_company_emissions_data(analysis_inputs_path)
+  } else {
+    company_emissions <- data.frame()
+  }
 
   save_cleaned_files(
     file_location,
