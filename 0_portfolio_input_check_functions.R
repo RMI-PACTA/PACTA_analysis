@@ -63,35 +63,40 @@ clean_portfolio_col_types <- function(portfolio, grouping_variables) {
       "Wrong variable class for investor_name. Should be character, but is ",
       class(portfolio$investor_name),
       ". This can introduce errors in further calculations!"
-    ))
+    ),
+    file_path = log_path)
   }
   if (is.character(portfolio$portfolio_name) == FALSE) {
     write_log(msg = paste0(
       "Wrong variable class for portfolio_name Should be character, but is ",
       class(portfolio$portfolio_name),
       ". This can introduce errors in further calculations!"
-    ))
+    ),
+    file_path = log_path)
   }
   if (is.numeric(portfolio$market_value) == FALSE) {
     write_log(msg = paste0(
       "Wrong variable class for market_value Should be numeric, but is ",
       class(portfolio$market_value),
       ". This can introduce errors in further calculations!"
-    ))
+    ),
+    file_path = log_path)
   }
   if (is.character(portfolio$currency) == FALSE) {
     write_log(msg = paste0(
       "Wrong variable class for currency Should be character, but is ",
       class(portfolio$currency),
       ". This can introduce errors in further calculations!"
-    ))
+    ),
+    file_path = log_path)
   }
   if (is.character(portfolio$isin) == FALSE) {
     write_log(msg = paste0(
       "Wrong variable class for isin Should be character, but is ",
       class(portfolio$isin),
       ". This can introduce errors in further calculations!"
-    ))
+    ),
+    file_path = log_path)
   }
   ### what about number_of_shares???
 
@@ -112,7 +117,8 @@ clear_portfolio_input_blanks <- function(portfolio) {
               because of missing values in at least one of the variables", str_c(grouping_variables, collapse = ", "),
       "\n To ensure complete analysis, please upload a file without
                           missing values in these columns."
-    ))
+    ),
+    file_path = log_path)
 
     portfolio <- portfolio %>% filter_at(
       grouping_variables, all_vars(!is.na(.))
@@ -191,7 +197,10 @@ check_missing_cols <- function(portfolio, grouping_variables) {
   missing_columns <- setdiff(required_input_cols, colnames(portfolio))
 
   if (length(missing_columns) > 0) {
-    write_log(msg = paste0("The input file is missing the following data columns: ", missing_columns))
+    write_log(
+      msg = paste0("The input file is missing the following data columns: ", missing_columns),
+      file_path = log_path
+      )
     stop(paste0("The input file is missing the following data columns: ", missing_columns))
   }
 
@@ -1284,6 +1293,92 @@ clean_unmatched_holdings <- function(portfolio) {
 }
 
 ### Emissions work
+calculate_average_portfolio_emissions <- function(portfolio_total,
+                                                  comp_fin_data,
+                                                  average_sector_intensity) {
+
+  min_portfolio <- portfolio_total %>%
+    select(
+      investor_name,
+      portfolio_name,
+      financial_sector,
+      security_mapped_sector,
+      company_id,
+      value_usd,
+      asset_type
+    ) %>%
+    filter(asset_type %in% c("Equity", "Bonds")) %>%
+    left_join(
+      select(comp_fin_data, company_id, bics_sector),
+      by = "company_id"
+    ) %>%
+    group_by(
+      investor_name,
+      portfolio_name,
+      asset_type,
+      financial_sector,
+      bics_sector
+    ) %>%
+    summarise(value_usd = sum(value_usd, na.rm = T),  .groups = "drop") %>%
+    left_join(
+      select(
+        average_sector_intensity,
+        bics_sector,
+        asset_type,
+        median_intensity,
+        mean_intensity
+      ),
+      by = c("bics_sector", "asset_type")
+    )
+
+  # Create averages where bics sectors were missing
+  average_other_sectors <- min_portfolio %>%
+    group_by(asset_type, financial_sector) %>%
+    summarise(
+      mean_intensity = mean(mean_intensity, na.rm = T),
+      .groups = "drop"
+    )
+
+  min_portfolio <- min_portfolio %>%
+    left_join(
+      average_other_sectors,
+      by = c("asset_type", "financial_sector")
+    ) %>%
+    mutate(
+      mean_intensity = ifelse(
+        is.na(mean_intensity.x),
+        mean_intensity.y,
+        mean_intensity.x
+      )
+    ) %>%
+    select(-mean_intensity.x, -mean_intensity.y)  %>%
+    mutate(weighted_sector_emissions = value_usd * mean_intensity)
+
+  min_portfolio <- min_portfolio %>%
+    mutate(
+      sector = ifelse(
+        financial_sector != "Other",
+        financial_sector,
+        bics_sector
+      ),
+      sector = ifelse(
+        is.na(sector),
+        "Other",
+        sector
+      )
+    ) %>%
+    group_by(investor_name, portfolio_name, asset_type,sector) %>%
+    summarise(
+      weighted_sector_emissions = sum(weighted_sector_emissions, na.rm = T),
+      .groups = "drop"
+    )
+
+
+
+  return(min_portfolio)
+}
+
+
 
 get_average_emission_data <- function(inc_emission_factors) {
   average_sector_intensity <- data.frame()
@@ -1564,10 +1659,11 @@ pw_calculations <- function(eq_portfolio, cb_portfolio){
   pw <- port_all %>%
     group_by(!!!rlang::syms(grouping_variables), company_id) %>%
     summarise(port_weight = sum(port_weight), .groups = "drop") %>%
-    select(company_id, port_weight)
+    select(company_id, port_weight) %>%
+    rename(portfolio_weight = port_weight)
 
   }else{
-    pw <- data.frame(company_id = "No companies in portfolio", port_weight = "0")
+    pw <- data.frame(company_id = "No companies in portfolio", portfolio_weight = "0")
   }
 
   return(pw)

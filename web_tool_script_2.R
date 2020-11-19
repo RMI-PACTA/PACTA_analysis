@@ -1,6 +1,6 @@
 cli::cli_h1("web_tool_script_2.R")
 
-devtools::load_all()
+devtools::load_all(quiet = TRUE)
 use_r_packages()
 
 #########################################################################
@@ -11,11 +11,14 @@ source("0_portfolio_test.R")
 source("0_global_functions.R")
 source("0_web_functions.R")
 
+if (!exists("portfolio_name_ref_all")) { portfolio_name_ref_all <- "TestPortfolio_Input" }
+if (!exists("portfolio_root_dir")) { portfolio_root_dir <- "working_dir" }
+
 setup_project()
 
 working_location <- file.path(working_location)
 
-set_webtool_paths()
+set_webtool_paths(portfolio_root_dir)
 
 # just done once
 options(r2dii_config = file.path(par_file_path, "AnalysisParameters.yml"))
@@ -60,7 +63,6 @@ if (file.exists(equity_input_file)) {
     port_all_eq <- NA
 
     investor_name_select <- list_investors_eq[e]
-    print(paste0(e, ": ", investor_name_select))
 
     port_raw_eq <- port_raw_all_eq %>% filter(investor_name == investor_name_select)
 
@@ -150,8 +152,6 @@ if (file.exists(bonds_inputs_file)) {
     port_all_cb <- NA
 
     investor_name_select <- list_investors_cb[b]
-
-    print(paste0(b, ": ", investor_name_select))
 
     port_raw_cb <- port_raw_all_cb %>% filter(investor_name == investor_name_select)
 

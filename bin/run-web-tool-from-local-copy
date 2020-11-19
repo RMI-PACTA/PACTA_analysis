@@ -1,0 +1,5 @@
+#! /bin/bash
+
+# $1: --fetch if you have access to private GitHub repos
+./bin/show-upstream-and-status-at-pacta-repos $1
+./bin/run-r-scripts
