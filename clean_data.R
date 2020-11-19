@@ -1,18 +1,35 @@
 # utilities --------------------------------------------------------------------
 
-get_rds_data_from_path <- function(path, filename) {
-  filepath <- file.path(path, filename)
-  if (tools::file_ext(filepath) != "rds") {
-    stop(paste0("file does not have the appropriate 'rds' extension: ", filename))
+get_rds_data_from_path <-
+  function(path, filename) {
+    filepath <- file.path(path, filename)
+    if (tools::file_ext(filepath) != "rds") {
+      stop(paste0("file does not have the appropriate 'rds' extension: ", filename))
+    }
+    if (!file.exists(filepath)) {
+      stop(paste0("file does not exist: ", filepath))
+    }
+    tryCatch(
+      readRDS(filepath),
+      error = function(e) stop(paste0("file cannot be read with readRDS(): ", filepath))
+    )
   }
-  if (!file.exists(filepath)) {
-    stop(paste0("file does not exist: ", filepath))
+
+
+fast_match <-
+  function(x, dict) {
+    if (inherits(x, "data.frame") && ncol(x) == 1L) { x <- x[[1]] }
+
+    stopifnot(inherits(x, "character"))
+    stopifnot(inherits(dict, "data.frame"))
+    stopifnot(ncol(dict) == 2L)
+    stopifnot(inherits(dict[[1]], "character"))
+
+    xfctr <- factor(x)
+    matchidxs <- match(levels(xfctr), dict[[1]])
+    matches <- dict[[2]][matchidxs]
+    matches[as.numeric(xfctr)]
   }
-  tryCatch(
-    readRDS(filepath),
-    error = function(e) stop(paste0("file cannot be read with readRDS(): ", filepath))
-  )
-}
 
 
 
@@ -117,24 +134,14 @@ get_currency_data_for_timestamp <-
 
 get_and_clean_company_fin_data <-
   function(path) {
-    output <- get_consolidated_financial_data(path)
-
-    sector_bridge <-
-      get_sector_bridge() %>%
-      filter(source %in% c("BICS", "ICB")) %>%
-      select(industry_classification, sector) %>%
-      distinct()
-
-    output %>%
+    get_consolidated_financial_data(path) %>%
       select(company_id, company_name, bloomberg_id, country_of_domicile,
              corporate_bond_ticker, bics_subgroup, icb_subgroup,
              has_asset_level_data, has_assets_in_matched_sector,
              sectors_with_assets, current_shares_outstanding_all_classes,
              market_cap, financial_timestamp) %>%
-      left_join(sector_bridge,
-                by = c("bics_subgroup" = "industry_classification")) %>%
-      left_join(rename(sector_bridge, sector_icb = sector),
-                by = c("icb_subgroup" = "industry_classification")) %>%
+      mutate(sector = sector_from_bics_subgroup(bics_subgroup)) %>%
+      mutate(sector_icb = sector_from_icb_subgroup(icb_subgroup)) %>%
       mutate(sector = if_else(is.na(sector), sector_icb, sector)) %>%
       select(-sector_icb) %>%
       rename(financial_sector = sector) %>%
@@ -163,12 +170,23 @@ get_and_clean_fund_data <-
 
 # data merging -----------------------------------------------------------------
 
-bics_from_bics_subgroup <- function(bics_subgroup) {
-  sector_bridge <- get_sector_bridge()
+convert_industry_classification <-
+  function(data, from, to) {
+    sector_bridge <- get_sector_bridge()
+    stopifnot(to %in% names(sector_bridge))
 
-  bics_subgroup <- output$bics_subgroup
-  match(bics_subgroup, sector_bridge$industry_classification)
+    dict <- sector_bridge[sector_bridge$source == from, ]
+    dict <- dict[c("industry_classification", to)]
+    fast_match(x = data, dict = dict)
+  }
 
-}
+sector_from_bics_subgroup <-
+  function(data) {
+    convert_industry_classification(data, from = "BICS", to = "sector")
+  }
 
 
+sector_from_icb_subgroup <-
+  function(data) {
+    convert_industry_classification(data, from = "ICB", to = "sector")
+  }
