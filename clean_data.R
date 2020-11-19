@@ -3,6 +3,16 @@ get_currency_data <- function() {
 }
 
 
+get_average_sector_intensity_data <-
+  function(path, filename = "average_sector_intensity.rds") {
+    filepath <- file.path(path, filename)
+    if (!file.exists(filepath)) {
+      stop(paste0("file does not exist: ", filepath))
+    }
+    readRDS(filepath)
+  }
+
+
 get_currency_data_for_timestamp <-
   function(financial_timestamp,
            currency_data = NULL,
