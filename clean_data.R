@@ -1,3 +1,5 @@
+# utilities --------------------------------------------------------------------
+
 get_rds_data_from_path <- function(path, filename) {
   filepath <- file.path(path, filename)
   if (tools::file_ext(filepath) != "rds") {
@@ -14,10 +16,28 @@ get_rds_data_from_path <- function(path, filename) {
 
 
 
-# -------------------------------------------------------------------------
+# importing internal data ------------------------------------------------------
+
+get_bics_bridge_data <-
+  function(path = "data", filename = "bics_bridge.rds") {
+    get_rds_data_from_path(path, filename)
+  }
+
 
 get_currency_data <-
   function(path = "data", filename = "currencies.rds") {
+    get_rds_data_from_path(path, filename)
+  }
+
+
+get_fin_sector_overrides_data <-
+  function(path = "data", filename = "fin_sector_overrides.rds") {
+    get_rds_data_from_path(path, filename)
+  }
+
+
+get_non_distinct_isins_data <-
+  function(path = "data", filename = "non_distinct_isins.rds") {
     get_rds_data_from_path(path, filename)
   }
 
@@ -29,7 +49,7 @@ get_sector_bridge <-
 
 
 
-# -------------------------------------------------------------------------
+# importing data from an external directory ------------------------------------
 
 get_average_sector_intensity_data <-
   function(path, filename = "average_sector_intensity.rds") {
@@ -61,8 +81,14 @@ get_revenue_data <-
   }
 
 
+get_security_financial_data <-
+  function(path, filename = "security_financial_data.rds") {
+    get_rds_data_from_path(path, filename)
+  }
 
-# -------------------------------------------------------------------------
+
+
+# multi-stage data importing and modifying -------------------------------------
 
 get_currency_data_for_timestamp <-
   function(financial_timestamp,
@@ -114,3 +140,35 @@ get_and_clean_company_fin_data <-
       rename(financial_sector = sector) %>%
       filter(!is.na(financial_sector))
   }
+
+
+get_and_clean_fund_data <-
+  function(financial_timestamp, path, filename = NULL) {
+    if (is.null(filename)) {
+      filename <- c(paste0("fund_data_", financial_timestamp, ".rds"),
+                    "fund_data_2018Q4.rds", "SFC_26052020_funds.rds")
+    }
+
+    filename <- purrr::detect(filename, ~ file.exists(file.path(path, .x)))
+    if (is.null(filename)) stop("a fund data file was not found")
+
+    fund_data <- readRDS(file.path(path, filename))
+
+    fund_data <- fund_data %>% janitor::clean_names()
+    fund_data <- fund_data %>% filter(!is.na(holding_isin) & holding_isin != "")
+    fund_data <- normalise_fund_data(fund_data)
+  }
+
+
+
+# data merging -----------------------------------------------------------------
+
+bics_from_bics_subgroup <- function(bics_subgroup) {
+  sector_bridge <- get_sector_bridge()
+
+  bics_subgroup <- output$bics_subgroup
+  match(bics_subgroup, sector_bridge$industry_classification)
+
+}
+
+
