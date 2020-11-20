@@ -1,9 +1,6 @@
-setwd(here::here())
-source("clean_data.R")
-
-
 # get_currency_data_for_timestamp() --------------------------------------------
 
+setwd(here::here())
 result <- get_currency_data_for_timestamp("2019Q4")
 
 test_that("get_currency_data_for_timestamp() function exists", {
