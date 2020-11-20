@@ -32,6 +32,24 @@ fast_match <-
   }
 
 
+save_files_to <-
+  function(path, ...) {
+    if (!dir.exists(path)) {
+      dir.create(path)
+    }
+
+    dots <- match.call(expand.dots = FALSE)$...
+
+    lapply(dots, function(obj_name) {
+      obj <- get(deparse(obj_name))
+      filename <- paste0(obj_name, ".fst")
+      fst::write_fst(obj, file.path(path, filename))
+    })
+
+    invisible()
+  }
+
+
 
 # importing internal data ------------------------------------------------------
 
