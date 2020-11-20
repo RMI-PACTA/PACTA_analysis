@@ -30,5 +30,10 @@ This repository `r fs::path_file(here::here())` is the most closely related to "
 source(params$main_file, echo = TRUE)
 ```
 
+### TODO
 
+* Preconditions: Transform them into tests that alert problems on CI.
 
+* Computing environment: Just point to a docker image.
+
+* Privacy: Who can successfully run this tool?
