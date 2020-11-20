@@ -24,3 +24,6 @@ jobs:
 
       - name: clean_data tests
         run: R -e 'testthat::test_file("tests/testthat/test-clean_data.R")'; echo $?
+
+      - name: force fail
+        run: R -e 'stop("error")'; echo $?
