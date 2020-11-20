@@ -111,7 +111,7 @@ get_debt_financial_data <-
 
 
 get_revenue_data <-
-  function(path, filename = "revenue_data_member_ticker.rds") {
+  function(path, filename = "revenue_data.rds") {
     get_rds_data_from_path(path, filename)
   }
 
