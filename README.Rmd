@@ -1,0 +1,34 @@
+---
+title: "PACTA_analysis"
+output: github_document
+params:
+  pacta_id: "[.]pacta"
+  main_file: "web_tool_script_1.R"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = "#>", collapse = TRUE)
+```
+
+This repository hosts the web tool. It's scope covers multiple public and private repositories at <https://github.com/2DegreesInvesting>:
+
+```{r cache=TRUE, echo=FALSE}
+pacta_find <- function(pacta_id = params$pacta_id) {
+  # Assume pacta repositories are under the same parent directory
+  siblings <- fs::dir_ls("..", regexp = pacta_id, recurse = TRUE, all = TRUE)
+  fs::path_file(fs::path_dir(siblings))
+}
+```
+
+```{r}
+pacta_find()
+```
+
+This repository `r fs::path_file(here::here())` is the most closely related to "PACTA". The main file is "`r params$main_file`"; source it to produce inputs to other, dependent parts of the web-tool ecosystem:
+
+```{r echo=FALSE}
+source(params$main_file, echo = TRUE)
+```
+
+
+
