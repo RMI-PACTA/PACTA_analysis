@@ -1,0 +1,27 @@
+on:
+  push:
+    branches:
+      - new-clean_data-script
+  pull_request:
+    branches:
+      - new-clean_data-script
+
+name: Run clean_data tests
+
+jobs:
+  test-coverage:
+    runs-on: macOS-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: r-lib/actions/setup-r@v1
+
+      - name: Install dependencies
+        run: install.packages(c("testthat", "dplyr", "purrr", "janitor", "fst"))
+        shell: Rscript {0}
+
+      - name: clean_data tests
+        run: testthat::test_file("tests/testthat/test-clean_data.R")
+        shell: Rscript {0}
