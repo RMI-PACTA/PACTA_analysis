@@ -23,7 +23,4 @@ jobs:
         shell: Rscript {0}
 
       - name: clean_data tests
-        run: R -e 'testthat::test_file("tests/testthat/test-clean_data.R", stop_on_failure = TRUE, stop_on_warning = TRUE)'; echo $?
-
-      - name: force fail
-        run: R -e 'stop("error")'; echo $?
+        run: Rscript -e 'testthat::test_file("tests/testthat/test-clean_data.R", stop_on_failure = TRUE, stop_on_warning = TRUE)'; echo $?
