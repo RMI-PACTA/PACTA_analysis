@@ -48,3 +48,9 @@ test_that("get_currency_data_for_timestamp() returns a data.frame with a numeric
     inherits(result$exchange_rate, "numeric")
   )
 })
+
+test_that("test failing test", {
+  expect_true(
+    1==2
+  )
+})
