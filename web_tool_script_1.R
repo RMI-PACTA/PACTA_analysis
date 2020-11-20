@@ -47,7 +47,7 @@ if (new_data == TRUE) {
 
   comp_fin_data <- get_and_clean_company_fin_data(analysis_inputs_path)
 
-  debt_fin_data <- get_debt_fin_data(analysis_inputs_path)
+  debt_fin_data <- get_debt_financial_data(analysis_inputs_path)
 
   if (has_revenue) {
     revenue_data <- get_revenue_data(analysis_inputs_path)

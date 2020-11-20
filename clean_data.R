@@ -104,7 +104,7 @@ get_consolidated_financial_data <-
   }
 
 
-get_debt_fin_data <-
+get_debt_financial_data <-
   function(path, filename = "debt_financial_data.rds") {
     get_rds_data_from_path(path, filename)
   }
