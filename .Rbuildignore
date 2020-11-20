@@ -48,3 +48,6 @@
 ^docker$
 ^\.renvignore$
 ^\.pacta$
+^test_cases$
+^test_test_cases\.R$
+
