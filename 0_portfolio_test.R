@@ -66,7 +66,7 @@ aggregate_holdings <- function(portfolio) {
       number_holdings = n_distinct(holding_id),
       value_usd = sum(value_usd, na.rm = T),
       number_of_shares = sum(number_of_shares, na.rm = T),
-      port_weight = sum(port_weight),
+      port_weight = sum(port_weight, na.rm = TRUE),
       .groups = "drop_last"
     )
 
