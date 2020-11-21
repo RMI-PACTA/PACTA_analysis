@@ -285,7 +285,7 @@ validate_only_column_names <-
 
 validate_ungrouped <-
   function(data) {
-    !is_grouped_df(data)
+    !dplyr::is_grouped_df(data)
   }
 
 
