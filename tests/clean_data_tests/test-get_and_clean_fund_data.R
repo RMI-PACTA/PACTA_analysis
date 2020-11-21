@@ -1,7 +1,7 @@
 setwd(here::here())
 function_name <- "get_and_clean_fund_data"
-result <- get_and_clean_fund_data(financial_timestamp = "2019Q4",
-                                  path = "tests/clean_data_tests/example_data")
+result <- get_and_clean_fund_data(path = "tests/clean_data_tests/example_data",
+                                  filename = "fund_data_2019Q4.rds")
 
 test_that(paste0(function_name, "() function exists"), {
   expect_true(

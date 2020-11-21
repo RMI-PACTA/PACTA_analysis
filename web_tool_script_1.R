@@ -8,6 +8,7 @@ source("0_global_functions.R")
 source("0_web_functions.R")
 source("0_json_functions.R")
 source("0_portfolio_test.R")
+source("clean_data.R")
 
 if (!exists("portfolio_name_ref_all")) { portfolio_name_ref_all <- "TestPortfolio_Input" }
 if (!exists("portfolio_root_dir")) { portfolio_root_dir <- "working_dir" }
@@ -40,8 +41,7 @@ file_location <- file.path(analysis_inputs_path, "cleaned_files")
 if (new_data == TRUE) {
   currencies <- get_currency_data_for_timestamp(financial_timestamp)
 
-  # fund_data <- get_and_clean_fund_data()
-  fund_data <- data.frame()
+  fund_data <- get_and_clean_fund_data()
 
   fin_data <- get_and_clean_fin_data(fund_data)
 

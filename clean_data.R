@@ -10,7 +10,7 @@ get_rds_data_from_path <-
       stop(paste0("file does not exist: ", filepath))
     }
     tryCatch(
-      readRDS(filepath),
+      readRDS(filepath) %>% as_tibble() %>% ungroup(),
       error = function(e) stop(paste0("file cannot be read with readRDS(): ", filepath))
     )
   }
@@ -112,6 +112,12 @@ get_debt_financial_data <-
   }
 
 
+get_fund_data <-
+  function(path, filename) {
+    get_rds_data_from_path(path, filename)
+  }
+
+
 get_revenue_data <-
   function(path, filename = "revenue_data.rds") {
     get_rds_data_from_path(path, filename)
@@ -172,20 +178,19 @@ get_and_clean_company_fin_data <-
 
 
 get_and_clean_fund_data <-
-  function(financial_timestamp, path, filename = NULL) {
-    if (is.null(filename)) {
-      filename <- c(paste0("fund_data_", financial_timestamp, ".rds"),
-                    "fund_data_2018Q4.rds", "SFC_26052020_funds.rds")
-    }
-
-    filename <- purrr::detect(filename, ~ file.exists(file.path(path, .x)))
-    if (is.null(filename)) stop("a fund data file was not found")
-
-    fund_data <- readRDS(file.path(path, filename))
-
-    fund_data <- fund_data %>% janitor::clean_names()
-    fund_data <- fund_data %>% filter(!is.na(holding_isin) & holding_isin != "")
-    # fund_data <- normalise_fund_data(fund_data)
+  function(path, filename) {
+    get_fund_data(path, filename) %>%
+      filter(!is.na(holding_isin) & holding_isin != "") %>%
+      group_by(fund_isin) %>%
+      mutate(total_weight = sum(isin_weight, na.rm = T)) %>%
+      mutate(isin_weight = if_else(total_weight > 1, isin_weight / total_weight, isin_weight)) %>%
+      bind_rows(filter(., total_weight <= 1) %>%
+                  summarise(holding_isin = "MissingValue",
+                            isin_weight = 1 - sum(isin_weight, na.rm = T),
+                            .groups = "drop")) %>%
+      select(-total_weight) %>%
+      ungroup() %>%
+      arrange(fund_isin, holding_isin != "MissingValue", holding_isin)
   }
 
 
