@@ -34,6 +34,8 @@ fast_match <-
 
 save_files_to <-
   function(path, ...) {
+    require(fst)
+
     if (!dir.exists(path)) {
       dir.create(path)
     }
@@ -152,6 +154,8 @@ get_currency_data_for_timestamp <-
 
 get_and_clean_company_fin_data <-
   function(path) {
+    require(dplyr)
+
     get_consolidated_financial_data(path) %>%
       select(company_id, company_name, bloomberg_id, country_of_domicile,
              corporate_bond_ticker, bics_subgroup, icb_subgroup,
@@ -181,7 +185,7 @@ get_and_clean_fund_data <-
 
     fund_data <- fund_data %>% janitor::clean_names()
     fund_data <- fund_data %>% filter(!is.na(holding_isin) & holding_isin != "")
-    fund_data <- normalise_fund_data(fund_data)
+    # fund_data <- normalise_fund_data(fund_data)
   }
 
 
