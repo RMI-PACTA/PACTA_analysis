@@ -36,17 +36,21 @@ save_files_to <-
   function(path, ...) {
     require(fst)
 
-    if (!dir.exists(path)) {
-      dir.create(path)
-    }
+    if (!dir.exists(path)) { dir.create(path) }
 
     dots <- match.call(expand.dots = FALSE)$...
 
-    lapply(dots, function(obj_name) {
-      obj <- get(deparse(obj_name))
-      filename <- paste0(obj_name, ".fst")
-      fst::write_fst(obj, file.path(path, filename))
+    lapply(dots, function(obj_sym) {
+      obj_name <- deparse(obj_sym)
+      if (exists(obj_name)) {
+        filename <- paste0(obj_name, ".fst")
+        fst::write_fst(base::get(obj_name), file.path(path, filename))
+      }
     })
+
+    if (any(file.size(list.files(path, full.names = T)) > 100e6)) {
+      warning("File size exceeds what can be pushed to GitHub. Check before Committing")
+    }
 
     invisible()
   }
