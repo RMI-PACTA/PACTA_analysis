@@ -41,7 +41,7 @@ file_location <- file.path(analysis_inputs_path, "cleaned_files")
 if (new_data == TRUE) {
   currencies <- get_currency_data_for_timestamp(financial_timestamp)
 
-  fund_data <- get_and_clean_fund_data()
+  fund_data <- get_and_clean_fund_data(analysis_inputs_path, "funds_2019Q4_reduced_for_meta.rds")
 
   fin_data <- get_and_clean_fin_data(fund_data)
 
@@ -63,7 +63,7 @@ if (new_data == TRUE) {
     company_emissions <- data.frame()
   }
 
-  save_cleaned_files(
+  save_files_to(
     file_location,
     currencies,
     fund_data,
