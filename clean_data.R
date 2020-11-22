@@ -10,7 +10,7 @@ get_rds_data_from_path <-
       stop(paste0("file does not exist: ", filepath))
     }
     tryCatch(
-      readRDS(filepath) %>% as_tibble() %>% ungroup(),
+      readRDS(filepath) %>% dplyr::as_tibble() %>% dplyr::ungroup(),
       error = function(e) stop(paste0("file cannot be read with readRDS(): ", filepath))
     )
   }
