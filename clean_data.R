@@ -252,15 +252,19 @@ sector_from_icb_subgroup <-
 # validate imported datasets ---------------------------------------------------
 
 validate_column_names <-
-  function(data, columns) {
-    all(names(columns) %in% names(data))
+  function(.data, columns) {
+    stopifnot(validate_is_dataframe(.data))
+    stopifnot(validate_is_named_character(columns))
+    all(names(columns) %in% names(.data))
   }
 
 
 validate_column_types <-
-  function(data, columns) {
+  function(.data, columns) {
+    stopifnot(validate_is_dataframe(.data))
+    stopifnot(validate_is_named_character(columns))
     all(sapply(seq_along(columns), function(i) {
-      class(data[[names(columns)[i]]]) == columns[i]
+      class(.data[[names(columns)[i]]]) == columns[i]
     }))
   }
 
@@ -274,6 +278,12 @@ validate_has_column_that_matches <-
 validate_is_dataframe <-
   function(data) {
     inherits(data, "data.frame")
+  }
+
+
+validate_is_named_character <-
+  function(.data) {
+    class(.data) == "character" && !is.null(attr(.data, "names"))
   }
 
 
