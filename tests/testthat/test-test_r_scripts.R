@@ -10,7 +10,7 @@ test_that("example data is available under sample_data/", {
   # At https://bit.ly/35Xypsw I read:
   # > copy TestPortfolio_Input.csv from sample_files/20_input_files/ to
   # > working_dir/20_Raw_Inputs/
-  # Do we copy that file manually or programatically? If so, where is the code?
+  # Do we copy that file manually or programmatically? If so, where is the code?
   # My experiments suggest web_tool_script_1.R runs to the end without it, and
   # I need to know it that's okay of if I should throw an error ASAP.
   example_data <- here::here(
