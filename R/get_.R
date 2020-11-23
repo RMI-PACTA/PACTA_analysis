@@ -129,6 +129,7 @@ get_currency_data_for_timestamp <-
 
 get_and_clean_company_fin_data <-
   function(path) {
+    .data <- NULL
     get_consolidated_financial_data(path) %>%
       dplyr::select(
         .data$company_id,
@@ -156,6 +157,8 @@ get_and_clean_company_fin_data <-
 
 get_and_clean_fund_data <-
   function(path, filename) {
+    .data <- NULL
+    . <- NULL
     get_fund_data(path, filename) %>%
       dplyr::filter(!is.na(.data$holding_isin) &
                       .data$holding_isin != "") %>%
