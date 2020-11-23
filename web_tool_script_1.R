@@ -96,7 +96,7 @@ if (new_data == TRUE) {
 #### PORTFOLIOS ####
 ####################
 # FIXME: Assert the input data is available or fail gracefully
-abort_if_path_doesnt_exist(
+abort_if_file_doesnt_exist(
   here::here(
     "working_dir", "20_Raw_Inputs", glue::glue("{portfolio_name_ref_all}.csv")
   )
