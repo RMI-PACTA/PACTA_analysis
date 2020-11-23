@@ -9,6 +9,12 @@ convert_industry_classification <-
   }
 
 
+convert_bclass_to_sector <-
+  function(data) {
+    convert_industry_classification(data, from = "BCLASS", to = "sector")
+  }
+
+
 convert_bics_to_sector <-
   function(data) {
     convert_industry_classification(data, from = "BICS", to = "sector")
