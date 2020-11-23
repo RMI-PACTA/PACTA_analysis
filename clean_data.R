@@ -301,14 +301,7 @@ validate_ungrouped <-
 
 validate_average_sector_intensity_data <-
   function(data) {
-    columns <- c(
-      bics_sector = "character",
-      mean_intensity = "numeric",
-      median_intensity = "numeric",
-      sd_intensity = "numeric",
-      asset_type = "character",
-      unit = "character"
-    )
+    columns <- colspec_average_sector_intensity_data()
 
     all(
       validate_is_dataframe(data),
@@ -322,10 +315,7 @@ validate_average_sector_intensity_data <-
 
 validate_bics_bridge_data <-
   function(data) {
-    columns <- c(
-      bics_sector = "character",
-      bics_subgroup = "character"
-    )
+    columns <- colspec_bics_bridge_data()
 
     all(
       validate_is_dataframe(data),
@@ -339,19 +329,7 @@ validate_bics_bridge_data <-
 
 validate_company_emissions_data <-
   function(data) {
-    columns <- c(
-      company_id = "numeric",
-      company_name = "character",
-      ald_sector = "character",
-      bics_sector = "character",
-      bics_subgroup = "character",
-      mapped_sector = "character",
-      unit = "character",
-      emissions_datastore = "numeric",
-      emissions_trucost = "numeric",
-      emissions = "numeric",
-      source = "character"
-    )
+    columns <- colspec_company_emissions_data()
 
     all(
       validate_is_dataframe(data),
@@ -365,7 +343,176 @@ validate_company_emissions_data <-
 
 validate_consolidated_financial_data <-
   function(data) {
-    columns <- c(
+    columns <- colspec_consolidated_financial_data()
+
+    all(
+      validate_is_dataframe(data),
+      validate_ungrouped(data),
+      validate_column_names(data, columns),
+      validate_only_column_names(data, columns),
+      validate_column_types(data, columns)
+    )
+  }
+
+
+validate_currency_data <-
+  function(data) {
+    columns <- colspec_currency_data()
+
+    all(
+      validate_is_dataframe(data),
+      validate_ungrouped(data),
+      validate_column_names(data, columns),
+      validate_column_types(data, columns),
+      validate_has_column_that_matches(data, "ExchangeRate_[12][09][0-9]{2}Q[1-4]")
+    )
+  }
+
+
+validate_debt_financial_data <-
+  function(data) {
+    columns <- colspec_debt_financial_data()
+
+    all(
+      validate_is_dataframe(data),
+      validate_ungrouped(data),
+      validate_column_names(data, columns),
+      validate_only_column_names(data, columns),
+      validate_column_types(data, columns)
+    )
+  }
+
+
+validate_fin_sector_overrides_data <-
+  function(data) {
+    columns <- colspec_fin_sector_overrides_data()
+
+    all(
+      validate_is_dataframe(data),
+      validate_ungrouped(data),
+      validate_column_names(data, columns),
+      validate_only_column_names(data, columns),
+      validate_column_types(data, columns)
+    )
+  }
+
+
+validate_fund_data <-
+  function(data) {
+    columns <- colspec_fund_data()
+
+    all(
+      validate_is_dataframe(data),
+      validate_ungrouped(data),
+      validate_column_names(data, columns),
+      validate_only_column_names(data, columns),
+      validate_column_types(data, columns)
+    )
+  }
+
+
+validate_non_distinct_isins_data <-
+  function(data) {
+    columns <- colspec_non_distinct_isins_data()
+
+    all(
+      validate_is_dataframe(data),
+      validate_ungrouped(data),
+      validate_column_names(data, columns),
+      validate_only_column_names(data, columns),
+      validate_column_types(data, columns)
+    )
+  }
+
+
+validate_revenue_data <-
+  function(data) {
+    columns <- colspec_revenue_data()
+
+    all(
+      validate_is_dataframe(data),
+      validate_ungrouped(data),
+      validate_column_names(data, columns),
+      validate_only_column_names(data, columns),
+      validate_column_types(data, columns)
+    )
+  }
+
+
+validate_sector_bridge <-
+  function(data) {
+    columns <- colspec_sector_bridge()
+
+    all(
+      validate_is_dataframe(data),
+      validate_ungrouped(data),
+      validate_column_names(data, columns),
+      validate_only_column_names(data, columns),
+      validate_column_types(data, columns)
+    )
+  }
+
+
+validate_security_financial_data <-
+  function(data) {
+    columns <- colspec_security_financial_data()
+
+    all(
+      validate_is_dataframe(data),
+      validate_ungrouped(data),
+      validate_column_names(data, columns),
+      validate_only_column_names(data, columns),
+      validate_column_types(data, columns)
+    )
+  }
+
+
+
+# column specifications for datasets -------------------------------------------
+
+colspec_average_sector_intensity_data <-
+  function() {
+    c(
+      bics_sector = "character",
+      mean_intensity = "numeric",
+      median_intensity = "numeric",
+      sd_intensity = "numeric",
+      asset_type = "character",
+      unit = "character"
+    )
+  }
+
+
+colspec_bics_bridge_data <-
+  function() {
+    c(
+      bics_sector = "character",
+      bics_subgroup = "character"
+    )
+  }
+
+
+colspec_company_emissions_data <-
+  function() {
+    c(
+      company_id = "numeric",
+      company_name = "character",
+      ald_sector = "character",
+      bics_sector = "character",
+      bics_subgroup = "character",
+      mapped_sector = "character",
+      unit = "character",
+      emissions_datastore = "numeric",
+      emissions_trucost = "numeric",
+      emissions = "numeric",
+      source = "character"
+    )
+  }
+
+
+colspec_consolidated_financial_data <-
+  function() {
+    c(
       company_id = "numeric",
       bloomberg_id = "numeric",
       company_name = "character",
@@ -386,110 +533,62 @@ validate_consolidated_financial_data <-
       current_shares_outstanding_all_classes = "numeric",
       financial_timestamp = "character"
     )
-
-    all(
-      validate_is_dataframe(data),
-      validate_ungrouped(data),
-      validate_column_names(data, columns),
-      validate_only_column_names(data, columns),
-      validate_column_types(data, columns)
-    )
   }
 
 
-validate_currency_data <-
-  function(data) {
-    columns <- c(
+colspec_currency_data <-
+  function() {
+    c(
       Currency = "character",
       Currency_abbr = "character"
     )
-
-    all(
-      validate_is_dataframe(data),
-      validate_ungrouped(data),
-      validate_column_names(data, columns),
-      validate_column_types(data, columns),
-      validate_has_column_that_matches(data, "ExchangeRate_[12][09][0-9]{2}Q[1-4]")
-    )
   }
 
 
-validate_debt_financial_data <-
-  function(data) {
-    columns <- c(
+colspec_debt_financial_data <-
+  function() {
+    c(
       corporate_bond_ticker = "character",
       has_asset_level_data = "logical",
       sectors_with_assets = "character",
       bics_sector = "character"
     )
-
-    all(
-      validate_is_dataframe(data),
-      validate_ungrouped(data),
-      validate_column_names(data, columns),
-      validate_only_column_names(data, columns),
-      validate_column_types(data, columns)
-    )
   }
 
 
-validate_fin_sector_overrides_data <-
-  function(data) {
-    columns <- c(
+colspec_fin_sector_overrides_data <-
+  function() {
+    c(
       company_name = "character",
       corporate_bond_ticker = "character",
       bloomberg_id = "numeric",
       fin_sector_override = "character"
     )
-
-    all(
-      validate_is_dataframe(data),
-      validate_ungrouped(data),
-      validate_column_names(data, columns),
-      validate_only_column_names(data, columns),
-      validate_column_types(data, columns)
-    )
   }
 
 
-validate_fund_data <-
-  function(data) {
-    columns <- c(
+colspec_fund_data <-
+  function() {
+    c(
       fund_isin = "character",
       holding_isin = "character",
       isin_weight = "numeric",
       fund_type = "character"
     )
-
-    all(
-      validate_is_dataframe(data),
-      validate_ungrouped(data),
-      validate_column_names(data, columns),
-      validate_only_column_names(data, columns),
-      validate_column_types(data, columns)
-    )
   }
 
 
-validate_non_distinct_isins_data <-
-  function(data) {
-    columns <- c(
+colspec_non_distinct_isins_data <-
+  function() {
+    c(
       isin = "character"
     )
-
-    all(
-      validate_is_dataframe(data),
-      validate_ungrouped(data),
-      validate_column_names(data, columns),
-      validate_only_column_names(data, columns),
-      validate_column_types(data, columns)
-    )
   }
 
 
-validate_revenue_data <-
-  function(data) {
-    columns <- c(
+colspec_revenue_data <-
+  function() {
+    c(
       company_id = "numeric",
       company_name = "character",
       bloomberg_id = "numeric",
@@ -499,20 +598,12 @@ validate_revenue_data <-
       sector = "character",
       tot_rev = "numeric"
     )
-
-    all(
-      validate_is_dataframe(data),
-      validate_ungrouped(data),
-      validate_column_names(data, columns),
-      validate_only_column_names(data, columns),
-      validate_column_types(data, columns)
-    )
   }
 
 
-validate_sector_bridge <-
-  function(data) {
-    columns <- c(
+colspec_sector_bridge <-
+  function() {
+    c(
       industry_classification = "character",
       source = "character",
       sector = "character",
@@ -522,20 +613,12 @@ validate_sector_bridge <-
       sector_boe = "character",
       subsector_boe = "character"
     )
-
-    all(
-      validate_is_dataframe(data),
-      validate_ungrouped(data),
-      validate_column_names(data, columns),
-      validate_only_column_names(data, columns),
-      validate_column_types(data, columns)
-    )
   }
 
 
-validate_security_financial_data <-
-  function(data) {
-    columns <- c(
+colspec_security_financial_data <-
+  function() {
+    c(
       company_id = "numeric",
       bloomberg_id = "numeric",
       company_name = "character",
@@ -556,12 +639,10 @@ validate_security_financial_data <-
       current_shares_outstanding_all_classes = "numeric",
       financial_timestamp = "character"
     )
+  }
 
-    all(
-      validate_is_dataframe(data),
-      validate_ungrouped(data),
-      validate_column_names(data, columns),
-      validate_only_column_names(data, columns),
-      validate_column_types(data, columns)
-    )
+
+colspec_by_name <-
+  function(name) {
+    do.call(paste0("colspec_", name), args = list())
   }
