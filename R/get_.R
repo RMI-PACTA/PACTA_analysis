@@ -146,8 +146,8 @@ get_and_clean_company_fin_data <-
         .data$market_cap,
         .data$financial_timestamp
       ) %>%
-      dplyr::mutate(sector = sector_from_bics_subgroup(.data$bics_subgroup)) %>%
-      dplyr::mutate(sector_icb = sector_from_icb_subgroup(.data$icb_subgroup)) %>%
+      dplyr::mutate(sector = convert_bics_to_sector(.data$bics_subgroup)) %>%
+      dplyr::mutate(sector_icb = convert_icb_to_sector(.data$icb_subgroup)) %>%
       dplyr::mutate(sector = dplyr::if_else(is.na(.data$sector), .data$sector_icb, .data$sector)) %>%
       dplyr::select(-.data$sector_icb) %>%
       dplyr::rename(financial_sector = .data$sector) %>%

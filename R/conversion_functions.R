@@ -9,13 +9,13 @@ convert_industry_classification <-
   }
 
 
-sector_from_bics_subgroup <-
+convert_bics_to_sector <-
   function(data) {
     convert_industry_classification(data, from = "BICS", to = "sector")
   }
 
 
-sector_from_icb_subgroup <-
+convert_icb_to_sector <-
   function(data) {
     convert_industry_classification(data, from = "ICB", to = "sector")
   }
