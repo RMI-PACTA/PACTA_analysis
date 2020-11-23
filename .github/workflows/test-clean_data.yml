@@ -23,4 +23,4 @@ jobs:
         shell: Rscript {0}
 
       - name: clean_data tests
-        run: Rscript -e 'testthat::test_dir("tests/clean_data_tests", stop_on_failure = TRUE, stop_on_warning = TRUE)'
+        run: Rscript -e 'testthat::local(stop_on_failure = TRUE, stop_on_warning = TRUE)'

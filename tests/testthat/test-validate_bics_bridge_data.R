@@ -1,6 +1,6 @@
 setwd(here::here())
 function_name <- "validate_bics_bridge_data"
-example_data <- readRDS("data/bics_bridge.rds")
+example_data <- readRDS("inst/extdata/bics_bridge.rds")
 
 
 test_that(paste0(function_name, "() function exists"), {

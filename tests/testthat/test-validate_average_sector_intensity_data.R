@@ -1,6 +1,6 @@
 setwd(here::here())
-function_name <- "validate_non_distinct_isins_data"
-example_data <- readRDS("data/non_distinct_isins.rds")
+function_name <- "validate_average_sector_intensity_data"
+example_data <- readRDS("inst/extdata/average_sector_intensity.rds")
 
 
 test_that(paste0(function_name, "() function exists"), {

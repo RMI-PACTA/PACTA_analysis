@@ -1,6 +1,6 @@
 setwd(here::here())
-function_name <- "validate_fin_sector_overrides_data"
-example_data <- readRDS("data/fin_sector_overrides.rds")
+function_name <- "validate_non_distinct_isins_data"
+example_data <- readRDS("inst/extdata/non_distinct_isins.rds")
 
 
 test_that(paste0(function_name, "() function exists"), {

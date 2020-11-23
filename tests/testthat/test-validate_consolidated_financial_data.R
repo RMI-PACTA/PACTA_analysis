@@ -1,6 +1,6 @@
 setwd(here::here())
-function_name <- "validate_security_financial_data"
-example_data <- readRDS("tests/clean_data_tests/example_data/security_financial_data.rds")
+function_name <- "validate_consolidated_financial_data"
+example_data <- readRDS("inst/extdata/consolidated_financial_data.rds")
 
 
 test_that(paste0(function_name, "() function exists"), {

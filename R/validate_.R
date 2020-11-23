@@ -1,0 +1,216 @@
+# validate imported datasets ---------------------------------------------------
+
+validate_column_names <-
+  function(.data, columns) {
+    stopifnot(validate_is_dataframe(.data))
+    stopifnot(validate_is_named_character(columns))
+    all(names(columns) %in% names(.data))
+  }
+
+
+validate_column_types <-
+  function(.data, columns) {
+    stopifnot(validate_is_dataframe(.data))
+    stopifnot(validate_is_named_character(columns))
+    all(sapply(seq_along(columns), function(i) {
+      class(.data[[names(columns)[i]]]) == columns[i]
+    }))
+  }
+
+
+validate_has_column_that_matches <-
+  function(data, regex, ...) {
+    any(grepl(regex, names(data), ...))
+  }
+
+
+validate_is_dataframe <-
+  function(data) {
+    inherits(data, "data.frame")
+  }
+
+
+validate_is_named_character <-
+  function(.data) {
+    class(.data) == "character" && !is.null(attr(.data, "names"))
+  }
+
+
+validate_only_column_names <-
+  function(data, columns) {
+    all(names(data) %in% names(columns))
+  }
+
+
+validate_ungrouped <-
+  function(data) {
+    !dplyr::is_grouped_df(data)
+  }
+
+
+validate_average_sector_intensity_data <-
+  function(data) {
+    columns <- colspec_average_sector_intensity_data()
+
+    all(
+      validate_is_dataframe(data),
+      validate_ungrouped(data),
+      validate_column_names(data, columns),
+      validate_only_column_names(data, columns),
+      validate_column_types(data, columns)
+    )
+  }
+
+
+validate_bics_bridge_data <-
+  function(data) {
+    columns <- colspec_bics_bridge_data()
+
+    all(
+      validate_is_dataframe(data),
+      validate_ungrouped(data),
+      validate_column_names(data, columns),
+      validate_only_column_names(data, columns),
+      validate_column_types(data, columns)
+    )
+  }
+
+
+validate_company_emissions_data <-
+  function(data) {
+    columns <- colspec_company_emissions_data()
+
+    all(
+      validate_is_dataframe(data),
+      validate_ungrouped(data),
+      validate_column_names(data, columns),
+      validate_only_column_names(data, columns),
+      validate_column_types(data, columns)
+    )
+  }
+
+
+validate_consolidated_financial_data <-
+  function(data) {
+    columns <- colspec_consolidated_financial_data()
+
+    all(
+      validate_is_dataframe(data),
+      validate_ungrouped(data),
+      validate_column_names(data, columns),
+      validate_only_column_names(data, columns),
+      validate_column_types(data, columns)
+    )
+  }
+
+
+validate_currency_data <-
+  function(data) {
+    columns <- colspec_currency_data()
+
+    all(
+      validate_is_dataframe(data),
+      validate_ungrouped(data),
+      validate_column_names(data, columns),
+      validate_column_types(data, columns),
+      validate_has_column_that_matches(data, "ExchangeRate_[12][09][0-9]{2}Q[1-4]")
+    )
+  }
+
+
+validate_debt_financial_data <-
+  function(data) {
+    columns <- colspec_debt_financial_data()
+
+    all(
+      validate_is_dataframe(data),
+      validate_ungrouped(data),
+      validate_column_names(data, columns),
+      validate_only_column_names(data, columns),
+      validate_column_types(data, columns)
+    )
+  }
+
+
+validate_fin_sector_overrides_data <-
+  function(data) {
+    columns <- colspec_fin_sector_overrides_data()
+
+    all(
+      validate_is_dataframe(data),
+      validate_ungrouped(data),
+      validate_column_names(data, columns),
+      validate_only_column_names(data, columns),
+      validate_column_types(data, columns)
+    )
+  }
+
+
+validate_fund_data <-
+  function(data) {
+    columns <- colspec_fund_data()
+
+    all(
+      validate_is_dataframe(data),
+      validate_ungrouped(data),
+      validate_column_names(data, columns),
+      validate_only_column_names(data, columns),
+      validate_column_types(data, columns)
+    )
+  }
+
+
+validate_non_distinct_isins_data <-
+  function(data) {
+    columns <- colspec_non_distinct_isins_data()
+
+    all(
+      validate_is_dataframe(data),
+      validate_ungrouped(data),
+      validate_column_names(data, columns),
+      validate_only_column_names(data, columns),
+      validate_column_types(data, columns)
+    )
+  }
+
+
+validate_revenue_data <-
+  function(data) {
+    columns <- colspec_revenue_data()
+
+    all(
+      validate_is_dataframe(data),
+      validate_ungrouped(data),
+      validate_column_names(data, columns),
+      validate_only_column_names(data, columns),
+      validate_column_types(data, columns)
+    )
+  }
+
+
+validate_sector_bridge <-
+  function(data) {
+    columns <- colspec_sector_bridge()
+
+    all(
+      validate_is_dataframe(data),
+      validate_ungrouped(data),
+      validate_column_names(data, columns),
+      validate_only_column_names(data, columns),
+      validate_column_types(data, columns)
+    )
+  }
+
+
+validate_security_financial_data <-
+  function(data) {
+    columns <- colspec_security_financial_data()
+
+    all(
+      validate_is_dataframe(data),
+      validate_ungrouped(data),
+      validate_column_names(data, columns),
+      validate_only_column_names(data, columns),
+      validate_column_types(data, columns)
+    )
+  }

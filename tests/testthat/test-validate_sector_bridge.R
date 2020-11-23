@@ -1,6 +1,6 @@
 setwd(here::here())
-function_name <- "validate_currency_data"
-example_data <- readRDS("data/currencies.rds")
+function_name <- "validate_sector_bridge"
+example_data <- readRDS("inst/extdata/sector_bridge.rds")
 
 
 test_that(paste0(function_name, "() function exists"), {
@@ -27,9 +27,9 @@ test_that(paste0(function_name, "() returns FALSE for data with a specified colu
   )
 })
 
-test_that(paste0(function_name, "() returns FALSE for data without an ExchangeRate_ column"), {
+test_that(paste0(function_name, "() returns FALSE for data with an unspecified column"), {
   expect_false(
-    do.call(function_name, list(select(example_data, 1:2)))
+    do.call(function_name, list(mutate(example_data, XXX = TRUE)))
   )
 })
 

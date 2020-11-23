@@ -8,7 +8,6 @@ source("0_global_functions.R")
 source("0_web_functions.R")
 source("0_json_functions.R")
 source("0_portfolio_test.R")
-source("clean_data.R")
 
 if (!exists("portfolio_name_ref_all")) { portfolio_name_ref_all <- "TestPortfolio_Input" }
 if (!exists("portfolio_root_dir")) { portfolio_root_dir <- "working_dir" }
@@ -41,16 +40,16 @@ file_location <- file.path(analysis_inputs_path, "cleaned_files")
 if (new_data == TRUE) {
   currencies <- get_currency_data_for_timestamp(financial_timestamp)
 
-  fund_data <- get_and_clean_fund_data(analysis_inputs_path, "funds_2019Q4_reduced_for_meta.rds")
+  fund_data <- PACTA.analysis::get_and_clean_fund_data(analysis_inputs_path, "funds_2019Q4_reduced_for_meta.rds")
 
   fin_data <- get_and_clean_fin_data(fund_data)
 
-  comp_fin_data <- get_and_clean_company_fin_data(analysis_inputs_path)
+  comp_fin_data <- PACTA.analysis::get_and_clean_company_fin_data(analysis_inputs_path)
 
   debt_fin_data <- get_debt_financial_data(analysis_inputs_path)
 
   if (has_revenue) {
-    revenue_data <- get_revenue_data(analysis_inputs_path)
+    revenue_data <- get_revenue_data(analysis_inputs_path, filename = "revenue_data_member_ticker.rds")
   } else {
     revenue_data <- data.frame()
   }
