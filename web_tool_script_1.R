@@ -95,6 +95,7 @@ if (new_data == TRUE) {
 ####################
 #### PORTFOLIOS ####
 ####################
+# FIXME: Assert the input data is available or fail gracefully
 portfolio_raw <- get_input_files(portfolio_name_ref_all)
 
 portfolio <- process_raw_portfolio(
