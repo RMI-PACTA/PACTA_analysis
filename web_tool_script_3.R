@@ -26,10 +26,10 @@ source(file.path(template_path, "create_executive_summary.R"))
 source(file.path(template_path, "useful_functions.R"))
 
 report_name = select_report_template(project_code = project_code,
-                       language_select = language_select)
+                                     language_select = language_select)
 
 exec_summary_name = select_exec_summary_template(project_code = project_code,
-                                           language_select = language_select)
+                                                 language_select = language_select)
 
 template_dir <- paste0(template_path, report_name,"/_book/")
 exec_summary_dir <- paste0(template_path, exec_summary_name,"/")
@@ -45,12 +45,26 @@ scenario_other <- "ETP2017_B2DS"
 scenario_shipping <- "SBTI_SBTI"
 portfolio_allocation_method <- "portfolio_weight"
 scenario_geography <- "Global"
-audit_file <- read_csv(file.path(proc_input_path, portfolio_name, "audit_file.csv"), col_types = cols())
-emissions <- read_rds(file.path(proc_input_path, portfolio_name, "emissions.rda"))
+
+if (file.exists(file.path(proc_input_path, portfolio_name_ref_all, "audit_file.csv"))){
+  audit_file <- read_csv(file.path(proc_input_path, portfolio_name_ref_all, "audit_file.csv"), col_types = cols())
+}else{
+  audit_file <- tibble("investor_name" = NA_character_, "portfolio_name" = NA_character_,
+                       "asset_type" = NA_character_, "valid_input" = NA, "isin" = NA_character_,
+                       "direct_holding" = NA, "value_usd" = NA_real_)
+
+}
+
+if (file.exists(file.path(proc_input_path, portfolio_name_ref_all, "emissions.rda"))){
+  emissions <- read_rds(file.path(proc_input_path, portfolio_name_ref_all, "emissions.rda"))
+  }else{
+    emissions <- tibble("investor_name" = NA_character_, "portfolio_name" = NA_character_,
+                        "asset_type" = NA_character_, "sector" = NA_character_,
+                        "weighted_sector_emissions" = NA_real_)}
 
 # load equity portfolio data
-if (file.exists(file.path(results_path, portfolio_name, "Equity_results_portfolio.rda"))) {
-  equity_results_portfolio <- read_rds(file.path(results_path, portfolio_name, "Equity_results_portfolio.rda"))
+if (file.exists(file.path(results_path, portfolio_name_ref_all, "Equity_results_portfolio.rda"))) {
+  equity_results_portfolio <- read_rds(file.path(results_path, portfolio_name_ref_all, "Equity_results_portfolio.rda"))
 } else {
   equity_results_portfolio <- tibble(
     "investor_name" = NA_character_, "portfolio_name" = NA_character_,
@@ -71,8 +85,8 @@ if (file.exists(file.path(results_path, portfolio_name, "Equity_results_portfoli
 }
 
 # load bonds portfolio data
-if (file.exists(file.path(results_path, portfolio_name, "Bonds_results_portfolio.rda"))) {
-  bonds_results_portfolio <- read_rds(file.path(results_path, portfolio_name, "Bonds_results_portfolio.rda"))
+if (file.exists(file.path(results_path, portfolio_name_ref_all, "Bonds_results_portfolio.rda"))) {
+  bonds_results_portfolio <- read_rds(file.path(results_path, portfolio_name_ref_all, "Bonds_results_portfolio.rda"))
 } else {
   bonds_results_portfolio <- tibble(
     "investor_name" = NA_character_, "portfolio_name" = NA_character_,
@@ -93,8 +107,8 @@ if (file.exists(file.path(results_path, portfolio_name, "Bonds_results_portfolio
 }
 
 # load equity company data
-if (file.exists(file.path(results_path, portfolio_name, "Equity_results_company.rda"))) {
-  equity_results_company <- read_rds(file.path(results_path, portfolio_name, "Equity_results_company.rda"))
+if (file.exists(file.path(results_path, portfolio_name_ref_all, "Equity_results_company.rda"))) {
+  equity_results_company <- read_rds(file.path(results_path, portfolio_name_ref_all, "Equity_results_company.rda"))
 } else {
   equity_results_company <- tibble(
     "investor_name" = NA_character_, "portfolio_name" = NA_character_,
@@ -119,8 +133,8 @@ if (file.exists(file.path(results_path, portfolio_name, "Equity_results_company.
 }
 
 # load bonds company data
-if (file.exists(file.path(results_path, portfolio_name, "Bonds_results_company.rda"))) {
-  bonds_results_company <- read_rds(file.path(results_path, portfolio_name, "Bonds_results_company.rda"))
+if (file.exists(file.path(results_path, portfolio_name_ref_all, "Bonds_results_company.rda"))) {
+  bonds_results_company <- read_rds(file.path(results_path, portfolio_name_ref_all, "Bonds_results_company.rda"))
 } else {
   bonds_results_company <- tibble(
     "investor_name" = NA_character_, "portfolio_name" = NA_character_,
@@ -145,8 +159,8 @@ if (file.exists(file.path(results_path, portfolio_name, "Bonds_results_company.r
 }
 
 # load equity map data
-if (file.exists(file.path(results_path, portfolio_name, "Equity_results_map.rda"))) {
-  equity_results_map <- read_rds(file.path(results_path, portfolio_name, "Equity_results_map.rda"))
+if (file.exists(file.path(results_path, portfolio_name_ref_all, "Equity_results_map.rda"))) {
+  equity_results_map <- read_rds(file.path(results_path, portfolio_name_ref_all, "Equity_results_map.rda"))
 } else {
   equity_results_map <- tibble(
     "investor_name" = NA_character_, "portfolio_name" = NA_character_,
@@ -161,8 +175,8 @@ if (file.exists(file.path(results_path, portfolio_name, "Equity_results_map.rda"
 }
 
 # load bonds map data
-if (file.exists(file.path(results_path, portfolio_name, "Bonds_results_map.rda"))) {
-  bonds_results_map <- read_rds(file.path(results_path, portfolio_name, "Bonds_results_map.rda"))
+if (file.exists(file.path(results_path, portfolio_name_ref_all, "Bonds_results_map.rda"))) {
+  bonds_results_map <- read_rds(file.path(results_path, portfolio_name_ref_all, "Bonds_results_map.rda"))
 } else {
   bonds_results_map <- tibble(
     "investor_name" = NA_character_, "portfolio_name" = NA_character_,
@@ -177,8 +191,8 @@ if (file.exists(file.path(results_path, portfolio_name, "Bonds_results_map.rda")
 }
 
 # load equity stress test data
-if (file.exists(file.path(results_path, portfolio_name, "Equity_results_stress_test.rda"))) {
-  equity_results_stress_test <- read_rds(file.path(results_path, portfolio_name, "Equity_results_stress_test.rda"))
+if (file.exists(file.path(results_path, portfolio_name_ref_all, "Equity_results_stress_test.rda"))) {
+  equity_results_stress_test <- read_rds(file.path(results_path, portfolio_name_ref_all, "Equity_results_stress_test.rda"))
 } else {
   equity_results_stress_test <- tibble(
     "investor_name" = NA_character_, "portfolio_name" = NA_character_,
@@ -194,8 +208,8 @@ if (file.exists(file.path(results_path, portfolio_name, "Equity_results_stress_t
 }
 
 # load bonds stress test data
-if (file.exists(file.path(results_path, portfolio_name, "Bonds_results_stress_test.rda"))) {
-  bonds_results_stress_test <- read_rds(file.path(results_path, portfolio_name, "Bonds_results_stress_test.rda"))
+if (file.exists(file.path(results_path, portfolio_name_ref_all, "Bonds_results_stress_test.rda"))) {
+  bonds_results_stress_test <- read_rds(file.path(results_path, portfolio_name_ref_all, "Bonds_results_stress_test.rda"))
 } else {
   bonds_results_stress_test <- tibble(
     "investor_name" = NA_character_, "portfolio_name" = NA_character_,
@@ -211,8 +225,8 @@ if (file.exists(file.path(results_path, portfolio_name, "Bonds_results_stress_te
 }
 
 # load portfolio overview
-if (file.exists(file.path(proc_input_path, portfolio_name, "overview_portfolio.rda"))) {
-  portfolio_overview <- read_rds(file.path(proc_input_path, portfolio_name, "overview_portfolio.rda"))
+if (file.exists(file.path(proc_input_path, portfolio_name_ref_all, "overview_portfolio.rda"))) {
+  portfolio_overview <- read_rds(file.path(proc_input_path, portfolio_name_ref_all, "overview_portfolio.rda"))
 } else {
   portfolio_overview <- tibble(
     "investor_name" = NA_character_, "portfolio_name" = NA_character_,
@@ -223,8 +237,8 @@ if (file.exists(file.path(proc_input_path, portfolio_name, "overview_portfolio.r
 }
 
 # load IPR stress test results
-if (file.exists(file.path(results_path, portfolio_name, "Stress_test_results_IPR.rds"))) {
-  ipr_results_stress_test <- read_rds(file.path(results_path, portfolio_name, "Stress_test_results_IPR.rds"))
+if (file.exists(file.path(results_path, portfolio_name_ref_all, "Stress_test_results_IPR.rds"))) {
+  ipr_results_stress_test <- read_rds(file.path(results_path, portfolio_name_ref_all, "Stress_test_results_IPR.rds"))
 } else {
   ipr_results_stress_test <- tibble(
     "investor_name" = NA_character_, "portfolio_name" = NA_character_,
@@ -245,7 +259,13 @@ peers_bonds_results_user <- read_rds(file.path(data_location_ext, "Peers_bonds_r
 dataframe_translations <- readr::read_csv(
   path(template_path, "data/translation/dataframe_labels.csv"),
   col_types = cols()
-  )
+)
+
+header_dictionary <- readr::read_csv(
+  path(template_path, "data/translation/dataframe_headers.csv"),
+  col_types = cols()
+)
+
 js_translations <- jsonlite::fromJSON(
   txt = path(template_path, "data/translation/js_labels.json")
 )
@@ -316,7 +336,8 @@ create_interactive_report(
   js_translations = js_translations,
   ipr_results_stress_test = ipr_results_stress_test,
   display_currency = "CHF",
-  currency_exchange_value = currency_exchange_value
+  currency_exchange_value = currency_exchange_value,
+  header_dictionary = header_dictionary
 )
 
 

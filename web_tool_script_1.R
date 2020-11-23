@@ -131,14 +131,10 @@ identify_missing_data(portfolio_total)
 
 audit_file <- create_audit_file(portfolio_total)
 
-emissions_totals <- calculate_portfolio_emissions(
-  inc_emission_factors,
-  audit_file,
-  fin_data,
+emissions_totals <- calculate_average_portfolio_emissions(
+  portfolio_total,
   comp_fin_data,
-  average_sector_intensity,
-  company_emissions
-)
+  average_sector_intensity)
 
 port_weights <- pw_calculations(eq_portfolio, cb_portfolio)
 
