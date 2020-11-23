@@ -19,3 +19,16 @@ test_that("example data is available under sample_data/", {
   expect_true(fs::file_exists(example_data))
 })
 
+test_that("example data is available under sample_data/", {
+  # FIXME: When this file if unavailable the error message is unhelpful
+  # Error in get_input_files(portfolio_name_ref_all) :
+  #   Difference in input files and input argument portfolio names.
+  # Execution halted
+  # Error: This script threw an error.
+  # TODO: Fail fast with a more informative error message.
+  example_data <- here::here(
+    "working_dir", "20_Raw_Inputs", "TestPortfolio_Input.csv"
+  )
+  expect_true(fs::file_exists(example_data))
+})
+
