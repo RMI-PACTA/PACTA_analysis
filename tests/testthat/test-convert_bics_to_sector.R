@@ -15,6 +15,6 @@ test_that("convert_bics_to_sector() returns NA for an unknown string", {
 
 test_that("convert_bics_to_sector() returns an appropriately matched string for an exisitng BICS group", {
   expect_true(
-    convert_bics_to_sector("Advertising Agencies") == "Other"
+    convert_bics_to_sector("Auto Floor Plan Other") == "Automotive"
   )
 })
