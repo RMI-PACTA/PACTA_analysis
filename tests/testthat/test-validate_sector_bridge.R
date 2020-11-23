@@ -1,41 +1,42 @@
 setwd(here::here())
-function_name <- "validate_sector_bridge"
-example_data <- readRDS("inst/extdata/sector_bridge.rds")
 
 
-test_that(paste0(function_name, "() function exists"), {
+test_that("validate_sector_bridge() function exists", {
   expect_true(
-    exists(function_name)
+    class(validate_sector_bridge) == "function"
   )
 })
 
-test_that(paste0(function_name, "() returns TRUE for example data"), {
+test_that("validate_sector_bridge() returns TRUE for example data", {
   expect_true(
-    do.call(function_name, list(example_data))
+    validate_sector_bridge(readRDS("inst/extdata/sector_bridge.rds"))
   )
 })
 
-test_that(paste0(function_name, "() returns FALSE for data with no columns"), {
+test_that("validate_sector_bridge() returns FALSE for data with no columns", {
   expect_false(
-    do.call(function_name, list(data.frame()))
+    validate_sector_bridge(data.frame())
   )
 })
 
-test_that(paste0(function_name, "() returns FALSE for data with a specified column missing"), {
+test_that("validate_sector_bridge() returns FALSE for data with a specified column missing", {
   expect_false(
-    do.call(function_name, list(select(example_data, -1)))
+    validate_sector_bridge(readRDS("inst/extdata/sector_bridge.rds")[-3])
   )
 })
 
-test_that(paste0(function_name, "() returns FALSE for data with an unspecified column"), {
-  expect_false(
-    do.call(function_name, list(mutate(example_data, XXX = TRUE)))
-  )
+test_that("validate_sector_bridge() returns FALSE for data with an unspecified column", {
+  expect_false({
+    example_data <- readRDS("inst/extdata/sector_bridge.rds")
+    example_data$XXX <- TRUE
+    validate_sector_bridge(example_data)
+  })
 })
 
-test_that(paste0(function_name, "() returns FALSE for data with a column of a different type"), {
-  expect_false(
-    do.call(function_name, list(mutate(example_data, !!names(example_data)[1] := TRUE)))
-  )
+test_that("validate_sector_bridge() returns FALSE for data with a column of a different type", {
+  expect_false({
+    example_data <- readRDS("inst/extdata/sector_bridge.rds")
+    example_data$sector <- 1L
+    validate_sector_bridge(example_data)
+  })
 })
-
