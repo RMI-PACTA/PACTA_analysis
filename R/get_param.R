@@ -39,25 +39,3 @@ pluck_param <- function(x, file, if_null) {
   out
 }
 
-pluck_param <- function(x, file, if_null) {
-  out <- purrr::pluck(config::get(file = file), !!!x)
-  param <- ui_field(dplyr::last(unlist(x)))
-
-  if (is.null(out) && identical(if_null, stop)) {
-    abort(glue(
-      "{param} must be not `NULL`.
-      Please set {param} on the configuration (.yml) file."
-    ))
-  }
-
-  if (is.null(out) && !is.null(if_null)) {
-    param_ <- ui_field(param)
-    warn(glue("On config.yml, {param} is undefined."))
-
-    if_null_ <- ui_field(if_null)
-    inform(glue("Setting {param_} to default value: {if_null_}."))
-    out <- if_null
-  }
-
-  out
-}
