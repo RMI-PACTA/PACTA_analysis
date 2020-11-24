@@ -1,10 +1,13 @@
-setwd(here::here())
-function_name <- "fast_match"
-result <- fast_match(x = c("A", "B"),
-                     dict = data.frame(from = c("A", "B"), to = c("a", "b")))
-
-test_that(paste0(function_name, "() function exists"), {
+test_that("fast_match() function exists", {
   expect_true(
-    exists(function_name)
+    class(fast_match) == "function"
+  )
+})
+
+test_that("fast_match() function properly matches a minimal example", {
+  x <- c("A", "B")
+  dict <- data.frame(from = c("A", "B"), to = c("a", "b"))
+  expect_true(
+    identical(fast_match(x = x, dict = dict), c("a", "b"))
   )
 })
