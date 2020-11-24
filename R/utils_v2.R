@@ -50,5 +50,5 @@ save_files_to <-
       warning("File size exceeds what can be pushed to GitHub. Check before Committing")
     }
 
-    invisible()
+    invisible(TRUE)
   }
