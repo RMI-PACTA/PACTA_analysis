@@ -1,41 +1,41 @@
-setwd(here::here())
-function_name <- "validate_fin_sector_overrides_data"
-example_data <- readRDS("inst/extdata/fin_sector_overrides.rds")
+example_data <- readRDS(here::here("inst/extdata/fin_sector_overrides.rds"))
 
-
-test_that(paste0(function_name, "() function exists"), {
+test_that("validate_fin_sector_overrides_data() function exists", {
   expect_true(
-    exists(function_name)
+    class(validate_fin_sector_overrides_data) == "function"
   )
 })
 
-test_that(paste0(function_name, "() returns TRUE for example data"), {
+test_that("validate_fin_sector_overrides_data() returns TRUE for example data", {
   expect_true(
-    do.call(function_name, list(example_data))
+    validate_fin_sector_overrides_data(example_data)
   )
 })
 
-test_that(paste0(function_name, "() returns FALSE for data with no columns"), {
+test_that("validate_fin_sector_overrides_data() returns FALSE for data with no columns", {
   expect_false(
-    do.call(function_name, list(data.frame()))
+    validate_fin_sector_overrides_data(data.frame())
   )
 })
 
-test_that(paste0(function_name, "() returns FALSE for data with a specified column missing"), {
+test_that("validate_fin_sector_overrides_data() returns FALSE for data with a specified column missing", {
   expect_false(
-    do.call(function_name, list(select(example_data, -1)))
+    validate_fin_sector_overrides_data(example_data[-1])
   )
 })
 
-test_that(paste0(function_name, "() returns FALSE for data with an unspecified column"), {
+test_that("validate_fin_sector_overrides_data() returns FALSE for data with an unspecified column", {
+  example_data_local <- example_data
+  example_data_local$XXX = TRUE
   expect_false(
-    do.call(function_name, list(mutate(example_data, XXX = TRUE)))
+    validate_fin_sector_overrides_data(example_data_local)
   )
 })
 
-test_that(paste0(function_name, "() returns FALSE for data with a column of a different type"), {
+test_that("validate_fin_sector_overrides_data() returns FALSE for data with a column of a different type", {
+  example_data_local <- example_data
+  example_data_local[1] <- TRUE
   expect_false(
-    do.call(function_name, list(mutate(example_data, !!names(example_data)[1] := TRUE)))
+    validate_fin_sector_overrides_data(example_data_local)
   )
 })
-
