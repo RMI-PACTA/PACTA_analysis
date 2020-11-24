@@ -1658,7 +1658,7 @@ pw_calculations <- function(eq_portfolio, cb_portfolio){
 
   pw <- port_all %>%
     group_by(!!!rlang::syms(grouping_variables), company_id) %>%
-    summarise(port_weight = sum(port_weight), .groups = "drop") %>%
+    summarise(port_weight = sum(port_weight, na.rm = T), .groups = "drop") %>%
     select(company_id, port_weight) %>%
     rename(portfolio_weight = port_weight)
 
