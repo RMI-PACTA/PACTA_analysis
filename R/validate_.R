@@ -18,6 +18,12 @@ validate_column_types <-
   }
 
 
+validate_data_frame_with_more_than_0_rows <-
+  function(.data) {
+    inherits(.data, "data.frame") && nrow(.data) > 0
+  }
+
+
 validate_has_column_that_matches <-
   function(.data, regex, ...) {
     any(grepl(regex, names(.data), ...))
