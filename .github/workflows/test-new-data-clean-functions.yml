@@ -6,10 +6,10 @@ on:
     branches:
       - new-clean_data-script
 
-name: Run clean_data tests
+name: test new data clean functions
 
 jobs:
-  test-coverage:
+  test-new-data-clean-functions:
     runs-on: macOS-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
