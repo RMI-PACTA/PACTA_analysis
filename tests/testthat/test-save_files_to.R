@@ -1,8 +1,5 @@
-setwd(here::here())
-function_name <- "save_files_to"
-
-test_that(paste0(function_name, "() function exists"), {
+test_that("save_files_to() function exists", {
   expect_true(
-    exists(function_name)
+    class(save_files_to) == "function"
   )
 })

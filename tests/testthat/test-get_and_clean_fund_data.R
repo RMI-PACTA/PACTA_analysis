@@ -1,15 +1,14 @@
 setwd(here::here())
-function_name <- "get_and_clean_fund_data"
-result <- get_and_clean_fund_data(path = "inst/extdata",
-                                  filename = "fund_data_2019Q4.rds")
 
-test_that(paste0(function_name, "() function exists"), {
+test_that("get_and_clean_fund_data() function exists", {
   expect_true(
-    exists(function_name)
+    class(get_and_clean_fund_data) == "function"
   )
 })
 
-test_that(paste0(function_name, "() returns a data.frame"), {
+test_that("get_and_clean_fund_data() returns a data.frame", {
+  result <- get_and_clean_fund_data(path = "inst/extdata",
+                                    filename = "fund_data_2019Q4.rds")
   expect_true(
     inherits(result, "data.frame")
   )

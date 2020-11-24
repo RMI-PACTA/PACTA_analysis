@@ -1,26 +1,24 @@
-setwd(here::here())
-function_name <- "get_company_emissions_data"
-result <- get_company_emissions_data("inst/extdata")
+result <- get_company_emissions_data(here::here("inst/extdata"))
 
-test_that(paste0(function_name, "() function exists"), {
-  expect_false(
-    is.null(get_company_emissions_data)
+test_that("get_company_emissions_data() function exists", {
+  expect_true(
+    class(get_company_emissions_data) == "function"
   )
 })
 
-test_that(paste0(function_name, "() returns a data.frame"), {
+test_that("get_company_emissions_data() returns a data.frame", {
   expect_true(
     inherits(result, "data.frame")
   )
 })
 
-test_that(paste0(function_name, "() returns a data.frame with 11 columns"), {
+test_that("get_company_emissions_data() returns a data.frame with 11 columns", {
   expect_true(
     ncol(result) == 11
   )
 })
 
-test_that(paste0(function_name, "() returns a data.frame with the proper column names"), {
+test_that("get_company_emissions_data() returns a data.frame with the proper column names", {
   expect_equal(
     names(result),
     c("company_id", "company_name", "ald_sector", "bics_sector",
@@ -29,7 +27,7 @@ test_that(paste0(function_name, "() returns a data.frame with the proper column 
   )
 })
 
-test_that(paste0(function_name, "() returns a data.frame with proper character class columns"), {
+test_that("get_company_emissions_data() returns a data.frame with proper character class columns", {
   char_cols <- c("company_name", "ald_sector", "bics_sector", "bics_subgroup",
                  "mapped_sector", "unit", "source")
   expect_true(
@@ -37,7 +35,7 @@ test_that(paste0(function_name, "() returns a data.frame with proper character c
   )
 })
 
-test_that(paste0(function_name, "() returns a data.frame with proper numeric class columns"), {
+test_that("get_company_emissions_data() returns a data.frame with proper numeric class columns", {
   char_cols <- c("company_id", "emissions_datastore", "emissions_trucost",
                  "emissions")
   expect_true(
