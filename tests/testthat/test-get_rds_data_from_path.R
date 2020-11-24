@@ -5,6 +5,7 @@ test_that("get_rds_data_from_path() function exists", {
 })
 
 test_that("get_rds_data_from_path() function returns a data frame", {
+  skip_check_but_run_test()
   result <- get_rds_data_from_path(path = here::here("inst/extdata"), filename = "bics_bridge.rds")
   expect_true(
     inherits(result, "data.frame")

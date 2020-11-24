@@ -1,5 +1,3 @@
-result <- get_consolidated_financial_data(here::here("inst/extdata"))
-
 test_that("get_consolidated_financial_data() function exists", {
   expect_true(
     class(get_consolidated_financial_data) == "function"
@@ -7,18 +5,24 @@ test_that("get_consolidated_financial_data() function exists", {
 })
 
 test_that("get_consolidated_financial_data() returns a data.frame", {
+  skip_check_but_run_test()
+  result <- get_consolidated_financial_data(here::here("inst/extdata"))
   expect_true(
     inherits(result, "data.frame")
   )
 })
 
 test_that("get_consolidated_financial_data() returns a data.frame with 19 columns", {
+  skip_check_but_run_test()
+  result <- get_consolidated_financial_data(here::here("inst/extdata"))
   expect_true(
     ncol(result) == 19
   )
 })
 
 test_that("get_consolidated_financial_data() returns a data.frame with the proper column names", {
+  skip_check_but_run_test()
+  result <- get_consolidated_financial_data(here::here("inst/extdata"))
   expect_equal(
     names(result),
     c("company_id", "bloomberg_id", "company_name", "country_of_domicile",
@@ -31,6 +35,8 @@ test_that("get_consolidated_financial_data() returns a data.frame with the prope
 })
 
 test_that("get_consolidated_financial_data() returns a data.frame with proper character class columns", {
+  skip_check_but_run_test()
+  result <- get_consolidated_financial_data(here::here("inst/extdata"))
   char_cols <- c("company_name", "country_of_domicile", "corporate_bond_ticker",
                  "equity_ticker", "mapped_sector", "bics_sector",
                  "bics_subgroup", "icb_subgroup", "bclass4",
@@ -41,6 +47,8 @@ test_that("get_consolidated_financial_data() returns a data.frame with proper ch
 })
 
 test_that("get_consolidated_financial_data() returns a data.frame with proper numeric class columns", {
+  skip_check_but_run_test()
+  result <- get_consolidated_financial_data(here::here("inst/extdata"))
   num_cols <- c("company_id", "bloomberg_id", "market_cap", "free_float_shares", "current_shares_outstanding", "current_shares_outstanding_all_classes")
   expect_true(
     all(sapply(result[num_cols], class) == "numeric")
@@ -48,6 +56,8 @@ test_that("get_consolidated_financial_data() returns a data.frame with proper nu
 })
 
 test_that("get_consolidated_financial_data() returns a data.frame with proper logical class columns", {
+  skip_check_but_run_test()
+  result <- get_consolidated_financial_data(here::here("inst/extdata"))
   log_cols <- c("has_asset_level_data", "has_assets_in_matched_sector")
   expect_true(
     all(sapply(result[log_cols], class) == "logical")
