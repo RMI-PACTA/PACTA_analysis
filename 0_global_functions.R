@@ -43,6 +43,33 @@ set_col_types <- function(grouping_variables, fixed_col_types) {
   return(port_col_types)
 }
 
+set_project_parameters <- function(file_path){
+  cfg <- config::get(file = file_path)
+
+  report_name <<- cfg$reporting$report_name
+  exec_summary_name <<- cfg$reporting$report_name
+
+  financial_timestamp <<- cfg$parameters$timestamp
+  start_year <<- as.numeric(cfg$parameters$start_year)
+  select_scenario <<- cfg$parameters$select_scenario
+  scenario_auto <<- cfg$parameters$scenario_auto
+  scenario_other <<- cfg$parameters$scenario_other
+  scenario_shipping <<- cfg$parameters$scenario_shipping
+  portfolio_allocation_method <<- cfg$parameters$portfolio_allocation_method
+  scenario_geography <<- cfg$parameters$scenario_geography
+  display_currency <<- cfg$parameters$display_currency
+  currency_exchange_value <<- as.numeric(cfg$parameters$currency_exchange_value)
+
+  tech_roadmap_sectors <<- cfg$sectors$tech_roadmap_sectors
+  pacta_sectors_not_analysed <<- cfg$sectors$pacta_sectors_not_analysed
+  twodi_sectors <<- cfg$sectors$twodi_sectors
+  green_techs <<- cfg$sectors$green_techs
+  alignment_techs <<- cfg$sectors$alignment_techs
+
+  shock_year <<- cfg$stress_test$shock_year
+
+}
+
 set_global_parameters <- function(file_path) {
   cfg <- config::get(file = file_path)
 
