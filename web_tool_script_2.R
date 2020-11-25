@@ -20,10 +20,7 @@ working_location <- file.path(working_location)
 
 set_webtool_paths(portfolio_root_dir)
 
-# just done once
-options(r2dii_config = file.path(working_location, "parameter_files", "AnalysisParameters.yml"))
-
-set_global_parameters(file.path(working_location, "parameter_files", "AnalysisParameters.yml"))
+set_portfolio_parameters(file_path = fs::path(par_file_path, paste0(portfolio_name_ref_all, "_PortfolioParameters.yml")))
 
 set_project_parameters(file.path(working_location, "parameter_files", paste0("ProjectParameters_", project_code, ".yml")))
 
@@ -34,7 +31,6 @@ analysis_inputs_path <- set_analysis_inputs_path(twodii_internal, data_location_
 unlink(file.path(results_path, portfolio_name_ref_all, "*"), force = TRUE, recursive = TRUE)
 
 # run again so output folders are available after deleting past results
-# file_names <- read_csv(file.path(proc_input_path, portfolio_name_ref_all, "file_names.csv"))
 create_portfolio_subfolders(portfolio_name_ref_all)
 
 port_col_types <- set_col_types(grouping_variables, "ddddccccddclc")
@@ -44,7 +40,6 @@ port_col_types <- set_col_types(grouping_variables, "ddddccccddclc")
 ##################
 
 equity_input_file <- file.path(proc_input_path, portfolio_name_ref_all, "equity_portfolio.rda")
-# portfolio_name <- file_names$portfolio_name
 
 if (file.exists(equity_input_file)) {
   ald_scen_eq <- get_ald_scen("Equity")
