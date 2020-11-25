@@ -23,7 +23,6 @@ source(file.path(template_path, "create_interactive_report.R"))
 source(file.path(template_path, "create_executive_summary.R"))
 source(file.path(template_path, "useful_functions.R"))
 
-# TODO: Deduplicate this step
 report_name = select_report_template(project_report_name = project_report_name,
                                      language_select = language_select)
 
@@ -169,6 +168,7 @@ shock <- shock_year # this should come directly from the stress test.. 2030 base
 select_scenario_auto = scenario_auto
 select_scenario_other = scenario_other
 select_scenario_shipping = scenario_shipping
+twodi_sectors = sector_list
 repo_path = template_path
 file_name = "template.Rmd"
 
@@ -192,7 +192,7 @@ create_interactive_report(
   select_scenario_other = scenario_other,
   portfolio_allocation_method = portfolio_allocation_method,
   scenario_geography = scenario_geography,
-  twodi_sectors = twodi_sectors,
+  twodi_sectors = sector_list,
   green_techs = green_techs,
   tech_roadmap_sectors = tech_roadmap_sectors,
   pacta_sectors_not_analysed = pacta_sectors_not_analysed,
@@ -235,7 +235,7 @@ create_executive_summary(
   select_scenario = scenario,
   portfolio_allocation_method = portfolio_allocation_method,
   scenario_geography = scenario_geography,
-  twodi_sectors = twodi_sectors,
+  twodi_sectors = sector_list,
   green_techs = green_techs,
   tech_roadmap_sectors = tech_roadmap_sectors,
   alignment_techs = alignment_techs,
