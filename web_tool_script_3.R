@@ -24,10 +24,10 @@ source(file.path(template_path, "create_executive_summary.R"))
 source(file.path(template_path, "useful_functions.R"))
 
 # TODO: Deduplicate this step
-report_name = select_report_template(project_code = project_code,
+report_name = select_report_template(project_report_name = project_report_name,
                                      language_select = language_select)
 
-exec_summary_name = select_exec_summary_template(project_code = project_code,
+exec_summary_name = select_exec_summary_template(project_report_name = project_report_name,
                                                  language_select = language_select)
 
 template_dir <- paste0(template_path, report_name,"/_book/")
@@ -164,33 +164,12 @@ js_translations <- jsonlite::fromJSON(
   txt = path(template_path, "data/translation/js_labels.json")
 )
 
-
-# scenario <- "WEO2019_SDS" # power, oil&gas, coal
-# scenario_auto <- "ETP2017_B2DS" # automotive
-# scenario_other <- "ETP2017_B2DS" # cement, steel, aviation
-# scenario_shipping <- "SBTI_SBTI"
-# portfolio_allocation_method <- "portfolio_weight"
-# scenario_geography <- "Global"
-#
-# shock <- 2030 # this should come directly from the stress test.. 2030 based on current discussions in CHPA2020 case
-#
-# select_scenario = scenario
-# select_scenario_auto = scenario_auto
-# select_scenario_other = scenario_other
-# select_scenario_shipping = scenario_shipping
-#
-# pacta_sectors_not_analysed <- c("Aviation","Cement","Shipping","Steel")
-# twodi_sectors = c("Power", "Automotive", "Shipping", "Oil&Gas", "Coal", "Steel", "Cement", "Aviation")
-# green_techs = c("RenewablesCap", "HydroCap", "NuclearCap", "Hybrid", "Electric", "FuelCell", "Hybrid_HDV", "Electric_HDV", "FuelCell_HDV","Dc-Electric Arc Furnace","Ac-Electric Arc Furnace")
-# tech_roadmap_sectors = c("Automotive", "Power", "Oil&Gas", "Coal")
-# alignment_techs = c("RenewablesCap", "CoalCap", "Coal", "Oil", "Gas", "Electric", "ICE")
-#
-# repo_path = template_path
-# output_dir <- file.path(outputs_path, portfolio_name_ref_all)
-#
-# display_currency = "CHF"
-# currency_exchange_value <- 1.03
-# TODO: update this from the currencies file
+# Needed for testing only
+shock <- shock_year # this should come directly from the stress test.. 2030 based on current discussions in CHPA2020 case
+select_scenario_auto = scenario_auto
+select_scenario_other = scenario_other
+select_scenario_shipping = scenario_shipping
+repo_path = template_path
 file_name = "template.Rmd"
 
 create_interactive_report(
