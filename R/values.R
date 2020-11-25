@@ -38,7 +38,7 @@ common_filenames_sans_ext <-
     company_emissions = "company_emissions",
     consolidated_financial = c("consolidated_financial", "consolidated_financial_data"),
     debt_financial = "debt_financial_data",
-    exchange_rates = "currencies",
+    exchange_rates = c("currencies", "currency_data", "exchange_rates"),
     fin_sector_overrides = "fin_sector_overrides",
     non_distinct_isins = "non_distinct_isins",
     revenue = "revenue_data",
@@ -51,7 +51,7 @@ sector_list <- c("Automotive", "Power", "Oil&Gas", "Coal")
 other_sector_list <- c("Shipping", "Steel", "Aviation", "Cement")
 
 
-cb_groups_vector <-
+cb_groups <-
   c(
     "Convertible Bonds",
     "Corporate Bonds",
@@ -84,7 +84,7 @@ get_sb_groups <-
 
 in_groups <-
   function(x, group) {
-    x %in% do.call(group, args = list())
+    x %in% get(group)
   }
 
 
