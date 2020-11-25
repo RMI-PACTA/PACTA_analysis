@@ -1,19 +1,30 @@
 default:
+
     reporting:
         project_report_name: liechtenstein
-        
+        display_currency: EUR
+        currency_exchange_value: 1.1227
+         
     parameters: 
         timestamp: 2019Q4
+        dataprep_timestamp: 2019Q4_250220
         start_year: 2020
+        horizon_year: 5
         select_scenario: WEO2019_SDS
         scenario_auto: ETP2017_B2DS
         scenario_other: ETP2017_B2DS
         scenario_shipping: SBTI_SBTI
         portfolio_allocation_method: portfolio_weight
         scenario_geography: Global
-        display_currency: EUR
-        currency_exchange_value: 1.1227
-        
+
+    methodology:
+        has_map: TRUE
+        has_sb: FALSE
+        has_revenue: FALSE
+        has_credit: FALSE
+        inc_emissionfactors: TRUE
+        inc_stresstest: TRUE
+    
     sectors:
         tech_roadmap_sectors:
             - Power
@@ -25,15 +36,6 @@ default:
             - Steel
             - Aviation
             - Cement
-        twodi_sectors:
-            - Power
-            - Automotive
-            - Shipping
-            - Oil&Gas
-            - Coal
-            - Steel
-            - Cement
-            - Aviation
         green_techs:
             - RenewablesCap
             - HydroCap
@@ -55,6 +57,34 @@ default:
             - Electric
             - ICE
             
+    asset_types:
+        - Equity
+        - Bonds
+        - Others
+        - Funds
+        
+    scenario_sources_list:
+        - ETP2017
+        - WEO2019
+        - WEO2020
+        - GECO2019
+      
+    scenario_geography_list:
+        - Global
+        - GlobalAggregate
+        - NonOECD
+        - OECD
+      
+    equity_market_list:
+        - GlobalMarket
+        - DevelopedMarket
+        - EmergingMarket
+      
+    grouping_variables: 
+        - investor_name
+        - portfolio_name  
+        
     stress_test:
-        shock_year: 2030 
-
+        shock_year: 2030
+        
+    
