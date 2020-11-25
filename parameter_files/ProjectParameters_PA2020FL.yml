@@ -1,0 +1,60 @@
+default:
+    reporting:
+        project_report_name: liechtenstein
+        
+    parameters: 
+        timestamp: 2019Q4
+        start_year: 2020
+        select_scenario: WEO2019_SDS
+        scenario_auto: ETP2017_B2DS
+        scenario_other: ETP2017_B2DS
+        scenario_shipping: SBTI_SBTI
+        portfolio_allocation_method: portfolio_weight
+        scenario_geography: Global
+        display_currency: EUR
+        currency_exchange_value: 1.1227
+        
+    sectors:
+        tech_roadmap_sectors:
+            - Power
+            - Automotive
+            - Oil&Gas
+            - Coal
+        pacta_sectors_not_analysed:
+            - Shipping
+            - Steel
+            - Aviation
+            - Cement
+        twodi_sectors:
+            - Power
+            - Automotive
+            - Shipping
+            - Oil&Gas
+            - Coal
+            - Steel
+            - Cement
+            - Aviation
+        green_techs:
+            - RenewablesCap
+            - HydroCap
+            - NuclearCap
+            - Hybrid
+            - Electric
+            - FuelCell
+            - Hybrid_HDV
+            - Electric_HDV
+            - FuelCell_HDV
+            - Dc-Electric Arc Furnace
+            - Ac-Electric Arc Furnace
+        alignment_techs:
+            - RenewablesCap
+            - CoalCap
+            - Coal
+            - Oil
+            - Gas
+            - Electric
+            - ICE
+            
+    stress_test:
+        shock_year: 2030 
+
