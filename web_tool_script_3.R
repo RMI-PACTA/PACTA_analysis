@@ -246,7 +246,7 @@ create_interactive_report(
 create_executive_summary(
   file_name = "template.Rmd",
   exec_summary_dir = exec_summary_dir,
-  output_dir = file.path(output_dir, "executive_summary"),
+  output_dir = output_dir,
   language_select = language_select,
   project_name = "working_dir",
   investor_name = investor_name,
