@@ -9,7 +9,7 @@ source("0_web_functions.R")
 source("0_json_functions.R")
 source("0_portfolio_test.R")
 
-if (!exists("portfolio_name_ref_all")) { portfolio_name_ref_all <- "OnlyAutomotive_ALL" }
+if (!exists("portfolio_name_ref_all")) { portfolio_name_ref_all <- "TestPortfolio_Input" }
 if (!exists("portfolio_root_dir")) { portfolio_root_dir <- "working_dir" }
 portfolio_root_dir <- "working_dir"
 
@@ -18,10 +18,6 @@ setup_project()
 working_location <- file.path(working_location)
 
 set_webtool_paths(portfolio_root_dir)
-
-# options(r2dii_config = file.path(working_location, "parameter_files", "AnalysisParameters.yml"))
-#
-# set_global_parameters(file.path(working_location, "parameter_files", "AnalysisParameters.yml"))
 
 set_portfolio_parameters(file_path = fs::path(par_file_path, paste0(portfolio_name_ref_all, "_PortfolioParameters.yml")))
 
