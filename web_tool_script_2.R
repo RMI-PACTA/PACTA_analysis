@@ -11,7 +11,7 @@ source("0_portfolio_test.R")
 source("0_global_functions.R")
 source("0_web_functions.R")
 
-if (!exists("portfolio_name_ref_all")) { portfolio_name_ref_all <- "TestPortfolio_Input" }
+if (!exists("portfolio_name_ref_all")) { portfolio_name_ref_all <- "OnlyAutomotive_ALL" }
 if (!exists("portfolio_root_dir")) { portfolio_root_dir <- "working_dir" }
 
 setup_project()
@@ -21,9 +21,11 @@ working_location <- file.path(working_location)
 set_webtool_paths(portfolio_root_dir)
 
 # just done once
-options(r2dii_config = file.path(par_file_path, "AnalysisParameters.yml"))
+options(r2dii_config = file.path(working_location, "parameter_files", "AnalysisParameters.yml"))
 
-set_global_parameters(file.path(par_file_path, "AnalysisParameters.yml"))
+set_global_parameters(file.path(working_location, "parameter_files", "AnalysisParameters.yml"))
+
+set_project_parameters(file.path(working_location, "parameter_files", paste0("ProjectParameters_", project_code, ".yml")))
 
 # need to define an alternative location for data files
 analysis_inputs_path <- set_analysis_inputs_path(twodii_internal, data_location_ext, dataprep_timestamp)
