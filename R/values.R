@@ -72,7 +72,7 @@ sb_groups <-
 
 get_cb_groups <-
   function() {
-    cb_groups_vector
+    cb_groups
   }
 
 
