@@ -1,6 +1,6 @@
 # column specifications for datasets -------------------------------------------
 
-colspec_average_sector_intensity_data <-
+colspec_average_sector_intensity <-
   function() {
     c(
       bics_sector = "character",
@@ -13,7 +13,7 @@ colspec_average_sector_intensity_data <-
   }
 
 
-colspec_bics_bridge_data <-
+colspec_bics_bridge <-
   function() {
     c(
       bics_sector = "character",
@@ -22,7 +22,7 @@ colspec_bics_bridge_data <-
   }
 
 
-colspec_company_emissions_data <-
+colspec_company_emissions <-
   function() {
     c(
       company_id = "numeric",
@@ -40,7 +40,7 @@ colspec_company_emissions_data <-
   }
 
 
-colspec_consolidated_financial_data <-
+colspec_consolidated_financial <-
   function() {
     c(
       company_id = "numeric",
@@ -66,7 +66,7 @@ colspec_consolidated_financial_data <-
   }
 
 
-colspec_currency_data <-
+colspec_exchange_rates <-
   function() {
     c(
       Currency = "character",
@@ -75,7 +75,7 @@ colspec_currency_data <-
   }
 
 
-colspec_debt_financial_data <-
+colspec_debt_financial <-
   function() {
     c(
       corporate_bond_ticker = "character",
@@ -86,7 +86,7 @@ colspec_debt_financial_data <-
   }
 
 
-colspec_fin_sector_overrides_data <-
+colspec_fin_sector_overrides <-
   function() {
     c(
       company_name = "character",
@@ -97,7 +97,7 @@ colspec_fin_sector_overrides_data <-
   }
 
 
-colspec_fund_data <-
+colspec_funds <-
   function() {
     c(
       fund_isin = "character",
@@ -108,7 +108,7 @@ colspec_fund_data <-
   }
 
 
-colspec_non_distinct_isins_data <-
+colspec_non_distinct_isins <-
   function() {
     c(
       isin = "character"
@@ -116,7 +116,7 @@ colspec_non_distinct_isins_data <-
   }
 
 
-colspec_revenue_data <-
+colspec_revenue <-
   function() {
     c(
       company_id = "numeric",
@@ -146,7 +146,7 @@ colspec_sector_bridge <-
   }
 
 
-colspec_security_financial_data <-
+colspec_security_financial <-
   function() {
     c(
       company_id = "numeric",

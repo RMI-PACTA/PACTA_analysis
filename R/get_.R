@@ -6,7 +6,7 @@ get_bics_bridge <-
       filename = paste0(default_filenames_sans_ext["bics_bridge"], ".rds")
     }
     data <- get_rds_data_from_path(path, filename)
-    stopifnot(validate_bics_bridge_data(data))
+    stopifnot(validate_bics_bridge(data))
     data
   }
 
@@ -17,7 +17,7 @@ get_exchange_rates <-
       filename = paste0(default_filenames_sans_ext["exchange_rates"], ".rds")
     }
     data <- get_rds_data_from_path(path, filename)
-    stopifnot(validate_currency_data(data))
+    stopifnot(validate_exchange_rates(data))
     data
   }
 
@@ -28,7 +28,7 @@ get_fin_sector_overrides <-
       filename = paste0(default_filenames_sans_ext["fin_sector_overrides"], ".rds")
     }
     data <- get_rds_data_from_path(path, filename)
-    stopifnot(validate_fin_sector_overrides_data(data))
+    stopifnot(validate_fin_sector_overrides(data))
     data
   }
 
@@ -39,7 +39,7 @@ get_non_distinct_isins <-
       filename = paste0(default_filenames_sans_ext["non_distinct_isins"], ".rds")
     }
     data <- get_rds_data_from_path(path, filename)
-    stopifnot(validate_non_distinct_isins_data(data))
+    stopifnot(validate_non_distinct_isins(data))
     data
   }
 
@@ -58,58 +58,76 @@ get_sector_bridge <-
 
 # importing data from an external directory ------------------------------------
 
-get_average_sector_intensity_data <-
-  function(path, filename = "average_sector_intensity.rds") {
+get_average_sector_intensity <-
+  function(path, filename) {
+    if (missing(filename)) {
+      filename = paste0(default_filenames_sans_ext["average_sector_intensity"], ".rds")
+    }
     data <- get_rds_data_from_path(path, filename)
-    stopifnot(validate_average_sector_intensity_data(data))
+    stopifnot(validate_average_sector_intensity(data))
     data
   }
 
 
-get_company_emissions_data <-
-  function(path, filename = "company_emissions.rds") {
+get_company_emissions <-
+  function(path, filename) {
+    if (missing(filename)) {
+      filename = paste0(default_filenames_sans_ext["company_emissions"], ".rds")
+    }
     data <- get_rds_data_from_path(path, filename)
-    stopifnot(validate_company_emissions_data(data))
+    stopifnot(validate_company_emissions(data))
     data
   }
 
 
-get_consolidated_financial_data <-
-  function(path, filename = "consolidated_financial_data.rds") {
+get_consolidated_financial <-
+  function(path, filename) {
+    if (missing(filename)) {
+      filename = paste0(default_filenames_sans_ext["consolidated_financial"], ".rds")
+    }
     data <- get_rds_data_from_path(path, filename)
-    stopifnot(validate_consolidated_financial_data(data))
+    stopifnot(validate_consolidated_financial(data))
     data
   }
 
 
-get_debt_financial_data <-
-  function(path, filename = "debt_financial_data.rds") {
+get_debt_financial <-
+  function(path, filename) {
+    if (missing(filename)) {
+      filename = paste0(default_filenames_sans_ext["debt_financial"], ".rds")
+    }
     data <- get_rds_data_from_path(path, filename)
-    stopifnot(validate_debt_financial_data(data))
+    stopifnot(validate_debt_financial(data))
     data
   }
 
 
-get_fund_data <-
+get_funds <-
   function(path, filename) {
     data <- get_rds_data_from_path(path, filename)
-    stopifnot(validate_fund_data(data))
+    stopifnot(validate_funds(data))
     data
   }
 
 
-get_revenue_data <-
-  function(path, filename = "revenue_data.rds") {
+get_revenue <-
+  function(path, filename) {
+    if (missing(filename)) {
+      filename = paste0(default_filenames_sans_ext["revenue"], ".rds")
+    }
     data <- get_rds_data_from_path(path, filename)
-    stopifnot(validate_revenue_data(data))
+    stopifnot(validate_revenue(data))
     data
   }
 
 
-get_security_financial_data <-
-  function(path, filename = "security_financial_data.rds") {
+get_security_financial <-
+  function(path, filename) {
+    if (missing(filename)) {
+      filename = paste0(default_filenames_sans_ext["security_financial"], ".rds")
+    }
     data <- get_rds_data_from_path(path, filename)
-    stopifnot(validate_security_financial_data(data))
+    stopifnot(validate_security_financial(data))
     data
   }
 
@@ -144,29 +162,27 @@ get_exchange_rates_for_timestamp <-
 
 get_and_clean_company_fin_data <-
   function(path) {
-    .data <- NULL
-    get_consolidated_financial_data(path) %>%
-      dplyr::select(
-        .data$company_id,
-        .data$company_name,
-        .data$bloomberg_id,
-        .data$country_of_domicile,
-        .data$corporate_bond_ticker,
-        .data$bics_subgroup,
-        .data$icb_subgroup,
-        .data$has_asset_level_data,
-        .data$has_assets_in_matched_sector,
-        .data$sectors_with_assets,
-        .data$current_shares_outstanding_all_classes,
-        .data$market_cap,
-        .data$financial_timestamp
-      ) %>%
-      dplyr::mutate(sector = convert_bics_to_sector(.data$bics_subgroup)) %>%
-      dplyr::mutate(sector_icb = convert_icb_to_sector(.data$icb_subgroup)) %>%
-      dplyr::mutate(sector = dplyr::if_else(is.na(.data$sector), .data$sector_icb, .data$sector)) %>%
-      dplyr::select(-.data$sector_icb) %>%
-      dplyr::rename(financial_sector = .data$sector) %>%
-      dplyr::filter(!is.na(.data$financial_sector))
+    .data <- get_consolidated_financial(path)
+    .data <- .data[c("company_id",
+                     "company_name",
+                     "bloomberg_id",
+                     "country_of_domicile",
+                     "corporate_bond_ticker",
+                     "bics_subgroup",
+                     "icb_subgroup",
+                     "has_asset_level_data",
+                     "has_assets_in_matched_sector",
+                     "sectors_with_assets",
+                     "current_shares_outstanding_all_classes",
+                     "market_cap",
+                     "financial_timestamp")]
+    .data$sector = convert_bics_to_sector(.data$bics_subgroup)
+    .data$sector_icb = convert_icb_to_sector(.data$icb_subgroup)
+    .data$sector = ifelse(is.na(.data$sector), .data$sector_icb, .data$sector)
+    .data$sector_icb <- NULL
+    .data$financial_sector <- .data$sector
+    .data$sector <- NULL
+    .data[!is.na(.data$financial_sector), ]
   }
 
 
@@ -174,7 +190,7 @@ get_and_clean_fund_data <-
   function(path, filename) {
     .data <- NULL
     . <- NULL
-    get_fund_data(path, filename) %>%
+    get_funds(path, filename) %>%
       dplyr::filter(!is.na(.data$holding_isin) &
                       .data$holding_isin != "") %>%
       dplyr::group_by(.data$fund_isin) %>%

@@ -1,22 +1,5 @@
-all_colspec_names <-
-  c(
-    "average_sector_intensity_data",
-    "bics_bridge_data",
-    "company_emissions_data",
-    "consolidated_financial_data",
-    "currency_data",
-    "debt_financial_data",
-    "fin_sector_overrides_data",
-    "fund_data",
-    "non_distinct_isins_data",
-    "revenue_data",
-    "sector_bridge",
-    "security_financial_data"
-  )
-
-
-for (colspec_name in all_colspec_names) {
-  function_name <- paste0("colspec_",  colspec_name)
+for (data_object_name in data_object_names) {
+  function_name <- paste0("colspec_",  data_object_name)
   result <- do.call(function_name, args = list())
 
   basic_vector_classes_and_Date <- c(
@@ -32,6 +15,12 @@ for (colspec_name in all_colspec_names) {
     "raw",
     "Date"
   )
+
+  test_that(paste0(function_name, "() function exists for ", data_object_name), {
+    expect_true(
+      class(get(function_name)) == "function"
+    )
+  })
 
   test_that(paste0(function_name, "() function returns a character vector"), {
     expect_true(
@@ -53,10 +42,10 @@ for (colspec_name in all_colspec_names) {
 }
 
 
-for (colspec_name in all_colspec_names) {
-  test_that(paste0("colspec_by_name() function can use the colspec_", colspec_name, "() functions by name and get the same result"), {
-    result <- colspec_by_name(colspec_name)
-    function_name <- paste0("colspec_",  colspec_name)
+for (data_object_name in data_object_names) {
+  test_that(paste0("colspec_by_name() function can use the colspec_", data_object_name, "() function by name and get the same result"), {
+    result <- colspec_by_name(data_object_name)
+    function_name <- paste0("colspec_",  data_object_name)
     check <- do.call(function_name, args = list())
 
     expect_true(

@@ -54,9 +54,9 @@ validate_ungrouped <-
   }
 
 
-validate_average_sector_intensity_data <-
+validate_average_sector_intensity <-
   function(.data) {
-    columns <- colspec_average_sector_intensity_data()
+    columns <- colspec_average_sector_intensity()
 
     all(
       validate_is_dataframe(.data),
@@ -68,9 +68,9 @@ validate_average_sector_intensity_data <-
   }
 
 
-validate_bics_bridge_data <-
+validate_bics_bridge <-
   function(.data) {
-    columns <- colspec_bics_bridge_data()
+    columns <- colspec_bics_bridge()
 
     all(
       validate_is_dataframe(.data),
@@ -83,9 +83,9 @@ validate_bics_bridge_data <-
   }
 
 
-validate_company_emissions_data <-
+validate_company_emissions <-
   function(.data) {
-    columns <- colspec_company_emissions_data()
+    columns <- colspec_company_emissions()
 
     all(
       validate_is_dataframe(.data),
@@ -97,9 +97,9 @@ validate_company_emissions_data <-
   }
 
 
-validate_consolidated_financial_data <-
+validate_consolidated_financial <-
   function(.data) {
-    columns <- colspec_consolidated_financial_data()
+    columns <- colspec_consolidated_financial()
 
     all(
       validate_is_dataframe(.data),
@@ -111,9 +111,9 @@ validate_consolidated_financial_data <-
   }
 
 
-validate_currency_data <-
+validate_exchange_rates <-
   function(.data) {
-    columns <- colspec_currency_data()
+    columns <- colspec_exchange_rates()
 
     all(
       validate_is_dataframe(.data),
@@ -125,9 +125,9 @@ validate_currency_data <-
   }
 
 
-validate_debt_financial_data <-
+validate_debt_financial <-
   function(.data) {
-    columns <- colspec_debt_financial_data()
+    columns <- colspec_debt_financial()
 
     all(
       validate_is_dataframe(.data),
@@ -139,9 +139,9 @@ validate_debt_financial_data <-
   }
 
 
-validate_fin_sector_overrides_data <-
+validate_fin_sector_overrides <-
   function(.data) {
-    columns <- colspec_fin_sector_overrides_data()
+    columns <- colspec_fin_sector_overrides()
 
     all(
       validate_is_dataframe(.data),
@@ -153,9 +153,9 @@ validate_fin_sector_overrides_data <-
   }
 
 
-validate_fund_data <-
+validate_funds <-
   function(.data) {
-    columns <- colspec_fund_data()
+    columns <- colspec_funds()
 
     all(
       validate_is_dataframe(.data),
@@ -167,9 +167,9 @@ validate_fund_data <-
   }
 
 
-validate_non_distinct_isins_data <-
+validate_non_distinct_isins <-
   function(.data) {
-    columns <- colspec_non_distinct_isins_data()
+    columns <- colspec_non_distinct_isins()
 
     all(
       validate_is_dataframe(.data),
@@ -181,9 +181,9 @@ validate_non_distinct_isins_data <-
   }
 
 
-validate_revenue_data <-
+validate_revenue <-
   function(.data) {
-    columns <- colspec_revenue_data()
+    columns <- colspec_revenue()
 
     all(
       validate_is_dataframe(.data),
@@ -212,9 +212,9 @@ validate_sector_bridge <-
   }
 
 
-validate_security_financial_data <-
+validate_security_financial <-
   function(.data) {
-    columns <- colspec_security_financial_data()
+    columns <- colspec_security_financial()
 
     all(
       validate_is_dataframe(.data),

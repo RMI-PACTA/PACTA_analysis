@@ -9,6 +9,7 @@ data_object_names <-
     "debt_financial",
     "exchange_rates",
     "fin_sector_overrides",
+    "funds",
     "non_distinct_isins",
     "revenue",
     "sector_bridge",

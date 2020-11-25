@@ -4,6 +4,12 @@ test_that("validate_sector_bridge() function exists", {
   )
 })
 
+test_that("validate_sector_bridge() uses a function name that conforms to the list of data_object_names", {
+  expect_true(
+    sub("^validate_", "", deparse(substitute(validate_sector_bridge))) %in% data_object_names
+  )
+})
+
 test_that("validate_sector_bridge() returns TRUE for example data", {
   skip_check_but_run_test()
   example_data <- readRDS(here::here("inst/extdata/sector_bridge.rds"))
