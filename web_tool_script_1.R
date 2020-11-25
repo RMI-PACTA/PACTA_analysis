@@ -9,24 +9,27 @@ source("0_web_functions.R")
 source("0_json_functions.R")
 source("0_portfolio_test.R")
 
-if (!exists("portfolio_name_ref_all")) { portfolio_name_ref_all <- "TestPortfolio_Input" }
+if (!exists("portfolio_name_ref_all")) { portfolio_name_ref_all <- "OnlyAutomotive_ALL" }
 if (!exists("portfolio_root_dir")) { portfolio_root_dir <- "working_dir" }
+portfolio_root_dir <- "working_dir"
 
 setup_project()
 
 working_location <- file.path(working_location)
 
 set_webtool_paths(portfolio_root_dir)
-options(r2dii_config = file.path(par_file_path, "AnalysisParameters.yml"))
 
-set_global_parameters(file.path(par_file_path, "AnalysisParameters.yml"))
+options(r2dii_config = file.path(working_location, "parameter_files", "AnalysisParameters.yml"))
+
+set_global_parameters(file.path(working_location, "parameter_files", "AnalysisParameters.yml"))
+
+set_project_parameters(file.path(working_location, "parameter_files",paste0("ProjectParameters_", project_code, ".yml")))
 
 # need to define an alternative location for data files
 analysis_inputs_path <- set_analysis_inputs_path(twodii_internal, data_location_ext, dataprep_timestamp)
 
 # To save, files need to go in the portfolio specific folder, created here
 create_portfolio_subfolders(portfolio_name_ref_all = portfolio_name_ref_all, project_location = project_location)
-
 ######################################################################
 
 ####################
@@ -77,12 +80,12 @@ if (new_data == TRUE) {
   }
 
   fund_data_path <- file.path(file_location, "fund_data.fst")
+
   fund_data <- read_fst_or_return_null(fund_data_path)
 
   fin_data <- fst::read_fst(file.path(file_location, "fin_data.fst"))
 
   comp_fin_data <- fst::read_fst(file.path(file_location, "comp_fin_data.fst"))
-
 
   debt_fin_data <- fst::read_fst(file.path(file_location, "debt_fin_data.fst"))
 
