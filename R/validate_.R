@@ -105,7 +105,6 @@ validate_consolidated_financial <-
       validate_is_dataframe(.data),
       validate_ungrouped(.data),
       validate_column_names(.data, columns),
-      validate_only_column_names(.data, columns),
       validate_column_types(.data, columns)
     )
   }
@@ -220,7 +219,6 @@ validate_security_financial <-
       validate_is_dataframe(.data),
       validate_ungrouped(.data),
       validate_column_names(.data, columns),
-      validate_only_column_names(.data, columns),
       validate_column_types(.data, columns)
     )
   }
