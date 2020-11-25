@@ -19,9 +19,11 @@ working_location <- file.path(working_location)
 
 set_webtool_paths(portfolio_root_dir)
 
-options(r2dii_config = file.path(working_location, "parameter_files", "AnalysisParameters.yml"))
+# options(r2dii_config = file.path(working_location, "parameter_files", "AnalysisParameters.yml"))
+#
+# set_global_parameters(file.path(working_location, "parameter_files", "AnalysisParameters.yml"))
 
-set_global_parameters(file.path(working_location, "parameter_files", "AnalysisParameters.yml"))
+set_portfolio_parameters(file_path = fs::path(par_file_path, paste0(portfolio_name_ref_all, "_PortfolioParameters.yml")))
 
 set_project_parameters(file.path(working_location, "parameter_files",paste0("ProjectParameters_", project_code, ".yml")))
 
@@ -112,8 +114,6 @@ portfolio <- add_revenue_split(has_revenue, portfolio, revenue_data)
 
 portfolio <- create_ald_flag(portfolio, comp_fin_data, debt_fin_data)
 
-# portfolio <- add_bics_sector(portfolio)
-
 eq_portfolio <- create_portfolio_subset(
   portfolio,
   "Equity",
@@ -146,20 +146,7 @@ port_weights <- pw_calculations(eq_portfolio, cb_portfolio)
 #### SAVING ####
 ################
 
-# Identify the portfolios to save;
-# Subset and Save these files
-
-file_names <- identify_portfolios(portfolio_total)
-
-portfolio_name <- file_names$portfolio_name
-
 proc_input_path_ <- file.path(proc_input_path, portfolio_name_ref_all)
-
-# write_csv(file_names, file.path(proc_input_path_, "file_names.csv"))
-
-# create_audit_chart(audit_file, proc_input_path = proc_input_path_)
-
-# website_text(audit_file, proc_input_path = proc_input_path_)
 
 export_audit_information_jsons(
   audit_file_ = audit_file %>% filter(portfolio_name == portfolio_name),
