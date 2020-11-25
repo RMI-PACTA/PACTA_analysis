@@ -19,10 +19,6 @@ working_location <- file.path(working_location)
 
 set_webtool_paths(portfolio_root_dir)
 
-# options(r2dii_config = file.path(working_location, "parameter_files", "AnalysisParameters.yml"))
-#
-# set_global_parameters(file.path(working_location, "parameter_files", "AnalysisParameters.yml"))
-
 set_portfolio_parameters(file_path = fs::path(par_file_path, paste0(portfolio_name_ref_all, "_PortfolioParameters.yml")))
 
 set_project_parameters(file.path(working_location, "parameter_files",paste0("ProjectParameters_", project_code, ".yml")))
