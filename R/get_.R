@@ -211,8 +211,19 @@ get_and_clean_fund_data <-
           )
       ) %>%
       dplyr::select(-.data$total_weight) %>%
-      dplyr::ungroup() %>%
-      dplyr::arrange(.data$fund_isin,
-                     .data$holding_isin != "MissingValue",
-                     .data$holding_isin)
+      dplyr::ungroup()
+  }
+
+
+get_and_clean_revenue_data <-
+  function(path, filename) {
+    if (missing(filename)) {
+      revenue_data <- get_revenue(path)
+    } else {
+      revenue_data <- get_revenue(path, filename)
+    }
+
+    revenue_data <- revenue_data[revenue_data$tot_rev > 0, ]
+    names(revenue_data)[names(revenue_data) == "sector"] <- "revenue_sector"
+    return(revenue_data)
   }

@@ -617,32 +617,32 @@ add_fund_portfolio <- function(portfolio, fund_portfolio, cols_of_funds) {
   portfolio_total
 }
 
-check_funds_wo_bbg <- function(fund_data, fin_data) {
-
-  # isin in the fund_data but no bbg data available
-  fin_data_funds <- fin_data %>%
-    filter(asset_type == "Funds") %>%
-    select(isin) %>%
-    distinct()
-
-  fund_isins <- fund_data %>%
-    select(fund_isin) %>%
-    distinct()
-
-  fund_isins_missing_bbg <- fund_isins %>% filter(!fund_isin %in% fin_data_funds$isin)
-
-  known_missing_isins <- read_csv("data/fund_isins_without_bbg_data.csv", col_types = "c")
-
-  known_missing_isins <- known_missing_isins %>%
-    bind_rows(fund_isins_missing_bbg) %>%
-    distinct()
-
-  readr::write_csv(fund_isins_missing_bbg, "data/fund_isins_without_bbg_data.csv")
-
-  if (data_check(fund_isins_missing_bbg)) {
-    print("Warning: There are funds without bbg data. These are excluded from the analysis.")
-  }
-}
+# check_funds_wo_bbg <- function(fund_data, fin_data) {
+#
+#   # isin in the fund_data but no bbg data available
+#   fin_data_funds <- fin_data %>%
+#     filter(asset_type == "Funds") %>%
+#     select(isin) %>%
+#     distinct()
+#
+#   fund_isins <- fund_data %>%
+#     select(fund_isin) %>%
+#     distinct()
+#
+#   fund_isins_missing_bbg <- fund_isins %>% filter(!fund_isin %in% fin_data_funds$isin)
+#
+#   known_missing_isins <- read_csv("data/fund_isins_without_bbg_data.csv", col_types = "c")
+#
+#   known_missing_isins <- known_missing_isins %>%
+#     bind_rows(fund_isins_missing_bbg) %>%
+#     distinct()
+#
+#   readr::write_csv(fund_isins_missing_bbg, "data/fund_isins_without_bbg_data.csv")
+#
+#   if (data_check(fund_isins_missing_bbg)) {
+#     print("Warning: There are funds without bbg data. These are excluded from the analysis.")
+#   }
+# }
 
 ###
 
@@ -869,113 +869,113 @@ get_and_clean_currency_data <- function() {
   currencies
 }
 
-get_and_clean_fund_data <- function() {
-  fund_data <- NA
-  # Fund Data
-  if (file.exists(paste0(analysis_inputs_path, "/fund_data_", financial_timestamp, ".rda"))) {
-    fund_data <- readRDS(paste0(analysis_inputs_path, "/fund_data_", financial_timestamp, ".rda"))
-  } else if (file.exists(paste0(analysis_inputs_path, "/fund_data_2018Q4.rda"))) {
-    fund_data <- readRDS(paste0(analysis_inputs_path, "/fund_data_2018Q4.rda"))
-    print("Old Fund Data being used. Replace FundsData2018Q4 or check name of file.")
-  } else if (file.exists(paste0(analysis_inputs_path, "/SFC_26052020_funds.csv"))) {
-    fund_data <- read_csv(paste0(analysis_inputs_path, "/SFC_26052020_funds.csv"))
-    print("2020Q2 SFC fund data being used")
-  } else {
-    if (!data_check(fund_data)) {
-      warning("No fund data available")
-    }
-  }
+# get_and_clean_fund_data <- function() {
+#   fund_data <- NA
+#   # Fund Data
+#   if (file.exists(paste0(analysis_inputs_path, "/fund_data_", financial_timestamp, ".rda"))) {
+#     fund_data <- readRDS(paste0(analysis_inputs_path, "/fund_data_", financial_timestamp, ".rda"))
+#   } else if (file.exists(paste0(analysis_inputs_path, "/fund_data_2018Q4.rda"))) {
+#     fund_data <- readRDS(paste0(analysis_inputs_path, "/fund_data_2018Q4.rda"))
+#     print("Old Fund Data being used. Replace FundsData2018Q4 or check name of file.")
+#   } else if (file.exists(paste0(analysis_inputs_path, "/SFC_26052020_funds.csv"))) {
+#     fund_data <- read_csv(paste0(analysis_inputs_path, "/SFC_26052020_funds.csv"))
+#     print("2020Q2 SFC fund data being used")
+#   } else {
+#     if (!data_check(fund_data)) {
+#       warning("No fund data available")
+#     }
+#   }
+#
+#   if (data_check(fund_data)) {
+#     fund_data <- fund_data %>% janitor::clean_names()
+#
+#     fund_data <- fund_data %>% filter(!is.na(holding_isin) & holding_isin != "")
+#
+#     fund_data <- normalise_fund_data(fund_data)
+#   }
+#   return(fund_data)
+# }
 
-  if (data_check(fund_data)) {
-    fund_data <- fund_data %>% janitor::clean_names()
-
-    fund_data <- fund_data %>% filter(!is.na(holding_isin) & holding_isin != "")
-
-    fund_data <- normalise_fund_data(fund_data)
-  }
-  return(fund_data)
-}
-
-get_and_clean_fin_data <- function(fund_data) {
-
-  # Financial Data
-  fin_data_raw <- read_rda(paste0(analysis_inputs_path, "/security_financial_data.rda")) %>% as_tibble()
-
-  # remove unclear duplicates from raw financial data. This should be moved to DataStore.
-  rm_duplicates <- read_csv("non_distinct_isins.csv")
-  rm_duplicates <- rm_duplicates %>%
-    distinct(isin) %>%
-    pull(isin)
-  fin_data_raw <- fin_data_raw %>%
-    filter(!(isin %in% rm_duplicates))
-
-  if (!unique(fin_data_raw$financial_timestamp) == financial_timestamp) {
-    print("Financial timestamp not equal")
-  }
-
-  overrides <- read_csv("data/fin_sector_overrides.csv",
-    col_types = "ccdc"
-  )
-
-  sector_bridge <- read_csv("data/sector_bridge.csv", col_types = "cccccccc")
-
-  fin_data <- fin_data_raw
-
-  fin_data <- fin_data %>% filter(!is.na(isin))
-
-  fin_data <- map_security_sectors(fin_data, sector_bridge)
-
-  # Adds in the manual sector classification overrides
-  fin_data <- override_sector_classification(fin_data, overrides)
-
-  # Checks that only eq, cb, funds and others are in the fin_data
-  fin_data <- check_asset_types(fin_data)
-
-  # Checks for other mapped sectors not within the sector lists
-  fin_data <- check_fin_mapped_sectors(fin_data)
-
-  # TODO: find alternative here, calling in data from company financial data
-  # Cleans and normalises the mapped_to_assets flag
-  # fin_data <- check_mapped_assets_flag(fin_data)
-
-  # Limits the Bonds category to corporate bonds only
-  fin_data <- convert_corporate_bonds(fin_data)
-
-  # Checks whether the bond is sovereign or not
-  fin_data <- identify_sb(fin_data)
-
-  # Checks to ensure all finds are classified as such
-  fin_data <- classify_all_funds(fin_data)
-
-  fin_data <- add_bics_sector(fin_data)
-
-  # Select relevant columns
-  fin_data <- fin_data %>%
-    select(
-      company_id, company_name, bloomberg_id, corporate_bond_ticker,
-      country_of_domicile,
-      isin,
-      unit_share_price, exchange_rate_usd,
-      asset_type, security_type,
-      security_mapped_sector, security_icb_subsector, security_bics_subgroup, bics_sector, # bclass4,
-      maturity_date, coupon_value, amount_issued, current_shares_outstanding_all_classes, unit_share_price,
-      sector_override, sector_boe, subsector_boe, sector_dnb, sector_ipr, subsector_ipr,
-      is_sb
-    ) %>%
-    distinct()
-
-  ### TEST
-  if (nrow(fin_data) > nrow(fin_data_raw)) {
-    stop("Additional rows added to fin data")
-  }
-
-  # updates csv file with missing bloomberg data re funds
-  if (data_check(fund_data)) {
-    check_funds_wo_bbg(fund_data, fin_data)
-  }
-
-  return(fin_data)
-}
+# get_and_clean_fin_data <- function(fund_data) {
+#
+#   # Financial Data
+#   fin_data_raw <- read_rda(paste0(analysis_inputs_path, "/security_financial_data.rda")) %>% as_tibble()
+#
+#   # remove unclear duplicates from raw financial data. This should be moved to DataStore.
+#   rm_duplicates <- read_csv("non_distinct_isins.csv")
+#   rm_duplicates <- rm_duplicates %>%
+#     distinct(isin) %>%
+#     pull(isin)
+#   fin_data_raw <- fin_data_raw %>%
+#     filter(!(isin %in% rm_duplicates))
+#
+#   if (!unique(fin_data_raw$financial_timestamp) == financial_timestamp) {
+#     print("Financial timestamp not equal")
+#   }
+#
+#   overrides <- read_csv("data/fin_sector_overrides.csv",
+#     col_types = "ccdc"
+#   )
+#
+#   sector_bridge <- read_csv("data/sector_bridge.csv", col_types = "cccccccc")
+#
+#   fin_data <- fin_data_raw
+#
+#   fin_data <- fin_data %>% filter(!is.na(isin))
+#
+#   fin_data <- map_security_sectors(fin_data, sector_bridge)
+#
+#   # Adds in the manual sector classification overrides
+#   fin_data <- override_sector_classification(fin_data, overrides)
+#
+#   # Checks that only eq, cb, funds and others are in the fin_data
+#   fin_data <- check_asset_types(fin_data)
+#
+#   # Checks for other mapped sectors not within the sector lists
+#   fin_data <- check_fin_mapped_sectors(fin_data)
+#
+#   # TODO: find alternative here, calling in data from company financial data
+#   # Cleans and normalises the mapped_to_assets flag
+#   # fin_data <- check_mapped_assets_flag(fin_data)
+#
+#   # Limits the Bonds category to corporate bonds only
+#   fin_data <- convert_corporate_bonds(fin_data)
+#
+#   # Checks whether the bond is sovereign or not
+#   fin_data <- identify_sb(fin_data)
+#
+#   # Checks to ensure all finds are classified as such
+#   fin_data <- classify_all_funds(fin_data)
+#
+#   fin_data <- add_bics_sector(fin_data)
+#
+#   # Select relevant columns
+#   fin_data <- fin_data %>%
+#     select(
+#       company_id, company_name, bloomberg_id, corporate_bond_ticker,
+#       country_of_domicile,
+#       isin,
+#       unit_share_price, exchange_rate_usd,
+#       asset_type, security_type,
+#       security_mapped_sector, security_icb_subsector, security_bics_subgroup, bics_sector, # bclass4,
+#       maturity_date, coupon_value, amount_issued, current_shares_outstanding_all_classes, unit_share_price,
+#       sector_override, sector_boe, subsector_boe, sector_dnb, sector_ipr, subsector_ipr,
+#       is_sb
+#     ) %>%
+#     distinct()
+#
+#   ### TEST
+#   if (nrow(fin_data) > nrow(fin_data_raw)) {
+#     stop("Additional rows added to fin data")
+#   }
+#
+#   # updates csv file with missing bloomberg data re funds
+#   if (data_check(fund_data)) {
+#     check_funds_wo_bbg(fund_data, fin_data)
+#   }
+#
+#   return(fin_data)
+# }
 
 add_bics_sector <- function(fin_data) {
   bics_bridge <- read_csv("data/bics_bridge.csv")
@@ -999,21 +999,21 @@ get_and_clean_revenue_data <- function() {
   return(revenue_data)
 }
 
-get_and_clean_company_fin_data <- function() {
-  comp_fin_data_raw <- read_rds(paste0(analysis_inputs_path, "/consolidated_financial_data.rda"))
-
-comp_fin_data_raw <- comp_fin_data_raw %>% select(
-    company_id, company_name, bloomberg_id, country_of_domicile, corporate_bond_ticker, bics_subgroup,
-    icb_subgroup, financial_sector, has_asset_level_data, has_assets_in_matched_sector, sectors_with_assets, current_shares_outstanding_all_classes,
-    market_cap, bond_debt_out, financial_timestamp
-  )
-
-  sector_bridge <- read_csv("data/sector_bridge.csv", col_types = "ccc")
-
-  comp_fin_data <- map_comp_sectors(comp_fin_data_raw, sector_bridge)
-
-  return(comp_fin_data)
-}
+# get_and_clean_company_fin_data <- function() {
+#   comp_fin_data_raw <- read_rds(paste0(analysis_inputs_path, "/consolidated_financial_data.rda"))
+#
+# comp_fin_data_raw <- comp_fin_data_raw %>% select(
+#     company_id, company_name, bloomberg_id, country_of_domicile, corporate_bond_ticker, bics_subgroup,
+#     icb_subgroup, financial_sector, has_asset_level_data, has_assets_in_matched_sector, sectors_with_assets, current_shares_outstanding_all_classes,
+#     market_cap, bond_debt_out, financial_timestamp
+#   )
+#
+#   sector_bridge <- read_csv("data/sector_bridge.csv", col_types = "ccc")
+#
+#   comp_fin_data <- map_comp_sectors(comp_fin_data_raw, sector_bridge)
+#
+#   return(comp_fin_data)
+# }
 
 get_and_clean_debt_fin_data <- function() {
   debt_fin_data_raw <- read_rds(paste0(analysis_inputs_path, "/debt_financial_data.rda"))

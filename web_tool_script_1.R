@@ -38,25 +38,27 @@ create_portfolio_subfolders(portfolio_name_ref_all = portfolio_name_ref_all, pro
 file_location <- file.path(analysis_inputs_path, "cleaned_files")
 
 if (new_data == TRUE) {
-  currencies <- get_currency_data_for_timestamp(financial_timestamp)
+  currencies <- get_exchange_rates_for_timestamp(financial_timestamp)
 
-  fund_data <- PACTA.analysis::get_and_clean_fund_data(analysis_inputs_path, "funds_2019Q4_reduced_for_meta.rds")
+  fund_data <- get_and_clean_fund_data(analysis_inputs_path, "funds.rds")
 
-  fin_data <- get_and_clean_fin_data(fund_data)
+  fin_data <- get_and_clean_fin_data(analysis_inputs_path, financial_timestamp = financial_timestamp)
 
-  comp_fin_data <- PACTA.analysis::get_and_clean_company_fin_data(analysis_inputs_path)
+  check_funds_wo_bbg(fund_data, fin_data)
 
-  debt_fin_data <- get_debt_financial_data(analysis_inputs_path)
+  comp_fin_data <- get_and_clean_company_fin_data(analysis_inputs_path)
+
+  debt_fin_data <- get_debt_financial(analysis_inputs_path)
 
   if (has_revenue) {
-    revenue_data <- get_revenue_data(analysis_inputs_path, filename = "revenue_data_member_ticker.rds")
+    revenue_data <- get_revenue(analysis_inputs_path, filename = "revenue.rds")
   } else {
     revenue_data <- data.frame()
   }
 
   if (inc_emission_factors) {
-    average_sector_intensity <- get_average_sector_intensity_data(analysis_inputs_path)
-    company_emissions <- get_company_emissions_data(analysis_inputs_path)
+    average_sector_intensity <- get_average_sector_intensity(analysis_inputs_path)
+    company_emissions <- get_company_emissions(analysis_inputs_path)
   } else {
     average_sector_intensity <- data.frame()
     company_emissions <- data.frame()

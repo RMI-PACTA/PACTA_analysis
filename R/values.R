@@ -21,15 +21,15 @@ default_filenames_sans_ext <-
     average_sector_intensity = "average_sector_intensity",
     bics_bridge = "bics_bridge",
     company_emissions = "company_emissions",
-    consolidated_financial = "consolidated_financial_data",
-    debt_financial = "debt_financial_data",
+    consolidated_financial = "consolidated_financial",
+    debt_financial = "debt_financial",
     exchange_rates = "currencies",
     fin_sector_overrides = "fin_sector_overrides",
     funds = "funds",
     non_distinct_isins = "non_distinct_isins",
-    revenue = "revenue_data",
+    revenue = "revenue",
     sector_bridge = "sector_bridge",
-    security_financial = "security_financial_data"
+    security_financial = "security_financial"
   )
 
 common_filenames_sans_ext <-
