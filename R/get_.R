@@ -1,31 +1,43 @@
 # importing internal data ------------------------------------------------------
 
-get_bics_bridge_data <-
-  function(path = "inst/extdata", filename = "bics_bridge.rds") {
+get_bics_bridge <-
+  function(path = "inst/extdata", filename) {
+    if (missing(filename)) {
+      filename = paste0(default_filenames_sans_ext["bics_bridge"], ".rds")
+    }
     data <- get_rds_data_from_path(path, filename)
     stopifnot(validate_bics_bridge_data(data))
     data
   }
 
 
-get_currency_data <-
-  function(path = "inst/extdata", filename = "currencies.rds") {
+get_exchange_rates <-
+  function(path = "inst/extdata", filename) {
+    if (missing(filename)) {
+      filename = paste0(default_filenames_sans_ext["exchange_rates"], ".rds")
+    }
     data <- get_rds_data_from_path(path, filename)
     stopifnot(validate_currency_data(data))
     data
   }
 
 
-get_fin_sector_overrides_data <-
-  function(path = "inst/extdata", filename = "fin_sector_overrides.rds") {
+get_fin_sector_overrides <-
+  function(path = "inst/extdata", filename) {
+    if (missing(filename)) {
+      filename = paste0(default_filenames_sans_ext["fin_sector_overrides"], ".rds")
+    }
     data <- get_rds_data_from_path(path, filename)
     stopifnot(validate_fin_sector_overrides_data(data))
     data
   }
 
 
-get_non_distinct_isins_data <-
-  function(path = "inst/extdata", filename = "non_distinct_isins.rds") {
+get_non_distinct_isins <-
+  function(path = "inst/extdata", filename) {
+    if (missing(filename)) {
+      filename = paste0(default_filenames_sans_ext["non_distinct_isins"], ".rds")
+    }
     data <- get_rds_data_from_path(path, filename)
     stopifnot(validate_non_distinct_isins_data(data))
     data
@@ -33,7 +45,10 @@ get_non_distinct_isins_data <-
 
 
 get_sector_bridge <-
-  function(path = "inst/extdata", filename = "sector_bridge.rds") {
+  function(path = "inst/extdata", filename) {
+    if (missing(filename)) {
+      filename = paste0(default_filenames_sans_ext["sector_bridge"], ".rds")
+    }
     data <- get_rds_data_from_path(path, filename)
     stopifnot(validate_sector_bridge(data))
     data
@@ -102,28 +117,28 @@ get_security_financial_data <-
 
 # multi-stage data importing and modifying -------------------------------------
 
-get_currency_data_for_timestamp <-
+get_exchange_rates_for_timestamp <-
   function(financial_timestamp,
-           currency_data = NULL,
+           exchange_rates = NULL,
            exchange_rate_colname = paste0("ExchangeRate_", financial_timestamp),
            currency_code_colname = "Currency_abbr") {
-    if (is.null(currency_data)) {
-      currency_data <- get_currency_data()
+    if (is.null(exchange_rates)) {
+      exchange_rates <- get_exchange_rates()
     }
 
-    stopifnot(inherits(currency_data, "data.frame"))
-    stopifnot(currency_code_colname %in% names(currency_data))
-    stopifnot(exchange_rate_colname %in% names(currency_data))
-    stopifnot(inherits(currency_data[[currency_code_colname]], "character"))
-    stopifnot(inherits(currency_data[[exchange_rate_colname]], "numeric"))
+    stopifnot(inherits(exchange_rates, "data.frame"))
+    stopifnot(currency_code_colname %in% names(exchange_rates))
+    stopifnot(exchange_rate_colname %in% names(exchange_rates))
+    stopifnot(inherits(exchange_rates[[currency_code_colname]], "character"))
+    stopifnot(inherits(exchange_rates[[exchange_rate_colname]], "numeric"))
 
-    currency_data <- currency_data[, c(currency_code_colname, exchange_rate_colname)]
-    names(currency_data) <- c("currency", "exchange_rate")
-    currency_data <- currency_data[!is.na(currency_data$currency), ]
-    currency_data <- currency_data[currency_data$currency != "", ]
-    currency_data <- currency_data[!duplicated(currency_data), ]
+    exchange_rates <- exchange_rates[, c(currency_code_colname, exchange_rate_colname)]
+    names(exchange_rates) <- c("currency", "exchange_rate")
+    exchange_rates <- exchange_rates[!is.na(exchange_rates$currency), ]
+    exchange_rates <- exchange_rates[exchange_rates$currency != "", ]
+    exchange_rates <- exchange_rates[!duplicated(exchange_rates), ]
 
-    currency_data
+    exchange_rates
   }
 
 

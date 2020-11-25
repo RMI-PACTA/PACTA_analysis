@@ -29,7 +29,7 @@ convert_icb_to_sector <-
 
 convert_bics_subgroup_to_bics_sector <-
   function(.data) {
-    bics_bridge <- get_bics_bridge_data()
+    bics_bridge <- get_bics_bridge()
 
     fast_match(x = .data, dict = bics_bridge[2:1])
   }

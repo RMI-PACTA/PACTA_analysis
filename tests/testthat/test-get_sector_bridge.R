@@ -4,6 +4,12 @@ test_that("get_sector_bridge() function exists", {
   )
 })
 
+test_that("get_sector_bridge() uses a function name that conforms to the list of data_object_names", {
+  expect_true(
+    sub("^get_", "", deparse(substitute(get_sector_bridge))) %in% data_object_names
+  )
+})
+
 test_that("get_sector_bridge() returns a data.frame", {
   skip_check_but_run_test()
   setwd(here::here())
