@@ -18,7 +18,7 @@ for (data_object_name in data_object_names) {
 
   test_that(paste0(function_name, "() function exists for ", data_object_name), {
     expect_true(
-      class(get(function_name)) == "function"
+      class(base::get(function_name)) == "function"
     )
   })
 

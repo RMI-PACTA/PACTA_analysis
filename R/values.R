@@ -86,7 +86,7 @@ get_sb_groups <-
 
 in_groups <-
   function(x, group) {
-    x %in% get(group)
+    x %in% base::get(group)
   }
 
 
