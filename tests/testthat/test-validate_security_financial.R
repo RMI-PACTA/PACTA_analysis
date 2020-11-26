@@ -12,7 +12,7 @@ test_that("validate_security_financial() uses a function name that conforms to t
 
 test_that("validate_security_financial() returns TRUE for example data", {
   skip_check_but_run_test()
-  example_data <- readRDS(here::here("inst/extdata/security_financial_data.rds"))
+  example_data <- readRDS(here::here("inst/extdata/security_financial.rds"))
   expect_true(
     validate_security_financial(example_data)
   )
@@ -20,7 +20,7 @@ test_that("validate_security_financial() returns TRUE for example data", {
 
 test_that("validate_security_financial() returns FALSE for data with no columns", {
   skip_check_but_run_test()
-  example_data <- readRDS(here::here("inst/extdata/security_financial_data.rds"))
+  example_data <- readRDS(here::here("inst/extdata/security_financial.rds"))
   expect_false(
     validate_security_financial(data.frame())
   )
@@ -28,7 +28,7 @@ test_that("validate_security_financial() returns FALSE for data with no columns"
 
 test_that("validate_security_financial() returns FALSE for data with a specified column missing", {
   skip_check_but_run_test()
-  example_data <- readRDS(here::here("inst/extdata/security_financial_data.rds"))
+  example_data <- readRDS(here::here("inst/extdata/security_financial.rds"))
   expect_false(
     validate_security_financial(example_data[-1])
   )
@@ -36,7 +36,7 @@ test_that("validate_security_financial() returns FALSE for data with a specified
 
 test_that("validate_security_financial() returns FALSE for data with a column of a different type", {
   skip_check_but_run_test()
-  example_data <- readRDS(here::here("inst/extdata/security_financial_data.rds"))
+  example_data <- readRDS(here::here("inst/extdata/security_financial.rds"))
   example_data[1] <- TRUE
   expect_false(
     validate_security_financial(example_data)

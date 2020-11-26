@@ -12,7 +12,7 @@ test_that("validate_debt_financial() uses a function name that conforms to the l
 
 test_that("validate_debt_financial() returns TRUE for example data", {
   skip_check_but_run_test()
-  example_data <- readRDS(here::here("inst/extdata/debt_financial_data.rds"))
+  example_data <- readRDS(here::here("inst/extdata/debt_financial.rds"))
   expect_true(
     validate_debt_financial(example_data)
   )
@@ -20,7 +20,7 @@ test_that("validate_debt_financial() returns TRUE for example data", {
 
 test_that("validate_debt_financial() returns FALSE for data with no columns", {
   skip_check_but_run_test()
-  example_data <- readRDS(here::here("inst/extdata/debt_financial_data.rds"))
+  example_data <- readRDS(here::here("inst/extdata/debt_financial.rds"))
   expect_false(
     validate_debt_financial(data.frame())
   )
@@ -28,7 +28,7 @@ test_that("validate_debt_financial() returns FALSE for data with no columns", {
 
 test_that("validate_debt_financial() returns FALSE for data with a specified column missing", {
   skip_check_but_run_test()
-  example_data <- readRDS(here::here("inst/extdata/debt_financial_data.rds"))
+  example_data <- readRDS(here::here("inst/extdata/debt_financial.rds"))
   expect_false(
     validate_debt_financial(example_data[-1])
   )
@@ -36,7 +36,7 @@ test_that("validate_debt_financial() returns FALSE for data with a specified col
 
 test_that("validate_debt_financial() returns FALSE for data with an unspecified column", {
   skip_check_but_run_test()
-  example_data <- readRDS(here::here("inst/extdata/debt_financial_data.rds"))
+  example_data <- readRDS(here::here("inst/extdata/debt_financial.rds"))
   example_data$XXX = TRUE
   expect_false(
     validate_debt_financial(example_data)
@@ -45,7 +45,7 @@ test_that("validate_debt_financial() returns FALSE for data with an unspecified 
 
 test_that("validate_debt_financial() returns FALSE for data with a column of a different type", {
   skip_check_but_run_test()
-  example_data <- readRDS(here::here("inst/extdata/debt_financial_data.rds"))
+  example_data <- readRDS(here::here("inst/extdata/debt_financial.rds"))
   example_data[1] <- TRUE
   expect_false(
     validate_debt_financial(example_data)
