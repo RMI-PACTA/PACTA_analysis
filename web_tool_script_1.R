@@ -46,32 +46,32 @@ if (new_data == TRUE) {
     processed_data_dir = file_location
   )
 } else {
-  currencies <- fst::read_fst(file.path(file_location, "currencies.fst"))
+  currencies <- readRDS(file.path(file_location, paste0(default_filenames_sans_ext[["exchange_rates"]], ".rds")))
 
-  read_fst_or_return_null <- function(fst_file) {
-    if (!file.exists(fst_file)) {
-      return(NULL)
-    }
+  fund_data <- readRDS(file.path(file_location, paste0(default_filenames_sans_ext[["funds"]], ".rds")))
 
-    fst::read_fst(fst_file)
+  fin_data <- readRDS(file.path(file_location, paste0(default_filenames_sans_ext[["security_financial"]], ".rds")))
+
+  comp_fin_data <- readRDS(file.path(file_location, paste0(default_filenames_sans_ext[["consolidated_financial"]], ".rds")))
+
+  debt_fin_data <- readRDS(file.path(file_location, paste0(default_filenames_sans_ext[["debt_financial"]], ".rds")))
+
+  if (has_revenue) {
+    revenue_data <- readRDS(file.path(file_location, paste0(default_filenames_sans_ext[["revenue"]], ".rds")))
+  } else {
+    revenue_data <- data.frame()
   }
-
-  fund_data_path <- file.path(file_location, "fund_data.fst")
-  fund_data <- read_fst_or_return_null(fund_data_path)
-
-  fin_data <- fst::read_fst(file.path(file_location, "fin_data.fst"))
-
-  comp_fin_data <- fst::read_fst(file.path(file_location, "comp_fin_data.fst"))
-
-
-  debt_fin_data <- fst::read_fst(file.path(file_location, "debt_fin_data.fst"))
 
   if (inc_emission_factors) {
-    average_sector_intensity <- fst::read_fst(file.path(file_location, "average_sector_intensity.fst"))
-
-    company_emissions <- fst::read_fst(file.path(file_location, "company_emissions.fst"))
+    average_sector_intensity <- readRDS(file.path(file_location, paste0(default_filenames_sans_ext[["average_sector_intensity"]], ".rds")))
+    company_emissions <- readRDS(file.path(file_location, paste0(default_filenames_sans_ext[["company_emissions"]], ".rds")))
+  } else {
+    average_sector_intensity <- data.frame()
+    company_emissions <- data.frame()
   }
 }
+
+
 ####################
 #### PORTFOLIOS ####
 ####################
