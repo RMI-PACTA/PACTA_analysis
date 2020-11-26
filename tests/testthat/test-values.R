@@ -30,6 +30,12 @@ test_that("default_filenames_sans_ext is a named vector", {
   )
 })
 
+test_that("default_filenames_sans_ext uses names that correspond with data_object_names", {
+  expect_false(
+    all(names(default_filenames_sans_ext) %in% data_object_names)
+  )
+})
+
 
 test_that("common_filenames_sans_ext is a list", {
   expect_true(
