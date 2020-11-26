@@ -13,11 +13,9 @@ setup_project()
 
 set_webtool_paths(portfolio_root_dir)
 
-options(r2dii_config = file.path(par_file_path, "AnalysisParameters.yml"))
-
-set_global_parameters(file.path(par_file_path, "AnalysisParameters.yml"))
-
 set_portfolio_parameters(file_path = fs::path(par_file_path, paste0(portfolio_name_ref_all, "_PortfolioParameters.yml")))
+
+set_project_parameters(file.path(working_location, "parameter_files",paste0("ProjectParameters_", project_code, ".yml")))
 
 analysis_inputs_path <- set_analysis_inputs_path(twodii_internal, data_location_ext, dataprep_timestamp)
 
@@ -25,10 +23,10 @@ source(file.path(template_path, "create_interactive_report.R"))
 source(file.path(template_path, "create_executive_summary.R"))
 source(file.path(template_path, "useful_functions.R"))
 
-report_name = select_report_template(project_code = project_code,
+report_name = select_report_template(project_report_name = project_report_name,
                                      language_select = language_select)
 
-exec_summary_name = select_exec_summary_template(project_code = project_code,
+exec_summary_name = select_exec_summary_template(project_report_name = project_report_name,
                                                  language_select = language_select)
 
 template_dir <- paste0(template_path, report_name,"/_book/")
@@ -39,222 +37,117 @@ real_estate_dir <- path(user_results_path, project_code, "real_estate")
 
 output_dir <- file.path(outputs_path, portfolio_name_ref_all)
 
-scenario <- "WEO2019_SDS"
-scenario_auto <- "ETP2017_B2DS"
-scenario_other <- "ETP2017_B2DS"
-scenario_shipping <- "SBTI_SBTI"
-portfolio_allocation_method <- "portfolio_weight"
-scenario_geography <- "Global"
-
 if (file.exists(file.path(proc_input_path, portfolio_name_ref_all, "audit_file.csv"))){
   audit_file <- read_csv(file.path(proc_input_path, portfolio_name_ref_all, "audit_file.csv"), col_types = cols())
 }else{
-  audit_file <- tibble("investor_name" = NA_character_, "portfolio_name" = NA_character_,
-                       "asset_type" = NA_character_, "valid_input" = NA, "isin" = NA_character_,
-                       "direct_holding" = NA, "value_usd" = NA_real_)
+  audit_file <- empty_audit_file()
 
-}
-
-if (file.exists(file.path(proc_input_path, portfolio_name_ref_all, "emissions.rda"))){
-  emissions <- read_rds(file.path(proc_input_path, portfolio_name_ref_all, "emissions.rda"))
-  }else{
-    emissions <- tibble("investor_name" = NA_character_, "portfolio_name" = NA_character_,
-                        "asset_type" = NA_character_, "sector" = NA_character_,
-                        "weighted_sector_emissions" = NA_real_)}
-
-# load equity portfolio data
-if (file.exists(file.path(results_path, portfolio_name_ref_all, "Equity_results_portfolio.rda"))) {
-  equity_results_portfolio <- read_rds(file.path(results_path, portfolio_name_ref_all, "Equity_results_portfolio.rda"))
-} else {
-  equity_results_portfolio <- tibble(
-    "investor_name" = NA_character_, "portfolio_name" = NA_character_,
-    "scenario" = NA_character_, "allocation" = NA_character_,
-    "equity_market" = NA_character_, "scenario_geography" = NA_character_,
-    "year" = NA_integer_, "ald_sector" = NA_character_, "technology" = NA_character_,
-    "plan_tech_prod" = NA_integer_, "plan_alloc_wt_tech_prod" = NA_integer_,
-    "plan_carsten" = NA_integer_, "plan_emission_factor" = NA_integer_,
-    "scen_tech_prod" = NA_integer_, "scen_alloc_wt_tech_prod" = NA_integer_,
-    "scen_carsten" = NA_integer_, "scen_emission_factor" = NA_integer_,
-    "plan_sec_prod" = NA_integer_, "plan_alloc_wt_sec_prod" = NA_integer_,
-    "plan_sec_carsten" = NA_integer_, "plan_sec_emissions_factor" = NA_integer_,
-    "scen_sec_prod" = NA_integer_, "scen_alloc_wt_sec_prod" = NA_integer_,
-    "scen_sec_carsten" = NA_integer_, "scen_sec_emissions_factor" = NA_integer_,
-    "plan_tech_share" = NA_integer_, "scen_tech_share" = NA_integer_,
-    "trajectory_deviation" = NA_integer_, "trajectory_alignment" = NA_integer_
-  )
-}
-
-# load bonds portfolio data
-if (file.exists(file.path(results_path, portfolio_name_ref_all, "Bonds_results_portfolio.rda"))) {
-  bonds_results_portfolio <- read_rds(file.path(results_path, portfolio_name_ref_all, "Bonds_results_portfolio.rda"))
-} else {
-  bonds_results_portfolio <- tibble(
-    "investor_name" = NA_character_, "portfolio_name" = NA_character_,
-    "scenario" = NA_character_, "allocation" = NA_character_,
-    "equity_market" = NA_character_, "scenario_geography" = NA_character_,
-    "year" = NA_integer_, "ald_sector" = NA_character_, "technology" = NA_character_,
-    "plan_tech_prod" = NA_integer_, "plan_alloc_wt_tech_prod" = NA_integer_,
-    "plan_carsten" = NA_integer_, "plan_emission_factor" = NA_integer_,
-    "scen_tech_prod" = NA_integer_, "scen_alloc_wt_tech_prod" = NA_integer_,
-    "scen_carsten" = NA_integer_, "scen_emission_factor" = NA_integer_,
-    "plan_sec_prod" = NA_integer_, "plan_alloc_wt_sec_prod" = NA_integer_,
-    "plan_sec_carsten" = NA_integer_, "plan_sec_emissions_factor" = NA_integer_,
-    "scen_sec_prod" = NA_integer_, "scen_alloc_wt_sec_prod" = NA_integer_,
-    "scen_sec_carsten" = NA_integer_, "scen_sec_emissions_factor" = NA_integer_,
-    "plan_tech_share" = NA_integer_, "scen_tech_share" = NA_integer_,
-    "trajectory_deviation" = NA_integer_, "trajectory_alignment" = NA_integer_
-  )
-}
-
-# load equity company data
-if (file.exists(file.path(results_path, portfolio_name_ref_all, "Equity_results_company.rda"))) {
-  equity_results_company <- read_rds(file.path(results_path, portfolio_name_ref_all, "Equity_results_company.rda"))
-} else {
-  equity_results_company <- tibble(
-    "investor_name" = NA_character_, "portfolio_name" = NA_character_,
-    "scenario" = NA_character_, "allocation" = NA_character_,
-    "id" = NA_character_, "company_name" = NA_character_,
-    "financial_sector" = NA_character_, "port_weight" = NA_integer_,
-    "allocation_weight" = NA_integer_, "plan_br_dist_alloc_wt" = NA_integer_,
-    "scen_br_dist_alloc_wt" = NA_integer_,
-    "equity_market" = NA_character_, "scenario_geography" = NA_character_,
-    "year" = NA_integer_, "ald_sector" = NA_character_, "technology" = NA_character_,
-    "plan_tech_prod" = NA_integer_, "plan_alloc_wt_tech_prod" = NA_integer_,
-    "plan_carsten" = NA_integer_, "plan_emission_factor" = NA_integer_,
-    "scen_tech_prod" = NA_integer_, "scen_alloc_wt_tech_prod" = NA_integer_,
-    "scen_carsten" = NA_integer_, "scen_emission_factor" = NA_integer_,
-    "plan_sec_prod" = NA_integer_, "plan_alloc_wt_sec_prod" = NA_integer_,
-    "plan_sec_carsten" = NA_integer_, "plan_sec_emissions_factor" = NA_integer_,
-    "scen_sec_prod" = NA_integer_, "scen_alloc_wt_sec_prod" = NA_integer_,
-    "scen_sec_carsten" = NA_integer_, "scen_sec_emissions_factor" = NA_integer_,
-    "plan_tech_share" = NA_integer_, "scen_tech_share" = NA_integer_,
-    "trajectory_deviation" = NA_integer_, "trajectory_alignment" = NA_integer_
-  )
-}
-
-# load bonds company data
-if (file.exists(file.path(results_path, portfolio_name_ref_all, "Bonds_results_company.rda"))) {
-  bonds_results_company <- read_rds(file.path(results_path, portfolio_name_ref_all, "Bonds_results_company.rda"))
-} else {
-  bonds_results_company <- tibble(
-    "investor_name" = NA_character_, "portfolio_name" = NA_character_,
-    "scenario" = NA_character_, "allocation" = NA_character_,
-    "id" = NA_character_, "company_name" = NA_character_,
-    "financial_sector" = NA_character_, "port_weight" = NA_integer_,
-    "allocation_weight" = NA_integer_, "plan_br_dist_alloc_wt" = NA_integer_,
-    "scen_br_dist_alloc_wt" = NA_integer_,
-    "equity_market" = NA_character_, "scenario_geography" = NA_character_,
-    "year" = NA_integer_, "ald_sector" = NA_character_, "technology" = NA_character_,
-    "plan_tech_prod" = NA_integer_, "plan_alloc_wt_tech_prod" = NA_integer_,
-    "plan_carsten" = NA_integer_, "plan_emission_factor" = NA_integer_,
-    "scen_tech_prod" = NA_integer_, "scen_alloc_wt_tech_prod" = NA_integer_,
-    "scen_carsten" = NA_integer_, "scen_emission_factor" = NA_integer_,
-    "plan_sec_prod" = NA_integer_, "plan_alloc_wt_sec_prod" = NA_integer_,
-    "plan_sec_carsten" = NA_integer_, "plan_sec_emissions_factor" = NA_integer_,
-    "scen_sec_prod" = NA_integer_, "scen_alloc_wt_sec_prod" = NA_integer_,
-    "scen_sec_carsten" = NA_integer_, "scen_sec_emissions_factor" = NA_integer_,
-    "plan_tech_share" = NA_integer_, "scen_tech_share" = NA_integer_,
-    "trajectory_deviation" = NA_integer_, "trajectory_alignment" = NA_integer_
-  )
-}
-
-# load equity map data
-if (file.exists(file.path(results_path, portfolio_name_ref_all, "Equity_results_map.rda"))) {
-  equity_results_map <- read_rds(file.path(results_path, portfolio_name_ref_all, "Equity_results_map.rda"))
-} else {
-  equity_results_map <- tibble(
-    "investor_name" = NA_character_, "portfolio_name" = NA_character_,
-    "ald_location" = NA_character_, "year" = NA_integer_,
-    "ald_sector" = NA_character_, "technology" = NA_character_,
-    "financial_sector" = NA_character_, "allocation" = NA_character_,
-    "allocation_weight" = NA_integer_, "ald_production_unit" = NA_character_,
-    "plan_alloc_wt_tech_prod" = NA_integer_, "plan_alloc_wt_sec_prod" = NA_integer_,
-    "equity_market" = NA_character_, "scenario" = NA_character_,
-    "scenario_geography" = NA_character_
-  )
-}
-
-# load bonds map data
-if (file.exists(file.path(results_path, portfolio_name_ref_all, "Bonds_results_map.rda"))) {
-  bonds_results_map <- read_rds(file.path(results_path, portfolio_name_ref_all, "Bonds_results_map.rda"))
-} else {
-  bonds_results_map <- tibble(
-    "investor_name" = NA_character_, "portfolio_name" = NA_character_,
-    "ald_location" = NA_character_, "year" = NA_integer_,
-    "ald_sector" = NA_character_, "technology" = NA_character_,
-    "financial_sector" = NA_character_, "allocation" = NA_character_,
-    "allocation_weight" = NA_integer_, "ald_production_unit" = NA_character_,
-    "plan_alloc_wt_tech_prod" = NA_integer_, "plan_alloc_wt_sec_prod" = NA_integer_,
-    "equity_market" = NA_character_, "scenario" = NA_character_,
-    "scenario_geography" = NA_character_
-  )
-}
-
-# load equity stress test data
-if (file.exists(file.path(results_path, portfolio_name_ref_all, "Equity_results_stress_test.rda"))) {
-  equity_results_stress_test <- read_rds(file.path(results_path, portfolio_name_ref_all, "Equity_results_stress_test.rda"))
-} else {
-  equity_results_stress_test <- tibble(
-    "investor_name" = NA_character_, "portfolio_name" = NA_character_,
-    "ald_sector" = NA_character_, "technology" = NA_character_,
-    "scenario_geography" = NA_character_, "VaR_technology" = NA_real_,
-    "asset_portfolio_value" = NA_real_, "VaR_Sector" = NA_real_,
-    "scenario_name" = NA_character_, "technology_exposure" = NA_real_,
-    "ector_exposure" = NA_real_, "sector_loss" = NA_real_,
-    "climate_relevant_var" = NA_real_, "portfolio_aum" = NA_real_,
-    "portfolio_loss_percentage" = NA_real_, "year_of_shock" = NA_integer_,
-    "duration_of_shock" = NA_integer_, "production_shock_percentage" = NA_real_
-  )
-}
-
-# load bonds stress test data
-if (file.exists(file.path(results_path, portfolio_name_ref_all, "Bonds_results_stress_test.rda"))) {
-  bonds_results_stress_test <- read_rds(file.path(results_path, portfolio_name_ref_all, "Bonds_results_stress_test.rda"))
-} else {
-  bonds_results_stress_test <- tibble(
-    "investor_name" = NA_character_, "portfolio_name" = NA_character_,
-    "ald_sector" = NA_character_, "technology" = NA_character_,
-    "scenario_geography" = NA_character_, "VaR_technology" = NA_real_,
-    "asset_portfolio_value" = NA_real_, "VaR_Sector" = NA_real_,
-    "scenario_name" = NA_character_, "technology_exposure" = NA_real_,
-    "ector_exposure" = NA_real_, "sector_loss" = NA_real_,
-    "climate_relevant_var" = NA_real_, "portfolio_aum" = NA_real_,
-    "portfolio_loss_percentage" = NA_real_, "year_of_shock" = NA_integer_,
-    "duration_of_shock" = NA_integer_, "production_shock_percentage" = NA_real_
-  )
 }
 
 # load portfolio overview
 if (file.exists(file.path(proc_input_path, portfolio_name_ref_all, "overview_portfolio.rda"))) {
   portfolio_overview <- read_rds(file.path(proc_input_path, portfolio_name_ref_all, "overview_portfolio.rda"))
 } else {
-  portfolio_overview <- tibble(
-    "investor_name" = NA_character_, "portfolio_name" = NA_character_,
-    "asset_type" = NA_character_, "financial_sector" = NA_character_,
-    "valid_input" = NA, "valid_value_usd" = NA_real_,
-    "asset_value_usd" = NA_real_, "portfolio_value_usd" = NA_real_
-  )
+  portfolio_overview <- empty_portfolio_overview()
+}
+
+
+if (file.exists(file.path(proc_input_path, portfolio_name_ref_all, "emissions.rda"))){
+  emissions <- read_rds(file.path(proc_input_path, portfolio_name_ref_all, "emissions.rda"))
+}else{
+  emissions <- empty_emissions_results()}
+
+# load equity portfolio data
+if (file.exists(file.path(results_path, portfolio_name_ref_all, "Equity_results_portfolio.rda"))) {
+  equity_results_portfolio <- read_rds(file.path(results_path, portfolio_name_ref_all, "Equity_results_portfolio.rda"))
+} else {
+  equity_results_portfolio <- empty_portfolio_results()
+}
+
+# load bonds portfolio data
+if (file.exists(file.path(results_path, portfolio_name_ref_all, "Bonds_results_portfolio.rda"))) {
+  bonds_results_portfolio <- read_rds(file.path(results_path, portfolio_name_ref_all, "Bonds_results_portfolio.rda"))
+} else {
+  bonds_results_portfolio <- empty_portfolio_results()
+}
+
+# load equity company data
+if (file.exists(file.path(results_path, portfolio_name_ref_all, "Equity_results_company.rda"))) {
+  equity_results_company <- read_rds(file.path(results_path, portfolio_name_ref_all, "Equity_results_company.rda"))
+} else {
+  equity_results_company <- empty_company_results()
+}
+
+# load bonds company data
+if (file.exists(file.path(results_path, portfolio_name_ref_all, "Bonds_results_company.rda"))) {
+  bonds_results_company <- read_rds(file.path(results_path, portfolio_name_ref_all, "Bonds_results_company.rda"))
+} else {
+  bonds_results_company <- empty_company_results()
+}
+
+# load equity map data
+if (file.exists(file.path(results_path, portfolio_name_ref_all, "Equity_results_map.rda"))) {
+  equity_results_map <- read_rds(file.path(results_path, portfolio_name_ref_all, "Equity_results_map.rda"))
+} else {
+  equity_results_map <- empty_map_results()
+}
+
+# load bonds map data
+if (file.exists(file.path(results_path, portfolio_name_ref_all, "Bonds_results_map.rda"))) {
+  bonds_results_map <- read_rds(file.path(results_path, portfolio_name_ref_all, "Bonds_results_map.rda"))
+} else {
+  bonds_results_map <- empty_map_results()
+}
+
+# load equity stress test data
+if (file.exists(file.path(results_path, portfolio_name_ref_all, "Equity_results_stress_test.rda"))) {
+  equity_results_stress_test <- read_rds(file.path(results_path, portfolio_name_ref_all, "Equity_results_stress_test.rda"))
+} else {
+  equity_results_stress_test <- empty_st_results()
+}
+
+# load bonds stress test data
+if (file.exists(file.path(results_path, portfolio_name_ref_all, "Bonds_results_stress_test.rda"))) {
+  bonds_results_stress_test <- read_rds(file.path(results_path, portfolio_name_ref_all, "Bonds_results_stress_test.rda"))
+} else {
+  bonds_results_stress_test <- empty_st_results()
 }
 
 # load IPR stress test results
 if (file.exists(file.path(results_path, portfolio_name_ref_all, "Stress_test_results_IPR.rds"))) {
   ipr_results_stress_test <- read_rds(file.path(results_path, portfolio_name_ref_all, "Stress_test_results_IPR.rds"))
 } else {
-  ipr_results_stress_test <- tibble(
-    "investor_name" = NA_character_, "portfolio_name" = NA_character_,
-    "sector" = NA_character_, "subsector" = NA_character_,
-    "exposure" = NA_real_, "description" = NA_character_,
-    "scenario" = NA_character_, "shock" = NA_real_,
-    "loss" = NA_real_
-  )
+  ipr_results_stress_test <- empty_ipr_st_results()
+}
+
+# load peers results both individual and aggregate
+if (file.exists(file.path(data_location_ext, paste0(project_code, "_peers_equity_results_portfolio.rda")))){
+  peers_equity_results_portfolio <- read_rds(file.path(data_location_ext, paste0(project_code, "_peers_equity_results_portfolio.rda")))
+}else{
+  peers_equity_results_portfolio <- empty_portfolio_results()
+}
+
+if(file.exists(file.path(data_location_ext, paste0(project_code, "_peers_bonds_results_portfolio.rda")))){
+  peers_bonds_results_portfolio <- read_rds(file.path(data_location_ext, paste0(project_code, "_peers_bonds_results_portfolio.rda")))
+}else{
+  peers_bonds_results_portfolio <- empty_portfolio_results()
+}
+
+if (file.exists(file.path(data_location_ext, paste0(project_code, "_peers_equity_results_portfolio_ind.rda")))){
+  peers_equity_results_user <- read_rds(file.path(data_location_ext, paste0(project_code, "_peers_equity_results_portfolio_ind.rda")))
+}else{
+  peers_equity_results_user <- empty_portfolio_results()
+}
+
+if(file.exists(file.path(data_location_ext, paste0(project_code, "_peers_bonds_results_portfolio_ind.rda")))){
+  peers_bonds_results_user <- read_rds(file.path(data_location_ext, paste0(project_code, "_peers_bonds_results_portfolio_ind.rda")))
+}else{
+  peers_bonds_results_user <- empty_portfolio_results()
 }
 
 indices_equity_results_portfolio <- read_rds(file.path(data_location_ext, "Indices_equity_portfolio.rda"))
+
 indices_bonds_results_portfolio <- read_rds(file.path(data_location_ext, "Indices_bonds_portfolio.rda"))
-peers_equity_results_portfolio <- read_rds(file.path(data_location_ext, "Peers_equity_results_portfolio.rda"))
-peers_bonds_results_portfolio <- read_rds(file.path(data_location_ext, "Peers_bonds_results_portfolio.rda"))
-peers_equity_results_user <- read_rds(file.path(data_location_ext, "Peers_equity_results_portfolio_ind.rda"))
-peers_bonds_results_user <- read_rds(file.path(data_location_ext, "Peers_bonds_results_portfolio_ind.rda"))
 
 dataframe_translations <- readr::read_csv(
   path(template_path, "data/translation/dataframe_labels.csv"),
@@ -270,25 +163,13 @@ js_translations <- jsonlite::fromJSON(
   txt = path(template_path, "data/translation/js_labels.json")
 )
 
-shock_year <- 2030 # this should come directly from the stress test.. 2030 based on current discussions in CHPA2020 case
-pacta_sectors_not_analysed <- c("Aviation","Cement","Shipping","Steel")
-select_scenario = scenario
+# Needed for testing only
+shock <- shock_year # this should come directly from the stress test.. 2030 based on current discussions in CHPA2020 case
 select_scenario_auto = scenario_auto
 select_scenario_other = scenario_other
 select_scenario_shipping = scenario_shipping
-
-twodi_sectors = c("Power", "Automotive", "Shipping", "Oil&Gas", "Coal", "Steel", "Cement", "Aviation")
-green_techs = c("RenewablesCap", "HydroCap", "NuclearCap", "Hybrid", "Electric", "FuelCell", "Hybrid_HDV", "Electric_HDV", "FuelCell_HDV","Ac-Electric Arc Furnace","Ac-Electric Arc Furnace")
-tech_roadmap_sectors = c("Automotive", "Power", "Oil&Gas", "Coal")
-alignment_techs = c("RenewablesCap", "CoalCap", "Coal", "Oil", "Gas", "Electric", "ICE")
-
-
+twodi_sectors = sector_list
 repo_path = template_path
-output_dir <- file.path(outputs_path, portfolio_name_ref_all)
-
-display_currency = "CHF"
-currency_exchange_value <- 1.03
-# TODO: update this from the currencies file
 file_name = "template.Rmd"
 
 create_interactive_report(
@@ -305,16 +186,16 @@ create_interactive_report(
   peer_group = peer_group,
   start_year = start_year,
   shock = shock_year,
-  select_scenario = scenario,
+  select_scenario = select_scenario,
   select_scenario_auto = scenario_auto,
   select_scenario_shipping = scenario_shipping,
   select_scenario_other = scenario_other,
   portfolio_allocation_method = portfolio_allocation_method,
   scenario_geography = scenario_geography,
-  twodi_sectors = c("Power", "Automotive", "Shipping", "Oil&Gas", "Coal", "Steel", "Cement", "Aviation"),
-  green_techs = c("RenewablesCap", "HydroCap", "NuclearCap", "Hybrid", "Electric", "FuelCell", "Hybrid_HDV", "Electric_HDV", "FuelCell_HDV","Ac-Electric Arc Furnace","Dc-Electric Arc Furnace"),
-  tech_roadmap_sectors = c("Automotive", "Power", "Oil&Gas", "Coal"),
-  pacta_sectors_not_analysed = c("Aviation","Cement","Shipping","Steel"),
+  twodi_sectors = sector_list,
+  green_techs = green_techs,
+  tech_roadmap_sectors = tech_roadmap_sectors,
+  pacta_sectors_not_analysed = pacta_sectors_not_analysed,
   audit_file = audit_file,
   emissions = emissions,
   portfolio_overview = portfolio_overview,
@@ -335,7 +216,7 @@ create_interactive_report(
   dataframe_translations = dataframe_translations,
   js_translations = js_translations,
   ipr_results_stress_test = ipr_results_stress_test,
-  display_currency = "CHF",
+  display_currency = display_currency,
   currency_exchange_value = currency_exchange_value,
   header_dictionary = header_dictionary
 )
@@ -344,7 +225,7 @@ create_interactive_report(
 create_executive_summary(
   file_name = "template.Rmd",
   exec_summary_dir = exec_summary_dir,
-  output_dir = file.path(output_dir, "executive_summary"),
+  output_dir = output_dir,
   language_select = language_select,
   project_name = "working_dir",
   investor_name = investor_name,
@@ -354,10 +235,10 @@ create_executive_summary(
   select_scenario = scenario,
   portfolio_allocation_method = portfolio_allocation_method,
   scenario_geography = scenario_geography,
-  twodi_sectors = c("Power", "Automotive", "Shipping", "Oil&Gas", "Coal", "Steel", "Cement", "Aviation"),
-  green_techs = c("RenewablesCap", "HydroCap", "NuclearCap", "Hybrid", "Electric", "FuelCell", "Hybrid_HDV", "Electric_HDV", "FuelCell_HDV","Ac-Electric Arc Furnace","Dc-Electric Arc Furnace"),
-  tech_roadmap_sectors = c("Automotive", "Power", "Oil&Gas", "Coal"),
-  alignment_techs = c("RenewablesCap", "CoalCap", "Coal", "Oil", "Gas", "Electric", "ICE"),
+  twodi_sectors = sector_list,
+  green_techs = green_techs,
+  tech_roadmap_sectors = tech_roadmap_sectors,
+  alignment_techs = alignment_techs,
   equity_results_portfolio = equity_results_portfolio,
   bonds_results_portfolio = bonds_results_portfolio,
   peers_equity_results_portfolio = peers_equity_results_portfolio,
