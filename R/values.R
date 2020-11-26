@@ -38,7 +38,7 @@ common_filenames_sans_ext <-
     bics_bridge = c("bics_bridge", "bics_bridge_data"),
     company_emissions = c("company_emissions", "company_emissions_data"),
     consolidated_financial = c("consolidated_financial", "consolidated_financial_data"),
-    debt_financial = c("debt_financial", "debt_financial_data"),
+    debt_financial = c("debt_financial", "debt_financial_data", "debt_fin", "debt_fin_data"),
     exchange_rates = c("exchange_rates", "exchange_rates_data", "currencies", "currencies_data", "currency_data"),
     fin_sector_overrides = c("fin_sector_overrides", "fin_sector_overrides_data"),
     funds = c("funds", "funds_data", "fund_data"),
