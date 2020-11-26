@@ -38,41 +38,12 @@ create_portfolio_subfolders(portfolio_name_ref_all = portfolio_name_ref_all, pro
 file_location <- file.path(analysis_inputs_path, "cleaned_files")
 
 if (new_data == TRUE) {
-  currencies <- get_exchange_rates_for_timestamp(financial_timestamp)
-
-  fund_data <- get_and_clean_fund_data(analysis_inputs_path, "funds.rds")
-
-  fin_data <- get_and_clean_fin_data(analysis_inputs_path, financial_timestamp = financial_timestamp)
-
-  check_funds_wo_bbg(fund_data, fin_data)
-
-  comp_fin_data <- get_and_clean_company_fin_data(analysis_inputs_path)
-
-  debt_fin_data <- get_debt_financial(analysis_inputs_path)
-
-  if (has_revenue) {
-    revenue_data <- get_revenue(analysis_inputs_path, filename = "revenue.rds")
-  } else {
-    revenue_data <- data.frame()
-  }
-
-  if (inc_emission_factors) {
-    average_sector_intensity <- get_average_sector_intensity(analysis_inputs_path)
-    company_emissions <- get_company_emissions(analysis_inputs_path)
-  } else {
-    average_sector_intensity <- data.frame()
-    company_emissions <- data.frame()
-  }
-
-  save_files_to(
-    file_location,
-    currencies,
-    fund_data,
-    fin_data,
-    comp_fin_data,
-    debt_fin_data,
-    average_sector_intensity,
-    company_emissions
+  prepare_new_data(
+    inputs_dir = analysis_inputs_path,
+    financial_timestamp = financial_timestamp,
+    has_revenue = has_revenue,
+    inc_emission_factors = inc_emission_factors,
+    processed_data_dir = file_location
   )
 } else {
   currencies <- fst::read_fst(file.path(file_location, "currencies.fst"))

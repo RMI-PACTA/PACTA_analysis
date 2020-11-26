@@ -42,21 +42,65 @@ save_files_to <-
   function(path, ...) {
     if (!dir.exists(path)) { dir.create(path) }
 
-    dots <- match.call(expand.dots = FALSE)$...
+    objs_to_save <- rlang::dots_list(..., .named = TRUE)
 
-    lapply(dots, function(obj_sym) {
-      obj_name <- deparse(obj_sym)
-      if (exists(obj_name)) {
-        filename <- paste0(obj_name, ".fst")
-        fst::write_fst(base::get(obj_name), file.path(path, filename))
-      }
+    lapply(seq_along(objs_to_save), function(i) {
+      filename <- paste0(names(objs_to_save)[i], ".rds")
+      saveRDS(objs_to_save[[i]], file.path(path, filename))
     })
 
     if (any(file.size(list.files(path, full.names = T)) > 100e6)) {
-      warning("File size exceeds what can be pushed to GitHub. Check before Committing")
+      message("File size exceeds what can be pushed to GitHub. Check before Committing")
     }
 
     invisible(TRUE)
+  }
+
+
+
+# rough -------------------------------------------------------------------
+
+prepare_new_data <-
+  function(inputs_dir, financial_timestamp,
+           has_revenue, inc_emission_factors,
+           processed_data_dir) {
+    currencies <- get_exchange_rates_for_timestamp(financial_timestamp)
+
+    fund_data <- get_and_clean_fund_data(inputs_dir, "funds.rds")
+
+    fin_data <- get_and_clean_fin_data(inputs_dir, financial_timestamp = financial_timestamp)
+
+    check_funds_wo_bbg(fund_data, fin_data)
+
+    comp_fin_data <- get_and_clean_company_fin_data(inputs_dir)
+
+    debt_fin_data <- get_debt_financial(inputs_dir)
+
+    if (has_revenue) {
+      revenue_data <- get_revenue(inputs_dir, filename = "revenue.rds")
+    } else {
+      revenue_data <- data.frame()
+    }
+
+    if (inc_emission_factors) {
+      average_sector_intensity <- get_average_sector_intensity(inputs_dir)
+      company_emissions <- get_company_emissions(inputs_dir)
+    } else {
+      average_sector_intensity <- data.frame()
+      company_emissions <- data.frame()
+    }
+
+    save_files_to(
+      processed_data_dir,
+      currencies,
+      fund_data,
+      fin_data,
+      comp_fin_data,
+      debt_fin_data,
+      revenue_data,
+      average_sector_intensity,
+      company_emissions
+    )
   }
 
 
