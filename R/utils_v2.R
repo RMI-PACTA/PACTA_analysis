@@ -179,38 +179,40 @@ check_funds_wo_bbg <-
 
 map_security_sectors <-
   function(fin_data, sector_bridge) {
+    .data <- NULL
+
     initial_no_rows <- nrow(fin_data)
 
     fin_data <-
       fin_data %>%
-      left_join(sector_bridge %>% filter(source == "BICS") %>% select(-source),
+      dplyr::left_join(dplyr::select(dplyr::filter(sector_bridge, .data$source == "BICS"), -.data$source),
                 by = c("security_bics_subgroup" = "industry_classification")
       ) %>%
-      mutate(security_icb_subsector = as.character(security_icb_subsector))
+      dplyr::mutate(security_icb_subsector = as.character(.data$security_icb_subsector))
 
     fin_data_na <-
       fin_data %>%
-      filter(is.na(sector)) %>%
-      select(-c(sector,sector_boe,subsector_boe,sector_dnb,sector_ipr,subsector_ipr))
+      dplyr::filter(is.na(.data$sector)) %>%
+      dplyr::select(-c(.data$sector, .data$sector_boe, .data$subsector_boe, .data$sector_dnb, .data$sector_ipr, .data$subsector_ipr))
 
     fin_data <- fin_data[!is.na(fin_data$sector), ]
 
     fin_data_na <-
       fin_data_na %>%
-      left_join(
+      dplyr::left_join(
         subset(sector_bridge[sector_bridge$source == "ICB", ], select = -c(source)),
         by = c("security_icb_subsector" = "industry_classification")
       )
 
-    fin_data <- bind_rows(fin_data, fin_data_na)
+    fin_data <- dplyr::bind_rows(fin_data, fin_data_na)
 
     fin_data$security_mapped_sector <- fin_data$sector
     fin_data$sector <- NULL
 
     fin_data %>%
-      group_by(security_mapped_sector) %>%
-      filter(is.na(security_mapped_sector)) %>%
-      summarise(count = n())
+      dplyr::group_by(.data$security_mapped_sector) %>%
+      dplyr::filter(is.na(.data$security_mapped_sector)) %>%
+      dplyr::summarise(count = dplyr::n())
 
     fin_data_na <- fin_data[is.na(fin_data$security_mapped_sector), ]
 
@@ -224,6 +226,8 @@ map_security_sectors <-
 
 override_sector_classification <-
   function(fin_data, overrides) {
+    .data <- NULL
+
     start_rows <- nrow(fin_data)
 
     overrides$company_name <- as.character(overrides$company_name)
@@ -235,37 +239,37 @@ override_sector_classification <-
     # Merge in by company corp ticker
     overrides_cbt <-
       overrides %>%
-      filter(corporate_bond_ticker != "", !is.na(corporate_bond_ticker)) %>%
-      select(corporate_bond_ticker, fin_sector_override, sector_override) %>%
-      distinct()
+      dplyr::filter(.data$corporate_bond_ticker != "", !is.na(.data$corporate_bond_ticker)) %>%
+      dplyr::select(.data$corporate_bond_ticker, .data$fin_sector_override, .data$sector_override) %>%
+      dplyr::distinct()
 
-    fin_data <- left_join(fin_data, overrides_cbt, by = "corporate_bond_ticker")
+    fin_data <- dplyr::left_join(fin_data, overrides_cbt, by = "corporate_bond_ticker")
 
     # Merge in by bloomberg_id
     overrides_bbg <-
       overrides %>%
-      filter(is.na(corporate_bond_ticker) | corporate_bond_ticker == "") %>%
-      select(bloomberg_id, fin_sector_override, sector_override) %>%
-      distinct()
+      dplyr::filter(is.na(.data$corporate_bond_ticker) | .data$corporate_bond_ticker == "") %>%
+      dplyr::select(.data$bloomberg_id, .data$fin_sector_override, .data$sector_override) %>%
+      dplyr::distinct()
 
-    fin_data <- left_join(fin_data, overrides_bbg, by = "bloomberg_id")
+    fin_data <- dplyr::left_join(fin_data, overrides_bbg, by = "bloomberg_id")
 
     # Clean resulting financial data
     fin_data <-
       fin_data %>%
-      mutate(
-        sector_override = sector_override.x,
-        sector_override = if_else(sector_override.y != "" & !is.na(sector_override.y), sector_override.y, sector_override),
-        fin_sector_override = fin_sector_override.x,
-        fin_sector_override = if_else(!is.na(fin_sector_override.y) & fin_sector_override.y != "", fin_sector_override.y, fin_sector_override),
-        sector_override = if_else(is.na(sector_override), FALSE, TRUE)
+      dplyr::mutate(
+        sector_override = .data$sector_override.x,
+        sector_override = dplyr::if_else(.data$sector_override.y != "" & !is.na(.data$sector_override.y), .data$sector_override.y, .data$sector_override),
+        fin_sector_override = .data$fin_sector_override.x,
+        fin_sector_override = dplyr::if_else(!is.na(.data$fin_sector_override.y) & .data$fin_sector_override.y != "", .data$fin_sector_override.y, .data$fin_sector_override),
+        sector_override = dplyr::if_else(is.na(.data$sector_override), FALSE, TRUE)
       ) %>%
-      select(-sector_override.x, -sector_override.y, -fin_sector_override.x, -fin_sector_override.y)
+      dplyr::select(-.data$sector_override.x, -.data$sector_override.y, -.data$fin_sector_override.x, -.data$fin_sector_override.y)
 
     fin_data <-
       fin_data %>%
-      mutate(security_mapped_sector = if_else(sector_override, fin_sector_override, security_mapped_sector)) %>%
-      select(-fin_sector_override)
+      dplyr::mutate(security_mapped_sector = dplyr::if_else(.data$sector_override, .data$fin_sector_override, .data$security_mapped_sector)) %>%
+      dplyr::select(-.data$fin_sector_override)
 
     if (nrow(fin_data) != start_rows) {
       stop("Additional rows being added by fin sector override")
@@ -277,6 +281,8 @@ override_sector_classification <-
 
 get_and_clean_fin_data <-
   function(path, filename, financial_timestamp) {
+    .data <- NULL
+
     sec_fin <- get_security_financial(path, filename)
 
     non_distinct_isins <- get_non_distinct_isins()
@@ -315,7 +321,7 @@ get_and_clean_fin_data <-
     # Checks to ensure all finds are classified as such
     sec_fin <- classify_all_funds(sec_fin)
 
-    sec_fin <- mutate(sec_fin, bics_sector = convert_bics_subgroup_to_bics_sector(security_bics_subgroup))
+    sec_fin <- dplyr::mutate(sec_fin, bics_sector = convert_bics_subgroup_to_bics_sector(.data$security_bics_subgroup))
     # security_financial_data_out <- add_bics_sector(security_financial_data_out)
 
     # Select relevant columns
