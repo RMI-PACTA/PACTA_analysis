@@ -181,46 +181,40 @@ map_security_sectors <-
   function(fin_data, sector_bridge) {
     .data <- NULL
 
-    initial_no_rows <- nrow(fin_data)
+    bics_ind_classes <-
+      sector_bridge$industry_classification[sector_bridge$source == "BICS"]
 
-    fin_data <-
+    fin_data_with_sectors <-
       fin_data %>%
-      dplyr::left_join(dplyr::select(dplyr::filter(sector_bridge, .data$source == "BICS"), -.data$source),
-                by = c("security_bics_subgroup" = "industry_classification")
+      dplyr::mutate(sector_source =
+        dplyr::if_else(
+          .data$security_bics_subgroup %in% bics_ind_classes,
+          "BICS",
+          "ICB"
+        )
       ) %>%
-      dplyr::mutate(security_icb_subsector = as.character(.data$security_icb_subsector))
-
-    fin_data_na <-
-      fin_data %>%
-      dplyr::filter(is.na(.data$sector)) %>%
-      dplyr::select(-c(.data$sector, .data$sector_boe, .data$subsector_boe, .data$sector_dnb, .data$sector_ipr, .data$subsector_ipr))
-
-    fin_data <- fin_data[!is.na(fin_data$sector), ]
-
-    fin_data_na <-
-      fin_data_na %>%
+      dplyr::mutate(sector_match_value =
+        dplyr::if_else(
+          .data$sector_source == "BICS",
+          .data$security_bics_subgroup,
+          .data$security_icb_subsector
+        )
+      ) %>%
       dplyr::left_join(
-        subset(sector_bridge[sector_bridge$source == "ICB", ], select = -c(source)),
-        by = c("security_icb_subsector" = "industry_classification")
-      )
+        sector_bridge,
+        by = c("sector_source" = "source",
+               "sector_match_value" = "industry_classification")
+      ) %>%
+      dplyr::select(-.data$sector_source, -.data$sector_match_value) %>%
+      dplyr::select(-.data$security_mapped_sector) %>%
+      dplyr::rename(security_mapped_sector = .data$sector) %>%
+      dplyr::filter(!is.na(.data$security_mapped_sector))
 
-    fin_data <- dplyr::bind_rows(fin_data, fin_data_na)
-
-    fin_data$security_mapped_sector <- fin_data$sector
-    fin_data$sector <- NULL
-
-    fin_data %>%
-      dplyr::group_by(.data$security_mapped_sector) %>%
-      dplyr::filter(is.na(.data$security_mapped_sector)) %>%
-      dplyr::summarise(count = dplyr::n())
-
-    fin_data_na <- fin_data[is.na(fin_data$security_mapped_sector), ]
-
-    if (nrow(fin_data) != initial_no_rows) {
-      stop("Rows being dropped in mapping sectors")
+    if (nrow(fin_data_with_sectors) != nrow(fin_data)) {
+      stop("rows were dropped because the sector was not matched")
     }
 
-    return(fin_data)
+    return(fin_data_with_sectors)
   }
 
 
