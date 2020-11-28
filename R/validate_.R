@@ -222,3 +222,44 @@ validate_security_financial <-
       validate_column_types(.data, columns)
     )
   }
+
+
+validate_cleaned_security_financial <-
+  function(.data, financial_timestamp) {
+    columns <- colspec_security_financial()
+    non_distinct_isins <- get_non_distinct_isins()$isin
+    allowable_sectors <- c(sector_list, other_sector_list, "Other")
+
+    all(
+      validate_is_dataframe(.data),
+      validate_ungrouped(.data),
+      validate_column_names(.data, columns),
+      validate_column_types(.data, columns),
+      all(!duplicated(.data)),
+      validate_none_within(.data$isin, non_distinct_isins),
+      length(unique(.data$financial_timestamp)) == 1,
+      unique(.data$financial_timestamp) == financial_timestamp,
+      validate_no_nas(.data$security_mapped_sector),
+      validate_all_within(.data$security_mapped_sector, allowable_sectors),
+      all(.data$asset_type != "Other"),
+      validate_no_nas(.data$asset_type)
+    )
+  }
+
+
+validate_no_nas <-
+  function(.data) {
+    all(!is.na(.data))
+  }
+
+
+validate_all_within <-
+  function(.data, allowed) {
+    all(.data %in% allowed)
+  }
+
+
+validate_none_within <-
+  function(.data, allowed) {
+    all(!.data %in% allowed)
+  }
