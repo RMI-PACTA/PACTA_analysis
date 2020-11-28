@@ -68,7 +68,7 @@ prepare_new_data <-
 
     fund_data <- get_and_clean_fund_data(inputs_dir, "funds.rds")
 
-    fin_data <- get_and_clean_fin_data(inputs_dir, financial_timestamp = financial_timestamp)
+    fin_data <- get_and_clean_security_financial(inputs_dir, financial_timestamp = financial_timestamp)
 
     check_funds_wo_bbg(fund_data, fin_data)
 
@@ -273,7 +273,7 @@ override_sector_classification <-
   }
 
 
-get_and_clean_fin_data <-
+get_and_clean_security_financial <-
   function(path, filename, financial_timestamp) {
     .data <- NULL
 
