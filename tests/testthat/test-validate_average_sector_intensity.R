@@ -20,7 +20,6 @@ test_that("validate_average_sector_intensity() returns TRUE for example data", {
 
 test_that("validate_average_sector_intensity() returns FALSE for data with no columns", {
   skip_check_but_run_test()
-  example_data <- readRDS(here::here("inst/extdata/average_sector_intensity.rds"))
   expect_false(
     validate_average_sector_intensity(data.frame())
   )

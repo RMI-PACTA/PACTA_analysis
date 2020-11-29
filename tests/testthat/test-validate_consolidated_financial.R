@@ -20,7 +20,6 @@ test_that("validate_consolidated_financial() returns TRUE for example data", {
 
 test_that("validate_consolidated_financial() returns FALSE for data with no columns", {
   skip_check_but_run_test()
-  example_data <- readRDS(here::here("inst/extdata/consolidated_financial.rds"))
   expect_false(
     validate_consolidated_financial(data.frame())
   )
