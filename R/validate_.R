@@ -419,3 +419,9 @@ validate_none_within <-
 
     return(all(test))
   }
+
+
+validate_by_name <-
+  function(name, .data) {
+    do.call(paste0("validate_", name), args = list(.data))
+  }
