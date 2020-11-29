@@ -69,8 +69,14 @@ validate_column_types <-
 
 
 validate_data_frame_with_more_than_0_rows <-
-  function(.data) {
-    inherits(.data, "data.frame") && nrow(.data) > 0
+  function(.data, error_collector = NULL) {
+    test <- inherits(.data, "data.frame") && nrow(.data) > 0
+
+    if (!all(test) && !is.null(error_collector)) {
+      error_collector$push("object is not a data frame with more than 0 rows")
+    }
+
+    return(all(test))
   }
 
 
@@ -100,8 +106,14 @@ validate_is_dataframe <-
 
 
 validate_is_named_character <-
-  function(.data) {
-    class(.data) == "character" && !is.null(attr(.data, "names"))
+  function(.data, error_collector = NULL) {
+    test <- class(.data) == "character" && !is.null(attr(.data, "names"))
+
+    if (!all(test) && !is.null(error_collector)) {
+      error_collector$push("object is not a named character vector")
+    }
+
+    return(all(test))
   }
 
 
@@ -358,18 +370,38 @@ validate_cleaned_security_financial <-
 
 
 validate_no_nas <-
-  function(.data) {
-    all(!is.na(.data))
+  function(.data, error_collector = NULL) {
+    test <- all(!is.na(.data))
+
+    if (!all(test) && !is.null(error_collector)) {
+      error_collector$push("the object contains NAs")
+    }
+
+    return(all(test))
   }
 
 
 validate_all_within <-
-  function(.data, allowed) {
-    all(.data %in% allowed)
+  function(.data, allowed, error_collector = NULL) {
+    test <- .data %in% allowed
+
+    if (!all(test) && !is.null(error_collector)) {
+      msg <- "the object contains values that are not within the allowed set"
+      error_collector$push(msg, details = .data[!test])
+    }
+
+    return(all(test))
   }
 
 
 validate_none_within <-
-  function(.data, allowed) {
-    all(!.data %in% allowed)
+  function(.data, allowed, error_collector = NULL) {
+    test <- !.data %in% allowed
+
+    if (!all(test) && !is.null(error_collector)) {
+      msg <- "the object contains values that are within the set of unallowed values"
+      error_collector$push(msg, details = .data[!test])
+    }
+
+    return(all(test))
   }
