@@ -37,7 +37,7 @@ test_that("validate_non_distinct_isins() returns FALSE for data with a specified
 test_that("validate_non_distinct_isins() returns FALSE for data with an unspecified column", {
   skip_check_but_run_test()
   example_data <- readRDS(here::here("inst/extdata/non_distinct_isins.rds"))
-  example_data$XXX = TRUE
+  example_data$XXX <- TRUE
   expect_false(
     validate_non_distinct_isins(example_data)
   )

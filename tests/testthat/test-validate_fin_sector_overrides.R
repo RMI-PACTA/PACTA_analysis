@@ -37,7 +37,7 @@ test_that("validate_fin_sector_overrides() returns FALSE for data with a specifi
 test_that("validate_fin_sector_overrides() returns FALSE for data with an unspecified column", {
   skip_check_but_run_test()
   example_data <- readRDS(here::here("inst/extdata/fin_sector_overrides.rds"))
-  example_data$XXX = TRUE
+  example_data$XXX <- TRUE
   expect_false(
     validate_fin_sector_overrides(example_data)
   )

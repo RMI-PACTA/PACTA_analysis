@@ -37,7 +37,7 @@ test_that("validate_revenue() returns FALSE for data with a specified column mis
 test_that("validate_revenue() returns FALSE for data with an unspecified column", {
   skip_check_but_run_test()
   example_data <- readRDS(here::here("inst/extdata/revenue.rds"))
-  example_data$XXX = TRUE
+  example_data$XXX <- TRUE
   expect_false(
     validate_revenue(example_data)
   )

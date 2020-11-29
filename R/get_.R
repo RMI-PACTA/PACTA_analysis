@@ -3,7 +3,7 @@
 get_bics_bridge <-
   function(path = "inst/extdata", filename) {
     if (missing(filename)) {
-      filename = paste0(default_filenames_sans_ext["bics_bridge"], ".rds")
+      filename <- paste0(default_filenames_sans_ext["bics_bridge"], ".rds")
     }
     data <- get_rds_data_from_path(path, filename)
     stopifnot(validate_bics_bridge(data))
@@ -14,7 +14,7 @@ get_bics_bridge <-
 get_exchange_rates <-
   function(path = "inst/extdata", filename) {
     if (missing(filename)) {
-      filename = paste0(default_filenames_sans_ext["exchange_rates"], ".rds")
+      filename <- paste0(default_filenames_sans_ext["exchange_rates"], ".rds")
     }
     data <- get_rds_data_from_path(path, filename)
     stopifnot(validate_exchange_rates(data))
@@ -25,7 +25,7 @@ get_exchange_rates <-
 get_fin_sector_overrides <-
   function(path = "inst/extdata", filename) {
     if (missing(filename)) {
-      filename = paste0(default_filenames_sans_ext["fin_sector_overrides"], ".rds")
+      filename <- paste0(default_filenames_sans_ext["fin_sector_overrides"], ".rds")
     }
     data <- get_rds_data_from_path(path, filename)
     stopifnot(validate_fin_sector_overrides(data))
@@ -36,7 +36,7 @@ get_fin_sector_overrides <-
 get_non_distinct_isins <-
   function(path = "inst/extdata", filename) {
     if (missing(filename)) {
-      filename = paste0(default_filenames_sans_ext["non_distinct_isins"], ".rds")
+      filename <- paste0(default_filenames_sans_ext["non_distinct_isins"], ".rds")
     }
     data <- get_rds_data_from_path(path, filename)
     stopifnot(validate_non_distinct_isins(data))
@@ -47,7 +47,7 @@ get_non_distinct_isins <-
 get_sector_bridge <-
   function(path = "inst/extdata", filename) {
     if (missing(filename)) {
-      filename = paste0(default_filenames_sans_ext["sector_bridge"], ".rds")
+      filename <- paste0(default_filenames_sans_ext["sector_bridge"], ".rds")
     }
     data <- get_rds_data_from_path(path, filename)
     stopifnot(validate_sector_bridge(data))
@@ -61,7 +61,7 @@ get_sector_bridge <-
 get_average_sector_intensity <-
   function(path, filename) {
     if (missing(filename)) {
-      filename = paste0(default_filenames_sans_ext["average_sector_intensity"], ".rds")
+      filename <- paste0(default_filenames_sans_ext["average_sector_intensity"], ".rds")
     }
     data <- get_rds_data_from_path(path, filename)
     stopifnot(validate_average_sector_intensity(data))
@@ -72,7 +72,7 @@ get_average_sector_intensity <-
 get_company_emissions <-
   function(path, filename) {
     if (missing(filename)) {
-      filename = paste0(default_filenames_sans_ext["company_emissions"], ".rds")
+      filename <- paste0(default_filenames_sans_ext["company_emissions"], ".rds")
     }
     data <- get_rds_data_from_path(path, filename)
     stopifnot(validate_company_emissions(data))
@@ -83,7 +83,7 @@ get_company_emissions <-
 get_consolidated_financial <-
   function(path, filename) {
     if (missing(filename)) {
-      filename = paste0(default_filenames_sans_ext["consolidated_financial"], ".rds")
+      filename <- paste0(default_filenames_sans_ext["consolidated_financial"], ".rds")
     }
     data <- get_rds_data_from_path(path, filename)
     stopifnot(validate_consolidated_financial(data))
@@ -94,7 +94,7 @@ get_consolidated_financial <-
 get_debt_financial <-
   function(path, filename) {
     if (missing(filename)) {
-      filename = paste0(default_filenames_sans_ext["debt_financial"], ".rds")
+      filename <- paste0(default_filenames_sans_ext["debt_financial"], ".rds")
     }
     data <- get_rds_data_from_path(path, filename)
     stopifnot(validate_debt_financial(data))
@@ -113,7 +113,7 @@ get_funds <-
 get_revenue <-
   function(path, filename) {
     if (missing(filename)) {
-      filename = paste0(default_filenames_sans_ext["revenue"], ".rds")
+      filename <- paste0(default_filenames_sans_ext["revenue"], ".rds")
     }
     data <- get_rds_data_from_path(path, filename)
     stopifnot(validate_revenue(data))
@@ -124,7 +124,7 @@ get_revenue <-
 get_security_financial <-
   function(path, filename) {
     if (missing(filename)) {
-      filename = paste0(default_filenames_sans_ext["security_financial"], ".rds")
+      filename <- paste0(default_filenames_sans_ext["security_financial"], ".rds")
     }
     data <- get_rds_data_from_path(path, filename)
     stopifnot(validate_security_financial(data))
@@ -176,9 +176,9 @@ get_and_clean_company_fin_data <-
                      "current_shares_outstanding_all_classes",
                      "market_cap",
                      "financial_timestamp")]
-    .data$sector = convert_bics_to_sector(.data$bics_subgroup)
-    .data$sector_icb = convert_icb_to_sector(.data$icb_subgroup)
-    .data$sector = ifelse(is.na(.data$sector), .data$sector_icb, .data$sector)
+    .data$sector <- convert_bics_to_sector(.data$bics_subgroup)
+    .data$sector_icb <- convert_icb_to_sector(.data$icb_subgroup)
+    .data$sector <- ifelse(is.na(.data$sector), .data$sector_icb, .data$sector)
     .data$sector_icb <- NULL
     .data$financial_sector <- .data$sector
     .data$sector <- NULL

@@ -37,7 +37,7 @@ test_that("validate_debt_financial() returns FALSE for data with a specified col
 test_that("validate_debt_financial() returns FALSE for data with an unspecified column", {
   skip_check_but_run_test()
   example_data <- readRDS(here::here("inst/extdata/debt_financial.rds"))
-  example_data$XXX = TRUE
+  example_data$XXX <- TRUE
   expect_false(
     validate_debt_financial(example_data)
   )

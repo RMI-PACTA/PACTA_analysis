@@ -37,7 +37,7 @@ test_that("validate_bics_bridge() returns FALSE for data with a specified column
 test_that("validate_bics_bridge() returns FALSE for data with an unspecified column", {
   skip_check_but_run_test()
   example_data <- readRDS(here::here("inst/extdata/bics_bridge.rds"))
-  example_data$XXX = TRUE
+  example_data$XXX <- TRUE
   expect_false(
     validate_bics_bridge(example_data)
   )
