@@ -3,6 +3,7 @@
 new_error_collector <-
   function() {
     error_msgs <- list()
+    context <- character(0L)
     push <- function(msg, details = NULL) error_msgs[[length(error_msgs) + 1]] <<- list(msg = msg, details = details)
     getMessages <- function() error_msgs
     isEmpty <- function() length(error_msgs) == 0L
@@ -10,6 +11,7 @@ new_error_collector <-
       function() {
         if (!isEmpty()) {
           errors <- getMessages()
+          if (length(context) > 0) cli::cli_text(context)
           cli::cli_alert_danger("Failed on {length(errors)} assertion{?s}")
           cli::cli_ol()
           for (error in  errors) {
@@ -147,6 +149,7 @@ validate_average_sector_intensity <-
     columns <- colspec_average_sector_intensity()
 
     error_collector <- new_error_collector()
+    error_collector$context <- "While running {.emph validate_average_sector_intensity}"
 
     validate_is_dataframe(.data, error_collector)
     validate_ungrouped(.data, error_collector)
@@ -163,6 +166,7 @@ validate_bics_bridge <-
     columns <- colspec_bics_bridge()
 
     error_collector <- new_error_collector()
+    error_collector$context <- "While running {.emph validate_bics_bridge}"
 
     validate_is_dataframe(.data, error_collector)
     validate_ungrouped(.data, error_collector)
@@ -183,6 +187,7 @@ validate_company_emissions <-
     columns <- colspec_company_emissions()
 
     error_collector <- new_error_collector()
+    error_collector$context <- "While running {.emph validate_company_emissions}"
 
     validate_is_dataframe(.data, error_collector)
     validate_ungrouped(.data, error_collector)
@@ -199,6 +204,7 @@ validate_consolidated_financial <-
     columns <- colspec_consolidated_financial()
 
     error_collector <- new_error_collector()
+    error_collector$context <- "While running {.emph validate_consolidated_financial}"
 
     validate_is_dataframe(.data, error_collector)
     validate_ungrouped(.data, error_collector)
@@ -214,6 +220,7 @@ validate_exchange_rates <-
     columns <- colspec_exchange_rates()
 
     error_collector <- new_error_collector()
+    error_collector$context <- "While running {.emph validate_exhange_rates}"
 
     validate_is_dataframe(.data, error_collector)
     validate_ungrouped(.data, error_collector)
@@ -230,6 +237,7 @@ validate_debt_financial <-
     columns <- colspec_debt_financial()
 
     error_collector <- new_error_collector()
+    error_collector$context <- "While running {.emph validate_debt_financial}"
 
     validate_is_dataframe(.data, error_collector)
     validate_ungrouped(.data, error_collector)
@@ -246,6 +254,7 @@ validate_fin_sector_overrides <-
     columns <- colspec_fin_sector_overrides()
 
     error_collector <- new_error_collector()
+    error_collector$context <- "While running {.emph validate_fin_sector_overrides}"
 
     validate_is_dataframe(.data, error_collector)
     validate_ungrouped(.data, error_collector)
@@ -262,6 +271,7 @@ validate_funds <-
     columns <- colspec_funds()
 
     error_collector <- new_error_collector()
+    error_collector$context <- "While running {.emph validate_funds}"
 
     validate_is_dataframe(.data, error_collector)
     validate_ungrouped(.data, error_collector)
@@ -278,6 +288,7 @@ validate_non_distinct_isins <-
     columns <- colspec_non_distinct_isins()
 
     error_collector <- new_error_collector()
+    error_collector$context <- "While running {.emph validate_non_distinct_isins}"
 
     validate_is_dataframe(.data, error_collector)
     validate_ungrouped(.data, error_collector)
@@ -294,6 +305,7 @@ validate_revenue <-
     columns <- colspec_revenue()
 
     error_collector <- new_error_collector()
+    error_collector$context <- "While running {.emph validate_revenue}"
 
     validate_is_dataframe(.data, error_collector)
     validate_ungrouped(.data, error_collector)
@@ -310,6 +322,7 @@ validate_sector_bridge <-
     columns <- colspec_sector_bridge()
 
     error_collector <- new_error_collector()
+    error_collector$context <- "While running {.emph validate_sector_bridge}"
 
     validate_is_dataframe(.data, error_collector)
     validate_ungrouped(.data, error_collector)
@@ -336,6 +349,7 @@ validate_security_financial <-
     columns <- colspec_security_financial()
 
     error_collector <- new_error_collector()
+    error_collector$context <- "While running {.emph validate_security_financial}"
 
     validate_is_dataframe(.data, error_collector)
     validate_ungrouped(.data, error_collector)
