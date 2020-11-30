@@ -21,3 +21,11 @@ test_that("validate_ungrouped() returns FALSE if the data is a grouped tibble", 
     validate_ungrouped(group_by(tibble(a = 1), a))
   )
 })
+
+test_that("validate_ungrouped() can succesffully use an error collector", {
+  error_collector <- new_error_collector()
+  validate_ungrouped(group_by(tibble(a = 1), a), error_collector = error_collector)
+  expect_false(
+    error_collector$isEmpty()
+  )
+})

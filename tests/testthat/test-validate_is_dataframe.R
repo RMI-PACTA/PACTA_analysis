@@ -39,3 +39,11 @@ test_that("validate_is_dataframe() returns FALSE if the data is a numeric value"
     validate_is_dataframe(1234)
   )
 })
+
+test_that("validate_is_dataframe() can succesffully use an error collector", {
+  error_collector <- new_error_collector()
+  validate_is_dataframe(1L, error_collector = error_collector)
+  expect_false(
+    error_collector$isEmpty()
+  )
+})
