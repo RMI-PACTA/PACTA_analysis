@@ -11,3 +11,17 @@ test_that("get_rds_data_from_path() function returns a data frame", {
     inherits(result, "data.frame")
   )
 })
+
+test_that("get_rds_data_from_path() function stops if the file extension is not .rds", {
+  expect_error(
+    get_rds_data_from_path(path = "inst/extdata", filename = "bics_bridge.xls"),
+    regexp = "file does not have the appropriate 'rds' extension"
+  )
+})
+
+test_that("get_rds_data_from_path() function stops if the file does not exist", {
+  expect_error(
+    get_rds_data_from_path(path = "inst/extdata", filename = "does_not_exist.rds"),
+    regexp = "file does not exist"
+  )
+})
