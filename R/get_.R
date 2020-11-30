@@ -215,7 +215,7 @@ get_and_clean_fund_data <-
   }
 
 
-get_and_clean_revenue_data <-
+get_and_clean_revenue <-
   function(path, filename) {
     if (missing(filename)) {
       revenue_data <- get_revenue(path)
