@@ -51,3 +51,12 @@ test_that("validate_bics_bridge() returns FALSE for data with a column of a diff
     validate_bics_bridge(example_data)
   )
 })
+
+test_that("validate_bics_bridge() returns FALSE for data with duplicate values in bics_subgroup", {
+  skip_check_but_run_test()
+  example_data <- readRDS(here::here("inst/extdata/bics_bridge.rds"))
+  example_data <- rbind(example_data, example_data)
+  expect_false(
+    validate_bics_bridge(example_data)
+  )
+})
