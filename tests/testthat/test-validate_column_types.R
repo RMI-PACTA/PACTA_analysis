@@ -21,9 +21,3 @@ test_that("validate_column_types() returns FALSE if a column type in the specifi
     validate_column_types(data.frame(a = 1, b = 1), c(a = "numeric", b = "character"))
   )
 })
-
-test_that("validate_column_types() returns FALSE if a column type in the specification is not found in the data", {
-  expect_false(
-    validate_column_types(data.frame(a = 1), c(a = "numeric", b = "character"))
-  )
-})
