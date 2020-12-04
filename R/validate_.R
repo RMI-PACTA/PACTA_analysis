@@ -51,6 +51,8 @@ validate_column_types <-
     stopifnot(validate_is_dataframe(.data))
     stopifnot(validate_is_named_character(columns))
 
+    columns <- columns[names(columns) %in% names(.data)]
+
     test <-
       sapply(seq_along(columns), function(i) {
         class(.data[[names(columns)[i]]]) == columns[i]
