@@ -1,7 +1,7 @@
 # importing internal data ------------------------------------------------------
 
 get_bics_bridge <-
-  function(path = "inst/extdata", filename) {
+  function(path = default_dirpath, filename) {
     if (missing(filename)) {
       filename <- paste0(default_filenames_sans_ext["bics_bridge"], ".rds")
     }
@@ -12,7 +12,7 @@ get_bics_bridge <-
 
 
 get_exchange_rates <-
-  function(path = "inst/extdata", filename) {
+  function(path = default_dirpath, filename) {
     if (missing(filename)) {
       filename <- paste0(default_filenames_sans_ext["exchange_rates"], ".rds")
     }
@@ -23,7 +23,7 @@ get_exchange_rates <-
 
 
 get_fin_sector_overrides <-
-  function(path = "inst/extdata", filename) {
+  function(path = default_dirpath, filename) {
     if (missing(filename)) {
       filename <- paste0(default_filenames_sans_ext["fin_sector_overrides"], ".rds")
     }
@@ -34,7 +34,7 @@ get_fin_sector_overrides <-
 
 
 get_non_distinct_isins <-
-  function(path = "inst/extdata", filename) {
+  function(path = default_dirpath, filename) {
     if (missing(filename)) {
       filename <- paste0(default_filenames_sans_ext["non_distinct_isins"], ".rds")
     }
@@ -45,7 +45,7 @@ get_non_distinct_isins <-
 
 
 get_sector_bridge <-
-  function(path = "inst/extdata", filename) {
+  function(path = default_dirpath, filename) {
     if (missing(filename)) {
       filename <- paste0(default_filenames_sans_ext["sector_bridge"], ".rds")
     }
