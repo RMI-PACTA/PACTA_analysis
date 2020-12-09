@@ -163,6 +163,22 @@ js_translations <- jsonlite::fromJSON(
   txt = path(template_path, "data/translation/js_labels.json")
 )
 
+sector_order <- function(path) {
+  # TODO: Remove following create_interactive_report#313
+  if (!fs::file_exists(path)) {
+    rlang::warn(glue::glue(
+      "This file doesn't exit: {path}.
+      Have you already merged create_interactive_report#313?"
+    ))
+    return(NULL)
+  }
+
+  readr::read_csv(
+    path(template_path, "data", "sector_order", "sector_order.csv"),
+    col_types = cols()
+  )
+}
+
 # Needed for testing only
 shock <- shock_year # this should come directly from the stress test.. 2030 based on current discussions in CHPA2020 case
 select_scenario_auto = scenario_auto
@@ -172,7 +188,7 @@ twodi_sectors = sector_list
 repo_path = template_path
 file_name = "template.Rmd"
 
-create_interactive_report(
+arguments <- list(
   repo_path = template_path,
   template_dir = template_dir,
   output_dir = output_dir,
@@ -221,6 +237,12 @@ create_interactive_report(
   header_dictionary = header_dictionary
 )
 
+has_arg <- utils::hasName(formals(create_executive_summary), "sector_order")
+if (has_arg) {
+  arg <- list(sector_order = sector_order())
+  arguments <- append(arguments, arg)
+}
+purrr::invoke(create_interactive_report, arguments)
 
 create_executive_summary(
   file_name = "template.Rmd",
