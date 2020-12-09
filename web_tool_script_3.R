@@ -37,8 +37,8 @@ real_estate_dir <- path(user_results_path, project_code, "real_estate")
 
 output_dir <- file.path(outputs_path, portfolio_name_ref_all)
 
-if (file.exists(file.path(proc_input_path, portfolio_name_ref_all, "audit_file.csv"))){
-  audit_file <- read_csv(file.path(proc_input_path, portfolio_name_ref_all, "audit_file.csv"), col_types = cols())
+if (file.exists(file.path(proc_input_path, portfolio_name_ref_all, "audit_file.rda"))){
+  audit_file <- readRDS(file.path(proc_input_path, portfolio_name_ref_all, "audit_file.rda"))
 }else{
   audit_file <- empty_audit_file()
 

@@ -150,8 +150,6 @@ export_audit_information_jsons(
   folder_path = proc_input_path_
 )
 
-save_if_exists(audit_file, portfolio_name, file.path(proc_input_path_, "audit_file.csv"), csv_or_rds = "csv")
-
 save_if_exists(portfolio_total, portfolio_name, file.path(proc_input_path_, "total_portfolio.rda"))
 save_if_exists(eq_portfolio, portfolio_name, file.path(proc_input_path_, "equity_portfolio.rda"))
 save_if_exists(cb_portfolio, portfolio_name, file.path(proc_input_path_, "bonds_portfolio.rda"))
@@ -163,3 +161,9 @@ if(data_check(port_weights)){
   port_weights <- jsonlite::toJSON(x=port_weights)
   write(x = port_weights, file = file.path(proc_input_path_,"portfolio_weights.json"))
   }
+
+rm(portfolio_total)
+rm(portfolio)
+rm(audit_file)
+rm(eq_portfolio)
+rm(cb_portfolio)
