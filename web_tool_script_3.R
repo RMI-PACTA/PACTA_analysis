@@ -163,10 +163,17 @@ js_translations <- jsonlite::fromJSON(
   txt = path(template_path, "data/translation/js_labels.json")
 )
 
-sector_order <- readr::read_csv(
-  path(template_path, "data","sector_order","sector_order.csv"),
-  col_types = cols()
-)
+sector_order <- function(path) {
+  if (!fs::file_exists(path)) {
+    rlang::warn(glue::glue("This file doesn't exit yet (see #356): {path}"))
+    return(NULL)
+  }
+
+  readr::read_csv(
+    path(template_path, "data", "sector_order", "sector_order.csv"),
+    col_types = cols()
+  )
+}
 
 # Needed for testing only
 shock <- shock_year # this should come directly from the stress test.. 2030 based on current discussions in CHPA2020 case
@@ -224,7 +231,7 @@ create_interactive_report(
   display_currency = display_currency,
   currency_exchange_value = currency_exchange_value,
   header_dictionary = header_dictionary,
- sector_order = sector_order
+ sector_order = sector_order()
 )
 
 
