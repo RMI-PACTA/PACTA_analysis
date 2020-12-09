@@ -164,7 +164,7 @@ js_translations <- jsonlite::fromJSON(
 )
 
 sector_order <- readr::read_csv(
-  path(template_path, "data/sector_order/sector_order.csv"),
+  path(template_path, "data","sector_order","sector_order.csv"),
   col_types = cols()
 )
 
