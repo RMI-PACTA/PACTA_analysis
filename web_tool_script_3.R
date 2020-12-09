@@ -164,8 +164,12 @@ js_translations <- jsonlite::fromJSON(
 )
 
 sector_order <- function(path) {
+  # TODO: Remove following create_interactive_report#313
   if (!fs::file_exists(path)) {
-    rlang::warn(glue::glue("This file doesn't exit yet (see #356): {path}"))
+    rlang::warn(glue::glue(
+      "This file doesn't exit: {path}.
+      Have you already merged create_interactive_report#313?"
+    ))
     return(NULL)
   }
 
