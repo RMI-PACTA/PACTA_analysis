@@ -163,6 +163,11 @@ js_translations <- jsonlite::fromJSON(
   txt = path(template_path, "data/translation/js_labels.json")
 )
 
+sector_order <- readr::read_csv(
+  path(template_path, "data/sector_order/sector_order.csv"),
+  col_types = cols()
+)
+
 # Needed for testing only
 shock <- shock_year # this should come directly from the stress test.. 2030 based on current discussions in CHPA2020 case
 select_scenario_auto = scenario_auto
@@ -218,7 +223,8 @@ create_interactive_report(
   ipr_results_stress_test = ipr_results_stress_test,
   display_currency = display_currency,
   currency_exchange_value = currency_exchange_value,
-  header_dictionary = header_dictionary
+  header_dictionary = header_dictionary,
+ sector_order = sector_order
 )
 
 
