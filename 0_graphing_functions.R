@@ -1115,8 +1115,10 @@ TechnologyExposure <- function(plotnumber, chart_type, sector_to_plot, plot_year
     Peers <- unique(Peers)
     Peers <- Peers %>%
       ungroup() %>%
-      filter(technology != "OilCap" & year == plot_year) %>% # year == PlotYr &
-      select("portfolio_name", "ald_sector", "technology", "Type", "plan_alloc_wt_tech_prod") %>% # "Type
+      filter(technology != "OilCap" & year == plot_year) %>%
+      # year == PlotYr &
+      select("portfolio_name", "ald_sector", "technology", "Type", "plan_alloc_wt_tech_prod") %>%
+      # "Type
       rename(WtProduction = plan_alloc_wt_tech_prod)
 
     Peers <- Peers %>%
@@ -1133,7 +1135,8 @@ TechnologyExposure <- function(plotnumber, chart_type, sector_to_plot, plot_year
       TARGET <- Combin %>%
         ungroup() %>%
         filter(technology != "OilCap" & year == plot_year) %>%
-        select("portfolio_name", "ald_sector", "technology", "scen_alloc_wt_tech_prod") %>% # "Type"
+        select("portfolio_name", "ald_sector", "technology", "scen_alloc_wt_tech_prod") %>%
+        # "Type"
         rename(WtProduction = scen_alloc_wt_tech_prod)
       TARGET$Type <- "Target"
 
@@ -1152,15 +1155,19 @@ TechnologyExposure <- function(plotnumber, chart_type, sector_to_plot, plot_year
     Combin$Type <- "Portfolio"
     Production <- Combin %>%
       ungroup() %>%
-      filter(technology != "OilCap" & year == plot_year) %>% # year == PlotYr &
-      select("portfolio_name", "ald_sector", "technology", "plan_alloc_wt_tech_prod", "Type") %>% # "Type
+      filter(technology != "OilCap" & year == plot_year) %>%
+      # year == PlotYr &
+      select("portfolio_name", "ald_sector", "technology", "plan_alloc_wt_tech_prod", "Type") %>%
+      # "Type
       rename(WtProduction = plan_alloc_wt_tech_prod)
 
     Market$Type <- "Benchmark"
     Market <- Market %>%
       ungroup() %>%
-      filter(technology != "OilCap" & year == plot_year) %>% # year == PlotYr & Type =="Portfolio") %>%
-      select("portfolio_name", "ald_sector", "technology", "scen_alloc_wt_tech_prod", "Type") %>% # "Type"
+      filter(technology != "OilCap" & year == plot_year) %>%
+      # year == PlotYr & Type =="Portfolio") %>%
+      select("portfolio_name", "ald_sector", "technology", "scen_alloc_wt_tech_prod", "Type") %>%
+      # "Type"
       rename(WtProduction = scen_alloc_wt_tech_prod)
 
     Market <- Market %>%
@@ -1435,7 +1442,8 @@ FiveYearGrowthTrend <- function(plotnumber, chart_type, tech_to_plot, LegendOn =
     ### Separate into CurrentPlans and scenario, get into same column headers
     ALD <- subset(ALD, select = c(investor_name, portfolio_name, ald_sector, year, technology, scenario, plan_alloc_wt_tech_prod, scen_alloc_wt_tech_prod))
     ALD.cp <- ALD %>%
-      select(investor_name, portfolio_name, ald_sector, scenario, year, technology, plan_alloc_wt_tech_prod) %>% # Tech.Type,
+      select(investor_name, portfolio_name, ald_sector, scenario, year, technology, plan_alloc_wt_tech_prod) %>%
+      # Tech.Type,
       distinct() %>%
       rename(Production = plan_alloc_wt_tech_prod) %>%
       filter(
@@ -1446,7 +1454,8 @@ FiveYearGrowthTrend <- function(plotnumber, chart_type, tech_to_plot, LegendOn =
 
 
     ALD.sc <- ALD %>%
-      select(investor_name, portfolio_name, scenario, ald_sector, year, technology, scen_alloc_wt_tech_prod) %>% # Tech.Type,
+      select(investor_name, portfolio_name, scenario, ald_sector, year, technology, scen_alloc_wt_tech_prod) %>%
+      # Tech.Type,
       rename(Production = scen_alloc_wt_tech_prod) %>%
       filter(
         portfolio_name == portfolio_name_select,
@@ -1634,7 +1643,8 @@ FiveYearGrowthTrend <- function(plotnumber, chart_type, tech_to_plot, LegendOn =
 
     ALD.sc.wide <- ALD.sc %>%
       ungroup() %>%
-      select(investor_name, portfolio_name, scenario, ald_sector, technology, Line.Type, year, Production) %>% # Tech.Type,
+      select(investor_name, portfolio_name, scenario, ald_sector, technology, Line.Type, year, Production) %>%
+      # Tech.Type,
       spread(key = scenario, value = Production)
 
 
@@ -1869,19 +1879,16 @@ FiveYearGrowthTrend <- function(plotnumber, chart_type, tech_to_plot, LegendOn =
           gp = gpar(fill = textcolor),
           arrow = arrow(length = unit(0.15, "cm"), ends = "last", type = "closed")
         ),
-
         linesGrob(
           x = unit(0.27, "npc"), y = unit(c(0.25, 0.71), "npc"),
           gp = gpar(fill = textcolor),
           arrow = arrow(length = unit(0.15, "cm"), ends = "last", type = "closed")
         ),
-
         linesGrob(
           x = unit(0.39, "npc"), y = unit(c(0.25, 0.71), "npc"),
           gp = gpar(fill = textcolor),
           arrow = arrow(length = unit(0.15, "cm"), ends = "last", type = "closed")
         ),
-
         linesGrob(
           x = unit(0.51, "npc"), y = unit(c(0.25, 0.71), "npc"),
           gp = gpar(fill = textcolor),
@@ -1926,17 +1933,14 @@ FiveYearGrowthTrend <- function(plotnumber, chart_type, tech_to_plot, LegendOn =
           x = scenario_labels_position, y = 0.88,
           just = "center", gp = gpar(fontsize = 5.8, col = textcolor)
         ),
-
         textGrob(Legend_labels[c(1, 3:6)],
           x = Legend_labels_position, y = 0.4,
           just = "center", gp = gpar(fontsize = 7, col = textcolor)
         ),
-
         textGrob(scenario_labels[2:4],
           x = scenario_labels_position[2:4], y = 0.8,
           just = "center", gp = gpar(fontsize = 5.8, col = textcolor)
         ),
-
         textGrob(Legend_labels[c(2, 4:6)],
           x = Legend_labels_position[2:5], y = 0.4,
           just = "center", gp = gpar(fontsize = 7, col = textcolor)
@@ -3035,8 +3039,10 @@ ShippingChart <- function(plotnumber, chart_type, plot_year, sector_to_plot = "S
       Peers <- unique(Peers)
       Peers <- Peers %>%
         ungroup() %>%
-        filter(technology != "OilCap" & year == plot_year) %>% # year == PlotYr &
-        select("portfolio_name", "ald_sector", "technology", "Type", "plan_alloc_wt_tech_prod") %>% # "Type
+        filter(technology != "OilCap" & year == plot_year) %>%
+        # year == PlotYr &
+        select("portfolio_name", "ald_sector", "technology", "Type", "plan_alloc_wt_tech_prod") %>%
+        # "Type
         rename(WtProduction = plan_alloc_wt_tech_prod)
 
       Peers <- Peers %>%
@@ -3059,8 +3065,10 @@ ShippingChart <- function(plotnumber, chart_type, plot_year, sector_to_plot = "S
 
     Combin <- Combin %>%
       ungroup() %>%
-      filter(technology != "OilCap" & year == plot_year) %>% # year == PlotYr &
-      select("portfolio_name", "ald_sector", "technology", "plan_alloc_wt_tech_prod", "Type") %>% # "Type
+      filter(technology != "OilCap" & year == plot_year) %>%
+      # year == PlotYr &
+      select("portfolio_name", "ald_sector", "technology", "plan_alloc_wt_tech_prod", "Type") %>%
+      # "Type
       rename(WtProduction = plan_alloc_wt_tech_prod)
 
     if (chart_type %in% c("All", "")) {
@@ -3079,8 +3087,10 @@ ShippingChart <- function(plotnumber, chart_type, plot_year, sector_to_plot = "S
     }
     Market <- Market %>%
       ungroup() %>%
-      filter(technology != "OilCap" & year == plot_year) %>% # year == PlotYr & Type =="Portfolio") %>%
-      select("portfolio_name", "ald_sector", "technology", "plan_alloc_wt_tech_prod", "Type") %>% # "Type"
+      filter(technology != "OilCap" & year == plot_year) %>%
+      # year == PlotYr & Type =="Portfolio") %>%
+      select("portfolio_name", "ald_sector", "technology", "plan_alloc_wt_tech_prod", "Type") %>%
+      # "Type"
       rename(WtProduction = plan_alloc_wt_tech_prod)
 
     if (chart_type %in% c("All", "")) {
@@ -4117,7 +4127,8 @@ CompareTechnologyExposure <- function(plotnumber, chart_type, sector_to_plot) {
     Combin$Type <- "Portfolio"
     Combin <- Combin %>%
       ungroup() %>%
-      filter(technology != "OilCap" & year == start_year + 5) %>% # year == PlotYr &
+      filter(technology != "OilCap" & year == start_year + 5) %>%
+      # year == PlotYr &
       select("portfolio_name", "ald_sector", "technology", "plan_alloc_wt_tech_prod", "Type") %>%
       rename(WtProduction = plan_alloc_wt_tech_prod)
 
@@ -4137,8 +4148,10 @@ CompareTechnologyExposure <- function(plotnumber, chart_type, sector_to_plot) {
     Market$Type <- "Benchmark"
     Market <- Market %>%
       ungroup() %>%
-      filter(technology != "OilCap" & year == start_year + 5) %>% # year == PlotYr & Type =="Portfolio") %>%
-      select("portfolio_name", "ald_sector", "technology", "scen_alloc_wt_tech_prod", "Type") %>% # "Type"
+      filter(technology != "OilCap" & year == start_year + 5) %>%
+      # year == PlotYr & Type =="Portfolio") %>%
+      select("portfolio_name", "ald_sector", "technology", "scen_alloc_wt_tech_prod", "Type") %>%
+      # "Type"
       rename(WtProduction = scen_alloc_wt_tech_prod)
 
     Market <- Market %>%

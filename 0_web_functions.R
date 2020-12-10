@@ -221,14 +221,14 @@ read_web_input_file <- function(input_file_path) {
   if (data_check(input_file) == FALSE) {
     warning("Input file not readable")
     ifelse(nrow(input_file) == 0,
-           write_log(
-             msg = "Input file has 0 rows. Please ensure the uploaded file is not empty.",
-             file_path = log_path
-           ),
-           write_log(
-             msg = "Input file could not be transformed into a data.frame. Please check the uploaded file has the correct format.",
-             file_path = log_path
-           )
+      write_log(
+        msg = "Input file has 0 rows. Please ensure the uploaded file is not empty.",
+        file_path = log_path
+      ),
+      write_log(
+        msg = "Input file could not be transformed into a data.frame. Please check the uploaded file has the correct format.",
+        file_path = log_path
+      )
     )
   }
 
@@ -323,7 +323,7 @@ check_file_size <- function(folder_to_check) {
   any(file.size(files_to_check) > 100e6)
 }
 
-empty_portfolio_results <- function(){
+empty_portfolio_results <- function() {
   tibble(
     "investor_name" = NA_character_, "portfolio_name" = NA_character_,
     "scenario" = NA_character_, "allocation" = NA_character_,
@@ -342,7 +342,7 @@ empty_portfolio_results <- function(){
   )
 }
 
-empty_company_results <- function(){
+empty_company_results <- function() {
   tibble(
     "investor_name" = NA_character_, "portfolio_name" = NA_character_,
     "scenario" = NA_character_, "allocation" = NA_character_,
@@ -365,19 +365,23 @@ empty_company_results <- function(){
   )
 }
 
-empty_emissions_results <- function(){
-  tibble("investor_name" = NA_character_, "portfolio_name" = NA_character_,
-         "asset_type" = NA_character_, "sector" = NA_character_,
-         "weighted_sector_emissions" = NA_real_)
+empty_emissions_results <- function() {
+  tibble(
+    "investor_name" = NA_character_, "portfolio_name" = NA_character_,
+    "asset_type" = NA_character_, "sector" = NA_character_,
+    "weighted_sector_emissions" = NA_real_
+  )
 }
 
-empty_audit_file <- function(){
-  tibble("investor_name" = NA_character_, "portfolio_name" = NA_character_,
-         "asset_type" = NA_character_, "valid_input" = NA, "isin" = NA_character_,
-         "direct_holding" = NA, "value_usd" = NA_real_)
+empty_audit_file <- function() {
+  tibble(
+    "investor_name" = NA_character_, "portfolio_name" = NA_character_,
+    "asset_type" = NA_character_, "valid_input" = NA, "isin" = NA_character_,
+    "direct_holding" = NA, "value_usd" = NA_real_
+  )
 }
 
-empty_map_results <- function(){
+empty_map_results <- function() {
   tibble(
     "investor_name" = NA_character_, "portfolio_name" = NA_character_,
     "ald_location" = NA_character_, "year" = NA_integer_,
@@ -390,7 +394,7 @@ empty_map_results <- function(){
   )
 }
 
-empty_st_results <- function(){
+empty_st_results <- function() {
   tibble(
     "investor_name" = NA_character_, "portfolio_name" = NA_character_,
     "ald_sector" = NA_character_, "technology" = NA_character_,
@@ -404,7 +408,7 @@ empty_st_results <- function(){
   )
 }
 
-empty_ipr_st_results <- function(){
+empty_ipr_st_results <- function() {
   tibble(
     "investor_name" = NA_character_, "portfolio_name" = NA_character_,
     "sector" = NA_character_, "subsector" = NA_character_,
@@ -414,7 +418,7 @@ empty_ipr_st_results <- function(){
   )
 }
 
-empty_portfolio_overview <- function(){
+empty_portfolio_overview <- function() {
   tibble(
     "investor_name" = NA_character_, "portfolio_name" = NA_character_,
     "asset_type" = NA_character_, "financial_sector" = NA_character_,
@@ -422,4 +426,3 @@ empty_portfolio_overview <- function(){
     "asset_value_usd" = NA_real_, "portfolio_value_usd" = NA_real_
   )
 }
-

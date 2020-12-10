@@ -9,8 +9,12 @@ source("0_web_functions.R")
 source("0_json_functions.R")
 source("0_portfolio_test.R")
 
-if (!exists("portfolio_name_ref_all")) { portfolio_name_ref_all <- "TestPortfolio_Input" }
-if (!exists("portfolio_root_dir")) { portfolio_root_dir <- "working_dir" }
+if (!exists("portfolio_name_ref_all")) {
+  portfolio_name_ref_all <- "TestPortfolio_Input"
+}
+if (!exists("portfolio_root_dir")) {
+  portfolio_root_dir <- "working_dir"
+}
 portfolio_root_dir <- "working_dir"
 
 setup_project()
@@ -21,7 +25,7 @@ set_webtool_paths(portfolio_root_dir)
 
 set_portfolio_parameters(file_path = fs::path(par_file_path, paste0(portfolio_name_ref_all, "_PortfolioParameters.yml")))
 
-set_project_parameters(file.path(working_location, "parameter_files",paste0("ProjectParameters_", project_code, ".yml")))
+set_project_parameters(file.path(working_location, "parameter_files", paste0("ProjectParameters_", project_code, ".yml")))
 
 # need to define an alternative location for data files
 analysis_inputs_path <- set_analysis_inputs_path(twodii_internal, data_location_ext, dataprep_timestamp)
@@ -133,7 +137,8 @@ audit_file <- create_audit_file(portfolio_total)
 emissions_totals <- calculate_average_portfolio_emissions(
   portfolio_total,
   comp_fin_data,
-  average_sector_intensity)
+  average_sector_intensity
+)
 
 port_weights <- pw_calculations(eq_portfolio, cb_portfolio)
 
@@ -157,10 +162,10 @@ save_if_exists(portfolio_overview, portfolio_name, file.path(proc_input_path_, "
 save_if_exists(audit_file, portfolio_name, file.path(proc_input_path_, "audit_file.rda"))
 save_if_exists(emissions_totals, portfolio_name, file.path(proc_input_path_, "emissions.rda"))
 
-if(data_check(port_weights)){
-  port_weights <- jsonlite::toJSON(x=port_weights)
-  write(x = port_weights, file = file.path(proc_input_path_,"portfolio_weights.json"))
-  }
+if (data_check(port_weights)) {
+  port_weights <- jsonlite::toJSON(x = port_weights)
+  write(x = port_weights, file = file.path(proc_input_path_, "portfolio_weights.json"))
+}
 
 rm(portfolio_total)
 rm(portfolio)

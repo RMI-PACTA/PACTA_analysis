@@ -43,7 +43,7 @@ set_col_types <- function(grouping_variables, fixed_col_types) {
   return(port_col_types)
 }
 
-set_project_parameters <- function(file_path){
+set_project_parameters <- function(file_path) {
   cfg <- config::get(file = file_path)
 
   project_report_name <<- cfg$reporting$project_report_name
@@ -363,6 +363,5 @@ write_log <- function(msg, file_path = log_path, ...) {
     as.character(msg),
     ...
   )
-  write(composed, file = file.path(file_path,"error_messages.txt"), append = TRUE)
+  write(composed, file = file.path(file_path, "error_messages.txt"), append = TRUE)
 }
-

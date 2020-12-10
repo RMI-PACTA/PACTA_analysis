@@ -15,11 +15,8 @@ export_report_content_variables_json <- function(audit_file__ = audit_file,
                                                  results_port_cb__ = port_all_cb,
                                                  results_company_eq__ = company_all_eq,
                                                  results_company_cb__ = company_all_cb,
-
                                                  investor_name_ = "Meta Investor",
                                                  portfolio_name_ = "Meta Portfolio",
-
-
                                                  scenario_ = "SDS",
                                                  scenario_geography_ = "Global",
                                                  allocation_ = "portfolio_weight",
@@ -208,35 +205,25 @@ export_report_content_variables_json <- function(audit_file__ = audit_file,
       InvestorName = this_investor_name,
       PortfolioName = this_portfolio_name,
       unique_isins = unique_isins,
-
       total_portfolio_value_usd = total_portfolio_value_usd,
       total_portfolio_percentage_equity = total_portfolio_percentage_equity,
       total_portfolio_percentage_bonds = total_portfolio_percentage_bonds,
       total_portfolio_percentage_other_asset_classes = total_portfolio_percentage_other_asset_classes,
       total_portfolio_percentage_coverage = total_portfolio_percentage_coverage,
-
       results_percentage_climate_rel_value = results_percentage_climate_rel_value,
-
       total_portfolio_percentage_climate_rel_emission = total_portfolio_percentage_climate_rel_emission,
-
       results_absolute_value_equity = results_absolute_value_equity,
       results_absolute_value_bonds = results_absolute_value_bonds,
-
       results_percentage_climate_rel_value_bonds = results_percentage_climate_rel_value_bonds,
       results_percentage_climate_rel_value_equity = results_percentage_climate_rel_value_equity,
-
       results_absolute_highcarb_value_bonds = results_absolute_highcarb_value_bonds,
       results_absolute_highcarb_value_equity = results_absolute_highcarb_value_equity,
-
       results_percentage_highcarb_value_bonds = results_percentage_highcarb_value_bonds,
       results_percentage_highcarb_value_equity = results_percentage_highcarb_value_equity,
-
       results_percentage_lowcarb_value_bonds = results_percentage_lowcarb_value_bonds,
       results_percentage_lowcarb_value_equity = results_percentage_lowcarb_value_equity,
-
       results_percentage_lowcarb_value = results_percentage_lowcarb_value,
       results_percentage_highcarb_value = results_percentage_highcarb_value,
-
       results_company_nr_relevent_companies = results_company_nr_relevent_companies
     )
 
