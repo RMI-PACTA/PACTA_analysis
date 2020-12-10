@@ -877,9 +877,9 @@ get_and_clean_fund_data <- function() {
   } else if (file.exists(paste0(analysis_inputs_path, "/fund_data_2018Q4.rda"))) {
     fund_data <- readRDS(paste0(analysis_inputs_path, "/fund_data_2018Q4.rda"))
     print("Old Fund Data being used. Replace FundsData2018Q4 or check name of file.")
-  } else if (file.exists(paste0(analysis_inputs_path, "/SFC_26052020_funds.csv"))) {
-    fund_data <- read_csv(paste0(analysis_inputs_path, "/SFC_26052020_funds.csv"))
-    print("2020Q2 SFC fund data being used")
+  } else if (file.exists(paste0(analysis_inputs_path, "/FundsData2018Q4.rda"))) {
+    fund_data <- readRDS(paste0(analysis_inputs_path, "/FundsData2018Q4.rda"))
+    print("Old Fund Data being used. Replace FundsData2018Q4 or check name of file.")
   } else {
     if (!data_check(fund_data)) {
       warning("No fund data available")
@@ -952,14 +952,27 @@ get_and_clean_fin_data <- function(fund_data) {
   # Select relevant columns
   fin_data <- fin_data %>%
     select(
-      company_id, company_name, bloomberg_id, corporate_bond_ticker,
+      company_id,
+      company_name,
+      bloomberg_id,
+      corporate_bond_ticker,
       country_of_domicile,
       isin,
-      unit_share_price, exchange_rate_usd,
-      asset_type, security_type,
-      security_mapped_sector, security_icb_subsector, security_bics_subgroup, bics_sector, # bclass4,
-      maturity_date, coupon_value, amount_issued, current_shares_outstanding_all_classes, unit_share_price,
-      sector_override, sector_boe, subsector_boe, sector_dnb, sector_ipr, subsector_ipr,
+      unit_share_price,
+      asset_type,
+      security_type,
+      security_mapped_sector,
+      security_icb_subsector,
+      security_bics_subgroup,
+      bics_sector, # bclass4,
+      current_shares_outstanding_all_classes,
+      unit_share_price,
+      sector_override,
+      sector_boe,
+      subsector_boe,
+      sector_dnb,
+      sector_ipr,
+      subsector_ipr,
       is_sb
     ) %>%
     distinct()
