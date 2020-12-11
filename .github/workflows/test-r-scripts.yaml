@@ -76,13 +76,6 @@ jobs:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
 
-      - name: Install usethis
-        run: |
-          # TODO: Install latest version when gert just works
-          install.packages("remotes")
-          remotes::install_version("usethis", "1.6.3")
-        shell: Rscript {0}
-
       - name: Install dependencies from CRAN
         run: |
           install.packages("rmarkdown")
@@ -96,9 +89,17 @@ jobs:
             "tools",
             "create_interactive_report",
             "PACTA.analysis",
-            "StressTestingModelDev"
+            "StressTestingModelDev",
+            "usethis"
           )
           install.packages(setdiff(deps, exclude))
+        shell: Rscript {0}
+
+      - name: Install usethis
+        run: |
+          # TODO: Install latest version when gert just works
+          install.packages("remotes")
+          remotes::install_version("usethis", "1.6.3")
         shell: Rscript {0}
 
       - name: Test R scripts
