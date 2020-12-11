@@ -64,7 +64,7 @@ jobs:
           install.packages("rmarkdown")
           install.packages("knitr")
           install.packages("renv")
-          dependencies <- renv::dependencies()$Package
+          dependencies <- renv::dependencies("PACTA_analysis")$Package
           install.packages(dependencies)
         shell: Rscript {0}
 
