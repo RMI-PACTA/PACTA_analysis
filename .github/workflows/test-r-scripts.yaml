@@ -17,6 +17,7 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
+      # FIXME: Find a way to check the current PR of the pwd
       - name: Checkout PACTA_analysis
         uses: actions/checkout@v2
         with:
