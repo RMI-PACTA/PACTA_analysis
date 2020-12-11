@@ -20,7 +20,9 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
-      # FIXME: Find a way to check the current PR of the pwd
+      # When checking out the repository that triggered a workflow, `ref:`
+      # defaults to the reference or SHA for that event. Otherwise, uses the
+      # default branch --https://github.com/actions/checkout
       - name: Checkout PACTA_analysis
         uses: actions/checkout@v2
         with:
@@ -71,7 +73,7 @@ jobs:
           dependencies <- renv::dependencies("PACTA_analysis")$Package
           # FIXME: Remove these strings from `dependencies`:
           # Warning messages:
-          # 1: packages ‘utils’, ‘base’, ‘tools’ are base packages, and should not be updated 
+          # 1: packages ‘utils’, ‘base’, ‘tools’ are base packages, and should not be updated
           # 2: packages ‘create_interactive_report’, ‘R’, ‘PACTA.analysis’, ‘StressTestingModelDev’ are not available for this version of R
           install.packages(dependencies)
           # FIXME: This is only because it fails to install above
