@@ -73,11 +73,15 @@ jobs:
           do
             eval sudo $cmd
           done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "16.04"))')
+          # TODO: I expect the official action to adapt so we don't need this
+          sudo apt install libgit2-dev
 
       - name: Install dependencies
         run: |
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("rcmdcheck")
+          # TODO: Remove when binaries for v2 become available
+          remotes::install_github("r-lib/usethis")
         shell: Rscript {0}
 
       - name: Session info
