@@ -66,6 +66,10 @@ jobs:
           install.packages("knitr")
           install.packages("renv")
           dependencies <- renv::dependencies("PACTA_analysis")$Package
+          # FIXME: Remove these strings from `dependencies`:
+          # Warning messages:
+          # 1: packages ‘utils’, ‘base’, ‘tools’ are base packages, and should not be updated 
+          # 2: packages ‘create_interactive_report’, ‘R’, ‘PACTA.analysis’, ‘StressTestingModelDev’ are not available for this version of R
           install.packages(dependencies)
           # FIXME: This is only because it fails to install above
           install.packages("usethis")
