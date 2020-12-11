@@ -173,12 +173,10 @@ js_translations <- jsonlite::fromJSON(
   txt = path(template_path, "data/translation/js_labels.json")
 )
 
-sector_order <- function(path) {
-  readr::read_csv(
-    path(template_path, "data", "sector_order", "sector_order.csv"),
-    col_types = cols()
-  )
-}
+sector_order <- readr::read_csv(
+  path(template_path, "data","sector_order","sector_order.csv"),
+  col_types = cols()
+)
 
 # Needed for testing only
 shock <- shock_year # this should come directly from the stress test.. 2030 based on current discussions in CHPA2020 case
