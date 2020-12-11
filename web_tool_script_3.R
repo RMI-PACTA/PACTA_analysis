@@ -174,15 +174,6 @@ js_translations <- jsonlite::fromJSON(
 )
 
 sector_order <- function(path) {
-  # TODO: Remove following create_interactive_report#313
-  if (!fs::file_exists(path)) {
-    rlang::warn(glue::glue(
-      "This file doesn't exit: {path}.
-      Have you already merged create_interactive_report#313?"
-    ))
-    return(NULL)
-  }
-
   readr::read_csv(
     path(template_path, "data", "sector_order", "sector_order.csv"),
     col_types = cols()
@@ -245,7 +236,7 @@ create_interactive_report(
   display_currency = display_currency,
   currency_exchange_value = currency_exchange_value,
   header_dictionary = header_dictionary,
- sector_order = sector_order()
+ sector_order = sector_order
 )
 
 
