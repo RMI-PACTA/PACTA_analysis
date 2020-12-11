@@ -251,11 +251,14 @@ check_input_file_contents <- function(portfolio_, portfolio_name, investor_name)
   if (length(setdiff(necessary_columns, colnames(portfolio_clean))) > 0) {
     missing_cols <- setdiff(necessary_columns, colnames(portfolio_clean))
 
-    write_log(msg = paste(
-      "The uploaded portfolio file contains the following missing variables:", str_c(missing_cols, collapse = ", "),
-      "\n For correct analysis, please ensure the following required variables are included in your uploaded portfolio file:",
-      str_c(necessary_columns, collapse = ", ")
-    ))
+    write_log(
+      msg = paste(
+        "The uploaded portfolio file contains the following missing variables:", str_c(missing_cols, collapse = ", "),
+        "\n For correct analysis, please ensure the following required variables are included in your uploaded portfolio file:",
+        str_c(necessary_columns, collapse = ", ")
+      ),
+      file_path = log_path
+    )
     stop(paste0("Missing inputs for this portfolio: ", str_c(missing_cols, collapse = ", ")))
   }
 
