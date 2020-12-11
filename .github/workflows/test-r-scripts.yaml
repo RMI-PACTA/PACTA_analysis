@@ -92,6 +92,9 @@ jobs:
             "StressTestingModelDev"
           )
           install.packages(setdiff(deps, exclude))
+          # TODO: Remove when binaries for v2 become available
+          install.packages("remotes")
+          remotes::install_github("r-lib/usethis")
         shell: Rscript {0}
 
       - name: Test R scripts
