@@ -17,6 +17,8 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
+      - uses: r-lib/actions/setup-pandoc@master
+      - uses: r-lib/actions/setup-tinytex@v1
       - uses: r-lib/actions/setup-r@master
         with:
           r-version: ${{ matrix.config.r }}
