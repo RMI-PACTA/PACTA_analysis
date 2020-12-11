@@ -1035,7 +1035,7 @@ get_and_clean_company_fin_data <- function() {
       corporate_bond_ticker,
       bics_subgroup,
       icb_subgroup,
-      financial_sector,
+      financial_sector = mapped_sector,
       has_asset_level_data,
       has_assets_in_matched_sector,
       sectors_with_assets,
