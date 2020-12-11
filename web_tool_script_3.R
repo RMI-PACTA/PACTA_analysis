@@ -198,7 +198,7 @@ twodi_sectors = sector_list
 repo_path = template_path
 file_name = "template.Rmd"
 
-arguments <- list(
+create_interactive_report(
   repo_path = template_path,
   template_dir = template_dir,
   output_dir = output_dir,
@@ -244,15 +244,10 @@ arguments <- list(
   ipr_results_stress_test = ipr_results_stress_test,
   display_currency = display_currency,
   currency_exchange_value = currency_exchange_value,
-  header_dictionary = header_dictionary
+  header_dictionary = header_dictionary,
+ sector_order = sector_order()
 )
 
-has_arg <- utils::hasName(formals(create_executive_summary), "sector_order")
-if (has_arg) {
-  arg <- list(sector_order = sector_order())
-  arguments <- append(arguments, arg)
-}
-purrr::invoke(create_interactive_report, arguments)
 
 create_executive_summary(
   file_name = "template.Rmd",
