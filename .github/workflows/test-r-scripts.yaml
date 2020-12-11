@@ -17,44 +17,6 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
-      # When checking out the repository that triggered a workflow, `ref:`
-      # defaults to the reference or SHA for that event. Otherwise, uses the
-      # default branch --https://github.com/actions/checkout
-      - name: Checkout PACTA_analysis
-        uses: actions/checkout@v2
-        with:
-          repository: 2DegreesInvesting/PACTA_analysis
-          token: ${{ secrets.MAURO_PAT_FOR_2DII }}
-          path: PACTA_analysis
-
-      - name: Checkout pacta-data
-        uses: actions/checkout@v2
-        with:
-          repository: 2DegreesInvesting/pacta-data
-          token: ${{ secrets.MAURO_PAT_FOR_2DII }}
-          path: pacta-data
-
-      - name: Checkout create_interactive_report
-        uses: actions/checkout@v2
-        with:
-          repository: 2DegreesInvesting/create_interactive_report
-          token: ${{ secrets.MAURO_PAT_FOR_2DII }}
-          path: create_interactive_report
-
-      - name: Checkout StressTestingModelDev
-        uses: actions/checkout@v2
-        with:
-          repository: 2DegreesInvesting/StressTestingModelDev
-          token: ${{ secrets.MAURO_PAT_FOR_2DII }}
-          path: StressTestingModelDev
-
-      - name: Checkout user_results
-        uses: actions/checkout@v2
-        with:
-          repository: 2DegreesInvesting/user_results
-          token: ${{ secrets.MAURO_PAT_FOR_2DII }}
-          path: user_results
-
       - uses: r-lib/actions/setup-pandoc@master
       - uses: r-lib/actions/setup-tinytex@v1
       - uses: r-lib/actions/setup-r@master
@@ -76,11 +38,4 @@ jobs:
           )
           exclude <- c("R", base, dev)
           install.packages(setdiff(dependencies, exclude))
-        shell: Rscript {0}
-
-      - name: Test R scripts
-        run: |
-          setwd("PACTA_analysis")
-          source("R/test_r_scripts.R")
-          test_r_scripts()
         shell: Rscript {0}
