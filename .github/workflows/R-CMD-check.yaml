@@ -80,8 +80,8 @@ jobs:
         run: |
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("rcmdcheck")
-          # TODO: Remove when binaries for v2 become available
-          remotes::install_github("r-lib/usethis")
+          # TODO: Install latest version when gert just works
+          remotes::install_version("usethis", "1.6.3")
         shell: Rscript {0}
 
       - name: Session info

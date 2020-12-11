@@ -76,17 +76,11 @@ jobs:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
 
-      - name: Install usethis system-dependencies
-        # TODO: I expect the official action to adapt so we don't need this
-        if: runner.os == 'Linux'
+      - name: Install usethis
         run: |
-          sudo apt install libgit2-dev
-
-      - name: Install usethis from github
-        # TODO: Remove when binaries for v2 become available
-        run: |
+          # TODO: Install latest version when gert just works
           install.packages("remotes")
-          remotes::install_github("r-lib/usethis")
+          remotes::install_version("usethis", "1.6.3")
         shell: Rscript {0}
 
       - name: Install dependencies from CRAN
