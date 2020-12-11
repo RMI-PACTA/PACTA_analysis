@@ -87,6 +87,7 @@ jobs:
         run: |
           install.packages("remotes")
           remotes::install_github("r-lib/usethis")
+        shell: Rscript {0}
 
       - name: Install dependencies from CRAN
         run: |
