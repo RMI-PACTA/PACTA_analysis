@@ -39,7 +39,6 @@ Imports:
     rlang,
     rmarkdown,
     tibble,
-    # Avoid problesm due to system dependencies on Linux
     usethis (< 2.0.0),
     withr
 Suggests: 
