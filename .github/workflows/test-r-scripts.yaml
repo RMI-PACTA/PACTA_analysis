@@ -27,7 +27,7 @@ jobs:
           install.packages("rmarkdown")
           install.packages("knitr")
           install.packages("renv")
-          dependencies <- unique(renv::dependencies("PACTA_analysis")$Package)
+          dependencies <- unique(renv::dependencies("../PACTA_analysis")$Package)
           base <- c("utils", "base", "tools")
           dev <- c(
             "create_interactive_report",
