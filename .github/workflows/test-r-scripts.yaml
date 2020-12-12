@@ -76,6 +76,10 @@ jobs:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
 
+      - name: Install system dependency of usethis >= 2.0.0
+        run: |
+          sudo apt install libgit2-dev
+
       - name: Install dependencies from CRAN
         run: |
           install.packages("rmarkdown")
