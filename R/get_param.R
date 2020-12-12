@@ -1,4 +1,4 @@
-# Extracted from r2dii.utils, to avoid depending on it
+# Copied and adapted from r2dii.utils, to avoid depending on it
 
 get_config <- function() {
   getOption("r2dii_config")
@@ -18,7 +18,7 @@ START.YEAR <- get_param(
 
 pluck_param <- function(x, file, if_null) {
   out <- purrr::pluck(config::get(file = file), !!!x)
-  param <- ui_field(dplyr::last(unlist(x)))
+  param <- dplyr::last(unlist(x))
 
   if (is.null(out) && identical(if_null, stop)) {
     abort(glue(
@@ -28,11 +28,9 @@ pluck_param <- function(x, file, if_null) {
   }
 
   if (is.null(out) && !is.null(if_null)) {
-    param_ <- ui_field(param)
     warn(glue("On config.yml, {param} is undefined."))
 
-    if_null_ <- ui_field(if_null)
-    inform(glue("Setting {param_} to default value: {if_null_}."))
+    inform(glue("Setting {param} to default value: {if_null}."))
     out <- if_null
   }
 
