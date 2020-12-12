@@ -39,13 +39,10 @@ Imports:
     rlang,
     rmarkdown,
     tibble,
-    withr,
-    usethis
+    withr
 Suggests: 
     testthat
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
-Remotes:  
-    r-lib/usethis@1.6.3
