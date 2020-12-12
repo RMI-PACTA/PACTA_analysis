@@ -77,6 +77,7 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
 
       - name: Install system dependency of usethis >= 2.0.0
+        if: runner.os == 'Linux'
         run: |
           sudo apt install libgit2-dev
 
