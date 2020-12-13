@@ -88,7 +88,7 @@ jobs:
           install.packages("rmarkdown")
           install.packages("knitr")
           install.packages("renv")
-          deps <- unique(renv::dependencies("../PACTA_analysis")$Package)
+          deps <- unique(renv::dependencies("PACTA_analysis")$Package)
           exclude <- c(
             "R",
             "utils",
