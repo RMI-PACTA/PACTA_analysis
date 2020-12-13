@@ -83,6 +83,8 @@ jobs:
 
       - name: Install dependencies from CRAN
         run: |
+          # TODO Install elsewhere? Why is it not detected by renv?
+          install.packages("forcats")
           install.packages("rmarkdown")
           install.packages("knitr")
           install.packages("renv")
