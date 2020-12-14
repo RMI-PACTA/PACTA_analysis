@@ -104,6 +104,6 @@ jobs:
       - name: Source web-tool scripts
         run: |
           setwd("PACTA_analysis")
-          source("R/test_r_scripts.R")
-          test_r_scripts()
+          source("R/source_web_tool_scripts.R")
+          source_web_tool_scripts()
         shell: Rscript {0}
