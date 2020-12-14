@@ -1,4 +1,12 @@
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
 
 name: Test R scripts
 
@@ -23,9 +31,14 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
+      # When checking out the repository that triggered a workflow, `ref:`
+      # defaults to the reference or SHA for that event. Otherwise, uses the
+      # default branch --https://github.com/actions/checkout
       - name: Checkout PACTA_analysis
         uses: actions/checkout@v2
         with:
+          repository: 2DegreesInvesting/PACTA_analysis
+          token: ${{ secrets.MAURO_PAT_FOR_2DII }}
           path: PACTA_analysis
 
       - name: Checkout pacta-data
@@ -63,13 +76,29 @@ jobs:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
 
+      - name: Install system dependency of usethis >= 2.0.0
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt install libgit2-dev
+
       - name: Install dependencies from CRAN
         run: |
+          # TODO Install elsewhere? Why is it not detected by renv?
+          install.packages("forcats")
           install.packages("rmarkdown")
           install.packages("knitr")
           install.packages("renv")
-          dependencies <- renv::dependencies()$Package
-          install.packages(dependencies)
+          deps <- unique(renv::dependencies("PACTA_analysis")$Package)
+          exclude <- c(
+            "R",
+            "utils",
+            "base",
+            "tools",
+            "create_interactive_report",
+            "PACTA.analysis",
+            "StressTestingModelDev"
+          )
+          install.packages(setdiff(deps, exclude))
         shell: Rscript {0}
 
       - name: Test R scripts
