@@ -9,8 +9,9 @@
 #' fs::file_delete(path)
 #' @noRd
 abort_if_file_doesnt_exist <- function(path) {
-  if (!fs::file_exists(path)) {
-    rlang::abort(glue::glue("This file must exist but it doesn't:\n{path}"))
+  if (!file.exists(path)) {
+    msg <- sprintf("This file must exist but it doesn't:\ns%", path)
+    stop(mdg, call. = TRUE)
   }
 
   invisible(path)
