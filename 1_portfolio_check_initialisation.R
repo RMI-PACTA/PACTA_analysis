@@ -33,7 +33,7 @@ twodii_internal <- FALSE
 ### ONLY FOR EXTERNAL PROJECTS (twodii_internal <- FALSE):
 # Variables must exist for internal projects
 project_location_ext <- "~/Desktop/DFS"
-data_location_ext <- "~/Documents/github/2DegreesInvesting/pacta-data/2019Q4"
+data_location_ext <- "~/Desktop/DFS/2019Q4_10042020_2020"
 #####################################################################
 
 create_project_folder(project_name, twodii_internal, project_location_ext)
