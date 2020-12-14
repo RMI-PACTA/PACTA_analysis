@@ -6,8 +6,8 @@ read_raw_portfolio_file <- function(project_name) {
 
   input_path <- paste0(project_location, "/20_Raw_Inputs/")
 
-  csv_to_read <- list.files(path = input_path, pattern = paste0(project_name, "_Input.csv"))
-  txt_to_read <- list.files(path = input_path, pattern = paste0(project_name, "_Input.txt"))
+  csv_to_read <- list.files(path = input_path, pattern = "*_Input.csv")
+  txt_to_read <- list.files(path = input_path, pattern = "*_Input.txt")
 
 
   if (length(csv_to_read) == 1) {
@@ -885,6 +885,9 @@ get_and_clean_fund_data <- function() {
   # Fund Data
   if (file.exists(paste0(analysis_inputs_path, "/fund_data_", financial_timestamp, ".rda"))) {
     fund_data <- readRDS(paste0(analysis_inputs_path, "/fund_data_", financial_timestamp, ".rda"))
+  } else if (file.exists(paste0(analysis_inputs_path, "/funds_2019Q4_3.rds"))) {
+    fund_data <- readRDS(paste0(analysis_inputs_path, "/funds_2019Q4_3.rds"))
+    print("Using fund_data_2019Q4_3.rds.")
   } else if (file.exists(paste0(analysis_inputs_path, "/fund_data_2018Q4.rda"))) {
     fund_data <- readRDS(paste0(analysis_inputs_path, "/fund_data_2018Q4.rda"))
     print("Old Fund Data being used. Replace FundsData2018Q4 or check name of file.")
@@ -1420,7 +1423,7 @@ get_average_emission_data <- function(inc_emission_factors) {
   average_sector_intensity <- data.frame()
 
   if (inc_emission_factors) {
-    average_sector_intensity <- read_rda(paste0(analysis_inputs_path, "average_sector_intensity.rda"))
+    average_sector_intensity <- read_rda(paste0(analysis_inputs_path, "/average_sector_intensity.rda"))
   }
   return(average_sector_intensity)
 }
@@ -1429,7 +1432,7 @@ get_company_emission_data <- function(inc_emission_factors) {
   company_emissions <- data.frame()
 
   if (inc_emission_factors) {
-    company_emissions <- read_rda(paste0(analysis_inputs_path, "company_emissions.rda"))
+    company_emissions <- read_rda(paste0(analysis_inputs_path, "/company_emissions.rda"))
   }
   return(company_emissions)
 }
