@@ -11,22 +11,23 @@ source("0_portfolio_test.R")
 
 if (!exists("portfolio_name_ref_all")) { portfolio_name_ref_all <- "TestPortfolio_Input" }
 if (!exists("portfolio_root_dir")) { portfolio_root_dir <- "working_dir" }
+portfolio_root_dir <- "working_dir"
 
 setup_project()
 
 working_location <- file.path(working_location)
 
 set_webtool_paths(portfolio_root_dir)
-options(r2dii_config = file.path(par_file_path, "AnalysisParameters.yml"))
 
-set_global_parameters(file.path(par_file_path, "AnalysisParameters.yml"))
+set_portfolio_parameters(file_path = fs::path(par_file_path, paste0(portfolio_name_ref_all, "_PortfolioParameters.yml")))
+
+set_project_parameters(file.path(working_location, "parameter_files",paste0("ProjectParameters_", project_code, ".yml")))
 
 # need to define an alternative location for data files
 analysis_inputs_path <- set_analysis_inputs_path(twodii_internal, data_location_ext, dataprep_timestamp)
 
 # To save, files need to go in the portfolio specific folder, created here
 create_portfolio_subfolders(portfolio_name_ref_all = portfolio_name_ref_all, project_location = project_location)
-
 ######################################################################
 
 ####################
@@ -77,12 +78,12 @@ if (new_data == TRUE) {
   }
 
   fund_data_path <- file.path(file_location, "fund_data.fst")
+
   fund_data <- read_fst_or_return_null(fund_data_path)
 
   fin_data <- fst::read_fst(file.path(file_location, "fin_data.fst"))
 
   comp_fin_data <- fst::read_fst(file.path(file_location, "comp_fin_data.fst"))
-
 
   debt_fin_data <- fst::read_fst(file.path(file_location, "debt_fin_data.fst"))
 
@@ -113,8 +114,6 @@ portfolio <- process_raw_portfolio(
 portfolio <- add_revenue_split(has_revenue, portfolio, revenue_data)
 
 portfolio <- create_ald_flag(portfolio, comp_fin_data, debt_fin_data)
-
-# portfolio <- add_bics_sector(portfolio)
 
 eq_portfolio <- create_portfolio_subset(
   portfolio,
@@ -148,28 +147,13 @@ port_weights <- pw_calculations(eq_portfolio, cb_portfolio)
 #### SAVING ####
 ################
 
-# Identify the portfolios to save;
-# Subset and Save these files
-
-file_names <- identify_portfolios(portfolio_total)
-
-portfolio_name <- file_names$portfolio_name
-
 proc_input_path_ <- file.path(proc_input_path, portfolio_name_ref_all)
-
-# write_csv(file_names, file.path(proc_input_path_, "file_names.csv"))
-
-# create_audit_chart(audit_file, proc_input_path = proc_input_path_)
-
-# website_text(audit_file, proc_input_path = proc_input_path_)
 
 export_audit_information_jsons(
   audit_file_ = audit_file %>% filter(portfolio_name == portfolio_name),
   portfolio_total_ = portfolio_total %>% filter(portfolio_name == portfolio_name),
   folder_path = proc_input_path_
 )
-
-save_if_exists(audit_file, portfolio_name, file.path(proc_input_path_, "audit_file.csv"), csv_or_rds = "csv")
 
 save_if_exists(portfolio_total, portfolio_name, file.path(proc_input_path_, "total_portfolio.rda"))
 save_if_exists(eq_portfolio, portfolio_name, file.path(proc_input_path_, "equity_portfolio.rda"))
@@ -182,3 +166,9 @@ if(data_check(port_weights)){
   port_weights <- jsonlite::toJSON(x=port_weights)
   write(x = port_weights, file = file.path(proc_input_path_,"portfolio_weights.json"))
   }
+
+rm(portfolio_total)
+rm(portfolio)
+rm(audit_file)
+rm(eq_portfolio)
+rm(cb_portfolio)

@@ -39,7 +39,6 @@ Imports:
     rlang,
     rmarkdown,
     tibble,
-    usethis,
     withr
 Suggests: 
     testthat
