@@ -1040,11 +1040,11 @@ get_and_clean_company_fin_data <- function() {
       has_assets_in_matched_sector,
       sectors_with_assets,
       current_shares_outstanding_all_classes,
-      market_cap, bond_debt_out,
+      market_cap,
       financial_timestamp
     )
 
-  sector_bridge <- read_csv("data/sector_bridge.csv", col_types = "ccc")
+  sector_bridge <- read_csv("data/sector_bridge.csv", col_types = "cccccccc")
 
   comp_fin_data <- map_comp_sectors(comp_fin_data_raw, sector_bridge)
 
@@ -1480,8 +1480,7 @@ prepare_portfolio_emissions <- function(
   audit_file_view <- comp_fin_data %>%
     distinct(
       company_id,
-      market_cap,
-      bond_debt_out
+      market_cap
     ) %>%
     inner_join(
       audit_file_view,
