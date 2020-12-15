@@ -1,4 +1,4 @@
-test_r_scripts <- function(x = 1:3) {
+source_web_tool_scripts <- function(x = 1:3) {
   command <- r_script_command(x)
 
   for (i in seq_along(command)) {

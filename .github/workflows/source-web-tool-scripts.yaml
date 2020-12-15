@@ -8,7 +8,7 @@ on:
       - main
       - master
 
-name: Test R scripts
+name: Source web-tool scripts
 
 jobs:
   Test-r-scripts:
@@ -101,9 +101,9 @@ jobs:
           install.packages(setdiff(deps, exclude))
         shell: Rscript {0}
 
-      - name: Test R scripts
+      - name: Source web-tool scripts
         run: |
           setwd("PACTA_analysis")
-          source("R/test_r_scripts.R")
-          test_r_scripts()
+          source("R/source_web_tool_scripts.R")
+          source_web_tool_scripts()
         shell: Rscript {0}
