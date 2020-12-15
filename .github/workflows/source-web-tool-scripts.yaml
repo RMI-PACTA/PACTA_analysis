@@ -62,13 +62,6 @@ jobs:
           token: ${{ secrets.MAURO_PAT_FOR_2DII }}
           path: StressTestingModelDev
 
-      - name: Checkout user_results
-        uses: actions/checkout@v2
-        with:
-          repository: 2DegreesInvesting/user_results
-          token: ${{ secrets.MAURO_PAT_FOR_2DII }}
-          path: user_results
-
       - uses: r-lib/actions/setup-pandoc@master
       - uses: r-lib/actions/setup-tinytex@v1
       - uses: r-lib/actions/setup-r@master
