@@ -757,9 +757,11 @@ graph_name <- function(plotnumber, ParameterFile, explicit_filename = "") {
   return(graphname)
 }
 
+# FIXME: There is another green_brown() in the repo create_interactive_report and
+# they are not identical. Which one should win?
 green_brown <- function(Tech) {
   GreenTechs <- c("Electric", "Hybrid", "RenewablesCap", "HydroCap", "NuclearCap")
-
+  stopifnot(length(Tech) == 1L)
   if (Tech %in% GreenTechs) {
     TechIs <- "green"
   } else {
