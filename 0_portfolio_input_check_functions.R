@@ -200,7 +200,7 @@ check_missing_cols <- function(portfolio, grouping_variables) {
     write_log(
       msg = paste0("The input file is missing the following data columns: ", missing_columns),
       file_path = log_path
-      )
+    )
     stop(paste0("The input file is missing the following data columns: ", missing_columns))
   }
 
@@ -230,7 +230,7 @@ map_security_sectors <- function(fin_data, sector_bridge) {
 
   fin_data <- fin_data %>%
     left_join(sector_bridge %>% filter(source == "BICS") %>% select(-source),
-      by = c("security_bics_subgroup" = "industry_classification")
+              by = c("security_bics_subgroup" = "industry_classification")
     ) %>%
     mutate(security_icb_subsector = as.character(security_icb_subsector))
 
@@ -241,7 +241,7 @@ map_security_sectors <- function(fin_data, sector_bridge) {
   fin_data <- fin_data %>% filter(!is.na(sector))
 
   fin_data_na <- fin_data_na %>% left_join(sector_bridge %>% filter(source == "ICB") %>% select(-source),
-    by = c("security_icb_subsector" = "industry_classification")
+                                           by = c("security_icb_subsector" = "industry_classification")
   )
 
   fin_data <- fin_data %>% bind_rows(fin_data_na)
@@ -267,7 +267,7 @@ map_comp_sectors <- function(comp_fin_data, sector_bridge) {
   initial_no_rows <- nrow(comp_fin_data)
 
   comp_fin_data <- comp_fin_data %>% left_join(sector_bridge %>% filter(source == "BICS") %>% select(-source),
-    by = c("bics_subgroup" = "industry_classification")
+                                               by = c("bics_subgroup" = "industry_classification")
   )
 
   comp_fin_data_na <- comp_fin_data %>%
@@ -277,7 +277,7 @@ map_comp_sectors <- function(comp_fin_data, sector_bridge) {
   comp_fin_data <- comp_fin_data %>% filter(!is.na(sector))
 
   comp_fin_data_na <- comp_fin_data_na %>% left_join(sector_bridge %>% filter(source == "ICB") %>% select(-source),
-    by = c("icb_subgroup" = "industry_classification")
+                                                     by = c("icb_subgroup" = "industry_classification")
   )
 
   comp_fin_data <- comp_fin_data %>% bind_rows(comp_fin_data_na)
@@ -914,7 +914,7 @@ get_and_clean_fin_data <- function(fund_data) {
   }
 
   overrides <- read_csv("data/fin_sector_overrides.csv",
-    col_types = "ccdc"
+                        col_types = "ccdc"
   )
 
   sector_bridge <- read_csv("data/sector_bridge.csv", col_types = "cccccccc")
@@ -1002,7 +1002,7 @@ get_and_clean_revenue_data <- function() {
 get_and_clean_company_fin_data <- function() {
   comp_fin_data_raw <- read_rds(paste0(analysis_inputs_path, "/consolidated_financial_data.rda"))
 
-comp_fin_data_raw <- comp_fin_data_raw %>% select(
+  comp_fin_data_raw <- comp_fin_data_raw %>% select(
     company_id, company_name, bloomberg_id, country_of_domicile, corporate_bond_ticker, bics_subgroup,
     icb_subgroup, financial_sector, has_asset_level_data, has_assets_in_matched_sector, sectors_with_assets, current_shares_outstanding_all_classes,
     market_cap, bond_debt_out, financial_timestamp
@@ -1194,7 +1194,7 @@ create_audit_chart <- function(audit_file, proc_input_path) {
   flag_categories <- names(flag_numbers_colors)
 
   flag_numbers$flag <- factor(flag_numbers$flag,
-    levels = flag_categories
+                              levels = flag_categories
   )
 
   y_intercept <- sum(flag_numbers$perc_n[flag_numbers$flag != "Included in analysis"])
@@ -1202,13 +1202,13 @@ create_audit_chart <- function(audit_file, proc_input_path) {
   nrows <- length(unique(flag_numbers$flag))
 
   nrow_Legend <- ifelse(nrows <= 2, 3.2,
-    ifelse(nrows == 3 | nrows == 4, 3.7,
-      ifelse(nrows == 5, 3.8,
-        ifelse(nrows == 6, 4.0,
-          ifelse(nrows == 7, 4, 4.6)
-        )
-      )
-    )
+                        ifelse(nrows == 3 | nrows == 4, 3.7,
+                               ifelse(nrows == 5, 3.8,
+                                      ifelse(nrows == 6, 4.0,
+                                             ifelse(nrows == 7, 4, 4.6)
+                                      )
+                               )
+                        )
   )
 
   ## Chart
@@ -1243,10 +1243,10 @@ create_audit_chart <- function(audit_file, proc_input_path) {
     guides(fill = guide_legend(reverse = TRUE, ncol = 1)) +
     geom_hline(aes(yintercept = y_intercept), color = "#3D3D3C", size = 1, show.legend = FALSE) +
     geom_text(aes(label = "Not included\nin analysis\n\n", x = 1.5, y_intercept - 0.02),
-      color = "#2e2e2e", family = base_family, size = base_size / 2.5, hjust = 1
+              color = "#2e2e2e", family = base_family, size = base_size / 2.5, hjust = 1
     ) +
     geom_text(aes(label = "Included\nin analysis\n\n", x = 1.5, y_intercept + 0.02),
-      color = "#207ddb", family = base_family, size = base_size / 2.5, hjust = 0
+              color = "#207ddb", family = base_family, size = base_size / 2.5, hjust = 0
     )
 
 
@@ -1399,11 +1399,11 @@ get_company_emission_data <- function(inc_emission_factors) {
 }
 
 prepare_portfolio_emissions <- function(
-                                        audit_file,
-                                        fin_data,
-                                        comp_fin_data,
-                                        average_sector_intensity,
-                                        company_emissions) {
+  audit_file,
+  fin_data,
+  comp_fin_data,
+  average_sector_intensity,
+  company_emissions) {
   audit_file <- audit_file %>%
     janitor::clean_names(case = "snake")
 
@@ -1567,12 +1567,12 @@ prepare_portfolio_emissions <- function(
 }
 
 calculate_portfolio_emissions <- function(
-                                          inc_emission_factors,
-                                          audit_file,
-                                          fin_data,
-                                          comp_fin_data,
-                                          average_sector_intensity,
-                                          company_emissions) {
+  inc_emission_factors,
+  audit_file,
+  fin_data,
+  comp_fin_data,
+  average_sector_intensity,
+  company_emissions) {
   audit_sector_emissions <- data.frame()
 
   if (inc_emission_factors) {
@@ -1651,16 +1651,16 @@ pw_calculations <- function(eq_portfolio, cb_portfolio){
 
   if(data_check(port_all)){
 
-  port_all <- port_all %>%  select(!!!rlang::syms(grouping_variables),company_id, value_usd)
+    port_all <- port_all %>%  select(!!!rlang::syms(grouping_variables),company_id, value_usd)
 
-  port_all <- calculate_port_weight(port_all, grouping_variables)
+    port_all <- calculate_port_weight(port_all, grouping_variables)
 
 
-  pw <- port_all %>%
-    group_by(!!!rlang::syms(grouping_variables), company_id) %>%
-    summarise(port_weight = sum(port_weight, na.rm = T), .groups = "drop") %>%
-    select(company_id, port_weight) %>%
-    rename(portfolio_weight = port_weight)
+    pw <- port_all %>%
+      group_by(!!!rlang::syms(grouping_variables), company_id) %>%
+      summarise(port_weight = sum(port_weight, na.rm = T), .groups = "drop") %>%
+      select(company_id, port_weight) %>%
+      rename(portfolio_weight = port_weight)
 
   }else{
     pw <- data.frame(company_id = "No companies in portfolio", portfolio_weight = "0")
