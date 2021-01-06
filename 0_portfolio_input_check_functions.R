@@ -1142,7 +1142,7 @@ create_merged_portfolio <- function(eq_portfolio, cb_portfolio) {
   return(portfolio_)
 }
 
-create_portfolio_subset <- function(portfolio, portfolio_type, relevant_fin_data) {
+create_portfolio_subset <- function(portfolio, portfolio_type) {
 
   if (portfolio_type %in% unique(portfolio$asset_type)) {
     portfolio_subset <- portfolio %>%
