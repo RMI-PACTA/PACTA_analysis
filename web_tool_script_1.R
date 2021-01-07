@@ -111,6 +111,7 @@ portfolio <- process_raw_portfolio(
   grouping_variables
 )
 
+
 portfolio <- add_revenue_split(has_revenue, portfolio, revenue_data)
 
 portfolio <- create_ald_flag(portfolio, comp_fin_data, debt_fin_data)
@@ -128,6 +129,17 @@ cb_portfolio <- create_portfolio_subset(
 )
 
 portfolio_total <- add_portfolio_flags(portfolio)
+
+
+fund_coverage_summary <- create_fund_summary(
+  portfolio_raw,
+  fin_data,
+  fund_data,
+  currencies,
+  grouping_variables,
+  portfolio_total
+)
+
 
 portfolio_overview <- portfolio_summary(portfolio_total)
 
@@ -161,6 +173,7 @@ save_if_exists(cb_portfolio, portfolio_name, file.path(proc_input_path_, "bonds_
 save_if_exists(portfolio_overview, portfolio_name, file.path(proc_input_path_, "overview_portfolio.rda"))
 save_if_exists(audit_file, portfolio_name, file.path(proc_input_path_, "audit_file.rda"))
 save_if_exists(emissions_totals, portfolio_name, file.path(proc_input_path_, "emissions.rda"))
+save_if_exists(fund_coverage_summary, portfolio_name, file.path(proc_input_path_, "fund_coverage_summary.rda"))
 
 if(data_check(port_weights)){
   port_weights <- jsonlite::toJSON(x=port_weights)
@@ -172,3 +185,4 @@ rm(portfolio)
 rm(audit_file)
 rm(eq_portfolio)
 rm(cb_portfolio)
+rm(fund_coverage_summary)
