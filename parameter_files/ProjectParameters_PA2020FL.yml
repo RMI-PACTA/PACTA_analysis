@@ -2,8 +2,8 @@ default:
 
     reporting:
         project_report_name: liechtenstein
-        display_currency: EUR
-        currency_exchange_value: 1.1227
+        display_currency: CHF
+        currency_exchange_value: 1.03
          
     parameters: 
         timestamp: 2019Q4
