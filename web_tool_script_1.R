@@ -119,6 +119,7 @@ fund_coverage <- get_fund_coverage(
   grouping_variables
 )
 
+fund_coverage_summary <- summarize_fund_coverage(fund_coverage)
 unknown_funds_in_funds <- list_unknown_funds_in_funds(portfolio)
 
 
