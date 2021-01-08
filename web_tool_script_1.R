@@ -119,7 +119,6 @@ fund_coverage <- get_fund_coverage(
   grouping_variables
 )
 
-fund_coverage_summary <- summarize_fund_coverage(fund_coverage)
 unknown_funds_in_funds <- list_unknown_funds_in_funds(portfolio)
 
 
@@ -199,3 +198,5 @@ rm(audit_file)
 rm(eq_portfolio)
 rm(cb_portfolio)
 rm(fund_coverage_summary)
+rm(fund_coverage)
+rm(unknown_funds_in_funds)
