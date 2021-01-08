@@ -72,14 +72,14 @@ audit_file <- create_audit_file(portfolio_total)
 
 create_audit_chart(audit_file, proc_input_path)
 
-emissions_totals <- calculate_portfolio_emissions(
-  inc_emission_factors,
-  audit_file,
-  fin_data,
-  comp_fin_data,
-  average_sector_intensity,
-  company_emissions
-)
+# emissions_totals <- calculate_portfolio_emissions(
+#   inc_emission_factors,
+#   audit_file,
+#   fin_data,
+#   comp_fin_data,
+#   average_sector_intensity,
+#   company_emissions
+# )
 
 ################
 #### SAVING ####
@@ -104,9 +104,9 @@ if ("csv" %in% file_format_list) {
   if (data_check(audit_file)) {
     write_csv(audit_file, paste0(proc_input_path, "/", project_name, "_audit_file.csv"))
   }
-  if (data_check(emissions_totals)) {
-    write_csv(emissions_totals, paste0(proc_input_path, "/", project_name, "_emissions.csv"))
-  }
+  # if (data_check(emissions_totals)) {
+  #   write_csv(emissions_totals, paste0(proc_input_path, "/", project_name, "_emissions.csv"))
+  # }
 }
 
 if ("rds" %in% file_format_list | "rda" %in% file_format_list) {
@@ -125,7 +125,7 @@ if ("rds" %in% file_format_list | "rda" %in% file_format_list) {
   if (data_check(audit_file)) {
     write_rds(audit_file, paste0(proc_input_path, "/", project_name, "_audit_file.rda"))
   }
-  if (data_check(emissions_totals)) {
-    write_rds(emissions_totals, paste0(proc_input_path, "/", project_name, "_emissions.rda"))
-  }
+  # if (data_check(emissions_totals)) {
+  #   write_rds(emissions_totals, paste0(proc_input_path, "/", project_name, "_emissions.rda"))
+  # }
 }
