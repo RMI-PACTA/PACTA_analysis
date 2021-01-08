@@ -111,6 +111,17 @@ portfolio <- process_raw_portfolio(
   grouping_variables
 )
 
+fund_coverage <- get_fund_coverage(
+  portfolio_raw,
+  fin_data,
+  fund_data,
+  currencies,
+  grouping_variables
+)
+
+fund_coverage_summary <- summarize_fund_coverage(fund_coverage)
+unknown_funds_in_funds <- list_unknown_funds_in_funds(portfolio)
+
 
 portfolio <- add_revenue_split(has_revenue, portfolio, revenue_data)
 
@@ -174,6 +185,8 @@ save_if_exists(portfolio_overview, portfolio_name, file.path(proc_input_path_, "
 save_if_exists(audit_file, portfolio_name, file.path(proc_input_path_, "audit_file.rda"))
 save_if_exists(emissions_totals, portfolio_name, file.path(proc_input_path_, "emissions.rda"))
 save_if_exists(fund_coverage_summary, portfolio_name, file.path(proc_input_path_, "fund_coverage_summary.rda"))
+save_if_exists(unknown_funds_in_funds, portfolio_name, file.path(proc_input_path_, "unknown_funds_in_funds.rda"))
+
 
 if(data_check(port_weights)){
   port_weights <- jsonlite::toJSON(x=port_weights)
