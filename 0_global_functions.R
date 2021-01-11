@@ -78,6 +78,7 @@ set_project_parameters <- function(file_path){
   alignment_techs <<- cfg$sectors$alignment_techs
 
   shock_year <<- cfg$stress_test$shock_year
+  price_data_version <<- cfg$stress_test$price_data_version
 
 
   # meta_investor_name <<- cfg$ComparisonBenchmarks$MetaInvestorName
