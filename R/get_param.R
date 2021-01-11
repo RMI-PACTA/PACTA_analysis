@@ -36,4 +36,3 @@ pluck_param <- function(x, file, if_null) {
 
   out
 }
-
