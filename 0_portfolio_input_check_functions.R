@@ -1209,7 +1209,7 @@ summarize_fund_coverage  <- function(fund_portfolio) {
   return(fund_portfolio)
 }
 
-list_unknown_funds_in_funds  <- function(total_portfolio) {
+list_unknown_funds_in_funds  <- function(portfolio_total) {
   
   fund_portfolio_total <- portfolio_total %>% filter(!is.na(fund_isin))
   
