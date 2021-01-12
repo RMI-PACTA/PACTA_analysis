@@ -1188,7 +1188,7 @@ get_fund_coverage <- function(portfolio_raw,
   fund_portfolio <- fund_portfolio %>% mutate(effective_coverage = (total_mapped_value_usd - missing_value_usd - funds_in_funds_not_mapped) / value_usd)
   fund_portfolio <- fund_portfolio %>% mutate(fund_data_file_coverage = (total_mapped_value_usd) / value_usd)
   fund_portfolio <- fund_portfolio %>% mutate(lipper_data_coverage = (total_mapped_value_usd - missing_value_usd) / total_mapped_value_usd)
-  fund_portfolio <- fund_portfolio %>% mutate(lost_coverage_fif = 1- (total_mapped_value_usd - missing_value_usd - funds_in_funds_not_mapped) / (total_mapped_value_usd-missing_value_usd))
+  fund_portfolio <- fund_portfolio %>% mutate(lost_coverage_fif = 1 - (total_mapped_value_usd - missing_value_usd - funds_in_funds_not_mapped) / (total_mapped_value_usd-missing_value_usd))
   
   
   
