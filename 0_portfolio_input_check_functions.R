@@ -1129,7 +1129,7 @@ get_fund_coverage <- function(portfolio_raw,
   
   portfolio <- calculate_number_of_shares(portfolio)
   
-  original_value_usd <- sum(portfolio$value_usd, na.rm = T)
+  original_value_usd <- sum(portfolio$value_usd, na.rm = TRUE)
   
   # identify funds in the portfolio
   fund_portfolio <- identify_fund_portfolio(portfolio)
