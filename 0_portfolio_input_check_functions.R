@@ -1215,9 +1215,7 @@ list_unknown_funds_in_funds  <- function(portfolio_total) {
   
   table_of_funds_in_funds_not_mapped <- fund_portfolio_total %>% 
     filter(nchar(isin)==12 & asset_type == "Funds") %>% 
-    mutate(direct_holding="FALSE")
-  
-  table_of_funds_in_funds_not_mapped <- table_of_funds_in_funds_not_mapped %>% 
+    mutate(direct_holding="FALSE") %>% 
     select(investor_name, 
            portfolio_name,
            isin,
