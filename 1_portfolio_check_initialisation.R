@@ -32,8 +32,13 @@ twodii_internal <- FALSE
 #####################################################################
 ### ONLY FOR EXTERNAL PROJECTS (twodii_internal <- FALSE):
 # Variables must exist for internal projects
-project_location_ext <- "~/Desktop/DFS"
-data_location_ext <- "~/Desktop/DFS/2019Q4_10042020_2020"
+
+# usethis::install_github("2DegreesInvesting/r2dii.utils")
+dropbox_path <- r2dii.utils::path_dropbox_2dii()
+project_location_ext <- glue::glue(dropbox_path, "/DFS")
+
+dropbox_path_data <- r2dii.utils::dbox_port_00()
+data_location_ext <- glue::glue(dropbox_path_data, "/07_AnalysisInputs/2019Q4_10042020_2020")
 #####################################################################
 
 create_project_folder(project_name, twodii_internal, project_location_ext)
