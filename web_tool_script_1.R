@@ -79,8 +79,13 @@ if (new_data == TRUE) {
 
   fund_data_path <- file.path(file_location, "fund_data.fst")
 
+  
   fund_data <- read_fst_or_return_null(fund_data_path)
-
+  
+  fund_data$holding_isin <- as.character(fund_data$holding_isin)
+  fund_data$fund_isin <- as.character(fund_data$fund_isin)
+  
+  
   fin_data <- fst::read_fst(file.path(file_location, "fin_data.fst"))
 
   comp_fin_data <- fst::read_fst(file.path(file_location, "comp_fin_data.fst"))
