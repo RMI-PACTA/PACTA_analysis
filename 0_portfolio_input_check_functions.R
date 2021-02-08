@@ -59,44 +59,54 @@ clean_portfolio_col_types <- function(portfolio, grouping_variables) {
   # portfolio[,grouping_variables] <- lapply(portfolio[,grouping_variables], clean_punctuation)
 
   if (is.character(portfolio$investor_name) == FALSE) {
-    write_log(msg = paste0(
-      "Wrong variable class for investor_name. Should be character, but is ",
-      class(portfolio$investor_name),
-      ". This can introduce errors in further calculations!"
-    ),
-    file_path = log_path)
+    write_log(
+      msg = paste0(
+        "Wrong variable class for investor_name. Should be character, but is ",
+        class(portfolio$investor_name),
+        ". This can introduce errors in further calculations!"
+      ),
+      file_path = log_path
+    )
   }
   if (is.character(portfolio$portfolio_name) == FALSE) {
-    write_log(msg = paste0(
-      "Wrong variable class for portfolio_name Should be character, but is ",
-      class(portfolio$portfolio_name),
-      ". This can introduce errors in further calculations!"
-    ),
-    file_path = log_path)
+    write_log(
+      msg = paste0(
+        "Wrong variable class for portfolio_name Should be character, but is ",
+        class(portfolio$portfolio_name),
+        ". This can introduce errors in further calculations!"
+      ),
+      file_path = log_path
+    )
   }
   if (is.numeric(portfolio$market_value) == FALSE) {
-    write_log(msg = paste0(
-      "Wrong variable class for market_value Should be numeric, but is ",
-      class(portfolio$market_value),
-      ". This can introduce errors in further calculations!"
-    ),
-    file_path = log_path)
+    write_log(
+      msg = paste0(
+        "Wrong variable class for market_value Should be numeric, but is ",
+        class(portfolio$market_value),
+        ". This can introduce errors in further calculations!"
+      ),
+      file_path = log_path
+    )
   }
   if (is.character(portfolio$currency) == FALSE) {
-    write_log(msg = paste0(
-      "Wrong variable class for currency Should be character, but is ",
-      class(portfolio$currency),
-      ". This can introduce errors in further calculations!"
-    ),
-    file_path = log_path)
+    write_log(
+      msg = paste0(
+        "Wrong variable class for currency Should be character, but is ",
+        class(portfolio$currency),
+        ". This can introduce errors in further calculations!"
+      ),
+      file_path = log_path
+    )
   }
   if (is.character(portfolio$isin) == FALSE) {
-    write_log(msg = paste0(
-      "Wrong variable class for isin Should be character, but is ",
-      class(portfolio$isin),
-      ". This can introduce errors in further calculations!"
-    ),
-    file_path = log_path)
+    write_log(
+      msg = paste0(
+        "Wrong variable class for isin Should be character, but is ",
+        class(portfolio$isin),
+        ". This can introduce errors in further calculations!"
+      ),
+      file_path = log_path
+    )
   }
   ### what about number_of_shares???
 
@@ -112,13 +122,15 @@ clean_portfolio_col_types <- function(portfolio, grouping_variables) {
 clear_portfolio_input_blanks <- function(portfolio) {
   if (any(portfolio[, grouping_variables] == "" | is.na(portfolio[, grouping_variables]))) {
     print("Warning: missing grouping variables, corresponding rows removed")
-    write_log(msg = paste(
-      "Warning: some entries of the uploaded portfolio file were removed
+    write_log(
+      msg = paste(
+        "Warning: some entries of the uploaded portfolio file were removed
               because of missing values in at least one of the variables", str_c(grouping_variables, collapse = ", "),
-      "\n To ensure complete analysis, please upload a file without
+        "\n To ensure complete analysis, please upload a file without
                           missing values in these columns."
-    ),
-    file_path = log_path)
+      ),
+      file_path = log_path
+    )
 
     portfolio <- portfolio %>% filter_at(
       grouping_variables, all_vars(!is.na(.))
@@ -230,18 +242,18 @@ map_security_sectors <- function(fin_data, sector_bridge) {
 
   fin_data <- fin_data %>%
     left_join(sector_bridge %>% filter(source == "BICS") %>% select(-source),
-              by = c("security_bics_subgroup" = "industry_classification")
+      by = c("security_bics_subgroup" = "industry_classification")
     ) %>%
     mutate(security_icb_subsector = as.character(security_icb_subsector))
 
   fin_data_na <- fin_data %>%
     filter(is.na(sector)) %>%
-    select(-c(sector,sector_boe,subsector_boe,sector_dnb,sector_ipr,subsector_ipr))
+    select(-c(sector, sector_boe, subsector_boe, sector_dnb, sector_ipr, subsector_ipr))
 
   fin_data <- fin_data %>% filter(!is.na(sector))
 
   fin_data_na <- fin_data_na %>% left_join(sector_bridge %>% filter(source == "ICB") %>% select(-source),
-                                           by = c("security_icb_subsector" = "industry_classification")
+    by = c("security_icb_subsector" = "industry_classification")
   )
 
   fin_data <- fin_data %>% bind_rows(fin_data_na)
@@ -267,7 +279,7 @@ map_comp_sectors <- function(comp_fin_data, sector_bridge) {
   initial_no_rows <- nrow(comp_fin_data)
 
   comp_fin_data <- comp_fin_data %>% left_join(sector_bridge %>% filter(source == "BICS") %>% select(-source),
-                                               by = c("bics_subgroup" = "industry_classification")
+    by = c("bics_subgroup" = "industry_classification")
   )
 
   comp_fin_data_na <- comp_fin_data %>%
@@ -277,7 +289,7 @@ map_comp_sectors <- function(comp_fin_data, sector_bridge) {
   comp_fin_data <- comp_fin_data %>% filter(!is.na(sector))
 
   comp_fin_data_na <- comp_fin_data_na %>% left_join(sector_bridge %>% filter(source == "ICB") %>% select(-source),
-                                                     by = c("icb_subgroup" = "industry_classification")
+    by = c("icb_subgroup" = "industry_classification")
   )
 
   comp_fin_data <- comp_fin_data %>% bind_rows(comp_fin_data_na)
@@ -914,7 +926,7 @@ get_and_clean_fin_data <- function(fund_data) {
   }
 
   overrides <- read_csv("data/fin_sector_overrides.csv",
-                        col_types = "ccdc"
+    col_types = "ccdc"
   )
 
   sector_bridge <- read_csv("data/sector_bridge.csv", col_types = "cccccccc")
@@ -1143,7 +1155,6 @@ create_merged_portfolio <- function(eq_portfolio, cb_portfolio) {
 }
 
 create_portfolio_subset <- function(portfolio, portfolio_type) {
-
   if (portfolio_type %in% unique(portfolio$asset_type)) {
     portfolio_subset <- portfolio %>%
       ungroup() %>%
@@ -1194,7 +1205,7 @@ create_audit_chart <- function(audit_file, proc_input_path) {
   flag_categories <- names(flag_numbers_colors)
 
   flag_numbers$flag <- factor(flag_numbers$flag,
-                              levels = flag_categories
+    levels = flag_categories
   )
 
   y_intercept <- sum(flag_numbers$perc_n[flag_numbers$flag != "Included in analysis"])
@@ -1202,13 +1213,13 @@ create_audit_chart <- function(audit_file, proc_input_path) {
   nrows <- length(unique(flag_numbers$flag))
 
   nrow_Legend <- ifelse(nrows <= 2, 3.2,
-                        ifelse(nrows == 3 | nrows == 4, 3.7,
-                               ifelse(nrows == 5, 3.8,
-                                      ifelse(nrows == 6, 4.0,
-                                             ifelse(nrows == 7, 4, 4.6)
-                                      )
-                               )
-                        )
+    ifelse(nrows == 3 | nrows == 4, 3.7,
+      ifelse(nrows == 5, 3.8,
+        ifelse(nrows == 6, 4.0,
+          ifelse(nrows == 7, 4, 4.6)
+        )
+      )
+    )
   )
 
   ## Chart
@@ -1243,10 +1254,10 @@ create_audit_chart <- function(audit_file, proc_input_path) {
     guides(fill = guide_legend(reverse = TRUE, ncol = 1)) +
     geom_hline(aes(yintercept = y_intercept), color = "#3D3D3C", size = 1, show.legend = FALSE) +
     geom_text(aes(label = "Not included\nin analysis\n\n", x = 1.5, y_intercept - 0.02),
-              color = "#2e2e2e", family = base_family, size = base_size / 2.5, hjust = 1
+      color = "#2e2e2e", family = base_family, size = base_size / 2.5, hjust = 1
     ) +
     geom_text(aes(label = "Included\nin analysis\n\n", x = 1.5, y_intercept + 0.02),
-              color = "#207ddb", family = base_family, size = base_size / 2.5, hjust = 0
+      color = "#207ddb", family = base_family, size = base_size / 2.5, hjust = 0
     )
 
 
@@ -1296,7 +1307,6 @@ clean_unmatched_holdings <- function(portfolio) {
 calculate_average_portfolio_emissions <- function(portfolio_total,
                                                   comp_fin_data,
                                                   average_sector_intensity) {
-
   min_portfolio <- portfolio_total %>%
     select(
       investor_name,
@@ -1319,7 +1329,7 @@ calculate_average_portfolio_emissions <- function(portfolio_total,
       financial_sector,
       bics_sector
     ) %>%
-    summarise(value_usd = sum(value_usd, na.rm = T),  .groups = "drop") %>%
+    summarise(value_usd = sum(value_usd, na.rm = T), .groups = "drop") %>%
     left_join(
       select(
         average_sector_intensity,
@@ -1351,7 +1361,7 @@ calculate_average_portfolio_emissions <- function(portfolio_total,
         mean_intensity.x
       )
     ) %>%
-    select(-mean_intensity.x, -mean_intensity.y)  %>%
+    select(-mean_intensity.x, -mean_intensity.y) %>%
     mutate(weighted_sector_emissions = value_usd * mean_intensity)
 
   min_portfolio <- min_portfolio %>%
@@ -1367,7 +1377,7 @@ calculate_average_portfolio_emissions <- function(portfolio_total,
         sector
       )
     ) %>%
-    group_by(investor_name, portfolio_name, asset_type,sector) %>%
+    group_by(investor_name, portfolio_name, asset_type, sector) %>%
     summarise(
       weighted_sector_emissions = sum(weighted_sector_emissions, na.rm = T),
       .groups = "drop"
@@ -1399,11 +1409,11 @@ get_company_emission_data <- function(inc_emission_factors) {
 }
 
 prepare_portfolio_emissions <- function(
-  audit_file,
-  fin_data,
-  comp_fin_data,
-  average_sector_intensity,
-  company_emissions) {
+                                        audit_file,
+                                        fin_data,
+                                        comp_fin_data,
+                                        average_sector_intensity,
+                                        company_emissions) {
   audit_file <- audit_file %>%
     janitor::clean_names(case = "snake")
 
@@ -1567,12 +1577,12 @@ prepare_portfolio_emissions <- function(
 }
 
 calculate_portfolio_emissions <- function(
-  inc_emission_factors,
-  audit_file,
-  fin_data,
-  comp_fin_data,
-  average_sector_intensity,
-  company_emissions) {
+                                          inc_emission_factors,
+                                          audit_file,
+                                          fin_data,
+                                          comp_fin_data,
+                                          average_sector_intensity,
+                                          company_emissions) {
   audit_sector_emissions <- data.frame()
 
   if (inc_emission_factors) {
@@ -1634,24 +1644,19 @@ add_other_to_sector_classifications <- function(audit) {
 }
 
 
-pw_calculations <- function(eq_portfolio, cb_portfolio){
-
+pw_calculations <- function(eq_portfolio, cb_portfolio) {
   port_all <- data.frame()
 
-  if(data_check(eq_portfolio)){
-
+  if (data_check(eq_portfolio)) {
     port_all <- bind_rows(port_all, eq_portfolio)
   }
 
-  if(data_check(cb_portfolio)){
-
+  if (data_check(cb_portfolio)) {
     port_all <- bind_rows(port_all, cb_portfolio)
-
   }
 
-  if(data_check(port_all)){
-
-    port_all <- port_all %>%  select(!!!rlang::syms(grouping_variables),company_id, value_usd)
+  if (data_check(port_all)) {
+    port_all <- port_all %>% select(!!!rlang::syms(grouping_variables), company_id, value_usd)
 
     port_all <- calculate_port_weight(port_all, grouping_variables)
 
@@ -1661,11 +1666,9 @@ pw_calculations <- function(eq_portfolio, cb_portfolio){
       summarise(port_weight = sum(port_weight, na.rm = T), .groups = "drop") %>%
       select(company_id, port_weight) %>%
       rename(portfolio_weight = port_weight)
-
-  }else{
+  } else {
     pw <- data.frame(company_id = "No companies in portfolio", portfolio_weight = "0")
   }
 
   return(pw)
-
 }
