@@ -10,7 +10,7 @@ source("0_json_functions.R")
 source("0_portfolio_test.R")
 
 if (!exists("portfolio_name_ref_all")) {
-  portfolio_name_ref_all <- "TestPortfolio_Input"
+  portfolio_name_ref_all <- "DFS_Project_Input"
 }
 if (!exists("portfolio_root_dir")) {
   portfolio_root_dir <- "working_dir"
