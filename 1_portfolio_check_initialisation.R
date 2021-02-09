@@ -42,8 +42,8 @@ set_project_paths(project_name, twodii_internal, project_location_ext)
 
 copy_files(project_name)
 
-options(r2dii_config = paste0(par_file_path, "/AnalysisParameters.yml"))
+options(r2dii_config = fs::path(par_file_path, "AnalysisParameters.yml"))
 
-set_global_parameters(paste0(par_file_path, "/AnalysisParameters.yml"))
+set_global_parameters(fs::path(par_file_path, "AnalysisParameters.yml"))
 
 analysis_inputs_path <- set_analysis_inputs_path(twodii_internal, data_location_ext, dataprep_timestamp)
