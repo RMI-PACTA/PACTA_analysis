@@ -4,29 +4,29 @@
 read_raw_portfolio_file <- function(project_name) {
   portfolio <- NA
 
-  input_path <- paste0(project_location, "/20_Raw_Inputs/")
+  input_path <- fs::path(project_location, "20_Raw_Inputs")
 
-  csv_to_read <- list.files(path = input_path, pattern = paste0(project_name, "_Input.csv"))
-  txt_to_read <- list.files(path = input_path, pattern = paste0(project_name, "_Input.txt"))
+  csv_to_read <- list.files(path = input_path, pattern = "_Input.csv")
+  txt_to_read <- list.files(path = input_path, pattern = "_Input.txt")
 
 
   if (length(csv_to_read) == 1) {
-    portfolio <- read_csv(paste0(input_path, csv_to_read))
+    portfolio <- read_csv(fs::path(input_path, csv_to_read))
   }
   if (length(txt_to_read) == 1) {
-    enc <- guess_encoding(paste0(input_path, txt_to_read))$encoding[1]
-    portfolio <- read.table(paste0(input_path, txt_to_read), sep = ",", header = T, fileEncoding = enc)
+    enc <- guess_encoding(fs::path(input_path, txt_to_read))$encoding[1]
+    portfolio <- read.table(fs::path(input_path, txt_to_read), sep = ",", header = T, fileEncoding = enc)
   }
 
   # Reads in Files saved with a ; not a ,
   if (ncol(portfolio) == 1 & length(csv_to_read) == 1) {
-    portfolio <- read.csv(paste0(input_path, csv_to_read), strip.white = T, stringsAsFactors = F, sep = ";")
+    portfolio <- read.csv(fs::path(input_path, csv_to_read), strip.white = T, stringsAsFactors = F, sep = ";")
   }
   if (ncol(portfolio) == 1 & length(txt_to_read) == 1) {
-    portfolio <- read.table(paste0(input_path, txt_to_read), sep = "\t", header = T, fileEncoding = enc)
+    portfolio <- read.table(fs::path0(input_path, txt_to_read), sep = "\t", header = T, fileEncoding = enc)
   }
   if (ncol(portfolio) == 1 & length(txt_to_read) == 1) {
-    portfolio <- read.table(paste0(input_path, txt_to_read), sep = ";", header = T, fileEncoding = enc)
+    portfolio <- read.table(fs::path(input_path, txt_to_read), sep = ";", header = T, fileEncoding = enc)
   }
 
 
@@ -742,6 +742,7 @@ overall_validity_flag <- function(portfolio_total) {
 }
 
 create_ald_flag <- function(portfolio, comp_fin_data, debt_fin_data) {
+
   portfolio_eq <- portfolio %>% filter(asset_type == "Equity")
   portfolio_cb <- portfolio %>% filter(asset_type == "Bonds")
   portfolio_other <- portfolio %>% filter(!asset_type %in% c("Equity", "Bonds"))
@@ -911,7 +912,7 @@ get_and_clean_fund_data <- function() {
 get_and_clean_fin_data <- function(fund_data) {
 
   # Financial Data
-  fin_data_raw <- read_rda(paste0(analysis_inputs_path, "/security_financial_data.rda")) %>% as_tibble()
+  fin_data_raw <- read_rds(paste0(analysis_inputs_path, "/security_financial_data.rda")) %>% as_tibble()
 
   # remove unclear duplicates from raw financial data. This should be moved to DataStore.
   rm_duplicates <- read_csv("non_distinct_isins.csv")
