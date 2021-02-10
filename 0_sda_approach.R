@@ -1,13 +1,13 @@
 devtools::load_all()
 
 sda_portfolio_target <- function(
-  market,
-  portfolio,
-  scenario = "B2DS",
-  geography = "Global",
-  ald_sector = NULL,
-  start_year = NULL,
-  target_year = NULL) {
+                                 market,
+                                 portfolio,
+                                 scenario = "B2DS",
+                                 geography = "Global",
+                                 ald_sector = NULL,
+                                 start_year = NULL,
+                                 target_year = NULL) {
   stopifnot(is.data.frame(market), is.data.frame(portfolio))
   old_market <- market
   old_portfolio <- portfolio

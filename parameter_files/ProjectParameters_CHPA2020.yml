@@ -4,8 +4,8 @@ default:
         project_report_name: swiss
         display_currency: CHF
         currency_exchange_value: 1.03
-         
-    parameters: 
+
+    parameters:
         timestamp: 2019Q4
         dataprep_timestamp: 2019Q4_250220
         start_year: 2020
@@ -24,7 +24,7 @@ default:
         has_credit: FALSE
         inc_emissionfactors: TRUE
         inc_stresstest: TRUE
-    
+
     sectors:
         tech_roadmap_sectors:
             - Power
@@ -56,35 +56,36 @@ default:
             - Gas
             - Electric
             - ICE
-            
+
     asset_types:
         - Equity
         - Bonds
         - Others
         - Funds
-        
+
     scenario_sources_list:
         - ETP2017
         - WEO2019
         - WEO2020
         - GECO2019
-      
+
     scenario_geography_list:
         - Global
         - GlobalAggregate
         - NonOECD
         - OECD
-      
+
     equity_market_list:
         - GlobalMarket
         - DevelopedMarket
         - EmergingMarket
-      
-    grouping_variables: 
+
+    grouping_variables:
         - investor_name
-        - portfolio_name  
-        
+        - portfolio_name
+
     stress_test:
         shock_year: 2030
-        
-    
+        price_data_version: 2020Q4
+
+

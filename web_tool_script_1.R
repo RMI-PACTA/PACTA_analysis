@@ -79,8 +79,13 @@ if (new_data == TRUE) {
 
   fund_data_path <- file.path(file_location, "fund_data.fst")
 
+  
   fund_data <- read_fst_or_return_null(fund_data_path)
-
+  
+  fund_data$holding_isin <- as.character(fund_data$holding_isin)
+  fund_data$fund_isin <- as.character(fund_data$fund_isin)
+  
+  
   fin_data <- fst::read_fst(file.path(file_location, "fin_data.fst"))
 
   comp_fin_data <- fst::read_fst(file.path(file_location, "comp_fin_data.fst"))
@@ -110,6 +115,21 @@ portfolio <- process_raw_portfolio(
   currencies,
   grouping_variables
 )
+
+# information of coverage and coverage loses for all funds in raw_portfolio
+fund_coverage <- get_fund_coverage(
+  portfolio_raw,
+  fin_data,
+  fund_data,
+  currencies,
+  grouping_variables
+)
+
+# reduce information on fund coverage to a data frame that can be shared with users
+fund_coverage_summary <- summarize_fund_coverage(fund_coverage)
+
+# list ISINs of unknown funds in funds. the list includes value_usd to estimate importance of the isin for o
+unknown_funds_in_funds <- list_unknown_funds_in_funds(portfolio)
 
 portfolio <- add_revenue_split(has_revenue, portfolio, revenue_data)
 
@@ -159,6 +179,8 @@ save_if_exists(cb_portfolio, portfolio_name, file.path(proc_input_path_, "bonds_
 save_if_exists(portfolio_overview, portfolio_name, file.path(proc_input_path_, "overview_portfolio.rda"))
 save_if_exists(audit_file, portfolio_name, file.path(proc_input_path_, "audit_file.rda"))
 save_if_exists(emissions_totals, portfolio_name, file.path(proc_input_path_, "emissions.rda"))
+save_if_exists(fund_coverage_summary, portfolio_name, file.path(proc_input_path_, "fund_coverage_summary.rda"))
+save_if_exists(unknown_funds_in_funds, portfolio_name, file.path(proc_input_path_, "unknown_funds_in_funds.rda"))
 
 if(data_check(port_weights)){
   port_weights <- jsonlite::toJSON(x=port_weights)
@@ -170,3 +192,6 @@ rm(portfolio)
 rm(audit_file)
 rm(eq_portfolio)
 rm(cb_portfolio)
+rm(fund_coverage_summary)
+rm(fund_coverage)
+rm(unknown_funds_in_funds)
