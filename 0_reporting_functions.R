@@ -158,22 +158,6 @@ ReportData <- function() {
 
   PeerGroupName <- ifelse(EQPeersRef == CBPeersRef & EQPeersRef == "Project", ProjectPeersRef, PeerGroupName)
 
-
-  # # Check Physical Risk
-  # if(HasRISK())
-  # if(data_check(EQPhysicalRisk)){
-  #   EQPhysicalRiskCheck <- TRUE
-  # }else{EQPhysicalRiskCheck <- FALSE}
-  #
-  # if(data_check(CBPhysicalRisk)){
-  #   CBPhysicalRiskCheck <-TRUE
-  # }  else{CBPhysicalRiskCheck <- FALSE}
-
-  # if (IsSample == T){     # Only necessary to print an unnamed report ie for sharing with interested partners.
-  #   investor_name_select <- "Investor"
-  #   portfolio_name_select <- "Sample Portfolio"
-  # }
-
   # Underscores break the report hence they are removed from names
   portfolio_name_select <- gsub("_", " ", portfolio_name_select)
 

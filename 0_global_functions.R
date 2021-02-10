@@ -78,7 +78,6 @@ set_project_parameters <- function(file_path){
   alignment_techs <<- cfg$sectors$alignment_techs
 
   shock_year <<- cfg$stress_test$shock_year
-  price_data_version <<- cfg$stress_test$price_data_version
 
 
   # meta_investor_name <<- cfg$ComparisonBenchmarks$MetaInvestorName
@@ -293,8 +292,8 @@ copy_files <- function(project_name) {
 
 create_project_folder <- function(project_name, twodii_internal, project_location_ext, working_location = working_location) {
   project_location <- ifelse(twodii_internal,
-    path_dropbox_2dii("PortCheck_v2", "10_Projects", project_name),
-    paste0(project_location_ext, "/", project_name)
+    r2dii.utils::path_dropbox_2dii("PortCheck_v2", "10_Projects", project_name),
+    fs::path(project_location_ext,  project_name)
   )
 
   # Create the new project folder
@@ -310,15 +309,15 @@ create_project_folder <- function(project_name, twodii_internal, project_locatio
       "50_Outputs"
     )
 
-    project_folders <- paste0(project_location, "/", project_folders)
+    project_folders <- fs::path(project_location, project_folders)
 
-    dir.create(project_location)
-    lapply(project_folders, function(x) dir.create(x))
+    dir.create(project_location, recursive = TRUE)
+    lapply(project_folders, function(x) dir.create(x, recursive = TRUE, showWarnings = FALSE))
 
     # Copy in Parameter File
     file.copy(
-      paste0(working_location, "parameter_files/AnalysisParameters.yml"),
-      paste0(project_location, "/10_Parameter_File/AnalysisParameters.yml")
+      fs::path(working_location, "parameter_files","AnalysisParameters.yml"),
+      fs::path(project_location, "10_Parameter_File","AnalysisParameters.yml")
     )
   }
 }
