@@ -866,8 +866,6 @@ get_and_clean_total_fund_list_data <- function() {
   total_fund_list <- read_rda("data/total_fund_list.rds")
   
   
-  
-  
   total_fund_list
 }
 
