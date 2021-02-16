@@ -84,6 +84,8 @@ emissions_totals <- calculate_portfolio_emissions(
 ################
 #### SAVING ####
 ################
+file_format_list <- c("rda")
+
 if (length(file_format_list) == 0) {
   stop("Saving results: No file formats defined")
 }
