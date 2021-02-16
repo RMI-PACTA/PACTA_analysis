@@ -1034,7 +1034,7 @@ process_raw_portfolio <- function(portfolio_raw,
                                   fund_data,
                                   currencies,
                                   grouping_variables,
-                                  total_fund_list=list()) {
+                                  total_fund_list=NA) {
   portfolio <- clean_colnames_portfolio_input_file(portfolio_raw)
 
   portfolio <- clear_portfolio_input_blanks(portfolio)
@@ -1070,8 +1070,7 @@ process_raw_portfolio <- function(portfolio_raw,
   original_value_usd <- sum(portfolio$value_usd, na.rm = T)
   
   # correct Funds classification by comparing isin to the list of all known funds isins 
-  portfolio <- portfolio %>% mutate(asset_type = ifelse(is.element(isin, total_fund_list$fund_isin), "Funds", asset_type))
-  
+  if(!is.na(total_fund_list)){portfolio <- portfolio %>% mutate(asset_type = ifelse(is.element(isin, total_fund_list$fund_isin), "Funds", asset_type))}
   # identify funds in the portfolio
   fund_portfolio <- identify_fund_portfolio(portfolio)
 
