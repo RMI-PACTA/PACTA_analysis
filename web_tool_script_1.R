@@ -38,10 +38,16 @@ create_portfolio_subfolders(portfolio_name_ref_all = portfolio_name_ref_all, pro
 # Set parameter to ensure data is reprocessed in "new_data" == TRUE in the parameter file
 file_location <- file.path(analysis_inputs_path, "cleaned_files")
 
+
+
+
 if (new_data == TRUE) {
   currencies <- get_and_clean_currency_data()
-
-  # fund_data <- get_and_clean_fund_data()
+  
+  
+  total_fund_list <- get_and_clean_total_fund_list_data()
+ 
+   # fund_data <- get_and_clean_fund_data()
   fund_data <- data.frame()
 
   fin_data <- get_and_clean_fin_data(fund_data)
@@ -64,11 +70,12 @@ if (new_data == TRUE) {
     comp_fin_data,
     debt_fin_data,
     average_sector_intensity,
-    company_emissions
+    company_emissions,
+    total_fund_list=total_fund_list
   )
 } else {
   currencies <- fst::read_fst(file.path(file_location, "currencies.fst"))
-
+  
   read_fst_or_return_null <- function(fst_file) {
     if (!file.exists(fst_file)) {
       return(NULL)
@@ -91,6 +98,8 @@ if (new_data == TRUE) {
   comp_fin_data <- fst::read_fst(file.path(file_location, "comp_fin_data.fst"))
 
   debt_fin_data <- fst::read_fst(file.path(file_location, "debt_fin_data.fst"))
+  
+  total_fund_list <- fst::read_fst(file.path(file_location, "total_fund_list.fst"))
 
   if (inc_emission_factors) {
     average_sector_intensity <- fst::read_fst(file.path(file_location, "average_sector_intensity.fst"))
@@ -98,6 +107,8 @@ if (new_data == TRUE) {
     company_emissions <- fst::read_fst(file.path(file_location, "company_emissions.fst"))
   }
 }
+
+
 ####################
 #### PORTFOLIOS ####
 ####################
@@ -113,7 +124,8 @@ portfolio <- process_raw_portfolio(
   fin_data,
   fund_data,
   currencies,
-  grouping_variables
+  grouping_variables,
+  total_fund_list=total_fund_list
 )
 
 # information of coverage and coverage loses for all funds in raw_portfolio

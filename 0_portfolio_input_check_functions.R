@@ -861,11 +861,19 @@ create_id_columns <- function(portfolio, portfolio_type) {
 }
 
 # FINAL SCRIPTS
+
+get_and_clean_total_fund_list_data <- function() {
+  total_fund_list <- read_rda("data/total_fund_list.rds")
+  
+  
+  total_fund_list
+}
+
 get_and_clean_currency_data <- function() {
   currencies <- read_rda("data/currencies.rda")
-
+  
   currencies <- set_currency_timestamp(currencies)
-
+  
   currencies
 }
 
@@ -1025,7 +1033,8 @@ process_raw_portfolio <- function(portfolio_raw,
                                   fin_data,
                                   fund_data,
                                   currencies,
-                                  grouping_variables) {
+                                  grouping_variables,
+                                  total_fund_list=NA) {
   portfolio <- clean_colnames_portfolio_input_file(portfolio_raw)
 
   portfolio <- clear_portfolio_input_blanks(portfolio)
@@ -1059,7 +1068,9 @@ process_raw_portfolio <- function(portfolio_raw,
   portfolio <- calculate_number_of_shares(portfolio)
 
   original_value_usd <- sum(portfolio$value_usd, na.rm = T)
-
+  
+  # correct Funds classification by comparing isin to the list of all known funds isins 
+  if(!is.na(total_fund_list)){portfolio <- portfolio %>% mutate(asset_type = ifelse(is.element(isin, total_fund_list$fund_isin), "Funds", asset_type))}
   # identify funds in the portfolio
   fund_portfolio <- identify_fund_portfolio(portfolio)
 
