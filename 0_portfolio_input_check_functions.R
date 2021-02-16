@@ -1018,7 +1018,7 @@ get_and_clean_company_fin_data <- function() {
     market_cap, bond_debt_out, financial_timestamp
   )
 
-  sector_bridge <- read_csv("data/sector_bridge.csv", col_types = "ccc")
+  sector_bridge <- read_csv("data/sector_bridge.csv", col_types = "cccccccc")
 
   comp_fin_data <- map_comp_sectors(comp_fin_data_raw, sector_bridge)
 
