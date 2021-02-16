@@ -870,7 +870,7 @@ get_and_clean_total_fund_list_data <- function() {
 }
 
 get_and_clean_currency_data <- function() {
-  currencies <- read_rda("data/currencies.rda")
+  currencies <- readRDS("data/currencies.rds")
 
   currencies <- set_currency_timestamp(currencies)
 
