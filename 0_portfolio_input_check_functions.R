@@ -1034,7 +1034,7 @@ process_raw_portfolio <- function(portfolio_raw,
                                   fund_data,
                                   currencies,
                                   grouping_variables,
-                                  total_fund_list) {
+                                  total_fund_list=list()) {
   portfolio <- clean_colnames_portfolio_input_file(portfolio_raw)
 
   portfolio <- clear_portfolio_input_blanks(portfolio)
