@@ -14,6 +14,8 @@
 
 # Obtains data, processes the portfolio and saves the files
 
+other_sector_list <- c("Steel", "Cement", "Shipping", "Aviation")
+
 ####################
 #### DATA FILES ####
 ####################
