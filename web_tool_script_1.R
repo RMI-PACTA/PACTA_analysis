@@ -71,7 +71,7 @@ if (new_data == TRUE) {
     debt_fin_data,
     average_sector_intensity,
     company_emissions,
-    total_fund_list
+    total_fund_list=total_fund_list
   )
 } else {
   currencies <- fst::read_fst(file.path(file_location, "currencies.fst"))
@@ -125,7 +125,7 @@ portfolio <- process_raw_portfolio(
   fund_data,
   currencies,
   grouping_variables,
-  total_fund_list
+  total_fund_list=total_fund_list
 )
 
 # information of coverage and coverage loses for all funds in raw_portfolio
