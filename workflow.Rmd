@@ -62,6 +62,22 @@ Crticial Set Up Components
   1. Data location
   2. Project location (inputs and outputs)
 
+Necessary Files:
+File List Check for External Data Requirements:
+security_financial_data.rda
+consolidated_financial_data.rda
+debt_financial_data.rda
+bonds_ald_scenario.rda
+equity_ald_scenario.rda
+masterdata_ownership_datastore.rda
+masterdata_debt_datastore.rda
+
+Optional Files:
+fund_data_2019Q4.rda (or relevant time stamp)
+revenue_data_member_ticker.rda (if not available, set has_revenue = FALSE in parameter file)
+company_emissions.rda (if not available, set inc_emissionfactors = FALSE in parameter file)
+average_sector_intensity.rda (if not available, set inc_emissionfactors = FALSE in parameter file)
+
 
 ### Set up parameters and paths
 ```{r 1_portfolio_check_initialisation, echo = FALSE}
