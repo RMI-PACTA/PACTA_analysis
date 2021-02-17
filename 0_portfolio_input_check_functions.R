@@ -5,9 +5,9 @@ read_raw_portfolio_file <- function(project_name) {
   portfolio <- NA
 
   input_path <- paste0(project_location, "/20_Raw_Inputs/")
-
-  csv_to_read <- list.files(path = input_path, pattern = paste0(project_name, "_Input.csv"))
-  txt_to_read <- list.files(path = input_path, pattern = paste0(project_name, "_Input.txt"))
+  # pattern matches e.g.: "whatever_Input.csv"
+  csv_to_read <- list.files(path = input_path, pattern = "_Input[.]csv$")
+  txt_to_read <- list.files(path = input_path, pattern = "_Input[.]txt$")
 
 
   if (length(csv_to_read) == 1) {
@@ -864,16 +864,18 @@ create_id_columns <- function(portfolio, portfolio_type) {
 
 get_and_clean_total_fund_list_data <- function() {
   total_fund_list <- read_rda("data/total_fund_list.rds")
-  
-  
+
+
   total_fund_list
 }
 
 get_and_clean_currency_data <- function() {
-  currencies <- read_rda("data/currencies.rda")
-  
+  currencies <- readRDS("data/currencies.rds")
+
   currencies <- set_currency_timestamp(currencies)
-  
+
+  if (all(currencies$exchange_rate) == 1){print("currency data temporary. todo: update")}
+
   currencies
 }
 
@@ -1011,12 +1013,12 @@ get_and_clean_company_fin_data <- function() {
   comp_fin_data_raw <- read_rds(paste0(analysis_inputs_path, "/consolidated_financial_data.rda"))
 
   comp_fin_data_raw <- comp_fin_data_raw %>% select(
-    company_id, company_name, bloomberg_id, country_of_domicile, corporate_bond_ticker, bics_subgroup,
+    company_id, company_name, bloomberg_id, country_of_domicile, corporate_bond_ticker, bics_subgroup, bics_sector,
     icb_subgroup, financial_sector, has_asset_level_data, has_assets_in_matched_sector, sectors_with_assets, current_shares_outstanding_all_classes,
     market_cap, bond_debt_out, financial_timestamp
   )
 
-  sector_bridge <- read_csv("data/sector_bridge.csv", col_types = "ccc")
+  sector_bridge <- read_csv("data/sector_bridge.csv", col_types = "cccccccc")
 
   comp_fin_data <- map_comp_sectors(comp_fin_data_raw, sector_bridge)
 
@@ -1068,8 +1070,8 @@ process_raw_portfolio <- function(portfolio_raw,
   portfolio <- calculate_number_of_shares(portfolio)
 
   original_value_usd <- sum(portfolio$value_usd, na.rm = T)
-  
-  # correct Funds classification by comparing isin to the list of all known funds isins 
+
+  # correct Funds classification by comparing isin to the list of all known funds isins
   if(!is.na(total_fund_list)){portfolio <- portfolio %>% mutate(asset_type = ifelse(is.element(isin, total_fund_list$fund_isin), "Funds", asset_type))}
   # identify funds in the portfolio
   fund_portfolio <- identify_fund_portfolio(portfolio)
@@ -1109,111 +1111,111 @@ get_fund_coverage <- function(portfolio_raw,
                               currencies,
                               grouping_variables) {
   portfolio <- clean_colnames_portfolio_input_file(portfolio_raw)
-  
+
   portfolio <- clear_portfolio_input_blanks(portfolio)
-  
+
   portfolio <- add_meta_portfolio(portfolio, inc_meta_portfolio)
-  
+
   start_port_rows <- nrow(portfolio)
-  
+
   portfolio <- add_holding_id(portfolio)
-  
+
   portfolio <- check_missing_cols(portfolio, grouping_variables)
-  
+
   portfolio <- clean_portfolio_col_types(portfolio, grouping_variables)
-  
+
   portfolio <- convert_currencies(portfolio, currencies)
-  
+
   cols_portfolio <- colnames(portfolio)
-  
+
   cols_of_funds <- c("direct_holding", "fund_isin", "original_value_usd")
-  
+
   # Add financial data
   # Merges in the clean data and calculates the marketvalue and number of shares
   portfolio <- add_fin_data(portfolio, fin_data)
-  
+
   if (nrow(portfolio) != start_port_rows) {
     stop("Portfolio lines changing unexpectedly")
   }
-  
+
   portfolio <- calculate_value_usd_with_fin_data(portfolio)
-  
+
   portfolio <- calculate_number_of_shares(portfolio)
-  
+
   original_value_usd <- sum(portfolio$value_usd, na.rm = TRUE)
-  
+
   # identify funds in the portfolio
   fund_portfolio <- identify_fund_portfolio(portfolio)
-  
+
   # the raw portfolio will be compared with the merged portfolio
   fund_portfolio_raw <- fund_portfolio
-  
+
   if (data_check(fund_data)) {
     # Creates the fund_portfolio to match the original portfolio
     fund_portfolio <- calculate_fund_portfolio(fund_portfolio, fund_data, cols_portfolio, cols_of_funds)
-    
+
     # Merges in the bbg data to the fund portfolio
     fund_portfolio <- add_fin_data(fund_portfolio, fin_data)
-    
+
     # add fund_portfolio and check that the total value is the same
     portfolio_total <- add_fund_portfolio(portfolio, fund_portfolio, cols_of_funds)
   } else {
     portfolio_total <- as_tibble(portfolio)
     portfolio_total$direct_holding <- TRUE
   }
-  
-  
+
+
   fund_portfolio_total <- portfolio_total %>% filter(!is.na(fund_isin))
-  
-  fund_portfolio_total_mapped_value_usd <- fund_portfolio_total  %>% 
-    group_by(holding_id) %>% 
+
+  fund_portfolio_total_mapped_value_usd <- fund_portfolio_total  %>%
+    group_by(holding_id) %>%
     summarize(total_mapped_value_usd = sum(value_usd))
-  
-  
-  fund_portfolio_missing_value_usd <- fund_portfolio_total  %>% 
-    filter(nchar(isin)!=12) %>% 
-    group_by(holding_id) %>% 
+
+
+  fund_portfolio_missing_value_usd <- fund_portfolio_total  %>%
+    filter(nchar(isin)!=12) %>%
+    group_by(holding_id) %>%
     summarize(missing_value_usd = sum(value_usd))
-  
-  
-  fund_portfolio_funds_in_funds_not_mapped_value_usd <-  fund_portfolio_total  %>% 
-    filter(nchar(isin)==12 & asset_type == "Funds") %>% 
-    group_by(holding_id) %>% 
+
+
+  fund_portfolio_funds_in_funds_not_mapped_value_usd <-  fund_portfolio_total  %>%
+    filter(nchar(isin)==12 & asset_type == "Funds") %>%
+    group_by(holding_id) %>%
     summarize(funds_in_funds_not_mapped = sum(value_usd))
-  
-  
-  
+
+
+
   fund_portfolio <- fund_portfolio_raw
   fund_portfolio <- left_join(fund_portfolio, fund_portfolio_total_mapped_value_usd)
   fund_portfolio$total_mapped_value_usd[is.na(fund_portfolio$total_mapped_value_usd)] <- 0
-  
-  
+
+
   fund_portfolio <- left_join(fund_portfolio, fund_portfolio_missing_value_usd)
   fund_portfolio$missing_value_usd[is.na(fund_portfolio$missing_value_usd)] <- 0
-  
+
   fund_portfolio <- left_join(fund_portfolio, fund_portfolio_funds_in_funds_not_mapped_value_usd)
   fund_portfolio$funds_in_funds_not_mapped[is.na(fund_portfolio$funds_in_funds_not_mapped)] <- 0
-  
-  
-  
+
+
+
   fund_portfolio <- fund_portfolio %>% mutate(effective_coverage = (total_mapped_value_usd - missing_value_usd - funds_in_funds_not_mapped) / value_usd)
   fund_portfolio <- fund_portfolio %>% mutate(fund_data_file_coverage = (total_mapped_value_usd) / value_usd)
   fund_portfolio <- fund_portfolio %>% mutate(lipper_data_coverage = (total_mapped_value_usd - missing_value_usd) / total_mapped_value_usd)
   fund_portfolio <- fund_portfolio %>% mutate(lost_coverage_fif = 1 - (total_mapped_value_usd - missing_value_usd - funds_in_funds_not_mapped) / (total_mapped_value_usd-missing_value_usd))
-  
-  
-  
-  
+
+
+
+
 
   return(fund_portfolio)
 }
 
 
 summarize_fund_coverage  <- function(fund_portfolio) {
-  
-  fund_portfolio %>% select(investor_name, 
+
+  fund_portfolio %>% select(investor_name,
                             portfolio_name,
-                            isin, 
+                            isin,
                             value_usd,
                             company_name,
                             effective_coverage)
@@ -1221,19 +1223,19 @@ summarize_fund_coverage  <- function(fund_portfolio) {
 }
 
 list_unknown_funds_in_funds  <- function(portfolio_total) {
-  
+
   fund_portfolio_total <- portfolio_total %>% filter(!is.na(fund_isin))
-  
-  table_of_funds_in_funds_not_mapped <- fund_portfolio_total %>% 
-    filter(nchar(isin)==12 & asset_type == "Funds") %>% 
-    mutate(direct_holding="FALSE") %>% 
-    select(investor_name, 
+
+  table_of_funds_in_funds_not_mapped <- fund_portfolio_total %>%
+    filter(nchar(isin)==12 & asset_type == "Funds") %>%
+    mutate(direct_holding="FALSE") %>%
+    select(investor_name,
            portfolio_name,
            isin,
            value_usd,
            company_name,
            fund_isin) %>% rename(parent_fund_isin = fund_isin)
-  
+
   return(table_of_funds_in_funds_not_mapped)
 }
 
@@ -1529,7 +1531,7 @@ get_average_emission_data <- function(inc_emission_factors) {
   average_sector_intensity <- data.frame()
 
   if (inc_emission_factors) {
-    average_sector_intensity <- read_rda(paste0(analysis_inputs_path, "average_sector_intensity.rda"))
+    average_sector_intensity <- read_rda(file.path(analysis_inputs_path, "average_sector_intensity.rda"))
   }
   return(average_sector_intensity)
 }
@@ -1538,7 +1540,7 @@ get_company_emission_data <- function(inc_emission_factors) {
   company_emissions <- data.frame()
 
   if (inc_emission_factors) {
-    company_emissions <- read_rda(paste0(analysis_inputs_path, "company_emissions.rda"))
+    company_emissions <- read_rda(file.path(analysis_inputs_path, "company_emissions.rda"))
   }
   return(company_emissions)
 }

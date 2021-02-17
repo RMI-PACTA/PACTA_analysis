@@ -8,11 +8,16 @@
 # masterdata_ownership_datastore.rda
 # masterdata_debt_datastore.rda
 
+# To do: write test to see that these files exist
+
 # optional:
 # fund_data_2019Q4.rda (or relevant time stamp)
 # revenue_data_member_ticker.rda (if not available, set has_revenue = FALSE in parameter file)
 
 # Obtains data, processes the portfolio and saves the files
+
+# todo: move this to parameter files
+other_sector_list <- c("Steel", "Cement", "Shipping", "Aviation")
 
 ####################
 #### DATA FILES ####
@@ -82,6 +87,9 @@ emissions_totals <- calculate_portfolio_emissions(
 ################
 #### SAVING ####
 ################
+# Todo: add this to a parameter file
+file_format_list <- "rda"
+
 if (length(file_format_list) == 0) {
   stop("Saving results: No file formats defined")
 }
