@@ -1,7 +1,7 @@
 # TODO:
 # Clean up sectors options
 
-port_col_types <- set_col_types(grouping_variables, "ddddccccddcl")
+# port_col_types <- set_col_types(grouping_variables, "ddddccccddcl")
 ##################
 ##### EQUITY #####
 ##################
@@ -12,9 +12,9 @@ if (file.exists(equity_input_file)) {
   port_raw_all_eq <- read_rds(equity_input_file) %>%
     mutate(id = as.character(id))
 
-  if (length(colnames(port_raw_all_eq)) != nchar(port_col_types)) {
-    stop("Check port_col_types: difference in length")
-  }
+  # if (length(colnames(port_raw_all_eq)) != nchar(port_col_types)) {
+  #   stop("Check port_col_types: difference in length")
+  # }
 
   ald_scen_eq <- get_ald_scen("Equity")
 
@@ -100,9 +100,9 @@ if (file.exists(bonds_inputs_file)) {
   port_raw_all_cb <- read_rds(bonds_inputs_file) %>%
     mutate(id = as.character(id))
 
-  if (length(colnames(port_raw_all_cb)) != nchar(port_col_types)) {
-    stop("Check port_col_types: difference in length")
-  }
+  # if (length(colnames(port_raw_all_cb)) != nchar(port_col_types)) {
+  #   stop("Check port_col_types: difference in length")
+  # }
 
   ald_scen_cb <- get_ald_scen("Bonds")
 
