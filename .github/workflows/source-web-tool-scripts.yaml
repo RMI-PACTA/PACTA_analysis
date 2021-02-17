@@ -11,7 +11,7 @@ on:
 name: Source web-tool scripts
 
 jobs:
-  R-CMD-check:
+  Test-r-scripts:
     runs-on: ${{ matrix.config.os }}
 
     name: ${{ matrix.config.os }} (${{ matrix.config.r }})
