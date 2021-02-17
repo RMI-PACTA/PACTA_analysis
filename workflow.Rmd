@@ -101,6 +101,7 @@ create_project_folder(project_name, twodii_internal, project_location_ext)
 set_project_paths(project_name, twodii_internal, project_location_ext)
 
 # Move sample files into the correct locations if they don't already exist. 
+# To do: copy in correct sample parameter files
 copy_files(project_name)
 
 # set_portfolio_parameters(file_path = fs::path(par_file_path, paste0("PortfolioParameters.yml")))
@@ -115,6 +116,7 @@ project_code <- "GENERAL"
 # set_global_parameters(fs::path(par_file_path, "AnalysisParameters.yml"))
 
 set_project_parameters(file.path(par_file_path, paste0("ProjectParameters_", project_code, ".yml")))
+# To do: find and add additional parameters
 
 analysis_inputs_path <- set_analysis_inputs_path(twodii_internal, data_location_ext, dataprep_timestamp)
 # ----------------------------------------------------------------------------
@@ -205,7 +207,7 @@ port_all_eq_sda <- sda_portfolio_target(market = msci_world,
 ```{r }
 
 
-source("5_interactive_report.R")
+# source("5_interactive_report.R")
 
 
 ```
