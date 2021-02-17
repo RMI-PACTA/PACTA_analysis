@@ -6,8 +6,8 @@ read_raw_portfolio_file <- function(project_name) {
 
   input_path <- paste0(project_location, "/20_Raw_Inputs/")
 
-  csv_to_read <- list.files(path = input_path, pattern = paste0(project_name, "_Input.csv"))
-  txt_to_read <- list.files(path = input_path, pattern = paste0(project_name, "_Input.txt"))
+  csv_to_read <- list.files(path = input_path, pattern = "_Input.csv")
+  txt_to_read <- list.files(path = input_path, pattern = "_Input.txt")
 
 
   if (length(csv_to_read) == 1) {
