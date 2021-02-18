@@ -5,9 +5,9 @@ read_raw_portfolio_file <- function(project_name) {
   portfolio <- NA
 
   input_path <- paste0(project_location, "/20_Raw_Inputs/")
-  # pattern matches e.g.: "whatever_Input.csv"
-  csv_to_read <- list.files(path = input_path, pattern = "_Input[.]csv$")
-  txt_to_read <- list.files(path = input_path, pattern = "_Input[.]txt$")
+
+  csv_to_read <- list.files(path = input_path, pattern = "_Input.csv")
+  txt_to_read <- list.files(path = input_path, pattern = "_Input.txt")
 
 
   if (length(csv_to_read) == 1) {
@@ -418,7 +418,7 @@ check_fin_mapped_sectors <- function(fin_data) {
     ))
 
   actual_sectors <- unique(fin_data$security_mapped_sector)
-  if (any(!actual_sectors %in% c(sector_list, other_sector_list, "Other"))) {
+  if (any(!actual_sectors %in% c(sector_list, pacta_sectors_not_analysed, "Other"))) {
     stop("Additional Sectors in fin_data")
   }
 
@@ -1531,7 +1531,7 @@ get_average_emission_data <- function(inc_emission_factors) {
   average_sector_intensity <- data.frame()
 
   if (inc_emission_factors) {
-    average_sector_intensity <- read_rda(file.path(analysis_inputs_path, "average_sector_intensity.rda"))
+    average_sector_intensity <- read_rda(paste0(analysis_inputs_path, "/average_sector_intensity.rda"))
   }
   return(average_sector_intensity)
 }
@@ -1540,7 +1540,7 @@ get_company_emission_data <- function(inc_emission_factors) {
   company_emissions <- data.frame()
 
   if (inc_emission_factors) {
-    company_emissions <- read_rda(file.path(analysis_inputs_path, "company_emissions.rda"))
+    company_emissions <- read_rda(paste0(analysis_inputs_path, "/company_emissions.rda"))
   }
   return(company_emissions)
 }
