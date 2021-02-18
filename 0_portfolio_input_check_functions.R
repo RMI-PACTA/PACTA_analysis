@@ -4,29 +4,29 @@
 read_raw_portfolio_file <- function(project_name) {
   portfolio <- NA
 
-  input_path <- paste0(project_location, "/20_Raw_Inputs/")
+  input_path <- file.path(project_location, "20_Raw_Inputs")
 
   csv_to_read <- list.files(path = input_path, pattern = "_Input.csv")
   txt_to_read <- list.files(path = input_path, pattern = "_Input.txt")
 
 
   if (length(csv_to_read) == 1) {
-    portfolio <- read_csv(paste0(input_path, csv_to_read))
+    portfolio <- read_csv(file.path(input_path, csv_to_read))
   }
   if (length(txt_to_read) == 1) {
-    enc <- guess_encoding(paste0(input_path, txt_to_read))$encoding[1]
-    portfolio <- read.table(paste0(input_path, txt_to_read), sep = ",", header = T, fileEncoding = enc)
+    enc <- guess_encoding(file.path(input_path, txt_to_read))$encoding[1]
+    portfolio <- read.table(file.path(input_path, txt_to_read), sep = ",", header = T, fileEncoding = enc)
   }
 
   # Reads in Files saved with a ; not a ,
   if (ncol(portfolio) == 1 & length(csv_to_read) == 1) {
-    portfolio <- read.csv(paste0(input_path, csv_to_read), strip.white = T, stringsAsFactors = F, sep = ";")
+    portfolio <- read.csv(file.path(input_path, csv_to_read), strip.white = T, stringsAsFactors = F, sep = ";")
   }
   if (ncol(portfolio) == 1 & length(txt_to_read) == 1) {
-    portfolio <- read.table(paste0(input_path, txt_to_read), sep = "\t", header = T, fileEncoding = enc)
+    portfolio <- read.table(file.path(input_path, txt_to_read), sep = "\t", header = T, fileEncoding = enc)
   }
   if (ncol(portfolio) == 1 & length(txt_to_read) == 1) {
-    portfolio <- read.table(paste0(input_path, txt_to_read), sep = ";", header = T, fileEncoding = enc)
+    portfolio <- read.table(file.path(input_path, txt_to_read), sep = ";", header = T, fileEncoding = enc)
   }
 
 
@@ -882,13 +882,13 @@ get_and_clean_currency_data <- function() {
 get_and_clean_fund_data <- function() {
   fund_data <- NA
   # Fund Data
-  if (file.exists(paste0(analysis_inputs_path, "/fund_data_", financial_timestamp, ".rda"))) {
-    fund_data <- readRDS(paste0(analysis_inputs_path, "/fund_data_", financial_timestamp, ".rda"))
-  } else if (file.exists(paste0(analysis_inputs_path, "/fund_data_2018Q4.rda"))) {
-    fund_data <- readRDS(paste0(analysis_inputs_path, "/fund_data_2018Q4.rda"))
+  if (file.exists(file.path(analysis_inputs_path, "fund_data_", financial_timestamp, ".rda"))) {
+    fund_data <- readRDS(file.path(analysis_inputs_path, "fund_data_", financial_timestamp, ".rda"))
+  } else if (file.exists(file.path(analysis_inputs_path, "fund_data_2018Q4.rda"))) {
+    fund_data <- readRDS(file.path(analysis_inputs_path, "fund_data_2018Q4.rda"))
     print("Old Fund Data being used. Replace FundsData2018Q4 or check name of file.")
-  } else if (file.exists(paste0(analysis_inputs_path, "/SFC_26052020_funds.csv"))) {
-    fund_data <- read_csv(paste0(analysis_inputs_path, "/SFC_26052020_funds.csv"))
+  } else if (file.exists(file.path(analysis_inputs_path, "SFC_26052020_funds.csv"))) {
+    fund_data <- read_csv(file.path(analysis_inputs_path, "SFC_26052020_funds.csv"))
     print("2020Q2 SFC fund data being used")
   } else {
     if (!data_check(fund_data)) {
@@ -909,7 +909,7 @@ get_and_clean_fund_data <- function() {
 get_and_clean_fin_data <- function(fund_data) {
 
   # Financial Data
-  fin_data_raw <- read_rda(paste0(analysis_inputs_path, "/security_financial_data.rda")) %>% as_tibble()
+  fin_data_raw <- read_rda(file.path(analysis_inputs_path, "security_financial_data.rda")) %>% as_tibble()
 
   # remove unclear duplicates from raw financial data. This should be moved to DataStore.
   rm_duplicates <- read_csv("non_distinct_isins.csv")
@@ -997,7 +997,7 @@ get_and_clean_revenue_data <- function() {
   revenue_data <- data.frame()
 
   if (has_revenue) {
-    revenue_data <- read_rda(paste0(analysis_inputs_path, "/revenue_data_member_ticker.rda"))
+    revenue_data <- read_rda(file.path(analysis_inputs_path, "revenue_data_member_ticker.rda"))
     # col_types = "dcdcclcd")
 
     revenue_data <- revenue_data %>%
@@ -1010,7 +1010,7 @@ get_and_clean_revenue_data <- function() {
 }
 
 get_and_clean_company_fin_data <- function() {
-  comp_fin_data_raw <- read_rds(paste0(analysis_inputs_path, "/consolidated_financial_data.rda"))
+  comp_fin_data_raw <- read_rds(file.path(analysis_inputs_path, "consolidated_financial_data.rda"))
 
   comp_fin_data_raw <- comp_fin_data_raw %>% select(
     company_id, company_name, bloomberg_id, country_of_domicile, corporate_bond_ticker, bics_subgroup, bics_sector,
@@ -1026,7 +1026,7 @@ get_and_clean_company_fin_data <- function() {
 }
 
 get_and_clean_debt_fin_data <- function() {
-  debt_fin_data_raw <- read_rds(paste0(analysis_inputs_path, "/debt_financial_data.rda"))
+  debt_fin_data_raw <- read_rds(file.path(analysis_inputs_path, "debt_financial_data.rda"))
 
   return(debt_fin_data_raw)
 }
@@ -1397,7 +1397,7 @@ create_audit_chart <- function(audit_file, proc_input_path) {
     )
 
 
-  ggsave(paste0(proc_input_path, "/AuditChart.png"), Chart_1, height = nrow_Legend, width = 8)
+  ggsave(file.path(proc_input_path, "AuditChart.png"), Chart_1, height = nrow_Legend, width = 8)
 }
 
 create_audit_file <- function(portfolio_total) {
@@ -1531,7 +1531,7 @@ get_average_emission_data <- function(inc_emission_factors) {
   average_sector_intensity <- data.frame()
 
   if (inc_emission_factors) {
-    average_sector_intensity <- read_rda(paste0(analysis_inputs_path, "/average_sector_intensity.rda"))
+    average_sector_intensity <- read_rda(file.path(analysis_inputs_path, "average_sector_intensity.rda"))
   }
   return(average_sector_intensity)
 }
@@ -1540,7 +1540,7 @@ get_company_emission_data <- function(inc_emission_factors) {
   company_emissions <- data.frame()
 
   if (inc_emission_factors) {
-    company_emissions <- read_rda(paste0(analysis_inputs_path, "/company_emissions.rda"))
+    company_emissions <- read_rda(file.path(analysis_inputs_path, "company_emissions.rda"))
   }
   return(company_emissions)
 }
