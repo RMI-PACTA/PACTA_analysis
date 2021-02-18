@@ -11,8 +11,12 @@ source("0_portfolio_test.R")
 source("0_global_functions.R")
 source("0_web_functions.R")
 
-if (!exists("portfolio_name_ref_all")) { portfolio_name_ref_all <- "TestPortfolio_Input" }
-if (!exists("portfolio_root_dir")) { portfolio_root_dir <- "working_dir" }
+if (!exists("portfolio_name_ref_all")) {
+  portfolio_name_ref_all <- "TestPortfolio_Input"
+}
+if (!exists("portfolio_root_dir")) {
+  portfolio_root_dir <- "working_dir"
+}
 
 setup_project()
 
@@ -130,7 +134,6 @@ bonds_inputs_file <- file.path(proc_input_path, portfolio_name_ref_all, "bonds_p
 # portfolio_name <- file_names$portfolio_name
 
 if (file.exists(bonds_inputs_file)) {
-
   ald_scen_cb <- get_ald_scen("Bonds")
   ald_raw_cb <- get_ald_raw("Bonds")
 
