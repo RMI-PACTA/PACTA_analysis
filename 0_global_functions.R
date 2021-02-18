@@ -43,7 +43,7 @@ set_col_types <- function(grouping_variables, fixed_col_types) {
   return(port_col_types)
 }
 
-set_project_parameters <- function(file_path) {
+set_project_parameters <- function(file_path){
   cfg <- config::get(file = file_path)
 
   project_report_name <<- cfg$reporting$project_report_name
@@ -124,6 +124,7 @@ set_project_parameters <- function(file_path) {
     inc_stresstest <<- FALSE
     warning("Warning: inc_stresstest set to standard value (FALSE) as it is not defined in the parameter file")
   }
+
 }
 
 set_global_parameters <- function(file_path) {
@@ -250,6 +251,7 @@ set_git_path <- function() {
 }
 
 set_analysis_inputs_path <- function(twodii_internal, data_location_ext, dataprep_ref = datastore_timestamp) {
+
   if (twodii_internal) {
     analysis_inputs_path <- r2dii.utils::path_dropbox_2dii("PortCheck", "00_Data", "07_AnalysisInputs", dataprep_ref)
     analysis_inputs_path <- file.path(analysis_inputs_path)
@@ -362,5 +364,6 @@ write_log <- function(msg, file_path = log_path, ...) {
     as.character(msg),
     ...
   )
-  write(composed, file = file.path(file_path, "error_messages.txt"), append = TRUE)
+  write(composed, file = file.path(file_path,"error_messages.txt"), append = TRUE)
 }
+

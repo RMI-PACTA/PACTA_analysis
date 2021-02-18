@@ -20,12 +20,8 @@ for (i in seq_along(test_cases_csvs)) {
   investor_name <- unique(test_case$Investor.Name)
 
   # if no unique, valid portfolio_name or investor_name, use the filename
-  if (length(portfolio_name) != 1) {
-    portfolio_name <- filename
-  }
-  if (length(investor_name) != 1) {
-    investor_name <- filename
-  }
+  if (length(portfolio_name) != 1) { portfolio_name <- filename }
+  if (length(investor_name) != 1) { investor_name <- filename }
 
   yaml_data <-
     list(default = list(
@@ -45,10 +41,8 @@ for (i in seq_along(test_cases_csvs)) {
   fs::dir_create(out_dir, recurse = TRUE)
 
   sub_directories_needed <-
-    c(
-      "00_Log_Files", "10_Parameter_File", "20_Raw_Inputs",
-      "30_Processed_Inputs", "40_Results", "50_Outputs"
-    )
+    c("00_Log_Files", "10_Parameter_File", "20_Raw_Inputs",
+      "30_Processed_Inputs", "40_Results", "50_Outputs")
 
   lapply(sub_directories_needed, function(sub_dir) {
     fs::dir_create(fs::path(out_dir, sub_dir), recurse = TRUE)
@@ -56,16 +50,14 @@ for (i in seq_along(test_cases_csvs)) {
 
   write_csv(test_case, fs::path(out_dir, "20_Raw_Inputs", paste0(portfolio_name, ".csv")))
   write_yaml(yaml_data, fs::path(out_dir, "10_Parameter_File", paste0(portfolio_name, "_PortfolioParameters.yml")), indent = 4)
-  fs::file_copy(
-    "working_dir/10_Parameter_File/AnalysisParameters.yml",
-    fs::path(out_dir, "10_Parameter_File", "AnalysisParameters.yml")
-  )
+  fs::file_copy("working_dir/10_Parameter_File/AnalysisParameters.yml",
+                fs::path(out_dir, "10_Parameter_File", "AnalysisParameters.yml"))
 }
 
 
 report_git_status <-
   function(repo_roots = ".") {
-    for (repo_root in repo_roots) {
+    for (repo_root in  repo_roots) {
       cli::cli_h1(paste0("repo status for: ", repo_root))
 
       system2("git", c("-C", repo_root, "fetch"), stdout = FALSE)
@@ -91,10 +83,8 @@ report_git_status <-
       owner <- "2DegreesInvesting"
       repo_name <- basename(repo_root)
       open_pr_list <-
-        gh::gh("/repos/:owner/:repo/pulls",
-          owner = owner, repo = repo_name,
-          state = "open", .limit = Inf
-        )
+        gh::gh("/repos/:owner/:repo/pulls", owner = owner, repo = repo_name,
+               state = "open", .limit = Inf)
 
       if (length(open_pr_list) > 0) {
         infos <-
@@ -107,8 +97,7 @@ report_git_status <-
   }
 
 report_git_status(
-  c(
-    "../PACTA_analysis",
+  c("../PACTA_analysis",
     "../create_interactive_report",
     "../StressTestingModelDev",
     "../pacta-data",
@@ -125,14 +114,10 @@ for (csv_num in seq_along(test_cases_csvs)) {
   sub_directory <- portfolio_name
 
   # if no unique, valid portfolio_name, use an empty string
-  if (length(portfolio_name) != 1) {
-    portfolio_name <- ""
-  }
+  if (length(portfolio_name) != 1) { portfolio_name <- "" }
 
   # if no unique, valid portfolio_name, use the filename
-  if (length(sub_directory) != 1) {
-    sub_directory <- filename
-  }
+  if (length(sub_directory) != 1) { sub_directory <- filename }
 
   out_dir <- fs::path(test_cases_output_dir, sub_directory)
 

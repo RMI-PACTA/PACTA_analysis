@@ -81,6 +81,7 @@ calculate_ownership_weight <- function(portfolio) {
 }
 
 calculate_port_weight <- function(portfolio, grouping_variables) {
+
   portfolio <- portfolio %>%
     ungroup() %>%
     group_by(!!!rlang::syms(grouping_variables)) %>%
@@ -166,10 +167,8 @@ aggregate_portfolio <- function(df) {
         plan_tech_prod, plan_alloc_wt_tech_prod, plan_carsten, plan_emission_factor,
         scen_tech_prod, scen_alloc_wt_tech_prod, scen_carsten, scen_emission_factor
       ) %>%
-      mutate(
-        plan_emission_factor = ifelse(is.na(plan_emission_factor), 0, plan_emission_factor),
-        scen_emission_factor = ifelse(is.na(scen_emission_factor), 0, scen_emission_factor)
-      ) %>%
+      mutate(plan_emission_factor = ifelse(is.na(plan_emission_factor), 0, plan_emission_factor),
+             scen_emission_factor = ifelse(is.na(scen_emission_factor), 0, scen_emission_factor)) %>%
       group_by(
         !!!rlang::syms(grouping_variables), scenario, allocation,
         equity_market, scenario_geography, year,
@@ -212,10 +211,8 @@ aggregate_map_data <- function(portfolio) {
       ald_sector, technology,
       financial_sector, allocation, allocation_weight, ald_production_unit
     ) %>%
-    summarise(
-      plan_alloc_wt_tech_prod = sum(plan_alloc_wt_tech_prod, na.rm = TRUE),
-      .groups = "drop_last"
-    ) %>%
+    summarise(plan_alloc_wt_tech_prod = sum(plan_alloc_wt_tech_prod, na.rm = TRUE),
+              .groups = "drop_last") %>%
     mutate(plan_alloc_wt_sec_prod = sum(plan_alloc_wt_tech_prod))
 
   if (data_check(portfolio)) {

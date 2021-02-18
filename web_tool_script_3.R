@@ -6,12 +6,8 @@ use_r_packages()
 source("0_global_functions.R")
 source("0_web_functions.R")
 
-if (!exists("portfolio_name_ref_all")) {
-  portfolio_name_ref_all <- "TestPortfolio_Input"
-}
-if (!exists("portfolio_root_dir")) {
-  portfolio_root_dir <- "working_dir"
-}
+if (!exists("portfolio_name_ref_all")) { portfolio_name_ref_all <- "TestPortfolio_Input" }
+if (!exists("portfolio_root_dir")) { portfolio_root_dir <- "working_dir" }
 
 setup_project()
 
@@ -19,14 +15,15 @@ set_webtool_paths(portfolio_root_dir)
 
 set_portfolio_parameters(file_path = fs::path(par_file_path, paste0(portfolio_name_ref_all, "_PortfolioParameters.yml")))
 
-set_project_parameters(file.path(working_location, "parameter_files", paste0("ProjectParameters_", project_code, ".yml")))
+set_project_parameters(file.path(working_location, "parameter_files",paste0("ProjectParameters_", project_code, ".yml")))
 
-if (project_code == "PA2020FL") {
-  peer_group <- case_when(
-    peer_group %in% c("other") ~ "Others",
+if(project_code == "PA2020FL"){
+  peer_group = case_when(
+    peer_group %in% c("other")~ "Others",
     peer_group %in% c("bank", "assetmanager") ~ "Banks  and  Asset Managers",
     peer_group %in% c("pensionfund", "insurance") ~ "Pension Funds  and  Insurances"
   )
+
 }
 
 
@@ -36,28 +33,25 @@ source(file.path(template_path, "create_interactive_report.R"))
 source(file.path(template_path, "create_executive_summary.R"))
 source(file.path(template_path, "useful_functions.R"))
 
-report_name <- select_report_template(
-  project_report_name = project_report_name,
-  language_select = language_select
-)
+report_name = select_report_template(project_report_name = project_report_name,
+                                     language_select = language_select)
 
-exec_summary_name <- select_exec_summary_template(
-  project_report_name = project_report_name,
-  language_select = language_select
-)
+exec_summary_name = select_exec_summary_template(project_report_name = project_report_name,
+                                                 language_select = language_select)
 
-template_dir <- paste0(template_path, report_name, "/_book/")
-exec_summary_dir <- paste0(template_path, exec_summary_name, "/")
+template_dir <- paste0(template_path, report_name,"/_book/")
+exec_summary_dir <- paste0(template_path, exec_summary_name,"/")
 
 survey_dir <- path(user_results_path, project_code, "survey")
 real_estate_dir <- path(user_results_path, project_code, "real_estate")
 
 output_dir <- file.path(outputs_path, portfolio_name_ref_all)
 
-if (file.exists(file.path(proc_input_path, portfolio_name_ref_all, "audit_file.rda"))) {
+if (file.exists(file.path(proc_input_path, portfolio_name_ref_all, "audit_file.rda"))){
   audit_file <- readRDS(file.path(proc_input_path, portfolio_name_ref_all, "audit_file.rda"))
-} else {
+}else{
   audit_file <- empty_audit_file()
+
 }
 
 # load portfolio overview
@@ -68,11 +62,10 @@ if (file.exists(file.path(proc_input_path, portfolio_name_ref_all, "overview_por
 }
 
 
-if (file.exists(file.path(proc_input_path, portfolio_name_ref_all, "emissions.rda"))) {
+if (file.exists(file.path(proc_input_path, portfolio_name_ref_all, "emissions.rda"))){
   emissions <- read_rds(file.path(proc_input_path, portfolio_name_ref_all, "emissions.rda"))
-} else {
-  emissions <- empty_emissions_results()
-}
+}else{
+  emissions <- empty_emissions_results()}
 
 # load equity portfolio data
 if (file.exists(file.path(results_path, portfolio_name_ref_all, "Equity_results_portfolio.rda"))) {
@@ -138,27 +131,27 @@ if (file.exists(file.path(results_path, portfolio_name_ref_all, "Stress_test_res
 }
 
 # load peers results both individual and aggregate
-if (file.exists(file.path(data_location_ext, paste0(project_code, "_peers_equity_results_portfolio.rda")))) {
+if (file.exists(file.path(data_location_ext, paste0(project_code, "_peers_equity_results_portfolio.rda")))){
   peers_equity_results_portfolio <- read_rds(file.path(data_location_ext, paste0(project_code, "_peers_equity_results_portfolio.rda")))
-} else {
+}else{
   peers_equity_results_portfolio <- empty_portfolio_results()
 }
 
-if (file.exists(file.path(data_location_ext, paste0(project_code, "_peers_bonds_results_portfolio.rda")))) {
+if(file.exists(file.path(data_location_ext, paste0(project_code, "_peers_bonds_results_portfolio.rda")))){
   peers_bonds_results_portfolio <- read_rds(file.path(data_location_ext, paste0(project_code, "_peers_bonds_results_portfolio.rda")))
-} else {
+}else{
   peers_bonds_results_portfolio <- empty_portfolio_results()
 }
 
-if (file.exists(file.path(data_location_ext, paste0(project_code, "_peers_equity_results_portfolio_ind.rda")))) {
+if (file.exists(file.path(data_location_ext, paste0(project_code, "_peers_equity_results_portfolio_ind.rda")))){
   peers_equity_results_user <- read_rds(file.path(data_location_ext, paste0(project_code, "_peers_equity_results_portfolio_ind.rda")))
-} else {
+}else{
   peers_equity_results_user <- empty_portfolio_results()
 }
 
-if (file.exists(file.path(data_location_ext, paste0(project_code, "_peers_bonds_results_portfolio_ind.rda")))) {
+if(file.exists(file.path(data_location_ext, paste0(project_code, "_peers_bonds_results_portfolio_ind.rda")))){
   peers_bonds_results_user <- read_rds(file.path(data_location_ext, paste0(project_code, "_peers_bonds_results_portfolio_ind.rda")))
-} else {
+}else{
   peers_bonds_results_user <- empty_portfolio_results()
 }
 
@@ -181,18 +174,18 @@ js_translations <- jsonlite::fromJSON(
 )
 
 sector_order <- readr::read_csv(
-  path(template_path, "data", "sector_order", "sector_order.csv"),
+  path(template_path, "data","sector_order","sector_order.csv"),
   col_types = cols()
 )
 
 # Needed for testing only
 shock <- shock_year # this should come directly from the stress test.. 2030 based on current discussions in CHPA2020 case
-select_scenario_auto <- scenario_auto
-select_scenario_other <- scenario_other
-select_scenario_shipping <- scenario_shipping
-twodi_sectors <- sector_list
-repo_path <- template_path
-file_name <- "template.Rmd"
+select_scenario_auto = scenario_auto
+select_scenario_other = scenario_other
+select_scenario_shipping = scenario_shipping
+twodi_sectors = sector_list
+repo_path = template_path
+file_name = "template.Rmd"
 
 create_interactive_report(
   repo_path = template_path,
@@ -241,7 +234,7 @@ create_interactive_report(
   display_currency = display_currency,
   currency_exchange_value = currency_exchange_value,
   header_dictionary = header_dictionary,
-  sector_order = sector_order
+ sector_order = sector_order
 )
 
 
@@ -268,4 +261,5 @@ create_executive_summary(
   peers_bonds_results_portfolio = peers_bonds_results_portfolio,
   peers_equity_results_user = peers_equity_results_user,
   peers_bonds_results_user = peers_bonds_results_user
+
 )

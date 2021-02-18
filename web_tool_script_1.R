@@ -9,12 +9,8 @@ source("0_web_functions.R")
 source("0_json_functions.R")
 source("0_portfolio_test.R")
 
-if (!exists("portfolio_name_ref_all")) {
-  portfolio_name_ref_all <- "TestPortfolio_Input"
-}
-if (!exists("portfolio_root_dir")) {
-  portfolio_root_dir <- "working_dir"
-}
+if (!exists("portfolio_name_ref_all")) { portfolio_name_ref_all <- "TestPortfolio_Input" }
+if (!exists("portfolio_root_dir")) { portfolio_root_dir <- "working_dir" }
 portfolio_root_dir <- "working_dir"
 
 setup_project()
@@ -25,7 +21,7 @@ set_webtool_paths(portfolio_root_dir)
 
 set_portfolio_parameters(file_path = fs::path(par_file_path, paste0(portfolio_name_ref_all, "_PortfolioParameters.yml")))
 
-set_project_parameters(file.path(working_location, "parameter_files", paste0("ProjectParameters_", project_code, ".yml")))
+set_project_parameters(file.path(working_location, "parameter_files",paste0("ProjectParameters_", project_code, ".yml")))
 
 # need to define an alternative location for data files
 analysis_inputs_path <- set_analysis_inputs_path(twodii_internal, data_location_ext, dataprep_timestamp)
@@ -47,11 +43,11 @@ file_location <- file.path(analysis_inputs_path, "cleaned_files")
 
 if (new_data == TRUE) {
   currencies <- get_and_clean_currency_data()
-
-
+  
+  
   total_fund_list <- get_and_clean_total_fund_list_data()
-
-  # fund_data <- get_and_clean_fund_data()
+ 
+   # fund_data <- get_and_clean_fund_data()
   fund_data <- data.frame()
 
   fin_data <- get_and_clean_fin_data(fund_data)
@@ -75,11 +71,11 @@ if (new_data == TRUE) {
     debt_fin_data,
     average_sector_intensity,
     company_emissions,
-    total_fund_list = total_fund_list
+    total_fund_list=total_fund_list
   )
 } else {
   currencies <- fst::read_fst(file.path(file_location, "currencies.fst"))
-
+  
   read_fst_or_return_null <- function(fst_file) {
     if (!file.exists(fst_file)) {
       return(NULL)
@@ -90,19 +86,19 @@ if (new_data == TRUE) {
 
   fund_data_path <- file.path(file_location, "fund_data.fst")
 
-
+  
   fund_data <- read_fst_or_return_null(fund_data_path)
-
+  
   fund_data$holding_isin <- as.character(fund_data$holding_isin)
   fund_data$fund_isin <- as.character(fund_data$fund_isin)
-
-
+  
+  
   fin_data <- fst::read_fst(file.path(file_location, "fin_data.fst"))
 
   comp_fin_data <- fst::read_fst(file.path(file_location, "comp_fin_data.fst"))
 
   debt_fin_data <- fst::read_fst(file.path(file_location, "debt_fin_data.fst"))
-
+  
   total_fund_list <- fst::read_fst(file.path(file_location, "total_fund_list.fst"))
 
   if (inc_emission_factors) {
@@ -129,7 +125,7 @@ portfolio <- process_raw_portfolio(
   fund_data,
   currencies,
   grouping_variables,
-  total_fund_list = total_fund_list
+  total_fund_list=total_fund_list
 )
 
 # information of coverage and coverage loses for all funds in raw_portfolio
@@ -172,8 +168,7 @@ audit_file <- create_audit_file(portfolio_total)
 emissions_totals <- calculate_average_portfolio_emissions(
   portfolio_total,
   comp_fin_data,
-  average_sector_intensity
-)
+  average_sector_intensity)
 
 port_weights <- pw_calculations(eq_portfolio, cb_portfolio)
 
@@ -199,10 +194,10 @@ save_if_exists(emissions_totals, portfolio_name, file.path(proc_input_path_, "em
 save_if_exists(fund_coverage_summary, portfolio_name, file.path(proc_input_path_, "fund_coverage_summary.rda"))
 save_if_exists(unknown_funds_in_funds, portfolio_name, file.path(proc_input_path_, "unknown_funds_in_funds.rda"))
 
-if (data_check(port_weights)) {
-  port_weights <- jsonlite::toJSON(x = port_weights)
-  write(x = port_weights, file = file.path(proc_input_path_, "portfolio_weights.json"))
-}
+if(data_check(port_weights)){
+  port_weights <- jsonlite::toJSON(x=port_weights)
+  write(x = port_weights, file = file.path(proc_input_path_,"portfolio_weights.json"))
+  }
 
 rm(portfolio_total)
 rm(portfolio)

@@ -76,7 +76,7 @@ dockerfile_packages <- function(path = packages_path()) {
 
   c(
     '    && Rscript -e "install.packages( \\',
-    paste0("             ", format_as_vector(pkg), " \\"),
+    paste0('             ', format_as_vector(pkg), ' \\'),
     '           )" \\'
   )
 }
@@ -84,7 +84,7 @@ dockerfile_packages <- function(path = packages_path()) {
 format_as_vector <- function(string) {
   x <- glue("'{string}',")
   x[length(x)] <- sub(",$", "", x[length(x)])
-  c("c(", glue("  {x}"), ")")
+  c('c(', glue("  {x}"), ')' )
 }
 
 packages_path <- function() {
