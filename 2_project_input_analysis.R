@@ -16,9 +16,6 @@
 
 # Obtains data, processes the portfolio and saves the files
 
-# todo: move this to parameter files
-other_sector_list <- c("Steel", "Cement", "Shipping", "Aviation")
-
 ####################
 #### DATA FILES ####
 ####################
