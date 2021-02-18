@@ -130,18 +130,9 @@ set_project_paths(project_name, twodii_internal, project_location_ext)
 # To do: copy in correct sample parameter files
 copy_files(project_name)
 
-# set_portfolio_parameters(file_path = fs::path(par_file_path, paste0("PortfolioParameters.yml")))
-
 # The ProjectParameter file is based off of the ProjectParameters_GENERAL used online for a user not taking part in a COP project
-# set_project_parameters(file.path(par_file_path,paste0("ProjectParameters.yml")))
+set_project_parameters(file.path(par_file_path,paste0("ProjectParameters.yml")))
 
-
-# parameters
-project_code <- "GENERAL"
-
-# set_global_parameters(fs::path(par_file_path, "AnalysisParameters.yml"))
-
-set_project_parameters(file.path(par_file_path, paste0("ProjectParameters_", project_code, ".yml")))
 # To do: find and add additional parameters
 
 analysis_inputs_path <- set_analysis_inputs_path(twodii_internal, data_location_ext, dataprep_timestamp)
