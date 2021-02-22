@@ -1,23 +1,4 @@
-## Project start
-# File List Check for External Data Requirements:
-# security_financial_data.rda
-# consolidated_financial_data.rda
-# debt_financial_data.rda
-# bonds_ald_scenario.rda
-# equity_ald_scenario.rda
-# masterdata_ownership_datastore.rda
-# masterdata_debt_datastore.rda
-
-# To do: write test to see that these files exist
-
-# optional:
-# fund_data_2019Q4.rda (or relevant time stamp)
-# revenue_data_member_ticker.rda (if not available, set has_revenue = FALSE in parameter file)
-
-# Obtains data, processes the portfolio and saves the files
-
-# todo: move this to parameter files
-other_sector_list <- c("Steel", "Cement", "Shipping", "Aviation")
+# This script obtains data, processes the portfolio and saves the files
 
 ####################
 #### DATA FILES ####
