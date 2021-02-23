@@ -13,7 +13,7 @@ default:
         select_scenario: WEO2019_SDS
         scenario_auto: ETP2017_B2DS
         scenario_other: ETP2017_B2DS
-        scenario_shipping: SBTI_SBTI
+        scenario_shipping: ETP2017_B2DS
         portfolio_allocation_method: portfolio_weight
         scenario_geography: Global
 
@@ -32,7 +32,6 @@ default:
             - Oil&Gas
             - Coal
         pacta_sectors_not_analysed:
-            - Shipping
             - Steel
             - Aviation
             - Cement

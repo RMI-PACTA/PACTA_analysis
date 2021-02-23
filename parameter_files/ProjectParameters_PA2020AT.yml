@@ -1,9 +1,9 @@
 default:
 
     reporting:
-        project_report_name: swiss
-        display_currency: CHF
-        currency_exchange_value: 1.03
+        project_report_name: austria
+        display_currency: EUR
+        currency_exchange_value: 1.12
 
     parameters:
         timestamp: 2019Q4
@@ -86,6 +86,5 @@ default:
 
     stress_test:
         shock_year: 2030
-        price_data_version: 2020Q4
-
-
+        price_data_version: 2021Q1
+     

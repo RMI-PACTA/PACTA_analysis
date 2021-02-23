@@ -276,7 +276,7 @@ copy_files <- function(project_name) {
 
   input_file <- paste0(raw_input_path, "/", project_name, "_Input.csv")
   parameter_file <- paste0(par_file_path, "/ReportParameters.yml")
-  yml_file <- paste0(par_file_path, "/AnalysisParameters.yml")
+  yml_file <- paste0(par_file_path, "/ProjectParameters.yml")
 
   if (!file.exists(input_file)) {
     file.copy(paste0(folder_location, "/ProjectName_Input.csv"), input_file, overwrite = F)
@@ -287,7 +287,7 @@ copy_files <- function(project_name) {
   }
 
   if (!file.exists(yml_file)) {
-    file.copy(paste0(folder_location, "/AnalysisParameters.yml"), yml_file, overwrite = F)
+    file.copy(paste0(folder_location, "/ProjectParameters.yml"), yml_file, overwrite = F)
   }
 }
 
