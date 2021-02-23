@@ -23,7 +23,8 @@ get_ald_scen <- function(portfolio_type) {
   ald <- ald %>%
     filter(
       scenario_source %in% scenario_sources_list,
-      scenario_geography %in% scenario_geographies_list
+      scenario_geography %in% scenario_geographies_list,
+      ald_sector %in% sector_list
     ) %>%
     mutate(mapped_ald = 1)
 
@@ -44,6 +45,7 @@ get_ald_raw <- function(portfolio_type) {
 
   ald_raw <- ald_raw %>%
     filter(year %in% seq(start_year, start_year + time_horizon)) %>%
+    filter(ald_sector %in% sector_list) %>%
     mutate(
       ald_sector = if_else(technology == "Coal", "Coal", ald_sector),
       ald_sector = if_else(technology %in% c("Oil", "Gas"), "Oil&Gas", ald_sector),
