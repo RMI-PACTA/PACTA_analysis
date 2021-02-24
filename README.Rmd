@@ -9,48 +9,172 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures/README-",
-  out.width = "100%"
+  out.width = "100%",
+  cache = TRUE
 )
 ```
 
 # PACTA.analysis
 
-<!-- badges: start -->
-<!-- badges: end -->
-
 The goal of this repository is to assess how well a porfolio aligns with climate
-goals. This document provides a reproducible example of what you can achieve
-with the code in this repository and friends.
+goals. 
 
-You may want to analyze a single portfolio and investor, or multiple ones. With
-2DII readers in mind, this document details two workflows:
+This documents targets internal 2DII users and developers. It provides a
+reproducible example of what you can achieve with the code in this repository
+and friends. You may use it as a guide to run your own analyses, or as an
+integration test to ensure code changes preserve the behavior documented here.
+Readers outside 2DII may instead see other related work:
+[transitionmonitor.com](https://platform.transitionmonitor.com/start),
+[r2dii.data](https://github.com/2DegreesInvesting/r2dii.data),
+[r2dii.match](https://github.com/2DegreesInvesting/r2dii.match), and
+[r2dii.analysis](https://github.com/2DegreesInvesting/r2dii.analysis).
+
+You may want to analyze a single portfolio and investor, or multiple ones. This document details two workflows:
 
 * __Single-inputs workflow__: When the number of portfolios and investors is
-exactly one, we now use a specific set of optimized scripts. (Because this
-workflow is available online at <https://platform.transitionmonitor.com/start>,
-it has been referred to as "the online workflow", and the scripts as "the web
-tool scripts". This is misleading because this workflow can run offline too.)
+exactly one, we use a specific set of scripts optimized for this purpose. This
+workflow is typically used to generate interactive reports. Because this
+workflow is available [online](https://platform.transitionmonitor.com/start), it
+has been referred to as "the online workflow", and the scripts as "the web tool
+scripts". This is misleading because this workflow can run offline too.
 * __Multiple-outputs workflow__: When the number of portfolios and/or investors
-is not exactly one, we use a different set of optimized scripts. (By contrast
-with the so-called "online" workflow, this one has been usually referred to as
-"the offline workflow"; again, this is misleading.)
+is not exactly one, we use a different set of optimized scripts. This workflow
+is typically used to produce static (.pdf) reports. By contrast with the
+so-called "online" workflow, this one has been usually referred to as "the
+offline workflow"; again, this is misleading.
 
-Users outside 2DII may instead see other related work:
+Both workflows include three steps:
 
-* <https://platform.transitionmonitor.com/start>
-* <https://github.com/2DegreesInvesting/r2dii.data>
-* <https://github.com/2DegreesInvesting/r2dii.match>
-* <https://github.com/2DegreesInvesting/r2dii.analysis>
+1. Clean portfolio: Clean the input portfolio and merge in financial data, to
+categorize each holding and identify whether it's equity (EQ) or corporate bonds
+(CB).
+2. Run Analysis: Merge portfolios with asset-level data and scenarios, then
+group results at company, portfolio and regional level.
+3. Present results: Present the results in a clear output format.
+
+--
+
+Note: Code chunks with prompts "`$`" and "`#>`" correspond to bash and R,
+respectively.
+
+## Computing environment
+
+### System
+
+The single-inputs workflow runs on a system defined by the Dockerfile in
+<https://github.com/2DegreesInvesting/docker/tree/master/system>. The
+multiple-inputs workflow currently lacks a formal definition of its system
+requirements. As a guide, see the computing environment for the single-inputs or
+search for relevant workflows for GitHub actions.
+
+```{bash comment="$"}
+ls .github/workflows
+```
+
+### Siblings
+
+PACTA_analysis depends on other "siblings" of the PACTA family. They are all
+available at <https://github.com/2DegreesInvesting> and should live side by
+side, under the same parent directory. Before any analysis, ensure all siblings
+are up to date.
+
+```{bash comment="$"}
+# Store
+ working_directory="$pwd"
+```
+
+```{bash comment="$"}
+siblings="\
+  ../pacta-data \
+  ../create_interactive_report \
+  ../StressTestingModelDev"
+for each_sibling in $siblings; do
+  cd $each_sibling && echo $each_sibling
+  git log --decorate --oneline -n 1
+done
+```
+
+```{bash comment="$"}
+# Restore
+cd "$working_directory"
+```
+
+### R packages
+
+* R packages used in this file:
+
+```{r}
+suppressPackageStartupMessages({
+  library(renv)
+  library(devtools)
+  library(conflicted)
+})
+```
+
+* R packages used in the directory PACTA_analysis:
+
+```{r}
+dependencies <- renv::dependencies(progress = FALSE)$Package
+sort(unique(dependencies))
+```
+
+See also the Dockerfile in
+<https://github.com/2DegreesInvesting/docker/tree/master/r-packages>.
 
 ## Installation
 
-Get the source code of this and related repositories (more on this below) from
-https://github.com/2DegreesInvesting/. You may use `git clone <URL>`.
+To use the software in this and related repositories (more on this below) you
+need to work on developer mode. There is no "installation package"; instead
+you need to clone the source code [2DII's organization on
+GitHub](https://github.com/2DegreesInvesting/).
 
-## Example
+Notice that this repository does contain an R package.
 
 ```{r}
-# TODO
+show_package <- head(readLines("DESCRIPTION"), 3)
+writeLines(show_package)
 ```
 
+However, it is only for convenience and must also be used in developer mode.
 
+```{r}
+devtools::load_all()
+```
+
+## Reproducible examples
+
+These examples show how to run each workflow. You may use them in a number of
+ways. For example, you may run them on your local computer to track and explore
+their implementation, or on a remote server as an integration test in a
+continuous integration pipeline.
+
+### Single-inputs workflow
+
+The single-inputs workflow has three steps, each in its own script.
+
+```{bash comment="$"}
+ls web_tool_script*
+```
+
+You can run each script individually in R with:
+
+```{r}
+source("web_tool_script_1.R")
+```
+
+You can also run multiple scripts at once with:
+
+```{r}
+PACTA.analysis:::source_web_tool_scripts(1:2)
+```
+
+If you prefer to use the terminal, you can run each script with:
+
+```{bash command="$", error=TRUE}
+# FIXME 
+Rscript --vanilla web_tool_script_3.R TestPortfolio_Input
+```
+
+### Multiple-inputs workflow
+
+TODO
