@@ -980,9 +980,9 @@ get_and_clean_fin_data <- function(fund_data) {
   }
 
   # updates csv file with missing bloomberg data re funds
-  if (data_check(fund_data)) {
-    check_funds_wo_bbg(fund_data, fin_data)
-  }
+  # if (data_check(fund_data)) {
+  #   check_funds_wo_bbg(fund_data, fin_data)
+  # }
 
   return(fin_data)
 }
