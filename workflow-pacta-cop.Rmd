@@ -1,0 +1,516 @@
+---
+title: "Workflow COP project"
+author: "Clare"
+date: "24/02/2021"
+output: github_document
+---
+
+To successfully prepare a COP project to go online - follow this workflow. 
+
+
+
+## Parameters
+
+To initialise a project, the following parameters need to be set:
+
+```{r echo = FALSE}
+
+project_code = "PA2021DFS"
+project_report_name = "general"
+display_currency = "USD"
+currency_exchange_value = 1
+timestamp = "2019Q4"
+
+# TODO: automate generation of Project Parameters
+# Add these to the parameter file in PACTA_analysis/parameter_files/ProjectParameters_(project_code)
+
+if(file.exists(file.path("parameter_files", paste0("ProjectParameters_", project_code, ".yml")))){
+  print("Parameter file exists")
+}
+
+# TODO: return print out of selected parameters
+
+
+```
+
+
+
+## Peer files
+
+The peer comparison component of the interactive report requires you to generate the results for all participants offline first. This can be done by running the PACTA offline workflow. You do not need to generate reports, just the output files. It is important to prepare the portfolio files representing all peers correctly to do so. 
+
+4 Peer files are required:
+
+- [project_code]_peers_bonds_results_portfolio.rda
+
+- [project_code]_peers_equity_results_portfolio.rda
+
+- [project_code]_peers_bonds_results_portfolio_ind.rda
+
+- [project_code]_peers_equity_results_portfolio_ind.rda
+
+These should be saved in the folder pacta_data/[timestamp] with the above format. 
+
+These represent two types of aggregations; the aggregation at Investor level for each participant, used to create the rankings and comparative bar charts; and the aggregation at peer group level (bank, pensionfund etc)
+
+The standard peer groups are as follow:
+
+- Pensionfund
+
+- Insurance
+
+- Bank
+
+- Asset manager. 
+
+This is entered by the user on the platform. If you require different peer groups selection options get in contact with Wim, or an alternative combination of these for your results this can be programmed into create_interactive_report. 
+
+### Creating the peer group files
+
+First the individual results are created, then the peer group results.
+
+This all works by using the cleaned portfolio files provided. The format should be one large file, that includes all portfolios appended into one. Include the peer groups in this file for ease. 
+
+Columns:
+Peer.Group; Investor.Name; Portfolio.Name; ISIN; MarketValue; Currency
+
+```{r echo = FALSE}
+
+library("dplyr")
+library("readr")
+
+# open the raw portfolio file here
+portfolio_file <- read_csv("C:/Users/clare/Desktop/sample_cop_file.csv")
+
+req_cols <- c("Peer.Group", "Investor.Name", "Portfolio.Name", "ISIN", "MarketValue", "Currency")
+
+if(length(setdiff(colnames(portfolio_file), req_cols)) > 0){print("Missing or excessive columns in portfolio file")}
+
+portfolio_peers <- portfolio_file %>% 
+  mutate(Investor.Name = Peer.Group,
+         Portfolio.Name = Peer.Group) %>% 
+  select(-Peer.Group)
+
+portfolio_ind <- portfolio_file %>% 
+  select(-Portfolio.Name) %>% 
+  rename(Portfolio.Name = Investor.Name,
+         Investor.Name = Peer.Group) 
+
+
+# Feel free to manually do this step if simpler for you. 
+
+```
+
+The first peer "project" is ready to be run through the analysis with the aggregation at the individual level. 
+
+```{r echo = FALSE}
+
+devtools::load_all()
+use_r_packages()
+## Project Initialisation
+working_location <- paste0(getwd(), "/")
+source("0_portfolio_test.R")
+source("0_graphing_functions.R")
+source("0_reporting_functions.R")
+source("0_portfolio_input_check_functions.R")
+source("0_global_functions.R")
+source("0_sda_approach.R")
+
+
+project_name <- paste0(project_code, "_peers_ind")
+twodii_internal <- FALSE
+
+# TRUE or FALSE: TRUE means that the code is running on a 2dii laptop with dropbox connection
+#####################################################################
+### ONLY FOR EXTERNAL PROJECTS (twodii_internal <- FALSE):
+# Variables must exist for internal projects
+project_location_ext <- "C:/Users/clare/Desktop/ExternalTest"
+data_location_ext <- "C:/Users/clare/Desktop/TestData"
+#####################################################################
+
+create_project_folder(project_name, twodii_internal, project_location_ext)
+set_project_paths(project_name, twodii_internal, project_location_ext)
+copy_files(project_name)
+set_project_parameters(file.path(par_file_path,paste0("ProjectParameters.yml")))
+analysis_inputs_path <- set_analysis_inputs_path(twodii_internal, data_location_ext, dataprep_timestamp)
+
+inc_meta_portfolio <- TRUE
+meta_portfolio_name <- "Meta Portfolio"
+meta_investor_name <- "Meta Investor"
+
+write_csv(portfolio_ind, path = file.path(raw_input_path, paste0(project_name, "_Input.csv")))
+```
+
+If you prepared the input file yourself, add the portfolio files to the folder `{r} file.path(raw_input_path)`. Otherwise this is already done above.
+This file should have:
+- investor.name as the peer group name (banks, pensionfund etc)
+- portfolio.name as the investor name ideally as provided by the user (or else the user_id)
+
+```{r echo = FALSE}
+# These run the above project. Will error out if the portfolio file is not provided in the input path
+# For more information on errors that arise, open the workflow-offline.Rmd file
+
+source("2_project_input_analysis.R")
+
+source("3_run_analysis.R")
+
+# Saving the files into the correct locations. 
+
+data_path <- file.path("..", "pacta-data", financial_timestamp)
+
+file.copy(file.path(results_path, "Equity_results_portfolio.rda"), file.path(data_path, paste0(project_code,"_peers_equity_results_portfolio_ind.rda")), overwrite = T)
+
+file.copy(file.path(results_path, "Bonds_results_portfolio.rda"), file.path(data_path, paste0(project_code,"_peers_bonds_results_portfolio_ind.rda")), overwrite = T)
+
+
+```
+
+Now the second peer project is run with the aggregation at the peer group level. 
+
+```{r echo = FALSE}
+
+project_name <- paste0(project_code, "_peers")
+twodii_internal <- FALSE
+
+# TRUE or FALSE: TRUE means that the code is running on a 2dii laptop with dropbox connection
+#####################################################################
+### ONLY FOR EXTERNAL PROJECTS (twodii_internal <- FALSE):
+# Variables must exist for internal projects
+project_location_ext <- "C:/Users/clare/Desktop/ExternalTest"
+data_location_ext <- "C:/Users/clare/Desktop/TestData"
+#####################################################################
+
+create_project_folder(project_name, twodii_internal, project_location_ext)
+set_project_paths(project_name, twodii_internal, project_location_ext)
+copy_files(project_name)
+set_project_parameters(file.path(par_file_path,paste0("ProjectParameters.yml")))
+analysis_inputs_path <- set_analysis_inputs_path(twodii_internal, data_location_ext, dataprep_timestamp)
+
+inc_meta_portfolio <- FALSE
+write_csv(portfolio_peers, path = file.path(raw_input_path, paste0(project_name, "_Input.csv")))
+
+```
+
+Add the portfolio files to the folder `{r} file.path(raw_input_path)`.
+This file should have:
+- investor.name as the peer group name (banks, pensionfund etc)
+- portfolio.name also as the peer group name
+
+```{r echo = FALSE}
+# These run the above project. Will error out if the portfolio file is not provided in the input path
+# For more information on errors that arise, open the workflow-offline.Rmd file
+
+source("2_project_input_analysis.R")
+
+source("3_run_analysis.R")
+
+
+file.copy(file.path(results_path, "Equity_results_portfolio.rda"), file.path(data_path, paste0(project_code,"_peers_equity_results_portfolio.rda")), overwrite = T)
+
+file.copy(file.path(results_path, "Bonds_results_portfolio.rda"), file.path(data_path, paste0(project_code,"_peers_bonds_results_portfolio.rda")), overwrite = T)
+
+```
+
+### Run the QA rmd code
+
+This is a detailed look into the data being used in this analysis. 
+This file is saved in the results folder here: `{r} results_path`
+
+
+```{r echo = FALSE}
+
+ render(file.path("pacta_data_qa.Rmd"),
+         output_dir = results_path,
+         clean = FALSE,
+         quiet = TRUE,
+         params = list(
+            project_code = project_code,
+            project_location_ext = project_location_ext,
+            twodii_internal = twodii_internal
+         )
+         )
+
+
+```
+
+
+### Checking the missing isins
+
+Using the peer group files, it is necessary to check for missing isins. This needs to be obtained and the pacta-data repository updated if necessary. 
+
+Additional missing isins are appended to the file data/isins_missing_bbg_data.csv. This identifies all unique missing isins across all projects.  
+
+This should be analysed using Bloomberg to obtain any new missing isins and these be added to the financial data, before running this again. 
+
+
+### Checking the fund coverage
+
+A coverage summary is provided as an output of 2_project_input_analysis.R. This is a different and more accurate version than what is currently in the QA document. 
+
+```{r echo = FALSE}
+
+# fund_coverage_file
+
+fund_coverage_file <- readRDS(file.path(proc_input_path, "fund_coverage_summary.rda")) %>% 
+  select(investor_name, portfolio_name, isin, value_usd, total_mapped_value_usd, missing_value_usd, funds_in_funds_not_mapped, effective_coverage, fund_data_file_coverage, lipper_data_coverage, lost_coverage_fif)
+
+
+
+```
+
+
+
+
+### Checking the peer group files
+
+Run through the following chunk to check that the files you've created make sense. Make adjustments as necessary. 
+
+```{r echo = FALSE}
+
+# checking the peer group files
+
+# Here is a list of the peer groups being checked for. If your project contains different ones, enter them here. 
+peer_groups <- c("pensionfund","insurance","bank","assetmanager")
+peer_groups <- c("pensionfund", "bank")
+
+# Add an estimated minimum number of investors you have in the study
+number_of_investors = 4
+
+if (file.exists(file.path(data_path, paste0(project_code, "_peers_equity_results_portfolio.rda")))){
+  peers_equity_results_portfolio <- read_rds(file.path(data_path, paste0(project_code, "_peers_equity_results_portfolio.rda")))
+  
+  if (length(setdiff(unique(peers_equity_results_portfolio$portfolio_name), c(peer_groups, "Meta Portfolio"))) > 0){
+    print("Unexpected occurances in peers_equity_results_portfolio. The following is missing from the portfolio_name col:")
+    print(setdiff(unique(peers_equity_results_portfolio$portfolio_name), c(peer_groups, "Meta Portfolio")))
+  } 
+  
+  if (length(setdiff(unique(peers_equity_results_portfolio$investor_name), c(peer_groups, "Meta Investor"))) > 0){
+    print("Unexpected occurances in peers_equity_results_portfolio. The following is missing from the investor_name col:")
+    print(setdiff(unique(peers_equity_results_portfolio$investor_name),  c(peer_groups, "Meta Investor")))
+  } 
+  
+}else{
+  print("No Equity peer group results")
+}
+
+if(file.exists(file.path(data_path, paste0(project_code, "_peers_bonds_results_portfolio.rda")))){
+  peers_bonds_results_portfolio <- read_rds(file.path(data_path, paste0(project_code, "_peers_bonds_results_portfolio.rda")))
+  
+  if (length(setdiff(unique(peers_bonds_results_portfolio$portfolio_name), c(peer_groups, "Meta Portfolio"))) > 0){
+    print("Unexpected occurances in peers_bonds_results_portfolio. The following is missing from the portfolio_name col:")
+    print(setdiff(unique(peers_bonds_results_portfolio$portfolio_name),  c(peer_groups, "Meta Portfolio")))
+  } 
+  
+  if (length(setdiff(unique(peers_bonds_results_portfolio$investor_name), c(peer_groups, "Meta Investor"))) > 0){
+    print("Unexpected occurances in peers_bonds_results_portfolio. The following is missing from the investor_name col:")
+    print(setdiff(unique(peers_bonds_results_portfolio$investor_name), c(peer_groups, "Meta Investor")))
+  } 
+  
+}else{
+  print("No Bond peer group results")
+}
+
+if (file.exists(file.path(data_path, paste0(project_code, "_peers_equity_results_portfolio_ind.rda")))){
+  peers_equity_results_user <- read_rds(file.path(data_path, paste0(project_code, "_peers_equity_results_portfolio_ind.rda")))
+  
+  if (length(unique(peers_equity_results_user$portfolio_name)) <= number_of_investors){
+    print("More investors expected in peers_equity_results_user. The portfolio_name column should be the investor_name string provided by the user. User_id would work as an alternative.")
+  } 
+  
+  
+}else{
+  print("No Equity individual results")
+}
+
+if(file.exists(file.path(data_path, paste0(project_code, "_peers_bonds_results_portfolio_ind.rda")))){
+  peers_bonds_results_user <- read_rds(file.path(data_path, paste0(project_code, "_peers_bonds_results_portfolio_ind.rda")))
+  
+  if (length(setdiff(unique(peers_bonds_results_user$investor_name), c(peer_groups))) > 0){
+    print("Unexpected occurances in peers_bonds_results_user. The following is missing from the investor_name col:")
+    print(setdiff(unique(peers_bonds_results_user$investor_name), peer_groups))
+  } 
+  
+  if (length(unique(peers_bonds_results_user$portfolio_name)) <= number_of_investors){
+    print("More investors expected in peers_bonds_results_user. The portfolio_name column should be the investor_name string provided by the user. User_id would work as an alternative.")
+  } 
+  
+  
+}else{
+  print("No Bond individual results")
+}
+
+
+
+```
+
+Important: once the checks have been reviewed and the files look reasonable, you now need to make a new branch in pacta-data and create a Pull request with this branch so that the files can be uploaded to github from where they are accessible by the tool. Ask if you need help on this! 
+
+
+
+## Stress Test Parameters
+
+If the stress testing module is going to be included, then ensure that a parameter file with the project parameters exists as well as the transition scenario. 
+
+```{r}
+
+if(file.exists(file.path("..","StressTestingModelDev","model_parameters", paste0("model_parameters_", project_code, ".yml")))){
+  print("Parameter file exists")
+}else{print(paste0("Stress test parameter file does not exist. Go to: ", file.path("StressTestingModelDev","model_parameters"), " for a template file."))}
+
+
+if(file.exists(file.path("..","StressTestingModelDev","data-raw", "project_transition_scenarios", paste0("transition_scenario_", project_code, ".csv")))){
+  print("Transition scenario file exists")
+}else{print(paste0("Stress test parameter file does not exist. Go to: ", file.path("StressTestingModelDev","data-raw", "project_transition_scenarios"), " for a template file."))}
+
+
+```
+
+## Portfolio report
+
+Customise the portfolio report for you project. Either create new folders for the project, or use the general template. Ensure that you use the latest version of the create_interactive_report repository before creatng a new template. 
+Generally there is an option to create two outputs:
+
+- Interactive Report (required)
+
+- Executive summary (optional)
+
+
+The executive summary will not print if the files do not exist
+
+Folders are stored in create_interactive_report with the formats: 
+Interactive report: [project_report_name]_[language]_template
+Executive summary: [project_report_name]_[language]_exec_summary
+
+Change the files:
+Interactive report: .rmd files in /rmd 
+Executive summary: template.rmd
+
+```{r}
+
+# Add folders for each language in this list
+languages = c("en")
+print(paste0("languages selected: ", languages))
+
+# Folders are stored in create_interactive_report with the formats: 
+# [report_name]_[language]_template ()
+
+if(all(dir.exists(file.path("..","create_interactive_report",paste0(project_report_name, "_", languages, "_template"))))){print("Templates exist for all reports")}else{
+  print("Add report template directories for all languages for this report name")
+}
+
+if(all(dir.exists(file.path("..","create_interactive_report",paste0(project_report_name, "_", languages, "_exec_summary"))))){print("Executive Summary Folder exists")}else{
+  print("Add executive summary directories for all languages if required for this project. Or let Constructiva know that an exec summary is not required")
+}
+```
+
+
+
+
+
+
+## Test Report
+
+The following code enables you to print a test report for the project. It is important to review this for accuracy and references to other projects. 
+
+If you have not already done so, download the following repositories into a single directory and ensure they have been pulled. 
+
+- PACTA_Analysis
+
+- create_interactive_report
+
+- pacta-data
+
+- StressTestingModelDev
+
+
+```{r}
+
+library(fs)
+library(readr)
+library(yaml)
+library(dplyr)
+
+start_dir <- getwd()
+
+local_git_dir <- "C:/Users/clare/Desktop/PACTA"
+
+test_investor <- unique(portfolio_file$Investor.Name)[1]
+test_portfolio <- portfolio_file %>% 
+  filter(Investor.Name == test_investor) %>% 
+  select(Portfolio.Name) %>%
+  distinct() %>% pull()
+test_portfolio <- test_portfolio[1]
+test_peergroup <-unique(portfolio_file$Peer.Group)[1]
+
+portfolio_data <- portfolio_file %>% 
+  filter(Investor.Name == test_investor,
+         Portfolio.Name == test_portfolio) %>% 
+  select(-Peer.Group)
+
+
+portfolio_name <- test_portfolio
+investor_name <- test_investor
+peer_group_type <- test_peergroup
+language_to_print <- languages[1]
+
+yaml_data <-
+  list(default = list(
+    parameters =
+      list(
+        portfolio_name_in = portfolio_name,
+        investor_name_in = investor_name,
+        peer_group = peer_group_type,
+        language = language_to_print,
+        project_code = project_code
+      )
+  ))
+
+out_dir <- path(local_git_dir, "PACTA_analysis", "working_dir")
+
+unlink(out_dir, recursive = T, force = T)
+dir.create(path(out_dir, "00_Log_Files"), recursive = T)
+dir.create(path(out_dir, "10_Parameter_File"), recursive = T)
+dir.create(path(out_dir, "20_Raw_Inputs"), recursive = T)
+dir.create(path(out_dir, "30_Processed_Inputs"), recursive = T)
+dir.create(path(out_dir, "40_Results"), recursive = T)
+dir.create(path(out_dir, "50_Outputs"), recursive = T)
+
+write_yaml(yaml_data, fs::path(out_dir, "10_Parameter_File", paste0(test_investor, "_PortfolioParameters.yml")), indent = 4)
+
+portfolio_name_ref_all <- test_investor
+portfolio_root_dir <- out_dir
+
+cli::cli_h1(paste0("running for: ", portfolio_name_ref_all, " (test #", test_investor, ")"))
+
+portfolio_root_dir <- "working_dir"
+
+if (nrow(portfolio_raw_data) > 0) {
+  print("port rows > 0")
+  
+  write_csv(data.frame(portfolio_data), path(out_dir, "20_Raw_Inputs", paste0(test_investor, ".csv")))
+  
+  try(source("web_tool_script_1.R"))
+  
+  try(source("web_tool_script_2.R"))
+}
+
+try(source("web_tool_script_3.R"))
+
+```
+
+The output report can be found in `{r} path(out_dir, "50_Outputs")`
+
+Feel free to repeast this process, changing the test_investor or test_portfolio. 
+
+## Docker Image
+
+Once this process has succeeded and you are happy with the contents of the report and the peers results look realistic. It is time to generate the docker image. 
+
+First, push all outstanding commits, and ensure that you have created appropriate PRs in all repos. 
+
+When done, alert the tech team, and flag it to the pacta-cop Slack channel to understand any other changes that could be occurring at the same time. 
+
+This project should be added to the docker image to ensure that it is tested for critical failure with every new release of the online tool.  
+
+Someone can then create this image and upload this to the server where it will be pushed online. 
+
