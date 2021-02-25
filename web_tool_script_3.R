@@ -263,4 +263,8 @@ if(dir.exists(exec_summary_dir)){
     peers_bonds_results_user = peers_bonds_results_user
 
   )
+}else{
+  # this is required for the online tool to know that the process has been completed.
+  create_blank_pdf(template_path,
+                   output_dir)
 }
