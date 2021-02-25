@@ -901,6 +901,9 @@ get_and_clean_fund_data <- function() {
 
     fund_data <- fund_data %>% filter(!is.na(holding_isin) & holding_isin != "")
 
+    fund_data$holding_isin <- as.character(fund_data$holding_isin)
+    fund_data$fund_isin <- as.character(fund_data$fund_isin)
+
     fund_data <- normalise_fund_data(fund_data)
   }
   return(fund_data)
