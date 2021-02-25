@@ -32,6 +32,21 @@ portfolio <- process_raw_portfolio(
   grouping_variables
 )
 
+# information of coverage and coverage loses for all funds in raw_portfolio
+fund_coverage <- get_fund_coverage(
+  portfolio_raw,
+  fin_data,
+  fund_data,
+  currencies,
+  grouping_variables
+)
+
+# reduce information on fund coverage to a data frame that can be shared with users
+fund_coverage_summary <- summarize_fund_coverage(fund_coverage)
+
+# list ISINs of unknown funds in funds. the list includes value_usd to estimate importance of the isin for o
+unknown_funds_in_funds <- list_unknown_funds_in_funds(portfolio)
+
 portfolio <- add_revenue_split(has_revenue, portfolio, revenue_data)
 
 portfolio <- create_ald_flag(portfolio, comp_fin_data, debt_fin_data)
@@ -94,6 +109,12 @@ if ("csv" %in% file_format_list) {
   if (data_check(emissions_totals)) {
     write_csv(emissions_totals, paste0(proc_input_path, "/", project_name, "_emissions.csv"))
   }
+  if (data_check(fund_coverage_summary)){
+    write_csv(fund_coverage_summary, file.path(proc_input_path_, "fund_coverage_summary.csv"))
+  }
+  if (data_check(unknown_funds_in_funds)){
+    write_csv(unknown_funds_in_funds, file.path(proc_input_path_, "unknown_funds_in_funds.csv"))
+  }
 }
 
 if ("rds" %in% file_format_list | "rda" %in% file_format_list) {
@@ -115,4 +136,13 @@ if ("rds" %in% file_format_list | "rda" %in% file_format_list) {
   if (data_check(emissions_totals)) {
     write_rds(emissions_totals, paste0(proc_input_path, "/", project_name, "_emissions.rda"))
   }
+  if (data_check(fund_coverage_summary)){
+    write_rds(fund_coverage_summary, file.path(proc_input_path, "fund_coverage_summary.rda"))
+  }
+  if (data_check(unknown_funds_in_funds)){
+    write_rds(unknown_funds_in_funds, file.path(proc_input_path, "unknown_funds_in_funds.rda"))
+  }
+
 }
+
+
