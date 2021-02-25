@@ -234,32 +234,33 @@ create_interactive_report(
   display_currency = display_currency,
   currency_exchange_value = currency_exchange_value,
   header_dictionary = header_dictionary,
- sector_order = sector_order
+  sector_order = sector_order
 )
 
+if(dir.exists(exec_summary_dir)){
+  create_executive_summary(
+    file_name = "template.Rmd",
+    exec_summary_dir = exec_summary_dir,
+    output_dir = output_dir,
+    language_select = language_select,
+    project_name = "working_dir",
+    investor_name = investor_name,
+    portfolio_name = portfolio_name,
+    peer_group = peer_group,
+    start_year = start_year,
+    select_scenario = scenario,
+    portfolio_allocation_method = portfolio_allocation_method,
+    scenario_geography = scenario_geography,
+    twodi_sectors = sector_list,
+    green_techs = green_techs,
+    tech_roadmap_sectors = tech_roadmap_sectors,
+    alignment_techs = alignment_techs,
+    equity_results_portfolio = equity_results_portfolio,
+    bonds_results_portfolio = bonds_results_portfolio,
+    peers_equity_results_portfolio = peers_equity_results_portfolio,
+    peers_bonds_results_portfolio = peers_bonds_results_portfolio,
+    peers_equity_results_user = peers_equity_results_user,
+    peers_bonds_results_user = peers_bonds_results_user
 
-create_executive_summary(
-  file_name = "template.Rmd",
-  exec_summary_dir = exec_summary_dir,
-  output_dir = output_dir,
-  language_select = language_select,
-  project_name = "working_dir",
-  investor_name = investor_name,
-  portfolio_name = portfolio_name,
-  peer_group = peer_group,
-  start_year = start_year,
-  select_scenario = scenario,
-  portfolio_allocation_method = portfolio_allocation_method,
-  scenario_geography = scenario_geography,
-  twodi_sectors = sector_list,
-  green_techs = green_techs,
-  tech_roadmap_sectors = tech_roadmap_sectors,
-  alignment_techs = alignment_techs,
-  equity_results_portfolio = equity_results_portfolio,
-  bonds_results_portfolio = bonds_results_portfolio,
-  peers_equity_results_portfolio = peers_equity_results_portfolio,
-  peers_bonds_results_portfolio = peers_bonds_results_portfolio,
-  peers_equity_results_user = peers_equity_results_user,
-  peers_bonds_results_user = peers_bonds_results_user
-
-)
+  )
+}
