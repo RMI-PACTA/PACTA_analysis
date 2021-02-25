@@ -264,7 +264,10 @@ if(dir.exists(exec_summary_dir)){
 
   )
 }else{
+
+  es_dir <- file.path(output_dir, "executive_summary")
+
+  if(!dir.exists(es_dir)){dir.create(es_dir, showWarnings = F, recursive = T)}
   # this is required for the online tool to know that the process has been completed.
-  create_blank_pdf(template_path,
-                   output_dir)
+  file.copy(file.path("data", "blank_pdf_do_not_delete.pdf"), es_dir)
 }
