@@ -200,29 +200,29 @@ PACTA.analysis:::source_web_tool_scripts(1:2)
 If you prefer to use the terminal, you can run each script with:
 
 ``` bash
-# FIXME 
+# FIXME
 Rscript --vanilla web_tool_script_3.R TestPortfolio_Input
-#> 
-#> ── web_tool_script_3.R ─────────────────────────────────────────────────────────
-#> Warning message:
-#> In grSoftVersion() :
-#>   unable to load shared object '/usr/local/lib/R/modules//R_X11.so':
-#>   libXt.so.6: cannot open shared object file: No such file or directory
-#> ! sh: 1: xelatex: not found
-#> 
-#> Error: LaTeX failed to compile /home/rstudio/git/PACTA_analysis/working_dir/50_Outputs/TestPortfolio_Input/executive_summary/template.tex. See https://yihui.org/tinytex/r/#debugging for debugging tips. See template.log for more info.
-#> In addition: Warning messages:
-#> 1: In has_crop_tools() : 
-#> Tool(s) not installed or not in PATH: pdfcrop, ghostcript
-#> -> As a result, figure cropping will be disabled.
-#> 2: Removed 1 rows containing missing values (geom_segment). 
-#> 3: Removed 1 rows containing missing values (geom_point). 
-#> 4: Removed 1 rows containing missing values (geom_point). 
-#> 5: Removed 1 rows containing missing values (geom_point). 
-#> 6: Removed 7 rows containing missing values (geom_point). 
-#> 7: In system2(..., stdout = if (use_file_stdout()) f1 else FALSE, stderr = f2) :
-#>   error in running command
-#> Execution halted
+$ 
+$ ── web_tool_script_3.R ─────────────────────────────────────────────────────────
+$ Warning message:
+$ In grSoftVersion() :
+$   unable to load shared object '/usr/local/lib/R/modules//R_X11.so':
+$   libXt.so.6: cannot open shared object file: No such file or directory
+$ ! sh: 1: xelatex: not found
+$ 
+$ Error: LaTeX failed to compile /home/rstudio/git/PACTA_analysis/working_dir/50_Outputs/TestPortfolio_Input/executive_summary/template.tex. See https://yihui.org/tinytex/r/#debugging for debugging tips. See template.log for more info.
+$ In addition: Warning messages:
+$ 1: In has_crop_tools() : 
+$ Tool(s) not installed or not in PATH: pdfcrop, ghostcript
+$ -> As a result, figure cropping will be disabled.
+$ 2: Removed 1 rows containing missing values (geom_segment). 
+$ 3: Removed 1 rows containing missing values (geom_point). 
+$ 4: Removed 1 rows containing missing values (geom_point). 
+$ 5: Removed 1 rows containing missing values (geom_point). 
+$ 6: Removed 7 rows containing missing values (geom_point). 
+$ 7: In system2(..., stdout = if (use_file_stdout()) f1 else FALSE, stderr = f2) :
+$   error in running command
+$ Execution halted
 ```
 
 ### Multiple-inputs workflow

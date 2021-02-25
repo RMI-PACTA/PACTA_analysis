@@ -170,8 +170,8 @@ PACTA.analysis:::source_web_tool_scripts(1:2)
 
 If you prefer to use the terminal, you can run each script with:
 
-```{bash command="$", error=TRUE}
-# FIXME 
+```{bash comment="$", error=TRUE}
+# FIXME
 Rscript --vanilla web_tool_script_3.R TestPortfolio_Input
 ```
 
