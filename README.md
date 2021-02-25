@@ -6,8 +6,8 @@
 The goal of this repository is to assess how well a porfolio aligns with
 climate goals.
 
-This documents targets internal 2DII users and developers. It provides a
-reproducible example of what you can achieve with the code in this
+This documents targets internal 2DII users and developers. It provides
+reproducible examples of what you can achieve with the code in this
 repository and friends. You may use it as a guide to run your own
 analyses, or as an integration test to ensure code changes preserve the
 behavior documented here. Readers outside 2DII may instead see other
@@ -70,8 +70,8 @@ $ source-web-tool-scripts.yaml
 
 PACTA\_analysis depends on other “siblings” of the PACTA family. They
 are all available at <https://github.com/2DegreesInvesting> and should
-live side by side, under the same parent directory. Before any analysis,
-ensure all siblings are up to date.
+live alongside PACTA\_analysis, under the same parent directory. Before
+any analysis, ensure all siblings are up to date.
 
 ``` bash
 # Store
