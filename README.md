@@ -1,77 +1,44 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-
 # PACTA.analysis
 
-The goal of this repository is to assess how well a porfolio aligns with
-climate goals.
+The goal of this repository is to assess how well a porfolio aligns with climate goals.
 
-This documents targets internal 2DII users and developers. It provides
-reproducible examples of what you can achieve with the code in this
-repository and friends. You may use it as a guide to run your own
-analyses, or as an integration test to ensure code changes preserve the
-behavior documented here. Readers outside 2DII may instead see other
-related work:
-[transitionmonitor.com](https://platform.transitionmonitor.com/start),
-[r2dii.data](https://github.com/2DegreesInvesting/r2dii.data),
-[r2dii.match](https://github.com/2DegreesInvesting/r2dii.match), and
-[r2dii.analysis](https://github.com/2DegreesInvesting/r2dii.analysis).
+This documents targets internal 2DII users and developers. It provides reproducible examples of what you can achieve with the code in this repository and friends. You may use it as a guide to run your own analyses, or as an integration test to ensure code changes preserve the behavior documented here. Readers outside 2DII may instead see other related work: [transitionmonitor.com](https://platform.transitionmonitor.com/start), [r2dii.data](https://github.com/2DegreesInvesting/r2dii.data), [r2dii.match](https://github.com/2DegreesInvesting/r2dii.match), and [r2dii.analysis](https://github.com/2DegreesInvesting/r2dii.analysis).
 
-You may want to analyze a single portfolio and investor, or multiple
-ones. This document details two workflows:
+You may want to analyze a single portfolio and investor, or multiple ones. This document details two workflows:
 
--   **Single-inputs workflow**: When the number of portfolios and
-    investors is exactly one, we use a specific set of scripts optimized
-    for this purpose. This workflow is typically used to generate
-    interactive reports. Because this workflow is available
-    [online](https://platform.transitionmonitor.com/start), it has been
-    referred to as “the online workflow”, and the scripts as “the web
-    tool scripts”. This is misleading because this workflow can run
-    offline too.
--   **Multiple-outputs workflow**: When the number of portfolios and/or
-    investors is not exactly one, we use a different set of optimized
-    scripts. This workflow is typically used to produce static (.pdf)
-    reports. By contrast with the so-called “online” workflow, this one
-    has been usually referred to as “the offline workflow”; again, this
-    is misleading.
+-   **Single-inputs workflow**: When the number of portfolios and investors is exactly one, we use a specific set of scripts optimized for this purpose. This workflow is typically used to generate interactive reports. Because this workflow is available [online](https://platform.transitionmonitor.com/start), it has been referred to as "the online workflow", and the scripts as "the web tool scripts". This is misleading because this workflow can run offline too.
+-   **Multiple-outputs workflow**: When the number of portfolios and/or investors is not exactly one, we use a different set of optimized scripts. This workflow is typically used to produce static (.pdf) reports. By contrast with the so-called "online" workflow, this one has been usually referred to as "the offline workflow"; again, this is misleading.
 
 Both workflows include three steps:
 
-1.  Clean portfolio: Clean the input portfolio and merge in financial
-    data, to categorize each holding and identify whether it’s equity
-    (EQ) or corporate bonds (CB).
-2.  Run Analysis: Merge portfolios with asset-level data and scenarios,
-    then group results at company, portfolio and regional level.
+1.  Clean portfolio: Clean the input portfolio and merge in financial data, to categorize each holding and identify whether it's equity (EQ) or corporate bonds (CB).
+2.  Run Analysis: Merge portfolios with asset-level data and scenarios, then group results at company, portfolio and regional level.
 3.  Present results: Present the results in a clear output format.
 
-–
+--
 
-Note: Code chunks with prompts “`$`” and “`#>`” correspond to bash and
-R, respectively.
+Note: Code chunks with prompts "`$`" and "`#>`" correspond to bash and R, respectively.
 
 ## Computing environment
 
+The required computing environment is complex, yet precisely defined via a collection of [Docker images](https://github.com/2DegreesInvesting/docker/). You may experiment with your local environment but if anything fails you may want to "fix the problem" yourself. Often "the problem" is that your computing environment lacks some obscure dependency or subtle configuration and figuring this out may take hours or days. Instead you are better off using the Docker images we build for this purpose. Learning Docker takes some effort but in the long run it will save frustration and time.
+
 ### System
 
-The single-inputs workflow runs on a system defined by the Dockerfile in
-<https://github.com/2DegreesInvesting/docker/tree/master/system>. The
-multiple-inputs workflow currently lacks a formal definition of its
-system requirements. As a guide, see the computing environment for the
-single-inputs or search for relevant workflows for GitHub actions.
+The single-inputs workflow runs on a system defined by the Dockerfile in <https://github.com/2DegreesInvesting/docker/tree/master/system>. The multiple-inputs workflow currently lacks a formal definition of its system requirements. As a guide, see the computing environment for the single-inputs or search for relevant workflows for GitHub actions.
 
 ``` bash
 ls .github/workflows
-$ pr-commands.yaml
 $ R-CMD-check.yaml
+$ pr-commands.yaml
 $ source-web-tool-scripts.yaml
 ```
 
 ### Siblings
 
-PACTA\_analysis depends on other “siblings” of the PACTA family. They
-are all available at <https://github.com/2DegreesInvesting> and should
-live alongside PACTA\_analysis, under the same parent directory. Before
-any analysis, ensure all siblings are up to date.
+PACTA\_analysis depends on other "siblings" of the PACTA family. They are all available at <https://github.com/2DegreesInvesting> and should live alongside PACTA\_analysis, under the same parent directory. Before any analysis, ensure all siblings are up to date.
 
 ``` bash
 # Store
@@ -117,28 +84,24 @@ suppressPackageStartupMessages({
 ``` r
 dependencies <- renv::dependencies(progress = FALSE)$Package
 sort(unique(dependencies))
-#>  [1] "assertthat"     "base"           "bookdown"       "cli"           
-#>  [5] "config"         "conflicted"     "countrycode"    "data.table"    
-#>  [9] "devtools"       "dplyr"          "fs"             "fst"           
-#> [13] "ggplot2"        "gh"             "git2r"          "glue"          
-#> [17] "here"           "janitor"        "jsonlite"       "knitr"         
-#> [21] "magrittr"       "PACTA.analysis" "plyr"           "purrr"         
-#> [25] "R"              "r2dii.utils"    "readr"          "readxl"        
+#>  [1] "PACTA.analysis" "R"              "assertthat"     "base"          
+#>  [5] "bookdown"       "cli"            "config"         "conflicted"    
+#>  [9] "countrycode"    "data.table"     "devtools"       "dplyr"         
+#> [13] "fs"             "fst"            "ggplot2"        "gh"            
+#> [17] "git2r"          "glue"           "here"           "janitor"       
+#> [21] "jsonlite"       "knitr"          "magrittr"       "plyr"          
+#> [25] "purrr"          "r2dii.utils"    "readr"          "readxl"        
 #> [29] "renv"           "reshape2"       "rlang"          "rmarkdown"     
 #> [33] "rstudioapi"     "scales"         "stringr"        "testthat"      
 #> [37] "tibble"         "tidyr"          "tidyselect"     "tools"         
 #> [41] "withr"          "writexl"        "yaml"           "zoo"
 ```
 
-See also the Dockerfile in
-<https://github.com/2DegreesInvesting/docker/tree/master/r-packages>.
+See also the Dockerfile in <https://github.com/2DegreesInvesting/docker/tree/master/r-packages>.
 
 ## Installation
 
-To use the software in this and related repositories (more on this
-below) you need to work on developer mode. There is no “installation
-package”; instead you need to clone the source code [2DII’s organization
-on GitHub](https://github.com/2DegreesInvesting/).
+To use the software in this and related repositories (more on this below) you need to work on developer mode. There is no "installation package"; instead you need to clone the source code [2DII's organization on GitHub](https://github.com/2DegreesInvesting/).
 
 Notice that this repository does contain an R package.
 
@@ -150,20 +113,21 @@ writeLines(show_package)
 #> Version: 0.0.0.9000
 ```
 
-However, it is only for convenience and must also be used in developer
-mode.
+However, it is only for convenience and must also be used in developer mode.
 
 ``` r
 devtools::load_all()
-#> ℹ Loading PACTA.analysis
+#> Loading PACTA.analysis
+#> 
+#> Attaching package: 'testthat'
+#> The following object is masked from 'package:devtools':
+#> 
+#>     test_file
 ```
 
 ## Reproducible examples
 
-These examples show how to run each workflow. You may use them in a
-number of ways. For example, you may run them on your local computer to
-track and explore their implementation, or on a remote server as an
-integration test in a continuous integration pipeline.
+These examples show how to run each workflow. You may use them in a number of ways. For example, you may run them on your local computer to track and explore their implementation, or on a remote server as an integration test in a continuous integration pipeline.
 
 ### Single-inputs workflow
 
@@ -176,20 +140,7 @@ $ web_tool_script_2.R
 $ web_tool_script_3.R
 ```
 
-You can run each script individually in R with:
-
-``` r
-source("web_tool_script_1.R")
-#> 
-#> ── web_tool_script_1.R ─────────────────────────────────────────────────────────
-#> Warning in if (!is.na(total_fund_list)) {: the condition has length > 1 and only
-#> the first element will be used
-#> Joining, by = "holding_id"
-#> Joining, by = "holding_id"
-#> Joining, by = "holding_id"
-```
-
-You can also run multiple scripts at once with:
+With R, you can run each script individually with something like `source("web_tool_script_1.R")` or run multiple scripts at once with:
 
 ``` r
 PACTA.analysis:::source_web_tool_scripts(1:2)
@@ -197,32 +148,28 @@ PACTA.analysis:::source_web_tool_scripts(1:2)
 #> Testing: Rscript --vanilla web_tool_script_2.R TestPortfolio_Input
 ```
 
-If you prefer to use the terminal, you can run each script with:
+With the terminal, you can run each script with:
 
 ``` bash
-# FIXME
-Rscript --vanilla web_tool_script_3.R TestPortfolio_Input
+Rscript --vanilla web_tool_script_3.R TestPortfolio_Input  
 $ 
-$ ── web_tool_script_3.R ─────────────────────────────────────────────────────────
-$ Warning message:
-$ In grSoftVersion() :
-$   unable to load shared object '/usr/local/lib/R/modules//R_X11.so':
-$   libXt.so.6: cannot open shared object file: No such file or directory
-$ ! sh: 1: xelatex: not found
-$ 
-$ Error: LaTeX failed to compile /home/rstudio/git/PACTA_analysis/working_dir/50_Outputs/TestPortfolio_Input/executive_summary/template.tex. See https://yihui.org/tinytex/r/#debugging for debugging tips. See template.log for more info.
-$ In addition: Warning messages:
-$ 1: In has_crop_tools() : 
-$ Tool(s) not installed or not in PATH: pdfcrop, ghostcript
-$ -> As a result, figure cropping will be disabled.
-$ 2: Removed 1 rows containing missing values (geom_segment). 
+$ -- web_tool_script_3.R ---------------------------------------------------------
+$ Warning messages:
+$ 1: Removed 1 rows containing missing values (geom_segment). 
+$ 2: Removed 1 rows containing missing values (geom_point). 
 $ 3: Removed 1 rows containing missing values (geom_point). 
 $ 4: Removed 1 rows containing missing values (geom_point). 
-$ 5: Removed 1 rows containing missing values (geom_point). 
-$ 6: Removed 7 rows containing missing values (geom_point). 
-$ 7: In system2(..., stdout = if (use_file_stdout()) f1 else FALSE, stderr = f2) :
-$   error in running command
-$ Execution halted
+$ 5: Removed 7 rows containing missing values (geom_point). 
+$ 6: LaTeX Warning: Command \underbar  has changed.
+$                Check if current package is valid.
+$ LaTeX Warning: Command \underline  has changed.
+$                Check if current package is valid.
+$ Package Fancyhdr Warning: \fancyfoot's `E' option without twoside option is use
+$ less on input line 89.
+$ Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+$ Make it at least 55.4097pt.
+$ We now make it that large for the rest of the document.
+$ This may cause the page layout to be inconsistent, however.
 ```
 
 ### Multiple-inputs workflow

@@ -59,6 +59,17 @@ respectively.
 
 ## Computing environment
 
+The required computing environment is complex, yet precisely defined via a
+collection of [Docker images](https://github.com/2DegreesInvesting/docker/). You
+may experiment with your local environment but if anything fails you may want to
+"fix the problem" yourself. Often "the problem" is that your computing
+environment lacks some obscure dependency or subtle configuration and figuring
+this out may take hours or days. Instead you are better off using the Docker
+images we build for this purpose. Learning Docker takes some effort but in the
+long run it will save frustration and time.
+
+
+
 ### System
 
 The single-inputs workflow runs on a system defined by the Dockerfile in
@@ -156,23 +167,17 @@ The single-inputs workflow has three steps, each in its own script.
 ls web_tool_script*
 ```
 
-You can run each script individually in R with:
-
-```{r}
-source("web_tool_script_1.R")
-```
-
-You can also run multiple scripts at once with:
+With R, you can run each script individually with something like
+`source("web_tool_script_1.R")` or run multiple scripts at once with:
 
 ```{r}
 PACTA.analysis:::source_web_tool_scripts(1:2)
 ```
 
-If you prefer to use the terminal, you can run each script with:
+With the terminal, you can run each script with:
 
 ```{bash comment="$", error=TRUE}
-# FIXME
-Rscript --vanilla web_tool_script_3.R TestPortfolio_Input
+Rscript --vanilla web_tool_script_3.R TestPortfolio_Input  
 ```
 
 ### Multiple-inputs workflow
