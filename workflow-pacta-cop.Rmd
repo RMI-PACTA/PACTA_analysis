@@ -1,7 +1,7 @@
 ---
 title: "Workflow COP project"
 author: "Clare"
-date: "24/02/2021"
+date: "`r format(Sys.time(), '%B %Y')`"
 output: github_document
 ---
 
@@ -30,6 +30,17 @@ if(file.exists(file.path("parameter_files", paste0("ProjectParameters_", project
 
 # TODO: return print out of selected parameters
 
+# For the peer files, you need to have the files necessary to run PACTA, and set a location for the output results. 
+
+# TRUE or FALSE: TRUE means that the code is running on a 2dii laptop with dropbox connection
+twodii_internal <- FALSE
+
+#####################################################################
+### ONLY FOR EXTERNAL PROJECTS (twodii_internal <- FALSE):
+# Variables must exist for internal projects
+project_location_ext_input <- "C:/Users/clare/Desktop/ExternalTest"
+data_location_ext_input <- "C:/Users/clare/Desktop/TestData"
+#####################################################################
 
 ```
 
@@ -61,9 +72,9 @@ The standard peer groups are as follow:
 
 - Bank
 
-- Asset manager. 
+- Asset manager
 
-This is entered by the user on the platform. If you require different peer groups selection options get in contact with Wim, or an alternative combination of these for your results this can be programmed into create_interactive_report. 
+The peer group is entered by the user on the platform. If you require different peer groups selection options get in contact with Wim, or if you require an alternative combination of these for your results this can be programmed into create_interactive_report (e.g. pensionfunds_and_assetmanagers). 
 
 ### Creating the peer group files
 
@@ -118,20 +129,20 @@ source("0_sda_approach.R")
 
 
 project_name <- paste0(project_code, "_peers_ind")
-twodii_internal <- FALSE
+# twodii_internal <- FALSE #Set above
 
 # TRUE or FALSE: TRUE means that the code is running on a 2dii laptop with dropbox connection
 #####################################################################
 ### ONLY FOR EXTERNAL PROJECTS (twodii_internal <- FALSE):
 # Variables must exist for internal projects
-project_location_ext <- "C:/Users/clare/Desktop/ExternalTest"
-data_location_ext <- "C:/Users/clare/Desktop/TestData"
+project_location_ext <- project_location_ext_input
+data_location_ext <- data_location_ext_input
 #####################################################################
 
 create_project_folder(project_name, twodii_internal, project_location_ext)
 set_project_paths(project_name, twodii_internal, project_location_ext)
 copy_files(project_name)
-set_project_parameters(file.path(par_file_path,paste0("ProjectParameters.yml")))
+set_project_parameters(file.path(par_file_path, "ProjectParameters.yml"))
 analysis_inputs_path <- set_analysis_inputs_path(twodii_internal, data_location_ext, dataprep_timestamp)
 
 inc_meta_portfolio <- TRUE
@@ -143,8 +154,8 @@ write_csv(portfolio_ind, path = file.path(raw_input_path, paste0(project_name, "
 
 If you prepared the input file yourself, add the portfolio files to the folder `{r} file.path(raw_input_path)`. Otherwise this is already done above.
 This file should have:
-- investor.name as the peer group name (banks, pensionfund etc)
-- portfolio.name as the investor name ideally as provided by the user (or else the user_id)
+- Investor.Name as the peer group name (banks, pensionfund etc)
+- Portfolio.Name as the investor name ideally as provided by the user (or else the user_id)
 
 ```{r echo = FALSE}
 # These run the above project. Will error out if the portfolio file is not provided in the input path
@@ -154,7 +165,7 @@ source("2_project_input_analysis.R")
 
 source("3_run_analysis.R")
 
-# Saving the files into the correct locations. 
+# Saving the files into the correct locations. The pacta-data repo must exist in the same repository as PACTA_analysis.
 
 data_path <- file.path("..", "pacta-data", financial_timestamp)
 
@@ -170,20 +181,20 @@ Now the second peer project is run with the aggregation at the peer group level.
 ```{r echo = FALSE}
 
 project_name <- paste0(project_code, "_peers")
-twodii_internal <- FALSE
+# twodii_internal <- FALSE
 
 # TRUE or FALSE: TRUE means that the code is running on a 2dii laptop with dropbox connection
 #####################################################################
 ### ONLY FOR EXTERNAL PROJECTS (twodii_internal <- FALSE):
 # Variables must exist for internal projects
-project_location_ext <- "C:/Users/clare/Desktop/ExternalTest"
-data_location_ext <- "C:/Users/clare/Desktop/TestData"
+project_location_ext <- project_location_ext_input
+data_location_ext <- data_location_ext_input
 #####################################################################
 
 create_project_folder(project_name, twodii_internal, project_location_ext)
 set_project_paths(project_name, twodii_internal, project_location_ext)
 copy_files(project_name)
-set_project_parameters(file.path(par_file_path,paste0("ProjectParameters.yml")))
+set_project_parameters(file.path(par_file_path, "ProjectParameters.yml"))
 analysis_inputs_path <- set_analysis_inputs_path(twodii_internal, data_location_ext, dataprep_timestamp)
 
 inc_meta_portfolio <- FALSE
@@ -219,7 +230,7 @@ This file is saved in the results folder here: `{r} results_path`
 
 ```{r echo = FALSE}
 
- render(file.path("pacta_data_qa.Rmd"),
+ render("pacta_data_qa.Rmd",
          output_dir = results_path,
          clean = FALSE,
          quiet = TRUE,
