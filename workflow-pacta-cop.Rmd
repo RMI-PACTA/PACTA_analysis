@@ -42,13 +42,16 @@ project_location_ext_input <- "C:/Users/clare/Desktop/ExternalTest"
 data_location_ext_input <- "C:/Users/clare/Desktop/TestData"
 #####################################################################
 
+# This should be the current working directory. 
+local_git_dir <- "C:/Users/clare/Desktop/PACTA"
+
 ```
 
 
 
 ## Peer files
 
-The peer comparison component of the interactive report requires you to generate the results for all participants offline first. This can be done by running the PACTA offline workflow. You do not need to generate reports, just the output files. It is important to prepare the portfolio files representing all peers correctly to do so. 
+The peer comparison component of the interactive report requires you to generate the result files for all portfolios offline first. This can be done by running the PACTA offline workflow or following through this Rmd to completion. You do not need to generate reports offline, just the output files. Before this can happen, the input portfolio files must be cleaned and put into the correct format. 
 
 4 Peer files are required:
 
@@ -60,7 +63,7 @@ The peer comparison component of the interactive report requires you to generate
 
 - [project_code]_peers_equity_results_portfolio_ind.rda
 
-These should be saved in the folder pacta_data/[timestamp] with the above format. 
+These should be saved in the folder pacta_data/[timestamp] with the above file names. If you follow this workflow, the files will be saved correctly for you.  
 
 These represent two types of aggregations; the aggregation at Investor level for each participant, used to create the rankings and comparative bar charts; and the aggregation at peer group level (bank, pensionfund etc)
 
@@ -385,8 +388,7 @@ Generally there is an option to create two outputs:
 
 - Executive summary (optional)
 
-
-The executive summary will not print if the files do not exist
+A blank executive summary will print if the files do not exist
 
 Folders are stored in create_interactive_report with the formats: 
 Interactive report: [project_report_name]_[language]_template
@@ -442,8 +444,6 @@ library(yaml)
 library(dplyr)
 
 start_dir <- getwd()
-
-local_git_dir <- "C:/Users/clare/Desktop/PACTA"
 
 test_investor <- unique(portfolio_file$Investor.Name)[1]
 test_portfolio <- portfolio_file %>% 
@@ -511,7 +511,7 @@ try(source("web_tool_script_3.R"))
 
 The output report can be found in `{r} path(out_dir, "50_Outputs")`
 
-Feel free to repeast this process, changing the test_investor or test_portfolio. 
+Feel free to repeat this process, changing the test_investor or test_portfolio. 
 
 ## Docker Image
 
@@ -521,7 +521,7 @@ First, push all outstanding commits, and ensure that you have created appropriat
 
 When done, alert the tech team, and flag it to the pacta-cop Slack channel to understand any other changes that could be occurring at the same time. 
 
-This project should be added to the docker image to ensure that it is tested for critical failure with every new release of the online tool.  
+For each new project, a test portfolio should be added to the docker image, to ensure that functionality for each project is maintained in future editions of the code. 
 
 Someone can then create this image and upload this to the server where it will be pushed online. 
 
