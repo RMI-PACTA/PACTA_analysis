@@ -45,6 +45,15 @@ data_location_ext_input <- "C:/Users/clare/Desktop/TestData"
 # This should be the current working directory. 
 local_git_dir <- "C:/Users/clare/Desktop/PACTA"
 
+if(!dir.exists(file.path(local_git_dir, "create_interactive_report"))){print("Download create_interactive_report repo")}
+if(!dir.exists(file.path(local_git_dir, "StressTestingModelDev"))){print("Download StressTestingModelDev repo")}
+if(!dir.exists(file.path(local_git_dir, "pacta-data"))){print("Download pacta-data repo")}
+if(!dir.exists(file.path(local_git_dir, "PACTA_analysis"))){print("Download PACTA_analysis repo")}
+if(!dir.exists(file.path(local_git_dir, "user_results"))){print("Download user_results")}
+
+
+
+
 ```
 
 
