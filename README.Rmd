@@ -11,7 +11,7 @@ knitr::opts_chunk$set(
   comment = "#>",
   fig.path = "man/figures/README-",
   out.width = "100%",
-  cache = TRUE
+  cache = T
 )
 ```
 
@@ -69,7 +69,58 @@ this out may take hours or days. Instead you are better off using the Docker
 images we build for this purpose. Learning Docker takes some effort but in the
 long run it will save frustration and time.
 
+[Install Docker](https://docs.docker.com/get-docker/) then the entire computing
+environment with:
 
+```bash
+docker pull 2dii/r-packages
+```
+
+For an example on how to use Docker, consider how I created the document you are
+now reading:
+
+* I first moved into the parent directory of PACTA_analysis/ and other siblings
+of the PACTA family.
+
+```bash
+cd ~/git
+```
+
+* Then I run (`docker run`) an ephemeral (`--rm`) interactive (`-ti`) container
+from the image `2dii/r-packages`, and created a volume (`-v`) to access
+everything in my local working directory (`$(pwd)`) from the `/home` directory
+inside the container.
+
+```bash
+docker run --rm -ti -v $(pwd):/home 2dii/r-packages
+```
+
+* Docker dropped me at the root directory of the container, so I moved into
+PACTA_analysis/.
+
+```bash
+cd /home/PACTA_analysis
+```
+
+* I started R.
+
+```r
+R
+```
+
+* And finally I render the source file of the document you are now reading.
+
+```r
+rmarkdown::render("README.Rmd")
+```
+
+<details> <summary>Session information</summary>
+
+```{r}
+devtools::session_info()
+```
+
+</details>
 
 ### System
 
@@ -87,29 +138,33 @@ ls .github/workflows
 
 PACTA_analysis depends on other "siblings" of the PACTA family. They are all
 available at <https://github.com/2DegreesInvesting> and should live alongside
-PACTA_analysis, under the same parent directory. Before any analysis,
-ensure all siblings are up to date.
+PACTA_analysis/, under the same parent directory. To make them easier to find,
+all siblings include an empty file called ".pacta"
+
+```{bash comment="$"}
+siblings="$(dirname $(find .. -maxdepth 2 -empty -type f -name '.pacta'))"
+echo $siblings
+```
+
+Before any analysis, ensure all siblings are up to date.
 
 ```{bash comment="$"}
 # Store
  working_directory="$pwd"
-```
 
-```{bash comment="$"}
-siblings="\
-  ../pacta-data \
-  ../create_interactive_report \
-  ../StressTestingModelDev"
-for each_sibling in $siblings; do
-  cd $each_sibling && echo $each_sibling
+siblings="$(dirname $(find .. -maxdepth 2 -empty -type f -name '.pacta'))"
+for i in $siblings; do
+  cd $i && echo $i
   git log --decorate --oneline -n 1
 done
-```
 
-```{bash comment="$"}
 # Restore
 cd "$working_directory"
+
 ```
+
+For an easier way to work with all siblings at once from the terminal see
+[pacta-cli](https://github.com/2DegreesInvesting/pacta-cli).
 
 ### R packages
 
