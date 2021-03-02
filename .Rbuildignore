@@ -52,3 +52,7 @@
 ^test_test_cases\.R$
 
 ^README\.Rmd$
+^README\.html$
+^README_cache$
+^workflow\.Rmd$
+^workflow\.md$
