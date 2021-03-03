@@ -72,8 +72,8 @@ writeLines(siblings)
 The PACTA family includes these siblings: `r siblings`. They are all available
 at <https://github.com/2DegreesInvesting> and some workflows assume they all
 live directly under the same parent directory. Before running a workflow, you
-may want to ensure the relevant siblings are up to date, by pulling the latest
-commits from GitHub.
+may pull the latest commits of the relevant siblings from Github, to ensure the
+code you use is up to date.
 
 ## Computing environment
 

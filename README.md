@@ -1,4 +1,4 @@
-2021-03-03 21:08:22.
+2021-03-03 21:13:05.
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 # PACTA\_analysis
@@ -24,7 +24,7 @@ Note that "`$`" and "`#>`" precede bash and R output, respectively.
 
 ### Siblings
 
-The PACTA family includes these siblings: PACTA\_analysis, StressTestingModelDev, create\_interactive\_report, pacta-data. They are all available at <https://github.com/2DegreesInvesting> and some workflows assume they all live directly under the same parent directory. Before running a workflow, you may want to ensure the relevant siblings are up to date, by pulling the latest commits from GitHub.
+The PACTA family includes these siblings: PACTA\_analysis, StressTestingModelDev, create\_interactive\_report, pacta-data. They are all available at <https://github.com/2DegreesInvesting> and some workflows assume they all live directly under the same parent directory. Before running a workflow, you may pull the latest commits of the relevant siblings from Github, to ensure the code you use is up to date.
 
 ## Computing environment
 
