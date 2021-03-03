@@ -61,18 +61,19 @@ Note that "`$`" and "`#>`" precede bash and R output, respectively.
 
 ### Siblings
 
-PACTA_analysis depends on other "siblings" of the PACTA family. They are all
-available at <https://github.com/2DegreesInvesting> and should live alongside
-PACTA_analysis/, under the same parent directory. All siblings include an empty file called ".pacta", which you can use to find them programmatically.
-
-```{bash comment="$"}
-siblings="$(dirname $(find .. -maxdepth 2 -empty -type f -name '.pacta'))"
-echo $siblings
+```{r include=FALSE}
+siblings <- list.files(
+  "..",pattern = "[.]pacta$", recursive = TRUE, all.files = TRUE
+)
+siblings <- basename(dirname(siblings))
+writeLines(siblings)
 ```
 
-Before any analysis, ensure all siblings are up to date. For an easier way to
-work with all siblings at once from the terminal see
-[pacta-cli](https://github.com/2DegreesInvesting/pacta-cli).
+The PACTA family includes these siblings: `r siblings`. They are all available
+at <https://github.com/2DegreesInvesting> and some workflows assume they all
+live directly under the same parent directory. Before running a workflow, you
+may want to ensure the relevant siblings are up to date, by pulling the latest
+commits from GitHub.
 
 ## Computing environment
 

@@ -1,4 +1,4 @@
-2021-03-03 20:40:52.
+2021-03-03 21:08:22.
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 # PACTA\_analysis
@@ -24,15 +24,7 @@ Note that "`$`" and "`#>`" precede bash and R output, respectively.
 
 ### Siblings
 
-PACTA\_analysis depends on other "siblings" of the PACTA family. They are all available at <https://github.com/2DegreesInvesting> and should live alongside PACTA\_analysis/, under the same parent directory. All siblings include an empty file called ".pacta", which you can use to find them programmatically.
-
-``` bash
-siblings="$(dirname $(find .. -maxdepth 2 -empty -type f -name '.pacta'))"
-echo $siblings
-$ ../pacta-data ../create_interactive_report ../StressTestingModelDev ../PACTA_analysis
-```
-
-Before any analysis, ensure all siblings are up to date. For an easier way to work with all siblings at once from the terminal see [pacta-cli](https://github.com/2DegreesInvesting/pacta-cli).
+The PACTA family includes these siblings: PACTA\_analysis, StressTestingModelDev, create\_interactive\_report, pacta-data. They are all available at <https://github.com/2DegreesInvesting> and some workflows assume they all live directly under the same parent directory. Before running a workflow, you may want to ensure the relevant siblings are up to date, by pulling the latest commits from GitHub.
 
 ## Computing environment
 
