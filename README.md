@@ -1,20 +1,6 @@
-Mauro Lepore, 2021-03-03 04:56:19.
+Mauro Lepore, 2021-03-03 05:12:17.
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-``` r
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  fig.path = "man/figures/README-",
-  out.width = "100%",
-  cache = TRUE
-)
-
-devtools::load_all()
-```
-
-    ## Loading PACTA.analysis
-
 # PACTA\_analysis
 
 The goal of this repository is to assess how well a porfolio aligns with climate goals.
@@ -190,7 +176,7 @@ devtools::session_info()
 
 </details>
 
-As an example, I'll use it to render the very document you are now reading:
+As an example, this is one way to use that computing environment to produce the very document you are now reading:
 
 -   I move to the parent directory of PACTA\_analysis and its siblings.
 
@@ -198,11 +184,10 @@ As an example, I'll use it to render the very document you are now reading:
 cd ~/git
 ```
 
--   I run (`docker run`) an ephemeral (`--rm`), interactive (`-ti`) container of the image `2dii/r-packages`, create a number of volumes (`-v`) to access useful files in my host computer from inside the container, and set the working directory (`w`) to PACTA\_analysis/.
+-   I run (`docker run`) an ephemeral (`--rm`), interactive (`-ti`) container of the image `2dii/r-packages`; create a number of volumes (`-v`) to access useful files in my host computer from inside the container; and set the working directory (`-w`) to PACTA\_analysis/.
 
 <!-- -->
 
-    #! /bin/bash
 
     docker run --rm -ti \
         -v "$(pwd)":"/root/$(basename $(pwd))" \
@@ -213,7 +198,7 @@ cd ~/git
         -w "/root/$(basename $(pwd))/PACTA_analysis" \
         2dii/r-packages
 
--   I now use R to produce the very file you are now reading.
+-   Then I use R to produce the very file you are now reading.
 
 ``` r
 Rscript -e "rmarkdown::render('README.Rmd', output_format = 'md_document')"
@@ -249,7 +234,7 @@ $ web_tool_script_2.R
 $ web_tool_script_3.R
 ```
 
-With R, you can run each script individually with something like `source("web_tool_script_1.R")` or run multiple scripts at once with:
+With R, you can run each script individually with something like `source("web_tool_script_1.R")` or run multiple scripts at once. For example, you can run scripts 1 and 2 with:
 
 ``` r
 source_web_tool_scripts(1:2)
@@ -257,7 +242,7 @@ source_web_tool_scripts(1:2)
 #> Testing: Rscript --vanilla web_tool_script_2.R TestPortfolio_Input
 ```
 
-With the terminal, you can run each script with:
+With the terminal, you can run each script individually. For example, you can run script 3 with:
 
 ``` bash
 Rscript --vanilla web_tool_script_3.R TestPortfolio_Input  

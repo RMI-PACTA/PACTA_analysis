@@ -5,7 +5,7 @@ author: "Mauro Lepore, `r Sys.time()`."
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-```{r setup}
+```{r setup, include=FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
@@ -110,7 +110,8 @@ devtools::session_info()
 ```
 </details>
 
-As an example, I'll use it to render the very document you are now reading:
+As an example, this is one way to use that computing environment to produce the
+very document you are now reading:
 
 * I move to the parent directory of PACTA_analysis and its siblings.
 
@@ -119,18 +120,21 @@ cd ~/git
 ```
 
 * I run (`docker run`) an ephemeral (`--rm`), interactive (`-ti`) container of
-the image `2dii/r-packages`, create a number of volumes (`-v`) to access
-useful files in my host computer from inside the container, and set the working
-directory (`w`) to PACTA_analysis/.
+the image `2dii/r-packages`; create a number of volumes (`-v`) to access useful
+files in my host computer from inside the container; and set the working
+directory (`-w`) to PACTA_analysis/.
 
 ```{r comment="", echo=FALSE}
 url <- "https://raw.githubusercontent.com/maurolepore/bin/master/docker-run-2dii-r-packages"
 tmp <- tempfile()
 download.file(url, tmp, quiet = TRUE)
-writeLines(readLines(tmp))
+
+lines <- readLines(tmp)
+lines <- lines[2:length(lines)]
+writeLines(lines)
 ```
 
-* I now use R to produce the very file you are now reading.
+* Then I use R to produce the very file you are now reading.
 
 ```r
 Rscript -e "rmarkdown::render('README.Rmd', output_format = 'md_document')"
