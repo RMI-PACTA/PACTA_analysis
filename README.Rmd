@@ -5,17 +5,19 @@ author: "Mauro Lepore, `r Sys.time()`."
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-```{r, include = FALSE}
+```{r setup}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures/README-",
   out.width = "100%",
-  cache = T
+  cache = TRUE
 )
+
+devtools::load_all()
 ```
 
-# PACTA.analysis
+# PACTA_analysis
 
 The goal of this repository is to assess how well a porfolio aligns with climate
 goals. 
@@ -58,88 +60,11 @@ group results at company, portfolio and regional level.
 Note: Code chunks with prompts "`$`" and "`#>`" correspond to bash and R,
 respectively.
 
-## Computing environment
-
-The required computing environment is complex, yet precisely defined via a
-collection of [Docker images](https://github.com/2DegreesInvesting/docker/). You
-may experiment with your local environment but if anything fails you may want to
-"fix the problem" yourself. Often "the problem" is that your computing
-environment lacks some obscure dependency or subtle configuration and figuring
-this out may take hours or days. Instead you are better off using the Docker
-images we build for this purpose. Learning Docker takes some effort but in the
-long run it will save frustration and time.
-
-[Install Docker](https://docs.docker.com/get-docker/) then the entire computing
-environment with:
-
-```bash
-docker pull 2dii/r-packages
-```
-
-For an example on how to use Docker, consider how I created the document you are
-now reading:
-
-* I first moved into the parent directory of PACTA_analysis/ and other siblings
-of the PACTA family.
-
-```bash
-cd ~/git
-```
-
-* Then I run (`docker run`) an ephemeral (`--rm`) interactive (`-ti`) container
-from the image `2dii/r-packages`, and created a volume (`-v`) to access
-everything in my local working directory (`$(pwd)`) from the `/home` directory
-inside the container.
-
-```bash
-docker run --rm -ti -v $(pwd):/home 2dii/r-packages
-```
-
-* Docker dropped me at the root directory of the container, so I moved into
-PACTA_analysis/.
-
-```bash
-cd /home/PACTA_analysis
-```
-
-* I started R.
-
-```r
-R
-```
-
-* And finally I render the source file of the document you are now reading.
-
-```r
-rmarkdown::render("README.Rmd")
-```
-
-<details> <summary>Session information</summary>
-
-```{r}
-devtools::session_info()
-```
-
-</details>
-
-### System
-
-The single-inputs workflow runs on a system defined by the Dockerfile in
-<https://github.com/2DegreesInvesting/docker/tree/master/system>. The
-multiple-inputs workflow currently lacks a formal definition of its system
-requirements. As a guide, see the computing environment for the single-inputs or
-search for relevant workflows for GitHub actions.
-
-```{bash comment="$"}
-ls .github/workflows
-```
-
 ### Siblings
 
 PACTA_analysis depends on other "siblings" of the PACTA family. They are all
 available at <https://github.com/2DegreesInvesting> and should live alongside
-PACTA_analysis/, under the same parent directory. To make them easier to find,
-all siblings include an empty file called ".pacta"
+PACTA_analysis/, under the same parent directory. All siblings include an empty file called ".pacta", which you can use to find them programmatically.
 
 ```{bash comment="$"}
 siblings="$(dirname $(find .. -maxdepth 2 -empty -type f -name '.pacta'))"
@@ -166,27 +91,50 @@ cd "$working_directory"
 For an easier way to work with all siblings at once from the terminal see
 [pacta-cli](https://github.com/2DegreesInvesting/pacta-cli).
 
-### R packages
+## Computing environment
 
-* R packages used in this file:
+The required computing environment is available in [this docker
+image](https://github.com/2DegreesInvesting/docker/tree/master/r-packages).
 
-```{r}
-suppressPackageStartupMessages({
-  library(renv)
-  library(devtools)
-  library(conflicted)
-})
+Other computing environments may be defined as workflows for GitHub actions.
+
+```{bash comment="$"}
+ls .github/workflows
 ```
 
-* R packages used in the directory PACTA_analysis:
+Unless otherwise indicated, R packages should be up to date.
 
+<details> <summary>Session information.</summary>
 ```{r}
-dependencies <- renv::dependencies(progress = FALSE)$Package
-sort(unique(dependencies))
+devtools::session_info()
+```
+</details>
+
+As an example, I'll use it to render the very document you are now reading:
+
+* I move to the parent directory of PACTA_analysis and its siblings.
+
+```bash
+cd ~/git
 ```
 
-See also the Dockerfile in
-<https://github.com/2DegreesInvesting/docker/tree/master/r-packages>.
+* I run (`docker run`) an ephemeral (`--rm`), interactive (`-ti`) container of
+the image `2dii/r-packages`, create a number of volumes (`-v`) to access
+useful files in my host computer from inside the container, and set the working
+directory (`w`) to PACTA_analysis/.
+
+```{r comment="", echo=FALSE}
+url <- "https://raw.githubusercontent.com/maurolepore/bin/master/docker-run-2dii-r-packages"
+tmp <- tempfile()
+download.file(url, tmp, quiet = TRUE)
+writeLines(readLines(tmp))
+```
+
+* I now use R to produce the very file you are now reading.
+
+```r
+Rscript -e "rmarkdown::render('README.Rmd', output_format = 'md_document')"
+```
 
 ## Installation
 
@@ -195,14 +143,8 @@ need to work on developer mode. There is no "installation package"; instead
 you need to clone the source code [2DII's organization on
 GitHub](https://github.com/2DegreesInvesting/).
 
-Notice that this repository does contain an R package.
-
-```{r}
-show_package <- head(readLines("DESCRIPTION"), 3)
-writeLines(show_package)
-```
-
-However, it is only for convenience and must also be used in developer mode.
+Notice that this repository contains an R package but it is only for convenience
+and must also be used in developer mode.
 
 ```{r}
 devtools::load_all()
@@ -210,10 +152,12 @@ devtools::load_all()
 
 ## Reproducible examples
 
-These examples show how to run each workflow. You may use them in a number of
-ways. For example, you may run them on your local computer to track and explore
-their implementation, or on a remote server as an integration test in a
-continuous integration pipeline.
+This section shows reproducible examples of both the single- and multiple-inputs
+workflows. You may use these examples in at least three ways:
+
+* Read this document for an overview of which workflows are possible.
+* Run them on your local computer to track and explore their implementation.
+* Run them on a server as an integration test.
 
 ### Single-inputs workflow
 
@@ -224,13 +168,15 @@ ls web_tool_script*
 ```
 
 With R, you can run each script individually with something like
-`source("web_tool_script_1.R")` or run multiple scripts at once with:
+`source("web_tool_script_1.R")` or run multiple scripts at once. For example,
+you can run scripts 1 and 2 with:
 
 ```{r}
-PACTA.analysis:::source_web_tool_scripts(1:2)
+source_web_tool_scripts(1:2)
 ```
 
-With the terminal, you can run each script with:
+With the terminal, you can run each script individually. For example, you can
+run script 3 with:
 
 ```{bash comment="$", error=TRUE}
 Rscript --vanilla web_tool_script_3.R TestPortfolio_Input  
