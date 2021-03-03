@@ -1,4 +1,4 @@
-Mauro Lepore, 2021-03-03 05:12:17.
+2021-03-03 20:40:52.
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 # PACTA\_analysis
@@ -20,7 +20,7 @@ Both workflows include three steps:
 
 --
 
-Note: Code chunks with prompts "`$`" and "`#>`" correspond to bash and R, respectively.
+Note that "`$`" and "`#>`" precede bash and R output, respectively.
 
 ### Siblings
 
@@ -32,47 +32,11 @@ echo $siblings
 $ ../pacta-data ../create_interactive_report ../StressTestingModelDev ../PACTA_analysis
 ```
 
-Before any analysis, ensure all siblings are up to date.
-
-``` bash
-# Store
- working_directory="$pwd"
-
-siblings="$(dirname $(find .. -maxdepth 2 -empty -type f -name '.pacta'))"
-for i in $siblings; do
-  cd $i && echo $i
-  git log --decorate --oneline -n 1
-done
-
-# Restore
-cd "$working_directory"
-
-$ ../pacta-data
-$ 13215f8 (HEAD -> master, tag: 0.0.14, origin/master) adding new peer files for Austria (#35)
-$ ../create_interactive_report
-$ aefc204 (HEAD -> master, tag: 0.0.14, origin/master) Merge pull request #380 from MonikaFu/375-format-scenario-names
-$ ../StressTestingModelDev
-$ 45f124b (HEAD -> master, tag: 0.0.14, origin/master) 211 litigation pf level (#220)
-$ ../PACTA_analysis
-$ 61af20b (HEAD -> generalize-workflow) Update date
-```
-
-For an easier way to work with all siblings at once from the terminal see [pacta-cli](https://github.com/2DegreesInvesting/pacta-cli).
+Before any analysis, ensure all siblings are up to date. For an easier way to work with all siblings at once from the terminal see [pacta-cli](https://github.com/2DegreesInvesting/pacta-cli).
 
 ## Computing environment
 
-The required computing environment is available in [this docker image](https://github.com/2DegreesInvesting/docker/tree/master/r-packages).
-
-Other computing environments may be defined as workflows for GitHub actions.
-
-``` bash
-ls .github/workflows
-$ R-CMD-check.yaml
-$ pr-commands.yaml
-$ source-web-tool-scripts.yaml
-```
-
-Unless otherwise indicated, R packages should be up to date.
+A functional computing environment is available in [this docker image](https://github.com/2DegreesInvesting/docker/tree/master/r-packages) (how to [install Docker](https://docs.docker.com/engine/install/)).
 
 <details> <summary>Session information.</summary>
 
@@ -178,7 +142,7 @@ devtools::session_info()
 
 As an example, this is one way to use that computing environment to produce the very document you are now reading:
 
--   I move to the parent directory of PACTA\_analysis and its siblings.
+-   I move to the parent directory of PACTA\_analysis and its siblings -- which in my case is "~/git/".
 
 ``` bash
 cd ~/git
@@ -201,18 +165,18 @@ cd ~/git
 -   Then I use R to produce the very file you are now reading.
 
 ``` r
-Rscript -e "rmarkdown::render('README.Rmd', output_format = 'md_document')"
+R
+rmarkdown::render("README.Rmd", output_format = "md_document")
 ```
 
 ## Installation
 
-To use the software in this and related repositories (more on this below) you need to work on developer mode. There is no "installation package"; instead you need to clone the source code [2DII's organization on GitHub](https://github.com/2DegreesInvesting/).
+To use the software in this and related repositories (more on this below) you need to clone the source code from [2DII's organization on GitHub](https://github.com/2DegreesInvesting/).
 
-Notice that this repository contains an R package but it is only for convenience and must also be used in developer mode.
+The PACTA\_analysis repository contains an R package called PACTA.analysis (the name of an R package can't include "\_"). Use it from inside PACTA\_analysis with:
 
 ``` r
-devtools::load_all()
-#> Loading PACTA.analysis
+devtools::load_all()`
 ```
 
 ## Reproducible examples
@@ -225,18 +189,16 @@ This section shows reproducible examples of both the single- and multiple-inputs
 
 ### Single-inputs workflow
 
-The single-inputs workflow has three steps, each in its own script.
+TODO: Document inputs/outputs
 
-``` bash
-ls web_tool_script*
-$ web_tool_script_1.R
-$ web_tool_script_2.R
-$ web_tool_script_3.R
-```
+> There's a pretty important absence here... any explanation of where the critically important input files are or need to be. Hypothetically, the repo should work because it includes some default example files, but any analyst truly using this repo... the first thing they would want to do is put their input files in working\_dir -- CJ
+
+The single-inputs workflow is composed of multiple steps, each in its own script: web\_tool\_script\_1.R, web\_tool\_script\_2.R, web\_tool\_script\_3.R.
 
 With R, you can run each script individually with something like `source("web_tool_script_1.R")` or run multiple scripts at once. For example, you can run scripts 1 and 2 with:
 
 ``` r
+# Helper from the package PACTA.analysis
 source_web_tool_scripts(1:2)
 #> Testing: Rscript --vanilla web_tool_script_1.R TestPortfolio_Input
 #> Testing: Rscript --vanilla web_tool_script_2.R TestPortfolio_Input

@@ -1,6 +1,6 @@
 ---
 output: github_document
-author: "Mauro Lepore, `r Sys.time()`."
+date: "`r Sys.time()`."
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -57,8 +57,7 @@ group results at company, portfolio and regional level.
 
 --
 
-Note: Code chunks with prompts "`$`" and "`#>`" correspond to bash and R,
-respectively.
+Note that "`$`" and "`#>`" precede bash and R output, respectively.
 
 ### Siblings
 
@@ -71,38 +70,15 @@ siblings="$(dirname $(find .. -maxdepth 2 -empty -type f -name '.pacta'))"
 echo $siblings
 ```
 
-Before any analysis, ensure all siblings are up to date.
-
-```{bash comment="$"}
-# Store
- working_directory="$pwd"
-
-siblings="$(dirname $(find .. -maxdepth 2 -empty -type f -name '.pacta'))"
-for i in $siblings; do
-  cd $i && echo $i
-  git log --decorate --oneline -n 1
-done
-
-# Restore
-cd "$working_directory"
-
-```
-
-For an easier way to work with all siblings at once from the terminal see
+Before any analysis, ensure all siblings are up to date. For an easier way to
+work with all siblings at once from the terminal see
 [pacta-cli](https://github.com/2DegreesInvesting/pacta-cli).
 
 ## Computing environment
 
-The required computing environment is available in [this docker
-image](https://github.com/2DegreesInvesting/docker/tree/master/r-packages).
-
-Other computing environments may be defined as workflows for GitHub actions.
-
-```{bash comment="$"}
-ls .github/workflows
-```
-
-Unless otherwise indicated, R packages should be up to date.
+A functional computing environment is available in [this docker
+image](https://github.com/2DegreesInvesting/docker/tree/master/r-packages) (how
+to [install Docker](https://docs.docker.com/engine/install/)).
 
 <details> <summary>Session information.</summary>
 ```{r}
@@ -113,7 +89,8 @@ devtools::session_info()
 As an example, this is one way to use that computing environment to produce the
 very document you are now reading:
 
-* I move to the parent directory of PACTA_analysis and its siblings.
+* I move to the parent directory of PACTA_analysis and its siblings -- which in
+my case is "~/git/".
 
 ```bash
 cd ~/git
@@ -137,21 +114,21 @@ writeLines(lines)
 * Then I use R to produce the very file you are now reading.
 
 ```r
-Rscript -e "rmarkdown::render('README.Rmd', output_format = 'md_document')"
+R
+rmarkdown::render("README.Rmd", output_format = "md_document")
 ```
 
 ## Installation
 
 To use the software in this and related repositories (more on this below) you
-need to work on developer mode. There is no "installation package"; instead
-you need to clone the source code [2DII's organization on
+need to clone the source code from [2DII's organization on
 GitHub](https://github.com/2DegreesInvesting/).
 
-Notice that this repository contains an R package but it is only for convenience
-and must also be used in developer mode.
+The PACTA_analysis repository contains an R package called PACTA.analysis (the
+name of an R package can't include "_"). Use it from inside PACTA_analysis with:
 
-```{r}
-devtools::load_all()
+```r
+devtools::load_all()`
 ```
 
 ## Reproducible examples
@@ -165,17 +142,19 @@ workflows. You may use these examples in at least three ways:
 
 ### Single-inputs workflow
 
-The single-inputs workflow has three steps, each in its own script.
+TODO: Document inputs/outputs
 
-```{bash comment="$"}
-ls web_tool_script*
-```
+> There's a pretty important absence here... any explanation of where the critically important input files are or need to be. Hypothetically, the repo should work because it includes some default example files, but any analyst truly using this repo... the first thing they would want to do is put their input files in working_dir -- CJ
+
+The single-inputs workflow is composed of multiple steps, each in its own
+script: `r list.files(pattern = "web_tool_script")`.
 
 With R, you can run each script individually with something like
 `source("web_tool_script_1.R")` or run multiple scripts at once. For example,
 you can run scripts 1 and 2 with:
 
 ```{r}
+# Helper from the package PACTA.analysis
 source_web_tool_scripts(1:2)
 ```
 
