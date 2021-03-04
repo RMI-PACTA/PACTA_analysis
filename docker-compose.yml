@@ -1,0 +1,16 @@
+version: "0.0.0"
+
+services:
+  pacta:
+    image: 2dii/r-packages
+    working_dir: /root/PACTA_analysis
+    volumes:
+    - .:/root/PACTA_analysis
+    - ../pacta-data:/root/pacta-data
+    - ../create_interactive_report:/root/create_interactive_report
+    - ../StressTestingModelDev:/root/StressTestingModelDev
+    - ~/.ssh:/root/.ssh
+    - ~/.Renviron:/root/.Renviron
+    - ~/.gitconfig:/root/.gitconfig
+
+
