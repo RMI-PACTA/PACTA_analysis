@@ -25,7 +25,7 @@ goals.
 This documents targets internal 2DII users and developers. It provides
 reproducible examples of what you can achieve with the code in this repository
 and friends. You may use it as a guide to run your own analyses, or as an
-integration test to ensure code changes preserve the behavior documented here.
+integration test to ensure code changes preserve the behaviour documented here.
 Readers outside 2DII may instead see other related work:
 [transitionmonitor.com](https://platform.transitionmonitor.com/start),
 [r2dii.data](https://github.com/2DegreesInvesting/r2dii.data),
@@ -59,7 +59,7 @@ group results at company, portfolio and regional level.
 
 Note that "`$`" and "`#>`" precede bash and R output, respectively.
 
-### Siblings
+## Siblings
 
 ```{r include=FALSE}
 siblings <- list.files(
@@ -77,9 +77,33 @@ code you use is up to date.
 
 ## Computing environment
 
-A functional computing environment is available in [this docker
+A functional computing environment is available in [this Docker
 image](https://github.com/2DegreesInvesting/docker/tree/master/r-packages) (how
-to [install Docker](https://docs.docker.com/engine/install/)).
+to [install Docker](https://docs.docker.com/engine/install/)). For an example
+using that image let's render the document you are now reading, using all PACTA
+siblings, and personal configuration files from the home directory in the host
+computer (my laptop). The entire computing environment is captured in the file
+"docker-compose.yml":
+
+```{r echo=FALSE, comment=""}
+writeLines(readLines("docker-compose.yml"))
+```
+
+We can now `run` an ephemeral (`--rm`) container of the `pacta` service with
+`docker-compose` (how to [install
+docker-compose](https://docs.docker.com/compose/install/)):
+
+```bash
+docker-compose run --rm pacta
+```
+
+From the container's `working_dir`ectory we now start an `R` session and
+`render()` the file you are now reading:
+
+```r
+R
+rmarkdown::render("README.Rmd", output_format = "md_document")
+```
 
 <details> <summary>Session information.</summary>
 ```{r}
@@ -87,52 +111,7 @@ devtools::session_info()
 ```
 </details>
 
-As an example, this is one way to use that computing environment to produce the
-very document you are now reading:
-
-* I move to the parent directory of PACTA_analysis and its siblings -- which in
-my case is "~/git/".
-
-```bash
-cd ~/git
-```
-
-* I run (`docker run`) an ephemeral (`--rm`), interactive (`-ti`) container of
-the image `2dii/r-packages`; create a number of volumes (`-v`) to access useful
-files in my host computer from inside the container; and set the working
-directory (`-w`) to PACTA_analysis/.
-
-```{r comment="", echo=FALSE}
-url <- "https://raw.githubusercontent.com/maurolepore/bin/master/docker-run-2dii-r-packages"
-tmp <- tempfile()
-download.file(url, tmp, quiet = TRUE)
-
-lines <- readLines(tmp)
-lines <- lines[2:length(lines)]
-writeLines(lines)
-```
-
-* Then I use R to produce the very file you are now reading.
-
-```r
-R
-rmarkdown::render("README.Rmd", output_format = "md_document")
-```
-
-## Installation
-
-To use the software in this and related repositories (more on this below) you
-need to clone the source code from [2DII's organization on
-GitHub](https://github.com/2DegreesInvesting/).
-
-The PACTA_analysis repository contains an R package called PACTA.analysis (the
-name of an R package can't include "_"). Use it from inside PACTA_analysis with:
-
-```r
-devtools::load_all()`
-```
-
-## Reproducible examples
+## Reproducible examples of PACTA workflows
 
 This section shows reproducible examples of both the single- and multiple-inputs
 workflows. You may use these examples in at least three ways:
@@ -140,6 +119,18 @@ workflows. You may use these examples in at least three ways:
 * Read this document for an overview of which workflows are possible.
 * Run them on your local computer to track and explore their implementation.
 * Run them on a server as an integration test.
+
+### R packages
+
+Let's start by loading the packages we use in this file:
+
+```{r}
+library(devtools, warn.conflicts = FALSE)
+load_all()
+```
+
+Notice we `load_all()` features in the PACTA.analysis package, which lives
+inside the PACTA_analysis repository.
 
 ### Single-inputs workflow
 

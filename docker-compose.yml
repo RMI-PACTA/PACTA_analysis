@@ -1,17 +1,16 @@
-version: "0.0.0"
-
+version: "0.0.0.9000"
 services:
   pacta:
     image: 2dii/r-packages
     working_dir: /root/PACTA_analysis
     volumes:
-    # The ssh protocol is required when 2FA is enabled (recommended)
+      # The ssh protocol is required when 2FA is enabled (recommended)
     - ~/.ssh:/root/.ssh
-    # Access GITHUB_PAT and other personal secrets
+      # Access GITHUB_PAT and other personal secrets
     - ~/.Renviron:/root/.Renviron
-    # Avoid re-configuring git
+      # Avoid re-configuring git
     - ~/.gitconfig:/root/.gitconfig
-    # Read/write PACTA siblings in the host form container
+      # Read/write PACTA siblings in the host from the container
     - ../PACTA_analysis:/root/PACTA_analysis
     - ../pacta-data:/root/pacta-data
     - ../create_interactive_report:/root/create_interactive_report
