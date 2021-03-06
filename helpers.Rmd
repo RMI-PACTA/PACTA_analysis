@@ -8,6 +8,8 @@
 look_into <- function(path, n = -1L) {
   lines <- readLines(path, n, encoding = "UTF-8")
   writeLines(lines)
+  
+  invisible(path)
 }
 
 #' Find a file matchin a regexp
