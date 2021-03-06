@@ -64,3 +64,4 @@
 ^workflow\.Rmd$
 ^workflow\.md$
 ^working_dir$
+^Dockerfile$
