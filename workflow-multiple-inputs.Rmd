@@ -1,0 +1,145 @@
+---
+output: github_document
+---
+
+```{r include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  config_general = "man/figures/README-",
+  out.width = "100%",
+  cache = TRUE
+)
+
+devtools::load_all()
+```
+
+Helpers.
+
+```{r child="helpers.Rmd"}
+
+```
+
+Packages.
+
+```{r}
+library(here)
+library(fs)
+```
+
+### Requirement
+
+Here I list requirements that Clare mentioned. I still don't know how they fit
+in the process but I guess that'll become clearer soon.
+
+#### Configurations
+
+PACTA inputs are commonly described not as parameters to functions but as key-value
+pairs in configuration files. 
+
+Here are some lines of a configuration file that I believe is current:
+
+```{r}
+config_filename <- "ProjectParameters_GENERAL[.]yml"
+config_general <- fs::dir_ls(here::here(), regexp = config_filename, recurse = TRUE)
+config_general
+
+stopifnot(any(fs::file_exists(config_general)))
+
+n <- 10L
+look_into(config_general[[1]], n)
+```
+
+For details on what each parameter means, you may see in this demo configuration
+file. It may be obsolete but it's the only documentation I know of.
+
+```{r}
+config_demo <- "config_demo.yml"
+look_into(config_demo, n)
+```
+
+#### Portfolio file
+
+The portfolio file matches this pattern:
+
+```{r}
+pattern <- "_Input[.]csv$"
+```
+
+The files matching that pattern are located at these paths:
+
+```{r}
+find_file(pattern)
+```
+
+#### Analysis inputs
+
+This section describes requirements from directories in 2DII's dropbox under
+"PortCheck/00_Data/07_AnalysisInputs/". This is private data. This example
+assumes you have this specific directory, alongside PACTA_analysis/:
+
+```{r}
+analysis_input <- "../2020Q4_02082021"
+fs::dir_exists(analysis_input)
+
+fs::dir_tree(analysis_input)
+```
+
+Required files must be found:
+
+```{r}
+required <- c(
+  "security_financial_data.rda",
+  "consolidated_financial_data.rda",
+  "debt_financial_data.rda",
+  "bonds_ald_scenario.rda",
+  "equity_ald_scenario.rda",
+  "masterdata_ownership_datastore.rda",
+  "masterdata_debt_datastore.rda"
+)
+
+exists_in <- function(x, path) fs::file_exists(find_file(x, path))
+found <- purrr::map(required, exists_in, analysis_input)
+stopifnot(all(unlist(found)))
+```
+
+Optional files may or may not be found:
+
+```{r}
+optional <- c(
+  # For example: fund_data_2019Q4.rda
+  "fund_data_20..Q.[.]rda",
+  "revenue_data_member_ticker.rda",
+  "company_emissions.rda",
+  "average_sector_intensity.rda"
+)
+
+found <- purrr::map(optional, exists_in, analysis_input)
+unlist(found)
+```
+
+The absence of some files determines affects some of the values in the
+configuration file. For example, if the file "revenue_data_member_ticker.rda" is
+missing, the parameter `has_revenue` should be set to `FALSE`.
+
+```{r}
+if_missing_param_is_false <- function(pattern,
+                                      param,
+                                      dir = analysis_input,
+                                      config = config_general) {
+  methodology <- config::get("methodology", file = config)
+  
+  available <- isTRUE(suppressWarnings(exists_in(pattern, dir)))
+  if (!available) {
+    param_is_false <- isFALSE(methodology[[param]])
+    stopifnot(param_is_false)
+  }
+  
+  invisible(pattern)
+}
+
+if_missing_param_is_false("revenue_data_member_ticker.rda", "has_revenue")
+if_missing_param_is_false("company_emissions.rda", "inc_emissionfactors")
+if_missing_param_is_false("average_sector_intensity.rda", "inc_emissionfactors")
+```
+

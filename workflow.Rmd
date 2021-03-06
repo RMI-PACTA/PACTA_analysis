@@ -56,10 +56,13 @@ This steps through the functions required to run a project using the original sc
 Crticial Set Up Components
 - Parameter file (ProjectParameters_GENERAL)
 - Portfolio file ("*_Input.csv")
+ASK Where to find this
 - Data files (multiple)
 
 - File paths to 
+ASK Where to find this
   1. Data location
+ASK Where to find this
   2. Project location (inputs and outputs)
 
 Necessary Files:
@@ -77,7 +80,6 @@ fund_data_2019Q4.rda (or relevant time stamp)
 revenue_data_member_ticker.rda (if not available, set has_revenue = FALSE in parameter file)
 company_emissions.rda (if not available, set inc_emissionfactors = FALSE in parameter file)
 average_sector_intensity.rda (if not available, set inc_emissionfactors = FALSE in parameter file)
-
 
 ### Set up parameters and paths
 ```{r 1_portfolio_check_initialisation, echo = FALSE}

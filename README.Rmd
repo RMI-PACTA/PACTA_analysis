@@ -9,7 +9,7 @@ date: "`r Sys.time()`."
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.path = "man/figures/README-",
+  config_general = "man/figures/README-",
   out.width = "100%",
   cache = TRUE
 )
@@ -59,6 +59,23 @@ group results at company, portfolio and regional level.
 
 Note that "`$`" and "`#>`" precede bash and R output, respectively.
 
+## Setup
+
+Let's start by loading the packages we use in this file. Notice we `load_all()`
+features in the PACTA.analysis package, which lives inside the PACTA_analysis
+repository.
+
+```{r, packages}
+library(devtools, warn.conflicts = FALSE)
+load_all()
+```
+
+These helpers are for this document only:
+
+```{r child="helpers.Rmd"}
+
+```
+
 ## Siblings
 
 ```{r include=FALSE}
@@ -77,39 +94,58 @@ code you use is up to date.
 
 ## Computing environment
 
-A functional computing environment is available in [this Docker
-image](https://github.com/2DegreesInvesting/docker/tree/master/r-packages) (how
-to [install Docker](https://docs.docker.com/engine/install/)). For an example
-using that image let's render the document you are now reading, using all PACTA
-siblings, and personal configuration files from the home directory in the host
-computer (my laptop). The entire computing environment is captured in the file
-"docker-compose.yml":
+The docker image [rocker/verse](https://hub.docker.com/r/rocker/verse) provides
+most of what you need for a functional computing environment, including system
+dependencies, a bash terminal and RStudio. The image
+[2dii/pacta_analysis](https://hub.docker.com/r/2dii/pacta_analysis) extends
+rocker/verse to include the required R packages. Here it its Dockerfile:
+
+* Dockerfile
 
 ```{r echo=FALSE, comment=""}
-writeLines(readLines("docker-compose.yml"))
+look_into("Dockerfile")
 ```
 
-We can now `run` an ephemeral (`--rm`) container of the `pacta` service with
-`docker-compose` (how to [install
-docker-compose](https://docs.docker.com/compose/install/)):
+Finally you need access to the PACTA siblings. You can create one or more
+volumes mapping the location of the siblings from your (host) computer to the
+container.
 
-```bash
-docker-compose run --rm pacta
+Here are two ways you may use a full computing environment, including PACTA
+siblings:
+
+* To from with RStudio, ensure your working directory is PACTA_analysis/, then
+run `docker-compose up`. RStudio is now available from your a browser at
+http://localhost:8787, with some personal configuration files and all siblings
+available at the home directory of the container. When you are finished using
+this service, run `docker-compose down`. The details of this environment are
+described in the file docker-compose.yml:
+
+```{r}
+look_into("docker-compose.yml")
 ```
 
-From the container's `working_dir`ectory we now start an `R` session and
-`render()` the file you are now reading:
+* To work from an interactive terminal, ensure your working directory is the
+parent of all pacta siblings, then run `docker run --rm -ti -v "$(pwd):/root"
+2dii/pacta_analysis:latest bash`. You are now into an ephemeral (`--rm`) docker
+container running an interactive `bash` terminal (`-it`) mapping (`-v`) the
+parent directory of all pacta siblings to the /root directory:
 
-```r
-R
-rmarkdown::render("README.Rmd", output_format = "md_document")
-```
+To prove this environment works, I used this environment to render the very
+document you are now reading.
 
 <details> <summary>Session information.</summary>
 ```{r}
 devtools::session_info()
 ```
 </details>
+
+--
+
+Reference:
+
+* [2DegreesInvesting/docker](https://github.com/2DegreesInvesting/docker/tree/master/r-packages).
+* [Install Docker](https://docs.docker.com/engine/install/).
+* [Install docker-compose](https://docs.docker.com/compose/install/)).
 
 ## Reproducible examples of PACTA workflows
 
@@ -119,18 +155,6 @@ workflows. You may use these examples in at least three ways:
 * Read this document for an overview of which workflows are possible.
 * Run them on your local computer to track and explore their implementation.
 * Run them on a server as an integration test.
-
-### R packages
-
-Let's start by loading the packages we use in this file:
-
-```{r}
-library(devtools, warn.conflicts = FALSE)
-load_all()
-```
-
-Notice we `load_all()` features in the PACTA.analysis package, which lives
-inside the PACTA_analysis repository.
 
 ### Single-inputs workflow
 
@@ -159,4 +183,7 @@ Rscript --vanilla web_tool_script_3.R TestPortfolio_Input
 
 ### Multiple-inputs workflow
 
-TODO
+```{r child="workflow-multiple-inputs.Rmd"}
+
+```
+

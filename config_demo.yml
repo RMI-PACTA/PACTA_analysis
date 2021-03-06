@@ -1,0 +1,96 @@
+default:
+  Methodology:
+    HasBookValue: FALSE # ignore
+    HasRISK: TRUE # ignore a flag specifying if the physical risk assessment should be done
+    HasMAP: TRUE # flag to specify if map data (production per country) should be prepared
+    HasSB: FALSE # ignore for now
+
+  TimeStamps:
+    # setting the dates of the data-input for financial and asset-level data: this identifies the input files
+    # The name "DONT-DELETE" is to alert people to not delete this directory
+    FinancialData.Timestamp: DONT-DELETE # specifies the Financial data sourcing date ie from which date the financial information is taken
+    ALD.Timestamp: 201812 # specifies the ALD sourcing date ie from which date the production data is taken
+    DataStore.Export: ASK-MAURO # specifying which SQL data is used
+    DataPrep.Timestamp: mauroexplores # date or project name of the data prep that you are about to run
+
+  AnalysisPeriod:
+    # setting the period of time for the analysis: by setting the starting year and the time-horizon
+    Years.Horizon: 5 # time horizon of the analysis
+    Years.Startyear: 2019 # start year of the analysis
+    Years.Riskyear: 2020
+    Years.Additional: 2040 # in case the data needs to be prepared for an additional year
+
+  # these list are used for scoping of the data set, ensuring it is not too large, etc.
+  Lists:
+    Scenario.Sources.List:
+      - GP_ER_2015
+      - ETP2017
+      - BNEF2017
+      - WEO2018
+      - SBTI
+    Scenario.Geography.List:
+      - GlobalAggregate
+      - Global
+      - NonOECD
+      - OECD
+      - Europe
+      - NorthAmerica
+    Equity.Market.List:
+      - Global
+    Global.Aggregate.Sector.List:
+      - Power
+    Global.Aggregate.Scenario.Sources.List:
+      - WEO2018
+      - ETP2017
+    Technology.List:
+      - Electric
+      - Hybrid
+      - ICE
+      - GasCap
+      - CoalCap
+      - OilCap
+      - RenewablesCap
+      - HydroCap
+      - NuclearCap
+      - Coal
+      - Oil
+      - Gas
+    Technology.Exclusion.List:
+      - FuelCell
+      - Fuel cell
+      - OtherCap
+      - OtherFF
+      - Bof Shop
+      - Coking Plant
+      - Sintering Plant
+      - Direct Or Smelting Reduction Plant
+      - Pelletizing Plant
+      - Open Hearth Meltshop
+    TechnologyRoadmap.Sector.List:
+      - Automotive
+      - Power
+      - Fossil Fuels
+      - Oil&Gas
+      - Coal
+    CO2Intensity.Sector.List:
+      - Shipping
+      - Steel
+      - Aviation
+      - Cement
+    WebToolRegions:
+      - Global
+      - OECD
+      - NonOECD
+      - NorthAmerica
+      - Europe
+      - AsiaPacific
+      - OECDNorthAmerica
+
+# Probably not needed in case we keep all geogrpahies in the preparation phase?!
+#    ScenarioGeography.List:
+#      - Global
+#      - OECD
+#      - NonOECD
+#      - Europe
+#      - NorthAmerica
+#      - AsiaPacific

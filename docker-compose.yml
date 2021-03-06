@@ -1,18 +1,27 @@
 version: "0.0.0.9000"
 services:
-  pacta:
-    image: 2dii/r-packages
-    working_dir: /root/PACTA_analysis
+  rstudio:
+    image: 2dii/pacta_analysis:latest
+    container_name: pacta_analysis
+    ports:
+      - '8787:8787'
+    environment:
+    - ROOT=TRUE
+    - UMASK=0000
+    - DISSABLE_AUTH=true
+    - PASSWORD=123
     volumes:
       # The ssh protocol is required when 2FA is enabled (recommended)
-    - ~/.ssh:/root/.ssh
+      - '~/.ssh:/home/rstudio/.ssh'
       # Access GITHUB_PAT and other personal secrets
-    - ~/.Renviron:/root/.Renviron
+      - '~/.Renviron:/home/rstudio/.Renviron'
       # Avoid re-configuring git
-    - ~/.gitconfig:/root/.gitconfig
+      - '~/.gitconfig:/home/rstudio/.gitconfig'
       # Read/write PACTA siblings in the host from the container
-    - ../PACTA_analysis:/root/PACTA_analysis
-    - ../pacta-data:/root/pacta-data
-    - ../create_interactive_report:/root/create_interactive_report
-    - ../StressTestingModelDev:/root/StressTestingModelDev
+      - '../PACTA_analysis:/home/rstudio/PACTA_analysis'
+      - '../pacta-data:/home/rstudio/pacta-data'
+      - '../create_interactive_report:/home/rstudio/create_interactive_report'
+      - '../StressTestingModelDev:/home/rstudio/StressTestingModelDev'
+        # Data from 2DII's Dropbox in PortCheck/00_Data/07_AnalysisInputs/
+      - '../2020Q4_02082021:/home/rstudio/2020Q4_02082021'
 
