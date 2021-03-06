@@ -11,17 +11,13 @@ services:
     - DISSABLE_AUTH=true
     - PASSWORD=123
     volumes:
-      # The ssh protocol is required when 2FA is enabled (recommended)
+      # Access GitHub when 2FA is enabled (recommended)
       - '~/.ssh:/home/rstudio/.ssh'
-      # Access GITHUB_PAT and other personal secrets
+      # Access secrets
       - '~/.Renviron:/home/rstudio/.Renviron'
       # Avoid re-configuring git
       - '~/.gitconfig:/home/rstudio/.gitconfig'
-      # Read/write PACTA siblings in the host from the container
-      - '../PACTA_analysis:/home/rstudio/PACTA_analysis'
-      - '../pacta-data:/home/rstudio/pacta-data'
-      - '../create_interactive_report:/home/rstudio/create_interactive_report'
-      - '../StressTestingModelDev:/home/rstudio/StressTestingModelDev'
-        # Data from 2DII's Dropbox in PortCheck/00_Data/07_AnalysisInputs/
-      - '../2020Q4_02082021:/home/rstudio/2020Q4_02082021'
+      # Access all siblings
+      - '..:/home/rstudio'
+
 
