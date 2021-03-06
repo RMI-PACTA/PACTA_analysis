@@ -100,35 +100,33 @@ dependencies, a bash terminal and RStudio. The image
 [2dii/pacta_analysis](https://hub.docker.com/r/2dii/pacta_analysis) extends
 rocker/verse to include the required R packages. Here it its Dockerfile:
 
-* Dockerfile
-
 ```{r echo=FALSE, comment=""}
 look_into("Dockerfile")
 ```
 
-Finally you need access to the PACTA siblings. You can create one or more
-volumes mapping the location of the siblings from your (host) computer to the
-container.
+Finally you need access to the PACTA [siblings](#Siblings). You can
+create one or more volumes mapping the location of the siblings from your (host)
+computer to the container. 
 
-Here are two ways you may use a full computing environment, including PACTA
+Here are two ways to access a full computing environment, including PACTA
 siblings:
 
-* To from with RStudio, ensure your working directory is PACTA_analysis/, then
-run `docker-compose up`. RStudio is now available from your a browser at
+* To work from with RStudio, ensure your working directory is PACTA_analysis/,
+then run `docker-compose up`. RStudio is now available from your a browser at
 http://localhost:8787, with some personal configuration files and all siblings
 available at the home directory of the container. When you are finished using
 this service, run `docker-compose down`. The details of this environment are
 described in the file docker-compose.yml:
 
-```{r}
+```{r echo=FALSE, comment=""}
 look_into("docker-compose.yml")
 ```
 
 * To work from an interactive terminal, ensure your working directory is the
-parent of all pacta siblings, then run `docker run --rm -ti -v "$(pwd):/root"
+parent of all PACTA siblings, then run `docker run --rm -ti -v "$(pwd):/root"
 2dii/pacta_analysis:latest bash`. You are now into an ephemeral (`--rm`) docker
 container running an interactive `bash` terminal (`-it`) mapping (`-v`) the
-parent directory of all pacta siblings to the /root directory:
+parent directory of all PACTA siblings to the /root directory.
 
 To prove this environment works, I used this environment to render the very
 document you are now reading.
@@ -145,7 +143,7 @@ Reference:
 
 * [2DegreesInvesting/docker](https://github.com/2DegreesInvesting/docker/tree/master/r-packages).
 * [Install Docker](https://docs.docker.com/engine/install/).
-* [Install docker-compose](https://docs.docker.com/compose/install/)).
+* [Install docker-compose](https://docs.docker.com/compose/install/).
 
 ## Reproducible examples of PACTA workflows
 
@@ -165,20 +163,19 @@ TODO: Document inputs/outputs
 The single-inputs workflow is composed of multiple steps, each in its own
 script: `r list.files(pattern = "web_tool_script")`.
 
-With R, you can run each script individually with something like
-`source("web_tool_script_1.R")` or run multiple scripts at once. For example,
-you can run scripts 1 and 2 with:
+In R you can run each script individually with something like
+`source("web_tool_script_1.R")` or run multiple scripts at once with:
 
 ```{r}
 # Helper from the package PACTA.analysis
-source_web_tool_scripts(1:2)
+source_web_tool_scripts()
 ```
 
-With the terminal, you can run each script individually. For example, you can
-run script 3 with:
+In a terminal you can run each script individually, e.g. "web_tool_script_1.R",
+with:
 
 ```{bash comment="$", error=TRUE}
-Rscript --vanilla web_tool_script_3.R TestPortfolio_Input  
+Rscript --vanilla web_tool_script_1.R TestPortfolio_Input  
 ```
 
 ### Multiple-inputs workflow
