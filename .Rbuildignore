@@ -51,9 +51,14 @@
 ^test_cases$
 ^test_test_cases\.R$
 
-^Dockerfile$
+ ^Dockerfile$
 ^docker-compose\.yml$
 ^workflow-multiple-inputs_cache$
 ^workflow\.Rmd$
 ^workflow\.md$
 ^\.env$
+^computing-environment\.Rmd$
+^Dockerfile$
+^helpers\.Rmd$
+^computing-environment\.md$
+^computing-environment_cache$

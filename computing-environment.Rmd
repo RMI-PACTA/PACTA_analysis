@@ -1,0 +1,85 @@
+---
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  config_general = "man/figures/README-",
+  out.width = "100%",
+  cache = TRUE
+)
+
+devtools::load_all()
+```
+
+```{r child="helpers.Rmd", include=FALSE}
+
+```
+
+The docker image [rocker/verse](https://hub.docker.com/r/rocker/verse) provides
+most of what you need for a functional computing environment, including system
+dependencies, a bash terminal and RStudio. The image
+[2dii/pacta_analysis](https://hub.docker.com/r/2dii/pacta_analysis) extends
+rocker/verse to include the required R packages. Here it its Dockerfile:
+
+```{r echo=FALSE, comment=""}
+look_into("Dockerfile")
+```
+
+Finally you need access to the PACTA [siblings](#Siblings). You can
+create one or more volumes mapping the location of the siblings from your (host)
+computer to the container. 
+
+Here are two ways to access a full computing environment, including PACTA
+siblings.
+
+_To work from with RStudio_, ensure your working directory is PACTA_analysis/,
+then run 
+
+```bash
+docker-compose up
+```
+
+RStudio is now available from your a browser at http://localhost:8787, with some
+personal configuration files and all siblings available at the home directory of
+the container. When you are finished using this service, run
+
+```bash
+docker-compose down
+```
+
+The details of this environment are described in the file docker-compose.yml:
+
+```{r echo=FALSE, comment=""}
+look_into("docker-compose.yml")
+```
+
+_To work from an _interactive terminal_, ensure your working directory is the
+parent of all PACTA siblings, then run 
+
+```bash
+docker run --rm -ti -v "$(pwd):/root" 2dii/pacta_analysis:latest bash`
+```
+
+You are now into an ephemeral (`--rm`) docker container running an interactive
+`bash` terminal (`-it`) mapping (`-v`) the parent directory of all PACTA
+siblings to the /root directory. For a slightly improved environment replace
+the trailing `bash` with `docker/entrypoint`.
+
+<details> <summary>Information of an R session running in this computing
+environment.</summary>
+```{r}
+devtools::session_info()
+```
+</details>
+
+--
+
+Reference:
+
+* [2DegreesInvesting/docker](https://github.com/2DegreesInvesting/docker/tree/master/r-packages).
+* [Install Docker](https://docs.docker.com/engine/install/).
+* [Install docker-compose](https://docs.docker.com/compose/install/).
+

@@ -1,0 +1,28 @@
+```{r}
+#' Look into a file
+#' @examples
+#' tmp <- tempfile()
+#' writeLines("a\nb\nc", tmp)
+#' look_into(tmp)
+#' look_into(tmp, 2)
+look_into <- function(path, n = -1L) {
+  lines <- readLines(path, n, encoding = "UTF-8")
+  writeLines(lines)
+  
+  invisible(path)
+}
+
+#' Find a file matchin a regexp
+#' @examples
+#' find_file("[.]profile$", "~")
+#' find_file("[.]profile$", "~", all = TRUE)
+find_file <- function(regexp, path = here::here(), all = FALSE) {
+  out <- fs::dir_ls(path = path, regexp = regexp, recurse = TRUE, all = all)
+  found <- any(fs::file_exists(out))
+  if (!found) {
+    rlang::warn(glue::glue("No file found matching regexp: {regexp}."))
+  }
+  
+  out
+}
+```
