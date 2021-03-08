@@ -113,7 +113,7 @@ siblings:
 
 * To work from with RStudio, ensure your working directory is PACTA_analysis/,
 then run `docker-compose up`. RStudio is now available from your a browser at
-localhost:8787, with some personal configuration files and all siblings
+http://localhost:8787, with some personal configuration files and all siblings
 available at the home directory of the container. When you are finished using
 this service, run `docker-compose down`. The details of this environment are
 described in the file docker-compose.yml:

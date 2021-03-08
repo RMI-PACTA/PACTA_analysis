@@ -1,4 +1,4 @@
-2021-03-07 05:31:21.
+2021-03-08 14:29:33.
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -126,11 +126,11 @@ PACTA siblings:
 
 -   To work from with RStudio, ensure your working directory is
     PACTA\_analysis/, then run `docker-compose up`. RStudio is now
-    available from your a browser at localhost:8787, with some personal
-    configuration files and all siblings available at the home directory
-    of the container. When you are finished using this service, run
-    `docker-compose down`. The details of this environment are described
-    in the file docker-compose.yml:
+    available from your a browser at <http://localhost:8787>, with some
+    personal configuration files and all siblings available at the home
+    directory of the container. When you are finished using this
+    service, run `docker-compose down`. The details of this environment
+    are described in the file docker-compose.yml:
 
 <!-- -->
 
