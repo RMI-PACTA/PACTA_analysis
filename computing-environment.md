@@ -59,8 +59,8 @@ docker-compose.yml:
           # Access all siblings
           - '..:/home/rstudio'
 
-\_To work from an *interactive terminal*, ensure your working directory
-is the parent of all PACTA siblings, then run
+*To work from an interactive terminal*, ensure your working directory is
+the parent of all PACTA siblings, then run
 
 ``` bash
 docker run --rm -ti -v "$(pwd):/root" 2dii/pacta_analysis:latest bash`

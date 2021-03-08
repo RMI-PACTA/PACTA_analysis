@@ -56,7 +56,7 @@ The details of this environment are described in the file docker-compose.yml:
 look_into("docker-compose.yml")
 ```
 
-_To work from an _interactive terminal_, ensure your working directory is the
+_To work from an interactive terminal_, ensure your working directory is the
 parent of all PACTA siblings, then run 
 
 ```bash
