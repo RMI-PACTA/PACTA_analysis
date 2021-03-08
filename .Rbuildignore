@@ -56,3 +56,4 @@
 ^workflow-multiple-inputs_cache$
 ^workflow\.Rmd$
 ^workflow\.md$
+^\.env$
