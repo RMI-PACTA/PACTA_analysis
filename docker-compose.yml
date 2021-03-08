@@ -4,7 +4,7 @@ services:
     image: 2dii/pacta_analysis:latest
     container_name: pacta_analysis
     ports:
-      - 127.0.0.1:8787:8787
+      - 8787:8787
     environment:
     - PASSWORD=123
     - DISSABLE_AUTH=true
