@@ -1,8 +1,8 @@
 # Build an image with R packages from a specific date `snapshot`:
 # docker build -t 2dii/pacta_analysis:yyyy-mm-dd .
 
-# 2020-10-06 (see https://packagemanager.rstudio.com/client/#/repos/1/overview)
-snapshot <- "https://packagemanager.rstudio.com/all/__linux__/focal/342"
+# 2021-03-04 (see https://packagemanager.rstudio.com/client/#/repos/1/overview)
+snapshot <- "https://packagemanager.rstudio.com/all/__linux__/focal/1695015"
 options(repos = c(CRAN = snapshot))
 install.packages(
   c(
