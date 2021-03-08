@@ -1,0 +1,136 @@
+---
+output: github_document
+date: "`r Sys.time()`."
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  config_general = "man/figures/README-",
+  out.width = "100%",
+  cache = TRUE
+)
+devtools::load_all()
+```
+
+# PACTA_analysis
+
+The goal of this repository is to assess how well a porfolio aligns with climate
+goals. 
+
+This documents targets internal 2DII users and developers. It provides
+reproducible examples of what you can achieve with the code in this repository
+and friends. You may use it as a guide to run your own analyses, or as an
+integration test to ensure code changes preserve the behaviour documented here.
+Readers outside 2DII may instead see other related work:
+[transitionmonitor.com](https://platform.transitionmonitor.com/start),
+[r2dii.data](https://github.com/2DegreesInvesting/r2dii.data),
+[r2dii.match](https://github.com/2DegreesInvesting/r2dii.match), and
+[r2dii.analysis](https://github.com/2DegreesInvesting/r2dii.analysis).
+
+You may want to analyze a single portfolio and investor, or multiple ones. This
+suggests two workflows:
+
+* __Single-inputs workflow__: When the number of portfolios and investors is
+exactly one, we use a specific set of scripts optimized for this purpose. This
+workflow is typically used to generate interactive reports. Because this
+workflow is available [online](https://platform.transitionmonitor.com/start), it
+has been referred to as "the online workflow", and the scripts as "the web tool
+scripts". This is misleading because this workflow can run offline too.
+* __Multiple-outputs workflow__: When the number of portfolios and/or investors
+is not exactly one, we use a different set of optimized scripts. This workflow
+is typically used to produce static (.pdf) reports. By contrast with the
+so-called "online" workflow, this one has been usually referred to as "the
+offline workflow"; again, this is misleading.
+
+Both workflows include three steps:
+
+1. Clean portfolio: Clean the input portfolio and merge in financial data, to
+categorize each holding and identify whether it's equity (EQ) or corporate bonds
+(CB).
+2. Run Analysis: Merge portfolios with asset-level data and scenarios, then
+group results at company, portfolio and regional level.
+3. Present results: Present the results in a clear output format.
+
+--
+
+Note that "`$`" and "`#>`" precede bash and R output, respectively.
+
+## Setup
+
+Let's start by loading the packages we use in this file. Notice we `load_all()`
+features in the PACTA.analysis package, which lives inside the PACTA_analysis
+repository.
+
+```{r, packages}
+library(devtools)
+load_all()
+```
+
+```{r include=FALSE, child="helpers.Rmd"}
+
+```
+
+## Siblings
+
+```{r include=FALSE}
+siblings <- list.files(
+  "..", pattern = "[.]pacta$", recursive = TRUE, all.files = TRUE
+)
+siblings <- basename(dirname(siblings))
+writeLines(siblings)
+```
+
+The PACTA family includes these siblings: **`r siblings`**. They are all available
+at <https://github.com/2DegreesInvesting> and some workflows assume they all
+live directly under the same parent directory. Before running a workflow, you
+may pull the latest commits of the relevant siblings from Github, to ensure the
+code you use is up to date.
+
+## Computing environment
+
+TODO
+
+```{r child="computing-environment.Rmd", eval=FALSE}
+
+```
+
+## Reproducible examples of PACTA workflows
+
+This section shows reproducible examples of both the single- and multiple-inputs
+workflows. You may use these examples in at least three ways:
+
+* Read this document for an overview of which workflows are possible.
+* Run them on your local computer to track and explore their implementation.
+* Run them on a server as an integration test.
+
+### Single-inputs workflow
+
+TODO: Document inputs/outputs
+
+> There's a pretty important absence here... any explanation of where the
+critically important input files are or need to be. Hypothetically, the repo
+should work because it includes some default example files, but any analyst
+truly using this repo... the first thing they would want to do is put their
+input files in working_dir -- CJ
+
+The single-inputs workflow is composed of multiple steps, each in its own
+script: `r list.files(pattern = "web_tool_script")`.
+
+In R you can run each script individually with something like
+`source("web_tool_script_1.R")` or run multiple scripts at once with:
+
+```{r}
+# Helper from the package PACTA.analysis
+source_web_tool_scripts()
+```
+
+In a terminal you can run each script individually, e.g. "web_tool_script_1.R",
+with:
+
+```{bash comment="$", error=TRUE}
+Rscript --vanilla web_tool_script_1.R TestPortfolio_Input  
+```
