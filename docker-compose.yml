@@ -1,0 +1,22 @@
+version: "0.0.0.9000"
+services:
+  rstudio:
+    image: 2dii/pacta_analysis:latest
+    container_name: pacta_analysis
+    ports:
+      - 8787:8787
+    environment:
+    - PASSWORD=${RSTUDIO_PASSWORD}
+    - ROOT=TRUE
+    - UMASK=0000
+    volumes:
+      # Access GitHub when 2FA is enabled (recommended)
+      - '~/.ssh:/home/rstudio/.ssh'
+      # Access secrets
+      - '~/.Renviron:/home/rstudio/.Renviron'
+      # Avoid re-configuring git
+      - '~/.gitconfig:/home/rstudio/.gitconfig'
+      # Access all siblings
+      - '..:/home/rstudio'
+
+

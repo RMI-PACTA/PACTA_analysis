@@ -1,0 +1,4 @@
+#! /bin/bash
+echo "PS1='\u: \w# '" >> /root/.bashrc
+umask 0000
+/bin/bash
