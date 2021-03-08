@@ -1,33 +1,16 @@
-on:
-  push:
-    branches:
-      - main
-      - master
-  pull_request:
-    branches:
-      - main
-      - master
-
 name: Source web-tool scripts
-
+on: [push, pull_request]
 jobs:
-  Test-r-scripts:
+  Source-web-tool-scripts:
     container: 2dii/pacta_analysis:latest
-    runs-on: ${{ matrix.config.os }}
-
-    name: ${{ matrix.config.os }} (${{ matrix.config.r }})
-
+    runs-on: ubuntu-latest 
+    name: ubuntu-latest 'release'
     strategy:
       fail-fast: false
-      matrix:
-        config:
-          - {os: ubuntu-20.04,   r: 'release', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
-
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
-      RSPM: ${{ matrix.config.rspm }}
+      RSPM: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-
     steps:
       # When checking out the repository that triggered a workflow, `ref:`
       # defaults to the reference or SHA for that event. Otherwise, uses the
@@ -38,28 +21,24 @@ jobs:
           repository: 2DegreesInvesting/PACTA_analysis
           token: ${{ secrets.MAURO_PAT_FOR_2DII }}
           path: PACTA_analysis
-
       - name: Checkout pacta-data
         uses: actions/checkout@v2
         with:
           repository: 2DegreesInvesting/pacta-data
           token: ${{ secrets.MAURO_PAT_FOR_2DII }}
           path: pacta-data
-
       - name: Checkout create_interactive_report
         uses: actions/checkout@v2
         with:
           repository: 2DegreesInvesting/create_interactive_report
           token: ${{ secrets.MAURO_PAT_FOR_2DII }}
           path: create_interactive_report
-
       - name: Checkout StressTestingModelDev
         uses: actions/checkout@v2
         with:
           repository: 2DegreesInvesting/StressTestingModelDev
           token: ${{ secrets.MAURO_PAT_FOR_2DII }}
           path: StressTestingModelDev
-
       - name: Source web-tool scripts
         run: |
           setwd("PACTA_analysis")
