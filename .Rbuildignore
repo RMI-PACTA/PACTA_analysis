@@ -53,4 +53,6 @@
 
 ^Dockerfile$
 ^docker-compose\.yml$
-
+^workflow-multiple-inputs_cache$
+^workflow\.Rmd$
+^workflow\.md$
