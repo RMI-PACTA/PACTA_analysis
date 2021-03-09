@@ -114,12 +114,12 @@ get_input_files <- function(portfolio_name_ref_all) {
   # set_portfolio_parameters(file_path = file.path(par_file_path, "PortfolioParameters.yml"))
   # check that the provided reference names match to the input files
 
-  input_files <- list.files(path = input_path, full.names = F)
-  input_names <- gsub(".csv", "", input_files)
-  input_names <- gsub(".txt", "", input_names)
-  input_names <- gsub(".xlsx", "", input_names)
+  input_files <- list.files(path = input_path, full.names = FALSE)
+  input_names <- tools:::file_path_sans_ext(input_files)
+  portfolio_files <- grep(portfolio_name_ref_all, input_files,
+                          value = TRUE, fixed = TRUE)
+  input_file_type <- unique(tools::file_ext(portfolio_files))
 
-  input_file_type <- unique(tools::file_ext(grep(portfolio_name_ref_all, list.files(path = input_path, full.names = F), value = T)))
   if (!input_file_type %in% c("csv", "xlsx", "txt")) {
     write_log(
       msg = "Input file format not supported. Must be .csv, .xlsx or .txt",
