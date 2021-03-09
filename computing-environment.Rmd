@@ -22,7 +22,7 @@ The docker image [rocker/verse](https://hub.docker.com/r/rocker/verse) provides
 most of what you need for a functional computing environment, including system
 dependencies, a bash terminal and RStudio. The image
 [2dii/pacta_analysis](https://hub.docker.com/r/2dii/pacta_analysis) extends
-rocker/verse to include the required R packages. Here it its Dockerfile:
+rocker/verse to include the required R packages. Here is its Dockerfile:
 
 ```{r echo=FALSE, comment=""}
 look_into("Dockerfile")

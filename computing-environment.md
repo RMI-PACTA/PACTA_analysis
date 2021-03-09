@@ -3,7 +3,7 @@ The docker image [rocker/verse](https://hub.docker.com/r/rocker/verse)
 provides most of what you need for a functional computing environment,
 including system dependencies, a bash terminal and RStudio. The image
 [2dii/pacta\_analysis](https://hub.docker.com/r/2dii/pacta_analysis)
-extends rocker/verse to include the required R packages. Here it its
+extends rocker/verse to include the required R packages. Here is its
 Dockerfile:
 
     FROM rocker/verse:latest
@@ -88,7 +88,7 @@ devtools::session_info()
 #>  collate  en_US.UTF-8                 
 #>  ctype    en_US.UTF-8                 
 #>  tz       Etc/UTC                     
-#>  date     2021-03-08                  
+#>  date     2021-03-09                  
 #> 
 #> ─ Packages ───────────────────────────────────────────────────────────────────
 #>  ! package        * version    date       lib source        
