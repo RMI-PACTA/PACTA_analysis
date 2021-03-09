@@ -17,64 +17,41 @@ create one or more volumes mapping the location of the siblings from
 your (host) computer to the container.
 
 Here are two ways to access a full computing environment, including
-PACTA siblings.
+PACTA siblings. The code below assumes you have this .env file (added to
+.gitignore) at the root of the repository, but you may change the value
+`abc` to anything.
 
-*To work from with RStudio*, ensure your working directory is
-PACTA\_analysis/, then run
+``` bash
+# .env
+RSTUDIO_PASSWORD=abc
+```
+
+RSTUDIO
+
+This starts RStudio at <http://localhost:8787>. Login as “rstudio” with
+the password you chose.
 
 ``` bash
 docker-compose up
 ```
 
-RStudio is now available from your a browser at <http://localhost:8787>,
-with some personal configuration files and all siblings available at the
-home directory of the container. When you are finished using this
-service, run
+This starts an interactive terminal, mounting your home directory at the
+container’s `/root` directory.
 
 ``` bash
-docker-compose down
+docker run --rm -ti -v "$HOME:/root" -w /root/PACTA_analysis  2dii/pacta_analysis:latest /bin/bash
 ```
 
-The details of this environment are described in the file
-docker-compose.yml:
+For an improved environment replace `/bin/bash` with
+`docker/entrypoint`.
 
-    version: "0.0.0.9000"
-    services:
-      rstudio:
-        image: 2dii/pacta_analysis:latest
-        container_name: pacta_analysis
-        ports:
-          - 8787:8787
-        environment:
-        - PASSWORD=${RSTUDIO_PASSWORD}
-        - ROOT=TRUE
-        - UMASK=0000
-        volumes:
-          # Access GitHub when 2FA is enabled (recommended)
-          - '~/.ssh:/home/rstudio/.ssh'
-          # Access secrets
-          - '~/.Renviron:/home/rstudio/.Renviron'
-          # Avoid re-configuring git
-          - '~/.gitconfig:/home/rstudio/.gitconfig'
-          # Access all siblings
-          - '..:/home/rstudio'
+Reference:
 
-*To work from an interactive terminal*, ensure your working directory is
-the parent of all PACTA siblings, then run
-
-``` bash
-docker run --rm -ti -v "$(pwd):/root" 2dii/pacta_analysis:latest bash`
-```
-
-You are now into an ephemeral (`--rm`) docker container running an
-interactive `bash` terminal (`-it`) mapping (`-v`) the parent directory
-of all PACTA siblings to the /root directory. For a slightly improved
-environment replace the trailing `bash` with `docker/entrypoint`.
+-   [2DegreesInvesting/docker](https://github.com/2DegreesInvesting/docker/tree/master/r-packages).
+-   [Install Docker](https://docs.docker.com/engine/install/).
+-   [Install docker-compose](https://docs.docker.com/compose/install/).
 
 <details>
-<summary>
-Information of an R session running in this computing environment.
-</summary>
 
 ``` r
 devtools::session_info()
@@ -161,11 +138,3 @@ devtools::session_info()
 ```
 
 </details>
-
-–
-
-Reference:
-
--   [2DegreesInvesting/docker](https://github.com/2DegreesInvesting/docker/tree/master/r-packages).
--   [Install Docker](https://docs.docker.com/engine/install/).
--   [Install docker-compose](https://docs.docker.com/compose/install/).
