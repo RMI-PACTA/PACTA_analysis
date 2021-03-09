@@ -41,8 +41,6 @@ at the root of the repository, but you may change the value `abc` to anything.
 RSTUDIO_PASSWORD=abc
 ```
 
-RSTUDIO
-
 This starts RStudio at http://localhost:8787. Login as "rstudio" with the
 password you chose.
 

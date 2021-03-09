@@ -26,8 +26,6 @@ PACTA siblings. The code below assumes you have this .env file (added to
 RSTUDIO_PASSWORD=abc
 ```
 
-RSTUDIO
-
 This starts RStudio at <http://localhost:8787>. Login as “rstudio” with
 the password you chose.
 
