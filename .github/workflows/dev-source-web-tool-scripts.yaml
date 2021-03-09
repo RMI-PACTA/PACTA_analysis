@@ -1,6 +1,7 @@
-name: Source web-tool scripts
+name: Dev source web-tool scripts
 on: [push, pull_request]
 jobs:
+  dev-source-web-tool-scripts
   Source-web-tool-scripts:
     container: 2dii/pacta_analysis:latest
     runs-on: ubuntu-latest
