@@ -59,7 +59,6 @@ For an improved environment replace `/bin/bash` with `docker/entrypoint`.
 
 Reference:
 
-* [2DegreesInvesting/docker](https://github.com/2DegreesInvesting/docker/tree/master/r-packages).
 * [Install Docker](https://docs.docker.com/engine/install/).
 * [Install docker-compose](https://docs.docker.com/compose/install/).
 
