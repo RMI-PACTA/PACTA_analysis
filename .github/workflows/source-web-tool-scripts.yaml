@@ -1,8 +1,9 @@
-name: Source web-tool scripts
+name: Dev source web-tool scripts
 on: [push, pull_request]
 jobs:
+  source-web-tool-scripts
   Source-web-tool-scripts:
-    container: 2dii/pacta_analysis:latest
+    container: 2dii/r-packages:latest
     runs-on: ubuntu-latest
     name: ubuntu-latest r-release
     strategy:
