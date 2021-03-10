@@ -1,11 +1,10 @@
 name: Dev source web-tool scripts
 on: [push, pull_request]
 jobs:
-  source-web-tool-scripts
   Source-web-tool-scripts:
     container: 2dii/r-packages:latest
     runs-on: ubuntu-18:04
-    name: 2dii/r-packages:latest
+    name: web tool on 2dii/r-packages:latest
     strategy:
       fail-fast: false
     env:
