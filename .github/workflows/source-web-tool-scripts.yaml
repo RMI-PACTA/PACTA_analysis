@@ -4,7 +4,7 @@ jobs:
   Source-web-tool-scripts:
     container: 2dii/r-packages:latest
     runs-on: ubuntu-18:04
-    name: web tool on 2dii/r-packages:latest
+    name: web tool on prod environment
     strategy:
       fail-fast: false
     env:
