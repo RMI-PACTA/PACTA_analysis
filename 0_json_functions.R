@@ -247,7 +247,7 @@ export_report_content_variables_json <- function(audit_file__ = audit_file,
 }
 
 
-export_audit_information_jsons <- function(audit_file_ = audit_file,
+export_audit_information_data <- function(audit_file_ = audit_file,
                                            portfolio_total_ = portfolio_total,
                                            folder_path = proc_input_path,
                                            project_name_ = NA) {
