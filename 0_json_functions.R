@@ -263,17 +263,13 @@ export_audit_information_jsons <- function(audit_file_ = audit_file,
     portfolio_total_ <- subset(portfolio_total_, investor_name != "Meta Investor")
   }
 
-
-
-
-
   folder_path <- paste0(folder_path, "/")
   if (!is.na(project_name_)) {
     folder_path <- paste0(folder_path, project_name_, "_")
   }
   # function
   export_audit_graph_json(audit_file_, paste0(folder_path, "coveragegraph"))
-  export_audit_invalid_json(portfolio_total_, paste0(folder_path, "invalidsecurities"))
+  export_audit_invalid_data(portfolio_total_, paste0(folder_path, "invalidsecurities"))
   export_audit_textvar_json(portfolio_total_, paste0(folder_path, "coveragetextvar"))
 }
 
@@ -343,7 +339,7 @@ export_audit_graph_json <- function(audit_file__, export_path_full) {
   write(chart_information, file = paste0(export_path_full, ".json"))
 }
 
-export_audit_invalid_json <- function(portfolio_total_, export_path_full) {
+export_audit_invalid_data <- function(portfolio_total_, export_path_full) {
   portfolio_total_ <- portfolio_total_ %>% subset(flag %in% c("Missing currency information", "Negative or missing input value", "Invalid or missing ISIN"))
   portfolio_total_ <- portfolio_total_ %>% select("isin", "market_value", "currency", "flag")
   portfolio_total_ <- portfolio_total_[order(-portfolio_total_$market_value), ]
@@ -352,6 +348,7 @@ export_audit_invalid_json <- function(portfolio_total_, export_path_full) {
   invalidsecurties <- toJSON(portfolio_total_, dataframe = c("columns"))
 
   write(invalidsecurties, file = paste0(export_path_full, ".json"))
+  readr::write_csv(portfolio_total_, file = paste0(export_path_full, ".csv"))
 }
 
 export_audit_textvar_json <- function(portfolio_total_, export_path_full) {

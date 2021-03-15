@@ -43,10 +43,10 @@ file_location <- file.path(analysis_inputs_path, "cleaned_files")
 
 if (new_data == TRUE) {
   currencies <- get_and_clean_currency_data()
-  
-  
+
+
   total_fund_list <- get_and_clean_total_fund_list_data()
- 
+
    # fund_data <- get_and_clean_fund_data()
   fund_data <- data.frame()
 
@@ -75,7 +75,7 @@ if (new_data == TRUE) {
   )
 } else {
   currencies <- fst::read_fst(file.path(file_location, "currencies.fst"))
-  
+
   read_fst_or_return_null <- function(fst_file) {
     if (!file.exists(fst_file)) {
       return(NULL)
@@ -86,19 +86,19 @@ if (new_data == TRUE) {
 
   fund_data_path <- file.path(file_location, "fund_data.fst")
 
-  
+
   fund_data <- read_fst_or_return_null(fund_data_path)
-  
+
   fund_data$holding_isin <- as.character(fund_data$holding_isin)
   fund_data$fund_isin <- as.character(fund_data$fund_isin)
-  
-  
+
+
   fin_data <- fst::read_fst(file.path(file_location, "fin_data.fst"))
 
   comp_fin_data <- fst::read_fst(file.path(file_location, "comp_fin_data.fst"))
 
   debt_fin_data <- fst::read_fst(file.path(file_location, "debt_fin_data.fst"))
-  
+
   total_fund_list <- fst::read_fst(file.path(file_location, "total_fund_list.fst"))
 
   if (inc_emission_factors) {
@@ -179,7 +179,7 @@ port_weights <- pw_calculations(eq_portfolio, cb_portfolio)
 
 proc_input_path_ <- file.path(proc_input_path, portfolio_name_ref_all)
 
-export_audit_information_jsons(
+export_audit_information_data(
   audit_file_ = audit_file %>% filter(portfolio_name == portfolio_name),
   portfolio_total_ = portfolio_total %>% filter(portfolio_name == portfolio_name),
   folder_path = proc_input_path_
