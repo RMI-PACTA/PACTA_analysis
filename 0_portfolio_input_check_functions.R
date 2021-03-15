@@ -1165,6 +1165,7 @@ get_fund_coverage <- function(portfolio_raw,
   } else {
     portfolio_total <- as_tibble(portfolio)
     portfolio_total$direct_holding <- TRUE
+    portfolio_total$fund_isin <- NA
   }
 
 
