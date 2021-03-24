@@ -26,6 +26,9 @@ if(project_code == "PA2020FL"){
 
 }
 
+if(project_code == "GENERAL"){
+  language_select = "EN"
+}
 
 analysis_inputs_path <- set_analysis_inputs_path(twodii_internal, data_location_ext, dataprep_timestamp)
 
