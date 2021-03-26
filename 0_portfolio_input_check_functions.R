@@ -82,6 +82,14 @@ clean_portfolio_col_types <- function(portfolio, grouping_variables) {
     ),
     file_path = log_path)
   }
+  if (is.numeric(portfolio$number_of_shares) == FALSE) {
+    write_log(msg = paste0(
+      "Wrong variable class for number_of_shares Should be numeric, but is ",
+      class(portfolio$number_of_shares),
+      ". This can introduce errors in further calculations!"
+    ),
+    file_path = log_path)
+  }
   if (is.character(portfolio$currency) == FALSE) {
     write_log(msg = paste0(
       "Wrong variable class for currency Should be character, but is ",
@@ -98,9 +106,8 @@ clean_portfolio_col_types <- function(portfolio, grouping_variables) {
     ),
     file_path = log_path)
   }
-  ### what about number_of_shares???
 
-  # portfolio$number_of_shares <- as.numeric(portfolio$number_of_shares)
+  portfolio$number_of_shares <- as.numeric(portfolio$number_of_shares)
   portfolio$market_value <- as.numeric(portfolio$market_value)
   portfolio$currency <- as.character(portfolio$currency)
 
