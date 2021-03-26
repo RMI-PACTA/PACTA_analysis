@@ -1180,31 +1180,31 @@ get_fund_coverage <- function(portfolio_raw,
 
   fund_portfolio_total_mapped_value_usd <- fund_portfolio_total  %>%
     group_by(holding_id) %>%
-    summarize(total_mapped_value_usd = sum(value_usd))
+    summarize(total_mapped_value_usd = sum(value_usd), .groups = "drop")
 
 
   fund_portfolio_missing_value_usd <- fund_portfolio_total  %>%
     filter(nchar(isin)!=12) %>%
     group_by(holding_id) %>%
-    summarize(missing_value_usd = sum(value_usd))
+    summarize(missing_value_usd = sum(value_usd), .groups = "drop")
 
 
   fund_portfolio_funds_in_funds_not_mapped_value_usd <-  fund_portfolio_total  %>%
     filter(nchar(isin)==12 & asset_type == "Funds") %>%
     group_by(holding_id) %>%
-    summarize(funds_in_funds_not_mapped = sum(value_usd))
+    summarize(funds_in_funds_not_mapped = sum(value_usd), .groups = "drop")
 
 
 
   fund_portfolio <- fund_portfolio_raw
-  fund_portfolio <- left_join(fund_portfolio, fund_portfolio_total_mapped_value_usd)
+  fund_portfolio <- left_join(fund_portfolio, fund_portfolio_total_mapped_value_usd, by = "holding_id")
   fund_portfolio$total_mapped_value_usd[is.na(fund_portfolio$total_mapped_value_usd)] <- 0
 
 
-  fund_portfolio <- left_join(fund_portfolio, fund_portfolio_missing_value_usd)
+  fund_portfolio <- left_join(fund_portfolio, fund_portfolio_missing_value_usd, by = "holding_id")
   fund_portfolio$missing_value_usd[is.na(fund_portfolio$missing_value_usd)] <- 0
 
-  fund_portfolio <- left_join(fund_portfolio, fund_portfolio_funds_in_funds_not_mapped_value_usd)
+  fund_portfolio <- left_join(fund_portfolio, fund_portfolio_funds_in_funds_not_mapped_value_usd, by = "holding_id")
   fund_portfolio$funds_in_funds_not_mapped[is.na(fund_portfolio$funds_in_funds_not_mapped)] <- 0
 
 
