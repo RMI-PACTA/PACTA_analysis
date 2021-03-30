@@ -82,6 +82,18 @@ clean_portfolio_col_types <- function(portfolio, grouping_variables) {
     ),
     file_path = log_path)
   }
+  if("number_of_shares" %in% colnames(portfolio)){
+    if (is.numeric(portfolio$number_of_shares) == FALSE) {
+      write_log(msg = paste0(
+        "Wrong variable class for number_of_shares Should be numeric, but is ",
+        class(portfolio$number_of_shares),
+        ". This can introduce errors in further calculations!"
+      ),
+      file_path = log_path)
+    }
+    portfolio$number_of_shares <- as.numeric(portfolio$number_of_shares)
+
+  }
   if (is.character(portfolio$currency) == FALSE) {
     write_log(msg = paste0(
       "Wrong variable class for currency Should be character, but is ",
@@ -98,9 +110,7 @@ clean_portfolio_col_types <- function(portfolio, grouping_variables) {
     ),
     file_path = log_path)
   }
-  ### what about number_of_shares???
 
-  # portfolio$number_of_shares <- as.numeric(portfolio$number_of_shares)
   portfolio$market_value <- as.numeric(portfolio$market_value)
   portfolio$currency <- as.character(portfolio$currency)
 
@@ -1173,31 +1183,31 @@ get_fund_coverage <- function(portfolio_raw,
 
   fund_portfolio_total_mapped_value_usd <- fund_portfolio_total  %>%
     group_by(holding_id) %>%
-    summarize(total_mapped_value_usd = sum(value_usd))
+    summarize(total_mapped_value_usd = sum(value_usd), .groups = "drop")
 
 
   fund_portfolio_missing_value_usd <- fund_portfolio_total  %>%
     filter(nchar(isin)!=12) %>%
     group_by(holding_id) %>%
-    summarize(missing_value_usd = sum(value_usd))
+    summarize(missing_value_usd = sum(value_usd), .groups = "drop")
 
 
   fund_portfolio_funds_in_funds_not_mapped_value_usd <-  fund_portfolio_total  %>%
     filter(nchar(isin)==12 & asset_type == "Funds") %>%
     group_by(holding_id) %>%
-    summarize(funds_in_funds_not_mapped = sum(value_usd))
+    summarize(funds_in_funds_not_mapped = sum(value_usd), .groups = "drop")
 
 
 
   fund_portfolio <- fund_portfolio_raw
-  fund_portfolio <- left_join(fund_portfolio, fund_portfolio_total_mapped_value_usd)
+  fund_portfolio <- left_join(fund_portfolio, fund_portfolio_total_mapped_value_usd, by = "holding_id")
   fund_portfolio$total_mapped_value_usd[is.na(fund_portfolio$total_mapped_value_usd)] <- 0
 
 
-  fund_portfolio <- left_join(fund_portfolio, fund_portfolio_missing_value_usd)
+  fund_portfolio <- left_join(fund_portfolio, fund_portfolio_missing_value_usd, by = "holding_id")
   fund_portfolio$missing_value_usd[is.na(fund_portfolio$missing_value_usd)] <- 0
 
-  fund_portfolio <- left_join(fund_portfolio, fund_portfolio_funds_in_funds_not_mapped_value_usd)
+  fund_portfolio <- left_join(fund_portfolio, fund_portfolio_funds_in_funds_not_mapped_value_usd, by = "holding_id")
   fund_portfolio$funds_in_funds_not_mapped[is.na(fund_portfolio$funds_in_funds_not_mapped)] <- 0
 
 
