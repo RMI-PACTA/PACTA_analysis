@@ -1085,13 +1085,14 @@ process_raw_portfolio <- function(portfolio_raw,
   original_value_usd <- sum(portfolio$value_usd, na.rm = T)
 
   # correct Funds classification by comparing isin to the list of all known funds isins
-
-  # FIXME: When fed with an object of length > 1L, `if()` extracts the first
-  # element !is.na(total_fund_list)[[1]] Extracting the first element explicitly
-  # avoids the warning reported in #436 but is likely wrong. Instead, should we
-  # use `!all(is.na(total_fund_list))`?
-  if(!is.na(total_fund_list)[[1]]){portfolio <- portfolio %>% mutate(asset_type = ifelse(is.element(isin, total_fund_list$fund_isin), "Funds", asset_type))}
-  # identify funds in the portfolio
+  # FIXME: Looking at the signature and noticing this is the fist use of
+  # `total_fund_list` I interpret that the author intended to make
+  # `total_fund_list` an optional argument and chose as a default the value
+  # `NA`. Here I express that intent explicitely but note that not `NA` but
+  # `NULL` is more commonly used as a default value for optional arguments.
+  total_fund_list_not_passed_as_argument <- identical(total_fund_list, NA)
+  if(total_fund_list_not_passed_as_argument){portfolio <- portfolio %>% mutate(asset_type = ifelse(is.element(isin, total_fund_list$fund_isin), "Funds", asset_type))}
+  # identify fund in the portfolio
   fund_portfolio <- identify_fund_portfolio(portfolio)
 
   if (data_check(fund_data)) {
