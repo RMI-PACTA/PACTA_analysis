@@ -1085,7 +1085,12 @@ process_raw_portfolio <- function(portfolio_raw,
   original_value_usd <- sum(portfolio$value_usd, na.rm = T)
 
   # correct Funds classification by comparing isin to the list of all known funds isins
-  if(!is.na(total_fund_list)){portfolio <- portfolio %>% mutate(asset_type = ifelse(is.element(isin, total_fund_list$fund_isin), "Funds", asset_type))}
+
+  # FIXME: When fed with an object of length > 1L, `if()` extracts the first
+  # element !is.na(total_fund_list)[[1]] Extracting the first element explicitly
+  # avoids the warning reported in #436 but is likely wrong. Instead, should we
+  # use `!all(is.na(total_fund_list))`?
+  if(!is.na(total_fund_list)[[1]]){portfolio <- portfolio %>% mutate(asset_type = ifelse(is.element(isin, total_fund_list$fund_isin), "Funds", asset_type))}
   # identify funds in the portfolio
   fund_portfolio <- identify_fund_portfolio(portfolio)
 
