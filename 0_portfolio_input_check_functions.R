@@ -1085,7 +1085,7 @@ process_raw_portfolio <- function(portfolio_raw,
   original_value_usd <- sum(portfolio$value_usd, na.rm = T)
 
   # correct Funds classification by comparing isin to the list of all known funds isins
-  # FIXME: Looking at the signature and noticing this is the fist use of
+  # FIXME: Looking at the signature and noticing this is the only use of
   # `total_fund_list` I interpret that the author intended to make
   # `total_fund_list` an optional argument and chose as a default the value
   # `NA`. Here I express that intent explicitely but note that not `NA` but
