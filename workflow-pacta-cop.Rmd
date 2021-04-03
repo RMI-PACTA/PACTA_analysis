@@ -174,8 +174,7 @@ inc_meta_portfolio <- TRUE
 meta_portfolio_name <- "Meta Portfolio"
 meta_investor_name <- "Meta Investor"
 
-# FIXME `path` is deprecated; use `file` instead.
-write_csv(portfolio_ind, path = file.path(raw_input_path, paste0(project_name, "_Input.csv")))
+write_csv(portfolio_ind, file = file.path(raw_input_path, paste0(project_name, "_Input.csv")))
 ```
 
 If you prepared the input file yourself, add the portfolio files to the folder `{r} file.path(raw_input_path)`. Otherwise this is already done above.
@@ -224,9 +223,7 @@ set_project_parameters(file.path(par_file_path, "ProjectParameters.yml"))
 analysis_inputs_path <- set_analysis_inputs_path(twodii_internal, data_location_ext, dataprep_timestamp)
 
 inc_meta_portfolio <- FALSE
-# FIXME `path` is deprecated; use `file` instead.
-write_csv(portfolio_peers, path = file.path(raw_input_path, paste0(project_name, "_Input.csv")))
-
+write_csv(portfolio_peers, file = file.path(raw_input_path, paste0(project_name, "_Input.csv")))
 ```
 
 Add the portfolio files to the folder `{r} file.path(raw_input_path)`.
