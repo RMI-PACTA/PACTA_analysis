@@ -318,7 +318,9 @@ save_cleaned_files <- function(save_loc,
   fst::write_fst(debt_fin_data, file.path(save_loc, "debt_fin_data.fst"))
   fst::write_fst(average_sector_intensity, file.path(save_loc, "average_sector_intensity.fst"))
   fst::write_fst(company_emissions, file.path(save_loc, "company_emissions.fst"))
-  if (!is.null(total_fund_list)) {fst::write_fst(total_fund_list, file.path(save_loc, "total_fund_list.fst"))}
+  if (!is.null(total_fund_list)) {
+    fst::write_fst(total_fund_list, file.path(save_loc, "total_fund_list.fst"))
+  }
 
   if (check_file_size(save_loc)) warning("File size exceeds what can be pushed to GitHub. Check before Committing")
 }
