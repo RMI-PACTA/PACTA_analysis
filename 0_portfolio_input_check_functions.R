@@ -1049,7 +1049,7 @@ process_raw_portfolio <- function(portfolio_raw,
                                   fund_data,
                                   currencies,
                                   grouping_variables,
-                                  total_fund_list=NA) {
+                                  total_fund_list = NULL) {
   portfolio <- clean_colnames_portfolio_input_file(portfolio_raw)
 
   portfolio <- clear_portfolio_input_blanks(portfolio)
@@ -1085,13 +1085,7 @@ process_raw_portfolio <- function(portfolio_raw,
   original_value_usd <- sum(portfolio$value_usd, na.rm = T)
 
   # correct Funds classification by comparing isin to the list of all known funds isins
-  # FIXME: Looking at the signature and noticing this is the only use of
-  # `total_fund_list` I interpret that the author intended to make
-  # `total_fund_list` an optional argument and chose as a default the value
-  # `NA`. Here I express that intent explicitely but note that not `NA` but
-  # `NULL` is more commonly used as a default value for optional arguments.
-  total_fund_list_not_passed_as_argument <- identical(total_fund_list, NA)
-  if(total_fund_list_not_passed_as_argument){portfolio <- portfolio %>% mutate(asset_type = ifelse(is.element(isin, total_fund_list$fund_isin), "Funds", asset_type))}
+  if(!is.null(total_fund_list)){portfolio <- portfolio %>% mutate(asset_type = ifelse(is.element(isin, total_fund_list$fund_isin), "Funds", asset_type))}
   # identify fund in the portfolio
   fund_portfolio <- identify_fund_portfolio(portfolio)
 

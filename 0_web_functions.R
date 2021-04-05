@@ -306,7 +306,7 @@ save_cleaned_files <- function(save_loc,
                                debt_fin_data,
                                average_sector_intensity,
                                company_emissions,
-                               total_fund_list=NA) {
+                               total_fund_list = NULL) {
   if (!dir.exists(save_loc)) {
     dir.create(save_loc)
   }
@@ -318,14 +318,7 @@ save_cleaned_files <- function(save_loc,
   fst::write_fst(debt_fin_data, file.path(save_loc, "debt_fin_data.fst"))
   fst::write_fst(average_sector_intensity, file.path(save_loc, "average_sector_intensity.fst"))
   fst::write_fst(company_emissions, file.path(save_loc, "company_emissions.fst"))
-  # FIXME: Looking at the signature and noticing this is the only use of
-  # `total_fund_list` I interpret that the author intended to make
-  # `total_fund_list` an optional argument and chose as a default the value
-  # `NA`. Here I express that intent explicitely but note that not `NA` but
-  # `NULL` is more commonly used as a default value for optional arguments.
-  total_fund_list_not_passed_as_argument <- identical(total_fund_list, NA)
-  if (!is.na(total_fund_list_not_passed_as_argument))
-  {fst::write_fst(total_fund_list, file.path(save_loc, "total_fund_list.fst"))}
+  if (!is.null(total_fund_list)) {fst::write_fst(total_fund_list, file.path(save_loc, "total_fund_list.fst"))}
 
   if (check_file_size(save_loc)) warning("File size exceeds what can be pushed to GitHub. Check before Committing")
 }
