@@ -51,3 +51,9 @@
 ^test_cases$
 ^test_test_cases\.R$
 
+^computing-environment_cache$
+^pacta_data_qa\.Rmd$
+^workflow-pacta-cop\.Rmd$
+^workflow-single-inputs_cache$
+^workflow\.Rmd$
+^workflow\.md$
