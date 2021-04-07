@@ -92,28 +92,28 @@ if (length(file_format_list) == 0) {
 
 if ("csv" %in% file_format_list) {
   if (data_check(portfolio_total)) {
-    write_csv(portfolio_total, paste0(proc_input_path, "/", project_name, "_total_portfolio.csv"))
+    write_csv_file(portfolio_total, paste0(proc_input_path, "/", project_name, "_total_portfolio.csv"))
   }
   if (data_check(eq_portfolio)) {
-    write_csv(eq_portfolio, paste0(proc_input_path, "/", project_name, "_equity_portfolio.csv"))
+    write_csv_file(eq_portfolio, paste0(proc_input_path, "/", project_name, "_equity_portfolio.csv"))
   }
   if (data_check(cb_portfolio)) {
-    write_csv(cb_portfolio, paste0(proc_input_path, "/", project_name, "_bonds_portfolio.csv"))
+    write_csv_file(cb_portfolio, paste0(proc_input_path, "/", project_name, "_bonds_portfolio.csv"))
   }
   if (data_check(portfolio_overview)) {
-    write_csv(portfolio_overview, paste0(proc_input_path, "/", project_name, "_overview_portfolio.csv"))
+    write_csv_file(portfolio_overview, paste0(proc_input_path, "/", project_name, "_overview_portfolio.csv"))
   }
   if (data_check(audit_file)) {
-    write_csv(audit_file, paste0(proc_input_path, "/", project_name, "_audit_file.csv"))
+    write_csv_file(audit_file, paste0(proc_input_path, "/", project_name, "_audit_file.csv"))
   }
   if (data_check(emissions_totals)) {
-    write_csv(emissions_totals, paste0(proc_input_path, "/", project_name, "_emissions.csv"))
+    write_csv_file(emissions_totals, paste0(proc_input_path, "/", project_name, "_emissions.csv"))
   }
   if (data_check(fund_coverage_summary)){
-    write_csv(fund_coverage_summary, file.path(proc_input_path_, "fund_coverage_summary.csv"))
+    write_csv_file(fund_coverage_summary, file.path(proc_input_path_, "fund_coverage_summary.csv"))
   }
   if (data_check(unknown_funds_in_funds)){
-    write_csv(unknown_funds_in_funds, file.path(proc_input_path_, "unknown_funds_in_funds.csv"))
+    write_csv_file(unknown_funds_in_funds, file.path(proc_input_path_, "unknown_funds_in_funds.csv"))
   }
 }
 

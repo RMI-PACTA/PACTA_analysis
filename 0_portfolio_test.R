@@ -411,10 +411,10 @@ gather_and_save_project_results <- function(
 
   if (exists("all_results_cb")) {
     saveRDS(all_results_cb, paste0(results_path, "/Bonds_results_", aggregation_level, ".rda"))
-    write_csv(all_results_cb, paste0(results_path, "/Bonds_results_", aggregation_level, ".csv"))
+    write_csv_file(all_results_cb, paste0(results_path, "/Bonds_results_", aggregation_level, ".csv"))
   }
   if (exists("all_results_eq")) {
     saveRDS(all_results_eq, paste0(results_path, "/Equity_results_", aggregation_level, ".rda"))
-    write_csv(all_results_eq, paste0(results_path, "/Equity_results_", aggregation_level, ".csv"))
+    write_csv_file(all_results_eq, paste0(results_path, "/Equity_results_", aggregation_level, ".csv"))
   }
 }
