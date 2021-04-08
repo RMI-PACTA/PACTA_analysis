@@ -43,12 +43,6 @@ jobs:
           install.packages('tinytex')
           tinytex::install_tinytex()
         shell: Rscript {0}
-      - name: Setup tex
-        run: |
-          apt-get update && apt-get -y install texlive-xetex
-          echo "options(tinytex.tlmgr.path = '/root/.TinyTeX/bin/x86_64-linux/tlmgr')" > .Rprofile
-          chmod -R a+rwX /root
-          /root/.TinyTeX/bin/*/tlmgr path add
       - name: Source web-tool scripts
         run: |
           setwd("PACTA_analysis")
