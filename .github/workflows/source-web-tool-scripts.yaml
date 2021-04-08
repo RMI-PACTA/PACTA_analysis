@@ -38,11 +38,11 @@ jobs:
           repository: 2DegreesInvesting/StressTestingModelDev
           token: ${{ secrets.MAURO_PAT_FOR_2DII }}
           path: StressTestingModelDev
-      - uses: r-lib/actions/setup-pandoc@v1
-      - uses: r-lib/actions/setup-tinytex@v1
-      - name: Setup tinytex part 2
+      # - uses: r-lib/actions/setup-pandoc@v1
+      # - uses: r-lib/actions/setup-tinytex@v1
+      - name: Setup tex
         run: |
-          # From 2dii/pacta
+          apt-get update && apt-get -y install texlive-xetex
           echo "options(tinytex.tlmgr.path = '/root/.TinyTeX/bin/x86_64-linux/tlmgr')" > .Rprofile
           chmod -R a+rwX /root
           /root/.TinyTeX/bin/*/tlmgr path add
