@@ -1,32 +1,15 @@
-on:
-  push:
-    branches:
-      - main
-      - master
-  pull_request:
-    branches:
-      - main
-      - master
-
-name: Source web-tool scripts
-
+name: Dev source web-tool scripts
+on: [push, pull_request]
 jobs:
-  Test-r-scripts:
-    runs-on: ${{ matrix.config.os }}
-
-    name: ${{ matrix.config.os }} (${{ matrix.config.r }})
-
+  Source-web-tool-scripts:
+    container: 2dii/r-packages:latest
+    runs-on: ubuntu-18.04
+    name: web tool on prod environment
     strategy:
       fail-fast: false
-      matrix:
-        config:
-          - {os: ubuntu-18.04,   r: 'release', rspm: "https://packagemanager.rstudio.com/cran/__linux__/bionic/latest"}
-
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
-      RSPM: ${{ matrix.config.rspm }}
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-
     steps:
       # When checking out the repository that triggered a workflow, `ref:`
       # defaults to the reference or SHA for that event. Otherwise, uses the
@@ -37,59 +20,32 @@ jobs:
           repository: 2DegreesInvesting/PACTA_analysis
           token: ${{ secrets.MAURO_PAT_FOR_2DII }}
           path: PACTA_analysis
-
       - name: Checkout pacta-data
         uses: actions/checkout@v2
         with:
           repository: 2DegreesInvesting/pacta-data
           token: ${{ secrets.MAURO_PAT_FOR_2DII }}
           path: pacta-data
-
       - name: Checkout create_interactive_report
         uses: actions/checkout@v2
         with:
           repository: 2DegreesInvesting/create_interactive_report
           token: ${{ secrets.MAURO_PAT_FOR_2DII }}
           path: create_interactive_report
-
       - name: Checkout StressTestingModelDev
         uses: actions/checkout@v2
         with:
           repository: 2DegreesInvesting/StressTestingModelDev
           token: ${{ secrets.MAURO_PAT_FOR_2DII }}
           path: StressTestingModelDev
-
-      - uses: r-lib/actions/setup-pandoc@v1
-      - uses: r-lib/actions/setup-tinytex@v1
-      - uses: r-lib/actions/setup-r@v1
-        with:
-          r-version: ${{ matrix.config.r }}
-
-      - name: Install system dependency of usethis >= 2.0.0
-        if: runner.os == 'Linux'
+      - name: Setup tinytex
+# -      - uses: r-lib/actions/setup-pandoc@v1
+# -      - uses: r-lib/actions/setup-tinytex@v1
         run: |
-          sudo apt install libgit2-dev
-
-      - name: Install dependencies from CRAN
-        run: |
-          # TODO Install elsewhere? Why is it not detected by renv?
-          install.packages("forcats")
-          install.packages("rmarkdown")
-          install.packages("knitr")
-          install.packages("renv")
-          deps <- unique(renv::dependencies("PACTA_analysis")$Package)
-          exclude <- c(
-            "R",
-            "utils",
-            "base",
-            "tools",
-            "create_interactive_report",
-            "PACTA.analysis",
-            "StressTestingModelDev"
-          )
-          install.packages(setdiff(deps, exclude))
-        shell: Rscript {0}
-
+          # From 2dii/pacta
+          echo "options(tinytex.tlmgr.path = '/root/.TinyTeX/bin/x86_64-linux/tlmgr')" > .Rprofile
+          chmod -R a+rwX /root
+          /root/.TinyTeX/bin/*/tlmgr path add
       - name: Source web-tool scripts
         run: |
           setwd("PACTA_analysis")
