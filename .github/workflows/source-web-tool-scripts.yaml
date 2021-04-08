@@ -38,9 +38,10 @@ jobs:
           repository: 2DegreesInvesting/StressTestingModelDev
           token: ${{ secrets.MAURO_PAT_FOR_2DII }}
           path: StressTestingModelDev
-      - name: Setup tinytex
+      - name: Setup tinytex part 1
 -      - uses: r-lib/actions/setup-pandoc@v1
 -      - uses: r-lib/actions/setup-tinytex@v1
+      - name: Setup tinytex part 2
         run: |
           # From 2dii/pacta
           echo "options(tinytex.tlmgr.path = '/root/.TinyTeX/bin/x86_64-linux/tlmgr')" > .Rprofile
