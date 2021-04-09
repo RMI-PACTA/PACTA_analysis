@@ -55,7 +55,7 @@ save_if_exists <- function(df, portfolio_name_, save_name, csv_or_rds = "rds") {
     if (csv_or_rds == "rds") {
       saveRDS(df, save_name)
     } else if (csv_or_rds == "csv") {
-      write_csv(df, save_name)
+      write_csv_file(df, file = save_name)
     }
   }
 }

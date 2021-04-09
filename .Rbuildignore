@@ -51,3 +51,7 @@
 ^test_cases$
 ^test_test_cases\.R$
 
+^pacta_data_qa\.Rmd$
+^workflow-pacta-cop\.Rmd$
+^workflow\.Rmd$
+^workflow\.md$

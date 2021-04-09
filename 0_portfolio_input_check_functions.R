@@ -647,7 +647,7 @@ check_funds_wo_bbg <- function(fund_data, fin_data) {
     bind_rows(fund_isins_missing_bbg) %>%
     distinct()
 
-  readr::write_csv(fund_isins_missing_bbg, "data/fund_isins_without_bbg_data.csv")
+  write_csv_file(fund_isins_missing_bbg, file = "data/fund_isins_without_bbg_data.csv")
 
   if (data_check(fund_isins_missing_bbg)) {
     print("Warning: There are funds without bbg data. These are excluded from the analysis.")
@@ -803,7 +803,7 @@ identify_missing_data <- function(portfolio_total) {
 
     no_bbg_data_all <- bind_rows(no_bbg_data_all, no_bbg_data) %>% distinct()
 
-    write_csv(no_bbg_data, "data/isins_missing_bbg_data.csv")
+    write_csv_file(no_bbg_data, file = "data/isins_missing_bbg_data.csv")
   }
 }
 

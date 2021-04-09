@@ -1,3 +1,5 @@
+devtools::load_all()
+
 # Convert to JSON functions
 
 to_jsonp <-
@@ -348,7 +350,7 @@ export_audit_invalid_data <- function(portfolio_total_, export_path_full) {
   invalidsecurties <- toJSON(portfolio_total_, dataframe = c("columns"))
 
   write(invalidsecurties, file = paste0(export_path_full, ".json"))
-  readr::write_csv(portfolio_total_, path =  paste0(export_path_full, ".csv"))
+  write_csv_file(portfolio_total_, file = paste0(export_path_full, ".csv"))
 }
 
 export_audit_textvar_json <- function(portfolio_total_, export_path_full) {
