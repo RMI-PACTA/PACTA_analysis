@@ -1,3 +1,5 @@
+# use this script instead of script 2, in case the logical run_remotely == TRUE
+
 financial_data <- readRDS(file.path(analysis_inputs_path, "financial_data.rda"))
 raw_pf <- read_csv(file.path(raw_input_path, paste0(project_name, "_Input.csv")),
                    col_types = "cccnnccn")
