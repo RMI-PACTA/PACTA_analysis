@@ -1,7 +1,10 @@
 # TODO:
 # Clean up sectors options
 
-port_col_types <- set_col_types(grouping_variables, "ddddccccddclc")
+if(run_remotely == FALSE) {
+  port_col_types <- set_col_types(grouping_variables, "ddddccccddclc")
+}
+
 ##################
 ##### EQUITY #####
 ##################
@@ -9,16 +12,25 @@ port_col_types <- set_col_types(grouping_variables, "ddddccccddclc")
 equity_input_file <- paste0(proc_input_path, "/", project_name, "_equity_portfolio.rda")
 
 if (file.exists(equity_input_file)) {
-  port_raw_all_eq <- read_rds(equity_input_file) %>%
+
+  if(run_remotely == FALSE) {
+
+    port_raw_all_eq <- read_rds(equity_input_file) %>%
     mutate(id = as.character(id))
 
-  if (length(colnames(port_raw_all_eq)) != nchar(port_col_types)) {
-    stop("Check port_col_types: difference in length")
+    if (length(colnames(port_raw_all_eq)) != nchar(port_col_types)) {
+      stop("Check port_col_types: difference in length")
+    }
+
+  } else {
+    port_raw_all_eq <- read_rds(equity_input_file)
   }
 
   ald_scen_eq <- get_ald_scen("Equity")
 
-  ald_raw_eq <- get_ald_raw("Equity")
+  if(has_map) {
+    ald_raw_eq <- get_ald_raw("Equity")
+  }
 
   list_investors_eq <- unique(port_raw_all_eq$investor_name)
 
@@ -97,16 +109,24 @@ if (file.exists(equity_input_file)) {
 bonds_inputs_file <- paste0(proc_input_path, "/", project_name, "_bonds_portfolio.rda")
 
 if (file.exists(bonds_inputs_file)) {
-  port_raw_all_cb <- read_rds(bonds_inputs_file) %>%
+
+  if(run_remotely == FALSE) {
+    port_raw_all_cb <- read_rds(bonds_inputs_file) %>%
     mutate(id = as.character(id))
 
-  if (length(colnames(port_raw_all_cb)) != nchar(port_col_types)) {
-    stop("Check port_col_types: difference in length")
+    if (length(colnames(port_raw_all_cb)) != nchar(port_col_types)) {
+      stop("Check port_col_types: difference in length")
+    }
+
+  } else {
+    port_raw_all_cb <- read_rds(bonds_inputs_file)
   }
 
   ald_scen_cb <- get_ald_scen("Bonds")
 
-  ald_raw_cb <- get_ald_raw("Bonds")
+  if(has_map) {
+    ald_raw_cb <- get_ald_raw("Bonds")
+  }
 
   list_investors_cb <- unique(port_raw_all_cb$investor_name)
 

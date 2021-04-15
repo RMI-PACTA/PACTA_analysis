@@ -27,6 +27,7 @@ source("0_sda_approach.R")
 
 project_name <- "BondsTest"
 twodii_internal <- TRUE
+run_remotely <- FALSE
 # TRUE or FALSE: TRUE means that the code is running on a 2dii laptop with dropbox connection
 
 #####################################################################
