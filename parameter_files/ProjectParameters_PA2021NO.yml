@@ -32,7 +32,6 @@ default:
             - Oil&Gas
             - Coal
         pacta_sectors_not_analysed:
-            - Shipping
             - Steel
             - Aviation
             - Cement
