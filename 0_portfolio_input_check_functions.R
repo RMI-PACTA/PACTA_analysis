@@ -4,7 +4,7 @@
 # docker image: https://github.com/Tazinho/snakecase/issues/191
 # because janitor::clean_names() is used in multiple functions here, this is the cleanest way
 # to deal with them all at once up front
-invisible(snakecase:::replace_special_characters_internal)
+suppressWarnings(invisible(snakecase:::replace_special_characters_internal))
 
 ### Portfolio cleaning functions
 read_raw_portfolio_file <- function(project_name) {
