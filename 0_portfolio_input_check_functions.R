@@ -1,5 +1,15 @@
 # devtools::load_all()
 
+# ridiculous hack to avoid janitor::clean_names() throwing numerous warnings when running in our
+# docker image: https://github.com/Tazinho/snakecase/issues/191
+# explanation: I believe snakecase:::replace_special_characters_internal is only a promise until
+# the first time it is called, so simply printing the function to stdout causes the function to
+# be loaded for the first time, triggering the warnings, thereby relieving any further calls 
+# to it from additional warnings
+# because janitor::clean_names() is used in multiple functions here, this is the cleanest way
+# to deal with them all at once up front
+suppressWarnings(invisible(snakecase:::replace_special_characters_internal))
+
 ### Portfolio cleaning functions
 read_raw_portfolio_file <- function(project_name) {
   portfolio <- NA
