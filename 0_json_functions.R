@@ -1,4 +1,4 @@
-devtools::load_all()
+devtools::load_all(quiet = TRUE)
 
 # Convert to JSON functions
 
