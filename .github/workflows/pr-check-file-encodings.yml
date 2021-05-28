@@ -11,11 +11,11 @@ jobs:
           fetch-depth: 0
       - name: list all changed files
         run: |
-          files=$(git diff --name-only origin/$GITHUB_BASE_REF...origin/$GITHUB_HEAD_REF)
+          files=$(git diff --name-only origin/$GITHUB_BASE_REF...${{ github.sha }})
           IFS=$'\n'; files=($files); unset IFS;  # split the string into an array
           file --mime "${files[@]}"
       - name: list all changed files with the wrong encoding
         run: |
-          files=$(git diff --name-only origin/$GITHUB_BASE_REF...origin/$GITHUB_HEAD_REF)
+          files=$(git diff --name-only origin/$GITHUB_BASE_REF...${{ github.sha }})
           IFS=$'\n'; files=($files); unset IFS;  # split the string into an array
           ! file --mime "${files[@]}" | grep -v "charset=utf-8\|charset=us-ascii\|charset=binary"
