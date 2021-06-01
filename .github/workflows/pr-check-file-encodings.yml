@@ -1,7 +1,8 @@
 name: check file encodings in PR
 on: [pull_request]
 jobs:
-  build:
+  file-encoding:
+    name: file encooding check
     runs-on: ubuntu-latest
 
     steps:
