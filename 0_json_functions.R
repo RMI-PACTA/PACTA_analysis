@@ -358,22 +358,22 @@ export_audit_textvar_json <- function(portfolio_total_, export_path_full) {
 
   included <-
     portfolio_total_ %>%
-    filter(has_valid_input == TRUE) %>%
-    pull(value_usd) %>%
+    dplyr::filter(has_valid_input == TRUE) %>%
+    dplyr::pull(value_usd) %>%
     sum(na.rm = TRUE) %>%
     round()
 
   bonds <-
     portfolio_total_ %>%
-    filter(asset_type == "Bonds") %>%
-    pull(value_usd) %>%
+    dplyr::filter(asset_type == "Bonds") %>%
+    dplyr::pull(value_usd) %>%
     sum(na.rm = TRUE) %>%
     round()
 
   equity <-
     portfolio_total_ %>%
-    filter(asset_type == "Equity") %>%
-    pull(value_usd) %>%
+    dplyr::filter(asset_type == "Equity") %>%
+    dplyr::pull(value_usd) %>%
     sum(na.rm = TRUE) %>%
     round()
 
