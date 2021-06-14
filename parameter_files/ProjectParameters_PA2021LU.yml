@@ -1,14 +1,14 @@
 default:
 
     reporting:
-        project_report_name: norway
-        display_currency: NOK
-        currency_exchange_value: 0.11
+        project_report_name: luxembourg
+        display_currency: EUR
+        currency_exchange_value: 1.22
 
     parameters:
-        timestamp: 2019Q4
-        dataprep_timestamp: 2019Q4_250220
-        start_year: 2020
+        timestamp: 2020Q4
+        dataprep_timestamp: 2020Q4_05172021_2020
+        start_year: 2021
         horizon_year: 5
         select_scenario: WEO2019_SDS
         scenario_auto: ETP2017_B2DS
