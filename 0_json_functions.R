@@ -272,7 +272,7 @@ export_audit_information_data <- function(audit_file_ = audit_file,
   # function
   export_audit_graph_json(audit_file_, paste0(folder_path, "coveragegraph"))
   export_audit_invalid_data(portfolio_total_, paste0(folder_path, "invalidsecurities"))
-  export_audit_textvar_json(portfolio_total_, paste0(folder_path, "coveragetextvar"))
+  export_audit_textvar_json(portfolio_total_, file.path(folder_path, "coveragetextvar.json"))
 }
 
 
@@ -354,41 +354,32 @@ export_audit_invalid_data <- function(portfolio_total_, export_path_full) {
 }
 
 export_audit_textvar_json <- function(portfolio_total_, export_path_full) {
-  portfolio_total_ <- portfolio_total_ %>% select("value_usd", "asset_type", "has_valid_input")
-  total_v <- sum(portfolio_total_$value_usd)
-  included <- portfolio_total_ %>% subset(has_valid_input == TRUE)
-  included_v <- sum(included$value_usd)
-  bonds <- portfolio_total_ %>% subset(asset_type == "Bonds")
-  bonds_v <- sum(bonds$value_usd)
-  equity <- portfolio_total_ %>% subset(asset_type == "Equity")
-  equity_v <- sum(equity$value_usd)
+  total <- round(sum(portfolio_total_$value_usd, na.rm = TRUE))
 
-  assertthat::are_equal(included_v <= total_v, TRUE)
-  assertthat::are_equal(bonds_v + equity_v - included_v < 1, TRUE)
+  included <-
+    portfolio_total_ %>%
+    dplyr::filter(has_valid_input == TRUE) %>%
+    dplyr::pull(value_usd) %>%
+    sum(na.rm = TRUE) %>%
+    round()
 
-  total_v <- round(total_v)
-  total_v <- as.character(total_v)
-  included_v <- round(included_v)
-  bonds_v <- round(bonds_v)
-  equity_v <- round(equity_v)
+  bonds <-
+    portfolio_total_ %>%
+    dplyr::filter(asset_type == "Bonds") %>%
+    dplyr::pull(value_usd) %>%
+    sum(na.rm = TRUE) %>%
+    round()
 
-  keys <- c("\"total\"", "\"included\"", "\"bonds\"", "\"equity\"")
-  values <- c(total_v, included_v, bonds_v, equity_v)
+  equity <-
+    portfolio_total_ %>%
+    dplyr::filter(asset_type == "Equity") %>%
+    dplyr::pull(value_usd) %>%
+    sum(na.rm = TRUE) %>%
+    round()
 
+  output <- list("total" = total, "included" = included, "bonds" = bonds, "equity" = equity)
 
-  json_head <- "{"
-  json_tail <- "}"
+  json_output <- jsonlite::toJSON(output, na = "null", auto_unbox = TRUE)
 
-  text_varibles <- json_head
-
-  for (i in 1:(length(keys) - 1)) {
-    text_varibles <- paste0(text_varibles, " ", keys[i], ": ", values[i], ",")
-  }
-  i <- length(keys)
-
-  text_varibles <- paste0(text_varibles, " ", keys[i], ": ", values[i])
-
-  text_varibles <- paste0(text_varibles, json_tail)
-
-  write(text_varibles, file = paste0(export_path_full, ".json"))
+  write(json_output, file = export_path_full)
 }
