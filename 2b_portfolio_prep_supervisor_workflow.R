@@ -10,6 +10,8 @@ prep_pf <- raw_pf %>%
   add_holding_id() %>%
   rename(current_shares_outstanding_all_classes = current_shares_outstanding)
 
+prep_pf <- add_meta_portfolio(prep_pf, inc_meta_portfolio)
+
 port_raw_all_eq <- prep_pf %>%
   filter(asset_type == "Equity") %>%
   mutate(
