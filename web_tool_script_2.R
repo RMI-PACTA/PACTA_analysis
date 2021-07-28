@@ -211,6 +211,8 @@ if (file.exists(bonds_inputs_file)) {
 
 # provide parameters for stress test
 invisible(set_portfolio_parameters(file_path = fs::path(par_file_path, paste0(portfolio_name_ref_all, "_PortfolioParameters.yml"))))
+# set environment variable for stress test data path
+options("ST_DATA_PATH") <- stress_test_data_location
 # run 2dii stress test
 source(file.path(stress_test_path, "web_tool_stress_test.R"))
 # run stress test with external scenarios (IPR)
