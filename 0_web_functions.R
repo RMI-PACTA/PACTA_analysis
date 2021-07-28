@@ -78,6 +78,7 @@ set_web_parameters <- function(file_path) {
   data_location_ext <<- cfg$paths$data_location_ext
   template_path <<- cfg$paths$template_location
   stress_test_path <<- cfg$paths$stress_test_location
+  stress_test_data_location <<- cfg$paths$stress_test_data_location
   user_results_path <<- cfg$paths$user_data_location
 
   project_name <<- cfg$parameters$project_name
