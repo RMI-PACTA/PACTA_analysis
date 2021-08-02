@@ -59,5 +59,4 @@
 ^computing-environment\.Rmd$
 ^computing-environment\.md$
 ^docker-compose\.yml$
-^helpers\.Rmd$
 ^\.env$
