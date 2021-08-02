@@ -4,44 +4,10 @@
 # 2021-03-04 (see https://packagemanager.rstudio.com/client/#/repos/1/overview)
 snapshot <- "https://packagemanager.rstudio.com/all/__linux__/focal/1695015"
 options(repos = c(CRAN = snapshot))
-install.packages(
-  c(
-    'assertthat',
-    'bookdown',
-    'config',
-    'conflicted',
-    'countrycode',
-    'crayon',
-    'data.table',
-    'devtools',
-    'dplyr',
-    'forcats',
-    'fs',
-    'fst',
-    'ggplot2',
-    'glue',
-    'highcharter',
-    'here',
-    'janitor',
-    'jsonlite',
-    'knitr',
-    'purrr',
-    'readr',
-    'readxl',
-    'renv',
-    'reshape2',
-    'rlang',
-    'rmarkdown',
-    'rstudioapi',
-    'scales',
-    'stringr',
-    'testthat',
-    'tibble',
-    'tidyr',
-    'tidyselect',
-    'usethis',
-    'withr',
-    'writexl',
-    'zoo'
-  )
+
+url <- paste0(
+  "https://raw.githubusercontent.com/2DegreesInvesting/docker/",
+  "extract-install.R/",
+  "r-packages/install.R"
 )
+source(url)
