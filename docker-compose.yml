@@ -1,7 +1,7 @@
 version: "0.0.0.9000"
 services:
   rstudio:
-    image: 2dii/pacta_analysis:latest
+    build: .
     container_name: pacta_analysis
     ports:
       - 8787:8787
