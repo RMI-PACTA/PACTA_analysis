@@ -1,0 +1,94 @@
+---
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  config_general = "man/figures/README-",
+  out.width = "100%",
+  cache = TRUE
+)
+
+devtools::load_all()
+```
+
+```{r helpers, include=FALSE}
+#' Look into a file
+#' @examples
+#' tmp <- tempfile()
+#' writeLines("a\nb\nc", tmp)
+#' look_into(tmp)
+#' look_into(tmp, 2)
+look_into <- function(path, n = -1L) {
+  lines <- readLines(path, n, encoding = "UTF-8")
+  writeLines(lines)
+  
+  invisible(path)
+}
+
+#' Find a file matchin a regexp
+#' @examples
+#' find_file("[.]profile$", "~")
+#' find_file("[.]profile$", "~", all = TRUE)
+find_file <- function(regexp, path = here::here(), all = FALSE) {
+  out <- fs::dir_ls(path = path, regexp = regexp, recurse = TRUE, all = all)
+  found <- any(fs::file_exists(out))
+  if (!found) {
+    rlang::warn(glue::glue("No file found matching regexp: {regexp}."))
+  }
+  
+  out
+}
+```
+
+The docker image [rocker/verse](https://hub.docker.com/r/rocker/verse) provides
+most of what you need for a functional computing environment, including system
+dependencies, a bash terminal and RStudio. The image
+[2dii/pacta_analysis](https://hub.docker.com/r/2dii/pacta_analysis) extends
+rocker/verse to include the required R packages. Here is its Dockerfile:
+
+```{r echo=FALSE, comment=""}
+look_into("Dockerfile")
+```
+
+Finally you need access to the PACTA [siblings](#Siblings). You can
+create one or more volumes mapping the location of the siblings from your (host)
+computer to the container. 
+
+Here are two ways to access a full computing environment, including PACTA
+siblings. The code below assumes you have this .env file (added to .gitignore)
+at the root of the repository, but you may change the value `abc` to anything.
+
+```bash
+# .env
+RSTUDIO_PASSWORD=abc
+```
+
+This starts RStudio at http://localhost:8787. Login as "rstudio" with the
+password you chose.
+
+```bash
+docker-compose up
+```
+
+This starts an interactive terminal, mounting your home directory at the
+container's `/root` directory.
+
+```bash
+docker run --rm -ti -v "$HOME:/root" -w /root/PACTA_analysis  2dii/pacta_analysis:latest /bin/bash
+```
+
+For an improved environment replace `/bin/bash` with `docker/entrypoint`.
+
+Reference:
+
+* [Install Docker](https://docs.docker.com/engine/install/).
+* [Install docker-compose](https://docs.docker.com/compose/install/).
+
+<details>
+```{r}
+devtools::session_info()
+```
+</details>

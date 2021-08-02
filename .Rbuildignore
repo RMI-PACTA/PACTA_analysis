@@ -55,3 +55,9 @@
 ^workflow-pacta-cop\.Rmd$
 ^workflow\.Rmd$
 ^workflow\.md$
+^Dockerfile$
+^computing-environment\.Rmd$
+^computing-environment\.md$
+^docker-compose\.yml$
+^helpers\.Rmd$
+^\.env$
