@@ -35,11 +35,19 @@ get_ald_scen <- function(portfolio_type) {
 
 get_ald_raw <- function(portfolio_type) {
   if (portfolio_type == "Equity") {
-    ald_raw <- read_rds(paste0(analysis_inputs_path, "/masterdata_ownership_datastore.rda"))
+    if (twodii_internal == FALSE & run_remotely == TRUE) {
+      ald_raw <- read_rds(paste0(analysis_inputs_path, "/equity_ald_scenario_map.rda"))
+    } else {
+      ald_raw <- read_rds(paste0(analysis_inputs_path, "/masterdata_ownership_datastore.rda"))
+    }
   }
 
   if (portfolio_type == "Bonds") {
-    ald_raw <- read_rds(paste0(analysis_inputs_path, "/masterdata_debt_datastore.rda"))
+    if (twodii_internal == FALSE & run_remotely == TRUE) {
+      ald_raw <- read_rds(paste0(analysis_inputs_path, "/bonds_ald_scenario_map.rda"))
+    } else {
+      ald_raw <- read_rds(paste0(analysis_inputs_path, "/masterdata_debt_datastore.rda"))
+    }
   }
 
 
