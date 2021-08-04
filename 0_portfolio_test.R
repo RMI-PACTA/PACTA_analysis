@@ -33,21 +33,21 @@ get_ald_scen <- function(portfolio_type) {
   return(ald)
 }
 
-get_ald_raw <- function(portfolio_type) {
+get_ald_raw <- function(portfolio_type, supervisor_workflow = FALSE) {
+  if (supervisor_workflow == TRUE) {
+    filename_eq_raw <- "equity_ald_scenario_map.rda"
+    filename_cb_raw <- "bonds_ald_scenario_map.rda"
+  } else {
+    filename_eq_raw <- "masterdata_ownership_datastore.rda"
+    filename_cb_raw <- "masterdata_debt_datastore.rda"
+  }
+
   if (portfolio_type == "Equity") {
-    if (twodii_internal == FALSE & run_remotely == TRUE) {
-      ald_raw <- read_rds(paste0(analysis_inputs_path, "/equity_ald_scenario_map.rda"))
-    } else {
-      ald_raw <- read_rds(paste0(analysis_inputs_path, "/masterdata_ownership_datastore.rda"))
-    }
+    ald_raw <- read_rds(file.path(analysis_inputs_path, filename_eq_raw))
   }
 
   if (portfolio_type == "Bonds") {
-    if (twodii_internal == FALSE & run_remotely == TRUE) {
-      ald_raw <- read_rds(paste0(analysis_inputs_path, "/bonds_ald_scenario_map.rda"))
-    } else {
-      ald_raw <- read_rds(paste0(analysis_inputs_path, "/masterdata_debt_datastore.rda"))
-    }
+    ald_raw <- read_rds(file.path(analysis_inputs_path, filename_cb_raw))
   }
 
 
