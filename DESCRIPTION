@@ -1,48 +1,52 @@
-Package: PACTA.analysis
-Title: Helpers for 'PACTA_analysis'
+Package: PACTA.analysis.dependencies
+Title: Install Depdendencies of PACTA_analysis
 Version: 0.0.0.9000
 Authors@R: 
-    c(person(given = "Mauro",
-             family = "Lepore",
-             role = c("aut", "ctr", "cre"),
-             email = "maurolepore@gmail.com",
-             comment = c(ORCID = "0000-0002-1986-7988")),
-      person(given = "Clare",
-             family = "Murray",
-             role = "aut",
-             email = "clare@2degrees-investing.org"),
-      person(given = "Jacob",
-             family = "Kastl",
-             role = "aut",
-             email = "jacob.kastl@gmail.com"),
       person(given = "2 Degrees Investing Initiative",
-             role = c("cph", "fnd"),
+             role = c("aut", "ctr", "cre"),
              email = "contact@2degrees-investing.org"))
-Description: For more information visit
-    <https://2degrees-investing.org/>.
+Description: We abuse this DESCRIPTION file to make it easy for Docker to 
+      install dependencies.
 License: MIT + file LICENSE
-Depends: 
-    R (>= 3.5)
-Imports: 
-    config,
-    conflicted,
-    dplyr,
-    fs,
-    fst,
-    glue,
-    here,
-    janitor,
-    magrittr,
-    purrr,
-    readr,
-    renv,
-    rlang,
-    rmarkdown,
-    tibble,
-    withr
-Suggests: 
-    testthat
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
+Depends: 
+    assertthat,
+    bookdown,
+    config,
+    conflicted,
+    countrycode,
+    crayon,
+    data.table,
+    devtools,
+    dplyr,
+    forcats,
+    fs,
+    fst,
+    ggplot2,
+    glue,
+    here,
+    highcharter,
+    janitor,
+    jsonlite,
+    knitr,
+    purrr,
+    readr,
+    readxl,
+    renv,
+    reshape2,
+    rlang,
+    rmarkdown,
+    rstudioapi,
+    scales,
+    stringr,
+    testthat,
+    tibble,
+    tidyr,
+    tidyselect,
+    usethis,
+    withr,
+    writexl,
+    zoo
