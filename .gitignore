@@ -53,3 +53,4 @@ integration-test.html
 
 # local test case test output
 test_cases/*
+.env
