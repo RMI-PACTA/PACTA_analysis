@@ -5,6 +5,10 @@ if(run_remotely == FALSE) {
   port_col_types <- set_col_types(grouping_variables, "ddddccccddclc")
 }
 
+# indicator used to pick correct file names later on - ADO 933
+use_supervisor_workflow <- dplyr::if_else(twodii_internal == FALSE & run_remotely == TRUE, TRUE, FALSE)
+
+
 ##################
 ##### EQUITY #####
 ##################
@@ -29,7 +33,10 @@ if (file.exists(equity_input_file)) {
   ald_scen_eq <- get_ald_scen("Equity")
 
   if(has_map) {
-    ald_raw_eq <- get_ald_raw("Equity")
+    ald_raw_eq <- get_ald_raw(
+      portfolio_type = "Equity",
+      supervisor_workflow = use_supervisor_workflow
+    )
   }
 
   list_investors_eq <- unique(port_raw_all_eq$investor_name)
@@ -125,7 +132,10 @@ if (file.exists(bonds_inputs_file)) {
   ald_scen_cb <- get_ald_scen("Bonds")
 
   if(has_map) {
-    ald_raw_cb <- get_ald_raw("Bonds")
+    ald_raw_cb <- get_ald_raw(
+      portfolio_type = "Bonds",
+      supervisor_workflow = use_supervisor_workflow
+    )
   }
 
   list_investors_cb <- unique(port_raw_all_cb$investor_name)

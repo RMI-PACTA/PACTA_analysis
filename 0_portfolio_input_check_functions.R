@@ -4,7 +4,7 @@
 # docker image: https://github.com/Tazinho/snakecase/issues/191
 # explanation: I believe snakecase:::replace_special_characters_internal is only a promise until
 # the first time it is called, so simply printing the function to stdout causes the function to
-# be loaded for the first time, triggering the warnings, thereby relieving any further calls 
+# be loaded for the first time, triggering the warnings, thereby relieving any further calls
 # to it from additional warnings
 # because janitor::clean_names() is used in multiple functions here, this is the cleanest way
 # to deal with them all at once up front
@@ -706,6 +706,19 @@ check_valid_input_value <- function(portfolio_total) {
       TRUE ~ TRUE
     ))
 
+  portfolio_total
+}
+
+check_valid_value_usd <- function(portfolio_total) {
+  portfolio_total <- portfolio_total %>%
+    mutate(
+      has_valid_value_usd = case_when(
+        is.na(value_usd) & is.na(number_of_shares) ~ FALSE,
+        value_usd < 0 ~ FALSE,
+        number_of_shares < 0 ~ FALSE,
+        TRUE ~ TRUE
+      )
+    )
   portfolio_total
 }
 
