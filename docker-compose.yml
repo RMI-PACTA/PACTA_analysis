@@ -1,0 +1,9 @@
+version: "3.9"
+services:
+  app:
+    build: .
+    volumes: 
+      - ../pacta-data:/pacta-data
+    stdin_open: true
+    tty: true
+
