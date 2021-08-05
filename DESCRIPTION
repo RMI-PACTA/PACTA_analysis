@@ -28,7 +28,6 @@ Depends:
     ggplot2,
     glue,
     here,
-    highcharter,
     janitor,
     jsonlite,
     knitr,
