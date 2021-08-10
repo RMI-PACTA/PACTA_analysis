@@ -18,12 +18,13 @@ Authors@R:
       person(given = "2 Degrees Investing Initiative",
              role = c("cph", "fnd"),
              email = "contact@2degrees-investing.org"))
-Description: For more information visit
-    <https://2degrees-investing.org/>.
+Description: For more information visit <https://2degrees-investing.org/>.
 License: MIT + file LICENSE
 Depends: 
     R (>= 3.5)
 Imports: 
+    assertthat,
+    bookdown,
     config,
     conflicted,
     dplyr,
@@ -40,8 +41,18 @@ Imports:
     rmarkdown,
     tibble,
     withr
-Suggests: 
-    testthat
+Suggests:
+    countrycode,
+    data.table,
+    devtools,
+    ggplot2,
+    jsonlite,
+    readxl,
+    reshape2,
+    rstudioapi,
+    testthat,
+    writexl,
+    zoo
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
