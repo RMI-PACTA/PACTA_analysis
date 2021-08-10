@@ -1,0 +1,6 @@
+services: 
+  app:
+    volumes:
+      - ../pacta-data:/pacta-data
+      - ../input:/input
+      - ../output:/output
