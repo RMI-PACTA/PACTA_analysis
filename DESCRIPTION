@@ -2,41 +2,44 @@ Package: PACTA.analysis
 Title: Helpers for 'PACTA_analysis'
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "2 Degrees Investing Initiative",
-             role = c("aut", "cre", "cph", "fnd"),
-             email = "contact@2degrees-investing.org")
+    c(person(given = "Mauro",
+             family = "Lepore",
+             role = c("aut", "ctr", "cre"),
+             email = "maurolepore@gmail.com",
+             comment = c(ORCID = "0000-0002-1986-7988")),
+      person(given = "Clare",
+             family = "Murray",
+             role = "aut",
+             email = "clare@2degrees-investing.org"),
+      person(given = "Jacob",
+             family = "Kastl",
+             role = "aut",
+             email = "jacob.kastl@gmail.com"),
+      person(given = "2 Degrees Investing Initiative",
+             role = c("cph", "fnd"),
+             email = "contact@2degrees-investing.org"))
 Description: For more information visit
     <https://2degrees-investing.org/>.
 License: MIT + file LICENSE
-Imports:
-    assertthat,
-    bookdown,
+Depends: 
+    R (>= 3.5)
+Imports: 
     config,
     conflicted,
-    countrycode, 
-    data.table,
-    devtools,
     dplyr,
     fs,
     fst,
-    ggplot2,
     glue,
     here,
     janitor,
-    jsonlite,
     magrittr,
     purrr,
     readr,
-    readxl,
     renv,
-    reshape2,
     rlang,
     rmarkdown,
-    rstudioapi,
     tibble,
-    withr,
-    writexl,
-    zoo
+    withr
 Suggests: 
     testthat
 Encoding: UTF-8
