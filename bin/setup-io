@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-mkdir ../input
-mkdir ../output
+mkdir -p ../input
+mkdir -p ../output
 cp working_dir/10_Parameter_File/TestPortfolio_Input_PortfolioParameters.yml ../input/
 cp working_dir/20_Raw_Inputs/TestPortfolio_Input.csv ../input/
