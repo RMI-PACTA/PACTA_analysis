@@ -19,7 +19,7 @@ From a terminal (e.g. bash) running PACTA involves three steps:
 
 ``` bash
 git clone git@github.com:2DegreesInvesting/pacta-data.git  # Private data!
-git clone git@github.com:jdhoffa/PACTA_analysis -b add_basic_dockerfile
+git clone git@github.com:2DegreesInvesting/PACTA_analysis -b 478-add_vanilla_pacta_dockerfile
 cd PACTA_analysis
 ```
 
