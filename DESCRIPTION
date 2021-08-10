@@ -8,7 +8,7 @@ Authors@R:
 Description: For more information visit
     <https://2degrees-investing.org/>.
 License: MIT + file LICENSE
-Depends:
+Imports:
     assertthat,
     bookdown,
     config,
