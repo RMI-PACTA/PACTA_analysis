@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+cp -r ../input/*.yml ./working_dir/10_Parameter_File
+cp -r ../input/*.csv ./working_dir/20_Raw_Inputs
+
+Rscript --vanilla -e "source('R/run_pacta.R'); run_pacta()"
+cp -r ./working_dir ../output
