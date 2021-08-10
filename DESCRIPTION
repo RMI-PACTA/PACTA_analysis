@@ -3,7 +3,7 @@ Title: Helpers for 'PACTA_analysis'
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "2 Degrees Investing Initiative",
-             role = c("cph", "fnd"),
+             role = c("aut", "cre", "cph", "fnd"),
              email = "contact@2degrees-investing.org")
 Description: For more information visit
     <https://2degrees-investing.org/>.
