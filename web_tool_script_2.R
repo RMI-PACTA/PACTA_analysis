@@ -209,6 +209,8 @@ if (file.exists(bonds_inputs_file)) {
   }
 }
 
+# pacta: end
+
 # provide parameters for stress test
 invisible(set_portfolio_parameters(file_path = fs::path(par_file_path, paste0(portfolio_name_ref_all, "_PortfolioParameters.yml"))))
 # set environment variable for stress test data path
