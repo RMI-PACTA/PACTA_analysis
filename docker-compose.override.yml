@@ -2,6 +2,6 @@ version: "3.2"
 services: 
   app:
     volumes:
-      - ../pacta-data:/pacta-data
-      - ../input:/input
+      - ../pacta-data:/pacta-data:ro
+      - ../input:/input:ro
       - ../output:/output
