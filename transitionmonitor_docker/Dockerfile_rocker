@@ -1,0 +1,58 @@
+# most recent build of 2dii/system and 2dii/r-packages
+# was on 22.02.2021 and had R v4.0.3 installed
+#
+# OS was Ubuntu 18.04.5 LTS
+#
+# R v4.0.5 would be the last bugfix version of the same
+# minor version of R, released around 31.03.2021
+#
+# R packages were installed on 22.02.2021, so we'll use
+# and RStudio package manager snapshot from then.
+# rocker/verse image is based on Ubuntu 20.04.2 LTS:
+# (binary packages available as of Feb 22, 2021 1:00 AM GMT+1
+# for Ubuntu 20.04.2 LTS (focal))
+# https://packagemanager.rstudio.com/all/__linux__/focal/1499234
+#
+# setting the CRAN mirror as is done in rocker's install_R.sh:
+# https://github.com/rocker-org/rocker-versioned2/blob/daf1b2f570254773dbf4aced68c90ebb1f876c30/scripts/install_R.sh#L135
+#
+# using the install2.r script built into rocker/verse to install
+# packages. using its skipinstalled option so that we can list all
+# R pkg dependencies, but they're only installed if they're
+# not already installed/included in rocker/verse
+
+
+FROM rocker/verse:4.0.3
+
+ARG CRAN
+ENV CRAN=${CRAN:-https://packagemanager.rstudio.com/all/__linux__/focal/1499234}
+RUN echo "options(repos = c(CRAN='$CRAN'), download.file.method = 'libcurl')" >> /usr/local/lib/R/etc/Rprofile.site
+
+RUN tlmgr install \
+    amsmath caption mathspec sectsty sourcesanspro wrapfig \
+    fancyhdr xcolor blindtext titlesec lipsum
+
+RUN install2.r --skipinstalled --error \
+    assertthat bookdown config conflicted countrycode crayon \
+    data.table devtools dplyr forcats fs fst ggplot2 glue \
+    highcharter here janitor jsonlite knitr purrr readr readxl \
+    renv reshape2 rlang rmarkdown rstudioapi scales stringr \
+    testthat tibble tidyr tidyselect usethis withr writexl zoo
+
+COPY PACTA_analysis /bound
+COPY create_interactive_report /create_interactive_report
+COPY pacta-data /pacta-data
+COPY r2dii.climate.stress.test /r2dii.climate.stress.test
+COPY r2dii.stress.test.data /r2dii.stress.test.data
+
+RUN chmod -R a+rwX /bound
+RUN chmod -R a+rwX /create_interactive_report
+RUN chmod -R a+rwX /pacta-data
+RUN chmod -R a+rwX /r2dii.climate.stress.test
+RUN chmod -R a+rwX /r2dii.stress.test.data
+
+# RUN echo "options(tinytex.tlmgr.path = '/root/.TinyTeX/bin/x86_64-linux/tlmgr')" > .Rprofile
+# RUN chmod -R a+rwX /root
+# RUN /root/.TinyTeX/bin/*/tlmgr path add
+
+RUN exit 0
