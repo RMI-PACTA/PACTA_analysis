@@ -105,6 +105,7 @@ docker run --rm -ti \
   --network none \
   --user 1000:1000 \
   --memory="4g" \
+  --platform linux/x86_64 \
   --mount type=bind,source="$working_dir",target=/bound/working_dir \
   --mount type=bind,source="$user_results",target=/user_results \
   2dii_pacta \

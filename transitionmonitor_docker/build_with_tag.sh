@@ -124,7 +124,7 @@ done
 
 # Copy Dockerfile alongside pacta siblings and build the image
 cp "${dir_start}/Dockerfile" "$dir_temp"
-docker build --tag 2dii_pacta:"$tag" --tag 2dii_pacta:latest .
+docker build --platform linux/x86_64 --tag 2dii_pacta:"$tag" --tag 2dii_pacta:latest .
 echo
 
 cd $dir_start
