@@ -29,8 +29,9 @@ ENV CRAN=${CRAN:-https://packagemanager.rstudio.com/all/__linux__/focal/1499234}
 RUN echo "options(repos = c(CRAN='$CRAN'), download.file.method = 'libcurl')" >> /usr/local/lib/R/etc/Rprofile.site
 
 RUN tlmgr install \
-    amsmath caption mathspec sectsty sourcesanspro wrapfig \
-    fancyhdr xcolor blindtext titlesec lipsum
+    caption mathspec sectsty sourcesanspro wrapfig \
+    fancyhdr xcolor blindtext titlesec lipsum \
+    amsmath iftex
 
 RUN install2.r --skipinstalled --error \
     assertthat bookdown config conflicted countrycode crayon \
