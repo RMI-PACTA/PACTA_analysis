@@ -24,7 +24,7 @@ set_portfolio_parameters(file_path = fs::path(par_file_path, paste0(portfolio_na
 
 set_project_parameters(file.path(working_location, "parameter_files", paste0("ProjectParameters_", project_code, ".yml")))
 
-data_location_ext <- sub("[0-9]{4}Q[0-9]", financial_timestamp, data_location_ext)
+data_location_ext <- sub("20[0-9]{2}Q[1-4]", financial_timestamp, data_location_ext)
 
 # need to define an alternative location for data files
 analysis_inputs_path <- set_analysis_inputs_path(twodii_internal, data_location_ext, dataprep_timestamp)
