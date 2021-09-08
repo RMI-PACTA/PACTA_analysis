@@ -85,7 +85,7 @@ set_web_parameters <- function(file_path) {
   twodii_internal <<- cfg$parameters$twodii_internal
   new_data <<- cfg$parameters$new_data
 
-  financial_timestamp <<- cfg$parameters$financial_timestamp
+  # financial_timestamp <<- cfg$parameters$financial_timestamp
 }
 
 set_portfolio_parameters <- function(file_path) {
