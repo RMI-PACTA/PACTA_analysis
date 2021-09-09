@@ -46,6 +46,10 @@ set_col_types <- function(grouping_variables, fixed_col_types) {
 set_project_parameters <- function(file_path){
   cfg <- config::get(file = file_path)
 
+  if (!is.null(cfg$paths$data_location_ext)) {
+    data_location_ext <<- cfg$paths$data_location_ext
+  }
+
   project_report_name <<- cfg$reporting$project_report_name
   display_currency <<- cfg$reporting$display_currency
   currency_exchange_value <<- as.numeric(cfg$reporting$currency_exchange_value)
