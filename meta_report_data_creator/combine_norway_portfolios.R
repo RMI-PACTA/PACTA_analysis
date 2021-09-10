@@ -140,7 +140,12 @@ for (user_id in all_user_ids) {
   user_data <- data %>% dplyr::filter(user_id == .env$user_id)
 
   investor_name <- encodeString(as.character(unique(user_data$investor_name)))
-  if (length(investor_name) > 1) { investor_name <- investor_name[[1]] }
+  if (length(investor_name) > 1) {
+    investor_name <- investor_name[[1]]
+    user_data <- user_data %>% mutate(investor_name = .env$investor_name)
+  }
+
+  user_data <- user_data %>% mutate(portfolio_name = .env$investor_name)
 
   peer_group <- unique(user_data$organization_type)
   if (length(peer_group) > 1) { peer_group <- peer_group[[1]] }
@@ -229,7 +234,11 @@ cli_progress_done()
 
 # run user files through PACTA --------------------------------------------
 
+cli_progress_bar("Running user portfolios through PACTA", total = length(all_user_ids))
+
 for (user_id in all_user_ids) {
+  message(paste0("running user_id:", user_id, " through PACTA"))
+
   user_id_output_dir <- file.path(users_output_dir, paste0(project_prefix, "_user_", user_id))
 
   dir_delete(dir_ls("working_dir"))
@@ -244,8 +253,10 @@ for (user_id in all_user_ids) {
   source("web_tool_script_2.R", local = TRUE)
 
   for (output_dir in dir_ls("working_dir")) {
-    dir_copy(output_dir, user_id_output_dir, overwrite = TRUE)
+    dir_copy("working_dir", user_id_output_dir, overwrite = TRUE)
   }
+
+  cli_progress_update(extra = user_id)
 }
 
-
+cli_progress_done()
