@@ -1,14 +1,17 @@
 default:
 
+    paths:
+        data_location_ext: ../pacta-data/2020Q4/
+
     reporting:
         project_report_name: norway
         display_currency: NOK
         currency_exchange_value: 0.11
 
     parameters:
-        timestamp: 2019Q4
-        dataprep_timestamp: 2019Q4_250220
-        start_year: 2020
+        timestamp: 2020Q4
+        dataprep_timestamp: 2020Q4_transitionmonitor
+        start_year: 2021
         horizon_year: 5
         select_scenario: WEO2019_SDS
         scenario_auto: ETP2017_B2DS
