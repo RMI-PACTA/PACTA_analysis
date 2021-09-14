@@ -1,7 +1,7 @@
 
 # manually set certain values and paths -----------------------------------
 
-output_dir <- normalizePath(file.path("~/Desktop/NORWAY"))
+output_dir <- normalizePath("~/Desktop/NORWAY", mustWork = FALSE)
 
 portfolios_path <- "~/Dropbox (2° Investing)/2° Investing Team/1. RESEARCH/1. Studies (projects)/PACTA . Regulator Monitoring/PACTA COP/03_Initiative_Level/05_PACTACOP_NO/04_Input_Cleaning/portfolios"
 portfolios_meta_csv <- "~/Dropbox (2° Investing)/2° Investing Team/1. RESEARCH/1. Studies (projects)/PACTA . Regulator Monitoring/PACTA COP/03_Initiative_Level/05_PACTACOP_NO/04_Input_Cleaning/portfolios.csv"
@@ -29,7 +29,6 @@ stopifnot(dir.exists(local_PACTA_git_path))
 library(dplyr)
 library(purrr)
 library(stringr)
-library(cli)
 library(fs)
 library(readr)
 library(yaml)
@@ -67,10 +66,45 @@ data <-
 
 write.csv(
   data,
-  file = file.path(output_dir, paste0(project_prefix, "_meta.csv")),
+  file = file.path(output_dir, paste0(project_prefix, "_full.csv")),
   row.names = FALSE, fileEncoding = "UTF-8"
   )
-saveRDS(data, file.path(output_dir, paste0(project_prefix, "_meta.rds")))
+saveRDS(data, file.path(output_dir, paste0(project_prefix, "_full.rds")))
+
+
+# prepare meta PACTA project ----------------------------------------------
+
+meta_output_dir <- file.path(output_dir, "meta")
+dir.create(meta_output_dir, showWarnings = FALSE)
+
+dir.create(file.path(meta_output_dir, "00_Log_Files"), recursive = TRUE, showWarnings = FALSE)
+dir.create(file.path(meta_output_dir, "10_Parameter_File"), recursive = TRUE, showWarnings = FALSE)
+dir.create(file.path(meta_output_dir, "20_Raw_Inputs"), recursive = TRUE, showWarnings = FALSE)
+dir.create(file.path(meta_output_dir, "30_Processed_Inputs"), recursive = TRUE, showWarnings = FALSE)
+dir.create(file.path(meta_output_dir, "40_Results"), recursive = TRUE, showWarnings = FALSE)
+dir.create(file.path(meta_output_dir, "50_Outputs"), recursive = TRUE, showWarnings = FALSE)
+
+data %>%
+  mutate(portfolio_name = "Meta Portfolio") %>%
+  mutate(investor_name = "Meta Investor") %>%
+  write.csv(
+    file = file.path(meta_output_dir, "20_Raw_Inputs", paste0(project_prefix, "_meta.csv")),
+    row.names = FALSE, fileEncoding = "UTF-8"
+  )
+
+config_list <-
+  list(
+    default = list(
+      parameters = list(
+        portfolio_name_in = "Meta Portfolio",
+        investor_name_in = "Meta Investor",
+        peer_group = paste0(project_prefix, "_meta"),
+        language = default_language,
+        project_code = project_code
+      )
+    )
+  )
+write_yaml(config_list, file = file.path(meta_output_dir, "10_Parameter_File", paste0(project_prefix, "_meta", "_PortfolioParameters.yml")))
 
 
 # slices for per port_id --------------------------------------------------
@@ -79,8 +113,6 @@ ports_output_dir <- file.path(output_dir, "port_id")
 dir.create(ports_output_dir, showWarnings = FALSE)
 
 all_port_ids <- unique(data$port_id)
-
-cli_progress_bar("Slicing data per port_id", total = length(all_port_ids))
 
 for (port_id in all_port_ids) {
   port_data <- data %>% dplyr::filter(port_id == .env$port_id)
@@ -115,16 +147,12 @@ for (port_id in all_port_ids) {
   dir.create(file.path(port_id_output_dir, "40_Results"), recursive = TRUE)
   dir.create(file.path(port_id_output_dir, "50_Outputs"), recursive = TRUE)
 
-  write_yaml(config_list, file = file.path(port_id_output_dir, "10_Parameter_File", paste0("norway_port_", port_id, "_PortfolioParameters.yml")))
+  write_yaml(config_list, file = file.path(port_id_output_dir, "10_Parameter_File", paste0(project_prefix, "_port_", port_id, "_PortfolioParameters.yml")))
 
   port_data %>%
     select(investor_name, portfolio_name, isin, market_value, currency) %>%
-    write_csv(file.path(port_id_output_dir, "20_Raw_Inputs", paste0("norway_port_", port_id, ".csv")))
-
-  cli_progress_update()
+    write_csv(file.path(port_id_output_dir, "20_Raw_Inputs", paste0(project_prefix, "_port_", port_id, ".csv")))
 }
-
-cli_progress_done()
 
 
 # slices for per user_id --------------------------------------------------
@@ -133,8 +161,6 @@ users_output_dir <- file.path(output_dir, "user_id")
 dir.create(users_output_dir, showWarnings = FALSE)
 
 all_user_ids <- unique(data$user_id)
-
-cli_progress_bar("Slicing data per user_id", total = length(all_user_ids))
 
 for (user_id in all_user_ids) {
   user_data <- data %>% dplyr::filter(user_id == .env$user_id)
@@ -171,16 +197,12 @@ for (user_id in all_user_ids) {
   dir.create(file.path(user_id_output_dir, "40_Results"), recursive = TRUE)
   dir.create(file.path(user_id_output_dir, "50_Outputs"), recursive = TRUE)
 
-  write_yaml(config_list, file = file.path(user_id_output_dir, "10_Parameter_File", paste0("norway_user_", user_id, "_PortfolioParameters.yml")))
+  write_yaml(config_list, file = file.path(user_id_output_dir, "10_Parameter_File", paste0(project_prefix, "_user_", user_id, "_PortfolioParameters.yml")))
 
   user_data %>%
     select(investor_name, portfolio_name, isin, market_value, currency) %>%
-    write_csv(file.path(user_id_output_dir, "20_Raw_Inputs", paste0("norway_user_", user_id, ".csv")))
-
-  cli_progress_update()
+    write_csv(file.path(user_id_output_dir, "20_Raw_Inputs", paste0(project_prefix, "_user_", user_id, ".csv")))
 }
-
-cli_progress_done()
 
 
 # slices for per organization_type --------------------------------------------------
@@ -189,8 +211,6 @@ orgs_output_dir <- file.path(output_dir, "organization_type")
 dir.create(orgs_output_dir, showWarnings = FALSE)
 
 all_org_types <- unique(data$organization_type)
-
-cli_progress_bar("Slicing data per organization_type", total = length(all_org_types))
 
 for (org_type in all_org_types) {
   org_data <-
@@ -220,43 +240,85 @@ for (org_type in all_org_types) {
   dir.create(file.path(org_type_output_dir, "40_Results"), recursive = TRUE)
   dir.create(file.path(org_type_output_dir, "50_Outputs"), recursive = TRUE)
 
-  write_yaml(config_list, file = file.path(org_type_output_dir, "10_Parameter_File", paste0("norway_org_", org_type, "_PortfolioParameters.yml")))
+  write_yaml(config_list, file = file.path(org_type_output_dir, "10_Parameter_File", paste0(project_prefix, "_org_", org_type, "_PortfolioParameters.yml")))
 
   org_data %>%
     select(investor_name, portfolio_name, isin, market_value, currency) %>%
-    write_csv(file.path(org_type_output_dir, "20_Raw_Inputs", paste0("norway_org_", org_type, ".csv")))
-
-  cli_progress_update()
+    write_csv(file.path(org_type_output_dir, "20_Raw_Inputs", paste0(project_prefix, "_org_", org_type, ".csv")))
 }
 
-cli_progress_done()
+
+# run meta portfolio through PACTA --------------------------------------------
+
+message("running meta portfolio through PACTA")
+
+dir_delete("working_dir")
+dir_copy(meta_output_dir, "working_dir", overwrite = TRUE)
+
+portfolio_name_ref_all <- paste0(project_prefix, "_meta")
+
+source("web_tool_script_1.R", local = TRUE)
+source("web_tool_script_2.R", local = TRUE)
+
+dir_delete(meta_output_dir)
+dir_copy("working_dir", meta_output_dir, overwrite = TRUE)
 
 
-# run user files through PACTA --------------------------------------------
+# run portfolio files through PACTA --------------------------------------------
 
-cli_progress_bar("Running user portfolios through PACTA", total = length(all_user_ids))
+for (port_id in all_port_ids) {
+  message(paste0("running port_id: ", port_id, " through PACTA"))
 
-for (user_id in all_user_ids) {
-  message(paste0("running user_id:", user_id, " through PACTA"))
+  port_id_output_dir <- file.path(ports_output_dir, paste0(project_prefix, "_port_", port_id))
 
-  user_id_output_dir <- file.path(users_output_dir, paste0(project_prefix, "_user_", user_id))
+  dir_delete("working_dir")
+  dir_copy(port_id_output_dir, "working_dir", overwrite = TRUE)
 
-  dir_delete(dir_ls("working_dir"))
-
-  for (user_id_dir in dir_ls(user_id_output_dir)) {
-    dir_copy(user_id_dir, "working_dir")
-  }
-
-  portfolio_name_ref_all <- paste0("norway_user_", user_id)
+  portfolio_name_ref_all <- paste0(project_prefix, "_port_", port_id)
 
   source("web_tool_script_1.R", local = TRUE)
   source("web_tool_script_2.R", local = TRUE)
 
-  for (output_dir in dir_ls("working_dir")) {
-    dir_copy("working_dir", user_id_output_dir, overwrite = TRUE)
-  }
-
-  cli_progress_update(extra = user_id)
+  dir_delete(port_id_output_dir)
+  dir_copy("working_dir", port_id_output_dir, overwrite = TRUE)
 }
 
-cli_progress_done()
+
+# run user files through PACTA --------------------------------------------
+
+for (user_id in all_user_ids) {
+  message(paste0("running user_id: ", user_id, " through PACTA"))
+
+  user_id_output_dir <- file.path(users_output_dir, paste0(project_prefix, "_user_", user_id))
+
+  dir_delete("working_dir")
+  dir_copy(user_id_output_dir, "working_dir", overwrite = TRUE)
+
+  portfolio_name_ref_all <- paste0(project_prefix, "_user_", user_id)
+
+  source("web_tool_script_1.R", local = TRUE)
+  source("web_tool_script_2.R", local = TRUE)
+
+  dir_delete(user_id_output_dir)
+  dir_copy("working_dir", user_id_output_dir, overwrite = TRUE)
+}
+
+
+# run organization_type files through PACTA --------------------------------------------
+
+for (org_type in all_org_types) {
+  message(paste0("running org_type: ", org_type, " through PACTA"))
+
+  org_type_output_dir <- file.path(orgs_output_dir, paste0(project_prefix, "_org_", org_type))
+
+  dir_delete("working_dir")
+  dir_copy(org_type_output_dir, "working_dir", overwrite = TRUE)
+
+  portfolio_name_ref_all <- paste0(project_prefix, "_org_", org_type)
+
+  source("web_tool_script_1.R", local = TRUE)
+  source("web_tool_script_2.R", local = TRUE)
+
+  dir_delete(org_type_output_dir)
+  dir_copy("working_dir", org_type_output_dir, overwrite = TRUE)
+}
