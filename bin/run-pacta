@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+here=$(pwd)
+pacta=${1:-$here}
+parent=$(dirname $pacta)
+
+cp -r "$parent"/input/*.yml "$pacta"/working_dir/10_Parameter_File
+cp -r "$parent"/input/*.csv "$pacta"/working_dir/20_Raw_Inputs
+
+Rscript --vanilla -e "source('""$pacta""/R/run_pacta.R'); run_pacta(wd = '""$pacta""')"
+cp -r "$pacta"/working_dir "$parent"/output
