@@ -1,0 +1,9 @@
+version: "3.2"
+services:
+  app: 
+    volumes: 
+      - /Users/jdhoffa/Documents/github/2dii/pacta-data:/pacta-data:ro
+      - /Users/jdhoffa/Desktop/pacta/input:/input:ro
+      - /Users/jdhoffa/Desktop/pacta/output:/output
+    working_dir: /bound
+    command: /bound/bin/run-pacta
