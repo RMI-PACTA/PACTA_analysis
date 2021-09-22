@@ -32,6 +32,21 @@ if(project_code == "GENERAL"){
 
 analysis_inputs_path <- set_analysis_inputs_path(twodii_internal, data_location_ext, dataprep_timestamp)
 
+
+# stress test -------------------------------------------------------------
+
+# provide parameters for stress test
+invisible(set_portfolio_parameters(file_path = fs::path(par_file_path, paste0(portfolio_name_ref_all, "_PortfolioParameters.yml"))))
+# set environment variable for stress test data path
+options("ST_DATA_PATH" = stress_test_data_location)
+# run 2dii stress test
+source(file.path(stress_test_path, "web_tool_stress_test.R"))
+# run stress test with external scenarios (IPR)
+source(file.path(stress_test_path, "web_tool_external_stress_test.R"))
+
+
+# create interactive report -----------------------------------------------
+
 source(file.path(template_path, "create_interactive_report.R"))
 source(file.path(template_path, "create_executive_summary.R"))
 source(file.path(template_path, "useful_functions.R"))
