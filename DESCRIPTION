@@ -24,23 +24,39 @@ License: MIT + file LICENSE
 Depends: 
     R (>= 3.5)
 Imports: 
+    assertthat,
+    bookdown,
     config,
     conflicted,
+    countrycode,
+    data.table,
     dplyr,
     fs,
     fst,
+    ggplot2,
     glue,
     here,
     janitor,
-    magrittr,
+    knitr,
     purrr,
     readr,
+    readxl,
     renv,
+    reshape2,
     rlang,
     rmarkdown,
+    scales,
+    stringr,
     tibble,
-    withr
+    tidyr,
+    tidyselect,
+    withr,
+    writexl,
+    zoo
 Suggests: 
+    devtools,
+    jsonlite,
+    rstudioapi,
     testthat
 Encoding: UTF-8
 LazyData: true
