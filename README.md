@@ -1,162 +1,175 @@
-# PACTA_analysis
 
-This set of files is the methodology for running PACTA on EQ and CB portfolios. 
+<!-- README.md is generated from README.Rmd. Please edit that file -->
 
-To use this repository of code please follow the following instructions:
+# PACTA\_analysis <a href='https://github.com/2DegreesInvesting/PACTA_analysis'><img src='https://imgur.com/A5ASZPE.png' align='right' height='43' /></a>
 
+<!-- badges: start -->
 
-## System Requirements ##
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/PACTA_analysis)](https://CRAN.R-project.org/package=PACTA_analysis)
+[![R-CMD-check](https://github.com/2DegreesInvesting/PACTA_analysis/workflows/R-CMD-check/badge.svg)](https://github.com/2DegreesInvesting/PACTA_analysis/actions)
+<!-- badges: end -->
 
-|   | RECOMMENDED | MINIMUM |
-| ------------- | ------------- |------------- |
-| RAM  | 16GB or more  | 8 GB |
-| if you use Windows  | 64-bit Version  |32-bit Version |
-| R version  | 3.6.1  |no earlier than 3.4.3 |
+The main goal of PACTA\_analysis is to run the [PACTA
+methodology](https://2degrees-investing.org/resource/pacta/). This
+document helps you to install, setup, and run PACTA from a terminal
+(e.g. bash).
 
-You can download R here: 
-https://cran.r-project.org/bin/windows/base/
+### 1. Install
 
+Clone the private data and public source code from GitHub, then work
+from your local clone of the source code:
 
-## Software Requirements / R Environment
+``` bash
+git clone git@github.com:2DegreesInvesting/pacta-data.git  # Private data!
+git clone git@github.com:2DegreesInvesting/PACTA_analysis.git
+cd PACTA_analysis
+```
 
-**Github software**
+### 2. Setup
 
-For example GitHub Desktop
-https://desktop.github.com/
+Setup directories for inputs and outputs (io):
 
-**Integrated Development Environment (IDE):f**
+-   Create input/ and output/ directories, these can live anywhere on
+    your computer.
 
-RStudio 
-preferably version 1.1.456
-https://rstudio.com/products/rstudio/
+-   Populate the input directory with portfolio files like
+    [TestPortfolio\_Input.csv](https://github.com/2DegreesInvesting/PACTA_analysis/blob/master/working_dir/20_Raw_Inputs/TestPortfolio_Input.csv),
+    and parameters files like
+    [TestPortfolio\_Input\_PortfolioParameters.yml](https://github.com/2DegreesInvesting/PACTA_analysis/blob/master/working_dir/10_Parameter_File/TestPortfolio_Input_PortfolioParameters.yml).
 
-**R Environment:**
+<details>
 
-Ensure you have the required libraries installed on your computer.
+Each corresponding `<pair-name>` the portfolio and parameter files must
+be named `<pair-name>_Input.csv` and
+`<pair-name>_Input_PortfolioParameters.yml`, respectively. For example:
 
-Further, the evaluation will require a bunch of package. It is recommanded install the package during the first run of the code. (assess approx. 30 minutes for the installation process during the first usage of the code).
+-   This pair is valid: `a_Input.csv`,
+    `a_Input_PortfolioParameters.yml`.
 
-Necessary packages are: 
-tidyr, dplyr, scales, reshape2, tidyverse, readxl, tidyselect (and dependencies)
-    
-**For report generation:**
+-   This pair is invalid: `a_Input.csv`,
+    `b_Input_PortfolioParameters.yml`.
 
-MiKTeX - a distribution of the LaTeX typesetting system ; includes TeXworks
-preferably version 2.9
+In the parameter files, whatever values you give to `portfolio_name_in`
+and `investor_name_in` will populate the columns `portfolio_name` and
+`investor_name` of some output files. For example:
 
-Further R packages needed:
-grid, ggplot2, ggthemes, dplyr, reshape2, gridExtra, scales, stringr, extrafont, tidyr, knitr, RColorBrewer, matrixStats, rworldmap, ggmap, cowplot, ggrepel, readxl, tidyverse, ggforce, sitools , countrycode
+-   A parameter file:
 
-## How to "download" the code
+<!-- -->
 
-In order to keep track on the latest updates of the codes, we suggest not to download the code just once, but to synchronize a local folder with the PACTA_analysis git repository (https://help.github.com/en/github/getting-started-with-github/fork-a-repo). 
- - Create an user account on github
- - Fork this repo by clicking the Fork button at the top right  
- - Clone the repo to your local machine using a git-software (such as github desktop) 
- - Do frequent updates of the code by your github desktop
+    default:
+        parameters:
+            portfolio_name_in: TestPortfolio_Input
+            investor_name_in: Test
+            peer_group: pensionfund
+            language: EN
+            project_code: CHPA2020
 
-## Data Requirements
-The evaluation requires input data that is provided by Asset Resoluation (https://asset-resolution.com/). If you are working in a collaboration with the 2DII, the 2DII possibly will allocate the necessary data files as a zip file. Unzip the data and save it a folder, that will later be refered to as data_location 
+-   A few rows of some relevant output files and columns:
 
-## Workflow
+<!-- -->
 
-There are four files that must be run in sequence to create results. 
+    named list()
 
-1_portfolio_check_initialisation.R
-2_project_input_analysis.R
-3_run_analysis.R
-4_report_maker.R
+</details>
 
-If you stop the process at a certain point (let's say after 2_project_input_analysis), you can go on later at any time with the subsequent steP (with 3_...) but, you after a break/restart of R, you will need to run 1_portfolio_check_initialisation again.
+Edit the `docker-compose.override.yml` file to point to your
+`pacta-data`, `input` and `output` folders. (Notice how the standard
+`docker-compose.override.yml` currently points to my local folders):
 
-### Initialisation
+``` bash
+cat docker-compose.override.yml
+version: "3.2"
+services:
+  app: 
+    volumes: 
+      - /Users/jdhoffa/Documents/github/2dii/pacta-data:/pacta-data:ro
+      - /Users/jdhoffa/Desktop/pacta/input:/input:ro
+      - /Users/jdhoffa/Desktop/pacta/output:/output
+    working_dir: /bound
+    command: /bound/bin/run-pacta
+```
 
-**1. Set Variables**
+### 3. Run
 
-Within 1_portfolio_check_initialisation.R there are some lines that should be edited to make reference to local directories on your computer. 
+Run PACTA via
+[`docker-compose`](https://docs.docker.com/compose/install/).
 
-```project_name <- "TEST"```
+``` bash
+docker-compose up
+```
 
-   - Please define ```project_name``` with a string ("...") by your choice. The project name is relavant for input, output and naming of data files.
+<details>
 
-```twodii_internal <- FALSE ```
+You may interact with the PACTA container with:
 
-   - Ensure that the variable ```twodii_internal``` is set ```False```. 
+``` bash
+docker-compose run app bash
+```
 
-```project_location_ext <- "/Desktop/ExternalTest"```
+You may mount your local source code with:
 
-   - Please define ```project_location_ext``` by copying the full path to the folder, in which you want to store data (including the results) related to this particular evaluation. During the run of the code, the a project folder with several sub-folders will be created here.
-   - Please consider: 
-     - copying in a path from windows requires to change all "\" to "/". 
-     - path needs to be a string ("...")
+``` bash
+docker-compose run -v "$(pwd)":/PACTA_analysis app bash
+```
 
-```data_location_ext <- "/Desktop/ExternalTest/Inputs"```
+These are the files used to create the Docker image and run the
+container:
 
-   - Please define ```data_location_ext``` by copying the full path to the folder, in which you stored the data files (set of rda files) provided Asset Resoluation or the 2DII.
+``` bash
+cat Dockerfile
+FROM rocker/r-ver:latest
 
-   - Please consider: 
-     - copying in a path from windows requires to change all "\" to "/". 
-     - path needs to be a string ("...")
+RUN Rscript -e 'install.packages("remotes")'
 
-**2. Run 1_portfolio_check_intialisation.R**
+COPY DESCRIPTION /bound/DESCRIPTION
+RUN Rscript -e 'remotes::install_deps("/bound", dependencies = TRUE)'
 
-**3. Check results**
+COPY . /bound
+RUN chmod -R +x /bound
+```
 
-After running 1_portfolio_check_intialisation, go to the project_location_ext folder. Now, you should see that a new folder was generated. The name of the folder equals the project name you defined before running the code. The folder contains several subfolders.
+``` bash
+cat docker-compose.yml
+version: "3.2"
+services: 
+  app:
+    build: .
+```
 
-### Input Analysis
-**1. Setting the portfolio input data**
+``` bash
+cat docker-compose.override.yml
+version: "3.2"
+services:
+  app: 
+    volumes: 
+      - /Users/jdhoffa/Documents/github/2dii/pacta-data:/pacta-data:ro
+      - /Users/jdhoffa/Desktop/pacta/input:/input:ro
+      - /Users/jdhoffa/Desktop/pacta/output:/output
+    working_dir: /bound
+    command: /bound/bin/run-pacta
+```
 
-Go to the project folder and open the subfolder 20_Raw_Inputs. There is a csv-file that is named according to the project name and has the annex "-Input". Open the csv-file. 
-If you use Excel for editting the csv file, make sure that "," and not ";" is set to be the column seperater. If Excel uses wrong settings, the different columnes are not detected, but as a string of words, seperated by commas is shown. If so, select the first row in Excel (A):
-    - Go to Data > Text to Columns.
-    - Choose Delimited. Click Next.
-    - Choose Comma. Click Next.
-    - Choose General or Text, whichever you prefer.
-    - Leave Destination as is, or choose another column. Click Finish.
-    
-As soon as the headings are displayed in seperate coumns, add your own portfolio data to this file and save. It is important that the column headings are not changed. The data needs to have the following format: 
+You may remove the input/ and output/ directories and start again.
 
-| Investor.Name	| Portfolio.Name	| ISIN	| NumberofShares	| MarketValue	| Currency | 
- | -------------  | -------------  | -------------  | -------------  | -------------  | ------------- |
-| Berlin_Pension_Fund| Green_Assets | DE2939203293 | ------------- | 8493050 | USD |
-| Berlin_Pension_Fund  | Green_Assets  | FR3439285941 |------------- | 324234 | CHF |
-| Berlin_Pension_Fund  | EU_Fund  | FR3439285941 |------------- | 2384929 | EUR |
-| Paris_Fund  | EmergingMarkets  | FR3439285941 | 172 | 1239322 | GBP |
+``` bash
+sudo rm ../input ../output -ri
+```
 
-   - There might be data from several investors  and several portfolios for each investor. The code will generate results for each single portfolio. 
-   - NumberofShares is the only row that is optional. It might stay empty. All others need to be filled
-   - Currency needs to have the 3-letter format
-  
-**2. Setting the parameter files**
+</details>
 
-Go to the project folder and open the subfolder 10_Parameter_File. There are two yml-files that can be opened in usual text editors. At this stage only open the AnalysisParameter file. Assert that the mentioned Timestamps match the holdings date of your portfolio input. The Years.Startyear should equal the year after the data time stamp. If you see any inconsistencies please reach out to transitionmonitor@2degrees-investing.org 
+## Funding
 
-By ```CreateMetaPortfolio: TRUE``` it is determined that a Meta Portfolio is created. That means, that one portfolio with aggregated results of all investors / portfolios is generated and evaluated. By re-writing it to ```CreateMetaPortfolio: FALSE``` and saving the file, the generation of the MetaPortfolio is deactivated.
-
-**3. Run 2_project_input_analysis.R**
-
-**4. Check outputs**
-
-Go to the project folder and open the subfolder 30_Processed_Inputs. You should find 11 files, that are generated from your input: One image and five pairs of data files, each one as csv and rda file.
-
-- AuditChart: The Audit Chart is a scale bar chart that shows on a relative scale the share of ISINs that are included in analysis (blue) and the ISINs that are neglected as no Bloomberg Data is available (gray). The blue bar is usually far above 50%, mostly in the range of 90-95%.
-
-- ...total_portfolio: This is the basic audit files that lists the derived data for each ISIN from the initial input.
-
-
-### Run Analysis
-There are no settings at this point. 
-
-**1. Run 3_run_analysis.R**
-
-**2. Check results**
-
-Go to the project folder and open the subfolder 40_Results. You should find 4 files and several folders. For each investor you one folder is created. Further, if CreatMetaPortofolio was set True, a folder for MetaInvestor was created. 
-
-
-### Report Maker
-
-## Contact
-
-Sample data files will be made available shortly. Complete data files are available under specific circumstances. Be in contact at transitionmonitor@2degrees-investing.org if you would like to find out more about this.  
+This project has received funding from the [European Union LIFE
+program](https://wayback.archive-it.org/12090/20210412123959/https://ec.europa.eu/easme/en/)
+and the [International Climate Initiative
+(IKI)](https://www.international-climate-initiative.com/en/details/project/measuring-paris-agreement-alignment-and-financial-risk-in-financial-markets-18_I_351-2982).
+The Federal Ministry for the Environment, Nature Conservation and
+Nuclear Safety (BMU) supports this initiative on the basis of a decision
+adopted by the German Bundestag. The views expressed are the sole
+responsibility of the authors and do not necessarily reflect the views
+of the funders. The funders are not responsible for any use that may be
+made of the information it contains.
