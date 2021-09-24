@@ -1,4 +1,4 @@
-FROM 2dii/r-packages:latest
+FROM 2dii/r-packages@sha256:2e99aaf36141cade6bc6f51023dfdf6dba87c464ee17a062207a37707553d69a
 
 COPY PACTA_analysis /bound
 COPY create_interactive_report /create_interactive_report
