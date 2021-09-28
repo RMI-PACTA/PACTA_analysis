@@ -4,14 +4,23 @@ financial_data <- readRDS(file.path(analysis_inputs_path, "financial_data.rda"))
 raw_pf <- read_csv(file.path(raw_input_path, paste0(project_name, "_Input.csv")),
                    col_types = "cccnnccn")
 
-
 prep_pf <- raw_pf %>%
-  inner_join(financial_data, by = "isin") %>%
+  left_join(financial_data, by = "isin") %>%
   add_holding_id() %>%
   rename(current_shares_outstanding_all_classes = current_shares_outstanding)
 
+prep_pf <- prep_pf %>%
+  dplyr::mutate(
+    asset_type = dplyr::if_else(
+      .data$asset_type %in% c("Bonds", "Equity", "Other"),
+      .data$asset_type,
+      "Unclassifiable"
+    )
+  )
+
 prep_pf <- add_meta_portfolio(prep_pf, inc_meta_portfolio)
 
+# TODO: check if flags are still right, when adding Unclassifiable
 # taken from add_portfolio_flags()
 prep_pf <- check_isin_format(prep_pf)
 prep_pf <- check_valid_value_usd(prep_pf)
