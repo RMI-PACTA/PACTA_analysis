@@ -18,6 +18,15 @@ test_that("outputs a tibble", {
   expect_is(out, "tbl_df")
 })
 
+test_that("FIXME: outputs `NaN` in columns `tdm_tech` and `tdm_sec`", {
+  out <- calculate_transition_disruption_metric(
+    fake_pacta_results(year = c(2020, 2025, 2030)),
+    2020
+  )
+  expect_true(is.nan(out$tdm_tech))
+  expect_true(is.nan(out$tdm_sec))
+})
+
 test_that("outputs is ungrouped", {
   out <- calculate_transition_disruption_metric(
     fake_pacta_results(
