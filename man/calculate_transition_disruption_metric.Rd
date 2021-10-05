@@ -21,3 +21,7 @@ the sector level transition disruption metric.
 \description{
 Calculate the transition disruption metric, based on the IPR scenario
 }
+\examples{
+pacta_results <- fake_pacta_results(year = c(2020, 2025, 2030))
+calculate_transition_disruption_metric(pacta_results, start_year = 2020)
+}

@@ -10,6 +10,8 @@
 #' @export
 #'
 #' @examples
+#' pacta_results <- fake_pacta_results(year = c(2020, 2025, 2030))
+#' calculate_transition_disruption_metric(pacta_results, start_year = 2020)
 calculate_transition_disruption_metric <- function(data, start_year, ...) {
   stopifnot(
     is.data.frame(data),
