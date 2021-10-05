@@ -90,23 +90,6 @@ calculate_transition_disruption_metric <- function(data, start_year, ...) {
     dplyr::select(!!!rlang::syms(groups), .data$tdm_tech, .data$tdm_sec, .data$reference_year)
 }
 
-check_crucial_names <- function(data, expected_names) {
-  stopifnot(rlang::is_named(data))
-  stopifnot(is.character(expected_names))
-
-  ok <- all(unique(expected_names) %in% names(data))
-  if (!ok) {
-    abort_missing_names(sort(setdiff(expected_names, names(data))))
-  }
-
-  invisible(data)
-}
-
-abort_missing_names <- function(missing_names) {
-  nms <- glue::glue_collapse(missing_names, sep = ", ", last = ", and ")
-  abort(glue("Must have missing names:\n{nms}."), class = "missing_names")
-}
-
 warn_if_has_zero_rows <- function(data, message) {
   if (nrow(data) == 0L) warn(message = message, class = "has_zero_rows")
   invisible(data)
