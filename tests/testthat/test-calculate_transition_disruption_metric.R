@@ -12,9 +12,7 @@ test_that("with bad `data` errors with informative message", {
 
 test_that("outputs a tibble", {
   out <- calculate_transition_disruption_metric(
-    fake_pacta_results(
-      year = c(2020, 2025, 2030)
-    ),
+    fake_pacta_results(year = c(2020, 2025, 2030)),
     2020
   )
   expect_is(out, "tbl_df")
