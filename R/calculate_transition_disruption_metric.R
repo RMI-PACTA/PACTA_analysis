@@ -11,7 +11,6 @@
 #'
 #' @examples
 calculate_transition_disruption_metric <- function(data, start_year, ...) {
-
   stopifnot(
     is.data.frame(data),
     is.numeric(start_year)
@@ -42,7 +41,7 @@ calculate_transition_disruption_metric <- function(data, start_year, ...) {
     dplyr::filter(.data$allocation == "portfolio_weight") %>%
     warn_if_has_zero_rows(
       'Filtering for "portfolio_weight" allocation, outputs 0 rows'
-      )
+    )
 
   if (nrow(data) == 0) {
     return(empty_calculate_transition_disruption_metric())
@@ -67,7 +66,7 @@ calculate_transition_disruption_metric <- function(data, start_year, ...) {
     tidyr::pivot_wider(
       names_from = .data$time_step,
       values_from = c("scen_alloc", "plan_alloc")
-      ) %>%
+    ) %>%
     dplyr::mutate(
       .numerator = .data$scen_alloc_plus_ten - .data$plan_alloc_plus_five,
       .denominator = .data$scen_alloc_plus_ten - .data$scen_alloc_start_year,
@@ -84,7 +83,7 @@ calculate_transition_disruption_metric <- function(data, start_year, ...) {
     dplyr::mutate(
       tdm_sec = .data$plan_carsten * sum(.data$tdm_tech) / sum(.data$plan_carsten),
       reference_year = start_year
-      ) %>%
+    ) %>%
     dplyr::ungroup() %>%
     dplyr::select(!!!rlang::syms(groups), .data$tdm_tech, .data$tdm_sec, .data$reference_year)
 }
