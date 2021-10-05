@@ -35,8 +35,8 @@ test_that("with data lacking crucial columns errors with informative message", {
     bad_pacta_results <- dplyr::rename(pacta_results, bad = name)
 
     expect_error(
-      class = "missing_names",
-      calculate_transition_disruption_metric(bad_pacta_results, 2020)
+      calculate_transition_disruption_metric(bad_pacta_results, 2020),
+      class = "missing_names"
     )
   }
 
@@ -54,7 +54,7 @@ test_that("warns if data has only `ownership_weight` values of `allocation`", {
     allocation = "ownership_weight", year = c(2020, 2025, 2030)
   )
   expect_warning(
-    class = "has_zero_rows",
-    calculate_transition_disruption_metric(pacta_results, 2020)
+    calculate_transition_disruption_metric(pacta_results, 2020),
+    class = "has_zero_rows"
   )
 })
