@@ -70,6 +70,7 @@ dockerfile_tail <- function(dockerfile = read_dockerfile()) {
   dockerfile[end_of_packages_on_dockerfile(dockerfile):length(dockerfile)]
 }
 
+# styler: off
 dockerfile_packages <- function(path = packages_path()) {
   raw <- readLines(path, encoding = "UTF-8")
   pkg <- sub("library\\((.*)\\)", "\\1", raw)
@@ -80,12 +81,15 @@ dockerfile_packages <- function(path = packages_path()) {
     '           )" \\'
   )
 }
+# styler: on
 
+# styler: off
 format_as_vector <- function(string) {
   x <- glue("'{string}',")
   x[length(x)] <- sub(",$", "", x[length(x)])
   c('c(', glue("  {x}"), ')' )
 }
+# styler: on
 
 packages_path <- function() {
   file.path("deduplicate", "load-and-attach-r-packages.R")
