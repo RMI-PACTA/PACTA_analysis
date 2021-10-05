@@ -22,6 +22,20 @@ the sector level transition disruption metric.
 Calculate the transition disruption metric, based on the IPR scenario
 }
 \examples{
-pacta_results <- fake_pacta_results(year = c(2020, 2025, 2030))
+pacta_results <- tibble::tibble(
+  investor_name = rep("some_investor", 3),
+  portfolio_name = rep("some_portfolio", 3),
+  allocation = rep("portfolio_weight", 3),
+  equity_market = rep("GlobalMarket", 3),
+  scenario_geography = rep("Global", 3),
+  ald_sector = rep("Power", 3),
+  technology = rep("RenewablesCap", 3),
+  year = c(2020, 2025, 2030),
+  plan_alloc_wt_tech_prod = rep(1, 3),
+  scen_alloc_wt_tech_prod = rep(1, 3),
+  plan_carsten = rep(0.5, 3)
+)
+pacta_results
+
 calculate_transition_disruption_metric(pacta_results, start_year = 2020)
 }
