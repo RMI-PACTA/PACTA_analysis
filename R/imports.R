@@ -3,6 +3,4 @@
 #' @importFrom fs path dir_create dir_delete dir_ls
 NULL
 
-globalVariables(c(
-  ".data"
-))
+globalVariables(".data")
