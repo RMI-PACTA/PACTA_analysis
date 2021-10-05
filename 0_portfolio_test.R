@@ -125,7 +125,7 @@ aggregate_company <- function(df) {
     df <- df %>%
       ungroup() %>%
       select(
-        all_of(grouping_variables), scenario, allocation,
+        all_of(grouping_variables), scenario_source, scenario, allocation,
         id, company_name, financial_sector, port_weight,
         allocation_weight, plan_br_dist_alloc_wt, scen_br_dist_alloc_wt,
         equity_market, scenario_geography, year,
@@ -134,7 +134,7 @@ aggregate_company <- function(df) {
         scen_tech_prod, scen_alloc_wt_tech_prod, scen_carsten, scen_emission_factor
       ) %>%
       group_by(
-        !!!rlang::syms(grouping_variables), scenario, allocation,
+        !!!rlang::syms(grouping_variables), scenario_source, scenario, allocation,
         id, company_name, financial_sector,
         allocation_weight, plan_br_dist_alloc_wt, scen_br_dist_alloc_wt,
         equity_market, scenario_geography, year,
@@ -171,7 +171,7 @@ aggregate_portfolio <- function(df) {
   if (data_check(df)) {
     df <- df %>%
       select(
-        all_of(grouping_variables), scenario, allocation,
+        all_of(grouping_variables), scenario_source, scenario, allocation,
         equity_market, scenario_geography, year,
         ald_sector, technology,
         plan_tech_prod, plan_alloc_wt_tech_prod, plan_carsten, plan_emission_factor,
@@ -180,7 +180,7 @@ aggregate_portfolio <- function(df) {
       mutate(plan_emission_factor = ifelse(is.na(plan_emission_factor), 0, plan_emission_factor),
              scen_emission_factor = ifelse(is.na(scen_emission_factor), 0, scen_emission_factor)) %>%
       group_by(
-        !!!rlang::syms(grouping_variables), scenario, allocation,
+        !!!rlang::syms(grouping_variables), scenario_source, scenario, allocation,
         equity_market, scenario_geography, year,
         ald_sector, technology
       ) %>%
