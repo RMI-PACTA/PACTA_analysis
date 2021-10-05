@@ -38,6 +38,7 @@ Imports:
     renv,
     rlang,
     rmarkdown,
+    tidyr,
     tibble,
     withr
 Suggests: 
