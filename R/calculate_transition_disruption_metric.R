@@ -45,7 +45,7 @@ calculate_transition_disruption_metric <- function(data, start_year, ...) {
       )
 
   if (nrow(data) == 0) {
-    return(empty_calculate_transition_disruption_metric_output())
+    return(empty_calculate_transition_disruption_metric())
   }
 
   technology_level_dy <- data %>%
@@ -111,7 +111,7 @@ warn_if_has_zero_rows <- function(data, message) {
   invisible(data)
 }
 
-empty_calculate_transition_disruption_metric_output <- function() {
+empty_calculate_transition_disruption_metric <- function() {
   tibble::tibble(
     technology = character(0),
     ald_sector = character(0),
