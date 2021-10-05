@@ -49,7 +49,7 @@ test_that("with data lacking crucial columns errors with informative message", {
   expect_error_missing_names("plan_alloc_wt_tech_prod")
 })
 
-test_that("warns if input data has only `ownership_weight` values of allocation", {
+test_that("warns if data has only `ownership_weight` values of `allocation`", {
   pacta_results <- fake_pacta_results(
     allocation = "ownership_weight", year = c(2020, 2025, 2030)
   )
