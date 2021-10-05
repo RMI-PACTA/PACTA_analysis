@@ -60,7 +60,7 @@ calculate_transition_disruption_metric <- function(data, start_year, ...) {
     dplyr::group_by(!!!rlang::syms(groups)) %>%
     dplyr::select(
       !!!rlang::syms(groups),
-      time_step,
+      .data$time_step,
       scen_alloc = "scen_alloc_wt_tech_prod",
       plan_alloc = "plan_alloc_wt_tech_prod"
     ) %>%
@@ -71,22 +71,22 @@ calculate_transition_disruption_metric <- function(data, start_year, ...) {
     dplyr::mutate(
       .numerator = .data$scen_alloc_plus_ten - .data$plan_alloc_plus_five,
       .denominator = .data$scen_alloc_plus_ten - .data$scen_alloc_start_year,
-      tdm_tech = max(0, .numerator / .denominator) * 2
+      tdm_tech = max(0, .data$.numerator / .data$.denominator) * 2
     ) %>%
-    dplyr::select(tdm_tech, !!!rlang::syms(groups)) %>%
+    dplyr::select(.data$tdm_tech, !!!rlang::syms(groups)) %>%
     dplyr::ungroup()
 
   data %>%
     dplyr::filter(.data$year == start_year) %>%
     dplyr::left_join(technology_level_dy) %>%
     dplyr::group_by(!!!rlang::syms(groups)) %>%
-    dplyr::ungroup(technology) %>%
+    dplyr::ungroup(.data$technology) %>%
     dplyr::mutate(
       tdm_sec = .data$plan_carsten * sum(.data$tdm_tech) / sum(.data$plan_carsten),
       reference_year = start_year
       ) %>%
     dplyr::ungroup() %>%
-    dplyr::select(!!!rlang::syms(groups), tdm_tech, tdm_sec, reference_year)
+    dplyr::select(!!!rlang::syms(groups), .data$tdm_tech, .data$tdm_sec, .data$reference_year)
 }
 
 check_crucial_names <- function(data, expected_names) {
