@@ -1,11 +1,11 @@
 test_that("with bad `data` errors with informative message", {
   expect_error(
-    calculate_transition_disruption_metric("bad",2020),
+    calculate_transition_disruption_metric("bad", 2020),
     "data.frame.*not.*TRUE"
   )
 
   expect_error(
-    calculate_transition_disruption_metric(fake_pacta_results(),"bad"),
+    calculate_transition_disruption_metric(fake_pacta_results(), "bad"),
     "numeric.*not.*TRUE"
   )
 })
