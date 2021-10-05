@@ -45,7 +45,7 @@ calculate_transition_disruption_metric <- function(data, start_year, ...) {
       )
 
   if (nrow(data) == 0) {
-    return(empty_calculate_transition_disruption_metric())
+    return(empty_calculate_transition_disruption_metric_output())
   }
 
   technology_level_dy <- data %>%
