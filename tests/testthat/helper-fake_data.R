@@ -26,8 +26,10 @@
 #'
 #' fake_pacta_results(allocation = c("portfolio_weight", "ownership_weight"))
 #'
+#' fake_pacta_results(new = "abc")
+#'
 #' # Support for trailing commas
-#' fake_pacta_results(allocation = "portfolio_weight",)
+#' fake_pacta_results(allocation = "portfolio_weight", )
 #' @noRd
 fake_pacta_results <- function(investor_name = NULL,
                                portfolio_name = NULL,
