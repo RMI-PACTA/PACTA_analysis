@@ -39,7 +39,7 @@ calculate_tdm <- function(data, start_year, ...) {
     return(tdm_prototype())
   }
 
-  groups <- c(crucial_groups(), ...)
+  groups <- c(crucial_tdm_groups(), ...)
   technology_level_dy <- data %>%
     filter(.data$year %in% c(start_year, start_year + 5, start_year + 10)) %>%
     mutate(
@@ -80,9 +80,7 @@ calculate_tdm <- function(data, start_year, ...) {
     ungroup() %>%
     select(
       !!!rlang::syms(groups),
-      .data$tdm_tech,
-      .data$tdm_sec,
-      .data$reference_year
+      setdiff(names(tdm_prototype()), crucial_tdm_groups())
     )
 }
 
@@ -91,7 +89,7 @@ check_calculate_tdm <- function(data, start_year) {
 
   crucial <- c(
     "allocation",
-    crucial_groups(),
+    crucial_tdm_groups(),
     "year",
     "scen_alloc_wt_tech_prod",
     "plan_alloc_wt_tech_prod",
@@ -102,12 +100,8 @@ check_calculate_tdm <- function(data, start_year) {
   invisible(data)
 }
 
-crucial_groups <- function() {
+crucial_tdm_groups <- function() {
   c("technology", "ald_sector")
-}
-
-other_tdm_columns <- function() {
-  setdiff(names(tdm_prototype()), crucial_groups())
 }
 
 tdm_prototype <- function() {
