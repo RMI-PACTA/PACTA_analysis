@@ -20,7 +20,7 @@
 #'   technology = rep("RenewablesCap", 3),
 #'   year = c(2020, 2025, 2030),
 #'   plan_alloc_wt_tech_prod = rep(1, 3),
-#'   scen_alloc_wt_tech_prod = rep(1, 3),
+#'   scen_alloc_wt_tech_prod = 1:3,
 #'   plan_carsten = rep(0.5, 3)
 #' )
 #' pacta_results
