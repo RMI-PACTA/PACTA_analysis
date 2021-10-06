@@ -10,7 +10,7 @@
 #' @export
 #'
 #' @examples
-#' pacta_results <- tibble::tibble(
+#' pacta_results <- tibble(
 #'   investor_name = rep("some_investor", 3),
 #'   portfolio_name = rep("some_portfolio", 3),
 #'   allocation = rep("portfolio_weight", 3),
@@ -111,7 +111,7 @@ other_tdm_columns <- function() {
 }
 
 tdm_prototype <- function() {
-  tibble::tibble(
+  tibble(
     technology = character(0),
     ald_sector = character(0),
     tdm_tech = numeric(0),

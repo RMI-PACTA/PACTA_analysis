@@ -43,7 +43,7 @@ fake_pacta_results <- function(investor_name = NULL,
                                scen_alloc_wt_tech_prod = NULL,
                                plan_carsten = NULL,
                                ...) {
-  tibble::tibble(
+  tibble(
     investor_name = investor_name %||% "some_investor",
     portfolio_name = portfolio_name %||% "some_portfolio",
     allocation = allocation %||% "portfolio_weight",
