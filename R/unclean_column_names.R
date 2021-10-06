@@ -56,11 +56,11 @@ clean_column_names <- function(data) {
 #' data %>% unclean_column_names(unclean)
 unclean_column_names <- function(data, unclean) {
   check_groups(data)
-  dplyr::rename(data, !!!extract_unclean_column_names(data, unclean))
+  rename(data, !!!extract_unclean_column_names(data, unclean))
 }
 
 check_groups <- function(data) {
-  g <- dplyr::group_vars(data)
+  g <- group_vars(data)
 
   if (identical(length(g), 0L)) {
     return(data)
@@ -80,8 +80,8 @@ check_groups <- function(data) {
 }
 
 clean_groups <- function(data) {
-  g <- dplyr::group_vars(data)
-  dplyr::grouped_df(data, vars = janitor::make_clean_names(g))
+  g <- group_vars(data)
+  grouped_df(data, vars = janitor::make_clean_names(g))
 }
 
 extract_unclean_column_names <- function(data, unclean) {

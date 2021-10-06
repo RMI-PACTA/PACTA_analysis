@@ -22,7 +22,7 @@ test_that("FIXME: outputs `NaN` in columns `tdm_tech` and `tdm_sec`", {
 test_that("outputs is ungrouped", {
   pacta_results <- fake_pacta_results(year = c(2020, 2025, 2030))
   out <- calculate_tdm(pacta_results, 2020)
-  expect_false(dplyr::is_grouped_df(out))
+  expect_false(is_grouped_df(out))
 })
 
 test_that("joins quietly", {
@@ -34,7 +34,7 @@ test_that("joins quietly", {
 test_that("with data lacking crucial columns errors with informative message", {
   expect_error_missing_names <- function(name) {
     pacta_results <- fake_pacta_results(year = c(2020, 2025, 2030))
-    bad <- dplyr::rename(pacta_results, bad = name)
+    bad <- rename(pacta_results, bad = name)
     expect_error(calculate_tdm(bad, 2020), class = "missing_names")
   }
 

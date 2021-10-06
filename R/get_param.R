@@ -18,7 +18,7 @@ START.YEAR <- get_param(
 
 pluck_param <- function(x, file, if_null) {
   out <- purrr::pluck(config::get(file = file), !!!x)
-  param <- dplyr::last(unlist(x))
+  param <- last(unlist(x))
 
   if (is.null(out) && identical(if_null, stop)) {
     abort(glue(

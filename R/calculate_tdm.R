@@ -51,7 +51,7 @@ calculate_tdm <- function(data, start_year, ...) {
     # TODO: This function will only work if the allocation method is portfolio_weight
     # ownership_weight outputs 0 for all carsten metric values, and thus we would be
     # dividing by zero otherwise...
-    dplyr::filter(.data$allocation == "portfolio_weight") %>%
+    filter(.data$allocation == "portfolio_weight") %>%
     warn_if_has_zero_rows(
       'Filtering for "portfolio_weight" allocation, outputs 0 rows'
     )
@@ -61,16 +61,16 @@ calculate_tdm <- function(data, start_year, ...) {
   }
 
   technology_level_dy <- data %>%
-    dplyr::filter(.data$year %in% c(start_year, start_year + 5, start_year + 10)) %>%
-    dplyr::mutate(
-      time_step = dplyr::case_when(
+    filter(.data$year %in% c(start_year, start_year + 5, start_year + 10)) %>%
+    mutate(
+      time_step = case_when(
         .data$year == start_year ~ "start_year",
         .data$year == start_year + 5 ~ "plus_five",
         .data$year == start_year + 10 ~ "plus_ten"
       )
     ) %>%
-    dplyr::group_by(!!!rlang::syms(groups)) %>%
-    dplyr::select(
+    group_by(!!!rlang::syms(groups)) %>%
+    select(
       !!!rlang::syms(groups),
       .data$time_step,
       scen_alloc = "scen_alloc_wt_tech_prod",
@@ -80,25 +80,25 @@ calculate_tdm <- function(data, start_year, ...) {
       names_from = .data$time_step,
       values_from = c("scen_alloc", "plan_alloc")
     ) %>%
-    dplyr::mutate(
+    mutate(
       .numerator = .data$scen_alloc_plus_ten - .data$plan_alloc_plus_five,
       .denominator = .data$scen_alloc_plus_ten - .data$scen_alloc_start_year,
       tdm_tech = max(0, .data$.numerator / .data$.denominator) * 2
     ) %>%
-    dplyr::select(.data$tdm_tech, !!!rlang::syms(groups)) %>%
-    dplyr::ungroup()
+    select(.data$tdm_tech, !!!rlang::syms(groups)) %>%
+    ungroup()
 
   data %>%
-    dplyr::filter(.data$year == start_year) %>%
-    dplyr::left_join(technology_level_dy, by = groups) %>%
-    dplyr::group_by(!!!rlang::syms(groups)) %>%
-    dplyr::ungroup(.data$technology) %>%
-    dplyr::mutate(
+    filter(.data$year == start_year) %>%
+    left_join(technology_level_dy, by = groups) %>%
+    group_by(!!!rlang::syms(groups)) %>%
+    ungroup(.data$technology) %>%
+    mutate(
       tdm_sec = .data$plan_carsten * sum(.data$tdm_tech) / sum(.data$plan_carsten),
       reference_year = start_year
     ) %>%
-    dplyr::ungroup() %>%
-    dplyr::select(!!!rlang::syms(groups), .data$tdm_tech, .data$tdm_sec, .data$reference_year)
+    ungroup() %>%
+    select(!!!rlang::syms(groups), .data$tdm_tech, .data$tdm_sec, .data$reference_year)
 }
 
 check_calculate_tdm <- function(data, start_year) {
