@@ -93,7 +93,7 @@ calculate_tdm <- function(data, start_year, ...) {
 check_calculate_tdm <- function(data, start_year) {
   stopifnot(is.data.frame(data), is.numeric(start_year))
 
-    crucial <- c(
+  crucial <- c(
     "allocation",
     crucial_groups(),
     "year",
@@ -102,6 +102,8 @@ check_calculate_tdm <- function(data, start_year) {
     "plan_carsten"
   )
   check_crucial_names(data, crucial)
+
+  invisible(data)
 }
 
 crucial_groups <- function() {
