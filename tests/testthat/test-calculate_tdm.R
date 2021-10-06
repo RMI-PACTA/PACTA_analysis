@@ -4,30 +4,29 @@ test_that("with bad `data` errors with informative message", {
 })
 
 test_that("outputs the expected tibble", {
-  pacta_results <- fake_pacta_results(
-    year = c(2020, 2025, 2030),
-    scen_alloc_wt_tech_prod = 1:3
+  data <- fake_pacta_results(
+    year = c(2020, 2025, 2030), scen_alloc_wt_tech_prod = 1:3
   )
-  out <- calculate_tdm(pacta_results, 2020)
+  out <- calculate_tdm(data, 2020)
   expect_snapshot(out)
 })
 
 test_that("FIXME: outputs `NaN` in columns `tdm_tech` and `tdm_sec`", {
-  pacta_results <- fake_pacta_results(year = c(2020, 2025, 2030))
-  out <- calculate_tdm(pacta_results, 2020)
+  data <- fake_pacta_results(year = c(2020, 2025, 2030))
+  out <- calculate_tdm(data, 2020)
   expect_true(is.nan(out$tdm_tech))
   expect_true(is.nan(out$tdm_sec))
 })
 
 test_that("outputs is ungrouped", {
-  pacta_results <- fake_pacta_results(year = c(2020, 2025, 2030))
-  out <- calculate_tdm(pacta_results, 2020)
+  data <- fake_pacta_results(year = c(2020, 2025, 2030))
+  out <- calculate_tdm(data, 2020)
   expect_false(is_grouped_df(out))
 })
 
 test_that("joins quietly", {
-  pacta_results <- fake_pacta_results(year = c(2020, 2025, 2030))
-  expect_no_message(calculate_tdm(pacta_results, 2020))
+  data <- fake_pacta_results(year = c(2020, 2025, 2030))
+  expect_no_message(calculate_tdm(data, 2020))
 })
 
 test_that("with data lacking crucial columns errors with informative message", {
@@ -47,9 +46,8 @@ test_that("with data lacking crucial columns errors with informative message", {
 })
 
 test_that("warns if data has only `ownership_weight` values of `allocation`", {
-  pacta_results <- fake_pacta_results(
-    allocation = "ownership_weight",
-    year = c(2020, 2025, 2030)
+  data <- fake_pacta_results(
+    allocation = "ownership_weight", year = c(2020, 2025, 2030)
   )
-  expect_warning(calculate_tdm(pacta_results, 2020), class = "has_zero_rows")
+  expect_warning(calculate_tdm(data, 2020), class = "has_zero_rows")
 })
