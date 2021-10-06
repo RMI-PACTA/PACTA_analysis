@@ -29,7 +29,6 @@
 calculate_tdm <- function(data, start_year, ...) {
   check_calculate_tdm(data, start_year)
 
-  crucial_groups <- function() c("technology", "ald_sector")
   crucial <- c(
     "allocation",
     crucial_groups(),
@@ -99,6 +98,10 @@ calculate_tdm <- function(data, start_year, ...) {
 
 check_calculate_tdm <- function(data, start_year) {
   stopifnot(is.data.frame(data), is.numeric(start_year))
+}
+
+crucial_groups <- function() {
+  c("technology", "ald_sector")
 }
 
 warn_if_has_zero_rows <- function(data, message) {
