@@ -29,17 +29,6 @@
 calculate_tdm <- function(data, start_year, ...) {
   check_calculate_tdm(data, start_year)
 
-  crucial <- c(
-    "allocation",
-    crucial_groups(),
-    "year",
-    "scen_alloc_wt_tech_prod",
-    "plan_alloc_wt_tech_prod",
-    "plan_carsten"
-  )
-
-  check_crucial_names(data, crucial)
-
   groups <- c(crucial_groups(), ...)
 
   data <- data %>%
@@ -103,6 +92,16 @@ calculate_tdm <- function(data, start_year, ...) {
 
 check_calculate_tdm <- function(data, start_year) {
   stopifnot(is.data.frame(data), is.numeric(start_year))
+
+    crucial <- c(
+    "allocation",
+    crucial_groups(),
+    "year",
+    "scen_alloc_wt_tech_prod",
+    "plan_alloc_wt_tech_prod",
+    "plan_carsten"
+  )
+  check_crucial_names(data, crucial)
 }
 
 crucial_groups <- function() {
