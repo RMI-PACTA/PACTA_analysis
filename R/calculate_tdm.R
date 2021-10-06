@@ -31,16 +31,13 @@ calculate_tdm <- function(data, start_year, ...) {
 
   groups <- c(crucial_groups(), ...)
 
-  data <- data %>%
+  data <- filter(data, .data$allocation == "portfolio_weight")
+  if (nrow(data) == 0) {
     # TODO: This function will only work if the allocation method is
     # portfolio_weight ownership_weight outputs 0 for all carsten metric values,
     # and thus we would be dividing by zero otherwise...
-    filter(.data$allocation == "portfolio_weight") %>%
-    warn_if_has_zero_rows(
-      'Filtering for "portfolio_weight" allocation, outputs 0 rows'
-    )
-
-  if (nrow(data) == 0) {
+    message <- 'Filtering for "portfolio_weight" allocation, outputs 0 rows'
+    warn(message, class = "has_zero_rows")
     return(empty_calculate_tdm())
   }
 
@@ -108,11 +105,6 @@ check_calculate_tdm <- function(data, start_year) {
 
 crucial_groups <- function() {
   c("technology", "ald_sector")
-}
-
-warn_if_has_zero_rows <- function(data, message) {
-  if (nrow(data) == 0L) warn(message = message, class = "has_zero_rows")
-  invisible(data)
 }
 
 empty_calculate_tdm <- function() {
