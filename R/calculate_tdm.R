@@ -43,9 +43,9 @@ calculate_tdm <- function(data, start_year, ...) {
   groups <- c(crucial_groups(), ...)
 
   data <- data %>%
-    # TODO: This function will only work if the allocation method is portfolio_weight
-    # ownership_weight outputs 0 for all carsten metric values, and thus we would be
-    # dividing by zero otherwise...
+    # TODO: This function will only work if the allocation method is
+    # portfolio_weight ownership_weight outputs 0 for all carsten metric values,
+    # and thus we would be dividing by zero otherwise...
     filter(.data$allocation == "portfolio_weight") %>%
     warn_if_has_zero_rows(
       'Filtering for "portfolio_weight" allocation, outputs 0 rows'
@@ -93,7 +93,12 @@ calculate_tdm <- function(data, start_year, ...) {
       reference_year = start_year
     ) %>%
     ungroup() %>%
-    select(!!!rlang::syms(groups), .data$tdm_tech, .data$tdm_sec, .data$reference_year)
+    select(
+      !!!rlang::syms(groups),
+      .data$tdm_tech,
+      .data$tdm_sec,
+      .data$reference_year
+    )
 }
 
 check_calculate_tdm <- function(data, start_year) {
