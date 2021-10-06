@@ -106,6 +106,10 @@ crucial_groups <- function() {
   c("technology", "ald_sector")
 }
 
+other_tdm_columns <- function() {
+  setdiff(names(empty_calculate_tdm()), crucial_groups())
+}
+
 empty_calculate_tdm <- function() {
   tibble::tibble(
     technology = character(0),
