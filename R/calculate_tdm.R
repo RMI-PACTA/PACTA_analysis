@@ -36,7 +36,7 @@ calculate_tdm <- function(data, start_year, ...) {
     # and thus we would be dividing by zero otherwise...
     message <- 'Filtering for "portfolio_weight" allocation, outputs 0 rows'
     warn(message, class = "has_zero_rows")
-    return(empty_calculate_tdm())
+    return(tdm_prototype())
   }
 
   groups <- c(crucial_groups(), ...)
@@ -107,10 +107,10 @@ crucial_groups <- function() {
 }
 
 other_tdm_columns <- function() {
-  setdiff(names(empty_calculate_tdm()), crucial_groups())
+  setdiff(names(tdm_prototype()), crucial_groups())
 }
 
-empty_calculate_tdm <- function() {
+tdm_prototype <- function() {
   tibble::tibble(
     technology = character(0),
     ald_sector = character(0),
