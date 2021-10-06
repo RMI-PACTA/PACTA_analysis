@@ -25,8 +25,8 @@
 #' )
 #' pacta_results
 #'
-#' calculate_transition_disruption_metric(pacta_results, start_year = 2020)
-calculate_transition_disruption_metric <- function(data, start_year, ...) {
+#' calculate_tdm(pacta_results, start_year = 2020)
+calculate_tdm <- function(data, start_year, ...) {
   stopifnot(
     is.data.frame(data),
     is.numeric(start_year)
@@ -60,7 +60,7 @@ calculate_transition_disruption_metric <- function(data, start_year, ...) {
     )
 
   if (nrow(data) == 0) {
-    return(empty_calculate_transition_disruption_metric())
+    return(empty_calculate_tdm())
   }
 
   technology_level_dy <- data %>%
@@ -109,7 +109,7 @@ warn_if_has_zero_rows <- function(data, message) {
   invisible(data)
 }
 
-empty_calculate_transition_disruption_metric <- function() {
+empty_calculate_tdm <- function() {
   tibble::tibble(
     technology = character(0),
     ald_sector = character(0),
