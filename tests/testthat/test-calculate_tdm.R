@@ -1,20 +1,13 @@
 test_that("with bad `data` errors with informative message", {
-  expect_error(
-    calculate_tdm("bad", 2020),
-    "data.frame.*not.*TRUE"
-  )
-
-  expect_error(
-    calculate_tdm(fake_pacta_results(), "bad"),
-    "numeric.*not.*TRUE"
-  )
+  expect_error(calculate_tdm("bad", 2020), "data.frame.*not.*TRUE")
+  expect_error(calculate_tdm(fake_pacta_results(), "bad"), "numeric.*not.*TRUE")
 })
 
 test_that("outputs the expected tibble", {
   pacta_results <- fake_pacta_results(
-    year = c(2020, 2025, 2030), scen_alloc_wt_tech_prod = 1:3
+    year = c(2020, 2025, 2030),
+    scen_alloc_wt_tech_prod = 1:3
   )
-
   out <- calculate_tdm(pacta_results, 2020)
   expect_snapshot(out)
 })
@@ -34,7 +27,6 @@ test_that("outputs is ungrouped", {
 
 test_that("joins quietly", {
   pacta_results <- fake_pacta_results(year = c(2020, 2025, 2030))
-
   none <- NA
   expect_message(calculate_tdm(pacta_results, 2020), none)
 })
@@ -42,12 +34,8 @@ test_that("joins quietly", {
 test_that("with data lacking crucial columns errors with informative message", {
   expect_error_missing_names <- function(name) {
     pacta_results <- fake_pacta_results(year = c(2020, 2025, 2030))
-    bad_pacta_results <- dplyr::rename(pacta_results, bad = name)
-
-    expect_error(
-      calculate_tdm(bad_pacta_results, 2020),
-      class = "missing_names"
-    )
+    bad <- dplyr::rename(pacta_results, bad = name)
+    expect_error(calculate_tdm(bad, 2020), class = "missing_names")
   }
 
   expect_error_missing_names("allocation")
@@ -61,10 +49,8 @@ test_that("with data lacking crucial columns errors with informative message", {
 
 test_that("warns if data has only `ownership_weight` values of `allocation`", {
   pacta_results <- fake_pacta_results(
-    allocation = "ownership_weight", year = c(2020, 2025, 2030)
+    allocation = "ownership_weight",
+    year = c(2020, 2025, 2030)
   )
-  expect_warning(
-    calculate_tdm(pacta_results, 2020),
-    class = "has_zero_rows"
-  )
+  expect_warning(calculate_tdm(pacta_results, 2020), class = "has_zero_rows")
 })
