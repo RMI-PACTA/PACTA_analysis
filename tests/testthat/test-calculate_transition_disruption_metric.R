@@ -10,10 +10,13 @@ test_that("with bad `data` errors with informative message", {
   )
 })
 
-test_that("outputs a tibble", {
-  pacta_results <- fake_pacta_results(year = c(2020, 2025, 2030))
+test_that("outputs the expected tibble", {
+  pacta_results <- fake_pacta_results(
+    year = c(2020, 2025, 2030), scen_alloc_wt_tech_prod = 1:3
+  )
+
   out <- calculate_transition_disruption_metric(pacta_results, 2020)
-  expect_is(out, "tbl_df")
+  expect_snapshot(out)
 })
 
 test_that("FIXME: outputs `NaN` in columns `tdm_tech` and `tdm_sec`", {
