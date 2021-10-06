@@ -29,10 +29,10 @@
 calculate_tdm <- function(data, start_year, ...) {
   check_calculate_tdm(data, start_year)
 
+  crucial_groups <- function() c("technology", "ald_sector")
   crucial <- c(
     "allocation",
-    "ald_sector",
-    "technology",
+    crucial_groups(),
     "year",
     "scen_alloc_wt_tech_prod",
     "plan_alloc_wt_tech_prod",
@@ -41,11 +41,7 @@ calculate_tdm <- function(data, start_year, ...) {
 
   check_crucial_names(data, crucial)
 
-  groups <- c(
-    "technology",
-    "ald_sector",
-    ...
-  )
+  groups <- c(crucial_groups(), ...)
 
   data <- data %>%
     # TODO: This function will only work if the allocation method is portfolio_weight
