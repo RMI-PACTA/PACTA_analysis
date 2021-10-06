@@ -114,3 +114,7 @@ mark_start <- function() {
 mark_end <- function() {
   "# update-dockerfile-packages-end"
 }
+
+expect_no_message <- function(object, regexp = NA, ...) {
+  testthat::expect_message(object = object, regexp = regexp, ...)
+}

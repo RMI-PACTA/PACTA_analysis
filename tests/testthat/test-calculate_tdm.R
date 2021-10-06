@@ -27,8 +27,7 @@ test_that("outputs is ungrouped", {
 
 test_that("joins quietly", {
   pacta_results <- fake_pacta_results(year = c(2020, 2025, 2030))
-  none <- NA
-  expect_message(calculate_tdm(pacta_results, 2020), none)
+  expect_no_message(calculate_tdm(pacta_results, 2020))
 })
 
 test_that("with data lacking crucial columns errors with informative message", {
