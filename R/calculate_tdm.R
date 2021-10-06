@@ -29,8 +29,6 @@
 calculate_tdm <- function(data, start_year, ...) {
   check_calculate_tdm(data, start_year)
 
-  groups <- c(crucial_groups(), ...)
-
   data <- filter(data, .data$allocation == "portfolio_weight")
   if (nrow(data) == 0) {
     # TODO: This function will only work if the allocation method is
@@ -41,6 +39,7 @@ calculate_tdm <- function(data, start_year, ...) {
     return(empty_calculate_tdm())
   }
 
+  groups <- c(crucial_groups(), ...)
   technology_level_dy <- data %>%
     filter(.data$year %in% c(start_year, start_year + 5, start_year + 10)) %>%
     mutate(
