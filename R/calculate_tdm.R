@@ -27,10 +27,7 @@
 #'
 #' calculate_tdm(pacta_results, start_year = 2020)
 calculate_tdm <- function(data, start_year, ...) {
-  stopifnot(
-    is.data.frame(data),
-    is.numeric(start_year)
-  )
+  check_calculate_tdm(data, start_year)
 
   crucial <- c(
     "allocation",
@@ -102,6 +99,10 @@ calculate_tdm <- function(data, start_year, ...) {
     ) %>%
     dplyr::ungroup() %>%
     dplyr::select(!!!rlang::syms(groups), .data$tdm_tech, .data$tdm_sec, .data$reference_year)
+}
+
+check_calculate_tdm <- function(data, start_year) {
+  stopifnot(is.data.frame(data), is.numeric(start_year))
 }
 
 warn_if_has_zero_rows <- function(data, message) {
