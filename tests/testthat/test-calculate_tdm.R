@@ -45,9 +45,10 @@ test_that("with data lacking crucial columns errors with informative message", {
   expect_error_missing_names("plan_alloc_wt_tech_prod")
 })
 
-test_that("if only `allocation` is 'ownership_weight' throws a warning", {
+test_that("if only `allocation` is 'ownership_weight' outputs the expected
+          tibble with a warning", {
   data <- fake_pacta_results(
     allocation = "ownership_weight", year = c(2020, 2025, 2030)
   )
-  expect_warning(calculate_tdm(data, 2020), class = "has_zero_rows")
+  suppressWarnings(expect_snapshot(calculate_tdm(data, 2020)))
 })
