@@ -32,6 +32,15 @@ test_that("outputs is ungrouped", {
   expect_false(dplyr::is_grouped_df(out))
 })
 
+test_that("joins quietly", {
+  pacta_results <- fake_pacta_results(year = c(2020, 2025, 2030))
+
+  no_message <- NA
+  pacta_results %>%
+    calculate_transition_disruption_metric(2020) %>%
+    expect_message(no_message)
+})
+
 test_that("with data lacking crucial columns errors with informative message", {
   expect_error_missing_names <- function(name) {
     pacta_results <- fake_pacta_results(year = c(2020, 2025, 2030))

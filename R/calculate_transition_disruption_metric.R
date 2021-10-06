@@ -93,7 +93,7 @@ calculate_transition_disruption_metric <- function(data, start_year, ...) {
 
   data %>%
     dplyr::filter(.data$year == start_year) %>%
-    dplyr::left_join(technology_level_dy) %>%
+    dplyr::left_join(technology_level_dy, by = groups) %>%
     dplyr::group_by(!!!rlang::syms(groups)) %>%
     dplyr::ungroup(.data$technology) %>%
     dplyr::mutate(
