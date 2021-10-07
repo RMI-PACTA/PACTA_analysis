@@ -50,5 +50,7 @@ test_that("if only `allocation` is 'ownership_weight' outputs the expected
   data <- fake_pacta_results(
     allocation = "ownership_weight", year = c(2020, 2025, 2030)
   )
-  suppressWarnings(expect_snapshot(calculate_tdm(data, 2020)))
+  expect_warning(out <- calculate_tdm(data, 2020), class = "has_zero_rows")
+  expect_s3_class(out, "tbl")
+  expect_true(nrow(out) == 0L)
 })

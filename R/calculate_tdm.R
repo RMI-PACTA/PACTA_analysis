@@ -32,14 +32,7 @@ calculate_tdm <- function(data, start_year, ...) {
   check_calculate_tdm(data, start_year)
 
   data <- filter(data, .data$allocation == "portfolio_weight")
-  if (nrow(data) == 0) {
-    # TODO: This function will only work if the allocation method is
-    # portfolio_weight ownership_weight outputs 0 for all carsten metric values,
-    # and thus we would be dividing by zero otherwise...
-    message <- 'Filtering for "portfolio_weight" allocation, outputs 0 rows'
-    warn(message, class = "has_zero_rows")
-    return(tdm_prototype())
-  }
+  if (nrow(data) == 0) return(warn_zero_rows(tdm_prototype()))
 
   groups <- c(crucial_tdm_groups(), ...)
   technology_level_dy <- data %>%
@@ -99,6 +92,17 @@ check_calculate_tdm <- function(data, start_year) {
   )
   check_crucial_names(data, crucial)
 
+  invisible(data)
+}
+
+warn_zero_rows <- function(data) {
+  # TODO: This function will only work if the allocation method is
+  # portfolio_weight ownership_weight outputs 0 for all carsten metric values,
+  # and thus we would be dividing by zero otherwise...
+  message <- 'Filtering for "portfolio_weight" allocation, outputs 0 rows'
+  warn(message, class = "has_zero_rows")
+
+  # Pass `data` to inline inside return()
   invisible(data)
 }
 
