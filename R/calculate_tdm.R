@@ -31,13 +31,13 @@
 calculate_tdm <- function(data, start_year, ...) {
   check_calculate_tdm(data, start_year)
 
-  data <- filter(data, .data$allocation == "portfolio_weight")
-  if (nrow(data) == 0) {
+  filtered <- filter(data, .data$allocation == "portfolio_weight")
+  if (nrow(filtered) == 0) {
     return(warn_zero_rows(tdm_prototype()))
   }
 
   groups <- c(crucial_tdm_groups(), ...)
-  technology_level_dy <- data %>%
+  technology_level_dy <- filtered %>%
     filter(.data$year %in% c(start_year, start_year + 5, start_year + 10)) %>%
     mutate(
       time_step = case_when(
@@ -65,7 +65,7 @@ calculate_tdm <- function(data, start_year, ...) {
     select(.data$tdm_tech, !!!rlang::syms(groups)) %>%
     ungroup()
 
-  data %>%
+  filtered %>%
     filter(.data$year == start_year) %>%
     left_join(technology_level_dy, by = groups) %>%
     group_by(!!!rlang::syms(groups)) %>%
