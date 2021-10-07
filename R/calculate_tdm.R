@@ -10,6 +10,8 @@
 #' @export
 #'
 #' @examples
+#' library(tibble)
+#'
 #' pacta_results <- tibble(
 #'   investor_name = rep("some_investor", 3),
 #'   portfolio_name = rep("some_portfolio", 3),

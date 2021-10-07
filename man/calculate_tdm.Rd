@@ -22,6 +22,8 @@ the sector level transition disruption metric.
 Calculate the transition disruption metric, based on the IPR scenario
 }
 \examples{
+library(tibble)
+
 pacta_results <- tibble(
   investor_name = rep("some_investor", 3),
   portfolio_name = rep("some_portfolio", 3),
