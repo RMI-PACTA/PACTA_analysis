@@ -37,17 +37,14 @@ calculate_tdm <- function(data, start_year, ...) {
   }
 
   groups <- c(crucial_tdm_groups(), ...)
-  technology_level_dy <- technology_level_dy(filtered, start_year, groups)
+  tech_dy <- tech_dy(filtered, start_year, groups)
 
   filtered %>%
     filter(.data$year == start_year) %>%
-    left_join(technology_level_dy, by = groups) %>%
+    left_join(tech_dy, by = groups) %>%
     group_by(!!!rlang::syms(groups)) %>%
     ungroup(.data$technology) %>%
-    mutate(
-      tdm_sec = .data$plan_carsten * sum(.data$tdm_tech) / sum(.data$plan_carsten),
-      reference_year = start_year
-    ) %>%
+    add_tdm_sec(start_year) %>%
     ungroup() %>%
     select(
       !!!rlang::syms(groups),
@@ -95,7 +92,10 @@ crucial_tdm_groups <- function() {
   c("technology", "ald_sector")
 }
 
-technology_level_dy <- function(data, start_year, groups) {
+#' Technology-level "dy"
+#' TODO: Explain the meaning of "dy".
+#' @noRd
+tech_dy <- function(data, start_year, groups) {
   data %>%
     filter(.data$year %in% c(start_year, start_year + 5, start_year + 10)) %>%
     add_time_step(start_year) %>%
@@ -113,6 +113,14 @@ technology_level_dy <- function(data, start_year, groups) {
     add_tdm_tech() %>%
     select(.data$tdm_tech, !!!rlang::syms(groups)) %>%
     ungroup()
+}
+
+add_tdm_sec <- function(data, start_year) {
+  data %>%
+    mutate(
+      tdm_sec = .data$plan_carsten * sum(.data$tdm_tech) / sum(.data$plan_carsten),
+      reference_year = start_year
+    )
 }
 
 add_time_step <- function(data, start_year) {
