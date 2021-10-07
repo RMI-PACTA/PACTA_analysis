@@ -51,3 +51,18 @@ test_that("if only `allocation` is 'ownership_weight' outputs a 0-row tibble", {
     expect_s3_class("tbl") %>%
     expect_warning(class = "has_zero_rows")
 })
+
+test_that("additional groups extend the minimum output", {
+  data <- fake_tdm_data(
+    technology = rep(c("RenewablesCap", "OilCap"), each = 4),
+    year = rep(c(2020, 2021, 2025, 2030), 2),
+    plan_alloc_wt_tech_prod = c(1, 1, 1, 1, 1, 2, 3, 4),
+    scen_alloc_wt_tech_prod = c(1, 2, 3, 4, 1, 0.75, 0.5, 0.25),
+    plan_carsten = c(0.5, 0.3, 0.25, 0.2, 0.5, 0.7, 0.75, 0.8),
+  )
+
+  minimum <- calculate_tdm(data, 2020)
+  additional_groups <- c("investor_name", "portfolio_name")
+  extended <- calculate_tdm(data, 2020, additional_groups)
+  expect_equal(setdiff(names(extended), names(minimum)), additional_groups)
+})
