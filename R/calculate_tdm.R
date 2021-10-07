@@ -40,12 +40,15 @@ calculate_tdm <- function(data, start_year, additional_groups = NULL) {
   }
 
   groups <- unique(c(crucial_tdm_groups(), additional_groups))
-  tech_dy <- technology_level_dy(portfolio_weight, start_year, groups)
+
+  joint <- left_join(
+    filter(portfolio_weight, .data$year == start_year),
+    technology_level_dy(portfolio_weight, start_year, groups),
+    by = groups
+  )
 
   # TODO: Try to extract one or more meaningful functions
-  portfolio_weight %>%
-    filter(.data$year == start_year) %>%
-    left_join(tech_dy, by = groups) %>%
+  joint %>%
     group_by(!!!rlang::syms(groups)) %>%
     ungroup(.data$technology) %>%
     add_tdm_sec(start_year) %>%
