@@ -2,7 +2,10 @@
 #'
 #' @param data A dataset like the `*_results_portfolio.rda` outputs of PACTA.
 #' @param start_year The start year for which the TDM value should be calculated.
-#' @param ... Variables to group by.
+#' @param additional_groups Character vector. The names of columns to group by,
+#'   in addition to these ones (which are always used):
+#'
+#'    `r toString(crucial_tdm_groups())`
 #'
 #' @return A tibble with the columns specified in the `...` input, as well as:
 #'   `tdm_tech`, the technology level transition disruption metric and `tdm_sec`,
@@ -28,7 +31,7 @@
 #' pacta_results
 #'
 #' calculate_tdm(pacta_results, start_year = 2020)
-calculate_tdm <- function(data, start_year, ...) {
+calculate_tdm <- function(data, start_year, additional_groups = NULL) {
   check_calculate_tdm(data, start_year)
 
   portfolio_weight_data <- filter(data, .data$allocation == "portfolio_weight")
@@ -36,7 +39,7 @@ calculate_tdm <- function(data, start_year, ...) {
     return(warn_zero_rows(tdm_prototype()))
   }
 
-  groups <- unique(c(crucial_tdm_groups(), ...))
+  groups <- unique(c(crucial_tdm_groups(), additional_groups))
   tech_dy <- tech_dy(portfolio_weight_data, start_year, groups)
 
   # TODO: Try to extract one or more meaningful functions

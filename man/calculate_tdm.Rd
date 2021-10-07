@@ -4,14 +4,17 @@
 \alias{calculate_tdm}
 \title{Calculate the transition disruption metric, based on the IPR scenario}
 \usage{
-calculate_tdm(data, start_year, ...)
+calculate_tdm(data, start_year, additional_groups = NULL)
 }
 \arguments{
 \item{data}{A dataset like the \verb{*_results_portfolio.rda} outputs of PACTA.}
 
 \item{start_year}{The start year for which the TDM value should be calculated.}
 
-\item{...}{Variables to group by.}
+\item{additional_groups}{Character vector. The names of columns to group by,
+in addition to these ones (which are always used):
+
+technology, ald_sector}
 }
 \value{
 A tibble with the columns specified in the \code{...} input, as well as:
