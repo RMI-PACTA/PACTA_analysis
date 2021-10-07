@@ -51,11 +51,7 @@ calculate_tdm <- function(data, start_year, ...) {
       names_from = .data$time_step,
       values_from = c("scen_alloc", "plan_alloc")
     ) %>%
-    mutate(
-      .numerator = .data$scen_alloc_plus_ten - .data$plan_alloc_plus_five,
-      .denominator = .data$scen_alloc_plus_ten - .data$scen_alloc_start_year,
-      tdm_tech = max(0, .data$.numerator / .data$.denominator) * 2
-    ) %>%
+    add_tdm_tech() %>%
     select(.data$tdm_tech, !!!rlang::syms(groups)) %>%
     ungroup()
 
@@ -90,7 +86,6 @@ check_calculate_tdm <- function(data, start_year) {
 
   invisible(data)
 }
-
 warn_zero_rows <- function(data) {
   # TODO: This function will only work if the allocation method is
   # portfolio_weight ownership_weight outputs 0 for all carsten metric values,
@@ -112,6 +107,10 @@ tdm_prototype <- function() {
   )
 }
 
+crucial_tdm_groups <- function() {
+  c("technology", "ald_sector")
+}
+
 add_time_step <- function(data, start_year) {
   data %>%
     mutate(
@@ -123,7 +122,11 @@ add_time_step <- function(data, start_year) {
     )
 }
 
-crucial_tdm_groups <- function() {
-  c("technology", "ald_sector")
+add_tdm_tech <- function(data) {
+  data %>%
+    mutate(
+      .numerator = .data$scen_alloc_plus_ten - .data$plan_alloc_plus_five,
+      .denominator = .data$scen_alloc_plus_ten - .data$scen_alloc_start_year,
+      tdm_tech = max(0, .data$.numerator / .data$.denominator) * 2
+    )
 }
-
