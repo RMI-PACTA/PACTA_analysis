@@ -67,7 +67,7 @@ test_that("additional groups extend the minimum output", {
   expect_equal(setdiff(names(extended), names(minimum)), additional_groups)
 })
 
-test_that("FIXME? is NOT sensitive to additoinal groups", {
+test_that("is sensitive to additoinal groups", {
   data <- fake_tdm_data(
     portfolio_name = rep(c("portfolio a", "portfolio b"), each = 6),
     technology = rep(rep(c("RenewablesCap", "OilCap"), each = 3), 2),
