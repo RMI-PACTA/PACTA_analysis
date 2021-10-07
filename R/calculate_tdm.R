@@ -100,7 +100,7 @@ crucial_tdm_groups <- function() {
 #' TODO: Explain the meaning of "dy".
 #' @noRd
 technology_level_dy <- function(data, start_year, groups) {
-  data %>%
+  long <- data %>%
     filter(.data$year %in% c(start_year, start_year + 5, start_year + 10)) %>%
     add_time_step(start_year) %>%
     group_by(!!!rlang::syms(groups)) %>%
@@ -109,14 +109,25 @@ technology_level_dy <- function(data, start_year, groups) {
       .data$time_step,
       scen_alloc = "scen_alloc_wt_tech_prod",
       plan_alloc = "plan_alloc_wt_tech_prod"
-    ) %>%
-    tidyr::pivot_wider(
-      names_from = .data$time_step,
-      values_from = c("scen_alloc", "plan_alloc")
-    ) %>%
+    )
+
+  long %>%
+    FIXME_pivot_wider(c("scen_alloc", "plan_alloc")) %>%
     add_tdm_tech() %>%
     select(.data$tdm_tech, all_of(groups)) %>%
+    distinct() %>%
     ungroup()
+}
+
+FIXME_pivot_wider <- function(data, columns) {
+  # This avoids an error but may be the wrong thing to do
+  data %>%
+    pivot_wider(
+      names_from = .data$time_step,
+      values_from = all_of(columns),
+      values_fn = list # Suppress "Values are not uniquely identified"
+    ) %>%
+    unnest(cols = unlist(lapply(columns, contains)))
 }
 
 add_tdm_sec <- function(data, start_year) {

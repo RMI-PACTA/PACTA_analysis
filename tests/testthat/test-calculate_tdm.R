@@ -81,6 +81,5 @@ test_that("FIXME? is NOT sensitive to additoinal groups", {
   additional_groups <- c("investor_name", "portfolio_name")
   extended <- calculate_tdm(data, 2020, additional_groups)
   extended <- extended[names(minimum)]
-  # FIXME: Instead I would expect_false()
-  expect_true(identical(minimum, extended))
+  expect_false(identical(arrange(minimum), arrange(extended)))
 })
