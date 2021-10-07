@@ -37,23 +37,7 @@ calculate_tdm <- function(data, start_year, ...) {
   }
 
   groups <- c(crucial_tdm_groups(), ...)
-  technology_level_dy <- filtered %>%
-    filter(.data$year %in% c(start_year, start_year + 5, start_year + 10)) %>%
-    add_time_step(start_year) %>%
-    group_by(!!!rlang::syms(groups)) %>%
-    select(
-      !!!rlang::syms(groups),
-      .data$time_step,
-      scen_alloc = "scen_alloc_wt_tech_prod",
-      plan_alloc = "plan_alloc_wt_tech_prod"
-    ) %>%
-    tidyr::pivot_wider(
-      names_from = .data$time_step,
-      values_from = c("scen_alloc", "plan_alloc")
-    ) %>%
-    add_tdm_tech() %>%
-    select(.data$tdm_tech, !!!rlang::syms(groups)) %>%
-    ungroup()
+  technology_level_dy <- technology_level_dy(filtered, start_year, groups)
 
   filtered %>%
     filter(.data$year == start_year) %>%
@@ -109,6 +93,26 @@ tdm_prototype <- function() {
 
 crucial_tdm_groups <- function() {
   c("technology", "ald_sector")
+}
+
+technology_level_dy <- function(data, start_year, groups) {
+  data %>%
+    filter(.data$year %in% c(start_year, start_year + 5, start_year + 10)) %>%
+    add_time_step(start_year) %>%
+    group_by(!!!rlang::syms(groups)) %>%
+    select(
+      !!!rlang::syms(groups),
+      .data$time_step,
+      scen_alloc = "scen_alloc_wt_tech_prod",
+      plan_alloc = "plan_alloc_wt_tech_prod"
+    ) %>%
+    tidyr::pivot_wider(
+      names_from = .data$time_step,
+      values_from = c("scen_alloc", "plan_alloc")
+    ) %>%
+    add_tdm_tech() %>%
+    select(.data$tdm_tech, !!!rlang::syms(groups)) %>%
+    ungroup()
 }
 
 add_time_step <- function(data, start_year) {
