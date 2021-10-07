@@ -69,16 +69,18 @@ test_that("additional groups extend the minimum output", {
 
 test_that("FIXME? is NOT sensitive to additoinal groups", {
   data <- fake_tdm_data(
-    technology = rep(c("RenewablesCap", "OilCap"), each = 4),
-    year = rep(c(2020, 2021, 2025, 2030), 2),
-    plan_alloc_wt_tech_prod = c(1, 1, 1, 1, 1, 2, 3, 4),
-    scen_alloc_wt_tech_prod = c(1, 2, 3, 4, 1, 0.75, 0.5, 0.25),
-    plan_carsten = c(0.5, 0.3, 0.25, 0.2, 0.5, 0.7, 0.75, 0.8),
+    portfolio_name = rep(c("portfolio a", "portfolio b"), each = 6),
+    technology = rep(rep(c("RenewablesCap", "OilCap"), each = 3), 2),
+    year = rep(c(2020, 2025, 2030), 4),
+    plan_alloc_wt_tech_prod = c(1, 1, 1, 1, 3, 4, 1, 2, 3, 1, 1, 1),
+    scen_alloc_wt_tech_prod = c(1, 3, 4, 1, 0.5, 0.25, 1, 3, 4, 1, 0.5, 0.25),
+    plan_carsten = c(0.5, 0.25, 0.2, 0.5, 0.75, 0.8, 0.5, 0.66, 0.75, 0.5, 0.33, 0.25),
   )
 
   minimum <- calculate_tdm(data, 2020)
   additional_groups <- c("investor_name", "portfolio_name")
-  extended <- calculate_tdm(data, 2020, additional_groups)[names(minimum)]
+  extended <- calculate_tdm(data, 2020, additional_groups)
+  extended <- extended[names(minimum)]
   # FIXME: Instead I would expect_false()
   expect_true(identical(minimum, extended))
 })
