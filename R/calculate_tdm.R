@@ -31,15 +31,15 @@
 calculate_tdm <- function(data, start_year, ...) {
   check_calculate_tdm(data, start_year)
 
-  filtered <- filter(data, .data$allocation == "portfolio_weight")
-  if (nrow(filtered) == 0) {
+  portfolio_weight_data <- filter(data, .data$allocation == "portfolio_weight")
+  if (nrow(portfolio_weight_data) == 0) {
     return(warn_zero_rows(tdm_prototype()))
   }
 
   groups <- c(crucial_tdm_groups(), ...)
-  tech_dy <- tech_dy(filtered, start_year, groups)
+  tech_dy <- tech_dy(portfolio_weight_data, start_year, groups)
 
-  filtered %>%
+  portfolio_weight_data %>%
     filter(.data$year == start_year) %>%
     left_join(tech_dy, by = groups) %>%
     group_by(!!!rlang::syms(groups)) %>%
