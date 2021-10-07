@@ -45,12 +45,9 @@ test_that("with data lacking crucial columns errors with informative message", {
   expect_error_missing_names("plan_alloc_wt_tech_prod")
 })
 
-test_that("if only `allocation` is 'ownership_weight' outputs the expected
-          tibble with a warning", {
-  data <- fake_tdm_data(
-    allocation = "ownership_weight", year = c(2020, 2025, 2030)
-  )
-  expect_warning(out <- calculate_tdm(data, 2020), class = "has_zero_rows")
-  expect_s3_class(out, "tbl")
-  expect_true(nrow(out) == 0L)
+test_that("if only `allocation` is 'ownership_weight' outputs a 0-row tibble", {
+  fake_tdm_data(allocation = "ownership_weight", year = c(2020, 2025, 2030)) %>%
+    calculate_tdm(2020) %>%
+    expect_s3_class("tbl") %>%
+    expect_warning(class = "has_zero_rows")
 })
