@@ -39,13 +39,7 @@ calculate_tdm <- function(data, start_year, ...) {
   groups <- c(crucial_tdm_groups(), ...)
   technology_level_dy <- filtered %>%
     filter(.data$year %in% c(start_year, start_year + 5, start_year + 10)) %>%
-    mutate(
-      time_step = case_when(
-        .data$year == start_year ~ "start_year",
-        .data$year == start_year + 5 ~ "plus_five",
-        .data$year == start_year + 10 ~ "plus_ten"
-      )
-    ) %>%
+    add_time_step(start_year) %>%
     group_by(!!!rlang::syms(groups)) %>%
     select(
       !!!rlang::syms(groups),
@@ -108,10 +102,6 @@ warn_zero_rows <- function(data) {
   invisible(data)
 }
 
-crucial_tdm_groups <- function() {
-  c("technology", "ald_sector")
-}
-
 tdm_prototype <- function() {
   tibble(
     technology = character(0),
@@ -121,3 +111,19 @@ tdm_prototype <- function() {
     reference_year = integer(0),
   )
 }
+
+add_time_step <- function(data, start_year) {
+  data %>%
+    mutate(
+      time_step = case_when(
+        .data$year == start_year ~ "start_year",
+        .data$year == start_year + 5 ~ "plus_five",
+        .data$year == start_year + 10 ~ "plus_ten"
+      )
+    )
+}
+
+crucial_tdm_groups <- function() {
+  c("technology", "ald_sector")
+}
+
