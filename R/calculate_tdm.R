@@ -39,6 +39,7 @@ calculate_tdm <- function(data, start_year, ...) {
   groups <- c(crucial_tdm_groups(), ...)
   tech_dy <- tech_dy(portfolio_weight_data, start_year, groups)
 
+  # TODO: Try to extract one or more meaningful functions
   portfolio_weight_data %>%
     filter(.data$year == start_year) %>%
     left_join(tech_dy, by = groups) %>%
@@ -46,10 +47,7 @@ calculate_tdm <- function(data, start_year, ...) {
     ungroup(.data$technology) %>%
     add_tdm_sec(start_year) %>%
     ungroup() %>%
-    select(
-      !!!rlang::syms(groups),
-      setdiff(names(tdm_prototype()), crucial_tdm_groups())
-    )
+    select(names(tdm_prototype()), groups)
 }
 
 check_calculate_tdm <- function(data, start_year) {
@@ -111,7 +109,7 @@ tech_dy <- function(data, start_year, groups) {
       values_from = c("scen_alloc", "plan_alloc")
     ) %>%
     add_tdm_tech() %>%
-    select(.data$tdm_tech, !!!rlang::syms(groups)) %>%
+    select(.data$tdm_tech, groups) %>%
     ungroup()
 }
 
