@@ -67,7 +67,7 @@ test_that("additional groups extend the minimum output", {
   expect_equal(setdiff(names(extended), names(minimum)), additional_groups)
 })
 
-test_that("is sensitive to additoinal groups", {
+test_that("is sensitive to additional groups", {
   data <- fake_tdm_data(
     portfolio_name = rep(c("portfolio a", "portfolio b"), each = 6),
     technology = rep(rep(c("RenewablesCap", "OilCap"), each = 3), 2),
@@ -80,6 +80,5 @@ test_that("is sensitive to additoinal groups", {
   minimum <- calculate_tdm(data, 2020)
   additional_groups <- c("investor_name", "portfolio_name")
   extended <- calculate_tdm(data, 2020, additional_groups)
-  extended <- extended[names(minimum)]
-  expect_false(identical(arrange(minimum), arrange(extended)))
+  expect_false(identical(minimum, extended[names(minimum)]))
 })
