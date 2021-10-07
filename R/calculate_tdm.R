@@ -36,7 +36,7 @@ calculate_tdm <- function(data, start_year, ...) {
     return(warn_zero_rows(tdm_prototype()))
   }
 
-  groups <- c(crucial_tdm_groups(), ...)
+  groups <- unique(c(crucial_tdm_groups(), ...))
   tech_dy <- tech_dy(portfolio_weight_data, start_year, groups)
 
   # TODO: Try to extract one or more meaningful functions
