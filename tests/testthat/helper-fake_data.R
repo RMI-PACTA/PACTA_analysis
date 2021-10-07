@@ -3,7 +3,7 @@
 #'
 #' These functions are developer-oriented. They all call [tibble()] so
 #' you can expect all the goodies that come with that.
-#' * `fake_pacta_results()` fakes the `_results_portfolio.rda` output of PACTA.
+#' * `fake_results()` fakes the `_results_portfolio.rda` output of PACTA.
 #'
 #' @section Params
 #' The arguments are the column names of the datasets being faked. They all have
@@ -22,27 +22,27 @@
 #' @return A data.frame
 #'
 #' @examples
-#' fake_pacta_results()
+#' fake_results()
 #'
-#' fake_pacta_results(allocation = c("portfolio_weight", "ownership_weight"))
+#' fake_results(allocation = c("portfolio_weight", "ownership_weight"))
 #'
-#' fake_pacta_results(new = "abc")
+#' fake_results(new = "abc")
 #'
 #' # Support for trailing commas
-#' fake_pacta_results(allocation = "portfolio_weight", )
+#' fake_results(allocation = "portfolio_weight", )
 #' @noRd
-fake_pacta_results <- function(investor_name = NULL,
-                               portfolio_name = NULL,
-                               allocation = NULL,
-                               equity_market = NULL,
-                               scenario_geography = NULL,
-                               ald_sector = NULL,
-                               technology = NULL,
-                               year = NULL,
-                               plan_alloc_wt_tech_prod = NULL,
-                               scen_alloc_wt_tech_prod = NULL,
-                               plan_carsten = NULL,
-                               ...) {
+fake_results <- function(investor_name = NULL,
+                         portfolio_name = NULL,
+                         allocation = NULL,
+                         equity_market = NULL,
+                         scenario_geography = NULL,
+                         ald_sector = NULL,
+                         technology = NULL,
+                         year = NULL,
+                         plan_alloc_wt_tech_prod = NULL,
+                         scen_alloc_wt_tech_prod = NULL,
+                         plan_carsten = NULL,
+                         ...) {
   tibble(
     investor_name = investor_name %||% "some_investor",
     portfolio_name = portfolio_name %||% "some_portfolio",

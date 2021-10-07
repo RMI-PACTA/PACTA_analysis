@@ -32,7 +32,9 @@ calculate_tdm <- function(data, start_year, ...) {
   check_calculate_tdm(data, start_year)
 
   data <- filter(data, .data$allocation == "portfolio_weight")
-  if (nrow(data) == 0) return(warn_zero_rows(tdm_prototype()))
+  if (nrow(data) == 0) {
+    return(warn_zero_rows(tdm_prototype()))
+  }
 
   groups <- c(crucial_tdm_groups(), ...)
   technology_level_dy <- data %>%

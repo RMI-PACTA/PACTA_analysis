@@ -1,10 +1,10 @@
 test_that("with bad `data` errors with informative message", {
   expect_error(calculate_tdm("bad", 2020), "data.frame.*not.*TRUE")
-  expect_error(calculate_tdm(fake_pacta_results(), "bad"), "numeric.*not.*TRUE")
+  expect_error(calculate_tdm(fake_results(), "bad"), "numeric.*not.*TRUE")
 })
 
 test_that("outputs the expected tibble", {
-  data <- fake_pacta_results(
+  data <- fake_results(
     year = c(2020, 2025, 2030), scen_alloc_wt_tech_prod = 1:3
   )
   out <- calculate_tdm(data, 2020)
@@ -12,26 +12,26 @@ test_that("outputs the expected tibble", {
 })
 
 test_that("FIXME: outputs `NaN` in columns `tdm_tech` and `tdm_sec`", {
-  data <- fake_pacta_results(year = c(2020, 2025, 2030))
+  data <- fake_results(year = c(2020, 2025, 2030))
   out <- calculate_tdm(data, 2020)
   expect_true(is.nan(out$tdm_tech))
   expect_true(is.nan(out$tdm_sec))
 })
 
 test_that("outputs is ungrouped", {
-  data <- fake_pacta_results(year = c(2020, 2025, 2030))
+  data <- fake_results(year = c(2020, 2025, 2030))
   out <- calculate_tdm(data, 2020)
   expect_false(is_grouped_df(out))
 })
 
 test_that("joins quietly", {
-  data <- fake_pacta_results(year = c(2020, 2025, 2030))
+  data <- fake_results(year = c(2020, 2025, 2030))
   expect_no_message(calculate_tdm(data, 2020))
 })
 
 test_that("with data lacking crucial columns errors with informative message", {
   expect_error_missing_names <- function(name) {
-    pacta_results <- fake_pacta_results(year = c(2020, 2025, 2030))
+    pacta_results <- fake_results(year = c(2020, 2025, 2030))
     bad <- rename(pacta_results, bad = name)
     expect_error(calculate_tdm(bad, 2020), class = "missing_names")
   }
@@ -47,7 +47,7 @@ test_that("with data lacking crucial columns errors with informative message", {
 
 test_that("if only `allocation` is 'ownership_weight' outputs the expected
           tibble with a warning", {
-  data <- fake_pacta_results(
+  data <- fake_results(
     allocation = "ownership_weight", year = c(2020, 2025, 2030)
   )
   expect_warning(out <- calculate_tdm(data, 2020), class = "has_zero_rows")
