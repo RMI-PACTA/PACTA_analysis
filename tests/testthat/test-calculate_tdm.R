@@ -32,7 +32,7 @@ test_that("joins quietly", {
 test_that("with data lacking crucial columns errors with informative message", {
   expect_error_missing_names <- function(name) {
     pacta_results <- fake_tdm_data(year = c(2020, 2025, 2030))
-    bad <- rename(pacta_results, bad = dplyr::all_of(name))
+    bad <- rename(pacta_results, bad = all_of(name))
     expect_error(calculate_tdm(bad, 2020), class = "missing_names")
   }
 

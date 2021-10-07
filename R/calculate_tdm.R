@@ -34,23 +34,23 @@
 calculate_tdm <- function(data, start_year, additional_groups = NULL) {
   check_calculate_tdm(data, start_year)
 
-  portfolio_weight_data <- filter(data, .data$allocation == "portfolio_weight")
-  if (nrow(portfolio_weight_data) == 0) {
+  portfolio_weight <- filter(data, .data$allocation == "portfolio_weight")
+  if (nrow(portfolio_weight) == 0) {
     return(warn_zero_rows(tdm_prototype()))
   }
 
   groups <- unique(c(crucial_tdm_groups(), additional_groups))
-  tech_dy <- tech_dy(portfolio_weight_data, start_year, groups)
+  tech_dy <- technology_level_dy(portfolio_weight, start_year, groups)
 
   # TODO: Try to extract one or more meaningful functions
-  portfolio_weight_data %>%
+  portfolio_weight %>%
     filter(.data$year == start_year) %>%
     left_join(tech_dy, by = groups) %>%
     group_by(!!!rlang::syms(groups)) %>%
     ungroup(.data$technology) %>%
     add_tdm_sec(start_year) %>%
     ungroup() %>%
-    select(names(tdm_prototype()), groups)
+    select(names(tdm_prototype()), all_of(groups))
 }
 
 check_calculate_tdm <- function(data, start_year) {
@@ -96,7 +96,7 @@ crucial_tdm_groups <- function() {
 #' Technology-level "dy"
 #' TODO: Explain the meaning of "dy".
 #' @noRd
-tech_dy <- function(data, start_year, groups) {
+technology_level_dy <- function(data, start_year, groups) {
   data %>%
     filter(.data$year %in% c(start_year, start_year + 5, start_year + 10)) %>%
     add_time_step(start_year) %>%
@@ -112,7 +112,7 @@ tech_dy <- function(data, start_year, groups) {
       values_from = c("scen_alloc", "plan_alloc")
     ) %>%
     add_tdm_tech() %>%
-    select(.data$tdm_tech, groups) %>%
+    select(.data$tdm_tech, all_of(groups)) %>%
     ungroup()
 }
 
