@@ -194,6 +194,9 @@ get_input_files <- function(portfolio_name_ref_all) {
     stop("Multiple investors detected. Only one investor at a time can be anaylsed")
   }
 
+  # remove holdings with <= 0 market value (short positions)
+  portfolio <- portfolio %>% filter(market_value > 0)
+
   return(portfolio)
 }
 
