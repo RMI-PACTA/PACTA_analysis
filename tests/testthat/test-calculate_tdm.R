@@ -68,17 +68,22 @@ test_that("additional groups extend the minimum output", {
 })
 
 test_that("is sensitive to additional groups", {
+  additional_groups <- c("investor_name", "portfolio_name")
+  n_groups <- length(crucial_tdm_groups()) + length(additional_groups)
+  start_year <- 2020
+  # Each group has values for years at t0, t0+5, and t0+10
+  years <- rep(c(start_year, start_year + 5, start_year + 10), n_groups)
+
   data <- fake_tdm_data(
     portfolio_name = rep(c("portfolio a", "portfolio b"), each = 6),
     technology = rep(rep(c("RenewablesCap", "OilCap"), each = 3), 2),
-    year = rep(c(2020, 2025, 2030), 4),
+    year = years,
     plan_alloc_wt_tech_prod = c(1, 1, 1, 1, 3, 4, 1, 2, 3, 1, 1, 1),
     scen_alloc_wt_tech_prod = c(1, 3, 4, 1, 0.5, 0.25, 1, 3, 4, 1, 0.5, 0.25),
     plan_carsten = c(0.5, 0.25, 0.2, 0.5, 0.75, 0.8, 0.5, 0.66, 0.75, 0.5, 0.33, 0.25),
   )
 
-  minimum <- calculate_tdm(data, 2020)
-  additional_groups <- c("investor_name", "portfolio_name")
-  extended <- calculate_tdm(data, 2020, additional_groups)
+  minimum <- calculate_tdm(data, start_year)
+  extended <- calculate_tdm(data, start_year, additional_groups)
   expect_false(identical(minimum, extended[names(minimum)]))
 })
