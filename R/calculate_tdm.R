@@ -51,7 +51,7 @@ calculate_tdm <- function(data, start_year, additional_groups = NULL) {
   joint %>%
     group_by(!!!rlang::syms(groups)) %>%
     ungroup(.data$technology) %>%
-    add_tdm_sec(start_year) %>%
+    add_sector_level_tdm(start_year) %>%
     ungroup() %>%
     select(names(tdm_prototype()), all_of(groups))
 }
@@ -113,7 +113,7 @@ technology_level_dy <- function(data, start_year, groups) {
 
   long %>%
     FIXME_pivot_wider(c("scen_alloc", "plan_alloc")) %>%
-    add_tdm_tech() %>%
+    add_technology_level_tdm() %>%
     select(.data$tdm_tech, all_of(groups)) %>%
     distinct() %>%
     ungroup()
@@ -130,7 +130,7 @@ FIXME_pivot_wider <- function(data, columns) {
     unnest(cols = unlist(lapply(columns, contains)))
 }
 
-add_tdm_sec <- function(data, start_year) {
+add_sector_level_tdm <- function(data, start_year) {
   data %>%
     mutate(
       tdm_sec = .data$plan_carsten * sum(.data$tdm_tech) / sum(.data$plan_carsten),
@@ -149,7 +149,7 @@ add_time_step <- function(data, start_year) {
     )
 }
 
-add_tdm_tech <- function(data) {
+add_technology_level_tdm <- function(data) {
   data %>%
     mutate(
       .numerator = .data$scen_alloc_plus_ten - .data$plan_alloc_plus_five,
