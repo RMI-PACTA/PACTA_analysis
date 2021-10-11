@@ -71,6 +71,7 @@ check_calculate_tdm <- function(data, start_year) {
 
   invisible(data)
 }
+
 warn_zero_rows <- function(data) {
   # TODO: This function will only work if the allocation method is
   # portfolio_weight ownership_weight outputs 0 for all carsten metric values,
