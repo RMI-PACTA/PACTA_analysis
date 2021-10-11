@@ -87,3 +87,28 @@ test_that("is sensitive to additional groups", {
   extended <- calculate_tdm(data, start_year, additional_groups)
   expect_false(identical(minimum, extended[names(minimum)]))
 })
+
+test_that("with known input outputs as expected", {
+  data <- fake_tdm_data(
+    technology = rep(c("RenewablesCap", "OilCap"), each = 4),
+    year = rep(c(2020, 2021, 2025, 2030), 2),
+    plan_alloc_wt_tech_prod = c(1, 1, 1, 1, 1, 2, 3, 4),
+    scen_alloc_wt_tech_prod = c(1, 2, 3, 4, 1, 0.75, 0.5, 0.25),
+    plan_carsten = c(0.5, 0.3, 0.25, 0.2, 0.5, 0.7, 0.75, 0.8),
+  )
+
+  out <- calculate_tdm(data, 2020)
+
+  out <- out %>%
+    mutate(
+      tdm_tech = round(tdm_tech, 2),
+      tdm_sec = round(tdm_sec, 2)
+      ) %>%
+    split(.$technology)
+
+  expect_equal(out$OilCap$tdm_tech, 7.33)
+  expect_equal(out$OilCap$tdm_sec, 4.67)
+  expect_equal(out$RenewablesCap$tdm_tech, 2)
+  expect_equal(out$RenewablesCap$tdm_sec, 4.67)
+
+})
