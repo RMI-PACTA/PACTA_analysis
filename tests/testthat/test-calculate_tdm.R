@@ -53,22 +53,19 @@ test_that("if only `allocation` is 'ownership_weight' outputs a 0-row tibble", {
     expect_warning(class = "has_zero_rows")
 })
 
-test_that("additional groups extend the minimum output", {
-  data <- fake_tdm_data(
-    technology = rep(c("RenewablesCap", "OilCap"), each = 4),
-    year = rep(c(2020, 2021, 2025, 2030), 2),
-    plan_alloc_wt_tech_prod = c(1, 1, 1, 1, 1, 2, 3, 4),
-    scen_alloc_wt_tech_prod = c(1, 2, 3, 4, 1, 0.75, 0.5, 0.25),
-    plan_carsten = c(0.5, 0.3, 0.25, 0.2, 0.5, 0.7, 0.75, 0.8),
-  )
-
-  minimum <- calculate_tdm(data, 2020)
-  additional_groups <- c("investor_name", "portfolio_name")
-  extended <- calculate_tdm(data, 2020, additional_groups)
-  expect_equal(setdiff(names(extended), names(minimum)), additional_groups)
+test_that("errors if data has multiple values per year", {
+  fake_tdm_data(
+    year = c(2020, 2020, 2025, 2030),
+    plan_alloc_wt_tech_prod = c(1, 1, 3, 4),
+    scen_alloc_wt_tech_prod = c(1, 2, 3, 4),
+    plan_carsten = c(0.5, 0.3, 0.25, 0.2),
+  ) %>%
+    calculate_tdm(2020) %>%
+    expect_error(class = "multiple_values_per_year")
 })
 
-test_that("is sensitive to additional groups", {
+test_that("errors if input data isn't grouped appropriately to ensure unique
+          values per year", {
   additional_groups <- c("investor_name", "portfolio_name")
   n_groups <- length(crucial_tdm_groups()) + length(additional_groups)
   start_year <- 2020
@@ -84,9 +81,12 @@ test_that("is sensitive to additional groups", {
     plan_carsten = c(0.5, 0.25, 0.2, 0.5, 0.75, 0.8, 0.5, 0.66, 0.75, 0.5, 0.33, 0.25),
   )
 
-  minimum <- calculate_tdm(data, start_year)
+  calculate_tdm(data, start_year) %>%
+    expect_error(class = "multiple_values_per_year")
+
   extended <- calculate_tdm(data, start_year, additional_groups)
-  expect_false(identical(minimum, extended[names(minimum)]))
+  expect_equal(round(extended$tdm_tech, 2), c(2, 7.33, 1.33, 2))
+  expect_equal(round(extended$tdm_sec, 2), c(4.67, 4.67, 1.67, 1.67))
 })
 
 test_that("with known input outputs as expected", {
