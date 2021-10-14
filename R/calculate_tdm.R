@@ -155,6 +155,10 @@ add_technology_level_tdm <- function(data) {
     mutate(
       .numerator = .data$scen_alloc_plus_ten - .data$plan_alloc_plus_five,
       .denominator = .data$scen_alloc_plus_ten - .data$scen_alloc_start_year,
-      tdm_tech = max(0, .data$.numerator / .data$.denominator) * 2
+      tdm_tech = ifelse(
+        .data$.denominator == 0,
+        0,
+        max(0, .data$.numerator / .data$.denominator) * 2
+        )
     )
 }

@@ -11,11 +11,12 @@ test_that("outputs the expected tibble", {
   expect_snapshot(out)
 })
 
-test_that("FIXME: outputs `NaN` in columns `tdm_tech` and `tdm_sec`", {
+test_that("outputs 0 for `tdm_tech` and `tdm_sec`, if `scen_alloc_wt_tech_prod
+          doesn't change over 10 year period`", {
   data <- fake_tdm_data(year = c(2020, 2025, 2030))
   out <- calculate_tdm(data, 2020)
-  expect_true(is.nan(out$tdm_tech))
-  expect_true(is.nan(out$tdm_sec))
+  expect_true(out$tdm_tech == 0)
+  expect_true(out$tdm_sec == 0)
 })
 
 test_that("outputs is ungrouped", {
