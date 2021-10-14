@@ -155,6 +155,8 @@ add_technology_level_tdm <- function(data) {
     mutate(
       .numerator = .data$scen_alloc_plus_ten - .data$plan_alloc_plus_five,
       .denominator = .data$scen_alloc_plus_ten - .data$scen_alloc_start_year,
+      #TODO: Ensure with @antoine-lacherche that this is the right way to
+      #address the issue of 0 denominator
       tdm_tech = ifelse(
         .data$.denominator == 0,
         0,
