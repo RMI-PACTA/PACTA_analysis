@@ -115,22 +115,14 @@ technology_level_dy <- function(data, start_year, groups) {
     )
 
   long %>%
-    FIXME_pivot_wider(c("scen_alloc", "plan_alloc")) %>%
+    pivot_wider(
+      names_from = .data$time_step,
+      values_from = all_of(c("scen_alloc", "plan_alloc"))
+      ) %>%
     add_technology_level_tdm() %>%
     select(.data$tdm_tech, all_of(groups)) %>%
     distinct() %>%
     ungroup()
-}
-
-FIXME_pivot_wider <- function(data, columns) {
-  # This avoids an error but may be the wrong thing to do
-  data %>%
-    pivot_wider(
-      names_from = .data$time_step,
-      values_from = all_of(columns),
-      values_fn = list # Suppress "Values are not uniquely identified"
-    ) %>%
-    unnest(cols = unlist(lapply(columns, contains)))
 }
 
 add_sector_level_tdm <- function(data, start_year) {
