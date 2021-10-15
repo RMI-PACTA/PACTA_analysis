@@ -32,14 +32,14 @@
 #'
 #' calculate_tdm(pacta_results, start_year = 2020)
 calculate_tdm <- function(data, start_year, additional_groups = NULL) {
-  check_calculate_tdm(data, start_year)
+
+  groups <- unique(c(crucial_tdm_groups(), additional_groups))
+  check_calculate_tdm(data, start_year, groups)
 
   portfolio_weight <- filter(data, .data$allocation == "portfolio_weight")
   if (nrow(portfolio_weight) == 0) {
     return(warn_zero_rows(tdm_prototype()))
   }
-
-  groups <- unique(c(crucial_tdm_groups(), additional_groups))
 
   joint <- left_join(
     filter(portfolio_weight, .data$year == start_year),
@@ -56,7 +56,7 @@ calculate_tdm <- function(data, start_year, additional_groups = NULL) {
     select(names(tdm_prototype()), all_of(groups))
 }
 
-check_calculate_tdm <- function(data, start_year) {
+check_calculate_tdm <- function(data, start_year, additional_groups) {
   stopifnot(is.data.frame(data), is.numeric(start_year))
 
   crucial <- c(
@@ -68,6 +68,8 @@ check_calculate_tdm <- function(data, start_year) {
     "plan_carsten"
   )
   check_crucial_names(data, crucial)
+
+  check_data_is_unique_per_year_and_groups(data, additional_groups)
 
   invisible(data)
 }
@@ -163,4 +165,34 @@ add_technology_level_tdm <- function(data) {
         max(0, .data$.numerator / .data$.denominator) * 2
         )
     )
+}
+
+check_data_is_unique_per_year_and_groups <- function(data, groups) {
+
+  columns_that_must_be_unique <- c(
+    "scen_alloc_wt_tech_prod",
+    "plan_alloc_wt_tech_prod",
+    "plan_carsten"
+    )
+
+  groups <- c("year", groups)
+
+  data <- data %>%
+    group_by(!!!rlang::syms(groups)) %>%
+    dplyr::summarize(rows_by_year_and_group = dplyr::n()) %>%
+    mutate(rows_are_unique = rows_by_year_and_group == 1)
+
+  ok <- all(data$rows_are_unique)
+  if (!ok) {
+    rlang::abort(
+      "multiple_values_per_year",
+      message = glue(
+        "Data must be unique by year and groups for the following columns:
+      {paste0('`', columns_that_must_be_unique, '`', collapse = ', ')} \n
+      Are you sure you have included the correct groupings?"
+      )
+    )
+  }
+
+  invisible(data)
 }
