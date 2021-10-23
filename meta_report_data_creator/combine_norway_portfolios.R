@@ -1,7 +1,10 @@
 
-# manually set certain values and paths -----------------------------------
+# manually set certain values and paths ----------------------------------------
 
-output_dir <- normalizePath("~/Desktop/NORWAY", mustWork = FALSE)
+output_dir <- normalizePath("~/Dropbox (2° Investing)/2° Investing Team/People/Catarina/NORWAY-3", mustWork = FALSE)
+combined_portfolio_results_output_dir <- normalizePath("~/Desktop/test/norway_14092021_portfoliolevel")
+combined_user_results_output_dir <- normalizePath("~/Desktop/test/norway_14092021_peers_ind")
+combined_orgtype_results_output_dir <- normalizePath("~/Desktop/test/norway_14092021_peergroup")
 
 portfolios_path <- "~/Dropbox (2° Investing)/2° Investing Team/1. RESEARCH/1. Studies (projects)/PACTA . Regulator Monitoring/PACTA COP/03_Initiative_Level/05_PACTACOP_NO/04_Input_Cleaning/portfolios"
 portfolios_meta_csv <- "~/Dropbox (2° Investing)/2° Investing Team/1. RESEARCH/1. Studies (projects)/PACTA . Regulator Monitoring/PACTA COP/03_Initiative_Level/05_PACTACOP_NO/04_Input_Cleaning/portfolios.csv"
@@ -14,17 +17,29 @@ project_prefix <- "norway"
 
 local_PACTA_git_path <- "~/Documents/git/PACTA_analysis"
 
+bogus_csvs_to_be_ignored <- c("20303", "26102")
 
-# check paths and directories ---------------------------------------------
+
+# check paths and directories --------------------------------------------------
 
 dir.create(output_dir, showWarnings = FALSE)
+stopifnot(dir.exists(output_dir))
 stopifnot(dir.exists(portfolios_path))
 stopifnot(file.exists(portfolios_meta_csv))
 stopifnot(file.exists(users_meta_csv))
 stopifnot(dir.exists(local_PACTA_git_path))
+stopifnot(dir.exists(combined_portfolio_results_output_dir))
+stopifnot(dir.exists(file.path(combined_portfolio_results_output_dir, "30_Processed_inputs")))
+stopifnot(dir.exists(file.path(combined_portfolio_results_output_dir, "40_Results")))
+stopifnot(dir.exists(combined_user_results_output_dir))
+stopifnot(dir.exists(file.path(combined_user_results_output_dir, "30_Processed_inputs")))
+stopifnot(dir.exists(file.path(combined_user_results_output_dir, "40_Results")))
+stopifnot(dir.exists(combined_orgtype_results_output_dir))
+stopifnot(dir.exists(file.path(combined_orgtype_results_output_dir, "30_Processed_inputs")))
+stopifnot(dir.exists(file.path(combined_orgtype_results_output_dir, "40_Results")))
 
 
-# load required packages --------------------------------------------------
+# load required packages -------------------------------------------------------
 
 library(dplyr)
 library(purrr)
@@ -33,30 +48,31 @@ library(fs)
 library(readr)
 library(yaml)
 
-source("meta_report_data_creator/read_portfolio_csv.R")
+source(file.path(local_PACTA_git_path, "meta_report_data_creator/read_portfolio_csv.R"))
+
+pacta_directories <- c("00_Log_Files", "10_Parameter_File", "20_Raw_Inputs", "30_Processed_Inputs", "40_Results", "50_Outputs")
 
 
-# prepare alist of all the CSVs to import ---------------------------------
+# prepare a list of all the CSVs to import -------------------------------------
 
 portfolio_csvs <- list.files(portfolios_path, pattern = "[.]csv$", full.names = TRUE)
 
-# remove bogus csvs
-portfolio_csvs <- portfolio_csvs[!grepl("20303[.]csv$", portfolio_csvs)]
-portfolio_csvs <- portfolio_csvs[!grepl("26102[.]csv$", portfolio_csvs)]
+# remove bogus CSVs
+portfolio_csvs <- portfolio_csvs[! tools::file_path_sans_ext(basename(portfolio_csvs)) %in% bogus_csvs_to_be_ignored]
 
 
-# read in all the CSVs ----------------------------------------------------
+# read in all the CSVs ---------------------------------------------------------
 
 data <- map_dfr(set_names(portfolio_csvs, portfolio_csvs), read_portfolio_csv, .id = "csv_name")
 
 
-# read in meta data CSVs --------------------------------------------------
+# read in meta data CSVs -------------------------------------------------------
 
 portfolios_meta <- read_csv(portfolios_meta_csv, col_types = "nnnccnc")
 users_meta <- read_csv(users_meta_csv, col_types = "ncccccn")
 
 
-# add meta data to full data and save it ----------------------------------
+# add meta data to full data and save it ---------------------------------------
 
 data <-
   data %>%
@@ -72,17 +88,12 @@ write.csv(
 saveRDS(data, file.path(output_dir, paste0(project_prefix, "_full.rds")))
 
 
-# prepare meta PACTA project ----------------------------------------------
+# prepare meta PACTA project ---------------------------------------------------
 
 meta_output_dir <- file.path(output_dir, "meta")
 dir.create(meta_output_dir, showWarnings = FALSE)
 
-dir.create(file.path(meta_output_dir, "00_Log_Files"), recursive = TRUE, showWarnings = FALSE)
-dir.create(file.path(meta_output_dir, "10_Parameter_File"), recursive = TRUE, showWarnings = FALSE)
-dir.create(file.path(meta_output_dir, "20_Raw_Inputs"), recursive = TRUE, showWarnings = FALSE)
-dir.create(file.path(meta_output_dir, "30_Processed_Inputs"), recursive = TRUE, showWarnings = FALSE)
-dir.create(file.path(meta_output_dir, "40_Results"), recursive = TRUE, showWarnings = FALSE)
-dir.create(file.path(meta_output_dir, "50_Outputs"), recursive = TRUE, showWarnings = FALSE)
+dir_create(file.path(meta_output_dir, pacta_directories))
 
 data %>%
   mutate(portfolio_name = "Meta Portfolio") %>%
@@ -107,7 +118,7 @@ config_list <-
 write_yaml(config_list, file = file.path(meta_output_dir, "10_Parameter_File", paste0(project_prefix, "_meta", "_PortfolioParameters.yml")))
 
 
-# slices for per port_id --------------------------------------------------
+# slices for per port_id -------------------------------------------------------
 
 ports_output_dir <- file.path(output_dir, "port_id")
 dir.create(ports_output_dir, showWarnings = FALSE)
@@ -140,12 +151,7 @@ for (port_id in all_port_ids) {
     )
 
   port_id_output_dir <- file.path(ports_output_dir, paste0(project_prefix, "_port_", port_id))
-  dir.create(file.path(port_id_output_dir, "00_Log_Files"), recursive = TRUE)
-  dir.create(file.path(port_id_output_dir, "10_Parameter_File"), recursive = TRUE)
-  dir.create(file.path(port_id_output_dir, "20_Raw_Inputs"), recursive = TRUE)
-  dir.create(file.path(port_id_output_dir, "30_Processed_Inputs"), recursive = TRUE)
-  dir.create(file.path(port_id_output_dir, "40_Results"), recursive = TRUE)
-  dir.create(file.path(port_id_output_dir, "50_Outputs"), recursive = TRUE)
+  dir_create(file.path(port_id_output_dir, pacta_directories))
 
   write_yaml(config_list, file = file.path(port_id_output_dir, "10_Parameter_File", paste0(project_prefix, "_port_", port_id, "_PortfolioParameters.yml")))
 
@@ -155,7 +161,7 @@ for (port_id in all_port_ids) {
 }
 
 
-# slices for per user_id --------------------------------------------------
+# slices for per user_id -------------------------------------------------------
 
 users_output_dir <- file.path(output_dir, "user_id")
 dir.create(users_output_dir, showWarnings = FALSE)
@@ -190,12 +196,7 @@ for (user_id in all_user_ids) {
     )
 
   user_id_output_dir <- file.path(users_output_dir, paste0(project_prefix, "_user_", user_id))
-  dir.create(file.path(user_id_output_dir, "00_Log_Files"), recursive = TRUE)
-  dir.create(file.path(user_id_output_dir, "10_Parameter_File"), recursive = TRUE)
-  dir.create(file.path(user_id_output_dir, "20_Raw_Inputs"), recursive = TRUE)
-  dir.create(file.path(user_id_output_dir, "30_Processed_Inputs"), recursive = TRUE)
-  dir.create(file.path(user_id_output_dir, "40_Results"), recursive = TRUE)
-  dir.create(file.path(user_id_output_dir, "50_Outputs"), recursive = TRUE)
+  dir_create(file.path(user_id_output_dir, pacta_directories))
 
   write_yaml(config_list, file = file.path(user_id_output_dir, "10_Parameter_File", paste0(project_prefix, "_user_", user_id, "_PortfolioParameters.yml")))
 
@@ -205,7 +206,7 @@ for (user_id in all_user_ids) {
 }
 
 
-# slices for per organization_type --------------------------------------------------
+# slices for per organization_type ---------------------------------------------
 
 orgs_output_dir <- file.path(output_dir, "organization_type")
 dir.create(orgs_output_dir, showWarnings = FALSE)
@@ -233,12 +234,7 @@ for (org_type in all_org_types) {
     )
 
   org_type_output_dir <- file.path(orgs_output_dir, paste0(project_prefix, "_org_", org_type))
-  dir.create(file.path(org_type_output_dir, "00_Log_Files"), recursive = TRUE)
-  dir.create(file.path(org_type_output_dir, "10_Parameter_File"), recursive = TRUE)
-  dir.create(file.path(org_type_output_dir, "20_Raw_Inputs"), recursive = TRUE)
-  dir.create(file.path(org_type_output_dir, "30_Processed_Inputs"), recursive = TRUE)
-  dir.create(file.path(org_type_output_dir, "40_Results"), recursive = TRUE)
-  dir.create(file.path(org_type_output_dir, "50_Outputs"), recursive = TRUE)
+  dir_create(file.path(org_type_output_dir, pacta_directories))
 
   write_yaml(config_list, file = file.path(org_type_output_dir, "10_Parameter_File", paste0(project_prefix, "_org_", org_type, "_PortfolioParameters.yml")))
 
@@ -248,7 +244,7 @@ for (org_type in all_org_types) {
 }
 
 
-# run meta portfolio through PACTA --------------------------------------------
+# run meta portfolio through PACTA ---------------------------------------------
 
 message("running meta portfolio through PACTA")
 
@@ -284,7 +280,7 @@ for (port_id in all_port_ids) {
 }
 
 
-# run user files through PACTA --------------------------------------------
+# run user files through PACTA -------------------------------------------------
 
 for (user_id in all_user_ids) {
   message(paste0("running user_id: ", user_id, " through PACTA"))
@@ -304,7 +300,7 @@ for (user_id in all_user_ids) {
 }
 
 
-# run organization_type files through PACTA --------------------------------------------
+# run organization_type files through PACTA ------------------------------------
 
 for (org_type in all_org_types) {
   message(paste0("running org_type: ", org_type, " through PACTA"))
@@ -322,3 +318,153 @@ for (org_type in all_org_types) {
   dir_delete(org_type_output_dir)
   dir_copy("working_dir", org_type_output_dir, overwrite = TRUE)
 }
+
+
+# combine all portfolio level results ------------------------------------------
+
+
+mutate(portfolio_name = portfolio_id) %>%
+mutate(portfolio_id = as.numeric(portfolio_id)) %>%
+left_join(select(portfolios_meta, portfolio_id = id, user_id)) %>%
+mutate(investor_name = user_id) %>%
+select(-c(portfolio_id, user_id))
+
+
+
+
+data_filenames <-
+  c(
+    "Bonds_results_portfolio.rda",
+    "Bonds_results_company.rda",
+    "Bonds_results_map.rda",
+    "Equity_results_portfolio.rda",
+    "Equity_results_company.rda",
+    "Equity_results_map.rda"
+  )
+
+lapply(data_filenames, function(data_filename) {
+  portfolio_result_filepaths <- list.files(ports_output_dir, pattern = data_filename, recursive = TRUE, full.names = TRUE)
+  meta_result_filepaths <- list.files(meta_output_dir, pattern = data_filename, recursive = TRUE, full.names = TRUE)
+  all_result_filepaths <- c(portfolio_result_filepaths, meta_result_filepaths)
+  all_result_filepaths <- setNames(all_result_filepaths, sub("^norway_port_", "", basename(dirname(all_result_filepaths))))
+
+  all_results <-
+    map_df(all_result_filepaths, readRDS, .id = "portfolio_id") %>%
+    mutate(portfolio_name = portfolio_id) %>%
+    mutate(portfolio_id = as.numeric(portfolio_id)) %>%
+    left_join(select(portfolios_meta, portfolio_id = id, user_id)) %>%
+    mutate(investor_name = user_id) %>%
+    select(-portfolio_id, -user_id)
+
+  saveRDS(all_results, file.path(combined_portfolio_results_output_dir, "40_Results", data_filename))
+})
+
+data_filenames <-
+  c(
+    "Overview_portfolio.rda",
+    "total_portfolio.rda",
+    "emissions.rda"
+  )
+
+lapply(data_filenames, function(data_filename) {
+  portfolio_result_filepaths <- list.files(ports_output_dir, pattern = data_filename, recursive = TRUE, full.names = TRUE)
+  meta_result_filepaths <- list.files(meta_output_dir, pattern = data_filename, recursive = TRUE, full.names = TRUE)
+  all_result_filepaths <- c(portfolio_result_filepaths, meta_result_filepaths)
+
+  all_results <- map_df(all_result_filepaths, readRDS)
+  saveRDS(all_results, file.path(combined_portfolio_results_output_dir, "30_Processed_inputs", data_filename))
+})
+
+
+# combine all user level results -----------------------------------------------
+
+data_filenames <-
+  c(
+    "Bonds_results_portfolio.rda",
+    "Bonds_results_company.rda",
+    "Bonds_results_map.rda",
+    "Equity_results_portfolio.rda",
+    "Equity_results_company.rda",
+    "Equity_results_map.rda"
+  )
+
+lapply(data_filenames, function(data_filename) {
+  portfolio_result_filepaths <- list.files(users_output_dir, pattern = data_filename, recursive = TRUE, full.names = TRUE)
+  meta_result_filepaths <- list.files(meta_output_dir, pattern = data_filename, recursive = TRUE, full.names = TRUE)
+  all_result_filepaths <- c(portfolio_result_filepaths, meta_result_filepaths)
+  all_result_filepaths <- setNames(all_result_filepaths, sub("^norway_user_", "", basename(dirname(all_result_filepaths))))
+
+  all_results <-
+    map_df(all_result_filepaths, readRDS, .id = "user_id") %>%
+    mutate(portfolio_name = user_id) %>%
+    mutate(user_id = as.numeric(user_id)) %>%
+    left_join(select(users_meta, user_id = id, organization_type)) %>%
+    rename(peergroup = organization_type) %>%
+    mutate(investor_name = peergroup) %>%
+    select(-peergroup, -user_id)
+
+  saveRDS(all_results, file.path(combined_user_results_output_dir, "40_Results", data_filename))
+})
+
+data_filenames <-
+  c(
+    "Overview_portfolio.rda",
+    "total_portfolio.rda",
+    "emissions.rda"
+  )
+
+lapply(data_filenames, function(data_filename) {
+  portfolio_result_filepaths <- list.files(users_output_dir, pattern = data_filename, recursive = TRUE, full.names = TRUE)
+  meta_result_filepaths <- list.files(meta_output_dir, pattern = data_filename, recursive = TRUE, full.names = TRUE)
+  all_result_filepaths <- c(portfolio_result_filepaths, meta_result_filepaths)
+  all_result_filepaths <- setNames(all_result_filepaths, sub("^norway_user_", "", basename(dirname(all_result_filepaths))))
+
+  all_results <-
+    map_df(all_result_filepaths, readRDS, .id = "user_id") %>%
+    mutate(portfolio_name = user_id) %>%
+    mutate(user_id = as.numeric(user_id)) %>%
+    left_join(users_meta[, c("id", "organization_type")], by = c(user_id = "id")) %>%
+    rename(peergroup = organization_type) %>%
+    mutate(investor_name = peergroup) %>%
+    select(-c(peergroup, user_id))
+
+  saveRDS(all_results, file.path(combined_user_results_output_dir, "30_Processed_inputs", data_filename))
+})
+
+
+# combine all organization_type level results ----------------------------------
+
+data_filenames <-
+  c(
+    "Bonds_results_portfolio.rda",
+    "Bonds_results_company.rda",
+    "Bonds_results_map.rda",
+    "Equity_results_portfolio.rda",
+    "Equity_results_company.rda",
+    "Equity_results_map.rda"
+  )
+
+lapply(data_filenames, function(data_filename) {
+  portfolio_result_filepaths <- list.files(org_type_output_dir, pattern = data_filename, recursive = TRUE, full.names = TRUE)
+  meta_result_filepaths <- list.files(meta_output_dir, pattern = data_filename, recursive = TRUE, full.names = TRUE)
+  all_result_filepaths <- c(portfolio_result_filepaths, meta_result_filepaths)
+
+  all_results <- map_df(all_result_filepaths, readRDS)
+  saveRDS(all_results, file.path(combined_orgtype_results_output_dir, "40_Results", data_filename))
+})
+
+data_filenames <-
+  c(
+    "Overview_portfolio.rda",
+    "total_portfolio.rda",
+    "emissions.rda"
+  )
+
+lapply(data_filenames, function(data_filename) {
+  portfolio_result_filepaths <- list.files(org_type_output_dir, pattern = data_filename, recursive = TRUE, full.names = TRUE)
+  meta_result_filepaths <- list.files(meta_output_dir, pattern = data_filename, recursive = TRUE, full.names = TRUE)
+  all_result_filepaths <- c(portfolio_result_filepaths, meta_result_filepaths)
+
+  all_results <- map_df(all_result_filepaths, readRDS)
+  saveRDS(all_results, file.path(combined_orgtype_results_output_dir, "30_Processed_inputs", data_filename))
+})
