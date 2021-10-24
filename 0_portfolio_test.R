@@ -5,7 +5,7 @@
 
 get_ald_scen <- function(portfolio_type) {
   if (portfolio_type == "Equity") {
-    ald <- read_rds(paste0(analysis_inputs_path, "/equity_ald_scenario.rda"))
+    ald <- read_rds(file.path(analysis_inputs_path, "equity_ald_scenario.rda"))
     ald <- ald %>%
       filter(equity_market %in% equity_market_list) # %>%
     # rename(bloomberg_id = id)
@@ -15,7 +15,7 @@ get_ald_scen <- function(portfolio_type) {
     }
   }
   if (portfolio_type == "Bonds") {
-    ald <- read_rds(paste0(analysis_inputs_path, "/bonds_ald_scenario.rda"))
+    ald <- read_rds(file.path(analysis_inputs_path, "bonds_ald_scenario.rda"))
     # ald <- ald %>%
     #   rename(corporate_bond_ticker = id)
   }
