@@ -1,0 +1,165 @@
+---
+title: "Transition Disruption Metric"
+author: "Jackson Hoffart"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{transition_disruption_metric}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(PACTA.analysis)
+```
+
+# Introduction
+
+The PACTA tool bases most of it's metrics off of forward looking data, where the input data (the production of physical assets) is reliably predictable to about five years into the future. There are certain scenarios which purposefully offset the bulk of their ambition to the later years in the scenario. 
+
+For example, a "delayed response" scenario, such as the  Inevitable Policy Response (IPR) Scenario, assumes that future production of most sectors follow current trends (ie. business as usual), before inevitably resulting in a massive and disruptive transition in the long-term. Since the interesting part of these scenarios is often positioned well beyond the time-horizon of our data, other PACTA metrics (eg. Volume Trajectory) are ill-suited to provide useful insights. 
+
+
+## Transition Disruption Metric
+**TODO: this needs a lot of work**
+The Transition Disruption Metric (TDM) was postulated to account for this, and provide an interesting metric to provide insights in the medium- to long- term (ie. time-horizons greater than 5 years). 
+
+To do so, we compare the portfolio's misalignment to the scenario in the medium-term (eg. year 5 to year 10), as a fraction of the overall ambition required by the scenario over the medium-term, normalized by the time left. 
+
+## Metric Definition
+
+Consider the transition disruption metric $TDM$, for some technology, $i$: 
+
+$$TDM_i = max\left(0, \frac{S_i (t+t_2) - P_i(t+t_1)}{S_i(t+t_2) - S_i(t)}\right) * \left(\frac{t_2}{t_2-t_1}\right) $$
+
+where: 
+
+- $S_i(t)$ is the scenario production of technology $i$ at year $t$
+- $P_i(t)$ is the portfolio production of technology $i$ at year $t$
+- $t_2$ is some long interval, against which the disruption is measured overall
+- $t_1$ is some interval, where $t_1 < t_2$, against which future disruption is measured 
+
+In the special case that $t_2 = 10$ and $t_1 = 5$, this metric reduces to: 
+
+$$TDM_i = 2 * max\left(0, \frac{S_i (t+10) - P_i(t+5)}{S_i(t+10) - S_i(t)}\right) $$
+
+## Edge Cases
+### Upper limit
+Given that we can assume both $S(t)$ and $P(t)$ are positive, it is clear that the numerator is bound by $S(t)$. Thus, the most obvious boundary to consider occurs when $S_i(t+10)$ approaches $S_i(t)$. In this case, we see that the $TDM$ approaches infinity. 
+
+How can we interpret this? 
+
+Let's plot a completely flat scenario, against two different production values, one which is above the flat scenario, and one which is below it: 
+
+``` {r, echo = FALSE}
+suppressPackageStartupMessages(library(tidyverse))
+
+data <- tibble::tribble(
+  ~year, ~metric, ~production,
+  2020L,    "P1",          5L,
+  2025L,    "P1",          6L,
+  2030L,    "P1",          7L,
+  2050L,    "P1",          8L,
+  2020L,    "P2",         15L,
+  2025L,    "P2",         14L,
+  2030L,    "P2",         13L,
+  2050L,    "P2",         12L,
+  2020L,     "S",         10L,
+  2025L,     "S",         10L,
+  2030L,     "S",         10L,
+  2050L,     "S",         10L
+  )
+
+
+data %>% 
+  ggplot(aes(x = year, y = production, group = metric, color = metric)) + 
+    geom_line() + 
+    labs(title="Trajectories for Two Portfolios",x="Year", y = "Production")
+
+```
+
+Notice that, since the scenario here is completely flat, the $TDM$ will be undefined. But this actually makes sense, since in general, we have no way of determining which portfolio will be "disrupted" in this case, since we don't know if it is preferable to be above or below the scenario. 
+
+Another interesting point is that the $TDM$ will blow up as the scenario becomes more shallow. Let's consider two cases. In both cases, the portfolio will have the exact same values, and the scenario will have the same value of $S(t+10)$. However, the second case scenario will be more shallow than the first: 
+
+``` {r, echo = FALSE}
+
+data <- tibble::tribble(
+  ~year, ~metric, ~production,
+  2020L,     "P",          5L,
+  2025L,     "P",          5L,
+  2030L,     "P",          5L,
+  2050L,     "P",          5L,
+  2020L,     "S",          5L,
+  2025L,     "S",         10L,
+  2030L,     "S",         12L,
+  2050L,     "S",         15L
+  )
+
+data %>% 
+  ggplot(aes(x = year, y = production, group = metric, color = metric)) + 
+    geom_line() + 
+    labs(title="Trajectories for Two Portfolios",x="Year", y = "Production")
+```
+
+the resulting TDM here is: 
+```{r}
+(12 - 5)/(12 - 5)
+```
+
+``` {r, echo = FALSE}
+
+data <- tibble::tribble(
+  ~year, ~metric, ~production,
+  2020L,     "P",           5,
+  2025L,     "P",           5,
+  2030L,     "P",           5,
+  2050L,     "P",           5,
+  2020L,     "S",        11.9,
+  2025L,     "S",       11.95,
+  2030L,     "S",          12,
+  2050L,     "S",        12.1
+  )
+
+
+data %>% 
+  ggplot(aes(x = year, y = production, group = metric, color = metric)) + 
+    geom_line() + 
+    labs(title="Trajectories for Two Portfolios",x="Year", y = "Production")
+```
+
+the resulting TDM here is: 
+``` {r}
+(12 - 5) / (12 - 11.9)
+```
+
+much much larger than the previous TDM. 
+
+### Lower limit
+The $max(0, ...)$ in this function guarantees that the lower limit is $0$. There are a few ways to reach this lower limit: 
+
+- If $S(t+10) \le P(t+5)$ AND $S(t+10) > S(t)$
+- If $S(t+10) \ge P(t+5)$ AND $S(t+10) < S(t)$
+
+How can we interpret these edge-cases? 
+
+In the first, we see that $S(t+10) - S(t) > 0$, meaning the scenario increases over a ten-year horizon. In general, increasing scenarios occur if: 
+
+- They are simply projecting that, given current trends, the technology must continue to increase (eg. gas as a transition technology)
+- They are stating that the technology SHOULD increase to satisfy a 2-degree aligned future (eg. renewable technologies)
+
+Thus, if the portfolio value $P(t+5)$ is already more ambitious then the scenario value $S(t+10)$ there is no disruption. However, the case is more subtle if the scenario changes it's behaviour outside of the 10 year window (see the next section on **S(t) is not monotonic**). 
+
+In the second case, the interpretation is the opposite. If the scenario decreases, and the portfolio is within the bounds of this decreasing trend, then the resultant disruption is 0. Still, we have the difficulty of potential non-monoticity. 
+
+### S(t) is not monotonic
+
+There is an interesting interpretation if f S(t) is not monotonic, and perhaps more importantly, if the function changes it's behaviour beyond the 10 year time horizon. 
+
+In this case, it can be confusing to determine *which* side of th
