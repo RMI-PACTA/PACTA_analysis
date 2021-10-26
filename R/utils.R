@@ -82,7 +82,7 @@ update_dockerfile_packages <- function(path = NULL) {
   old_dockerfile <- read_dockerfile(path)
   new_dockerfile <- c(
     dockerfile_head(old_dockerfile),
-    dockerfile_packages(packages_path()),
+    dockerfile_packages(),
     dockerfile_tail(old_dockerfile)
   )
 
