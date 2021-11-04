@@ -46,9 +46,9 @@ create_portfolio_subfolders <- function(portfolio_name_ref_all = NULL, project_l
   invisible(portfolio_name_ref_all)
 }
 
-save_if_exists <- function(df, portfolio_name_, save_name, csv_or_rds = "rds") {
+save_if_exists <- function(df, portfolio_name, save_name, csv_or_rds = "rds") {
   if (data_check(df)) {
-    df <- df %>% filter(portfolio_name == all_of(portfolio_name_))
+    df <- df %>% filter(portfolio_name == .env$portfolio_name)
   }
 
   if (data_check(df)) {

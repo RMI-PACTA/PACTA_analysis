@@ -1,4 +1,4 @@
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 
 test_that("reverses the effect of janitor::clean_names", {
   data <- tibble(x.x = 1, y = 1, z.z = 1)

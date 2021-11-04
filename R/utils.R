@@ -1,16 +1,59 @@
 setup_project <- function() {
-  path <- fs::path(
-    "deduplicate",
-    "set_portfolio-name-ref-all_working-location_and_web-parameters.R"
-  )
-  source(path)
+  if (in_transitionmonitor()) {
+    portfolio_name_ref_all <<- get_portfolio_name()
+    working_location <<- getwd()
+    set_web_parameters(file_path = paste0(working_location, "/parameter_files/WebParameters_docker.yml"))
+  } else {
+    portfolio_name_ref_all <<- portfolio_name_ref_all # must be the same name as in the _PortfolioParameters.yml
+    working_location <<- here::here()
+    set_web_parameters(file_path = paste0(working_location, "/parameter_files/WebParameters_2dii.yml"))
+  }
 }
 
-use_r_packages <- function(path = packages_path()) {
-  suppressPackageStartupMessages(source(path))
-  resolve_conflicts()
+required_packages_vec <- function() {
+  c(
+    "assertthat",
+    "bookdown",
+    "config",
+    "conflicted",
+    "countrycode",
+    "data.table",
+    "devtools",
+    "dplyr",
+    "fs",
+    "fst",
+    "ggplot2",
+    "glue",
+    "here",
+    "janitor",
+    "jsonlite",
+    "knitr",
+    "purrr",
+    "readr",
+    "readxl",
+    "renv",
+    "reshape2",
+    "rlang",
+    "rmarkdown",
+    "rstudioapi",
+    "scales",
+    "stringr",
+    "testthat",
+    "tibble",
+    "tidyr",
+    "tidyselect",
+    "withr",
+    "writexl",
+    "zoo"
+  )
+}
 
-  invisible(path)
+use_r_packages <- function() {
+  suppressPackageStartupMessages({
+    for (pkg in required_packages_vec()) { library(pkg, character.only = TRUE) }
+  })
+
+  resolve_conflicts()
 }
 
 resolve_conflicts <- function() {
@@ -39,7 +82,7 @@ update_dockerfile_packages <- function(path = NULL) {
   old_dockerfile <- read_dockerfile(path)
   new_dockerfile <- c(
     dockerfile_head(old_dockerfile),
-    dockerfile_packages(packages_path()),
+    dockerfile_packages(),
     dockerfile_tail(old_dockerfile)
   )
 
@@ -70,9 +113,8 @@ dockerfile_tail <- function(dockerfile = read_dockerfile()) {
   dockerfile[end_of_packages_on_dockerfile(dockerfile):length(dockerfile)]
 }
 
-dockerfile_packages <- function(path = packages_path()) {
-  raw <- readLines(path, encoding = "UTF-8")
-  pkg <- sub("library\\((.*)\\)", "\\1", raw)
+dockerfile_packages <- function() {
+  pkg <- required_packages_vec()
 
   c(
     '    && Rscript -e "install.packages( \\',
@@ -85,10 +127,6 @@ format_as_vector <- function(string) {
   x <- glue("'{string}',")
   x[length(x)] <- sub(",$", "", x[length(x)])
   c('c(', glue("  {x}"), ')' )
-}
-
-packages_path <- function() {
-  file.path("deduplicate", "load-and-attach-r-packages.R")
 }
 
 dockerfile_path <- function() {

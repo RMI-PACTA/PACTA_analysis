@@ -1,12 +1,37 @@
 # use this script instead of script 2, in case the logical run_remotely == TRUE
 
 financial_data <- readRDS(file.path(analysis_inputs_path, "financial_data.rda"))
-raw_pf <- read_csv(file.path(raw_input_path, paste0(project_name, "_Input.csv")),
-                   col_types = "cccnnccn")
-
+raw_pf <- read_csv(
+  file.path(raw_input_path, paste0(project_name, "_Input.csv")),
+  col_types = cols(
+    investor_name = "c",
+    portfolio_name = "c",
+    isin = "c",
+    number_of_shares = "d",
+    value_usd = "d",
+    corporate_bond_ticker = "c",
+    country_of_domicile = "c",
+    current_shares_outstanding = "d"
+  )
+)
 
 prep_pf <- raw_pf %>%
-  inner_join(financial_data, by = "isin") %>%
+  inner_join(financial_data, by = "isin")
+
+prep_pf <- prep_pf %>%
+  mutate(
+    corporate_bond_ticker = dplyr::if_else(asset_type == "Bonds", corporate_bond_ticker, NA_character_),
+    number_of_shares = dplyr::if_else(asset_type == "Equity", number_of_shares, NA_real_),
+    current_shares_outstanding = dplyr::if_else(asset_type == "Equity", current_shares_outstanding, NA_real_)
+  ) %>%
+  mutate(
+    asset_type = dplyr::case_when(
+      asset_type == "Equity" & is.na(number_of_shares) ~ "Unclassifiable",
+      asset_type == "Equity" & is.na(current_shares_outstanding) ~ "Unclassifiable",
+      asset_type == "Bonds" & is.na(corporate_bond_ticker) ~ "Unclassifiable",
+      TRUE ~ .data$asset_type
+    )
+  ) %>%
   add_holding_id() %>%
   rename(current_shares_outstanding_all_classes = current_shares_outstanding)
 
