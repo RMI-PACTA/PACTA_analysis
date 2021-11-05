@@ -1,11 +1,11 @@
 ---
 title: "Transition Disruption Metric"
-# author: "Jackson Hoffart"
-# output: rmarkdown::html_vignette
-# vignette: >
-#   %\VignetteIndexEntry{transition_disruption_metric}
-#   %\VignetteEngine{knitr::rmarkdown}
-#   %\VignetteEncoding{UTF-8}
+author: "Jackson Hoffart"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{transition_disruption_metric}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, include = FALSE}
@@ -23,15 +23,15 @@ library(PACTA.analysis)
 
 PACTA offers many different metrics, each with their own strengths and weaknesses. Most of the metrics rely heavily on the use of forward-looking data. This data, which estimates the production of physical assets, is reliably predictable to about five years into the future. 
 
-There are, however, certain climate scenarios which deliberately offset the bulk of their ambition to the later years in the scenario. For example, a "delayed response" scenario (such as the  Inevitable Policy Response (IPR) Scenario) assumes that future production of most sectors follow current trends (i.e. business as usual), before inevitably resulting in a massive and disruptive transition in the long-term. Since the interesting part of these scenarios is often positioned well beyond the 5 year time-horizon of the data, most usual PACTA metrics (eg. Volume Trajectory) are ill-suited to provide useful insights. 
+The other key component to these metrics is a climate scenario, which projects how production *should* shift, to mediate climate change. There are, however, certain climate scenarios which deliberately offset the bulk of their ambition to the later years in the scenario (sometimes 20+ years into the future). A "delayed response" scenario, such as the  Inevitable Policy Response (IPR) Scenario, assumes that future production of most sectors follow current trends (i.e. business as usual), before inevitably resulting in a massive and disruptive transition in the long-term. Since the interesting part of these scenarios is often positioned well beyond the 5 year time-horizon of the data, most usual PACTA metrics (eg. Volume Trajectory) are ill-suited to provide useful insights. 
 
-The purpose of these "delayed response" scenarios is to estimate the risks associated with a "worst-case scenario". With such a scenario, we might want to measure how **disruptive** a climate **transition** could be to the portfolio.  
+The purpose of these "delayed response" scenarios is to estimate the risks associated with a "worst-case scenario". With such a scenario, we might want to measure how **disruptive** a climate **transition** could be to a company or portfolio.  
 
 To help provide insights into this question, we propose the Transition Disruption Metric (TDM). This metric aims to provide useful insights in the medium- to long- term (ie. time-horizons greater than 5 years).
 
-# Inspiration
+# Derivation
 
-We will design the metric in a few steps. Consider some function, $S(t)$, that in general might increase or decrease over time:
+We will design the metric together, in a few steps. Consider some function, $S(t)$, that in general may increase or decrease over time:
 
 ```{r, echo = FALSE}
 
@@ -61,7 +61,7 @@ data %>%
   )
 ```
 
-This function could represent some climate scenario, dictating how production should change to mitigate climate change. Now, let's say we know the production associated with a portfolio for the range $(t,t + t_1)$, where in general, $t + t_1$ will be less than the end year of the scenario:
+This function could represent a climate scenario, dictating how production should change to mitigate climate change. Now, let's say we know the production associated with a company or portfolio, $P(t)$, for the range $(t,t + t_1)$. In general, $t + t_1$ will be less than the end year of the scenario:
 ```{r, echo = FALSE}
 
 data <- tibble::tribble(
@@ -137,30 +137,298 @@ The slope of the scenario, between $(t, t+t2)$ is:
 
 $$ m_S = \frac{S(t+t_2) - S(t)}{(t+t_2) - (t)} $$ 
 
-To calculate the slope of the portfolio's required build-out, we have constructed this line to connect $P(t+t_1)$ and $S(t+t_2)$, thus the slope will be: 
+Next let's calculate the slope of the portfolio's required build-out. Since we have constructed this line to connect $P(t+t_1)$ and $S(t+t_2)$, we see that the slope will be: 
 
 $$ m_P = \frac{S(t+t_2) - P(t+t_1)}{(t+t_2) - (t+t_1)}$$
 
 Taking the ratio of these two slopes, and tidying up a bit, yields: 
 
 $$\frac{m_P}{m_S} = \frac{S_i (t+t_2) - P_i(t+t_1)}{S_i(t+t_2) - S_i(t)} * \left(\frac{t_2}{t_2-t_1}\right)$$
+## Interesting regions
+### Increasing Scenarios
+We will use this value as the basis for our metric. To understand what this value shows, let's explore a few interesting cases. First, let's assume that $m_S$ is strictly positive (we will explore the opposite case after): 
 
-We will use this value as the basis for our metric. To understand what this value shows, let's explore a few boundary cases: 
+- Case 1: $\frac{m_P}{m_S} > 1$: The portfolio will need to change it's production at a rate more rapid than the scenario to achieve the same production value at $t+t_2$. 
 
-- First of all, if $m_P$ is $0$, meaning that the portfolio has already achieved the future scenario target, then the ratio will be 0. 
+```{r, echo = FALSE}
 
-- If $m_P = m_S$, meaning that the portfolio has not achieved the future scenario target, but is exactly on track with the current scenario value, then the ratio will be 1. 
+data <- tibble::tribble(
+  ~production, ~year,                ~type, ~line_type,
+            1, 2020L,               "S(t)",    "solid",
+            2, 2025L,               "S(t)",    "solid",
+            3, 2030L,               "S(t)",    "solid",
+            4, 2035L,               "S(t)",    "solid",
+            5, 2040L,               "S(t)",    "solid",
+            6, 2045L,               "S(t)",    "solid",
+            7, 2050L,               "S(t)",    "solid",
+          0.5, 2020L,               "P(t)",    "solid",
+            0.6, 2025L,               "P(t)",    "solid",
+            0.6, 2025L, "Required build-out",   "dashed",
+            3, 2030L, "Required build-out",   "dashed"
+  )
 
-- Any value between $0$ and $1$ means that the portfolio is currently performing equal to or better than the scenario. 
+data %>%
+  ggplot(aes(x = year, y = production, group = type)) +
+  geom_line(aes(color = type, linetype = line_type)) +
+  scale_color_manual(values = c("#9999CC", "#0B7A75", "#CC6666")) +
+  guides(linetype = "none") +
+  scale_linetype_manual(values = c("dashed", "solid")) + 
+  guides(fill = "none") +
+  geom_point(aes(shape = type)) +
+  scale_shape_manual(values = c("triangle", "triangle", "circle")) +
+  labs(title = "Production by Year", x = "Year", y = "Production") + 
+  theme(
+    axis.text.y = element_blank()
+  ) + 
+  scale_x_continuous(
+    breaks = c(2020, 2025, 2030, 2035, 2040, 2045, 2050),
+    labels = c("t", "t+t1", "t+t2", "", "", "", "")
+    )
+```
 
-- For values greater than $1$, the portfolio is lagging the scenario and needs to have a LARGER rate of change than the scenario, to achieve the future targets. 
+- Case 2: $\frac{m_P}{m_S} = 1$: The portfolio and scenario have the exact same value at $t+t_1$, and thus the portfolio will need to increaes it's production at exactly the same rate as the scenario (difficult to see on the graph, since "Required build-out" is on the same line as S(t)).
 
-The final boundary case will be assessing when the value is positive or negative. 
-It is clear that it will be positive if $m_P$ is less than $0$, meaning that the portfolio needs to increase to meet the scenario AND $m_S$ is positive,  the ratio will be negative. 
+```{r, echo = FALSE}
+
+data <- tibble::tribble(
+  ~production, ~year,                ~type, ~line_type,
+            1, 2020L,               "S(t)",    "solid",
+            2, 2025L,               "S(t)",    "solid",
+            3, 2030L,               "S(t)",    "solid",
+            4, 2035L,               "S(t)",    "solid",
+            5, 2040L,               "S(t)",    "solid",
+            6, 2045L,               "S(t)",    "solid",
+            7, 2050L,               "S(t)",    "solid",
+          0.5, 2020L,               "P(t)",    "solid",
+            2, 2025L,               "P(t)",    "solid",
+            2, 2025L, "Required build-out",   "dashed",
+            3, 2030L, "Required build-out",   "dashed"
+  )
+
+data %>%
+  ggplot(aes(x = year, y = production, group = type)) +
+  geom_line(aes(color = type, linetype = line_type)) +
+  scale_color_manual(values = c("#9999CC", "#0B7A75", "#CC6666")) +
+  guides(linetype = "none") +
+  scale_linetype_manual(values = c("dashed", "solid")) + 
+  guides(fill = "none") +
+  geom_point(aes(shape = type)) +
+  scale_shape_manual(values = c("triangle", "triangle", "circle")) +
+  labs(title = "Production by Year", x = "Year", y = "Production") + 
+  theme(
+    axis.text.y = element_blank()
+  ) + 
+  scale_x_continuous(
+    breaks = c(2020, 2025, 2030, 2035, 2040, 2045, 2050),
+    labels = c("t", "t+t1", "t+t2", "", "", "", "")
+    )
+```
+
+- Case 3: $0 < \frac{m_P}{m_S} < 1$: The portfolio is producing more than the scenario at $t+t_1$, but still less than is required at $t+t_2$. The slope of required build-out will be positive, but less than the slope of the scenario. 
+
+```{r, echo = FALSE}
+
+data <- tibble::tribble(
+  ~production, ~year,                ~type, ~line_type,
+            1, 2020L,               "S(t)",    "solid",
+            2, 2025L,               "S(t)",    "solid",
+            3, 2030L,               "S(t)",    "solid",
+            4, 2035L,               "S(t)",    "solid",
+            5, 2040L,               "S(t)",    "solid",
+            6, 2045L,               "S(t)",    "solid",
+            7, 2050L,               "S(t)",    "solid",
+          0.5, 2020L,               "P(t)",    "solid",
+            2.5, 2025L,               "P(t)",    "solid",
+            2.5, 2025L, "Required build-out",   "dashed",
+            3, 2030L, "Required build-out",   "dashed"
+  )
+
+data %>%
+  ggplot(aes(x = year, y = production, group = type)) +
+  geom_line(aes(color = type, linetype = line_type)) +
+  scale_color_manual(values = c("#9999CC", "#0B7A75", "#CC6666")) +
+  guides(linetype = "none") +
+  scale_linetype_manual(values = c("dashed", "solid")) + 
+  guides(fill = "none") +
+  geom_point(aes(shape = type)) +
+  scale_shape_manual(values = c("triangle", "triangle", "circle")) +
+  labs(title = "Production by Year", x = "Year", y = "Production") + 
+  theme(
+    axis.text.y = element_blank()
+  ) + 
+  scale_x_continuous(
+    breaks = c(2020, 2025, 2030, 2035, 2040, 2045, 2050),
+    labels = c("t", "t+t1", "t+t2", "", "", "", "")
+    )
+```
+
+- Case 4: $\frac{m_P}{m_S} < 0$: The portfolio is producing more than the scenario at $t+t_2$ thus it is already more amibitious than the scenario. To align with the scenario it would need to reduce it's production.
+
+```{r, echo = FALSE}
+
+data <- tibble::tribble(
+  ~production, ~year,                ~type, ~line_type,
+            1, 2020L,               "S(t)",    "solid",
+            2, 2025L,               "S(t)",    "solid",
+            3, 2030L,               "S(t)",    "solid",
+            4, 2035L,               "S(t)",    "solid",
+            5, 2040L,               "S(t)",    "solid",
+            6, 2045L,               "S(t)",    "solid",
+            7, 2050L,               "S(t)",    "solid",
+          0.5, 2020L,               "P(t)",    "solid",
+            4, 2025L,               "P(t)",    "solid",
+            4, 2025L, "Required build-out",   "dashed",
+            3, 2030L, "Required build-out",   "dashed"
+  )
+
+data %>%
+  ggplot(aes(x = year, y = production, group = type)) +
+  geom_line(aes(color = type, linetype = line_type)) +
+  scale_color_manual(values = c("#9999CC", "#0B7A75", "#CC6666")) +
+  guides(linetype = "none") +
+  scale_linetype_manual(values = c("dashed", "solid")) + 
+  guides(fill = "none") +
+  geom_point(aes(shape = type)) +
+  scale_shape_manual(values = c("triangle", "triangle", "circle")) +
+  labs(title = "Production by Year", x = "Year", y = "Production") + 
+  theme(
+    axis.text.y = element_blank()
+  ) + 
+  scale_x_continuous(
+    breaks = c(2020, 2025, 2030, 2035, 2040, 2045, 2050),
+    labels = c("t", "t+t1", "t+t2", "", "", "", "")
+    )
+```
 
 In this final case, we don't necessarily need a metric as we don't expect the portfolio to be disrupted if it is already out-performing against the scenario, so we can attenuate negative values: 
 
 $$max\left(0, \frac{m_P}{m_S}\right)$$
+
+### Decreasing Scenarios
+
+So far, in all the above cases, we considered only increasing scenarios (i.e scenarios where $m_S > 0$). Let's consider now the case that $m_S < 0$. For such a scenario, the above cases still hold their validity, just with the sign of $m_P$ reversed. That is to say: 
+
+- Case 1: The case that the portfolio needs to change more rapidly than the scenario to meet at $t + t_2$ can still be shown as $\frac{m_P}{m_S} > 1$. This is because, if $m_S < 0$, then $m_P$ will simply need to be more negative, and the signs will cancel out. 
+
+```{r, echo = FALSE}
+
+data <- tibble::tribble(
+  ~production, ~year,                ~type, ~line_type,
+            7, 2020L,               "S(t)",    "solid",
+            6, 2025L,               "S(t)",    "solid",
+            5, 2030L,               "S(t)",    "solid",
+            4, 2035L,               "S(t)",    "solid",
+            3, 2040L,               "S(t)",    "solid",
+            2, 2045L,               "S(t)",    "solid",
+            1, 2050L,               "S(t)",    "solid",
+            7, 2020L,               "P(t)",    "solid",
+            7, 2025L,               "P(t)",    "solid",
+            7, 2025L, "Required build-out",   "dashed",
+            5, 2030L, "Required build-out",   "dashed"
+  )
+
+data %>%
+  ggplot(aes(x = year, y = production, group = type)) +
+  geom_line(aes(color = type, linetype = line_type)) +
+  scale_color_manual(values = c("#9999CC", "#0B7A75", "#CC6666")) +
+  guides(linetype = "none") +
+  scale_linetype_manual(values = c("dashed", "solid")) + 
+  guides(fill = "none") +
+  geom_point(aes(shape = type)) +
+  scale_shape_manual(values = c("triangle", "triangle", "circle")) +
+  labs(title = "Production by Year", x = "Year", y = "Production") + 
+  theme(
+    axis.text.y = element_blank()
+  ) + 
+  scale_x_continuous(
+    breaks = c(2020, 2025, 2030, 2035, 2040, 2045, 2050),
+    labels = c("t", "t+t1", "t+t2", "", "", "", "")
+    )
+```
+
+It is left as an exercise to the reader to prove that, due to similar sign cancellations, Cases 2, 3 and 4 keep their interpretation, regardless of if the scenario increases or decreases.  
+
+### Non-Monotonic Scenario
+There is one final situation we have not yet accounted for, and this is the case of the non-monotonic scenario. Consider the situation that $S(t)$ increases(decreases) over the period $(t, t+t_2)$, but then decreases(increases) over the following time-period:
+
+```{r, echo = FALSE}
+
+data <- tibble::tribble(
+  ~production, ~year,                ~type, ~line_type,
+            3, 2020L,               "S(t)",    "solid",
+            2, 2025L,               "S(t)",    "solid",
+            1, 2030L,               "S(t)",    "solid",
+            2, 2035L,               "S(t)",    "solid",
+            3, 2040L,               "S(t)",    "solid",
+            4, 2045L,               "S(t)",    "solid",
+            5, 2050L,               "S(t)",    "solid",
+          # 3, 2020L,               "P(t)",    "solid",
+          #   4, 2025L,               "P(t)",    "solid",
+          #   4, 2025L, "Required build-out",   "dashed",
+          #   1, 2030L, "Required build-out",   "dashed"
+  )
+
+data %>%
+  ggplot(aes(x = year, y = production, group = type)) +
+  geom_line(aes(color = type, linetype = line_type)) +
+  scale_color_manual(values = c("#CC6666")) +
+  guides(linetype = "none") +
+  scale_linetype_manual(values = c("solid")) + 
+  guides(fill = "none") +
+  geom_point(aes(shape = type)) +
+  scale_shape_manual(values = c("circle")) +
+  labs(title = "Production by Year", x = "Year", y = "Production") + 
+  theme(
+    axis.text.y = element_blank()
+  ) + 
+  scale_x_continuous(
+    breaks = c(2020, 2025, 2030, 2035, 2040, 2045, 2050),
+    labels = c("t", "t+t1", "t+t2", "", "", "", "")
+    )
+```
+
+Here, our usual formulation might look something like this: 
+```{r, echo = FALSE}
+
+data <- tibble::tribble(
+  ~production, ~year,                ~type, ~line_type,
+            3, 2020L,               "S(t)",    "solid",
+            2, 2025L,               "S(t)",    "solid",
+            1, 2030L,               "S(t)",    "solid",
+            2, 2035L,               "S(t)",    "solid",
+            3, 2040L,               "S(t)",    "solid",
+            4, 2045L,               "S(t)",    "solid",
+            5, 2050L,               "S(t)",    "solid",
+          3, 2020L,               "P(t)",    "solid",
+            2.9, 2025L,               "P(t)",    "solid",
+            2.9, 2025L, "Required build-out",   "dashed",
+            1, 2030L, "Required build-out",   "dashed"
+  )
+
+data %>%
+  ggplot(aes(x = year, y = production, group = type)) +
+  geom_line(aes(color = type, linetype = line_type)) +
+  scale_color_manual(values = c("#9999CC", "#0B7A75", "#CC6666")) +
+  guides(linetype = "none") +
+  scale_linetype_manual(values = c("dashed", "solid")) + 
+  guides(fill = "none") +
+  geom_point(aes(shape = type)) +
+  scale_shape_manual(values = c("triangle", "triangle", "circle")) +
+  labs(title = "Production by Year", x = "Year", y = "Production") + 
+  theme(
+    axis.text.y = element_blank()
+  ) + 
+  scale_x_continuous(
+    breaks = c(2020, 2025, 2030, 2035, 2040, 2045, 2050),
+    labels = c("t", "t+t1", "t+t2", "", "", "", "")
+    )
+```
+
+However this doesn't really make sense. Since, overall, the scenario is increasing, if the portfolio or company is producing more than the scenario projects, it shouldn't be disrupted at all. 
+
+Normally, this would be accounted for by our $max(0, \frac{m_P}{m_S})$ function
+
+TODO: finish this section. 
 
 # Metric Definition
 
@@ -181,11 +449,11 @@ $$TDM_i = 2 * max\left(0, \frac{S_i (t+10) - P_i(t+5)}{S_i(t+10) - S_i(t)}\right
 
 <!-- # Edge Cases -->
 <!-- ## Upper limit -->
-<!-- Given that we can assume both $S(t)$ and $P(t)$ are positive, it is clear that the numerator is bound by $S(t)$. Thus, the most obvious boundary to consider occurs when $S_i(t+10)$ approaches $S_i(t)$. In this case, we see that the $TDM$ approaches infinity.  -->
+<!-- Given that we can assume both $S(t)$ and $P(t)$ are positive, it is clear that the numerator is bound by $S(t)$. Thus, the most obvious boundary to consider occurs when $S_i(t+10)$ approaches $S_i(t)$. In this case, we see that the $TDM$ approaches infinity. -->
 
-<!-- How can we interpret this?  -->
+<!-- How can we interpret this? -->
 
-<!-- Let's plot a completely flat scenario, against two different production values, one which is above the flat scenario, and one which is below it:  -->
+<!-- Let's plot a completely flat scenario, against two different production values, one which is above the flat scenario, and one which is below it: -->
 
 <!-- ``` {r, echo = FALSE} -->
 <!-- suppressPackageStartupMessages(library(tidyverse)) -->
@@ -213,9 +481,9 @@ $$TDM_i = 2 * max\left(0, \frac{S_i (t+10) - P_i(t+5)}{S_i(t+10) - S_i(t)}\right
 <!--   labs(title = "Trajectories for Two Portfolios", x = "Year", y = "Production") -->
 <!-- ``` -->
 
-<!-- Notice that, since the scenario here is completely flat, the $TDM$ will be undefined. But this actually makes sense, since in general, we have no way of determining which portfolio will be "disrupted" in this case, since we don't know if it is preferable to be above or below the scenario.  -->
+<!-- Notice that, since the scenario here is completely flat, the $TDM$ will be undefined. But this actually makes sense, since in general, we have no way of determining which portfolio will be "disrupted" in this case, since we don't know if it is preferable to be above or below the scenario. -->
 
-<!-- Another interesting point is that the $TDM$ will blow up as the scenario becomes more shallow. Let's consider two cases. In both cases, the portfolio will have the exact same values, and the scenario will have the same value of $S(t+10)$. However, the second case scenario will be more shallow than the first:  -->
+<!-- Another interesting point is that the $TDM$ will blow up as the scenario becomes more shallow. Let's consider two cases. In both cases, the portfolio will have the exact same values, and the scenario will have the same value of $S(t+10)$. However, the second case scenario will be more shallow than the first: -->
 
 <!-- ``` {r, echo = FALSE} -->
 
@@ -237,7 +505,7 @@ $$TDM_i = 2 * max\left(0, \frac{S_i (t+10) - P_i(t+5)}{S_i(t+10) - S_i(t)}\right
 <!--   labs(title = "Trajectories for Two Portfolios", x = "Year", y = "Production") -->
 <!-- ``` -->
 
-<!-- the resulting TDM here is:  -->
+<!-- the resulting TDM here is: -->
 <!-- ```{r} -->
 <!-- (12 - 5) / (12 - 5) -->
 <!-- ``` -->
@@ -263,30 +531,22 @@ $$TDM_i = 2 * max\left(0, \frac{S_i (t+10) - P_i(t+5)}{S_i(t+10) - S_i(t)}\right
 <!--   labs(title = "Trajectories for Two Portfolios", x = "Year", y = "Production") -->
 <!-- ``` -->
 
-<!-- the resulting TDM here is:  -->
+<!-- the resulting TDM here is: -->
 <!-- ``` {r} -->
 <!-- (12 - 5) / (12 - 11.9) -->
 <!-- ``` -->
 
-<!-- much much larger than the previous TDM.  -->
+<!-- much much larger than the previous TDM. -->
 
 <!-- ## Lower limit -->
-<!-- The $max(0, ...)$ in this function guarantees that the lower limit is $0$. There are a few ways to reach this lower limit:  -->
+<!-- The $max(0, ...)$ in this function guarantees that the lower limit is $0$. There are a few ways to reach this lower limit: -->
 
 <!-- - If $S(t+10) \le P(t+5)$ AND $S(t+10) > S(t)$ -->
 <!-- - If $S(t+10) \ge P(t+5)$ AND $S(t+10) < S(t)$ -->
 
-<!-- How can we interpret these edge-cases?  -->
+<!-- How can we interpret these edge-cases? -->
 
-<!-- In the first, we see that $S(t+10) - S(t) > 0$, meaning the scenario increases over a ten-year horizon. In general, increasing scenarios occur if:  -->
+<!-- In the first, we see that $S(t+10) - S(t) > 0$, meaning the scenario increases over a ten-year horizon. In general, increasing scenarios occur if: -->
 
 <!-- - They are simply projecting that, given current trends, the technology must continue to increase (eg. gas as a transition technology) -->
 <!-- - They are stating that the technology SHOULD increase to satisfy a 2-degree aligned future (eg. renewable technologies) -->
-
-<!-- Thus, if the portfolio value $P(t+5)$ is already more ambitious then the scenario value $S(t+10)$ there is no disruption. However, the case is more subtle if the scenario changes it's behaviour outside of the 10 year window (see the next section on **S(t) is not monotonic**).  -->
-
-<!-- In the second case, the interpretation is the opposite. If the scenario decreases, and the portfolio is within the bounds of this decreasing trend, then the resultant disruption is 0. Still, we have the difficulty of potential non-monoticity.  -->
-
-<!-- ## S(t) is not monotonic -->
-
-<!-- TODO: WORK ON THIS -->
