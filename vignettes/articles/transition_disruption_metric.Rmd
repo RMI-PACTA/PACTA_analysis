@@ -1,5 +1,9 @@
 ---
 title: "Transition Disruption Metric"
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
 ---
 
 ```{r, include = FALSE}
@@ -11,7 +15,7 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
-library(dplyr)
+suppressPackageStartupMessages(library(dplyr))
 library(ggplot2)
 library(PACTA.analysis)
 ```
@@ -480,11 +484,14 @@ However this doesn't really make sense. Since, overall, the scenario is increasi
 Normally, this would be accounted for by our $max(0, \frac{m_P}{m_S})$ function, however the function is now off by a factor of $-1$, since the scenario is changing directions. 
 
 To account for this, we add a special considerations to the $TDM$ metric:
+
+IF $S(t+t_2) > S(t) > S(t+t_1)$ OR $S(t+t_2) < S(t) < S(t+t_1)$, then: 
+
+$$TDM = max(0, - \frac{m_P}{m_S})$$
+
+ELSE: 
+
 $$TDM = max(0, \frac{m_P}{m_S})$$
-
-except if $$S(t+t_2) > S(t) > S(t+t_1)$$ or $S(t+t_2) < S(t) < S(t+t_1)$, then: 
-
-$TDM = max(0, - \frac{m_P}{m_S})$
 
 ## TDM In Practice
 
