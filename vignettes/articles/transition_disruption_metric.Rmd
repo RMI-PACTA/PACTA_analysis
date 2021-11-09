@@ -32,43 +32,52 @@ tdm_demo_plot<- function(data) {
 }
 ```
 
+
+# Introduction 
+
 There are several metrics included in the PACTA analysis. Some metrics offer
 interesting insights on short time-scales (e.g. five years into the future).
 However, analysts may also be interested in longer-term insights (e.g. 10+ years
-into the future). Here, we will propose and derive one of these metrics, called
-the Transition Disruption Metric. We will then explore interesting regions
-expressed by the metric, along with their interpretation.
+into the future). To address this, we propose here the Transition Disruption
+Metric. In this article, we will motivate why such a metric is necessary, define
+the metric, provide a brief derivation, and explore interesting regions of the
+metric function, along with their interpretation.
 
-# Introduction
+# Motivation
 
-PACTA offers many metrics, most of which rely heavily on the use of
+PACTA offers many metrics. One key component of most of these metrics if
 forward-looking data. This forward-looking data estimates the production of
-physical assets and is usually able to reliably forecast data to about five years
-into the future.
+physical assets and is usually able to reliably forecast data to about five
+years into the future.
 
-Another key component in these metrics is a climate scenario, which projects how
-production *should* shift to mediate climate change. There are certain climate
-scenarios which offset the bulk of required change to the later years in the
-scenario (sometimes 20+ years into the future). The so-called "delayed response"
-scenarios, such as the  Inevitable Policy Response (IPR) scenario, assume that
+Another key component of these metrics is a climate scenario. These scenarios
+project how production *should* shift to mediate climate change. Most of these
+scenarios project that production should shift relatively smoothly from
+high-carbon to low-carbon technologies. There are, however, certain climate
+scenarios which shift very abruptly, often quite late in the scenario timeline
+(sometimes 20+ years into the future). These so-called "delayed response"
+scenarios, such as the Inevitable Policy Response (IPR) scenario, assume that
 future production of most sectors follow current trends (i.e. business as
-usual), before inevitably resulting in a massive and disruptive transition in
-the long-term. Since the interesting part of these scenarios is often positioned
-well beyond the five year time-horizon of the data, most usual PACTA metrics (e.g.
-Volume Trajectory) are ill-suited to provide useful insights.
+usual), before inevitably resulting in a massive and disruptive transition to
+low-carbon technologies in the long-term.
 
-The purpose of these "delayed response" scenarios is to estimate the risks
-associated with a worst-case scenario. With such a scenario, we might want to
-measure how **disruptive** a climate **transition** could be to a company or
-portfolio. To help provide insights into this question, we propose the
-**Transition Disruption Metric** (TDM). This metric aims to provide useful
-insights in the medium- to long- term (i.e. time-horizons greater than five
-years).
+A possible use-case of these "delayed response" scenarios is to estimate the
+risks associated with a worst-case scenario materializing. In other words, we
+might want to measure how **disruptive** a climate **transition** could be to a
+company or portfolio. Now, since the interesting part of these delayed response
+scenarios is often positioned well beyond the five year time-horizon of our
+forward-looking data, most other PACTA metrics (e.g. Volume Trajectory) don't
+provide useful insights into the later years of the scenario. 
+
+We propose the **Transition Disruption Metric** (TDM) as a way to address this
+problem. This metric aims to provide useful insights in the medium- to long-
+term (i.e. time-horizons greater than five years).
 
 # Metric Definition
 
-First, let us define (with no motivation) the Transition Disruption Metric,
-$TDM$, for some technology, $i$ as:
+First, let us define the metric with no context. We will then derive it together
+in the following section. The Transition Disruption Metric, $TDM$, for some
+technology, $i$ is:
 
 $$TDM_i = max\left(0, \frac{S_i (t+t_2) - P_i(t+t_1)}{S_i(t+t_2) - S_i(t)} * \left(\frac{t_2}{t_2-t_1}\right)\right) $$
 
@@ -77,17 +86,17 @@ where:
 
 - $t$ is some year - 
 
-- $S_i(t)$ is the production forecast by some climate scenario, for technology 
-$i$, at year $t$ 
+- $S_i(t)$ is a climate scenario, forecasting production for some technology
+$i$, at year $t$
 
-- $P_i(t)$ is the production associated to a company or portfolio, for 
-technology $i$, at year $t$ 
+- $P_i(t)$ is the production associated to a company or portfolio, for some
+technology $i$, at year $t$
 
 - $t_1$ and $t_2$ are two future years, where $t_1 < t_2$
 
 # Derivation
 
-Now, let's derive this metric together. Consider first some arbitrary function,
+Let's derive this metric together. Consider first some arbitrary function,
 $S(t)$, that in general may increase or decrease over time. This function could
 represent, for example, a climate scenario dictating how production must change
 to mitigate climate change:
@@ -149,10 +158,9 @@ data %>%
   )
 ```
 
-We are now comparing projected portfolio data (accurate to the best of our
-knowledge) against a scenario's production projections. For the portfolio to
-"transition", it would simply need to adjust it's production to match that of
-the scenario.
+We are comparing the estimated **future** production of a portfolio against what
+the scenario is suggesting. We can thus define a "transition", simply as
+adjusting the portfolio's production to match that of the scenario.
 
 If we want to determine how disrupted a portfolio might be between the last date
 we have data for it, $t+t_1$, and some future date in the scenario, $t+t_2$, we
@@ -198,23 +206,23 @@ The slope of the scenario, between $(t, t+t2)$ is:
 
 $$ m_S = \frac{S(t+t_2) - S(t)}{(t+t_2) - (t)} $$ 
 
-Next let's calculate the slope of the portfolio's required build-out. Since we
-have constructed this line to connect $P(t+t_1)$ and $S(t+t_2)$, we see that the
-slope will be:
+To calculate the slope of the portfolio's required build-out, recall that we
+have constructed this line to connect $P(t+t_1)$ and $S(t+t_2)$. Thus we can see
+that the slope will be:
 
 $$ m_P = \frac{S(t+t_2) - P(t+t_1)}{(t+t_2) - (t+t_1)}$$
 
 Taking the ratio of these two slopes, and tidying up a bit, yields: 
 
 $$\frac{m_P}{m_S} = \frac{S_i (t+t_2) - P_i(t+t_1)}{S_i(t+t_2) - S_i(t)} * \left(\frac{t_2}{t_2-t_1}\right)$$
-This looks similar to the metric we defined above, but we aren't quite done yet.
-Let's analyze some interesting regions of this function, and try to understand
-thri implications.
+This looks similar to the metric we defined at the beginning, but we aren't
+quite done yet. Let's analyze some interesting regions of this function, and try
+to understand what is missing.
 
 ## Interesting regions
 ### Increasing Scenarios
-First, let's assume for now that $m_S$ is strictly positive (we will explore the
-opposite case later):
+For now, let's assume that $m_S$ is strictly positive, thus the scenario is
+increasing. We will explore the opposite case later.
 
 - Case 1: $\frac{m_P}{m_S} > 1$: The portfolio will need to change it's
 production at a rate more rapid than the scenario to achieve the same production
@@ -367,11 +375,11 @@ $$max\left(0, \frac{m_P}{m_S}\right)$$
 or 
 
 $$max\left(0, \frac{S_i (t+t_2) - P_i(t+t_1)}{S_i(t+t_2) - S_i(t)} * \left(\frac{t_2}{t_2-t_1}\right)\right)$$
-This is exactly the metric we defined above. 
+This is exactly the metric we defined at the start. 
 
 ### Decreasing Scenarios
 
-To be complete, let's now consider decreasing scenarios (i.e scenarios where
+To be complete, let's consider decreasing scenarios (i.e scenarios where
 $m_S < 0$). For such a scenario, the above cases still hold their validity, just
 with the sign of $m_P$ reversed. That is to say:
 
@@ -497,10 +505,15 @@ ELSE:
 
 $$TDM = max(0, \frac{m_P}{m_S})$$
 
-## TDM In Practice
+# Conclusion
+
+We have derived together here the **Transition Disruption Metric**, which is useful for determining how a portfolio or company might be disrupted due to a delayed transition. We explored how different values of the metric can be interpreted, and how different edge-cases are handled. 
+
+## TDM in Practice
 
 One final note: in practice, PACTA's forward-looking data goes 5 years into the
-future, so $t_1 = 5$, and currently we set $t_2 = 10$ by default. In this case,
-this metric reduces to:
+future, so we can set $t_1 = 5$. By default, we will measure the transition
+disruption against a total time horizon of 10 years, so $t_2 = 10$. In this
+case, this metric reduces to:
 
-$$TDM_i = 2 * max\left(0, \frac{S_i (t+10) - P_i(t+5)}{S_i(t+10) - S_i(t)}\right) $$
+$$TDM_i = 2 * max\left(0, \frac{S_i (t+10) - P_i(t+5)}{S_i(t+10) - S_i(t)}\right)$$
