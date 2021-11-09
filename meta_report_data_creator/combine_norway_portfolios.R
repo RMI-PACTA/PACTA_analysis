@@ -1,28 +1,39 @@
 
 # manually set certain values and paths ----------------------------------------
 
-output_dir <- normalizePath("~/Dropbox (2° Investing)/2° Investing Team/People/Catarina/NORWAY-3", mustWork = FALSE)
-combined_portfolio_results_output_dir <- normalizePath("~/Desktop/test/norway_14092021_portfoliolevel")
-combined_user_results_output_dir <- normalizePath("~/Desktop/test/norway_14092021_peers_ind")
-combined_orgtype_results_output_dir <- normalizePath("~/Desktop/test/norway_14092021_peergroup")
+output_dir <- normalizePath("~/Desktop/Peru", mustWork = FALSE)
+combined_portfolio_results_output_dir <- file.path(output_dir, "combined", "portfolio_level")
+combined_user_results_output_dir <- file.path(output_dir, "combined", "user_level")
+combined_orgtype_results_output_dir <- file.path(output_dir, "combined", "orgtype_level")
 
-portfolios_path <- "~/Dropbox (2° Investing)/2° Investing Team/1. RESEARCH/1. Studies (projects)/PACTA . Regulator Monitoring/PACTA COP/03_Initiative_Level/05_PACTACOP_NO/04_Input_Cleaning/portfolios"
-portfolios_meta_csv <- "~/Dropbox (2° Investing)/2° Investing Team/1. RESEARCH/1. Studies (projects)/PACTA . Regulator Monitoring/PACTA COP/03_Initiative_Level/05_PACTACOP_NO/04_Input_Cleaning/portfolios.csv"
-users_meta_csv <- "~/Dropbox (2° Investing)/2° Investing Team/1. RESEARCH/1. Studies (projects)/PACTA . Regulator Monitoring/PACTA COP/03_Initiative_Level/05_PACTACOP_NO/04_Input_Cleaning/users.csv"
+data_path <- r2dii.utils::path_dropbox_2dii("2° Investing Team/1. research/1. Studies (projects)/PACTA . Regulator Monitoring/PACTA COP/03_Initiative_Level/06_PACTACOP_PE/04_Input_Cleaning/04. Data")
+portfolios_path <- file.path(data_path, "portfolios")
+portfolios_meta_csv <- file.path(data_path, "portfolios.csv")
+users_meta_csv <- file.path(data_path, "users.csv")
 
-project_code <- "PA2021NO"
-default_language <- "EN"
+project_code <- "PA2021PE"
+default_language <- "ES"
 
-project_prefix <- "norway"
+project_prefix <- "peru"
 
 local_PACTA_git_path <- "~/Documents/git/PACTA_analysis"
 
-bogus_csvs_to_be_ignored <- c("20303", "26102")
+bogus_csvs_to_be_ignored <- c()
 
 
 # check paths and directories --------------------------------------------------
 
 dir.create(output_dir, showWarnings = FALSE)
+dir.create(combined_portfolio_results_output_dir, showWarnings = FALSE, recursive = TRUE)
+dir.create(file.path(combined_portfolio_results_output_dir, "30_Processed_inputs"), showWarnings = FALSE)
+dir.create(file.path(combined_portfolio_results_output_dir, "40_Results"), showWarnings = FALSE)
+dir.create(combined_user_results_output_dir, showWarnings = FALSE, recursive = TRUE)
+dir.create(file.path(combined_user_results_output_dir, "30_Processed_inputs"), showWarnings = FALSE)
+dir.create(file.path(combined_user_results_output_dir, "40_Results"), showWarnings = FALSE)
+dir.create(combined_orgtype_results_output_dir, showWarnings = FALSE, recursive = TRUE)
+dir.create(file.path(combined_orgtype_results_output_dir, "30_Processed_inputs"), showWarnings = FALSE)
+dir.create(file.path(combined_orgtype_results_output_dir, "40_Results"), showWarnings = FALSE)
+
 stopifnot(dir.exists(output_dir))
 stopifnot(dir.exists(portfolios_path))
 stopifnot(file.exists(portfolios_meta_csv))
@@ -41,7 +52,7 @@ stopifnot(dir.exists(file.path(combined_orgtype_results_output_dir, "40_Results"
 
 # load required packages -------------------------------------------------------
 
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 library(purrr)
 library(stringr)
 library(fs)
@@ -76,15 +87,16 @@ users_meta <- read_csv(users_meta_csv, col_types = "ncccccn")
 
 data <-
   data %>%
-  mutate(port_id = as.numeric(tools::file_path_sans_ext(basename(csv_name)))) %>%
+  mutate(port_id = suppressWarnings(as.numeric(tools::file_path_sans_ext(basename(csv_name))))) %>%
   left_join(portfolios_meta[, c("id", "user_id")], by = c(port_id = "id")) %>%
   left_join(users_meta[, c("id", "organization_type")], by = c(user_id = "id"))
 
-write.csv(
-  data,
-  file = file.path(output_dir, paste0(project_prefix, "_full.csv")),
-  row.names = FALSE, fileEncoding = "UTF-8"
-  )
+data <-
+  data %>%
+  filter(!is.na(port_id)) %>%
+  filter(!is.na(user_id))
+
+write_csv(data, file = file.path(output_dir, paste0(project_prefix, "_full.csv")))
 saveRDS(data, file.path(output_dir, paste0(project_prefix, "_full.rds")))
 
 
@@ -98,10 +110,8 @@ dir_create(file.path(meta_output_dir, pacta_directories))
 data %>%
   mutate(portfolio_name = "Meta Portfolio") %>%
   mutate(investor_name = "Meta Investor") %>%
-  write.csv(
-    file = file.path(meta_output_dir, "20_Raw_Inputs", paste0(project_prefix, "_meta.csv")),
-    row.names = FALSE, fileEncoding = "UTF-8"
-  )
+  select(investor_name, portfolio_name, isin, market_value, currency) %>%
+  write_csv(file = file.path(meta_output_dir, "20_Raw_Inputs", paste0(project_prefix, "_meta.csv")))
 
 config_list <-
   list(
