@@ -2,6 +2,10 @@
 #'
 #' @param data A dataset like the `*_results_portfolio.rda` outputs of PACTA.
 #' @param t0 The start year for which the TDM value should be calculated.
+#' @param t1 The number of years into the future for which there is production
+#'   data. Default is 5 years.
+#' @param t2 The number of years into the future against which you want to
+#'   calculate disruption. Default is 10 years.
 #' @param additional_groups Character vector. The names of columns to group by,
 #'   in addition to these ones (which are always used):
 #'
@@ -31,7 +35,7 @@
 #' pacta_results
 #'
 #' calculate_tdm(pacta_results, t0 = 2020)
-calculate_tdm <- function(data, t0, additional_groups = NULL) {
+calculate_tdm <- function(data, t0, t1 = 5, t2 = 10, additional_groups = NULL) {
 
   groups <- unique(c(crucial_tdm_groups(), additional_groups))
   check_calculate_tdm(data, t0, groups)
@@ -43,7 +47,7 @@ calculate_tdm <- function(data, t0, additional_groups = NULL) {
 
   joint <- left_join(
     filter(portfolio_weight, .data$year == t0),
-    technology_level_dy(portfolio_weight, t0, groups),
+    technology_level_dy(portfolio_weight, t0, t1, t2, groups),
     by = groups
   )
 
@@ -102,10 +106,10 @@ crucial_tdm_groups <- function() {
 #' Technology-level "dy"
 #' TODO: Explain the meaning of "dy".
 #' @noRd
-technology_level_dy <- function(data, t0, groups) {
+technology_level_dy <- function(data, t0, t1, t2, groups) {
   long <- data %>%
-    filter(.data$year %in% c(t0, t0 + 5, t0 + 10)) %>%
-    add_time_step(t0) %>%
+    filter(.data$year %in% c(t0, t0 + t1, t0 + t2)) %>%
+    add_time_step(t0, t1, t2) %>%
     group_by(!!!rlang::syms(groups)) %>%
     select(
       !!!rlang::syms(groups),
@@ -133,13 +137,13 @@ add_sector_level_tdm <- function(data, t0) {
     )
 }
 
-add_time_step <- function(data, t0) {
+add_time_step <- function(data, t0, t1, t2) {
   data %>%
     mutate(
       time_step = case_when(
         .data$year == t0 ~ "t0",
-        .data$year == t0 + 5 ~ "plus_five",
-        .data$year == t0 + 10 ~ "plus_ten"
+        .data$year == t0 + t1 ~ "plus_t1",
+        .data$year == t0 + t2 ~ "plus_t2"
       )
     )
 }
@@ -147,8 +151,8 @@ add_time_step <- function(data, t0) {
 add_technology_level_tdm <- function(data) {
   data %>%
     mutate(
-      .numerator = .data$scen_alloc_plus_ten - .data$plan_alloc_plus_five,
-      .denominator = .data$scen_alloc_plus_ten - .data$scen_alloc_t0,
+      .numerator = .data$scen_alloc_plus_t2 - .data$plan_alloc_plus_t1,
+      .denominator = .data$scen_alloc_plus_t2 - .data$scen_alloc_t0,
       #TODO: Ensure with @antoine-lacherche that this is the right way to
       #address the issue of 0 denominator
       tdm_tech = ifelse(

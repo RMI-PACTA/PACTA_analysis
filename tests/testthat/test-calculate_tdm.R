@@ -68,9 +68,11 @@ test_that("errors if input data isn't grouped appropriately to ensure unique
           values per year", {
   additional_groups <- c("investor_name", "portfolio_name")
   n_groups <- length(crucial_tdm_groups()) + length(additional_groups)
-  start_year <- 2020
+  t0 <- 2020
+  t1 <- 5
+  t2 <- 10
   # Each group has values for years at t0, t0+5, and t0+10
-  years <- rep(c(start_year, start_year + 5, start_year + 10), n_groups)
+  years <- rep(c(t0, t0 + t1, t0 + t2), n_groups)
 
   data <- fake_tdm_data(
     portfolio_name = rep(c("portfolio a", "portfolio b"), each = 6),
@@ -81,10 +83,10 @@ test_that("errors if input data isn't grouped appropriately to ensure unique
     plan_carsten = c(0.5, 0.25, 0.2, 0.5, 0.75, 0.8, 0.5, 0.66, 0.75, 0.5, 0.33, 0.25),
   )
 
-  calculate_tdm(data, start_year) %>%
+  calculate_tdm(data, t0, t1, t2) %>%
     expect_error(class = "multiple_values_per_year")
 
-  extended <- calculate_tdm(data, start_year, additional_groups)
+  extended <- calculate_tdm(data, t0, t1, t2, additional_groups)
   expect_equal(round(extended$tdm_tech, 2), c(2, 7.33, 1.33, 2))
   expect_equal(round(extended$tdm_sec, 2), c(4.67, 4.67, 1.67, 1.67))
 })
