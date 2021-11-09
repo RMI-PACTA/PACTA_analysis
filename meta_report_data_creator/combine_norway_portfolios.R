@@ -1,7 +1,7 @@
 
 # manually set certain values and paths ----------------------------------------
 
-output_dir <- normalizePath("~/Desktop/Peru", mustWork = FALSE)
+output_dir <- r2dii.utils::path_dropbox_2dii("2° Investing Team/1. RESEARCH/1. Studies (projects)/PACTA . Regulator Monitoring/PACTA COP/03_Initiative_Level/06_PACTACOP_PE/04_Input_Cleaning/PACTA Results")
 combined_portfolio_results_output_dir <- file.path(output_dir, "combined", "portfolio_level")
 combined_user_results_output_dir <- file.path(output_dir, "combined", "user_level")
 combined_orgtype_results_output_dir <- file.path(output_dir, "combined", "orgtype_level")
@@ -15,8 +15,6 @@ project_code <- "PA2021PE"
 default_language <- "ES"
 
 project_prefix <- "peru"
-
-local_PACTA_git_path <- "~/Documents/git/PACTA_analysis"
 
 bogus_csvs_to_be_ignored <- c()
 
@@ -38,7 +36,6 @@ stopifnot(dir.exists(output_dir))
 stopifnot(dir.exists(portfolios_path))
 stopifnot(file.exists(portfolios_meta_csv))
 stopifnot(file.exists(users_meta_csv))
-stopifnot(dir.exists(local_PACTA_git_path))
 stopifnot(dir.exists(combined_portfolio_results_output_dir))
 stopifnot(dir.exists(file.path(combined_portfolio_results_output_dir, "30_Processed_inputs")))
 stopifnot(dir.exists(file.path(combined_portfolio_results_output_dir, "40_Results")))
@@ -59,7 +56,7 @@ library(fs)
 library(readr)
 library(yaml)
 
-source(file.path(local_PACTA_git_path, "meta_report_data_creator/read_portfolio_csv.R"))
+source("meta_report_data_creator/read_portfolio_csv.R")
 
 pacta_directories <- c("00_Log_Files", "10_Parameter_File", "20_Raw_Inputs", "30_Processed_Inputs", "40_Results", "50_Outputs")
 
@@ -332,16 +329,6 @@ for (org_type in all_org_types) {
 
 # combine all portfolio level results ------------------------------------------
 
-
-mutate(portfolio_name = portfolio_id) %>%
-mutate(portfolio_id = as.numeric(portfolio_id)) %>%
-left_join(select(portfolios_meta, portfolio_id = id, user_id)) %>%
-mutate(investor_name = user_id) %>%
-select(-c(portfolio_id, user_id))
-
-
-
-
 data_filenames <-
   c(
     "Bonds_results_portfolio.rda",
@@ -356,13 +343,12 @@ lapply(data_filenames, function(data_filename) {
   portfolio_result_filepaths <- list.files(ports_output_dir, pattern = data_filename, recursive = TRUE, full.names = TRUE)
   meta_result_filepaths <- list.files(meta_output_dir, pattern = data_filename, recursive = TRUE, full.names = TRUE)
   all_result_filepaths <- c(portfolio_result_filepaths, meta_result_filepaths)
-  all_result_filepaths <- setNames(all_result_filepaths, sub("^norway_port_", "", basename(dirname(all_result_filepaths))))
+  all_result_filepaths <- setNames(all_result_filepaths, sub(paste0("^", project_prefix, "_port_"), "", basename(dirname(all_result_filepaths))))
 
   all_results <-
     map_df(all_result_filepaths, readRDS, .id = "portfolio_id") %>%
     mutate(portfolio_name = portfolio_id) %>%
-    mutate(portfolio_id = as.numeric(portfolio_id)) %>%
-    left_join(select(portfolios_meta, portfolio_id = id, user_id)) %>%
+    left_join(mutate(portfolios_meta, id = as.character(id)) %>% select(portfolio_id = id, user_id), by = "portfolio_id") %>%
     mutate(investor_name = user_id) %>%
     select(-portfolio_id, -user_id)
 
@@ -371,7 +357,7 @@ lapply(data_filenames, function(data_filename) {
 
 data_filenames <-
   c(
-    "Overview_portfolio.rda",
+    "overview_portfolio.rda",
     "total_portfolio.rda",
     "emissions.rda"
   )
@@ -402,13 +388,12 @@ lapply(data_filenames, function(data_filename) {
   portfolio_result_filepaths <- list.files(users_output_dir, pattern = data_filename, recursive = TRUE, full.names = TRUE)
   meta_result_filepaths <- list.files(meta_output_dir, pattern = data_filename, recursive = TRUE, full.names = TRUE)
   all_result_filepaths <- c(portfolio_result_filepaths, meta_result_filepaths)
-  all_result_filepaths <- setNames(all_result_filepaths, sub("^norway_user_", "", basename(dirname(all_result_filepaths))))
+  all_result_filepaths <- setNames(all_result_filepaths, sub(paste0("^", project_prefix, "_user_"), "", basename(dirname(all_result_filepaths))))
 
   all_results <-
     map_df(all_result_filepaths, readRDS, .id = "user_id") %>%
     mutate(portfolio_name = user_id) %>%
-    mutate(user_id = as.numeric(user_id)) %>%
-    left_join(select(users_meta, user_id = id, organization_type)) %>%
+    left_join(mutate(users_meta, id = as.character(id)) %>% select(user_id = id, organization_type), by = "user_id") %>%
     rename(peergroup = organization_type) %>%
     mutate(investor_name = peergroup) %>%
     select(-peergroup, -user_id)
@@ -418,7 +403,7 @@ lapply(data_filenames, function(data_filename) {
 
 data_filenames <-
   c(
-    "Overview_portfolio.rda",
+    "overview_portfolio.rda",
     "total_portfolio.rda",
     "emissions.rda"
   )
@@ -427,13 +412,12 @@ lapply(data_filenames, function(data_filename) {
   portfolio_result_filepaths <- list.files(users_output_dir, pattern = data_filename, recursive = TRUE, full.names = TRUE)
   meta_result_filepaths <- list.files(meta_output_dir, pattern = data_filename, recursive = TRUE, full.names = TRUE)
   all_result_filepaths <- c(portfolio_result_filepaths, meta_result_filepaths)
-  all_result_filepaths <- setNames(all_result_filepaths, sub("^norway_user_", "", basename(dirname(all_result_filepaths))))
+  all_result_filepaths <- setNames(all_result_filepaths, sub(paste0("^", project_prefix, "_user_"), "", basename(dirname(all_result_filepaths))))
 
   all_results <-
     map_df(all_result_filepaths, readRDS, .id = "user_id") %>%
     mutate(portfolio_name = user_id) %>%
-    mutate(user_id = as.numeric(user_id)) %>%
-    left_join(users_meta[, c("id", "organization_type")], by = c(user_id = "id")) %>%
+    left_join(mutate(users_meta, id = as.character(id)) %>% select(user_id = id, organization_type), by = "user_id") %>%
     rename(peergroup = organization_type) %>%
     mutate(investor_name = peergroup) %>%
     select(-c(peergroup, user_id))
@@ -465,7 +449,7 @@ lapply(data_filenames, function(data_filename) {
 
 data_filenames <-
   c(
-    "Overview_portfolio.rda",
+    "overview_portfolio.rda",
     "total_portfolio.rda",
     "emissions.rda"
   )
