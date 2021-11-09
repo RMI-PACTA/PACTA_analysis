@@ -481,7 +481,9 @@ data %>%
   )
 ```
 
-However this doesn't really make sense. Since, overall, the scenario is increasing, if the portfolio or company is producing more than the scenario projects, it shouldn't be disrupted at all. 
+However this doesn't really make sense. Since overall the scenario is
+increasing, if the portfolio or company is producing more than the scenario
+projects it shouldn't be disrupted at all.
 
 Normally, this would be accounted for by our $max(0, \frac{m_P}{m_S})$ function, however the function is now off by a factor of $-1$, since the scenario is changing directions. 
 
