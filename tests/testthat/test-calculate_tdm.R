@@ -64,6 +64,21 @@ test_that("errors if data has multiple values per year", {
     expect_error(class = "multiple_values_per_year")
 })
 
+test_that("errors if crucial years missing", {
+  t0 <- 2020
+  t1 <- 5
+  t2 <- 10
+
+  fake_tdm_data(
+    year = c(2020, 2020, 2025, 2031),
+    plan_alloc_wt_tech_prod = c(1, 1, 3, 4),
+    scen_alloc_wt_tech_prod = c(1, 2, 3, 4),
+    plan_carsten = c(0.5, 0.3, 0.25, 0.2),
+  ) %>%
+    calculate_tdm(t0, t1, t2) %>%
+    expect_error(class = "missing_crucial_years")
+})
+
 test_that("errors if input data isn't grouped appropriately to ensure unique
           values per year", {
   additional_groups <- c("investor_name", "portfolio_name")
