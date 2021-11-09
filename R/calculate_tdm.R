@@ -1,7 +1,7 @@
 #' Calculate the transition disruption metric, based on the IPR scenario
 #'
 #' @param data A dataset like the `*_results_portfolio.rda` outputs of PACTA.
-#' @param start_year The start year for which the TDM value should be calculated.
+#' @param t0 The start year for which the TDM value should be calculated.
 #' @param additional_groups Character vector. The names of columns to group by,
 #'   in addition to these ones (which are always used):
 #'
@@ -30,11 +30,11 @@
 #' )
 #' pacta_results
 #'
-#' calculate_tdm(pacta_results, start_year = 2020)
-calculate_tdm <- function(data, start_year, additional_groups = NULL) {
+#' calculate_tdm(pacta_results, t0 = 2020)
+calculate_tdm <- function(data, t0, additional_groups = NULL) {
 
   groups <- unique(c(crucial_tdm_groups(), additional_groups))
-  check_calculate_tdm(data, start_year, groups)
+  check_calculate_tdm(data, t0, groups)
 
   portfolio_weight <- filter(data, .data$allocation == "portfolio_weight")
   if (nrow(portfolio_weight) == 0) {
@@ -42,8 +42,8 @@ calculate_tdm <- function(data, start_year, additional_groups = NULL) {
   }
 
   joint <- left_join(
-    filter(portfolio_weight, .data$year == start_year),
-    technology_level_dy(portfolio_weight, start_year, groups),
+    filter(portfolio_weight, .data$year == t0),
+    technology_level_dy(portfolio_weight, t0, groups),
     by = groups
   )
 
@@ -51,13 +51,13 @@ calculate_tdm <- function(data, start_year, additional_groups = NULL) {
   joint %>%
     group_by(!!!rlang::syms(groups)) %>%
     ungroup(.data$technology) %>%
-    add_sector_level_tdm(start_year) %>%
+    add_sector_level_tdm(t0) %>%
     ungroup() %>%
     select(names(tdm_prototype()), all_of(groups))
 }
 
-check_calculate_tdm <- function(data, start_year, additional_groups) {
-  stopifnot(is.data.frame(data), is.numeric(start_year))
+check_calculate_tdm <- function(data, t0, additional_groups) {
+  stopifnot(is.data.frame(data), is.numeric(t0))
 
   crucial <- c(
     "allocation",
@@ -102,10 +102,10 @@ crucial_tdm_groups <- function() {
 #' Technology-level "dy"
 #' TODO: Explain the meaning of "dy".
 #' @noRd
-technology_level_dy <- function(data, start_year, groups) {
+technology_level_dy <- function(data, t0, groups) {
   long <- data %>%
-    filter(.data$year %in% c(start_year, start_year + 5, start_year + 10)) %>%
-    add_time_step(start_year) %>%
+    filter(.data$year %in% c(t0, t0 + 5, t0 + 10)) %>%
+    add_time_step(t0) %>%
     group_by(!!!rlang::syms(groups)) %>%
     select(
       !!!rlang::syms(groups),
@@ -125,21 +125,21 @@ technology_level_dy <- function(data, start_year, groups) {
     ungroup()
 }
 
-add_sector_level_tdm <- function(data, start_year) {
+add_sector_level_tdm <- function(data, t0) {
   data %>%
     mutate(
       tdm_sec = .data$plan_carsten * sum(.data$tdm_tech) / sum(.data$plan_carsten),
-      reference_year = start_year
+      reference_year = t0
     )
 }
 
-add_time_step <- function(data, start_year) {
+add_time_step <- function(data, t0) {
   data %>%
     mutate(
       time_step = case_when(
-        .data$year == start_year ~ "start_year",
-        .data$year == start_year + 5 ~ "plus_five",
-        .data$year == start_year + 10 ~ "plus_ten"
+        .data$year == t0 ~ "t0",
+        .data$year == t0 + 5 ~ "plus_five",
+        .data$year == t0 + 10 ~ "plus_ten"
       )
     )
 }
@@ -148,7 +148,7 @@ add_technology_level_tdm <- function(data) {
   data %>%
     mutate(
       .numerator = .data$scen_alloc_plus_ten - .data$plan_alloc_plus_five,
-      .denominator = .data$scen_alloc_plus_ten - .data$scen_alloc_start_year,
+      .denominator = .data$scen_alloc_plus_ten - .data$scen_alloc_t0,
       #TODO: Ensure with @antoine-lacherche that this is the right way to
       #address the issue of 0 denominator
       tdm_tech = ifelse(
