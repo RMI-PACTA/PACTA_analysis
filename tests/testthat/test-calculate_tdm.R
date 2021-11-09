@@ -113,3 +113,26 @@ test_that("with known input outputs as expected", {
   expect_equal(out$RenewablesCap$tdm_sec, 4.67)
 
 })
+
+test_that("outputs correctly for non-monotonic scenarios", {
+  data <- fake_tdm_data(
+    technology = rep(c("RenewablesCap", "OilCap"), each = 4),
+    year = rep(c(2020, 2025, 2030, 2050), 2),
+    plan_alloc_wt_tech_prod = c(rep(0.1, 4), rep(5, 4)),
+    scen_alloc_wt_tech_prod = c(1, 0.5, 0.25, 4, 1, 2, 3, 0.25),
+    plan_carsten = 0.5,
+  )
+
+  out <- calculate_tdm(data, 2020)
+
+  out <- out %>%
+    mutate(
+      tdm_tech = round(tdm_tech, 2),
+      tdm_sec = round(tdm_sec, 2)
+    ) %>%
+    split(.$technology)
+
+  expect_equal(out$OilCap$tdm_tech, 2)
+  expect_equal(out$RenewablesCap$tdm_tech, 0.4)
+
+})
