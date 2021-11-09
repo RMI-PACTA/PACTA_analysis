@@ -38,7 +38,7 @@
 calculate_tdm <- function(data, t0, t1 = 5, t2 = 10, additional_groups = NULL) {
 
   groups <- unique(c(crucial_tdm_groups(), additional_groups))
-  check_calculate_tdm(data, t0, groups)
+  check_calculate_tdm(data, t0, t1, t2, groups)
 
   portfolio_weight <- filter(data, .data$allocation == "portfolio_weight")
   if (nrow(portfolio_weight) == 0) {
@@ -60,8 +60,8 @@ calculate_tdm <- function(data, t0, t1 = 5, t2 = 10, additional_groups = NULL) {
     select(names(tdm_prototype()), all_of(groups))
 }
 
-check_calculate_tdm <- function(data, t0, additional_groups) {
-  stopifnot(is.data.frame(data), is.numeric(t0))
+check_calculate_tdm <- function(data, t0, t1, t2, additional_groups) {
+  stopifnot(is.data.frame(data), is.numeric(t0), is.numeric(t1), is.numeric(t2))
 
   crucial <- c(
     "allocation",
@@ -72,6 +72,8 @@ check_calculate_tdm <- function(data, t0, additional_groups) {
     "plan_carsten"
   )
   check_crucial_names(data, crucial)
+
+  check_crucial_years(data, t0, t1, t2, additional_groups)
 
   check_data_is_unique_per_year_and_groups(data, additional_groups)
 
@@ -191,4 +193,27 @@ check_data_is_unique_per_year_and_groups <- function(data, groups) {
   }
 
   invisible(data)
+}
+
+check_crucial_years <- function(data, t0, t1, t2, groups) {
+
+  crucial_years <- tibble::tibble(crucial_years = c(t0, t0 + t1, t0 + t2))
+
+  missing_crucial_years <- crucial_years %>%
+    left_join( data, by = c(crucial_years = "year")) %>%
+    group_by(!!!rlang::syms(groups)) %>%
+    dplyr::summarize(missing_data = sum(is.na(plan_alloc_wt_tech_prod)))
+
+  ok <- all(missing_crucial_years$missing_data == 0)
+
+  if (!ok) {
+    rlang::abort(
+      "missing_crucial_years",
+      message = glue(
+        "Data must contain all crucial years, by group:
+      {paste0('`', crucial_years, '`', collapse = ', ')} \n
+      Are all crucial years present in input data?"
+      )
+    )
+  }
 }
