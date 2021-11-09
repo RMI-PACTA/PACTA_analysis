@@ -33,7 +33,7 @@ tdm_demo_plot<- function(data) {
 ```
 
 There are several metrics included in the PACTA analysis. Some metrics offer
-interesting insights on short time-scales (e.g. 5 years into the future).
+interesting insights on short time-scales (e.g. five years into the future).
 However, analysts may also be interested in longer-term insights (e.g. 10+ years
 into the future). Here, we will propose and derive one of these metrics, called
 the Transition Disruption Metric. We will then explore interesting regions
@@ -42,26 +42,28 @@ expressed by the metric, along with their interpretation.
 # Introduction
 
 PACTA offers many metrics, most of which rely heavily on the use of
-forward-looking data. This data estimates the production of physical assets and
-is usually able to reliably forecast data to about 5 years into the future.
+forward-looking data. This forward-looking data estimates the production of
+physical assets and is usually able to reliably forecast data to about five years
+into the future.
 
-Another key component in these metrics is a climate scenario, which projects 
-how production *should* shift to mediate climate change. There are 
-certain climate scenarios which offset the bulk of required change to the later 
-years in the scenario (sometimes 20+ years into the future). So-called "delayed 
-response" scenarios, such as the  Inevitable Policy Response (IPR) scenario, 
-assumes that future production of most sectors follow current trends (i.e. 
-business as usual), before inevitably resulting in a massive and disruptive 
-transition in the long-term. Since the interesting part of these scenarios is 
-often positioned well beyond the 5 year time-horizon of the data, most usual 
-PACTA metrics (eg. Volume Trajectory) are ill-suited to provide useful insights. 
+Another key component in these metrics is a climate scenario, which projects how
+production *should* shift to mediate climate change. There are certain climate
+scenarios which offset the bulk of required change to the later years in the
+scenario (sometimes 20+ years into the future). The so-called "delayed response"
+scenarios, such as the  Inevitable Policy Response (IPR) scenario, assume that
+future production of most sectors follow current trends (i.e. business as
+usual), before inevitably resulting in a massive and disruptive transition in
+the long-term. Since the interesting part of these scenarios is often positioned
+well beyond the five year time-horizon of the data, most usual PACTA metrics (e.g.
+Volume Trajectory) are ill-suited to provide useful insights.
 
-The purpose of these "delayed response" scenarios is to estimate the risks 
-associated with a worst-case scenario. With such a scenario, we might want to 
-understand how **disruptive** a climate **transition** could be to a company or 
-portfolio. To help provide insights into this question, we propose the 
-Transition Disruption Metric (TDM). This metric aims to provide useful insights 
-in the medium- to long- term (ie. time-horizons greater than 5 years).
+The purpose of these "delayed response" scenarios is to estimate the risks
+associated with a worst-case scenario. With such a scenario, we might want to
+measure how **disruptive** a climate **transition** could be to a company or
+portfolio. To help provide insights into this question, we propose the
+**Transition Disruption Metric** (TDM). This metric aims to provide useful
+insights in the medium- to long- term (i.e. time-horizons greater than five
+years).
 
 # Metric Definition
 
@@ -87,7 +89,7 @@ technology $i$, at year $t$
 
 Now, let's derive this metric together. Consider first some arbitrary function,
 $S(t)$, that in general may increase or decrease over time. This function could
-represent, for example, a climate scenario, dictating how production must change
+represent, for example, a climate scenario dictating how production must change
 to mitigate climate change:
 
 ```{r}
@@ -153,7 +155,7 @@ knowledge) against a scenario's production projections. For the portfolio to
 the scenario.
 
 If we want to determine how disrupted a portfolio might be between the last date
-we have data for it, $t+t_1$, and some future dae in the scenario, $t+t_2$, we
+we have data for it, $t+t_1$, and some future date in the scenario, $t+t_2$, we
 may simply draw a line connecting the two points:
 
 ```{r}
@@ -415,9 +417,9 @@ scenario increases or decreases.
 
 ### Non-Monotonic Scenario
 There is one final situation we have not yet accounted for, and this is the case
-of the non-monotonic scenario. Consider the situation that $S(t)$
-increases(decreases) over the period $(t, t+t_2)$, but then decreases(increases)
-over the following time-period:
+of the non-monotonic scenario. Consider the situation that $S(t)$ increases (or
+decreases) over the period $(t, t+t_2)$, but then decreases (or increases) over
+the following time-period:
 
 ```{r}
 
