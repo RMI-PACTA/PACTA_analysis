@@ -19,7 +19,7 @@ resources:
     name: 2DegreesInvesting/create_interactive_report
 
 stages:
-- stage: checkout-repos
+- stage: checkout_repos
   displayName: Checkout Repos
   jobs:
   - job: Build_api
