@@ -1,15 +1,17 @@
 test_that("with bad `data` errors with informative message", {
-  expect_error(calculate_tdm("bad", 2020, 5, 10, NULL), "data.frame.*not.*TRUE")
-  expect_error(calculate_tdm(fake_tdm_data(), "bad", 5, 10, NULL), "numeric.*not.*TRUE")
-  expect_error(calculate_tdm(fake_tdm_data(), 2020, "bad", 10, NULL), "numeric.*not.*TRUE")
-  expect_error(calculate_tdm(fake_tdm_data(), 2020, 5, "bad", NULL), "numeric.*not.*TRUE")
-  expect_error(calculate_tdm(fake_tdm_data(), 2020, 5, 10, TRUE), "character.*not.*TRUE")
+  expect_error(calculate_tdm("bad", 2020), "data.frame.*not.*TRUE")
+  expect_error(calculate_tdm(fake_tdm_data(), "bad"), "numeric.*not.*TRUE")
+  expect_error(calculate_tdm(fake_tdm_data(), 2020, t1 = "bad"), "numeric.*not.*TRUE")
+  expect_error(calculate_tdm(fake_tdm_data(), 2020, t2 = "bad"), "numeric.*not.*TRUE")
+  expect_error(calculate_tdm(fake_tdm_data(), 2020, additional_groups = TRUE), "character.*not.*TRUE")
 })
 
 test_that("outputs the expected tibble", {
   data <- fake_tdm_data(
-    year = c(2020, 2025, 2030), scen_alloc_wt_tech_prod = 1:3
+    year = c(2020, 2025, 2030),
+    scen_alloc_wt_tech_prod = 1:3
   )
+
   out <- calculate_tdm(data, 2020)
   expect_snapshot(out)
 })
