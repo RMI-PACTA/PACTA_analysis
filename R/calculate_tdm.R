@@ -123,7 +123,28 @@ calculate_tdm <- function(data, t0, t1 = 5, t2 = 10, additional_groups = NULL) {
   portfolio_weight <- left_join(portfolio_weight, is_monotonic, by = groups)
 
   left <- filter(portfolio_weight, .data$year == t0)
-  right <- technology_level_dy(portfolio_weight, t0, t1, t2, groups)
+
+  long <- portfolio_weight %>%
+    filter(.data$year %in% c(t0, t0 + t1, t0 + t2)) %>%
+    group_by(!!!rlang::syms(groups)) %>%
+    add_time_step(t0, t1, t2) %>%
+    select(
+      !!!rlang::syms(groups),
+      .data$time_step,
+      .data$monotonic_factor,
+      scen_alloc = "scen_alloc_wt_tech_prod",
+      plan_alloc = "plan_alloc_wt_tech_prod",
+    )
+
+  right <- long %>%
+    pivot_wider(
+      names_from = .data$time_step,
+      values_from = all_of(c("scen_alloc", "plan_alloc"))
+    ) %>%
+    add_technology_level_tdm() %>%
+    select(.data$tdm_tech, all_of(groups)) %>%
+    distinct() %>%
+    ungroup()
 
   joint <- left_join(
     left,
@@ -169,27 +190,7 @@ crucial_tdm_groups <- function() {
 #' TODO: Explain the meaning of "dy".
 #' @noRd
 technology_level_dy <- function(data, t0, t1, t2, groups) {
-  long <- data %>%
-    filter(.data$year %in% c(t0, t0 + t1, t0 + t2)) %>%
-    group_by(!!!rlang::syms(groups)) %>%
-    add_time_step(t0, t1, t2) %>%
-    select(
-      !!!rlang::syms(groups),
-      .data$time_step,
-      .data$monotonic_factor,
-      scen_alloc = "scen_alloc_wt_tech_prod",
-      plan_alloc = "plan_alloc_wt_tech_prod",
-    )
 
-  long %>%
-    pivot_wider(
-      names_from = .data$time_step,
-      values_from = all_of(c("scen_alloc", "plan_alloc"))
-      ) %>%
-    add_technology_level_tdm() %>%
-    select(.data$tdm_tech, all_of(groups)) %>%
-    distinct() %>%
-    ungroup()
 }
 
 add_sector_level_tdm <- function(data, t0) {
