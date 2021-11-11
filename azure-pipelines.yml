@@ -25,4 +25,4 @@ stages:
   - job: Build_api
     displayName: Build API
     steps:
-    - iheckout: create_interactive_report
+    - checkout: create_interactive_report
