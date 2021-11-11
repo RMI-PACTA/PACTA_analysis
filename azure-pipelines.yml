@@ -2,6 +2,7 @@
 # Starter pipeline Start with a minimal pipeline that you can customize
 # to build and deploy your code.  Add steps that build, run tests,
 # deploy, and more: https://aka.ms/yaml
+# r2dii.climate.stress.test r2dii.stress.test.data pacta-data
 
 trigger:
   - master
@@ -10,11 +11,18 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-jobs:
-  - job: Build Docker Image
-  steps:
-  - bash: echo "A"
+resources:
+  repositories:
+    - repository: create_interactive_report
+      type: github
+      endpoint: MyGitHubServiceConnection
+      name: 2DegreesInvesting/create_interactive_report
 
-  - job: B
-  steps:
-    - bash: echo "B"
+stages:
+  - stage: checkout-repos
+    displayName: Checkout Repos
+    jobs:
+      - job: Build_api
+        displayName: Build API
+        steps:
+          - checkout: create_interactive_report
