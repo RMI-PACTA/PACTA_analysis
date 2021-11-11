@@ -1,8 +1,7 @@
 ---
 # Starter pipeline Start with a minimal pipeline that you can customize
 # to build and deploy your code.  Add steps that build, run tests,
-# deploy, and more: https://aka.ms/yaml
-# r2dii.climate.stress.test r2dii.stress.test.data pacta-data
+# deploy, and more: https://aka.ms/yaml 
 
 trigger:
   - master
@@ -17,12 +16,35 @@ resources:
       type: github
       endpoint: 2DegreesInvesting  # Servce connection name
       name: 2DegreesInvesting/create_interactive_report
+      ref: master
+    - repository: r2dii.climate.stress.test
+      type: github
+      endpoint: 2DegreesInvesting  # Servce connection name
+      name: 2DegreesInvesting/r2dii.climate.stress.test
+      ref: master
+    - repository: r2dii.stress.test.data
+      type: github
+      endpoint: 2DegreesInvesting  # Servce connection name
+      name: 2DegreesInvesting/r2dii.stress.test.data
+      ref: master
+    - repository: pacta-data
+      type: github
+      endpoint: 2DegreesInvesting  # Servce connection name
+      name: 2DegreesInvesting/pacta-data
+      ref: master
 
 stages:
-  - stage: checkout_repos
-    displayName: Checkout Repos
+  - stage: build_image
+    displayName: Build Docker Image
     jobs:
-      - job: Build_api
-        displayName: Build API
+      - job: checkout_repos
+        displayName: Checkout Repos
         steps:
           - checkout: create_interactive_report
+          - checkout: r2dii.climate.stress.test
+          - checkout: r2dii.stress.test.data
+          - checkout: pacta-data
+      - job: list_repos
+        displayName: List Repos
+        steps:
+          - script: dir $(Build.SourcesDirectory)
