@@ -45,9 +45,70 @@ calculate_tdm <- function(data, t0, t1 = 5, t2 = 10, additional_groups = NULL) {
     return(warn_zero_rows(tdm_prototype()))
   }
 
+  is_monotonic <- portfolio_weight %>%
+    group_by(!!!rlang::syms(groups)) %>%
+    mutate(
+      end_year = last(.data$year),
+      end_year_is_t0_t2 = .data$end_year == t0 + t2
+    )
+
+  if (all(is_monotonic$end_year_is_t0_t2)) {
+    is_monotonic <- is_monotonic %>%
+      mutate(
+        .is_monotonic = TRUE,
+        monotonic_factor = dplyr::if_else(.data$.is_monotonic, 1, -1),
+        .is_monotonic = NULL
+      ) %>%
+      select(
+        -.data$year,
+        -.data$end_year,
+        -.data$plan_carsten,
+        -.data$plan_alloc_wt_tech_prod,
+        -.data$scen_alloc_wt_tech_prod,
+        -.data$end_year_is_t0_t2
+      ) %>%
+    distinct()
+  } else {
+    is_monotonic <- is_monotonic %>%
+      add_time_step(t0, t1, t2) %>%
+      mutate(time_step = case_when(
+        .data$year == .data$end_year ~ "end_year",
+        TRUE ~ .data$time_step
+      )) %>%
+      select(
+        -.data$year,
+        -.data$end_year,
+        -.data$plan_carsten,
+        -.data$plan_alloc_wt_tech_prod,
+        -.data$end_year_is_t0_t2
+        ) %>%
+      tidyr::pivot_wider(
+        names_from = time_step,
+        values_from = c(scen_alloc_wt_tech_prod)
+      ) %>%
+      mutate(
+        .increasing_overall = end_year > t0,
+        .increasing_in_interval = plus_t2 > t0,
+        .is_monotonic = .increasing_in_interval & .increasing_overall,
+        monotonic_factor = dplyr::if_else(.data$.is_monotonic, 1, -1),
+        .increasing_overall = NULL,
+        .increasing_in_interval = NULL,
+        .is_monotonic = NULL,
+        t0 = NULL,
+        plus_t1 = NULL,
+        plus_t2 = NULL,
+        end_year = NULL
+      )
+  }
+
+  portfolio_weight <- left_join(portfolio_weight, is_monotonic, by = groups)
+
+  left <- filter(portfolio_weight, .data$year == t0)
+  right <- technology_level_dy(portfolio_weight, t0, t1, t2, groups)
+
   joint <- left_join(
-    filter(portfolio_weight, .data$year == t0),
-    technology_level_dy(portfolio_weight, t0, t1, t2, groups),
+    left,
+    right,
     by = groups
   )
 
@@ -111,13 +172,14 @@ crucial_tdm_groups <- function() {
 technology_level_dy <- function(data, t0, t1, t2, groups) {
   long <- data %>%
     filter(.data$year %in% c(t0, t0 + t1, t0 + t2)) %>%
-    add_time_step(t0, t1, t2) %>%
     group_by(!!!rlang::syms(groups)) %>%
+    add_time_step(t0, t1, t2) %>%
     select(
       !!!rlang::syms(groups),
       .data$time_step,
+      .data$monotonic_factor,
       scen_alloc = "scen_alloc_wt_tech_prod",
-      plan_alloc = "plan_alloc_wt_tech_prod"
+      plan_alloc = "plan_alloc_wt_tech_prod",
     )
 
   long %>%
@@ -151,7 +213,7 @@ add_time_step <- function(data, t0, t1, t2) {
 }
 
 add_technology_level_tdm <- function(data) {
-  data %>%
+  data <- data %>%
     mutate(
       .numerator = .data$scen_alloc_plus_t2 - .data$plan_alloc_plus_t1,
       .denominator = .data$scen_alloc_plus_t2 - .data$scen_alloc_t0,
@@ -160,9 +222,11 @@ add_technology_level_tdm <- function(data) {
       tdm_tech = ifelse(
         .data$.denominator == 0,
         0,
-        max(0, .data$.numerator / .data$.denominator) * 2
+        max(0, (.data$.numerator / .data$.denominator) * .data$monotonic_factor) * 2
         )
     )
+
+
 }
 
 check_data_is_unique_per_year_and_groups <- function(data, groups) {
