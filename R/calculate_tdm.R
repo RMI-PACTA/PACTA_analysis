@@ -1,7 +1,10 @@
-#' Calculate the transition disruption metric, based on the IPR scenario
+#' Calculate and add the transition disruption metric to a dataset
 #'
-#' @param data A dataset like the `*_results_portfolio.rda` outputs of PACTA.
-#' @param t0 The start year for which the TDM value should be calculated.
+#' This function takes a typical PACTA output, and uses it to calculate the
+#' transition disruption metric.
+#'
+#' @param data A dataset, like the `*_results_portfolio.rda` outputs of PACTA.
+#' @param t0 The start year, from which the TDM value should be calculated.
 #' @param t1 The number of years into the future for which there is production
 #'   data. Default is 5 years.
 #' @param t2 The number of years into the future against which you want to
@@ -9,11 +12,11 @@
 #' @param additional_groups Character vector. The names of columns to group by,
 #'   in addition to these ones (which are always used):
 #'
-#'    `r toString(crucial_tdm_groups())`
+#'   `r toString(crucial_tdm_groups())`
 #'
 #' @return A tibble with the columns specified in the `...` input, as well as:
-#'   `tdm_tech`, the technology level transition disruption metric and `tdm_sec`,
-#'    the sector level transition disruption metric.
+#'   `tdm_tech`, the technology level transition disruption metric and
+#'   `tdm_sec`, the sector level transition disruption metric.
 #' @export
 #'
 #' @examples
@@ -38,9 +41,25 @@
 calculate_tdm <- function(data, t0, t1 = 5, t2 = 10, additional_groups = NULL) {
 
   groups <- unique(c(crucial_tdm_groups(), additional_groups))
-  check_calculate_tdm(data, t0, t1, t2, groups)
+
+  stopifnot(is.data.frame(data), is.numeric(t0), is.numeric(t1), is.numeric(t2))
+
+  crucial <- c(
+    "allocation",
+    crucial_tdm_groups(),
+    "year",
+    "scen_alloc_wt_tech_prod",
+    "plan_alloc_wt_tech_prod",
+    "plan_carsten"
+  )
+  check_crucial_names(data, crucial)
+
+  check_crucial_years(data, t0, t1, t2, groups)
+
+  check_data_is_unique_per_year_and_groups(data, groups)
 
   portfolio_weight <- filter(data, .data$allocation == "portfolio_weight")
+
   if (nrow(portfolio_weight) == 0) {
     return(warn_zero_rows(tdm_prototype()))
   }
@@ -119,26 +138,6 @@ calculate_tdm <- function(data, t0, t1 = 5, t2 = 10, additional_groups = NULL) {
     add_sector_level_tdm(t0) %>%
     ungroup() %>%
     select(names(tdm_prototype()), all_of(groups))
-}
-
-check_calculate_tdm <- function(data, t0, t1, t2, additional_groups) {
-  stopifnot(is.data.frame(data), is.numeric(t0), is.numeric(t1), is.numeric(t2))
-
-  crucial <- c(
-    "allocation",
-    crucial_tdm_groups(),
-    "year",
-    "scen_alloc_wt_tech_prod",
-    "plan_alloc_wt_tech_prod",
-    "plan_carsten"
-  )
-  check_crucial_names(data, crucial)
-
-  check_crucial_years(data, t0, t1, t2, additional_groups)
-
-  check_data_is_unique_per_year_and_groups(data, additional_groups)
-
-  invisible(data)
 }
 
 warn_zero_rows <- function(data) {
