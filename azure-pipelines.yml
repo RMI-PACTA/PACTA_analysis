@@ -15,7 +15,7 @@ resources:
   repositories:
   - repository: create_interactive_report
     type: github
-    endpoint: MyGitHubServiceConnection
+    endpoint: 2DegreesInvesting
     name: 2DegreesInvesting/create_interactive_report
 
 stages:
@@ -25,4 +25,4 @@ stages:
   - job: Build_api
     displayName: Build API
     steps:
-    - checkout: create_interactive_report
+    - iheckout: create_interactive_report
