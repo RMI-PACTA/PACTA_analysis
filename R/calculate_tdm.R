@@ -42,7 +42,14 @@ calculate_tdm <- function(data, t0, t1 = 5, t2 = 10, additional_groups = NULL) {
 
   groups <- union(crucial_tdm_groups(), additional_groups)
 
-  stopifnot(is.data.frame(data), is.numeric(t0), is.numeric(t1), is.numeric(t2))
+  stopifnot(
+    is.data.frame(data),
+    is.numeric(t0),
+    is.numeric(t1),
+    is.numeric(t2)
+    )
+
+  if (!is.null(additional_groups)) stopifnot(is.character(additional_groups))
 
   crucial <- c(
     "allocation",
