@@ -56,7 +56,7 @@ calculate_tdm <- function(data, t0, t1 = 5, t2 = 10, additional_groups = NULL) {
 
   check_crucial_years(data, t0, t1, t2, groups)
 
-  check_data_is_unique_per_year_and_groups(data, groups)
+  check_data_unique_per_year_and_groups(data, groups)
 
   portfolio_weight <- filter(data, .data$allocation == "portfolio_weight")
 
@@ -182,20 +182,6 @@ warn_zero_rows <- function(data) {
   invisible(data)
 }
 
-tdm_prototype <- function() {
-  tibble(
-    technology = character(0),
-    ald_sector = character(0),
-    tdm_tech = numeric(0),
-    tdm_sec = numeric(0),
-    reference_year = integer(0),
-  )
-}
-
-crucial_tdm_groups <- function() {
-  c("technology", "ald_sector")
-}
-
 add_sector_level_tdm <- function(data, t0) {
   data %>%
     mutate(
@@ -215,7 +201,21 @@ add_time_step <- function(data, t0, t1, t2) {
     )
 }
 
-check_data_is_unique_per_year_and_groups <- function(data, groups) {
+crucial_tdm_groups <- function() {
+  c("technology", "ald_sector")
+}
+
+tdm_prototype <- function() {
+  tibble(
+    technology = character(0),
+    ald_sector = character(0),
+    tdm_tech = numeric(0),
+    tdm_sec = numeric(0),
+    reference_year = integer(0),
+  )
+}
+
+check_data_unique_per_year_and_groups <- function(data, groups) {
 
   columns_that_must_be_unique <- c(
     "scen_alloc_wt_tech_prod",
