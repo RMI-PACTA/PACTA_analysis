@@ -40,7 +40,7 @@
 #' calculate_tdm(pacta_results, t0 = 2020)
 calculate_tdm <- function(data, t0, t1 = 5, t2 = 10, additional_groups = NULL) {
 
-  groups <- unique(c(crucial_tdm_groups(), additional_groups))
+  groups <- union(crucial_tdm_groups(), additional_groups)
 
   stopifnot(is.data.frame(data), is.numeric(t0), is.numeric(t1), is.numeric(t2))
 
