@@ -141,7 +141,17 @@ calculate_tdm <- function(data, t0, t1 = 5, t2 = 10, additional_groups = NULL) {
       names_from = .data$time_step,
       values_from = all_of(c("scen_alloc", "plan_alloc"))
     ) %>%
-    add_technology_level_tdm() %>%
+    mutate(
+      .numerator = .data$scen_alloc_plus_t2 - .data$plan_alloc_plus_t1,
+      .denominator = .data$scen_alloc_plus_t2 - .data$scen_alloc_t0,
+      #TODO: Ensure with @antoine-lacherche that this is the right way to
+      #address the issue of 0 denominator
+      tdm_tech = ifelse(
+        .data$.denominator == 0,
+        0,
+        max(0, (.data$.numerator / .data$.denominator) * .data$monotonic_factor) * 2
+      )
+    ) %>%
     select(.data$tdm_tech, all_of(groups)) %>%
     distinct() %>%
     ungroup()
@@ -186,13 +196,6 @@ crucial_tdm_groups <- function() {
   c("technology", "ald_sector")
 }
 
-#' Technology-level "dy"
-#' TODO: Explain the meaning of "dy".
-#' @noRd
-technology_level_dy <- function(data, t0, t1, t2, groups) {
-
-}
-
 add_sector_level_tdm <- function(data, t0) {
   data %>%
     mutate(
@@ -210,23 +213,6 @@ add_time_step <- function(data, t0, t1, t2) {
         .data$year == t0 + t2 ~ "plus_t2"
       )
     )
-}
-
-add_technology_level_tdm <- function(data) {
-  data <- data %>%
-    mutate(
-      .numerator = .data$scen_alloc_plus_t2 - .data$plan_alloc_plus_t1,
-      .denominator = .data$scen_alloc_plus_t2 - .data$scen_alloc_t0,
-      #TODO: Ensure with @antoine-lacherche that this is the right way to
-      #address the issue of 0 denominator
-      tdm_tech = ifelse(
-        .data$.denominator == 0,
-        0,
-        max(0, (.data$.numerator / .data$.denominator) * .data$monotonic_factor) * 2
-        )
-    )
-
-
 }
 
 check_data_is_unique_per_year_and_groups <- function(data, groups) {
