@@ -1,7 +1,7 @@
 ---
 # Starter pipeline Start with a minimal pipeline that you can customize
 # to build and deploy your code.  Add steps that build, run tests,
-# deploy, and more: https://aka.ms/yaml 
+# deploy, and more: https://aka.ms/yaml
 
 trigger:
   - master
@@ -46,5 +46,6 @@ stages:
           - checkout: pacta-data
       - job: list_repos
         displayName: List Repos
+        dependsOn: checkout_repos  # checkout first
         steps:
-          - script: dir $(Build.SourcesDirectory)
+          - script: ls -laR $(Build.SourcesDirectory)
