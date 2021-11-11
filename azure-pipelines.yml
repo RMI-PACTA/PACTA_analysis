@@ -48,4 +48,4 @@ stages:
         displayName: List Repos
         dependsOn: checkout_repos  # checkout first
         steps:
-          - script: ls -laR $(Build.SourcesDirectory)
+          - script: ls -lR $(Agent.BuildDirectory)
