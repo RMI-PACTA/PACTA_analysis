@@ -1,6 +1,9 @@
 test_that("with bad `data` errors with informative message", {
-  expect_error(calculate_tdm("bad", 2020), "data.frame.*not.*TRUE")
-  expect_error(calculate_tdm(fake_tdm_data(), "bad"), "numeric.*not.*TRUE")
+  expect_error(calculate_tdm("bad", 2020, 5, 10, NULL), "data.frame.*not.*TRUE")
+  expect_error(calculate_tdm(fake_tdm_data(), "bad", 5, 10, NULL), "numeric.*not.*TRUE")
+  expect_error(calculate_tdm(fake_tdm_data(), 2020, "bad", 10, NULL), "numeric.*not.*TRUE")
+  expect_error(calculate_tdm(fake_tdm_data(), 2020, 5, "bad", NULL), "numeric.*not.*TRUE")
+  expect_error(calculate_tdm(fake_tdm_data(), 2020, 5, 10, TRUE), "character.*not.*TRUE")
 })
 
 test_that("outputs the expected tibble", {
