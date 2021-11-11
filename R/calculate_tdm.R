@@ -40,46 +40,109 @@
 #' calculate_tdm(pacta_results, t0 = 2020)
 calculate_tdm <- function(data, t0, t1 = 5, t2 = 10, additional_groups = NULL) {
 
-  groups <- union(crucial_tdm_groups(), additional_groups)
-
-  stopifnot(
-    is.data.frame(data),
-    is.numeric(t0),
-    is.numeric(t1),
-    is.numeric(t2)
-    )
-
   if (!is.null(additional_groups)) stopifnot(is.character(additional_groups))
 
-  crucial <- c(
-    "allocation",
-    crucial_tdm_groups(),
-    "year",
-    "scen_alloc_wt_tech_prod",
-    "plan_alloc_wt_tech_prod",
-    "plan_carsten"
-  )
-  check_crucial_names(data, crucial)
+  groups <- union(crucial_tdm_groups(), additional_groups)
 
-  check_crucial_years(data, t0, t1, t2, groups)
+  check_calculate_tdm(data, t0, t1, t2, groups)
 
-  check_data_unique_per_year_and_groups(data, groups)
+  portfolio_weight_data <- filter(data, .data$allocation == "portfolio_weight")
 
-  portfolio_weight <- filter(data, .data$allocation == "portfolio_weight")
-
-  if (nrow(portfolio_weight) == 0) {
+  if (nrow(portfolio_weight_data) == 0) {
     return(warn_zero_rows(tdm_prototype()))
   }
 
-  is_monotonic <- portfolio_weight %>%
+  #TODO: Add a `scenario` identifier argument, and by default filter for "IPR"
+  # Waiting on getting the IPR data formatted to know exactly how this will look.
+
+  data_with_monotonic_factors <- add_monotonic_factor(
+    portfolio_weight_data,
+    t0,
+    t1,
+    t2,
+    groups
+  )
+
+  initial_year_data <- filter(data_with_monotonic_factors, .data$year == t0)
+
+  preformatted_data <- data_with_monotonic_factors %>%
+    filter(.data$year %in% c(t0, t0 + t1, t0 + t2)) %>%
+    group_by(!!!rlang::syms(groups)) %>%
+    add_time_step(t0, t1, t2) %>%
+    select(
+      !!!rlang::syms(groups),
+      .data$time_step,
+      .data$monotonic_factor,
+      scenario_production = "scen_alloc_wt_tech_prod",
+      portfolio_production = "plan_alloc_wt_tech_prod",
+    )
+
+  data_with_tdm <- preformatted_data %>%
+    pivot_wider(
+      names_from = .data$time_step,
+      values_from = all_of(c("scenario_production", "portfolio_production"))
+    ) %>%
+    mutate(
+      .numerator = .data$scenario_production_plus_t2 - .data$portfolio_production_plus_t1,
+      .denominator = .data$scenario_production_plus_t2 - .data$scenario_production_t0,
+      #TODO: Ensure with @antoine-lacherche that this is the right way to
+      #address the issue of 0 denominator
+      tdm_tech = ifelse(
+        .data$.denominator == 0,
+        0,
+        max(0, (.data$.numerator / .data$.denominator) * .data$monotonic_factor) * 2
+      ),
+      .numerator = NULL,
+      .denominator = NULL
+    ) %>%
+    select(.data$tdm_tech, all_of(groups)) %>%
+    distinct() %>%
+    ungroup()
+
+  formatted_data_with_tdm <- left_join(
+    initial_year_data,
+    data_with_tdm,
+    by = groups
+  )
+
+  formatted_data_with_tdm %>%
+    aggregate_tdm(t0, groups) %>%
+    select(names(tdm_prototype()), all_of(groups))
+}
+
+warn_zero_rows <- function(data) {
+  # NOTE: This function will only work if the allocation method is
+  # portfolio_weight. ownership_weight outputs 0 for all carsten metric values,
+  # and thus we would be dividing by zero otherwise...
+  message <- 'Filtering for "portfolio_weight" allocation, outputs 0 rows'
+  warn(message, class = "has_zero_rows")
+
+  # Pass `data` to inline inside return()
+  invisible(data)
+}
+
+add_time_step <- function(data, t0, t1, t2) {
+  data %>%
+    mutate(
+      time_step = case_when(
+        .data$year == t0 ~ "t0",
+        .data$year == t0 + t1 ~ "plus_t1",
+        .data$year == t0 + t2 ~ "plus_t2"
+      )
+    )
+}
+
+add_monotonic_factor <- function(data, t0, t1, t2, groups) {
+
+  data <- data %>%
     group_by(!!!rlang::syms(groups)) %>%
     mutate(
       end_year = last(.data$year),
       end_year_is_t0_t2 = .data$end_year == t0 + t2
     )
 
-  if (all(is_monotonic$end_year_is_t0_t2)) {
-    is_monotonic <- is_monotonic %>%
+  if (all(data$end_year_is_t0_t2)) {
+    monotonic_factors <- data %>%
       mutate(
         .is_monotonic = TRUE,
         monotonic_factor = dplyr::if_else(.data$.is_monotonic, 1, -1),
@@ -93,9 +156,9 @@ calculate_tdm <- function(data, t0, t1 = 5, t2 = 10, additional_groups = NULL) {
         -.data$scen_alloc_wt_tech_prod,
         -.data$end_year_is_t0_t2
       ) %>%
-    distinct()
+      distinct()
   } else {
-    is_monotonic <- is_monotonic %>%
+    monotonic_factors <- data %>%
       add_time_step(t0, t1, t2) %>%
       mutate(time_step = case_when(
         .data$year == .data$end_year ~ "end_year",
@@ -107,7 +170,7 @@ calculate_tdm <- function(data, t0, t1 = 5, t2 = 10, additional_groups = NULL) {
         -.data$plan_carsten,
         -.data$plan_alloc_wt_tech_prod,
         -.data$end_year_is_t0_t2
-        ) %>%
+      ) %>%
       tidyr::pivot_wider(
         names_from = time_step,
         values_from = c(scen_alloc_wt_tech_prod)
@@ -127,89 +190,18 @@ calculate_tdm <- function(data, t0, t1 = 5, t2 = 10, additional_groups = NULL) {
       )
   }
 
-  portfolio_weight <- left_join(portfolio_weight, is_monotonic, by = groups)
+  left_join(data, monotonic_factors, by = groups)
+}
 
-  left <- filter(portfolio_weight, .data$year == t0)
-
-  long <- portfolio_weight %>%
-    filter(.data$year %in% c(t0, t0 + t1, t0 + t2)) %>%
-    group_by(!!!rlang::syms(groups)) %>%
-    add_time_step(t0, t1, t2) %>%
-    select(
-      !!!rlang::syms(groups),
-      .data$time_step,
-      .data$monotonic_factor,
-      scen_alloc = "scen_alloc_wt_tech_prod",
-      plan_alloc = "plan_alloc_wt_tech_prod",
-    )
-
-  right <- long %>%
-    pivot_wider(
-      names_from = .data$time_step,
-      values_from = all_of(c("scen_alloc", "plan_alloc"))
-    ) %>%
-    mutate(
-      .numerator = .data$scen_alloc_plus_t2 - .data$plan_alloc_plus_t1,
-      .denominator = .data$scen_alloc_plus_t2 - .data$scen_alloc_t0,
-      #TODO: Ensure with @antoine-lacherche that this is the right way to
-      #address the issue of 0 denominator
-      tdm_tech = ifelse(
-        .data$.denominator == 0,
-        0,
-        max(0, (.data$.numerator / .data$.denominator) * .data$monotonic_factor) * 2
-      )
-    ) %>%
-    select(.data$tdm_tech, all_of(groups)) %>%
-    distinct() %>%
-    ungroup()
-
-  joint <- left_join(
-    left,
-    right,
-    by = groups
-  )
-
-  # TODO: Try to extract one or more meaningful functions
-  joint %>%
+aggregate_tdm <- function(data, t0, groups) {
+  data %>%
     group_by(!!!rlang::syms(groups)) %>%
     ungroup(.data$technology) %>%
-    add_sector_level_tdm(t0) %>%
-    ungroup() %>%
-    select(names(tdm_prototype()), all_of(groups))
-}
-
-warn_zero_rows <- function(data) {
-  # TODO: This function will only work if the allocation method is
-  # portfolio_weight ownership_weight outputs 0 for all carsten metric values,
-  # and thus we would be dividing by zero otherwise...
-  message <- 'Filtering for "portfolio_weight" allocation, outputs 0 rows'
-  warn(message, class = "has_zero_rows")
-
-  # Pass `data` to inline inside return()
-  invisible(data)
-}
-
-add_sector_level_tdm <- function(data, t0) {
-  data %>%
     mutate(
       tdm_sec = .data$plan_carsten * sum(.data$tdm_tech) / sum(.data$plan_carsten),
       reference_year = t0
-    )
-}
-
-add_time_step <- function(data, t0, t1, t2) {
-  data %>%
-    mutate(
-      time_step = case_when(
-        .data$year == t0 ~ "t0",
-        .data$year == t0 + t1 ~ "plus_t1",
-        .data$year == t0 + t2 ~ "plus_t2"
-      )
-    )
-}
-
-crucial_tdm_groups <- function() {
-  c("technology", "ald_sector")
+    ) %>%
+    ungroup()
 }
 
 tdm_prototype <- function() {
@@ -222,18 +214,33 @@ tdm_prototype <- function() {
   )
 }
 
-check_data_unique_per_year_and_groups <- function(data, groups) {
+check_calculate_tdm <- function(data, t0, t1, t2, groups) {
+  stopifnot(
+    is.data.frame(data),
+    is.numeric(t0),
+    is.numeric(t1),
+    is.numeric(t2)
+  )
 
-  columns_that_must_be_unique <- c(
+  check_crucial_names(data, crucial_columns())
+
+  check_crucial_years(data, t0, t1, t2, groups)
+
+  check_unique_by_year_and_groups(data, groups)
+
+  invisible(data)
+}
+
+check_unique_by_year_and_groups <- function(data, groups) {
+
+  req_unique_columns <- c(
     "scen_alloc_wt_tech_prod",
     "plan_alloc_wt_tech_prod",
     "plan_carsten"
     )
 
-  groups <- c("year", groups)
-
   data <- data %>%
-    group_by(!!!rlang::syms(groups)) %>%
+    group_by(!!!rlang::syms(c("year", groups))) %>%
     dplyr::summarize(rows_by_year_and_group = dplyr::n()) %>%
     mutate(rows_are_unique = rows_by_year_and_group == 1)
 
@@ -243,7 +250,7 @@ check_data_unique_per_year_and_groups <- function(data, groups) {
       "multiple_values_per_year",
       message = glue(
         "Data must be unique by year and groups for the following columns:
-      {paste0('`', columns_that_must_be_unique, '`', collapse = ', ')} \n
+      {paste0('`', req_unique_columns, '`', collapse = ', ')} \n
       Are you sure you have included the correct groupings?"
       )
     )
@@ -273,4 +280,19 @@ check_crucial_years <- function(data, t0, t1, t2, groups) {
       )
     )
   }
+}
+
+crucial_tdm_groups <- function() {
+  c("technology", "ald_sector")
+}
+
+crucial_columns <- function(){
+  c(
+    crucial_tdm_groups(),
+    "allocation",
+    "year",
+    "scen_alloc_wt_tech_prod",
+    "plan_alloc_wt_tech_prod",
+    "plan_carsten"
+  )
 }
