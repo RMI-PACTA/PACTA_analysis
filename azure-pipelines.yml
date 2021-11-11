@@ -13,16 +13,16 @@ pool:
 
 resources:
   repositories:
-    - repository: create_interactive_report
-      type: github
-      endpoint: MyGitHubServiceConnection
-      name: 2DegreesInvesting/create_interactive_report
+  - repository: create_interactive_report
+    type: github
+    endpoint: MyGitHubServiceConnection
+    name: 2DegreesInvesting/create_interactive_report
 
 stages:
-  - stage: checkout-repos
-    displayName: Checkout Repos
-    jobs:
-      - job: Build_api
-        displayName: Build API
-        steps:
-          - checkout: create_interactive_report
+- stage: checkout-repos
+  displayName: Checkout Repos
+  jobs:
+  - job: Build_api
+    displayName: Build API
+    steps:
+    - checkout: create_interactive_report
