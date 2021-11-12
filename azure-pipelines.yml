@@ -50,22 +50,22 @@ stages:
         displayName: Checkout Repos & Build
         steps:
           - checkout: self  # PACTA_analysis repo
-          - checkout: create_interactive_report
-          - checkout: r2dii.climate.stress.test
-          - checkout: r2dii.stress.test.data
-          - checkout: pacta-data
-          # TODO: Add Tagging steps job
-          - task: Docker@2
-            displayName: Build Transition Monitor Docker image
-            inputs:
-              command: buildAndPush
-              repository: $(imageRepository)
-              dockerfile: $(dockerfilePath)
-              buildContext: $(Build.SourcesDirectory)
-              containerRegistry: $(dockerRegistryServiceConnection)
-              addPipelineData: false
-              tags: |
-                $(tag)
+          # - checkout: create_interactive_report
+          # - checkout: r2dii.climate.stress.test
+          # - checkout: r2dii.stress.test.data
+          # - checkout: pacta-data
+          # # TODO: Add Tagging steps job
+          # - task: Docker@2
+          #   displayName: Build Transition Monitor Docker image
+          #   inputs:
+          #     command: buildAndPush
+          #     repository: $(imageRepository)
+          #     dockerfile: $(dockerfilePath)
+          #     buildContext: $(Build.SourcesDirectory)
+          #     containerRegistry: $(dockerRegistryServiceConnection)
+          #     addPipelineData: false
+          #     tags: |
+          #       $(tag)
   - stage: test_image
     displayName: Test Docker Image
     jobs:
