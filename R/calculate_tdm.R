@@ -59,8 +59,10 @@ calculate_tdm <- function(data, t0, t1 = 5, t2 = 10, additional_groups = NULL) {
     return(warn_zero_rows(tdm_prototype()))
   }
 
-  #TODO: Add a `scenario` identifier argument, and by default filter for "IPR"
-  # Waiting on getting the IPR data formatted to know exactly how this will look.
+  #TODO: Filter the data fora  particular scenario. Function should gain the
+  # argument `scenario`, which by default specifies IPR - FPS scenario. I am
+  # waiting until the data is prepared as I'm not sure exactly what this
+  # scenario will be called in the input data.
 
   data_with_monotonic_factors <- add_monotonic_factor(
     portfolio_weight_data,
