@@ -115,7 +115,7 @@ calculate_tdm <- function(data, t0, t1 = 5, t2 = 10, additional_groups = NULL) {
   )
 
   formatted_data_with_tdm %>%
-    aggregate_tdm(t0, groups) %>%
+    add_aggregate_tdm(t0, groups) %>%
     select(names(tdm_prototype()), all_of(groups))
 }
 
@@ -206,7 +206,7 @@ add_monotonic_factor <- function(data, t0, t1, t2, groups) {
   left_join(data, monotonic_factors, by = groups)
 }
 
-aggregate_tdm <- function(data, t0, groups) {
+add_aggregate_tdm <- function(data, t0, groups) {
   data %>%
     group_by(!!!rlang::syms(groups)) %>%
     ungroup(.data$technology) %>%
