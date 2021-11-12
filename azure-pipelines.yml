@@ -16,9 +16,15 @@ variables:
   dockerRegistryServiceConnection: 'ddd45595-876e-4212-92f0-8196a5c2fe71'
   containerRegistry: 'transitionmonitordockerregistry.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/PACTA_analysis/transitionmonitor_docker/Dockerfile'
-  tag: '$(Build.BuildId)'
   testingStorageAccountName: 'tmdockerstorage'
   testingShareName: 'testing-data'
+  # use PR number if it's a PR, otherwise branch name.
+  ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+    dockerTag: 'PR$(System.PullRequest.PullRequestNumber)'
+  ${{ elseif eq(variables['Build.Reason'], 'PullRequest') }}:
+    dockerTag: '$(Build.SourceBranchName)'
+  ${{ else }}:
+    dockerTag: '$(Build.Reason)'
 
 resources:
   repositories:
@@ -50,24 +56,25 @@ stages:
       - job: Build
         displayName: Checkout Repos & Build
         steps:
-          - script: echo Hi, Alex is great.
-          # - checkout: self  # PACTA_analysis repo
-          # - checkout: create_interactive_report
-          # - checkout: r2dii.climate.stress.test
-          # - checkout: r2dii.stress.test.data
-          # - checkout: pacta-data
-          # # TODO: Add Tagging steps job
-          # - task: Docker@2
-          #   displayName: Build Transition Monitor Docker image
-          #   inputs:
-          #     command: buildAndPush
-          #     repository: $(imageRepository)
-          #     dockerfile: $(dockerfilePath)
-          #     buildContext: $(Build.SourcesDirectory)
-          #     containerRegistry: $(dockerRegistryServiceConnection)
-          #     addPipelineData: false
-          #     tags: |
-          #       $(tag)
+          - checkout: self  # PACTA_analysis repo
+          - checkout: create_interactive_report
+          - checkout: r2dii.climate.stress.test
+          - checkout: r2dii.stress.test.data
+          - checkout: pacta-data
+          # TODO: Add Tagging steps job
+          - task: Docker@2
+            displayName: Build Transition Monitor Docker image
+            inputs:
+              command: buildAndPush
+              repository: $(imageRepository)
+              dockerfile: $(dockerfilePath)
+              buildContext: $(Build.SourcesDirectory)
+              containerRegistry: $(dockerRegistryServiceConnection)
+              addPipelineData: false
+              tags: |
+                $(dockerTag)
+                $(Build.BuildNumber)
+                $(Build.SourceVersion)
   - stage: test_image
     displayName: Test Docker Image
     jobs:
@@ -75,8 +82,17 @@ stages:
         displayName: Test PA2021NO
         steps:
           - checkout: none
-          - script: pwd
-          - script: echo $(Build.SourcesDirectory)
+          - task: AzureCLI@2
+            displayName: Download run script from Azure File Share
+            inputs:
+              azureSubscription: tm-docker-AzureResourceManager
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+                az storage file download \
+                --source $(testingShareName)/run-like-constructiva-flags.sh \
+                --destination $(Build.SourcesDirectory) \
+                --account-name $(testingStorageAccountName)
           - task: AzureCLI@2
             displayName: Download files from Azure File Share
             inputs:
@@ -94,3 +110,7 @@ stages:
             inputs:
               filePath: run-like-wim-PA2021NO.sh
               workingDirectory: $(Build.SourcesDirectory)
+              arguments: |
+                "-u 4"
+                "-p Test_PA2021NO"
+                "-t $(Build.BuildNumber)"
