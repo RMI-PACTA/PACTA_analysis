@@ -76,7 +76,7 @@ stages:
         steps:
           - checkout: none
           - task: AzureCLI@2
-            displayName: Azure CLI - Version
+            displayName: Download files from Azure File Share
             inputs:
               azureSubscription: tm-docker-AzureResourceManager
               scriptType: bash
@@ -84,6 +84,7 @@ stages:
               inlineScript: |
                 az storage file download-batch \
                 --source $(testingShareName)/PA2021NO \
+                --destination $(Build.SourceDirectory) \
                 --account-name $(testingStorageAccountName)
           - script: run-like-wim-PA2021NO.sh
           # - task: AzureCLI@2
@@ -98,4 +99,4 @@ stages:
           #       --share-name $(testingShareName) \
           #       --path "run-like-wim.sh" \
           #       --dest "foo.sh" \
-          #       --output none
+          #       i-output none
