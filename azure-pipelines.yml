@@ -82,18 +82,20 @@ stages:
               scriptType: bash
               scriptLocation: inlineScript
               inlineScript: |
-                az --version
-                az account show
-          - task: AzureCLI@2
-            displayName: Azure CLI - Copy files
-            inputs:
-              azureSubscription: tm-docker-AzureResourceManager
-              scriptType: bash
-              scriptLocation: inlineScript
-              inlineScript: |
-                az storage file list \
-                --account-name $(testingStorageAccountName) \
-                --share-name $(testingShareName) \
-                --output table
-
-# --account-key $(AZURE_STORAGE_KEY) \
+                az storage file download-batch \
+                --source $(testingShareName)/PA2021NO \
+                --account-name $(testingStorageAccountName)
+          - script: run-like-wim-PA2021NO.sh
+          # - task: AzureCLI@2
+          #   displayName: Azure CLI - Copy files
+          #   inputs:
+          #     azureSubscription: tm-docker-AzureResourceManager
+          #     scriptType: bash
+          #     scriptLocation: inlineScript
+          #     inlineScript: |
+          #       az storage file download \
+          #       --account-name $(testingStorageAccountName) \
+          #       --share-name $(testingShareName) \
+          #       --path "run-like-wim.sh" \
+          #       --dest "foo.sh" \
+          #       --output none
