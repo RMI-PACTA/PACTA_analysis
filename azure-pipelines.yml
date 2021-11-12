@@ -15,8 +15,9 @@ variables:
   # Container registry service connection established during pipeline creation
   dockerRegistryServiceConnection: 'ddd45595-876e-4212-92f0-8196a5c2fe71'
   containerRegistry: 'transitionmonitordockerregistry.azurecr.io'
-  dockerfilePath: '$(Agent.BuildDirectory)/repos/PACTA_analysis/transitionmonitor_docker/Dockerfile'
+  dockerfilePath: '$(Build.SourcesDirectory)/PACTA_analysis/transitionmonitor_docker/Dockerfile'
   tag: '$(Build.BuildId)'
+  testingShareName: 'testing-data'
 
 resources:
   repositories:
@@ -43,32 +44,54 @@ resources:
 
 stages:
   - stage: build_image
-    displayName: Build Docker Image
+    displayName: Build and Push Docker Image
     jobs:
       - job: Build
         displayName: Checkout Repos & Build
         steps:
           - checkout: self  # PACTA_analysis repo
-            path: repos/PACTA_analysis
           - checkout: create_interactive_report
-            path: repos/create_interactive_report
           - checkout: r2dii.climate.stress.test
-            path: repos/r2dii.climate.stress.test
           - checkout: r2dii.stress.test.data
-            path: repos/r2dii.stress.test.data
           - checkout: pacta-data
-            path: repos/pacta-data
-          - script: echo $(Agent.BuildDirectory)
-          - script: echo $(Build.SourcesDirectory)
-          # - script: ls -lR $(Agent.BuildDirectory)
-          # TODO: Add Tagging steps
+          # TODO: Add Tagging steps job
           - task: Docker@2
             displayName: Build Transition Monitor Docker image
             inputs:
               command: buildAndPush
               repository: $(imageRepository)
               dockerfile: $(dockerfilePath)
-              buildContext: $(Agent.BuildDirectory)/repos
+              buildContext: $(Build.SourcesDirectory)
               containerRegistry: $(dockerRegistryServiceConnection)
+              addPipelineData: false
               tags: |
                 $(tag)
+  - stage: test_image
+    displayName: Test Docker Image
+    jobs:
+      - job: test_PA2021NO
+        displayName: Test PA2021NO
+        steps:
+          - checkout: none
+          - task: AzureCLI@2
+            displayName: Azure CLI - Version
+            inputs:
+              azureSubscription: tm-docker-AzureResourceManager
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+                az --version
+                az account show
+          - task: AzureCLI@2
+            displayName: Azure CLI - Copy files
+            inputs:
+              azureSubscription: tm-docker-AzureResourceManager
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+                az storage file list \
+                --share-name $(testingShareName) \
+                --output table
+
+# --account-name $storageAccountName \
+# --account-key $storageAccountKey \
