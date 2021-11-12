@@ -40,6 +40,13 @@
 #' calculate_tdm(pacta_results, t0 = 2020)
 calculate_tdm <- function(data, t0, t1 = 5, t2 = 10, additional_groups = NULL) {
 
+  stopifnot(
+    is.data.frame(data),
+    is.numeric(t0),
+    is.numeric(t1),
+    is.numeric(t2)
+  )
+
   if (!is.null(additional_groups)) stopifnot(is.character(additional_groups))
 
   groups <- union(crucial_tdm_groups(), additional_groups)
@@ -215,12 +222,6 @@ tdm_prototype <- function() {
 }
 
 check_calculate_tdm <- function(data, t0, t1, t2, groups) {
-  stopifnot(
-    is.data.frame(data),
-    is.numeric(t0),
-    is.numeric(t1),
-    is.numeric(t2)
-  )
 
   check_crucial_names(data, crucial_columns())
 
