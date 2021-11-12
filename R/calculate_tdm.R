@@ -131,7 +131,8 @@ add_monotonic_factor <- function(data, t0, t1, t2, groups) {
           .data$end_year_is_t0_t2
         )
       ) %>%
-      distinct()
+      distinct() %>%
+      ungroup()
   } else {
     monotonic_factors <- data %>%
       add_time_step(t0, t1, t2) %>%
@@ -164,7 +165,8 @@ add_monotonic_factor <- function(data, t0, t1, t2, groups) {
         plus_t1 = NULL,
         plus_t2 = NULL,
         end_year = NULL
-      )
+      ) %>%
+      ungroup()
   }
 
   left_join(data, monotonic_factors, by = groups)
@@ -217,7 +219,8 @@ pre_format_data <- function(data, t0, t1, t2, groups) {
     pivot_wider(
       names_from = .data$time_step,
       values_from = all_of(c("scenario_production", "portfolio_production"))
-    )
+    ) %>%
+    ungroup()
   }
 
 tdm_prototype <- function() {
