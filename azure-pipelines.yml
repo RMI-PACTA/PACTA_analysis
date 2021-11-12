@@ -89,17 +89,8 @@ stages:
                 --destination $(Build.SourcesDirectory) \
                 --account-name $(testingStorageAccountName)
           - script: ls -lR $(Build.SourcesDirectory)
-          - script: $(Build.SourcesDirectory)/run-like-wim-PA2021NO.sh
-          # - task: AzureCLI@2
-          #   displayName: Azure CLI - Copy files
-          #   inputs:
-          #     azureSubscription: tm-docker-AzureResourceManager
-          #     scriptType: bash
-          #     scriptLocation: inlineScript
-          #     inlineScript: |
-          #       az storage file download \
-          #       --account-name $(testingStorageAccountName) \
-          #       --share-name $(testingShareName) \
-          #       --path "run-like-wim.sh" \
-          #       --dest "foo.sh" \
-          #       i-output none
+          - task: Bash@3
+            displayName: Run PA2021NO Portfolio
+            inputs:
+              filePath: run-like-wim-PA2021NO.sh
+              workingDirectory: $(Build.SourcesDirectory)
