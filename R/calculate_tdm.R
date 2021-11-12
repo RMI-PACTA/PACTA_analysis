@@ -158,12 +158,14 @@ add_monotonic_factor <- function(data, t0, t1, t2, groups) {
         .is_monotonic = NULL
       ) %>%
       select(
-        -.data$year,
-        -.data$end_year,
-        -.data$plan_carsten,
-        -.data$plan_alloc_wt_tech_prod,
-        -.data$scen_alloc_wt_tech_prod,
-        -.data$end_year_is_t0_t2
+        -c(
+          .data$year,
+          .data$end_year,
+          .data$plan_carsten,
+          .data$plan_alloc_wt_tech_prod,
+          .data$scen_alloc_wt_tech_prod,
+          .data$end_year_is_t0_t2
+        )
       ) %>%
       distinct()
   } else {
@@ -174,11 +176,13 @@ add_monotonic_factor <- function(data, t0, t1, t2, groups) {
         TRUE ~ .data$time_step
       )) %>%
       select(
-        -.data$year,
-        -.data$end_year,
-        -.data$plan_carsten,
-        -.data$plan_alloc_wt_tech_prod,
-        -.data$end_year_is_t0_t2
+        -c(
+          .data$year,
+          .data$end_year,
+          .data$plan_carsten,
+          .data$plan_alloc_wt_tech_prod,
+          .data$end_year_is_t0_t2
+        )
       ) %>%
       tidyr::pivot_wider(
         names_from = time_step,
@@ -240,7 +244,7 @@ check_unique_by_year_and_groups <- function(data, groups) {
     "scen_alloc_wt_tech_prod",
     "plan_alloc_wt_tech_prod",
     "plan_carsten"
-    )
+  )
 
   data <- data %>%
     group_by(!!!rlang::syms(c("year", groups))) %>%
