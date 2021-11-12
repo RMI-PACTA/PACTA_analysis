@@ -39,7 +39,6 @@
 #'
 #' calculate_tdm(pacta_results, t0 = 2020)
 calculate_tdm <- function(data, t0, t1 = 5, t2 = 10, additional_groups = NULL) {
-
   stopifnot(
     is.data.frame(data),
     is.numeric(t0),
@@ -59,12 +58,12 @@ calculate_tdm <- function(data, t0, t1 = 5, t2 = 10, additional_groups = NULL) {
     return(warn_zero_rows(tdm_prototype()))
   }
 
-  #TODO: Filter the data fora  particular scenario. Function should gain the
+  # TODO: Filter the data fora  particular scenario. Function should gain the
   # argument `scenario`, which by default specifies IPR - FPS scenario. I am
   # waiting until the data is prepared as I'm not sure exactly what this
   # scenario will be called in the input data.
 
-  data_with_monotonic_factors <- add_monotonic_factor(filtered_data,t0,t1,t2,groups)
+  data_with_monotonic_factors <- add_monotonic_factor(filtered_data, t0, t1, t2, groups)
 
   initial_year_data <- filter(data_with_monotonic_factors, .data$year == t0)
 
@@ -106,7 +105,6 @@ add_time_step <- function(data, t0, t1, t2) {
 }
 
 add_monotonic_factor <- function(data, t0, t1, t2, groups) {
-
   data <- data %>%
     group_by(!!!rlang::syms(groups)) %>%
     mutate(
@@ -178,7 +176,7 @@ add_tdm <- function(data, groups) {
     mutate(
       .numerator = .data$scenario_production_plus_t2 - .data$portfolio_production_plus_t1,
       .denominator = .data$scenario_production_plus_t2 - .data$scenario_production_t0,
-      #TODO: This case we
+      # TODO: This case we
       tdm_tech = ifelse(
         .data$.denominator == 0,
         0,
@@ -204,7 +202,6 @@ add_aggregate_tdm <- function(data, t0, groups) {
 }
 
 pre_format_data <- function(data, t0, t1, t2, groups) {
-
   data %>%
     filter(.data$year %in% c(t0, t0 + t1, t0 + t2)) %>%
     group_by(!!!rlang::syms(groups)) %>%
@@ -221,7 +218,7 @@ pre_format_data <- function(data, t0, t1, t2, groups) {
       values_from = all_of(c("scenario_production", "portfolio_production"))
     ) %>%
     ungroup()
-  }
+}
 
 tdm_prototype <- function() {
   tibble(
@@ -234,7 +231,6 @@ tdm_prototype <- function() {
 }
 
 check_calculate_tdm <- function(data, t0, t1, t2, groups) {
-
   check_crucial_names(data, crucial_columns())
 
   check_crucial_years(data, t0, t1, t2, groups)
@@ -245,7 +241,6 @@ check_calculate_tdm <- function(data, t0, t1, t2, groups) {
 }
 
 check_unique_by_year_and_groups <- function(data, groups) {
-
   req_unique_columns <- c(
     "scen_alloc_wt_tech_prod",
     "plan_alloc_wt_tech_prod",
@@ -273,11 +268,10 @@ check_unique_by_year_and_groups <- function(data, groups) {
 }
 
 check_crucial_years <- function(data, t0, t1, t2, groups) {
-
   crucial_years <- tibble::tibble(crucial_years = c(t0, t0 + t1, t0 + t2))
 
   missing_crucial_years <- crucial_years %>%
-    left_join( data, by = c(crucial_years = "year")) %>%
+    left_join(data, by = c(crucial_years = "year")) %>%
     group_by(!!!rlang::syms(groups)) %>%
     dplyr::summarize(missing_data = sum(is.na(.data$plan_alloc_wt_tech_prod)))
 
@@ -299,7 +293,7 @@ crucial_tdm_groups <- function() {
   c("technology", "ald_sector")
 }
 
-crucial_columns <- function(){
+crucial_columns <- function() {
   c(
     crucial_tdm_groups(),
     "allocation",
