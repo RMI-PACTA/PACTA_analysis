@@ -17,6 +17,7 @@ resources:
       endpoint: 2DegreesInvesting  # Servce connection name
       name: 2DegreesInvesting/create_interactive_report
       ref: master
+      path: foo/create_interactive_report
     - repository: r2dii.climate.stress.test
       type: github
       endpoint: 2DegreesInvesting  # Servce connection name
@@ -37,18 +38,19 @@ stages:
   - stage: build_image
     displayName: Build Docker Image
     jobs:
-      - job: checkout_repos
-        displayName: Checkout Repos
+      - job: Build
+        displayName: Checkout Repos & Build
         steps:
+          - checkout: self  # PACTA_analysis repo
           - checkout: create_interactive_report
           - checkout: r2dii.climate.stress.test
           - checkout: r2dii.stress.test.data
           - checkout: pacta-data
           - script: ls -lR $(Agent.BuildDirectory)
-      # - job: list_repos
-      #   displayName: List Repos
-      #   dependsOn: checkout_repos  # checkout first
-      #   steps:
-      #     - script: ls -lR $(Agent.BuildDirectory)
-      #       # Each job runs on one agent. A job can also be agentless.
-      #       # https://docs.microsoft.com/en-us/azure/devops/pipelines/get-started/key-pipelines-concepts?view=azure-devops
+          # TODO: Add Tagging steps
+          # - task: Docker@2
+          #   displayName: Build TM docker image
+          #   inputs:
+          #     repository: $(imageName)
+          #     command: build
+          #     Dockerfile: app/Dockerfile
