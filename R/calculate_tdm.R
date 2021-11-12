@@ -53,9 +53,9 @@ calculate_tdm <- function(data, t0, t1 = 5, t2 = 10, additional_groups = NULL) {
 
   check_calculate_tdm(data, t0, t1, t2, groups)
 
-  portfolio_weight_data <- filter(data, .data$allocation == "portfolio_weight")
+  filtered_data <- filter(data, .data$allocation == "portfolio_weight")
 
-  if (nrow(portfolio_weight_data) == 0) {
+  if (nrow(filtered_data) == 0) {
     return(warn_zero_rows(tdm_prototype()))
   }
 
@@ -65,7 +65,7 @@ calculate_tdm <- function(data, t0, t1 = 5, t2 = 10, additional_groups = NULL) {
   # scenario will be called in the input data.
 
   data_with_monotonic_factors <- add_monotonic_factor(
-    portfolio_weight_data,
+    filtered_data,
     t0,
     t1,
     t2,
