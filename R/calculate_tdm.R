@@ -64,27 +64,11 @@ calculate_tdm <- function(data, t0, t1 = 5, t2 = 10, additional_groups = NULL) {
   # waiting until the data is prepared as I'm not sure exactly what this
   # scenario will be called in the input data.
 
-  data_with_monotonic_factors <- add_monotonic_factor(
-    filtered_data,
-    t0,
-    t1,
-    t2,
-    groups
-  )
+  data_with_monotonic_factors <- add_monotonic_factor(filtered_data,t0,t1,t2,groups)
 
   initial_year_data <- filter(data_with_monotonic_factors, .data$year == t0)
 
-  preformatted_data <- data_with_monotonic_factors %>%
-    filter(.data$year %in% c(t0, t0 + t1, t0 + t2)) %>%
-    group_by(!!!rlang::syms(groups)) %>%
-    add_time_step(t0, t1, t2) %>%
-    select(
-      !!!rlang::syms(groups),
-      .data$time_step,
-      .data$monotonic_factor,
-      scenario_production = "scen_alloc_wt_tech_prod",
-      portfolio_production = "plan_alloc_wt_tech_prod",
-    )
+  preformatted_data <- pre_format_data(data_with_monotonic_factors, t0, t1, t2, groups)
 
   data_with_tdm <- preformatted_data %>%
     pivot_wider(
@@ -94,8 +78,7 @@ calculate_tdm <- function(data, t0, t1 = 5, t2 = 10, additional_groups = NULL) {
     mutate(
       .numerator = .data$scenario_production_plus_t2 - .data$portfolio_production_plus_t1,
       .denominator = .data$scenario_production_plus_t2 - .data$scenario_production_t0,
-      #TODO: Ensure with @antoine-lacherche that this is the right way to
-      #address the issue of 0 denominator
+      #TODO: This case we
       tdm_tech = ifelse(
         .data$.denominator == 0,
         0,
@@ -216,6 +199,21 @@ add_aggregate_tdm <- function(data, t0, groups) {
     ) %>%
     ungroup()
 }
+
+pre_format_data <- function(data, t0, t1, t2, groups) {
+
+  data %>%
+    filter(.data$year %in% c(t0, t0 + t1, t0 + t2)) %>%
+    group_by(!!!rlang::syms(groups)) %>%
+    add_time_step(t0, t1, t2) %>%
+    select(
+      !!!rlang::syms(groups),
+      .data$time_step,
+      .data$monotonic_factor,
+      scenario_production = "scen_alloc_wt_tech_prod",
+      portfolio_production = "plan_alloc_wt_tech_prod",
+    )
+  }
 
 tdm_prototype <- function() {
   tibble(
