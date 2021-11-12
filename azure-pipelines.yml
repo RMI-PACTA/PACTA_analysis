@@ -17,7 +17,6 @@ resources:
       endpoint: 2DegreesInvesting  # Servce connection name
       name: 2DegreesInvesting/create_interactive_report
       ref: master
-      path: foo/create_interactive_report
     - repository: r2dii.climate.stress.test
       type: github
       endpoint: 2DegreesInvesting  # Servce connection name
@@ -43,6 +42,7 @@ stages:
         steps:
           - checkout: self  # PACTA_analysis repo
           - checkout: create_interactive_report
+            path: foo/create_interactive_report
           - checkout: r2dii.climate.stress.test
           - checkout: r2dii.stress.test.data
           - checkout: pacta-data
