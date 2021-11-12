@@ -61,4 +61,4 @@ stages:
               repository: $(imageName)
               command: build
               Dockerfile: $(Agent.BuildDirectory)/repos/PACTA_analysis/transitionmonitor_docker/Dockerfile
-              buildContext: repos
+              buildContext: $(Agent.BuildDirectory)/repos
