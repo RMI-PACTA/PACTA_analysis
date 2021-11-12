@@ -2,14 +2,20 @@
 % Please edit documentation in R/calculate_tdm.R
 \name{calculate_tdm}
 \alias{calculate_tdm}
-\title{Calculate the transition disruption metric, based on the IPR scenario}
+\title{Calculate and add the transition disruption metric to a dataset}
 \usage{
-calculate_tdm(data, start_year, additional_groups = NULL)
+calculate_tdm(data, t0, t1 = 5, t2 = 10, additional_groups = NULL)
 }
 \arguments{
-\item{data}{A dataset like the \verb{*_results_portfolio.rda} outputs of PACTA.}
+\item{data}{A dataset, like the \verb{*_results_portfolio.rda} outputs of PACTA.}
 
-\item{start_year}{The start year for which the TDM value should be calculated.}
+\item{t0}{The start year, from which the TDM value should be calculated.}
+
+\item{t1}{The number of years into the future for which there is production
+data. Default is 5 years.}
+
+\item{t2}{The number of years into the future against which you want to
+calculate disruption. Default is 10 years.}
 
 \item{additional_groups}{Character vector. The names of columns to group by,
 in addition to these ones (which are always used):
@@ -18,11 +24,12 @@ technology, ald_sector}
 }
 \value{
 A tibble with the columns specified in the \code{...} input, as well as:
-\code{tdm_tech}, the technology level transition disruption metric and \code{tdm_sec},
-the sector level transition disruption metric.
+\code{tdm_tech}, the technology level transition disruption metric and
+\code{tdm_sec}, the sector level transition disruption metric.
 }
 \description{
-Calculate the transition disruption metric, based on the IPR scenario
+This function takes a typical PACTA output, and uses it to calculate the
+transition disruption metric.
 }
 \examples{
 library(tibble)
@@ -42,5 +49,5 @@ pacta_results <- tibble(
 )
 pacta_results
 
-calculate_tdm(pacta_results, start_year = 2020)
+calculate_tdm(pacta_results, t0 = 2020)
 }

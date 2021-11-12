@@ -150,13 +150,13 @@ add_monotonic_factor <- function(data, t0, t1, t2, groups) {
         )
       ) %>%
       tidyr::pivot_wider(
-        names_from = time_step,
-        values_from = c(scen_alloc_wt_tech_prod)
+        names_from = .data$time_step,
+        values_from = .data$scen_alloc_wt_tech_prod
       ) %>%
       mutate(
-        .increasing_overall = end_year > t0,
-        .increasing_in_interval = plus_t2 > t0,
-        .is_monotonic = .increasing_in_interval & .increasing_overall,
+        .increasing_overall = .data$end_year > .data$t0,
+        .increasing_in_interval = .data$plus_t2 > .data$t0,
+        .is_monotonic = .data$.increasing_in_interval & .data$.increasing_overall,
         monotonic_factor = dplyr::if_else(.data$.is_monotonic, 1, -1),
         .increasing_overall = NULL,
         .increasing_in_interval = NULL,
@@ -213,8 +213,8 @@ pre_format_data <- function(data, t0, t1, t2, groups) {
       !!!rlang::syms(groups),
       .data$time_step,
       .data$monotonic_factor,
-      scenario_production = "scen_alloc_wt_tech_prod",
-      portfolio_production = "plan_alloc_wt_tech_prod",
+      scenario_production = .data$scen_alloc_wt_tech_prod,
+      portfolio_production = .data$plan_alloc_wt_tech_prod,
     ) %>%
     pivot_wider(
       names_from = .data$time_step,
@@ -255,7 +255,7 @@ check_unique_by_year_and_groups <- function(data, groups) {
   data <- data %>%
     group_by(!!!rlang::syms(c("year", groups))) %>%
     dplyr::summarize(rows_by_year_and_group = dplyr::n()) %>%
-    mutate(rows_are_unique = rows_by_year_and_group == 1)
+    mutate(rows_are_unique = .data$rows_by_year_and_group == 1)
 
   ok <- all(data$rows_are_unique)
   if (!ok) {
@@ -279,7 +279,7 @@ check_crucial_years <- function(data, t0, t1, t2, groups) {
   missing_crucial_years <- crucial_years %>%
     left_join( data, by = c(crucial_years = "year")) %>%
     group_by(!!!rlang::syms(groups)) %>%
-    dplyr::summarize(missing_data = sum(is.na(plan_alloc_wt_tech_prod)))
+    dplyr::summarize(missing_data = sum(is.na(.data$plan_alloc_wt_tech_prod)))
 
   ok <- all(missing_crucial_years$missing_data == 0)
 
