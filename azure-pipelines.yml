@@ -17,6 +17,7 @@ variables:
   containerRegistry: 'transitionmonitordockerregistry.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/PACTA_analysis/transitionmonitor_docker/Dockerfile'
   tag: '$(Build.BuildId)'
+  testingStorageAccountName: 'tmdockerstorage'
   testingShareName: 'testing-data'
 
 resources:
@@ -49,7 +50,8 @@ stages:
       - job: Build
         displayName: Checkout Repos & Build
         steps:
-          - checkout: self  # PACTA_analysis repo
+          - script: echo Hi, Alex is great.
+          # - checkout: self  # PACTA_analysis repo
           # - checkout: create_interactive_report
           # - checkout: r2dii.climate.stress.test
           # - checkout: r2dii.stress.test.data
@@ -90,8 +92,8 @@ stages:
               scriptLocation: inlineScript
               inlineScript: |
                 az storage file list \
+                --account-name $(testingStorageAccountName) \
                 --share-name $(testingShareName) \
                 --output table
 
-# --account-name $storageAccountName \
-# --account-key $storageAccountKey \
+# --account-key $(AZURE_STORAGE_KEY) \
