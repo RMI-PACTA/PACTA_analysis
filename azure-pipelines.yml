@@ -10,6 +10,9 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+variables:
+  imageName: '2dii_pacta'
+
 resources:
   repositories:
     - repository: create_interactive_report
@@ -41,16 +44,21 @@ stages:
         displayName: Checkout Repos & Build
         steps:
           - checkout: self  # PACTA_analysis repo
+            path: repos/PACTA_analysis
           - checkout: create_interactive_report
-            path: foo/create_interactive_report
+            path: repos/create_interactive_report
           - checkout: r2dii.climate.stress.test
+            path: repos/r2dii.climate.stress.test
           - checkout: r2dii.stress.test.data
+            path: repos/r2dii.stress.test.data
           - checkout: pacta-data
+            path: repos/pacta-data
           - script: ls -lR $(Agent.BuildDirectory)
           # TODO: Add Tagging steps
-          # - task: Docker@2
-          #   displayName: Build TM docker image
-          #   inputs:
-          #     repository: $(imageName)
-          #     command: build
-          #     Dockerfile: app/Dockerfile
+          - task: Docker@2
+            displayName: Build Transition Monitor Docker image
+            inputs:
+              repository: $(imageName)
+              command: build
+              Dockerfile: repos/PACTA_analysis/transitionmonitor_docker/Dockerfile
+              buildContext: repos
