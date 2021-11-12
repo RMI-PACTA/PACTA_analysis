@@ -44,8 +44,11 @@ stages:
           - checkout: r2dii.climate.stress.test
           - checkout: r2dii.stress.test.data
           - checkout: pacta-data
-      - job: list_repos
-        displayName: List Repos
-        dependsOn: checkout_repos  # checkout first
-        steps:
           - script: ls -lR $(Agent.BuildDirectory)
+      # - job: list_repos
+      #   displayName: List Repos
+      #   dependsOn: checkout_repos  # checkout first
+      #   steps:
+      #     - script: ls -lR $(Agent.BuildDirectory)
+      #       # Each job runs on one agent. A job can also be agentless.
+      #       # https://docs.microsoft.com/en-us/azure/devops/pipelines/get-started/key-pipelines-concepts?view=azure-devops
