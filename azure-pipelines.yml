@@ -76,7 +76,7 @@ stages:
         steps:
           - checkout: none
           - script: pwd
-          - script: echo $(Build.SourceDirectory)
+          - script: echo $(Build.SourcesDirectory)
           - task: AzureCLI@2
             displayName: Download files from Azure File Share
             inputs:
@@ -86,7 +86,7 @@ stages:
               inlineScript: |
                 az storage file download-batch \
                 --source $(testingShareName)/PA2021NO \
-                --destination $(Build.SourceDirectory) \
+                --destination $(Build.SourcesDirectory) \
                 --account-name $(testingStorageAccountName)
           - script: run-like-wim-PA2021NO.sh
           # - task: AzureCLI@2
