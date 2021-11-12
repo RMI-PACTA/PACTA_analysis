@@ -70,26 +70,7 @@ calculate_tdm <- function(data, t0, t1 = 5, t2 = 10, additional_groups = NULL) {
 
   preformatted_data <- pre_format_data(data_with_monotonic_factors, t0, t1, t2, groups)
 
-  data_with_tdm <- preformatted_data %>%
-    pivot_wider(
-      names_from = .data$time_step,
-      values_from = all_of(c("scenario_production", "portfolio_production"))
-    ) %>%
-    mutate(
-      .numerator = .data$scenario_production_plus_t2 - .data$portfolio_production_plus_t1,
-      .denominator = .data$scenario_production_plus_t2 - .data$scenario_production_t0,
-      #TODO: This case we
-      tdm_tech = ifelse(
-        .data$.denominator == 0,
-        0,
-        max(0, (.data$.numerator / .data$.denominator) * .data$monotonic_factor) * 2
-      ),
-      .numerator = NULL,
-      .denominator = NULL
-    ) %>%
-    select(.data$tdm_tech, all_of(groups)) %>%
-    distinct() %>%
-    ungroup()
+  data_with_tdm <- add_tdm(preformatted_data, groups)
 
   formatted_data_with_tdm <- left_join(
     initial_year_data,
@@ -189,6 +170,26 @@ add_monotonic_factor <- function(data, t0, t1, t2, groups) {
   left_join(data, monotonic_factors, by = groups)
 }
 
+add_tdm <- function(data, groups) {
+  data %>%
+    group_by(!!!rlang::syms(groups)) %>%
+    mutate(
+      .numerator = .data$scenario_production_plus_t2 - .data$portfolio_production_plus_t1,
+      .denominator = .data$scenario_production_plus_t2 - .data$scenario_production_t0,
+      #TODO: This case we
+      tdm_tech = ifelse(
+        .data$.denominator == 0,
+        0,
+        max(0, (.data$.numerator / .data$.denominator) * .data$monotonic_factor) * 2
+      ),
+      .numerator = NULL,
+      .denominator = NULL
+    ) %>%
+    select(.data$tdm_tech, all_of(groups)) %>%
+    distinct() %>%
+    ungroup()
+}
+
 add_aggregate_tdm <- function(data, t0, groups) {
   data %>%
     group_by(!!!rlang::syms(groups)) %>%
@@ -212,6 +213,10 @@ pre_format_data <- function(data, t0, t1, t2, groups) {
       .data$monotonic_factor,
       scenario_production = "scen_alloc_wt_tech_prod",
       portfolio_production = "plan_alloc_wt_tech_prod",
+    ) %>%
+    pivot_wider(
+      names_from = .data$time_step,
+      values_from = all_of(c("scenario_production", "portfolio_production"))
     )
   }
 
