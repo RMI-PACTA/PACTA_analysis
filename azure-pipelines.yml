@@ -88,7 +88,8 @@ stages:
                 --source $(testingShareName)/PA2021NO \
                 --destination $(Build.SourcesDirectory) \
                 --account-name $(testingStorageAccountName)
-          - script: run-like-wim-PA2021NO.sh
+          - script: ls -lR $(Build.SourcesDirectory)
+          - script: $(Build.SourcesDirectory)/run-like-wim-PA2021NO.sh
           # - task: AzureCLI@2
           #   displayName: Azure CLI - Copy files
           #   inputs:
