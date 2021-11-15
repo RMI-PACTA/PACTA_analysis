@@ -52,6 +52,8 @@ resources:
   containers:
     - container: builder
       image: ubuntu:18.04
+    - container: TMRunner
+      image: $(imageRepository):$(Build.BuildNumber)
 
 stages:
   - stage: build_image
