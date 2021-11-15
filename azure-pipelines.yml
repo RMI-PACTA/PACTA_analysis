@@ -54,6 +54,7 @@ resources:
       image: ubuntu:18.04
     - container: TMRunner
       image: $(imageRepository):$(Build.BuildNumber)
+      endpoint: $(dockerRegistryServiceConnection)
 
 stages:
   - stage: build_image
@@ -121,6 +122,9 @@ stages:
                 --account-name $(testingStorageAccountName)
           - script: ls -lR $(Build.SourcesDirectory)
           - script: echo "I can run inside the container (it starts by default)"
+            target:
+              container: TMRunner
+          - script: ls -lR /bound
             target:
               container: TMRunner
           - task: Docker@2
