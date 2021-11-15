@@ -61,39 +61,40 @@ resources:
     - container: builder
       image: ubuntu:18.04
     - container: TMRunner
-      image: $(imageRepository):$(Build.BuildNumber)
+      image: $(imageRepository):20211115.22
+      # image: $(imageRepository):$(Build.BuildNumber)
       endpoint: TransitionMonitorDockerRegistry
       # options: $(dockerRunFlags)
       volumes:
-        - /tmp/user_info/working_dirs:/bound/working_dir
-        - /tmp/user_info/user_results/4:/user_results
+        - ./working_dirs:/bound/working_dir
+        - ./user_results/4:/user_results
 
 stages:
-  - stage: build_image
-    displayName: Build and Push Docker Image
-    jobs:
-      - job: Build
-        displayName: Checkout Repos & Build
-        steps:
-          - checkout: self  # PACTA_analysis repo
-          - checkout: create_interactive_report
-          - checkout: r2dii.climate.stress.test
-          - checkout: r2dii.stress.test.data
-          - checkout: pacta-data
-          # TODO: Add Tagging steps job
-          - task: Docker@2
-            displayName: Build Transition Monitor Docker image
-            inputs:
-              command: buildAndPush
-              repository: $(imageRepository)
-              dockerfile: $(dockerfilePath)
-              buildContext: $(Build.SourcesDirectory)
-              containerRegistry: $(dockerRegistryServiceConnection)
-              addPipelineData: false
-              tags: |
-                $(dockerTag)
-                $(Build.BuildNumber)
-                $(Build.SourceVersion)
+  # - stage: build_image
+  #   displayName: Build and Push Docker Image
+  #   jobs:
+  #     - job: Build
+  #       displayName: Checkout Repos & Build
+  #       steps:
+  #         - checkout: self  # PACTA_analysis repo
+  #         - checkout: create_interactive_report
+  #         - checkout: r2dii.climate.stress.test
+  #         - checkout: r2dii.stress.test.data
+  #         - checkout: pacta-data
+  #         # TODO: Add Tagging steps job
+  #         - task: Docker@2
+  #           displayName: Build Transition Monitor Docker image
+  #           inputs:
+  #             command: buildAndPush
+  #             repository: $(imageRepository)
+  #             dockerfile: $(dockerfilePath)
+  #             buildContext: $(Build.SourcesDirectory)
+  #             containerRegistry: $(dockerRegistryServiceConnection)
+  #             addPipelineData: false
+  #             tags: |
+  #               $(dockerTag)
+  #               $(Build.BuildNumber)
+  #               $(Build.SourceVersion)
   - stage: test_image
     displayName: Test Docker Image
     jobs:
@@ -130,7 +131,7 @@ stages:
               inlineScript: |
                 az storage file download-batch \
                 --source $(testingShareName)/PA2021NO \
-                --destination /tmp/user_info/ \
+                --destination $(Build.SourcesDirectory) \
                 --account-name $(testingStorageAccountName)
           - script: ls -lR /tmp/user_info/
           - script: echo "I can run inside the container (it starts by default)"
