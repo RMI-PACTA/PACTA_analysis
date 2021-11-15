@@ -90,7 +90,8 @@ stages:
               scriptLocation: inlineScript
               inlineScript: |
                 az storage file download \
-                --source $(testingShareName)/run-like-constructiva-flags.sh \
+                --share-name $(testingShareName) \
+                --path run-like-constructiva-flags.sh \
                 --destination $(Build.SourcesDirectory) \
                 --account-name $(testingStorageAccountName)
           - task: AzureCLI@2
