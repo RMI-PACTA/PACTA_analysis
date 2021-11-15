@@ -66,8 +66,8 @@ resources:
       endpoint: TransitionMonitorDockerRegistry
       # options: $(dockerRunFlags)
       volumes:
-        - ./working_dirs:/bound/working_dir
-        - ./user_results/4:/user_results
+        - working_dirs:/bound/working_dir
+        - user_results/4:/user_results
 
 stages:
   # - stage: build_image
