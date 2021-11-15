@@ -46,9 +46,7 @@ set_col_types <- function(grouping_variables, fixed_col_types) {
 set_project_parameters <- function(file_path){
   cfg <- config::get(file = file_path)
 
-  if (!is.null(cfg$paths$data_location_ext)) {
-    data_location_ext <<- cfg$paths$data_location_ext
-  }
+  proj_data_location_ext <<- cfg$paths$data_location_ext
 
   project_report_name <<- cfg$reporting$project_report_name
   display_currency <<- cfg$reporting$display_currency
@@ -260,7 +258,16 @@ set_analysis_inputs_path <- function(twodii_internal, data_location_ext, datapre
     analysis_inputs_path <- r2dii.utils::path_dropbox_2dii("PortCheck", "00_Data", "07_AnalysisInputs", dataprep_ref)
     analysis_inputs_path <- file.path(analysis_inputs_path)
   } else {
-    analysis_inputs_path <- data_location_ext
+    # project level setting takes precedence, portfolio level second, else what
+    # set_webtool_paths() sets for data_location_ext
+    if (!is.null(proj_data_location_ext)) {
+      analysis_inputs_path <- proj_data_location_ext
+    } else if (!is.null(port_holdings_date)) {
+      analysis_inputs_path <- file.path("..", "pacta-data", port_holdings_date)
+    } else {
+      analysis_inputs_path <- data_location_ext
+    }
+
   }
 
   return(analysis_inputs_path)
