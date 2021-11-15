@@ -49,6 +49,9 @@ resources:
       endpoint: 2DegreesInvesting  # Servce connection name
       name: 2DegreesInvesting/pacta-data
       ref: master
+  containers:
+    - container: builder
+      image: ubuntu:18.04
 
 stages:
   - stage: build_image
@@ -83,26 +86,26 @@ stages:
         displayName: Test PA2021NO
         steps:
           - checkout: none
-          - task: Docker@2
-            displayName: Login to ACR
-            inputs:
-              command: login
-              containerRegistry: $(dockerRegistryServiceConnection)
-          - script: docker pull $(imageRepository):$(Build.BuildNumber)
-            workingDirectory: $(Build.SourcesDirectory)
-            displayName: 'Docker Pull'
-          - task: AzureCLI@2
-            displayName: Download run script from Azure File Share
-            inputs:
-              azureSubscription: tm-docker-AzureResourceManager
-              scriptType: bash
-              scriptLocation: inlineScript
-              workingDirectory: $(Build.SourcesDirectory)
-              inlineScript: |
-                az storage file download \
-                --path run-like-constructiva-flags.sh \
-                --share-name $(testingShareName) \
-                --account-name $(testingStorageAccountName)
+          # - task: Docker@2
+          #   displayName: Login to ACR
+          #   inputs:
+          #     command: login
+          #     containerRegistry: $(dockerRegistryServiceConnection)
+          # - script: docker pull $(imageRepository):$(Build.BuildNumber)
+          #   workingDirectory: $(Build.SourcesDirectory)
+          #   displayName: 'Docker Pull'
+          # - task: AzureCLI@2
+          #   displayName: Download run script from Azure File Share
+          #   inputs:
+          #     azureSubscription: tm-docker-AzureResourceManager
+          #     scriptType: bash
+          #     scriptLocation: inlineScript
+          #     workingDirectory: $(Build.SourcesDirectory)
+          #     inlineScript: |
+          #       az storage file download \
+          #       --path run-like-constructiva-flags.sh \
+          #       --share-name $(testingShareName) \
+          #       --account-name $(testingStorageAccountName)
           - task: AzureCLI@2
             displayName: Download files from Azure File Share
             inputs:
@@ -115,12 +118,20 @@ stages:
                 --destination $(Build.SourcesDirectory) \
                 --account-name $(testingStorageAccountName)
           - script: ls -lR $(Build.SourcesDirectory)
-          - task: Bash@3
-            displayName: Run PA2021NO Portfolio
+          - script: echo "I can run inside the container (it starts by default)"
+            target:
+              container: builder
+          - task: Docker@2
             inputs:
-              filePath: run-like-wim-PA2021NO.sh
-              workingDirectory: $(Build.SourcesDirectory)
-              arguments: |
-                "-u 4"
-                "-p Test_PA2021NO"
-                "-t $(Build.BuildNumber)"
+              command: stop
+              container: builder
+
+          # - task: Bash@3
+          #   displayName: Run PA2021NO Portfolio
+          #   inputs:
+          #     filePath: run-like-wim-PA2021NO.sh
+          #     workingDirectory: $(Build.SourcesDirectory)
+          #     arguments: |
+          #       "-u 4"
+          #       "-p Test_PA2021NO"
+          #       "-t $(Build.BuildNumber)"
