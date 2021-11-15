@@ -26,6 +26,14 @@ variables:
     dockerTag: '$(Build.SourceBranchName)'
   ${{ else }}:
     dockerTag: '$(Build.Reason)'
+    dockerRunFlags: |
+      --rm \
+      --platform linux/x86_64 \
+      --pull=never \
+      --network none \
+      --user 1000:1000 \
+      --memory=8g \
+      --memory-swappiness=0
 
 resources:
   repositories:
@@ -55,6 +63,9 @@ resources:
     - container: TMRunner
       image: $(imageRepository):$(Build.BuildNumber)
       endpoint: TransitionMonitorDockerRegistry
+      mount:
+        - $(Build.SourcesDirectory)/working_dirs/Test_PA2021NO:/bound/working_dir
+        - $(Build.SourcesDirectory)/user_results/4:/user_results
 
 stages:
   - stage: build_image
@@ -125,6 +136,9 @@ stages:
             target:
               container: TMRunner
           - script: ls -lR /bound
+            target:
+              container: TMRunner
+          - script: /bound/bin/run-r-scripts "Test_PA2021NO"
             target:
               container: TMRunner
           - task: Docker@2
