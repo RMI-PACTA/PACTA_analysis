@@ -63,7 +63,7 @@ resources:
     - container: TMRunner
       image: $(imageRepository):$(Build.BuildNumber)
       endpoint: TransitionMonitorDockerRegistry
-      options: $(dockerRunFlags)
+      # options: $(dockerRunFlags)
       volumes:
         - /tmp/user_info/working_dirs:/bound/working_dir
         - /tmp/user_info/user_results/4:/user_results
