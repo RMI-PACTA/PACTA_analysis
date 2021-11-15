@@ -64,8 +64,8 @@ resources:
       image: $(imageRepository):$(Build.BuildNumber)
       endpoint: TransitionMonitorDockerRegistry
       volumes:
-        - working_dirs/:/bound/working_dir
-        - user_results/4:/user_results
+        - $[$(Build.SourcesDirectory)/working_dirs/:/bound/working_dir]
+        - $[$(Build.SourcesDirectory)/user_results/4:/user_results]
 
 stages:
   - stage: build_image
