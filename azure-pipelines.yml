@@ -122,11 +122,11 @@ stages:
           - script: ls -lR $(Build.SourcesDirectory)
           - script: echo "I can run inside the container (it starts by default)"
             target:
-              container: builder
+              container: TMRunner
           - task: Docker@2
             inputs:
               command: stop
-              container: builder
+              container: TMRunner
 
           # - task: Bash@3
           #   displayName: Run PA2021NO Portfolio
