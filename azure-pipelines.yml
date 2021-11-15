@@ -88,11 +88,11 @@ stages:
               azureSubscription: tm-docker-AzureResourceManager
               scriptType: bash
               scriptLocation: inlineScript
+              workingDirectory: $(Build.SourcesDirectory)
               inlineScript: |
                 az storage file download \
-                --share-name $(testingShareName) \
                 --path run-like-constructiva-flags.sh \
-                --destination $(Build.SourcesDirectory) \
+                --share-name $(testingShareName) \
                 --account-name $(testingStorageAccountName)
           - task: AzureCLI@2
             displayName: Download files from Azure File Share
