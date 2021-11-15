@@ -130,8 +130,19 @@ stages:
               scriptLocation: inlineScript
               inlineScript: |
                 az storage file download-batch \
-                --source $(testingShareName)/PA2021NO \
-                --destination $(Build.SourcesDirectory) \
+                --source $(testingShareName)/user_results \
+                --destination $(Build.SourcesDirectory)/user_results \
+                --account-name $(testingStorageAccountName)
+          - task: AzureCLI@2
+            displayName: Download files from Azure File Share
+            inputs:
+              azureSubscription: tm-docker-AzureResourceManager
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+                az storage file download-batch \
+                --source $(testingShareName)/working_dirs \
+                --destination $(Build.SourcesDirectory)/working_dirs \
                 --account-name $(testingStorageAccountName)
           - script: ls -lR /tmp/user_info/
           - script: echo "I can run inside the container (it starts by default)"
