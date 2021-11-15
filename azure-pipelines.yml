@@ -15,7 +15,8 @@ variables:
   # Container registry service connection established during pipeline creation
   dockerRegistryServiceConnection: 'ddd45595-876e-4212-92f0-8196a5c2fe71'
   containerRegistry: 'transitionmonitordockerregistry.azurecr.io'
-  dockerfilePath: '$(Build.SourcesDirectory)/PACTA_analysis/transitionmonitor_docker/Dockerfile'
+  dockerfileRepoPath: 'PACTA_analysis/transitionmonitor_docker/Dockerfile'
+  dockerfilePath: '$(Build.SourcesDirectory)/dockerfileRepoPath'
   testingStorageAccountName: 'tmdockerstorage'
   testingShareName: 'testing-data'
   # use PR number if it's a PR, otherwise branch name.
@@ -82,7 +83,12 @@ stages:
         displayName: Test PA2021NO
         steps:
           - checkout: none
-          - script:  docker pull $(imageRepository):$(Build.BuildNumber)
+          - task: Docker@2
+            displayName: Login to ACR
+            inputs:
+              command: login
+              containerRegistry: dockerRegistryServiceConnection
+          - script: docker pull $(imageRepository):$(Build.BuildNumber)
             workingDirectory: $(Build.SourcesDirectory)
             displayName: 'Docker Pull'
           - task: AzureCLI@2
