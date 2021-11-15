@@ -82,6 +82,9 @@ stages:
         displayName: Test PA2021NO
         steps:
           - checkout: none
+          - script:  docker pull $(imageRepository):$(Build.BuildNumber)
+            workingDirectory: $(Build.SourcesDirectory)
+            displayName: 'Docker Pull'
           - task: AzureCLI@2
             displayName: Download run script from Azure File Share
             inputs:
