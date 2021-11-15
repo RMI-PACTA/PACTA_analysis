@@ -54,7 +54,7 @@ resources:
       image: ubuntu:18.04
     - container: TMRunner
       image: $(imageRepository):$(Build.BuildNumber)
-      endpoint: $(dockerRegistryServiceConnection)
+      endpoint: $(containerRegistry)
 
 stages:
   - stage: build_image
