@@ -16,7 +16,7 @@ variables:
   dockerRegistryServiceConnection: 'ddd45595-876e-4212-92f0-8196a5c2fe71'
   containerRegistry: 'transitionmonitordockerregistry.azurecr.io'
   dockerfileRepoPath: 'PACTA_analysis/transitionmonitor_docker/Dockerfile'
-  dockerfilePath: '$(Build.SourcesDirectory)/dockerfileRepoPath'
+  dockerfilePath: '$(Build.SourcesDirectory)/$(dockerfileRepoPath)'
   testingStorageAccountName: 'tmdockerstorage'
   testingShareName: 'testing-data'
   # use PR number if it's a PR, otherwise branch name.
