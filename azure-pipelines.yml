@@ -70,6 +70,7 @@ resources:
         - "/home/vsts/work/1/s/user_results/4:/user_results"
 
 stages:
+
   # - stage: build_image
   #   displayName: Build and Push Docker Image
   #   jobs:
@@ -95,6 +96,7 @@ stages:
   #               $(dockerTag)
   #               $(Build.BuildNumber)
   #               $(Build.SourceVersion)
+
   - stage: test_image
     displayName: Test Docker Image
     jobs:
@@ -102,26 +104,18 @@ stages:
         displayName: Test PA2021NO
         steps:
           - checkout: none
-          # - task: Docker@2
-          #   displayName: Login to ACR
-          #   inputs:
-          #     command: login
-          #     containerRegistry: $(dockerRegistryServiceConnection)
-          # - script: docker pull $(imageRepository):$(Build.BuildNumber)
-          #   workingDirectory: $(Build.SourcesDirectory)
-          #   displayName: 'Docker Pull'
-          # - task: AzureCLI@2
-          #   displayName: Download run script from Azure File Share
-          #   inputs:
-          #     azureSubscription: tm-docker-AzureResourceManager
-          #     scriptType: bash
-          #     scriptLocation: inlineScript
-          #     workingDirectory: $(Build.SourcesDirectory)
-          #     inlineScript: |
-          #       az storage file download \
-          #       --path run-like-constructiva-flags.sh \
-          #       --share-name $(testingShareName) \
-          #       --account-name $(testingStorageAccountName)
+          - task: AzureCLI@2
+            displayName: Download run script from Azure File Share
+            inputs:
+              azureSubscription: tm-docker-AzureResourceManager
+              scriptType: bash
+              scriptLocation: inlineScript
+              workingDirectory: $(Build.SourcesDirectory)
+              inlineScript: |
+                az storage file download \
+                --path run-like-constructiva-flags.sh \
+                --share-name $(testingShareName) \
+                --account-name $(testingStorageAccountName)
           - task: AzureCLI@2
             displayName: Download files from Azure File Share
             inputs:
