@@ -87,7 +87,7 @@ stages:
             displayName: Login to ACR
             inputs:
               command: login
-              containerRegistry: dockerRegistryServiceConnection
+              containerRegistry: $(dockerRegistryServiceConnection)
           - script: docker pull $(imageRepository):$(Build.BuildNumber)
             workingDirectory: $(Build.SourcesDirectory)
             displayName: 'Docker Pull'
