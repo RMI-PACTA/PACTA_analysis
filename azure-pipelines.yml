@@ -26,8 +26,6 @@ variables:
     dockerTag: '$(Build.SourceBranchName)'
   ${{ else }}:
     dockerTag: '$(Build.Reason)'
-    userFolder: '$(Build.SourcesDirectory)/working_dirs'
-    resultsFolder: '$(Build.SourcesDirectory)/user_results/4'
     dockerRunFlags: |
       --rm \
       --platform linux/x86_64 \
@@ -36,8 +34,6 @@ variables:
       --user 1000:1000 \
       --memory=8g \
       --memory-swappiness=0
-      --mount type=bind,source="$(userFolder)",target=/bound/working_dir \
-      --mount type=bind,readonly,source="$(resultsFolder)",target=/user_results \
 
 resources:
   repositories:
@@ -67,6 +63,10 @@ resources:
     - container: TMRunner
       image: $(imageRepository):$(Build.BuildNumber)
       endpoint: TransitionMonitorDockerRegistry
+      options: $(dockerRunFlags)
+      volumes:
+        - /tmp/user_info/working_dirs:/bound/working_dir
+        - /tmp/user_info/user_results/4:/user_results
 
 stages:
   - stage: build_image
@@ -130,9 +130,9 @@ stages:
               inlineScript: |
                 az storage file download-batch \
                 --source $(testingShareName)/PA2021NO \
-                --destination $(Build.SourcesDirectory) \
+                --destination /tmp/user_info/ \
                 --account-name $(testingStorageAccountName)
-          - script: ls -lR $(Build.SourcesDirectory)
+          - script: ls -lR /tmp/user_info/
           - script: echo "I can run inside the container (it starts by default)"
             target:
               container: TMRunner
