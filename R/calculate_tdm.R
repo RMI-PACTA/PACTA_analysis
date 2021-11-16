@@ -55,7 +55,7 @@ calculate_tdm <- function(data, t0, t1 = 5, t2 = 10, additional_groups = NULL) {
 
   check_calculate_tdm(data, t0, t1, t2, groups)
 
-  filtered_data <- filter(data, .data$allocation == "portfolio_weight")
+  filtered_data <- dplyr::filter(data, .data$allocation == "portfolio_weight")
 
   if (nrow(filtered_data) == 0) {
     return(warn_zero_rows(tdm_prototype()))
@@ -68,7 +68,7 @@ calculate_tdm <- function(data, t0, t1 = 5, t2 = 10, additional_groups = NULL) {
 
   data_with_monotonic_factors <- add_monotonic_factor(filtered_data, t0, t1, t2, groups)
 
-  initial_year_data <- filter(data_with_monotonic_factors, .data$year == t0)
+  initial_year_data <- dplyr::filter(data_with_monotonic_factors, .data$year == t0)
 
   preformatted_data <- pre_format_data(data_with_monotonic_factors, t0, t1, t2, groups)
 
@@ -201,7 +201,7 @@ add_aggregate_tdm <- function(data, t0, groups) {
 
 pre_format_data <- function(data, t0, t1, t2, groups) {
   data %>%
-    filter(.data$year %in% c(t0, t0 + t1, t0 + t2)) %>%
+    dplyr::filter(.data$year %in% c(t0, t0 + t1, t0 + t2)) %>%
     group_by(!!!rlang::syms(groups)) %>%
     add_time_step(t0, t1, t2) %>%
     select(
