@@ -99,9 +99,9 @@ add_time_step <- function(data, t0, t1, t2) {
   data %>%
     mutate(
       time_step = case_when(
-        .data$year == t0 ~ "t0",
-        .data$year == t0 + t1 ~ "plus_t1",
-        .data$year == t0 + t2 ~ "plus_t2"
+        .data$year == .env$t0 ~ "t0",
+        .data$year == .env$t0 + .env$t1 ~ "plus_t1",
+        .data$year == .env$t0 + .env$t2 ~ "plus_t2"
       )
     )
 }
