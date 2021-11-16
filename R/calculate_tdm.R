@@ -92,7 +92,6 @@ warn_zero_rows <- function(data) {
   message <- 'Filtering for "portfolio_weight" allocation, outputs 0 rows'
   warn(message, class = "has_zero_rows")
 
-  # Pass `data` to inline inside return()
   invisible(data)
 }
 
