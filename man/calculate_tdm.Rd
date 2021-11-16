@@ -26,9 +26,9 @@ in addition to these ones (which are always used):
 technology, ald_sector}
 }
 \value{
-A tibble with the columns specified in the \code{additional_groups} input,
-as well as: \code{tdm_tech}, the technology level transition disruption metric
-and \code{tdm_sec}, the sector level transition disruption metric.
+A tibble with the columns specified in the \code{additional_groups} input
+as well as \code{tdm_tech}: the technology level transition disruption metric
+and \code{tdm_sec}: the sector level transition disruption metric.
 }
 \description{
 This function takes a typical PACTA output, and uses it to calculate the
