@@ -7,15 +7,18 @@
 calculate_tdm(data, t0, t1 = 5, t2 = 10, additional_groups = NULL)
 }
 \arguments{
-\item{data}{A dataset, like the \verb{*_results_portfolio.rda} outputs of PACTA.}
+\item{data}{A data.frame (or tibble), with a format similar to the
+\verb{*_results_portfolio.rda} outputs of PACTA.}
 
-\item{t0}{The start year, from which the TDM value should be calculated.}
+\item{t0}{The start year, from which the TDM value should be calculated. This
+value should coincide with the earliest year in the PACTA results dataset.}
 
 \item{t1}{The number of years into the future for which there is production
-data. Default is 5 years.}
+data. The default value is 5 years since this is often the limit of the
+forward-looking data.}
 
 \item{t2}{The number of years into the future against which you want to
-calculate disruption. Default is 10 years.}
+calculate disruption.}
 
 \item{additional_groups}{Character vector. The names of columns to group by,
 in addition to these ones (which are always used):
@@ -23,9 +26,9 @@ in addition to these ones (which are always used):
 technology, ald_sector}
 }
 \value{
-A tibble with the columns specified in the \code{...} input, as well as:
-\code{tdm_tech}, the technology level transition disruption metric and
-\code{tdm_sec}, the sector level transition disruption metric.
+A tibble with the columns specified in the \code{additional_groups} input,
+as well as: \code{tdm_tech}, the technology level transition disruption metric
+and \code{tdm_sec}, the sector level transition disruption metric.
 }
 \description{
 This function takes a typical PACTA output, and uses it to calculate the

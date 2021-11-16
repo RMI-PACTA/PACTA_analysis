@@ -3,12 +3,15 @@
 #' This function takes a typical PACTA output, and uses it to calculate the
 #' transition disruption metric.
 #'
-#' @param data A dataset, like the `*_results_portfolio.rda` outputs of PACTA.
-#' @param t0 The start year, from which the TDM value should be calculated.
+#' @param data A data.frame (or tibble), with a format similar to the
+#'   `*_results_portfolio.rda` outputs of PACTA.
+#' @param t0 The start year, from which the TDM value should be calculated. This
+#'   value should coincide with the earliest year in the PACTA results dataset.
 #' @param t1 The number of years into the future for which there is production
-#'   data. Default is 5 years.
+#'   data. The default value is 5 years since this is often the limit of the
+#'   forward-looking data.
 #' @param t2 The number of years into the future against which you want to
-#'   calculate disruption. Default is 10 years.
+#'   calculate disruption.
 #' @param additional_groups Character vector. The names of columns to group by,
 #'   in addition to these ones (which are always used):
 #'
