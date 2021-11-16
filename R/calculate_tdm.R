@@ -116,11 +116,7 @@ add_monotonic_factor <- function(data, t0, t1, t2, groups) {
 
   if (all(data$end_year_is_t0_t2)) {
     monotonic_factors <- data %>%
-      mutate(
-        .is_monotonic = TRUE,
-        monotonic_factor = dplyr::if_else(.data$.is_monotonic, 1, -1),
-        .is_monotonic = NULL
-      ) %>%
+      mutate(monotonic_factor = 1) %>%
       select(
         -c(
           .data$year,
