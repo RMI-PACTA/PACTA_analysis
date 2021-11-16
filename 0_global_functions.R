@@ -55,7 +55,21 @@ set_project_parameters <- function(file_path){
   financial_timestamp <<- cfg$parameters$timestamp
   dataprep_timestamp <<- cfg$parameters$dataprep_timestamp
 
-  start_year <<- as.numeric(cfg$parameters$start_year)
+  if (!is.null(cfg$parameters$start_year)) {
+    start_year <<- as.numeric(cfg$parameters$start_year)
+  } else if (!is.null(port_holdings_date)) {
+    start_year <- convert_quarter_to_year(port_holdings_date)
+    # if holdings date is Q4 (not 1, 2, or 3), start year is next year
+    if (grepl(pattern = "Q4$", x = port_holdings_date, ignore.case = TRUE)) {
+      start_year <- start_year + 1L
+    }
+    start_year <<- start_year
+  } else {
+    # if everything else is gone, 2020 is the only valid year we ran projects
+    # without setting holdings_date in the portfolio parameters
+    start_year <<- 2020L
+  }
+
   time_horizon <<- as.numeric(cfg$parameters$horizon_year)
 
   select_scenario <<- cfg$parameters$select_scenario
@@ -378,3 +392,22 @@ write_log <- function(msg, file_path = log_path, ...) {
   write(composed, file = file.path(file_path,"error_messages.txt"), append = TRUE)
 }
 
+convert_quarter_to_year <- function(quarter_string){
+  # check that it's a valid timestamp xxxxQy
+  stopifnot(
+    grepl(
+      pattern = "^[[:digit:]]{4}Q[1-4]$",
+      x = quarter_string,
+      ignore.case = TRUE
+      )
+    )
+  year_string <- gsub(
+    pattern = "Q[[:digit:]]",
+    replacement = "",
+    x = port_holdings_date,
+    ignore.case = TRUE
+    )
+  # coerce to integer
+  year_int <- as.integer(year_string)
+  return(year_int)
+}
