@@ -110,7 +110,7 @@ add_monotonic_factor <- function(data, t0, t1, t2, groups) {
   data <- data %>%
     group_by(!!!rlang::syms(groups)) %>%
     mutate(
-      end_year = last(.data$year),
+      end_year = max(.data$year),
       end_year_is_t0_t2 = .data$end_year == t0 + t2
     )
 
