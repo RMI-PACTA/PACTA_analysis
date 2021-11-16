@@ -8,7 +8,6 @@ default:
     parameters:
         timestamp: 2019Q4
         dataprep_timestamp: 2019Q4_250220
-        start_year: 2020
         horizon_year: 5
         select_scenario: WEO2019_SDS
         scenario_auto: ETP2017_B2DS
