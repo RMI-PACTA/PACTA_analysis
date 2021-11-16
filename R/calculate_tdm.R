@@ -14,9 +14,9 @@
 #'
 #'   `r toString(crucial_tdm_groups())`
 #'
-#' @return A tibble with the columns specified in the `...` input, as well as:
-#'   `tdm_tech`, the technology level transition disruption metric and
-#'   `tdm_sec`, the sector level transition disruption metric.
+#' @return A tibble with the columns specified in the `additional_groups` input,
+#'   as well as: `tdm_tech`, the technology level transition disruption metric
+#'   and `tdm_sec`, the sector level transition disruption metric.
 #' @export
 #'
 #' @examples
