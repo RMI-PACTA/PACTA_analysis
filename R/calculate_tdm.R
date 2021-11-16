@@ -257,12 +257,17 @@ check_unique_by_year_and_groups <- function(data, groups) {
   ok <- all(data$rows_are_unique)
   if (!ok) {
     rlang::abort(
-      "multiple_values_per_year",
-      message = glue(
-        "Data must be unique by year and groups for the following columns:
-      {paste0('`', req_unique_columns, '`', collapse = ', ')} \n
-      Are you sure you have included the correct groupings?"
-      )
+      message = c(
+        "Data must be unique by year and groups for the following columns",
+        x = glue::glue_collapse(
+          req_unique_columns,
+          sep = ",",
+          width = 50,
+          last = "and"
+          ),
+        i = "Are you sure you have included the correct groupings?"
+        ),
+      class = "multiple_values_per_year",
     )
   }
 
@@ -281,12 +286,17 @@ check_crucial_years <- function(data, t0, t1, t2, groups) {
 
   if (!ok) {
     rlang::abort(
-      "missing_crucial_years",
-      message = glue(
-        "Data must contain all crucial years, by group:
-      {paste0('`', crucial_years, '`', collapse = ', ')} \n
-      Are all crucial years present in input data?"
-      )
+      message = c(
+        "Data must contain all crucial years, by group:",
+        x = glue::glue_collapse(
+          crucial_years,
+          sep = ",",
+          width = 50,
+          last = "and"
+        ),
+        i = "Are all crucial years present in input data?"
+      ),
+      class = "missing_crucial_years",
     )
   }
 }
