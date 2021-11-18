@@ -1,15 +1,15 @@
 # This function exists to check if a portfolio has a single holdings
 # date, or multiple. If there is a single date, then everything is good.
 # but on the platform, if a user groups multiple  portfolios, and some of
-# thse have different holding dates, then the parameters file will
-# contaain a yaml array with the distinct dates from each grouped
+# these have different holding dates, then the parameters file will
+# contain a yaml array with the distinct dates from each grouped
 # portfolio.
 # Examples:
 #
 # simple portfolio
 # holdings_date: 2020Q4
 #
-# groupedd portfolio with all same date:
+# grouped portfolio with all same date:
 # holdings_date: 2020Q4
 #
 # grouped portfolio with different dates:
@@ -17,10 +17,20 @@
 #
 # `config` will read this in as a character vector, so all we need to do
 # here is check for length > 1
+#
+#' @examples
+#' # No errors
+#' check_grouped_portfolio_years("2019Q4")
+#' check_grouped_portfolio_years(c("2019Q4"))
+#' check_grouped_portfolio_years(c("2019Q4", "2019Q4"))
+#' # produces error
+#' check_grouped_portfolio_years(c("2019Q4", "2020Q4"))
 
 check_grouped_portfolio_years <- function(
   port_holdings_date
   ) {
+  # Extract unique (distinct) values
+  port_holdings_date <- unique(port_holdings_date)
   if ((!is.null(port_holdings_date)) && length(port_holdings_date) > 1) {
     error_name <- "Grouped Portfolio with different Holdings Dates"
     desc <- paste(
@@ -40,6 +50,7 @@ check_grouped_portfolio_years <- function(
       description = desc,
       immediate = TRUE
     )
-    stop("port_holdings_date length > 1")
+    stop("port_holdings_date length > 1", call. = FALSE)
   }
+  return(invisible(port_holdings_date))
 }

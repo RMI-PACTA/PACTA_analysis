@@ -393,8 +393,9 @@ write_log <- function(msg, file_path = log_path, ...) {
 }
 
 convert_quarter_to_year <- function(quarter_string){
-  # see function definition for more info, but this give the user a useful
-  # error if length > 1 (grouped portfolio from multiple timestamps)
+  # see definition of check_grouped_portfolio_years for more info, but
+  # this give the user a useful error if length > 1 (grouped portfolio
+  # from multiple timestamps)
   check_grouped_portfolio_years(quarter_string)
   # check that it's a valid timestamp xxxxQy
   stopifnot(

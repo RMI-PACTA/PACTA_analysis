@@ -36,7 +36,6 @@ log_user_errors <- function(
   stopifnot(is.character(error_name))
   stopifnot(is.character(suggested_action))
   stopifnot(is.character(description))
-  # check that directory exists, create if not
   if (!dir.exists(dirname(error_file))) {
     dir.create(dirname(error_file), recursive = TRUE)
   }
