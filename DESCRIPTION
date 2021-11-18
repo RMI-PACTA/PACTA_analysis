@@ -31,6 +31,7 @@ Imports:
     fst,
     glue,
     here,
+    jsonlite,
     janitor,
     magrittr,
     purrr,
