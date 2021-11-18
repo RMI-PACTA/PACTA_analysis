@@ -33,6 +33,7 @@
 #' @noRd
 fake_tdm_data <- function(investor_name = NULL,
                           portfolio_name = NULL,
+                          scenario = NULL,
                           allocation = NULL,
                           equity_market = NULL,
                           scenario_geography = NULL,
@@ -46,6 +47,7 @@ fake_tdm_data <- function(investor_name = NULL,
   tibble(
     investor_name = investor_name %||% "some_investor",
     portfolio_name = portfolio_name %||% "some_portfolio",
+    scenario = scenario %||% "IPR FPS 2021",
     allocation = allocation %||% "portfolio_weight",
     equity_market = equity_market %||% "GlobalMarket",
     scenario_geography = scenario_geography %||% "Global",

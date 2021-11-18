@@ -16,6 +16,8 @@
 #'   in addition to these ones (which are always used):
 #'
 #'   `r toString(crucial_tdm_groups())`
+#' @param scenarios Character vector. The names of scenarios for which TDM
+#'   should be calculated.
 #'
 #' @return A tibble with the columns specified in the `additional_groups` input
 #'   as well as `tdm_tech`: the technology level transition disruption metric
@@ -41,7 +43,12 @@
 #' pacta_results
 #'
 #' calculate_tdm(pacta_results, t0 = 2020)
-calculate_tdm <- function(data, t0, t1 = 5, t2 = 10, additional_groups = NULL) {
+calculate_tdm <- function(data,
+                          t0,
+                          t1 = 5,
+                          t2 = 10,
+                          additional_groups = NULL,
+                          scenarios = "IPR FPS 2021") {
   stopifnot(
     is.data.frame(data),
     is.numeric(t0),
@@ -55,16 +62,28 @@ calculate_tdm <- function(data, t0, t1 = 5, t2 = 10, additional_groups = NULL) {
 
   check_calculate_tdm(data, t0, t1, t2, groups)
 
-  filtered_data <- dplyr::filter(data, .data$allocation == "portfolio_weight")
+  filtered_data <- dplyr::filter(
+    data,
+    .data$allocation == "portfolio_weight"
+    )
 
   if (nrow(filtered_data) == 0) {
-    return(warn_zero_rows(tdm_prototype()))
+    # NOTE: This function will only work if the allocation method is
+    # portfolio_weight. ownership_weight outputs 0 for all `carsten_metric` values,
+    # which would later result in a divide by 0 issue.
+    warning_message <- 'Filtering for "portfolio_weight" allocation, outputs 0 rows'
+    return(warn_zero_rows(tdm_prototype(), warning_message))
   }
 
-  # TODO: Filter the data fora  particular scenario. Function should gain the
-  # argument `scenario`, which by default specifies IPR - FPS scenario. I am
-  # waiting until the data is prepared as I'm not sure exactly what this
-  # scenario will be called in the input data.
+  filtered_data <- dplyr::filter(
+    filtered_data,
+    .data$scenario %in% scenarios
+  )
+
+  if (nrow(filtered_data) == 0) {
+    warning_message <- 'Filtering for `scenarios`, outputs 0 rows'
+    return(warn_zero_rows(tdm_prototype(), warning_message))
+  }
 
   data_with_monotonic_factors <- add_monotonic_factor(filtered_data, t0, t1, t2, groups)
 
@@ -85,11 +104,7 @@ calculate_tdm <- function(data, t0, t1 = 5, t2 = 10, additional_groups = NULL) {
     select(names(tdm_prototype()), all_of(groups))
 }
 
-warn_zero_rows <- function(data) {
-  # NOTE: This function will only work if the allocation method is
-  # portfolio_weight. ownership_weight outputs 0 for all carsten metric values,
-  # and thus we would be dividing by zero otherwise...
-  message <- 'Filtering for "portfolio_weight" allocation, outputs 0 rows'
+warn_zero_rows <- function(data, message) {
   warn(message, class = "has_zero_rows")
 
   invisible(data)
@@ -260,9 +275,9 @@ check_unique_by_year_and_groups <- function(data, groups) {
           sep = ",",
           width = 50,
           last = "and"
-          ),
-        i = "Are you sure you have included the correct groupings?"
         ),
+        i = "Are you sure you have included the correct groupings?"
+      ),
       class = "multiple_values_per_year",
     )
   }

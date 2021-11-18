@@ -58,6 +58,13 @@ test_that("if only `allocation` is 'ownership_weight' outputs a 0-row tibble", {
     expect_warning(class = "has_zero_rows")
 })
 
+test_that("if no `scenarios` found in data, outputs a 0-row tibble", {
+  fake_tdm_data(scenario = "bad scenario", year = c(2020, 2025, 2030)) %>%
+    calculate_tdm(2020) %>%
+    expect_s3_class("tbl") %>%
+    expect_warning(class = "has_zero_rows")
+})
+
 test_that("errors if data has multiple values per year", {
   fake_tdm_data(
     year = c(2020, 2020, 2025, 2030),
