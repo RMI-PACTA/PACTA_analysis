@@ -133,7 +133,10 @@ dir.create(ports_output_dir, showWarnings = FALSE)
 all_port_ids <- unique(data$port_id)
 
 for (port_id in all_port_ids) {
-  port_data <- data %>% dplyr::filter(port_id == .env$port_id)
+  port_data <-
+    data %>%
+    dplyr::filter(port_id == .env$port_id) %>%
+    mutate(portfolio_name = as.character(.env$port_id))
 
   portfolio_name <- encodeString(as.character(unique(port_data$portfolio_name)))
   if (length(portfolio_name) > 1) { portfolio_name <- port_id }
@@ -148,8 +151,8 @@ for (port_id in all_port_ids) {
     list(
       default = list(
         parameters = list(
-          portfolio_name_in = portfolio_name,
-          investor_name_in = investor_name,
+          portfolio_name_in = as.character(portfolio_name),
+          investor_name_in = as.character(investor_name),
           peer_group = peer_group,
           language = default_language,
           project_code = project_code
@@ -193,8 +196,8 @@ for (user_id in all_user_ids) {
     list(
       default = list(
         parameters = list(
-          portfolio_name_in = investor_name,
-          investor_name_in = investor_name,
+          portfolio_name_in = as.character(investor_name),
+          investor_name_in = as.character(investor_name),
           peer_group = peer_group,
           language = default_language,
           project_code = project_code
