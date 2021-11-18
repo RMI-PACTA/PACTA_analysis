@@ -30,6 +30,7 @@
 #' pacta_results <- tibble(
 #'   investor_name = rep("some_investor", 3),
 #'   portfolio_name = rep("some_portfolio", 3),
+#'   scenario = rep("IPR FPS 2021", 3),
 #'   allocation = rep("portfolio_weight", 3),
 #'   equity_market = rep("GlobalMarket", 3),
 #'   scenario_geography = rep("Global", 3),

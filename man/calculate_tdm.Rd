@@ -4,7 +4,14 @@
 \alias{calculate_tdm}
 \title{Calculate and add the transition disruption metric to a dataset}
 \usage{
-calculate_tdm(data, t0, t1 = 5, t2 = 10, additional_groups = NULL)
+calculate_tdm(
+  data,
+  t0,
+  t1 = 5,
+  t2 = 10,
+  additional_groups = NULL,
+  scenarios = "IPR FPS 2021"
+)
 }
 \arguments{
 \item{data}{A data.frame (or tibble), with a format similar to the
@@ -24,6 +31,9 @@ calculate disruption.}
 in addition to these ones (which are always used):
 
 technology, ald_sector}
+
+\item{scenarios}{Character vector. The names of scenarios for which TDM
+should be calculated.}
 }
 \value{
 A tibble with the columns specified in the \code{additional_groups} input
@@ -40,6 +50,7 @@ library(tibble)
 pacta_results <- tibble(
   investor_name = rep("some_investor", 3),
   portfolio_name = rep("some_portfolio", 3),
+  scenario = rep("IPR FPS 2021", 3),
   allocation = rep("portfolio_weight", 3),
   equity_market = rep("GlobalMarket", 3),
   scenario_geography = rep("Global", 3),
