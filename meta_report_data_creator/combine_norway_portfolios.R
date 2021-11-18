@@ -1,22 +1,22 @@
 
 # manually set certain values and paths ----------------------------------------
 
-output_dir <- r2dii.utils::path_dropbox_2dii("2° Investing Team/1. RESEARCH/1. Studies (projects)/PACTA . Regulator Monitoring/PACTA COP/03_Initiative_Level/06_PACTACOP_PE/04_Input_Cleaning/PACTA Results")
+output_dir <- "~/Desktop/norway-5"
 combined_portfolio_results_output_dir <- file.path(output_dir, "combined", "portfolio_level")
 combined_user_results_output_dir <- file.path(output_dir, "combined", "user_level")
 combined_orgtype_results_output_dir <- file.path(output_dir, "combined", "orgtype_level")
 
-data_path <- r2dii.utils::path_dropbox_2dii("2° Investing Team/1. research/1. Studies (projects)/PACTA . Regulator Monitoring/PACTA COP/03_Initiative_Level/06_PACTACOP_PE/04_Input_Cleaning/04. Data")
+data_path <- r2dii.utils::path_dropbox_2dii("2° Investing Team/1. Research/1. Studies (projects)/PACTA . Regulator Monitoring/PACTA COP/03_Initiative_Level/05_PACTACOP_NO/04_Input_Cleaning")
 portfolios_path <- file.path(data_path, "portfolios")
 portfolios_meta_csv <- file.path(data_path, "portfolios.csv")
 users_meta_csv <- file.path(data_path, "users.csv")
 
-project_code <- "PA2021PE"
-default_language <- "ES"
+project_code <- "PA2021NO"
+default_language <- "EN"
 
-project_prefix <- "peru"
+project_prefix <- "norway"
 
-bogus_csvs_to_be_ignored <- c()
+bogus_csvs_to_be_ignored <- c("20303", "26102")
 
 
 # check paths and directories --------------------------------------------------
