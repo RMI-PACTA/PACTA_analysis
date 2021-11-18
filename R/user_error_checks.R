@@ -30,15 +30,15 @@ check_grouped_portfolio_years <- function(
   port_holdings_date
   ) {
   # Extract unique (distinct) values
-  port_holdings_date <- unique(port_holdings_date)
-  if ((!is.null(port_holdings_date)) && length(port_holdings_date) > 1) {
+  hold_date <- unique(port_holdings_date)
+  if ((!is.null(hold_date)) && length(hold_date) > 1) {
     error_name <- "Grouped Portfolio with different Holdings Dates"
     desc <- paste(
       "When grouping portfolios, the user included portfolios with",
       "different holdings dates. All portfolios in the group should have",
       "the same holding date (2019Q4, 2020Q4, etc.) The portfolios",
       "in this group have holding dates of:",
-      paste0("**", paste(port_holdings_date, collapse = ", "), "**")
+      paste0("**", paste(hold_date, collapse = ", "), "**")
     )
     action <- paste(
       "Delete this grouping, and create a new one with portfolios",
@@ -50,7 +50,7 @@ check_grouped_portfolio_years <- function(
       description = desc,
       immediate = TRUE
     )
-    stop("port_holdings_date length > 1", call. = FALSE)
+    stop("port_holdings_date contains multiple distinct values", call. = FALSE)
   }
   return(invisible(port_holdings_date))
 }

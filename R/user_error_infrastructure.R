@@ -56,6 +56,7 @@ log_user_errors <- function(
   if (suggested_action != "") {
     this_error["action"] <- suggested_action
   }
+  write_log(c("User Error:", this_error))
   errors <- c(errors, list(this_error))
   jsonlite::write_json(
     x = errors,
@@ -87,7 +88,7 @@ convert_user_errors_to_md <- function(
     # Add description
     if ("description" %in% section_names) {
       description <- paste("**Description:**", error[["description"]])
-      section <- c(section, description)
+      section <- c(section, description = description)
     }
     # Suggested actions
     if ("action" %in% section_names) {
@@ -96,7 +97,7 @@ convert_user_errors_to_md <- function(
         " Suggested Action", "\n\n",
         error[["action"]]
       )
-      section <- c(section, action)
+      section <- c(section, action = action)
     }
     error_text <- paste(section, collapse = "\n\n")
     all_error_texts <- c(all_error_texts, error_text)

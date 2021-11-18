@@ -389,10 +389,16 @@ write_log <- function(msg, file_path = log_path, ...) {
     as.character(msg),
     ...
   )
+  if (!dir.exists(file_path)) {
+    dir.create(file_path, recursive = TRUE)
+  }
   write(composed, file = file.path(file_path,"error_messages.txt"), append = TRUE)
 }
 
 convert_quarter_to_year <- function(quarter_string){
+  # extract unique values, so that even if an array is passed in with all
+  # same values, we still accept it, if all values are the same.
+  quarter_string <- unique(quarter_string)
   # see definition of check_grouped_portfolio_years for more info, but
   # this give the user a useful error if length > 1 (grouped portfolio
   # from multiple timestamps)
