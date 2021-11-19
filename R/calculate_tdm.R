@@ -101,7 +101,7 @@ calculate_tdm <- function(data,
   )
 
   formatted_data_with_tdm %>%
-    mutate(reference_year = .env$t0) %>%
+    mutate(t0 = .env$t0) %>%
     add_aggregate_tdm(groups) %>%
     select(names(tdm_prototype()), all_of(groups))
 }
@@ -232,7 +232,7 @@ tdm_prototype <- function() {
     ald_sector = character(0),
     tdm_technology = numeric(0),
     tdm_sector = numeric(0),
-    reference_year = integer(0),
+    t0 = integer(0)
   )
 }
 
