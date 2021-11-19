@@ -16,12 +16,12 @@ test_that("outputs the expected tibble", {
   expect_snapshot(out)
 })
 
-test_that("outputs 0 for `tdm_tech` and `tdm_sec`, if `scen_alloc_wt_tech_prod
+test_that("outputs 0 for `tdm_technology` and `tdm_sector`, if `scen_alloc_wt_tech_prod
           doesn't change over 10 year period`", {
   data <- fake_tdm_data(year = c(2020, 2025, 2030))
   out <- calculate_tdm(data, 2020)
-  expect_true(out$tdm_tech == 0)
-  expect_true(out$tdm_sec == 0)
+  expect_true(out$tdm_technology == 0)
+  expect_true(out$tdm_sector == 0)
 })
 
 test_that("outputs is ungrouped", {
@@ -114,8 +114,8 @@ test_that("errors if input data isn't grouped appropriately to ensure unique
     expect_error(class = "multiple_values_per_year")
 
   extended <- calculate_tdm(data, t0, t1, t2, additional_groups)
-  expect_equal(round(extended$tdm_tech, 2), c(2, 7.33, 1.33, 2))
-  expect_equal(round(extended$tdm_sec, 2), c(4.67, 4.67, 1.67, 1.67))
+  expect_equal(round(extended$tdm_technology, 2), c(2, 7.33, 1.33, 2))
+  expect_equal(round(extended$tdm_sector, 2), c(4.67, 4.67, 1.67, 1.67))
 })
 
 test_that("with known input outputs as expected", {
@@ -131,15 +131,15 @@ test_that("with known input outputs as expected", {
 
   out <- out %>%
     mutate(
-      tdm_tech = round(tdm_tech, 2),
-      tdm_sec = round(tdm_sec, 2)
+      tdm_technology = round(tdm_technology, 2),
+      tdm_sector = round(tdm_sector, 2)
       ) %>%
     split(.$technology)
 
-  expect_equal(out$OilCap$tdm_tech, 7.33)
-  expect_equal(out$OilCap$tdm_sec, 4.67)
-  expect_equal(out$RenewablesCap$tdm_tech, 2)
-  expect_equal(out$RenewablesCap$tdm_sec, 4.67)
+  expect_equal(out$OilCap$tdm_technology, 7.33)
+  expect_equal(out$OilCap$tdm_sector, 4.67)
+  expect_equal(out$RenewablesCap$tdm_technology, 2)
+  expect_equal(out$RenewablesCap$tdm_sector, 4.67)
 
 })
 
@@ -156,12 +156,12 @@ test_that("outputs correctly for non-monotonic scenarios", {
 
   out <- out %>%
     mutate(
-      tdm_tech = round(tdm_tech, 2),
-      tdm_sec = round(tdm_sec, 2)
+      tdm_technology = round(tdm_technology, 2),
+      tdm_sector = round(tdm_sector, 2)
     ) %>%
     split(.$technology)
 
-  expect_equal(out$OilCap$tdm_tech, 2)
-  expect_equal(out$RenewablesCap$tdm_tech, 0.4)
+  expect_equal(out$OilCap$tdm_technology, 2)
+  expect_equal(out$RenewablesCap$tdm_technology, 0.4)
 
 })

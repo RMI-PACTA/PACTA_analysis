@@ -20,8 +20,8 @@
 #'   should be calculated.
 #'
 #' @return A tibble with the columns specified in the `additional_groups` input
-#'   as well as `tdm_tech`: the technology level transition disruption metric
-#'   and `tdm_sec`: the sector level transition disruption metric.
+#'   as well as `tdm_technology`: the technology level transition disruption metric
+#'   and `tdm_sector`: the sector level transition disruption metric.
 #' @export
 #'
 #' @examples
@@ -183,7 +183,7 @@ add_tdm <- function(data, groups) {
       .numerator = .data$scenario_production_plus_t2 - .data$portfolio_production_plus_t1,
       .denominator = .data$scenario_production_plus_t2 - .data$scenario_production_t0,
       # TODO: This case we
-      tdm_tech = ifelse(
+      tdm_technology = ifelse(
         .data$.denominator == 0,
         0,
         max(0, (.data$.numerator / .data$.denominator) * .data$monotonic_factor) * 2
@@ -191,7 +191,7 @@ add_tdm <- function(data, groups) {
       .numerator = NULL,
       .denominator = NULL
     ) %>%
-    select(.data$tdm_tech, all_of(groups)) %>%
+    select(.data$tdm_technology, all_of(groups)) %>%
     distinct() %>%
     ungroup()
 }
@@ -201,7 +201,7 @@ add_aggregate_tdm <- function(data, t0, groups) {
     group_by(!!!rlang::syms(groups)) %>%
     ungroup(.data$technology) %>%
     mutate(
-      tdm_sec = .data$plan_carsten * sum(.data$tdm_tech) / sum(.data$plan_carsten),
+      tdm_sector = .data$plan_carsten * sum(.data$tdm_technology) / sum(.data$plan_carsten),
       reference_year = t0
     ) %>%
     ungroup()
@@ -230,8 +230,8 @@ tdm_prototype <- function() {
   tibble(
     technology = character(0),
     ald_sector = character(0),
-    tdm_tech = numeric(0),
-    tdm_sec = numeric(0),
+    tdm_technology = numeric(0),
+    tdm_sector = numeric(0),
     reference_year = integer(0),
   )
 }
