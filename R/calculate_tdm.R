@@ -20,8 +20,10 @@
 #'   should be calculated.
 #'
 #' @return A tibble with the columns specified in the `additional_groups` input
-#'   as well as `tdm_technology`: the technology level transition disruption metric
-#'   and `tdm_sector`: the sector level transition disruption metric.
+#'   as well as `tdm_technology`: the technology level transition disruption
+#'   metric, `tdm_sector`: the sector level transition disruption metric, as
+#'   well as `t0`, `delta_t1` and `delta_t2`: corresponding to the input
+#'   arguments.
 #' @export
 #'
 #' @examples
@@ -101,7 +103,11 @@ calculate_tdm <- function(data,
   )
 
   formatted_data_with_tdm %>%
-    mutate(t0 = .env$t0) %>%
+    mutate(
+      t0 = .env$t0,
+      delta_t1 = .env$delta_t1,
+      delta_t2 = .env$delta_t2
+      ) %>%
     add_aggregate_tdm(groups) %>%
     select(names(tdm_prototype()), all_of(groups))
 }
@@ -232,7 +238,9 @@ tdm_prototype <- function() {
     ald_sector = character(0),
     tdm_technology = numeric(0),
     tdm_sector = numeric(0),
-    t0 = integer(0)
+    t0 = integer(0),
+    delta_t1 = integer(0),
+    delta_t2 = integer(0)
   )
 }
 
