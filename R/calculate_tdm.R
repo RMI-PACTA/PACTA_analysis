@@ -207,13 +207,15 @@ add_tdm <- function(data, groups) {
 add_aggregate_tdm <- function(data, groups) {
   data %>%
     group_by(!!!rlang::syms(groups)) %>%
+    arrange(.data$year) %>%
+    mutate(initial_carsten = dplyr::first(.data$plan_carsten)) %>%
     ungroup(.data$technology) %>%
     mutate(
-      tdm_sector_value = .data$plan_carsten * sum(.data$tdm_technology_value) / sum(.data$plan_carsten)
+      tdm_sector_value = .data$initial_carsten * sum(.data$tdm_technology_value) / sum(.data$initial_carsten)
     ) %>%
     ungroup(.data$ald_sector) %>%
     mutate(
-      tdm_portfolio_value = .data$plan_carsten * sum(.data$tdm_technology_value) / sum(.data$plan_carsten)
+      tdm_portfolio_value = .data$initial_carsten * sum(.data$tdm_technology_value) / sum(.data$initial_carsten)
     ) %>%
     ungroup()
 }
