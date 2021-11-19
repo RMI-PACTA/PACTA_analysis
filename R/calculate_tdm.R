@@ -101,7 +101,8 @@ calculate_tdm <- function(data,
   )
 
   formatted_data_with_tdm %>%
-    add_aggregate_tdm(t0, groups) %>%
+    mutate(reference_year = .env$t0) %>%
+    add_aggregate_tdm(groups) %>%
     select(names(tdm_prototype()), all_of(groups))
 }
 
@@ -196,13 +197,12 @@ add_tdm <- function(data, groups) {
     ungroup()
 }
 
-add_aggregate_tdm <- function(data, t0, groups) {
+add_aggregate_tdm <- function(data, groups) {
   data %>%
     group_by(!!!rlang::syms(groups)) %>%
     ungroup(.data$technology) %>%
     mutate(
-      tdm_sector = .data$plan_carsten * sum(.data$tdm_technology) / sum(.data$plan_carsten),
-      reference_year = t0
+      tdm_sector = .data$plan_carsten * sum(.data$tdm_technology) / sum(.data$plan_carsten)
     ) %>%
     ungroup()
 }
