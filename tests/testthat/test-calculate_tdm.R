@@ -24,7 +24,7 @@ test_that("outputs the expected names", {
   )
 
   actual <- names(calculate_tdm(data, 2020))
-  expect_equal(setdiff(expected, actual), 0L)
+  expect_equal(setdiff(expected, actual), character(0))
 
 })
 
