@@ -131,20 +131,12 @@ add_monotonic_factor <- function(data, t0, t1, t2, groups) {
     )
 
   if (all(data$end_year_is_t0_t2)) {
-    monotonic_factors <- data %>%
-      mutate(monotonic_factor = 1) %>%
-      select(
-        -c(
-          .data$year,
-          .data$end_year,
-          .data$plan_carsten,
-          .data$plan_alloc_wt_tech_prod,
-          .data$scen_alloc_wt_tech_prod,
-          .data$end_year_is_t0_t2
-        )
-      ) %>%
+    monotonic_factors <-
+      data %>%
+      ungroup() %>%
+      select(.env$groups) %>%
       distinct() %>%
-      ungroup()
+      mutate(monotonic_factor = 1L)
   } else {
     monotonic_factors <- data %>%
       add_time_step(t0, t1, t2) %>%
