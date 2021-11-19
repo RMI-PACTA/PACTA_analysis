@@ -23,7 +23,7 @@
 #'   as well as `tdm_technology`: the technology level transition disruption
 #'   metric, `tdm_sector`: the sector level transition disruption metric,
 #'   `tdm_portfolio`: the portfolio level transition disruption metric, as well
-#'   as `t0`, `delta_t1` and `delta_t2`: corresponding to the input
+#'   as `tdm_t0`, `tdm_delta_t1` and `tdm_delta_t2`: corresponding to the input
 #'   arguments.
 #' @export
 #'
@@ -105,9 +105,9 @@ calculate_tdm <- function(data,
 
   formatted_data_with_tdm %>%
     mutate(
-      t0 = .env$t0,
-      delta_t1 = .env$delta_t1,
-      delta_t2 = .env$delta_t2
+      tdm_t0 = .env$t0,
+      tdm_delta_t1 = .env$delta_t1,
+      tdm_delta_t2 = .env$delta_t2
       ) %>%
     add_aggregate_tdm(groups) %>%
     select(names(tdm_prototype()), all_of(groups))
@@ -244,9 +244,9 @@ tdm_prototype <- function() {
     tdm_technology = numeric(0),
     tdm_sector = numeric(0),
     tdm_portfolio = numeric(0),
-    t0 = integer(0),
-    delta_t1 = integer(0),
-    delta_t2 = integer(0)
+    tdm_t0 = integer(0),
+    tdm_delta_t1 = integer(0),
+    tdm_delta_t2 = integer(0)
   )
 }
 

@@ -37,8 +37,11 @@ should be calculated.}
 }
 \value{
 A tibble with the columns specified in the \code{additional_groups} input
-as well as \code{tdm_technology}: the technology level transition disruption metric
-and \code{tdm_sector}: the sector level transition disruption metric.
+as well as \code{tdm_technology}: the technology level transition disruption
+metric, \code{tdm_sector}: the sector level transition disruption metric,
+\code{tdm_portfolio}: the portfolio level transition disruption metric, as well
+as \code{tdm_t0}, \code{tdm_delta_t1} and \code{tdm_delta_t2}: corresponding to the input
+arguments.
 }
 \description{
 This function takes a typical PACTA output, and uses it to calculate the
