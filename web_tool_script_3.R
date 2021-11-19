@@ -127,6 +127,20 @@ if (file.exists(file.path(results_path, portfolio_name_ref_all, "Bonds_results_m
   bonds_results_map <- empty_map_results()
 }
 
+# load equity tdm data
+if (file.exists(file.path(results_path, portfolio_name_ref_all, "Equity_tdm.rds"))) {
+  equity_tdm <- readRDS(file.path(results_path, portfolio_name_ref_all, "Equity_tdm.rds"))
+} else {
+  equity_tdm <- NULL
+}
+
+# load bonds tdm data
+if (file.exists(file.path(results_path, portfolio_name_ref_all, "Bonds_tdm.rds"))) {
+  bonds_tdm <- readRDS(file.path(results_path, portfolio_name_ref_all, "Bonds_tdm.rds"))
+} else {
+  bonds_tdm <- NULL
+}
+
 # load equity stress test data
 if (file.exists(file.path(results_path, portfolio_name_ref_all, "equity_results_stress_test.rda"))) {
   equity_results_stress_test <- read_rds(file.path(results_path, portfolio_name_ref_all, "equity_results_stress_test.rda"))
@@ -252,7 +266,9 @@ create_interactive_report(
   display_currency = display_currency,
   currency_exchange_value = currency_exchange_value,
   header_dictionary = header_dictionary,
-  sector_order = sector_order
+  sector_order = sector_order,
+  equity_tdm = equity_tdm,
+  bonds_tdm = bonds_tdm
 )
 
 if(dir.exists(exec_summary_dir)){
