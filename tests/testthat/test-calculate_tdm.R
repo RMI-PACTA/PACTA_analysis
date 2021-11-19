@@ -25,7 +25,6 @@ test_that("outputs the expected names", {
 
   actual <- names(calculate_tdm(data, 2020))
   expect_equal(setdiff(expected, actual), character(0))
-
 })
 
 test_that("outputs 0 for `tdm_technology_value` and `tdm_sector_value`, if `scen_alloc_wt_tech_prod
@@ -145,14 +144,13 @@ test_that("with known input outputs as expected", {
     mutate(
       tdm_technology_value = round(tdm_technology_value, 2),
       tdm_sector_value = round(tdm_sector_value, 2)
-      ) %>%
+    ) %>%
     split(.$technology)
 
   expect_equal(out$OilCap$tdm_technology_value, 7.33)
   expect_equal(out$OilCap$tdm_sector_value, 4.67)
   expect_equal(out$RenewablesCap$tdm_technology_value, 2)
   expect_equal(out$RenewablesCap$tdm_sector_value, 4.67)
-
 })
 
 test_that("outputs correctly for non-monotonic scenarios", {
@@ -175,5 +173,4 @@ test_that("outputs correctly for non-monotonic scenarios", {
 
   expect_equal(out$OilCap$tdm_technology_value, 2)
   expect_equal(out$RenewablesCap$tdm_technology_value, 0.4)
-
 })

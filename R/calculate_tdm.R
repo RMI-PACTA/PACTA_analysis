@@ -69,7 +69,7 @@ calculate_tdm <- function(data,
   filtered_data <- dplyr::filter(
     data,
     .data$allocation == "portfolio_weight"
-    )
+  )
 
   if (nrow(filtered_data) == 0) {
     # NOTE: This function will only work if the allocation method is
@@ -85,7 +85,7 @@ calculate_tdm <- function(data,
   )
 
   if (nrow(filtered_data) == 0) {
-    warning_message <- 'Filtering for `scenarios`, outputs 0 rows'
+    warning_message <- "Filtering for `scenarios`, outputs 0 rows"
     return(warn_zero_rows(tdm_prototype(), warning_message))
   }
 
@@ -108,7 +108,7 @@ calculate_tdm <- function(data,
       tdm_t0 = .env$t0,
       tdm_delta_t1 = .env$delta_t1,
       tdm_delta_t2 = .env$delta_t2
-      ) %>%
+    ) %>%
     add_aggregate_tdm(groups) %>%
     select(names(tdm_prototype()), all_of(groups))
 }
