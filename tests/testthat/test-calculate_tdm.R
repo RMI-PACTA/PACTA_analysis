@@ -13,7 +13,28 @@ test_that("outputs the expected tibble", {
   )
 
   out <- calculate_tdm(data, 2020)
-  expect_snapshot(out)
+
+expect_equal(
+    sort(names(out)),
+    c(
+      "ald_sector",
+      "tdm_delta_t1",
+      "tdm_delta_t2",
+      "tdm_portfolio_value",
+      "tdm_sector_value",
+      "tdm_t0",
+      "tdm_technology_value",
+      "technology"
+      )
+  )
+
+expect_equal(out$tdm_technology_value, 2L)
+expect_equal(out$tdm_sector_value, 2L)
+expect_equal(out$tdm_portfolio_value, 2L)
+expect_equal(out$tdm_t0, 2020L)
+expect_equal(out$tdm_delta_t1, 5L)
+expect_equal(out$tdm_delta_t2, 10L)
+
 })
 
 test_that("outputs the expected names", {
