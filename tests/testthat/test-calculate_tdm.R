@@ -16,6 +16,18 @@ test_that("outputs the expected tibble", {
   expect_snapshot(out)
 })
 
+test_that("outputs the expected names", {
+  expected <- names(tdm_prototype())
+  data <- fake_tdm_data(
+    year = c(2020, 2025, 2030),
+    scen_alloc_wt_tech_prod = 1:3
+  )
+
+  actual <- names(calculate_tdm(data, 2020))
+  expect_equal(setdiff(expected, actual), 0L)
+
+})
+
 test_that("outputs 0 for `tdm_technology` and `tdm_sector`, if `scen_alloc_wt_tech_prod
           doesn't change over 10 year period`", {
   data <- fake_tdm_data(year = c(2020, 2025, 2030))
