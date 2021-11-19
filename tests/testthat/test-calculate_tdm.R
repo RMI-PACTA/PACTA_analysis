@@ -195,3 +195,30 @@ test_that("outputs correctly for non-monotonic scenarios", {
   expect_equal(out$OilCap$tdm_technology_value, 2)
   expect_equal(out$RenewablesCap$tdm_technology_value, 0.4)
 })
+
+test_that("only start_year carsten is used to aggregate tdm", {
+
+  # only initial carsten value should be used
+  carsten <- c(0.5, 0.5, 0.1, 0.9, 0, 1)
+
+  data <- fake_tdm_data(
+    technology = rep(c("RenewablesCap", "OilCap"), 3),
+    year = rep(rep(c(2020, 2025, 2030), 2)),
+    plan_alloc_wt_tech_prod = rep(c(1, 2, 3), each = 2),
+    scen_alloc_wt_tech_prod = rep(c(1, 3, 5), each = 2),
+    plan_carsten = carsten,
+  )
+
+  out <- calculate_tdm(data, t0 = 2020) %>%
+    split(.$technology)
+
+  expect_equal(
+    out$OilCap$tdm_sector_value,
+    out$RenewablesCap$tdm_sector_value
+    )
+
+  expect_equal(
+    out$OilCap$tdm_portfolio_value,
+    out$RenewablesCap$tdm_portfolio_value
+    )
+})
