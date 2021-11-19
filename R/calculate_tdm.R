@@ -7,10 +7,10 @@
 #'   `*_results_portfolio.rda` outputs of PACTA.
 #' @param t0 The start year, from which the TDM value should be calculated. This
 #'   value should coincide with the earliest year in the PACTA results dataset.
-#' @param t1 The number of years into the future for which there is production
+#' @param delta_t1 The number of years into the future for which there is production
 #'   data. The default value is 5 years since this is often the limit of the
 #'   forward-looking data.
-#' @param t2 The number of years into the future against which you want to
+#' @param delta_t2 The number of years into the future against which you want to
 #'   calculate disruption.
 #' @param additional_groups Character vector. The names of columns to group by,
 #'   in addition to these ones (which are always used):
@@ -46,22 +46,22 @@
 #' calculate_tdm(pacta_results, t0 = 2020)
 calculate_tdm <- function(data,
                           t0,
-                          t1 = 5,
-                          t2 = 10,
+                          delta_t1 = 5,
+                          delta_t2 = 10,
                           additional_groups = NULL,
                           scenarios = "IPR FPS 2021") {
   stopifnot(
     is.data.frame(data),
     is.numeric(t0),
-    is.numeric(t1),
-    is.numeric(t2)
+    is.numeric(delta_t1),
+    is.numeric(delta_t2)
   )
 
   if (!is.null(additional_groups)) stopifnot(is.character(additional_groups))
 
   groups <- union(crucial_tdm_groups(), additional_groups)
 
-  check_calculate_tdm(data, t0, t1, t2, groups)
+  check_calculate_tdm(data, t0, delta_t1, delta_t2, groups)
 
   filtered_data <- dplyr::filter(
     data,
@@ -86,11 +86,11 @@ calculate_tdm <- function(data,
     return(warn_zero_rows(tdm_prototype(), warning_message))
   }
 
-  data_with_monotonic_factors <- add_monotonic_factor(filtered_data, t0, t1, t2, groups)
+  data_with_monotonic_factors <- add_monotonic_factor(filtered_data, t0, delta_t1, delta_t2, groups)
 
   initial_year_data <- dplyr::filter(data_with_monotonic_factors, .data$year == t0)
 
-  preformatted_data <- pre_format_data(data_with_monotonic_factors, t0, t1, t2, groups)
+  preformatted_data <- pre_format_data(data_with_monotonic_factors, t0, delta_t1, delta_t2, groups)
 
   data_with_tdm <- add_tdm(preformatted_data, groups)
 
@@ -112,26 +112,26 @@ warn_zero_rows <- function(data, message) {
   invisible(data)
 }
 
-add_time_step <- function(data, t0, t1, t2) {
+add_time_step <- function(data, t0, delta_t1, delta_t2) {
   data %>%
     mutate(
       time_step = case_when(
         .data$year == .env$t0 ~ "t0",
-        .data$year == .env$t0 + .env$t1 ~ "plus_t1",
-        .data$year == .env$t0 + .env$t2 ~ "plus_t2"
+        .data$year == .env$t0 + .env$delta_t1 ~ "plus_delta_t1",
+        .data$year == .env$t0 + .env$delta_t2 ~ "plus_delta_t2"
       )
     )
 }
 
-add_monotonic_factor <- function(data, t0, t1, t2, groups) {
+add_monotonic_factor <- function(data, t0, delta_t1, delta_t2, groups) {
   data <- data %>%
     group_by(!!!rlang::syms(groups)) %>%
     mutate(
       end_year = max(.data$year),
-      end_year_is_t0_t2 = .data$end_year == t0 + t2
+      end_year_is_t0_delta_t2 = .data$end_year == t0 + delta_t2
     )
 
-  if (all(data$end_year_is_t0_t2)) {
+  if (all(data$end_year_is_t0_delta_t2)) {
     monotonic_factors <-
       data %>%
       ungroup() %>%
@@ -140,7 +140,7 @@ add_monotonic_factor <- function(data, t0, t1, t2, groups) {
       mutate(monotonic_factor = 1L)
   } else {
     monotonic_factors <- data %>%
-      add_time_step(t0, t1, t2) %>%
+      add_time_step(t0, delta_t1, delta_t2) %>%
       mutate(time_step = case_when(
         .data$year == .data$end_year ~ "end_year",
         TRUE ~ .data$time_step
@@ -151,7 +151,7 @@ add_monotonic_factor <- function(data, t0, t1, t2, groups) {
           .data$end_year,
           .data$plan_carsten,
           .data$plan_alloc_wt_tech_prod,
-          .data$end_year_is_t0_t2
+          .data$end_year_is_t0_delta_t2
         )
       ) %>%
       tidyr::pivot_wider(
@@ -160,15 +160,15 @@ add_monotonic_factor <- function(data, t0, t1, t2, groups) {
       ) %>%
       mutate(
         .increasing_overall = .data$end_year > .data$t0,
-        .increasing_in_interval = .data$plus_t2 > .data$t0,
+        .increasing_in_interval = .data$plus_delta_t2 > .data$t0,
         .is_monotonic = .data$.increasing_in_interval & .data$.increasing_overall,
         monotonic_factor = dplyr::if_else(.data$.is_monotonic, 1, -1),
         .increasing_overall = NULL,
         .increasing_in_interval = NULL,
         .is_monotonic = NULL,
         t0 = NULL,
-        plus_t1 = NULL,
-        plus_t2 = NULL,
+        plus_delta_t1 = NULL,
+        plus_delta_t2 = NULL,
         end_year = NULL
       ) %>%
       ungroup()
@@ -181,8 +181,8 @@ add_tdm <- function(data, groups) {
   data %>%
     group_by(!!!rlang::syms(groups)) %>%
     mutate(
-      .numerator = .data$scenario_production_plus_t2 - .data$portfolio_production_plus_t1,
-      .denominator = .data$scenario_production_plus_t2 - .data$scenario_production_t0,
+      .numerator = .data$scenario_production_plus_delta_t2 - .data$portfolio_production_plus_delta_t1,
+      .denominator = .data$scenario_production_plus_delta_t2 - .data$scenario_production_t0,
       # TODO: This case we
       tdm_technology = ifelse(
         .data$.denominator == 0,
@@ -207,11 +207,11 @@ add_aggregate_tdm <- function(data, groups) {
     ungroup()
 }
 
-pre_format_data <- function(data, t0, t1, t2, groups) {
+pre_format_data <- function(data, t0, delta_t1, delta_t2, groups) {
   data %>%
-    dplyr::filter(.data$year %in% c(t0, t0 + t1, t0 + t2)) %>%
+    dplyr::filter(.data$year %in% c(t0, t0 + delta_t1, t0 + delta_t2)) %>%
     group_by(!!!rlang::syms(groups)) %>%
-    add_time_step(t0, t1, t2) %>%
+    add_time_step(t0, delta_t1, delta_t2) %>%
     select(
       !!!rlang::syms(groups),
       .data$time_step,
@@ -236,10 +236,10 @@ tdm_prototype <- function() {
   )
 }
 
-check_calculate_tdm <- function(data, t0, t1, t2, groups) {
+check_calculate_tdm <- function(data, t0, delta_t1, delta_t2, groups) {
   check_crucial_names(data, crucial_columns())
 
-  check_crucial_years(data, t0, t1, t2, groups)
+  check_crucial_years(data, t0, delta_t1, delta_t2, groups)
 
   check_unique_by_year_and_groups(data, groups)
 
@@ -278,8 +278,8 @@ check_unique_by_year_and_groups <- function(data, groups) {
   invisible(data)
 }
 
-check_crucial_years <- function(data, t0, t1, t2, groups) {
-  crucial_years <- tibble::tibble(crucial_years = c(t0, t0 + t1, t0 + t2))
+check_crucial_years <- function(data, t0, delta_t1, delta_t2, groups) {
+  crucial_years <- tibble::tibble(crucial_years = c(t0, t0 + delta_t1, t0 + delta_t2))
 
   missing_crucial_years <- crucial_years %>%
     left_join(data, by = c(crucial_years = "year")) %>%

@@ -1,8 +1,8 @@
 test_that("with bad `data` errors with informative message", {
   expect_error(calculate_tdm("bad", 2020), "data.frame.*not.*TRUE")
   expect_error(calculate_tdm(fake_tdm_data(), "bad"), "numeric.*not.*TRUE")
-  expect_error(calculate_tdm(fake_tdm_data(), 2020, t1 = "bad"), "numeric.*not.*TRUE")
-  expect_error(calculate_tdm(fake_tdm_data(), 2020, t2 = "bad"), "numeric.*not.*TRUE")
+  expect_error(calculate_tdm(fake_tdm_data(), 2020, delta_t1 = "bad"), "numeric.*not.*TRUE")
+  expect_error(calculate_tdm(fake_tdm_data(), 2020, delta_t2 = "bad"), "numeric.*not.*TRUE")
   expect_error(calculate_tdm(fake_tdm_data(), 2020, additional_groups = TRUE), "character.*not.*TRUE")
 })
 
@@ -78,8 +78,8 @@ test_that("errors if data has multiple values per year", {
 
 test_that("errors if crucial years missing", {
   t0 <- 2020
-  t1 <- 5
-  t2 <- 10
+  delta_t1 <- 5
+  delta_t2 <- 10
 
   fake_tdm_data(
     year = c(2020, 2020, 2025, 2031),
@@ -87,7 +87,7 @@ test_that("errors if crucial years missing", {
     scen_alloc_wt_tech_prod = c(1, 2, 3, 4),
     plan_carsten = c(0.5, 0.3, 0.25, 0.2),
   ) %>%
-    calculate_tdm(t0, t1, t2) %>%
+    calculate_tdm(t0, delta_t1, delta_t2) %>%
     expect_error(class = "missing_crucial_years")
 })
 
@@ -96,10 +96,10 @@ test_that("errors if input data isn't grouped appropriately to ensure unique
   additional_groups <- c("investor_name", "portfolio_name")
   n_groups <- length(crucial_tdm_groups()) + length(additional_groups)
   t0 <- 2020
-  t1 <- 5
-  t2 <- 10
+  delta_t1 <- 5
+  delta_t2 <- 10
   # Each group has values for years at t0, t0+5, and t0+10
-  years <- rep(c(t0, t0 + t1, t0 + t2), n_groups)
+  years <- rep(c(t0, t0 + delta_t1, t0 + delta_t2), n_groups)
 
   data <- fake_tdm_data(
     portfolio_name = rep(c("portfolio a", "portfolio b"), each = 6),
@@ -110,10 +110,10 @@ test_that("errors if input data isn't grouped appropriately to ensure unique
     plan_carsten = c(0.5, 0.25, 0.2, 0.5, 0.75, 0.8, 0.5, 0.66, 0.75, 0.5, 0.33, 0.25),
   )
 
-  calculate_tdm(data, t0, t1, t2) %>%
+  calculate_tdm(data, t0, delta_t1, delta_t2) %>%
     expect_error(class = "multiple_values_per_year")
 
-  extended <- calculate_tdm(data, t0, t1, t2, additional_groups)
+  extended <- calculate_tdm(data, t0, delta_t1, delta_t2, additional_groups)
   expect_equal(round(extended$tdm_technology, 2), c(2, 7.33, 1.33, 2))
   expect_equal(round(extended$tdm_sector, 2), c(4.67, 4.67, 1.67, 1.67))
 })

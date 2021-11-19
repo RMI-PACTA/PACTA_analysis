@@ -7,8 +7,8 @@
 calculate_tdm(
   data,
   t0,
-  t1 = 5,
-  t2 = 10,
+  delta_t1 = 5,
+  delta_t2 = 10,
   additional_groups = NULL,
   scenarios = "IPR FPS 2021"
 )
@@ -20,11 +20,11 @@ calculate_tdm(
 \item{t0}{The start year, from which the TDM value should be calculated. This
 value should coincide with the earliest year in the PACTA results dataset.}
 
-\item{t1}{The number of years into the future for which there is production
+\item{delta_t1}{The number of years into the future for which there is production
 data. The default value is 5 years since this is often the limit of the
 forward-looking data.}
 
-\item{t2}{The number of years into the future against which you want to
+\item{delta_t2}{The number of years into the future against which you want to
 calculate disruption.}
 
 \item{additional_groups}{Character vector. The names of columns to group by,
