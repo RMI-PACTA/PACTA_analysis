@@ -21,8 +21,9 @@
 #'
 #' @return A tibble with the columns specified in the `additional_groups` input
 #'   as well as `tdm_technology`: the technology level transition disruption
-#'   metric, `tdm_sector`: the sector level transition disruption metric, as
-#'   well as `t0`, `delta_t1` and `delta_t2`: corresponding to the input
+#'   metric, `tdm_sector`: the sector level transition disruption metric,
+#'   `tdm_portfolio`: the portfolio level transition disruption metric, as well
+#'   as `t0`, `delta_t1` and `delta_t2`: corresponding to the input
 #'   arguments.
 #' @export
 #'
@@ -210,6 +211,10 @@ add_aggregate_tdm <- function(data, groups) {
     mutate(
       tdm_sector = .data$plan_carsten * sum(.data$tdm_technology) / sum(.data$plan_carsten)
     ) %>%
+    ungroup(.data$ald_sector) %>%
+    mutate(
+      tdm_portfolio = .data$plan_carsten * sum(.data$tdm_technology) / sum(.data$plan_carsten)
+    ) %>%
     ungroup()
 }
 
@@ -238,6 +243,7 @@ tdm_prototype <- function() {
     ald_sector = character(0),
     tdm_technology = numeric(0),
     tdm_sector = numeric(0),
+    tdm_portfolio = numeric(0),
     t0 = integer(0),
     delta_t1 = integer(0),
     delta_t2 = integer(0)
