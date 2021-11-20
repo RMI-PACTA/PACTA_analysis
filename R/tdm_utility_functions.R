@@ -11,7 +11,7 @@ data_includes_tdm_scenarios <- function() {
 }
 
 tdm_conditions_met <- function () {
-  project_code == "GENERAL" && analysis_inputs_path %in% analysis_inputs_with_tdm_scenarios()
+  project_code == "GENERAL" && data_includes_tdm_scenarios()
 }
 
 determine_tdm_variables <- function () {
