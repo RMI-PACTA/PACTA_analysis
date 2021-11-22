@@ -1,0 +1,18 @@
+---
+title: "User Error Report"
+output: html_document
+params:
+  errors: ""
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+During the course of preparing your PACTA report, the system encountered the errors detailed below. Please correct the errors and create a new reeport. If the errors persist, please contact 2 Degrees Investing Initative at `transitionmonitor@2degrees-investing.org`
+
+## Errors
+
+```{r errors, results = 'asis'}
+cat(convert_user_errors_to_md(params[["errors"]]))
+```
