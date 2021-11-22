@@ -111,7 +111,29 @@ if (file.exists(equity_input_file)) {
       write_rds(company_all_eq, file.path(pf_file_results_path, "Equity_results_company.rda"))
     }
     if (data_check(port_all_eq)) {
-      write_rds(port_all_eq, file.path(pf_file_results_path, "Equity_results_portfolio.rda"))
+
+      if (tdm_conditions_met()) {
+        tdm_vars <- determine_tdm_variables()
+
+        equity_tdm <-
+          calculate_tdm(
+            port_all_eq,
+            t0 = tdm_vars$t0,
+            delta_t1 = tdm_vars$delta_t1,
+            delta_t2 = tdm_vars$delta_t2,
+            additional_groups = tdm_vars$additional_groups,
+            scenarios = tdm_vars$scenarios
+          )
+
+        saveRDS(equity_tdm, file.path(pf_file_results_path, "Equity_tdm.rds"))
+      }
+
+      # filter out scenarios used only for TDM, if they exist
+      if (data_includes_tdm_scenarios()) {
+        port_all_eq <- filter(port_all_eq, ! scenario %in% tdm_scenarios())
+      }
+
+      saveRDS(port_all_eq, file.path(pf_file_results_path, "Equity_results_portfolio.rda"))
     }
     if (has_map) {
       if (data_check(map_eq)) {
@@ -199,7 +221,28 @@ if (file.exists(bonds_inputs_file)) {
       write_rds(company_all_cb, file.path(pf_file_results_path, "Bonds_results_company.rda"))
     }
     if (data_check(port_all_cb)) {
-      write_rds(port_all_cb, file.path(pf_file_results_path, "Bonds_results_portfolio.rda"))
+      if (tdm_conditions_met()) {
+        tdm_vars <- determine_tdm_variables()
+
+        bonds_tdm <-
+          calculate_tdm(
+            port_all_cb,
+            t0 = tdm_vars$t0,
+            delta_t1 = tdm_vars$delta_t1,
+            delta_t2 = tdm_vars$delta_t2,
+            additional_groups = tdm_vars$additional_groups,
+            scenarios = tdm_vars$scenarios
+          )
+
+        saveRDS(bonds_tdm, file.path(pf_file_results_path, "Bonds_tdm.rds"))
+      }
+
+      # filter out scenarios used only for TDM, if they exist
+      if (data_includes_tdm_scenarios()) {
+        port_all_cb <- filter(port_all_cb, ! scenario %in% tdm_scenarios())
+      }
+
+      saveRDS(port_all_cb, file.path(pf_file_results_path, "Bonds_results_portfolio.rda"))
     }
     if (has_map) {
       if (data_check(map_cb)) {
