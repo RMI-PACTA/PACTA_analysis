@@ -6,8 +6,6 @@ default:
         currency_exchange_value: 1
 
     parameters:
-        timestamp: 2019Q4
-        dataprep_timestamp: 2019Q4_250220
         horizon_year: 5
         select_scenario: WEO2019_SDS
         scenario_auto: ETP2017_B2DS
@@ -66,6 +64,7 @@ default:
         - WEO2019
         - WEO2020
         - GECO2019
+        - IPR2021
 
     scenario_geography_list:
         - Global
