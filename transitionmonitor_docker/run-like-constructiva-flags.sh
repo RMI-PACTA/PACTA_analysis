@@ -61,7 +61,8 @@ if [ -n "${verbose}" ]; then
 fi
 
 if [ -z "${docker_command}" ]; then
-  docker_command="/bound/bin/run-r-scripts \"$portfolioIdentifier\""
+  docker_command="/bound/bin/run-r-scripts"
+  docker_command_args="${portfolioIdentifier}"
 fi
 
 args=(
@@ -103,7 +104,7 @@ args+=(
   --mount "type=bind,source=${userFolder},target=/bound/working_dir"
   --mount "type=bind,readonly,source=${resultsFolder},target=/user_results"
 )
-args+=(2dii_pacta:"$tag")
+args+=("2dii_pacta:$tag")
 args+=("${docker_command}")
 
 echo Running Docker Container
@@ -114,6 +115,12 @@ if [ -n "${verbose}" ]; then
   done
 fi
 
-docker run "${args[@]}"
+# I can't finsd a better way to work around however docker is parsing
+# arguments.
+if [ -n "${docker_command_args}" ]; then
+  docker run "${args[@]}" "${docker_command_args}"
+else
+  docker run "${args[@]}"
+fi
 
 echo "Done :-)"
