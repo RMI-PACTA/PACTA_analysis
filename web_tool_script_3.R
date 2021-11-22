@@ -50,6 +50,7 @@ source(file.path(stress_test_path, "web_tool_external_stress_test.R"))
 source(file.path(template_path, "create_interactive_report.R"))
 source(file.path(template_path, "create_executive_summary.R"))
 source(file.path(template_path, "useful_functions.R"))
+source(file.path(template_path, "export_environment_info.R"))
 
 report_name = select_report_template(project_report_name = project_report_name,
                                      language_select = language_select)
@@ -210,6 +211,19 @@ sector_order <- readr::read_csv(
   col_types = cols()
 )
 
+
+# combine config files to send to create_interactive_report() ------------------
+
+portfolio_config_path <- file.path(par_file_path, paste0(portfolio_name_ref_all, "_PortfolioParameters.yml"))
+project_config_path <- file.path(working_location, "parameter_files", paste0("ProjectParameters_", project_code, ".yml"))
+
+configs <-
+  list(
+    portfolio_config = config::get(file = portfolio_config_path),
+    project_config = config::get(file = project_config_path)
+  )
+
+
 # Needed for testing only
 shock <- shock_year # this should come directly from the stress test.. 2030 based on current discussions in CHPA2020 case
 select_scenario_auto = scenario_auto
@@ -268,7 +282,8 @@ create_interactive_report(
   header_dictionary = header_dictionary,
   sector_order = sector_order,
   equity_tdm = equity_tdm,
-  bonds_tdm = bonds_tdm
+  bonds_tdm = bonds_tdm,
+  configs = configs
 )
 
 if(dir.exists(exec_summary_dir)){
