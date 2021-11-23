@@ -23,10 +23,10 @@
 #'   as well as `tdm_technology_value`: the technology level transition
 #'   disruption metric, `tdm_sector_value`: the sector level transition
 #'   disruption metric, `tdm_portfolio_value`: the portfolio level transition
-#'   disruption metric, `tdm_metric`: a flag that indicates what each `*_value`
-#'   is being calculated against (e.g. "portfolio" or "scenario"),  as well as
-#'   `tdm_t0`, `tdm_delta_t1` and `tdm_delta_t2`: corresponding to the input
-#'   arguments.
+#'   disruption metric, `tdm_metric`: a flag that indicates what each
+#'   `tdm_*_value` is being calculated against (e.g. "portfolio" or "scenario"),
+#'   as well as `tdm_t0`, `tdm_delta_t1` and `tdm_delta_t2`: corresponding to
+#'   the input arguments.
 #' @export
 #'
 #' @examples
