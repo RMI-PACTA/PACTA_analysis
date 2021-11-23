@@ -161,7 +161,7 @@ add_monotonic_factor <- function(data, t0, delta_t1, delta_t2, groups) {
           .data$end_year_is_t0_delta_t2
         )
       ) %>%
-      tidyr::pivot_wider(
+      pivot_wider(
         names_from = .data$time_step,
         values_from = .data$scen_alloc_wt_tech_prod
       ) %>%
@@ -188,23 +188,37 @@ add_tdm <- function(data, groups) {
   data %>%
     group_by(!!!rlang::syms(groups)) %>%
     mutate(
-      .numerator = .data$scenario_production_plus_delta_t2 - .data$portfolio_production_plus_delta_t1,
+      .numerator_portfolio = .data$scenario_production_plus_delta_t2 - .data$portfolio_production_plus_delta_t1,
+      .numerator_scenario = .data$scenario_production_plus_delta_t2 - .data$scenario_production_plus_delta_t1,
       .denominator = .data$scenario_production_plus_delta_t2 - .data$scenario_production_t0,
-      # TODO: This case we
-      tdm_technology_value = ifelse(
+      tdm_technology_value_portfolio = ifelse(
         .data$.denominator == 0,
         0,
-        max(0, (.data$.numerator / .data$.denominator) * .data$monotonic_factor) * 2
+        max(0, (.data$.numerator_portfolio / .data$.denominator) * .data$monotonic_factor) * 2
       ),
-      .numerator = NULL,
+      tdm_technology_value_scenario = ifelse(
+        .data$.denominator == 0,
+        0,
+        max(0, (.data$.numerator_scenario / .data$.denominator) * .data$monotonic_factor) * 2
+      ),
+      .numerator_portfolio = NULL,
+      .numerator_scenario = NULL,
       .denominator = NULL
     ) %>%
-    select(.data$tdm_technology_value, all_of(groups)) %>%
+    select(.data$tdm_technology_value_portfolio, tdm_technology_value_scenario, all_of(groups)) %>%
     distinct() %>%
+    pivot_longer(
+      cols = starts_with("tdm_technology_value"),
+      names_to = "tdm_metric",
+      names_prefix = "tdm_technology_value_",
+      values_to = "tdm_technology_value"
+    ) %>%
     ungroup()
 }
 
 add_aggregate_tdm <- function(data, groups) {
+  groups <- c(groups, "tdm_metric")
+
   data %>%
     group_by(!!!rlang::syms(groups)) %>%
     arrange(.data$year) %>%
@@ -244,6 +258,7 @@ tdm_prototype <- function() {
   tibble(
     technology = character(0),
     ald_sector = character(0),
+    tdm_metric = character(0),
     tdm_technology_value = numeric(0),
     tdm_sector_value = numeric(0),
     tdm_portfolio_value = numeric(0),
