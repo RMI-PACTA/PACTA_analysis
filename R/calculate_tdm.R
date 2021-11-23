@@ -197,12 +197,12 @@ add_tdm <- function(data, delta_t1, delta_t2, groups) {
       tdm_technology_value_portfolio = ifelse(
         .data$.denominator == 0,
         0,
-        max(0, (.data$.numerator_portfolio / .data$.denominator) * .data$monotonic_factor) * .time_factor
+        max(0, (.data$.numerator_portfolio / .data$.denominator) * .data$monotonic_factor) * .data$.time_factor
       ),
       tdm_technology_value_scenario = ifelse(
         .data$.denominator == 0,
         0,
-        max(0, (.data$.numerator_scenario / .data$.denominator) * .data$monotonic_factor) * .time_factor
+        max(0, (.data$.numerator_scenario / .data$.denominator) * .data$monotonic_factor) * .data$.time_factor
       ),
       .numerator_portfolio = NULL,
       .numerator_scenario = NULL,
