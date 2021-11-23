@@ -11,6 +11,7 @@ NULL
 globalVariables(
   c(
     ".data",
+    ".env",
     "get_portfolio_name",
     "outputs_path",
     "portfolio_name",

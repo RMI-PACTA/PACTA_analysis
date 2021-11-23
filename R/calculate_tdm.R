@@ -205,10 +205,10 @@ add_tdm <- function(data, groups) {
       .numerator_scenario = NULL,
       .denominator = NULL
     ) %>%
-    select(.data$tdm_technology_value_portfolio, tdm_technology_value_scenario, all_of(groups)) %>%
+    select(.data$tdm_technology_value_portfolio, .data$tdm_technology_value_scenario, all_of(groups)) %>%
     distinct() %>%
     pivot_longer(
-      cols = starts_with("tdm_technology_value"),
+      cols = tidyr::starts_with("tdm_technology_value"),
       names_to = "tdm_metric",
       names_prefix = "tdm_technology_value_",
       values_to = "tdm_technology_value"
