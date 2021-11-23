@@ -27,8 +27,9 @@ expect_equal(
       "tdm_technology_value",
       "technology"
       )
-  ) %>%
-  split(.$tdm_metric)
+  )
+
+out <- split(out, out$tdm_metric)
 
 expect_equal(out$portfolio$tdm_technology_value, 2L)
 expect_equal(out$portfolio$tdm_sector_value, 2L)
