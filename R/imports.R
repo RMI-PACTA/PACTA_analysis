@@ -3,7 +3,7 @@
 #' @importFrom dplyr is_grouped_df last last left_join mutate pull rename select
 #' @importFrom dplyr ungroup all_of contains distinct
 #' @importFrom tibble tibble
-#' @importFrom tidyr pivot_wider unnest
+#' @importFrom tidyr pivot_wider pivot_longer unnest
 #' @importFrom rlang abort warn inform %||%
 #' @importFrom fs path dir_create dir_delete dir_ls
 NULL
