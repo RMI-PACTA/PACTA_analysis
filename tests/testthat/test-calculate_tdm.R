@@ -14,7 +14,7 @@ test_that("outputs the expected tibble", {
 
   out <- calculate_tdm(data, 2020)
 
-expect_equal(
+  expect_equal(
     sort(names(out)),
     c(
       "ald_sector",
@@ -26,25 +26,24 @@ expect_equal(
       "tdm_t0",
       "tdm_technology_value",
       "technology"
-      )
+    )
   )
 
-out <- split(out, out$tdm_metric)
+  out <- split(out, out$tdm_metric)
 
-expect_equal(out$portfolio$tdm_technology_value, 2L)
-expect_equal(out$portfolio$tdm_sector_value, 2L)
-expect_equal(out$portfolio$tdm_portfolio_value, 2L)
-expect_equal(out$portfolio$tdm_t0, 2020L)
-expect_equal(out$portfolio$tdm_delta_t1, 5L)
-expect_equal(out$portfolio$tdm_delta_t2, 10L)
+  expect_equal(out$portfolio$tdm_technology_value, 2L)
+  expect_equal(out$portfolio$tdm_sector_value, 2L)
+  expect_equal(out$portfolio$tdm_portfolio_value, 2L)
+  expect_equal(out$portfolio$tdm_t0, 2020L)
+  expect_equal(out$portfolio$tdm_delta_t1, 5L)
+  expect_equal(out$portfolio$tdm_delta_t2, 10L)
 
-expect_equal(out$scenario$tdm_technology_value, 1L)
-expect_equal(out$scenario$tdm_sector_value, 1L)
-expect_equal(out$scenario$tdm_portfolio_value, 1L)
-expect_equal(out$scenario$tdm_t0, 2020L)
-expect_equal(out$scenario$tdm_delta_t1, 5L)
-expect_equal(out$scenario$tdm_delta_t2, 10L)
-
+  expect_equal(out$scenario$tdm_technology_value, 1L)
+  expect_equal(out$scenario$tdm_sector_value, 1L)
+  expect_equal(out$scenario$tdm_portfolio_value, 1L)
+  expect_equal(out$scenario$tdm_t0, 2020L)
+  expect_equal(out$scenario$tdm_delta_t1, 5L)
+  expect_equal(out$scenario$tdm_delta_t2, 10L)
 })
 
 test_that("outputs the expected names", {
@@ -236,10 +235,10 @@ test_that("only start_year carsten is used to aggregate tdm", {
   expect_equal(
     out$OilCap$tdm_sector_value,
     out$RenewablesCap$tdm_sector_value
-    )
+  )
 
   expect_equal(
     out$OilCap$tdm_portfolio_value,
     out$RenewablesCap$tdm_portfolio_value
-    )
+  )
 })
