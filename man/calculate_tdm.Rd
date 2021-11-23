@@ -37,9 +37,9 @@ should be calculated.}
 }
 \value{
 A tibble with the columns specified in the \code{additional_groups} input
-as well as \code{tdm_technology}: the technology level transition disruption
-metric, \code{tdm_sector}: the sector level transition disruption metric,
-\code{tdm_portfolio}: the portfolio level transition disruption metric, as well
+as well as \code{tdm_technology_value}: the technology level transition disruption
+metric, \code{tdm_sector_value}: the sector level transition disruption metric,
+\code{tdm_portfolio_value}: the portfolio level transition disruption metric, as well
 as \code{tdm_t0}, \code{tdm_delta_t1} and \code{tdm_delta_t2}: corresponding to the input
 arguments.
 }
