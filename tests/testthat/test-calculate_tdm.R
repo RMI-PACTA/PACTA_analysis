@@ -242,3 +242,19 @@ test_that("only start_year carsten is used to aggregate tdm", {
     out$RenewablesCap$tdm_portfolio_value
   )
 })
+
+test_that("outputs expected values if delta_t1 or delta_t2 have non-default values", {
+
+  data <- fake_tdm_data(
+    year = c(2020, 2021, 2025),
+    plan_alloc_wt_tech_prod = c(1, 2, 3),
+    scen_alloc_wt_tech_prod = c(4, 5, 6)
+  )
+
+  out <- calculate_tdm(data, 2020, delta_t1 = 1, delta_t2 = 5) %>%
+    split(.$tdm_metric)
+
+  expect_equal(out$portfolio$tdm_technology_value, 2.5)
+
+  expect_equal(out$scenario$tdm_technology_value, 0.625)
+})

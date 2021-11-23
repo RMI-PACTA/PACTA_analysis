@@ -97,7 +97,7 @@ calculate_tdm <- function(data,
 
   preformatted_data <- pre_format_data(data_with_monotonic_factors, t0, delta_t1, delta_t2, groups)
 
-  data_with_tdm <- add_tdm(preformatted_data, groups)
+  data_with_tdm <- add_tdm(preformatted_data, delta_t1, delta_t2, groups)
 
   formatted_data_with_tdm <- left_join(
     initial_year_data,
@@ -186,26 +186,28 @@ add_monotonic_factor <- function(data, t0, delta_t1, delta_t2, groups) {
   left_join(data, monotonic_factors, by = groups)
 }
 
-add_tdm <- function(data, groups) {
+add_tdm <- function(data, delta_t1, delta_t2, groups) {
   data %>%
     group_by(!!!rlang::syms(groups)) %>%
     mutate(
       .numerator_portfolio = .data$scenario_production_plus_delta_t2 - .data$portfolio_production_plus_delta_t1,
       .numerator_scenario = .data$scenario_production_plus_delta_t2 - .data$scenario_production_plus_delta_t1,
       .denominator = .data$scenario_production_plus_delta_t2 - .data$scenario_production_t0,
+      .time_factor = (delta_t2 / (delta_t2 - delta_t1)),
       tdm_technology_value_portfolio = ifelse(
         .data$.denominator == 0,
         0,
-        max(0, (.data$.numerator_portfolio / .data$.denominator) * .data$monotonic_factor) * 2
+        max(0, (.data$.numerator_portfolio / .data$.denominator) * .data$monotonic_factor) * .time_factor
       ),
       tdm_technology_value_scenario = ifelse(
         .data$.denominator == 0,
         0,
-        max(0, (.data$.numerator_scenario / .data$.denominator) * .data$monotonic_factor) * 2
+        max(0, (.data$.numerator_scenario / .data$.denominator) * .data$monotonic_factor) * .time_factor
       ),
       .numerator_portfolio = NULL,
       .numerator_scenario = NULL,
-      .denominator = NULL
+      .denominator = NULL,
+      .time_factor = NULL
     ) %>%
     select(.data$tdm_technology_value_portfolio, .data$tdm_technology_value_scenario, all_of(groups)) %>%
     distinct() %>%
