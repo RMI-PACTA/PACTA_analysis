@@ -14,27 +14,36 @@ test_that("outputs the expected tibble", {
 
   out <- calculate_tdm(data, 2020)
 
-expect_equal(
+  expect_equal(
     sort(names(out)),
     c(
       "ald_sector",
       "tdm_delta_t1",
       "tdm_delta_t2",
+      "tdm_metric",
       "tdm_portfolio_value",
       "tdm_sector_value",
       "tdm_t0",
       "tdm_technology_value",
       "technology"
-      )
+    )
   )
 
-expect_equal(out$tdm_technology_value, 2L)
-expect_equal(out$tdm_sector_value, 2L)
-expect_equal(out$tdm_portfolio_value, 2L)
-expect_equal(out$tdm_t0, 2020L)
-expect_equal(out$tdm_delta_t1, 5L)
-expect_equal(out$tdm_delta_t2, 10L)
+  out <- split(out, out$tdm_metric)
 
+  expect_equal(out$portfolio$tdm_technology_value, 2L)
+  expect_equal(out$portfolio$tdm_sector_value, 2L)
+  expect_equal(out$portfolio$tdm_portfolio_value, 2L)
+  expect_equal(out$portfolio$tdm_t0, 2020L)
+  expect_equal(out$portfolio$tdm_delta_t1, 5L)
+  expect_equal(out$portfolio$tdm_delta_t2, 10L)
+
+  expect_equal(out$scenario$tdm_technology_value, 1L)
+  expect_equal(out$scenario$tdm_sector_value, 1L)
+  expect_equal(out$scenario$tdm_portfolio_value, 1L)
+  expect_equal(out$scenario$tdm_t0, 2020L)
+  expect_equal(out$scenario$tdm_delta_t1, 5L)
+  expect_equal(out$scenario$tdm_delta_t2, 10L)
 })
 
 test_that("outputs the expected names", {
@@ -51,9 +60,11 @@ test_that("outputs the expected names", {
 test_that("outputs 0 for `tdm_technology_value` and `tdm_sector_value`, if `scen_alloc_wt_tech_prod
           doesn't change over 10 year period`", {
   data <- fake_tdm_data(year = c(2020, 2025, 2030))
-  out <- calculate_tdm(data, 2020)
-  expect_true(out$tdm_technology_value == 0)
-  expect_true(out$tdm_sector_value == 0)
+  out <- calculate_tdm(data, 2020) %>%
+    split(.$tdm_metric)
+
+  expect_true(out$portfolio$tdm_technology_value == 0)
+  expect_true(out$portfolio$tdm_sector_value == 0)
 })
 
 test_that("outputs is ungrouped", {
@@ -145,9 +156,11 @@ test_that("errors if input data isn't grouped appropriately to ensure unique
   calculate_tdm(data, t0, delta_t1, delta_t2) %>%
     expect_error(class = "multiple_values_per_year")
 
-  extended <- calculate_tdm(data, t0, delta_t1, delta_t2, additional_groups)
-  expect_equal(round(extended$tdm_technology_value, 2), c(2, 7.33, 1.33, 2))
-  expect_equal(round(extended$tdm_sector_value, 2), c(4.67, 4.67, 1.67, 1.67))
+  extended <- calculate_tdm(data, t0, delta_t1, delta_t2, additional_groups) %>%
+    split(.$tdm_metric)
+
+  expect_equal(round(extended$portfolio$tdm_technology_value, 2), c(2, 7.33, 1.33, 2))
+  expect_equal(round(extended$portfolio$tdm_sector_value, 2), c(4.67, 4.67, 1.67, 1.67))
 })
 
 test_that("with known input outputs as expected", {
@@ -162,6 +175,9 @@ test_that("with known input outputs as expected", {
   out <- calculate_tdm(data, 2020)
 
   out <- out %>%
+    filter(
+      tdm_metric == "portfolio"
+    ) %>%
     mutate(
       tdm_technology_value = round(tdm_technology_value, 2),
       tdm_sector_value = round(tdm_sector_value, 2)
@@ -186,6 +202,9 @@ test_that("outputs correctly for non-monotonic scenarios", {
   out <- calculate_tdm(data, 2020)
 
   out <- out %>%
+    filter(
+      tdm_metric == "portfolio"
+    ) %>%
     mutate(
       tdm_technology_value = round(tdm_technology_value, 2),
       tdm_sector_value = round(tdm_sector_value, 2)
@@ -210,15 +229,32 @@ test_that("only start_year carsten is used to aggregate tdm", {
   )
 
   out <- calculate_tdm(data, t0 = 2020) %>%
+    filter(tdm_metric == "portfolio") %>%
     split(.$technology)
 
   expect_equal(
     out$OilCap$tdm_sector_value,
     out$RenewablesCap$tdm_sector_value
-    )
+  )
 
   expect_equal(
     out$OilCap$tdm_portfolio_value,
     out$RenewablesCap$tdm_portfolio_value
-    )
+  )
+})
+
+test_that("outputs expected values if delta_t1 or delta_t2 have non-default values", {
+
+  data <- fake_tdm_data(
+    year = c(2020, 2021, 2025),
+    plan_alloc_wt_tech_prod = c(1, 2, 3),
+    scen_alloc_wt_tech_prod = c(4, 5, 6)
+  )
+
+  out <- calculate_tdm(data, 2020, delta_t1 = 1, delta_t2 = 5) %>%
+    split(.$tdm_metric)
+
+  expect_equal(out$portfolio$tdm_technology_value, 2.5)
+
+  expect_equal(out$scenario$tdm_technology_value, 0.625)
 })
