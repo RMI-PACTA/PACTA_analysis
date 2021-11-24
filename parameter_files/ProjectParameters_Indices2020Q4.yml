@@ -1,11 +1,12 @@
 default:
 
-    reporting:
-        project_report_name: general
-        display_currency: USD
-        currency_exchange_value: 1
+    paths:
+        data_location_ext: ../pacta-data/2020Q4/
 
     parameters:
+        timestamp: 2020Q4
+        dataprep_timestamp: 2020Q4_transitionmonitor
+        start_year: 2021
         horizon_year: 5
         select_scenario: WEO2019_SDS
         scenario_auto: ETP2017_B2DS
@@ -64,7 +65,6 @@ default:
         - WEO2019
         - WEO2020
         - GECO2019
-        - IPR2021
 
     scenario_geography_list:
         - Global

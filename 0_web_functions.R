@@ -97,6 +97,7 @@ set_portfolio_parameters <- function(file_path) {
   language_select <<- cfg$parameters$language
   user_id <<- cfg$parameters$user_id
   project_code <<- cfg$parameters$project_code
+  port_holdings_date <<- cfg$parameters$holdings_date
 }
 
 add_naming_to_portfolio <- function(portfolio_raw) {

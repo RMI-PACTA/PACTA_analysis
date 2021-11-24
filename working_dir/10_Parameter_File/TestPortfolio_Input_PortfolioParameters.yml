@@ -4,5 +4,5 @@ default:
         investor_name_in: Test
         peer_group: pensionfund
         language: EN
-        project_code: CHPA2020
-
+        project_code: GENERAL
+        holdings_date: 2020Q4
