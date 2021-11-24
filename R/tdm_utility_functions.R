@@ -12,6 +12,8 @@ data_includes_tdm_scenarios <- function() {
 
 tdm_conditions_met <- function () {
   project_code == "GENERAL" && data_includes_tdm_scenarios()
+  # TODO: remove this when we're ready to actually roll out TDM to users
+  return(FALSE)
 }
 
 determine_tdm_variables <- function () {
