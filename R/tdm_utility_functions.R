@@ -10,11 +10,11 @@ data_includes_tdm_scenarios <- function() {
   analysis_inputs_path %in% analysis_inputs_with_tdm_scenarios()
 }
 
-tdm_conditions_met <- function () {
+tdm_conditions_met <- function() {
   project_code == "GENERAL" && data_includes_tdm_scenarios()
 }
 
-determine_tdm_variables <- function () {
+determine_tdm_variables <- function() {
   list(
     t0 = start_year,
     delta_t1 = 5,
