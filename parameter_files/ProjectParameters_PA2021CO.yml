@@ -1,5 +1,8 @@
 default:
 
+    paths:
+        data_location_ext: ../pacta-data/2020Q4/
+        
     reporting:
         project_report_name: Colombia
         display_currency: USD
@@ -7,7 +10,7 @@ default:
 
     parameters:
         timestamp: 2020Q4
-        dataprep_timestamp: 2020Q4_05172021_2020
+        dataprep_timestamp: 2020Q4_transitionmonitor
         start_year: 2021
         horizon_year: 5
         select_scenario: WEO2019_SDS
