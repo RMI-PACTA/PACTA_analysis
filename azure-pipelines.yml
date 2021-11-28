@@ -122,7 +122,7 @@ stages:
                 --share-name $(testingShareName) \
                 --account-name $(testingStorageAccountName)
           - task: AzureCLI@2
-            displayName: Download files from Azure File Share
+            displayName: Download User Results files from Azure File Share
             inputs:
               azureSubscription: tm-docker-AzureResourceManager
               scriptType: bash
@@ -132,9 +132,13 @@ stages:
                 --source $(testingShareName)/user_results \
                 --destination $(Build.SourcesDirectory)/user_results \
                 --account-name $(testingStorageAccountName)
-          - shell: mkdir -p $(Build.SourcesDirectory)/working_dirs/
+          - task: Bash@3
+            displayName: Create working_dirs/
+            inputs:
+              targetType: inline
+              script: mkdir -p $(Build.SourcesDirectory)/working_dirs/
           - task: AzureCLI@2
-            displayName: Download files from Azure File Share
+            displayName: Download Portfolio files from Azure File Share
             inputs:
               azureSubscription: tm-docker-AzureResourceManager
               scriptType: bash
