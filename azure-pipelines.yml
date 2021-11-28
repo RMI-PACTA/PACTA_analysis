@@ -57,17 +57,17 @@ resources:
       endpoint: 2DegreesInvesting  # Servce connection name
       name: 2DegreesInvesting/pacta-data
       ref: master
-  containers:
-    - container: builder
-      image: ubuntu:18.04
-    - container: TMRunner
-      image: $(imageRepository):20211115.22
-      # image: $(imageRepository):$(Build.BuildNumber)
-      endpoint: TransitionMonitorDockerRegistry
-      # options: $(dockerRunFlags)
-      volumes:
-        - "/home/vsts/work/1/s/working_dirs:/bound/working_dir"
-        - "/home/vsts/work/1/s/user_results/4:/user_results"
+  # containers:
+  #   - container: builder
+  #     image: ubuntu:18.04
+  #   - container: TMRunner
+  #     image: $(imageRepository):20211115.22
+  #     # image: $(imageRepository):$(Build.BuildNumber)
+  #     endpoint: TransitionMonitorDockerRegistry
+  #     # options: $(dockerRunFlags)
+  #     volumes:
+  #       - "/home/vsts/work/1/s/working_dirs:/bound/working_dir"
+  #       - "/home/vsts/work/1/s/user_results/4:/user_results"
 
 stages:
 
@@ -100,58 +100,65 @@ stages:
   - stage: test_image
     displayName: Test Docker Image
     jobs:
-      - job: test_PA2021NO
-        displayName: Test PA2021NO
+      - job: test_lowmem
         steps:
           - checkout: none
-          - task: AzureCLI@2
-            displayName: Download run script from Azure File Share
-            inputs:
-              azureSubscription: tm-docker-AzureResourceManager
-              scriptType: bash
-              scriptLocation: inlineScript
-              workingDirectory: $(Build.SourcesDirectory)
-              inlineScript: |
-                az storage file download \
-                --path run-like-constructiva-flags.sh \
-                --share-name $(testingShareName) \
-                --account-name $(testingStorageAccountName)
-          - task: AzureCLI@2
-            displayName: Download files from Azure File Share
-            inputs:
-              azureSubscription: tm-docker-AzureResourceManager
-              scriptType: bash
-              scriptLocation: inlineScript
-              inlineScript: |
-                az storage file download-batch \
-                --source $(testingShareName)/user_results \
-                --destination $(Build.SourcesDirectory)/user_results \
-                --account-name $(testingStorageAccountName)
-          - task: AzureCLI@2
-            displayName: Download files from Azure File Share
-            inputs:
-              azureSubscription: tm-docker-AzureResourceManager
-              scriptType: bash
-              scriptLocation: inlineScript
-              inlineScript: |
-                az storage file download-batch \
-                --source $(testingShareName)/working_dirs \
-                --destination $(Build.SourcesDirectory)/working_dirs \
-                --account-name $(testingStorageAccountName)
-          - script: ls -lR /tmp/user_info/
-          - script: echo "I can run inside the container (it starts by default)"
-            target:
-              container: TMRunner
-          - script: ls -lR /bound
-            target:
-              container: TMRunner
-          - script: /bound/bin/run-r-scripts "Test_PA2021NO"
-            target:
-              container: TMRunner
-          - task: Docker@2
-            inputs:
-              command: stop
-              container: TMRunner
+          - bash: docker run alpine --latest free -h
+          - bash: docker run --memory=2G alpine --latest free -h
+          - bash: docker run --memory=4G alpine --latest free -h
+          - bash: docker run --memory=8G alpine --latest free -h
+      # - job: test_PA2021NO
+      #   displayName: Test PA2021NO
+      #   steps:
+      #     - checkout: none
+      #     - task: AzureCLI@2
+      #       displayName: Download run script from Azure File Share
+      #       inputs:
+      #         azureSubscription: tm-docker-AzureResourceManager
+      #         scriptType: bash
+      #         scriptLocation: inlineScript
+      #         workingDirectory: $(Build.SourcesDirectory)
+      #         inlineScript: |
+      #           az storage file download \
+      #           --path run-like-constructiva-flags.sh \
+      #           --share-name $(testingShareName) \
+      #           --account-name $(testingStorageAccountName)
+      #     - task: AzureCLI@2
+      #       displayName: Download files from Azure File Share
+      #       inputs:
+      #         azureSubscription: tm-docker-AzureResourceManager
+      #         scriptType: bash
+      #         scriptLocation: inlineScript
+      #         inlineScript: |
+      #           az storage file download-batch \
+      #           --source $(testingShareName)/user_results \
+      #           --destination $(Build.SourcesDirectory)/user_results \
+      #           --account-name $(testingStorageAccountName)
+      #     - task: AzureCLI@2
+      #       displayName: Download files from Azure File Share
+      #       inputs:
+      #         azureSubscription: tm-docker-AzureResourceManager
+      #         scriptType: bash
+      #         scriptLocation: inlineScript
+      #         inlineScript: |
+      #           az storage file download-batch \
+      #           --source $(testingShareName)/working_dirs \
+      #           --destination $(Build.SourcesDirectory)/working_dirs \
+      #           --account-name $(testingStorageAccountName)
+      #     - script: ls -lR /tmp/user_info/
+      #     - script: echo "I can run inside the container (it starts by default)"
+      #       target:
+      #         container: TMRunner
+      #     - script: ls -lR /bound
+      #       target:
+      #         container: TMRunner
+      #     - script: /bound/bin/run-r-scripts "Test_PA2021NO"
+      #       target:
+      #         container: TMRunner
+      #     - task: Docker@2
+      #       inputs:
+      #         command: stop
+      #         container: TMRunner
 
           # - task: Bash@3
           #   displayName: Run PA2021NO Portfolio
