@@ -58,6 +58,7 @@ jobs:
       - name: install package dependencies
         run: |
           install2.r --skipinstalled --error \
+          --repos https://packagemanager.rstudio.com/all/__linux__/focal/2021-11-17+Y3JhbiwyOjQ1MjYyMTU7MzM5RjM4RjI \
           assertthat bookdown config conflicted countrycode crayon \
           data.table devtools dplyr DT forcats fs fst ggplot2 glue \
           highcharter here janitor jsonlite knitr plyr purrr readr readxl \
