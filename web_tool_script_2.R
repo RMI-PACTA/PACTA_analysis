@@ -112,8 +112,8 @@ if (file.exists(equity_input_file)) {
     }
     if (data_check(port_all_eq)) {
 
-      if (tdm_conditions_met()) {
-        tdm_vars <- determine_tdm_variables()
+      if (tdm_conditions_met(analysis_inputs_path)) {
+        tdm_vars <- determine_tdm_variables(start_year)
 
         equity_tdm <-
           calculate_tdm(
@@ -129,7 +129,7 @@ if (file.exists(equity_input_file)) {
       }
 
       # filter out scenarios used only for TDM, if they exist
-      if (data_includes_tdm_scenarios()) {
+      if (data_includes_tdm_scenarios(analysis_inputs_path)) {
         port_all_eq <- filter(port_all_eq, ! scenario %in% tdm_scenarios())
       }
 
@@ -221,8 +221,8 @@ if (file.exists(bonds_inputs_file)) {
       write_rds(company_all_cb, file.path(pf_file_results_path, "Bonds_results_company.rda"))
     }
     if (data_check(port_all_cb)) {
-      if (tdm_conditions_met()) {
-        tdm_vars <- determine_tdm_variables()
+      if (tdm_conditions_met(analysis_inputs_path)) {
+        tdm_vars <- determine_tdm_variables(start_year)
 
         bonds_tdm <-
           calculate_tdm(
@@ -238,7 +238,7 @@ if (file.exists(bonds_inputs_file)) {
       }
 
       # filter out scenarios used only for TDM, if they exist
-      if (data_includes_tdm_scenarios()) {
+      if (data_includes_tdm_scenarios(analysis_inputs_path)) {
         port_all_cb <- filter(port_all_cb, ! scenario %in% tdm_scenarios())
       }
 

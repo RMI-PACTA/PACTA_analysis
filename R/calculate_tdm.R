@@ -20,11 +20,13 @@
 #'   should be calculated.
 #'
 #' @return A tibble with the columns specified in the `additional_groups` input
-#'   as well as `tdm_technology_value`: the technology level transition disruption
-#'   metric, `tdm_sector_value`: the sector level transition disruption metric,
-#'   `tdm_portfolio_value`: the portfolio level transition disruption metric, as well
-#'   as `tdm_t0`, `tdm_delta_t1` and `tdm_delta_t2`: corresponding to the input
-#'   arguments.
+#'   as well as `tdm_technology_value`: the technology level transition
+#'   disruption metric, `tdm_sector_value`: the sector level transition
+#'   disruption metric, `tdm_portfolio_value`: the portfolio level transition
+#'   disruption metric, `tdm_metric`: a flag that indicates what each
+#'   `tdm_*_value` is being calculated against (e.g. "portfolio" or "scenario"),
+#'   as well as `tdm_t0`, `tdm_delta_t1` and `tdm_delta_t2`: corresponding to
+#'   the input arguments.
 #' @export
 #'
 #' @examples
@@ -95,7 +97,7 @@ calculate_tdm <- function(data,
 
   preformatted_data <- pre_format_data(data_with_monotonic_factors, t0, delta_t1, delta_t2, groups)
 
-  data_with_tdm <- add_tdm(preformatted_data, groups)
+  data_with_tdm <- add_tdm(preformatted_data, delta_t1, delta_t2, groups)
 
   formatted_data_with_tdm <- left_join(
     initial_year_data,
@@ -161,7 +163,7 @@ add_monotonic_factor <- function(data, t0, delta_t1, delta_t2, groups) {
           .data$end_year_is_t0_delta_t2
         )
       ) %>%
-      tidyr::pivot_wider(
+      pivot_wider(
         names_from = .data$time_step,
         values_from = .data$scen_alloc_wt_tech_prod
       ) %>%
@@ -184,27 +186,43 @@ add_monotonic_factor <- function(data, t0, delta_t1, delta_t2, groups) {
   left_join(data, monotonic_factors, by = groups)
 }
 
-add_tdm <- function(data, groups) {
+add_tdm <- function(data, delta_t1, delta_t2, groups) {
   data %>%
     group_by(!!!rlang::syms(groups)) %>%
     mutate(
-      .numerator = .data$scenario_production_plus_delta_t2 - .data$portfolio_production_plus_delta_t1,
+      .numerator_portfolio = .data$scenario_production_plus_delta_t2 - .data$portfolio_production_plus_delta_t1,
+      .numerator_scenario = .data$scenario_production_plus_delta_t2 - .data$scenario_production_plus_delta_t1,
       .denominator = .data$scenario_production_plus_delta_t2 - .data$scenario_production_t0,
-      # TODO: This case we
-      tdm_technology_value = ifelse(
+      .time_factor = (delta_t2 / (delta_t2 - delta_t1)),
+      tdm_technology_value_portfolio = ifelse(
         .data$.denominator == 0,
         0,
-        max(0, (.data$.numerator / .data$.denominator) * .data$monotonic_factor) * 2
+        max(0, (.data$.numerator_portfolio / .data$.denominator) * .data$monotonic_factor) * .data$.time_factor
       ),
-      .numerator = NULL,
-      .denominator = NULL
+      tdm_technology_value_scenario = ifelse(
+        .data$.denominator == 0,
+        0,
+        max(0, (.data$.numerator_scenario / .data$.denominator) * .data$monotonic_factor) * .data$.time_factor
+      ),
+      .numerator_portfolio = NULL,
+      .numerator_scenario = NULL,
+      .denominator = NULL,
+      .time_factor = NULL
     ) %>%
-    select(.data$tdm_technology_value, all_of(groups)) %>%
+    select(.data$tdm_technology_value_portfolio, .data$tdm_technology_value_scenario, all_of(groups)) %>%
     distinct() %>%
+    pivot_longer(
+      cols = tidyr::starts_with("tdm_technology_value"),
+      names_to = "tdm_metric",
+      names_prefix = "tdm_technology_value_",
+      values_to = "tdm_technology_value"
+    ) %>%
     ungroup()
 }
 
 add_aggregate_tdm <- function(data, groups) {
+  groups <- c(groups, "tdm_metric")
+
   data %>%
     group_by(!!!rlang::syms(groups)) %>%
     arrange(.data$year) %>%
@@ -244,6 +262,7 @@ tdm_prototype <- function() {
   tibble(
     technology = character(0),
     ald_sector = character(0),
+    tdm_metric = character(0),
     tdm_technology_value = numeric(0),
     tdm_sector_value = numeric(0),
     tdm_portfolio_value = numeric(0),
