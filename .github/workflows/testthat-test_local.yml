@@ -30,31 +30,31 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-    - uses: r-lib/actions/setup-r@v1
-      with:
-        r-version: ${{ matrix.config.r }}
+      - uses: r-lib/actions/setup-r@v1
+        with:
+          r-version: ${{ matrix.config.r }}
 
-    - name: Install dependencies
-      shell: Rscript {0}
-      run: |
-        install.packages(c("remotes", "testthat", "dplyr", "cli", "config", "countrycode", "readr", "tidyr", "stringr", "zoo", "devtools", "tidyverse", "here", "fs", "tidyselect", "janitor", "assertr"))
-        devtools::install_github("2DegreesInvesting/r2dii.utils")
+      - name: Install dependencies
+        shell: Rscript {0}
+        run: |
+          install.packages(c("remotes", "testthat", "dplyr", "cli", "config", "countrycode", "readr", "tidyr", "stringr", "zoo", "devtools", "tidyverse", "here", "fs", "tidyselect", "janitor", "assertr"))
+          devtools::install_github("2DegreesInvesting/r2dii.utils")
 
-    - name: Install system dependencies
-      if: runner.os == 'Linux'
-      run: |
-        while read -r cmd
-        do
-          eval sudo $cmd
-        done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "20.04"))')
+      - name: Install system dependencies
+        if: runner.os == 'Linux'
+        run: |
+          while read -r cmd
+          do
+            eval sudo $cmd
+          done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "20.04"))')
 
-    - name: run testthat::test_local()
-      run: testthat::test_local()
-      shell: Rscript {0}
+      - name: run testthat::test_local()
+        run: testthat::test_local()
+        shell: Rscript {0}
 
-    - name: Upload check results
-      if: failure()
-      uses: actions/upload-artifact@main
-      with:
-        name: ${{ runner.os }}-r${{ matrix.config.r }}-results
-        path: check
+      - name: Upload check results
+        if: failure()
+        uses: actions/upload-artifact@main
+        with:
+          name: ${{ runner.os }}-r${{ matrix.config.r }}-results
+          path: check
