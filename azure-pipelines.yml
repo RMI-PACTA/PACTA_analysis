@@ -154,13 +154,21 @@ stages:
                 --destination $(Build.SourcesDirectory)/working_dirs \
                 --account-name $(testingStorageAccountName)
           - task: Bash@3
-            displayName: Run PA2021NO Portfolio
+            displayName: Change file permissions
             inputs:
               targetType: inline
               # filePath: run-like-constructiva-flags.sh
               workingDirectory: $(Build.SourcesDirectory)
               script: |
                 chmod +x run-like-constructiva-flags.sh
+          - task: Bash@3
+            displayName: Pull Docker image
+            inputs:
+              targetType: inline
+              # filePath: run-like-constructiva-flags.sh
+              workingDirectory: $(Build.SourcesDirectory)
+              script: |
+                docker pull transitionmonitordockerregistry.azurecr.io/2dii_pacta:20211115.22
           - task: Bash@3
             displayName: Run PA2021NO Portfolio
             inputs:
