@@ -176,7 +176,7 @@ stages:
               # filePath: run-like-constructiva-flags.sh
               workingDirectory: $(Build.SourcesDirectory)
               script: |
-                docker tag transitionmonitordockerregistry.azurecr.io/2dii_pacta:20211115.22 $(imageRepository):20111115.22
+                docker tag transitionmonitordockerregistry.azurecr.io/2dii_pacta:20211115.22 $(imageRepository):20211115.22
           - task: Bash@3
             displayName: Inspect Docker image
             inputs:
