@@ -2,9 +2,9 @@ name: Source web tool scripts in container r2dii/r-packages
 on: push
 jobs:
   Source-web-tool-scripts:
-    container: 2dii/r-packages:latest
+    container: rocker/verse:4.1.2
     runs-on: ubuntu-latest
-    name: Source web tool scripts in container r2dii/r-packages
+    name: Source web tool scripts in container
     strategy:
       fail-fast: false
     env:
@@ -19,7 +19,7 @@ jobs:
         with:
           repository: 2DegreesInvesting/PACTA_analysis
           token: ${{ secrets.MAURO_PAT_FOR_2DII }}
-          path: PACTA_analysis
+          path: bound
       - name: Checkout pacta-data
         uses: actions/checkout@v2
         with:
@@ -44,14 +44,33 @@ jobs:
           repository: 2DegreesInvesting/r2dii.stress.test.data
           token: ${{ secrets.MAURO_PAT_FOR_2DII }}
           path: r2dii.stress.test.data
-      - name: Setup tinytex
+
+      - name: install Tex packages
         run: |
-          install.packages('tinytex')
-          tinytex::install_tinytex()
+          tlmgr install \
+          caption mathspec sectsty sourcesanspro wrapfig fancyhdr xcolor blindtext \
+          titlesec lipsum amsmath iftex euenc fontspec tipa unicode-math xunicode \
+          kvoptions ltxcmds kvsetkeys etoolbox auxhook bigintcalc bitset etexcmds \
+          gettitlestring hycolor hyperref intcalc kvdefinekeys letltxmacro pdfescape \
+          refcount rerunfilecheck stringenc uniquecounter zapfding pdftexcmds \
+          infwarerr texlive-scripts geometry
+
+      - name: install package dependencies
+        run: |
+          install2.r --skipinstalled --error \
+          assertthat bookdown config conflicted countrycode crayon \
+          data.table devtools dplyr DT forcats fs fst ggplot2 glue \
+          highcharter here janitor jsonlite knitr plyr purrr readr readxl \
+          renv reshape2 rlang rmarkdown rstudioapi scales snakecase stringr \
+          testthat tibble tidyr tidyselect tidyverse usethis withr writexl yaml zoo
+
+      - name: install GitHub dev dependencies
         shell: Rscript {0}
+        run: devtools::install_github("2DegreesInvesting/r2dii.utils")
+
       - name: Source web-tool scripts
+        shell: Rscript {0}
         run: |
-          setwd("PACTA_analysis")
+          setwd("bound")
           source("R/source_web_tool_scripts.R")
           source_web_tool_scripts()
-        shell: Rscript {0}
