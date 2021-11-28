@@ -153,13 +153,14 @@ stages:
                 --source $(testingShareName)/working_dirs \
                 --destination $(Build.SourcesDirectory)/working_dirs \
                 --account-name $(testingStorageAccountName)
-
           - task: Bash@3
             displayName: Run PA2021NO Portfolio
             inputs:
-              filePath: run-like-constructiva-flags.sh
+              targetType: inline
+              # filePath: run-like-constructiva-flags.sh
               workingDirectory: $(Build.SourcesDirectory)
-              arguments: |
+              script: |
+                ./run-like-constructiva-flags.sh
                 "-u 4"
                 "-p Test_PA2021NO"
                 "-t 20211115.22"
