@@ -1,4 +1,4 @@
-source(rprojroot::find_package_root_file("0_portfolio_input_check_functions.R"))
+source("../../0_portfolio_input_check_functions.R")
 
 portfolio <- tibble::tribble(
   ~isin,          ~market_value, ~currency, ~portfolio_name,       ~investor_name,
