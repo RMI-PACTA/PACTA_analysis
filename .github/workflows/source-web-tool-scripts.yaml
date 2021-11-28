@@ -70,4 +70,4 @@ jobs:
         run: devtools::install_github("2DegreesInvesting/r2dii.utils")
 
       - name: Source web-tool scripts
-        run: /bound/bin/run-r-scripts "TestPortfolio_Input"
+        run: bound/bin/run-r-scripts "TestPortfolio_Input"
