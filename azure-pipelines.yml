@@ -100,73 +100,56 @@ stages:
   - stage: test_image
     displayName: Test Docker Image
     jobs:
-      - job: test_lowmem
+      - job: test_PA2021NO
+        displayName: Test PA2021NO
         steps:
+          - task: Docker@2
+            displayName: Login to ACR
+            inputs:
+              command: login
+              containerRegistry: $(dockerRegistryServiceConnection)
           - checkout: none
-          - bash: docker info
-          - bash: docker run alpine:latest free -h
-          - bash: docker run --memory=2G alpine:latest free -h
-          - bash: docker run --memory=4G alpine:latest free -h
-          - bash: docker run --memory=8G alpine:latest free -h
-      # - job: test_PA2021NO
-      #   displayName: Test PA2021NO
-      #   steps:
-      #     - checkout: none
-      #     - task: AzureCLI@2
-      #       displayName: Download run script from Azure File Share
-      #       inputs:
-      #         azureSubscription: tm-docker-AzureResourceManager
-      #         scriptType: bash
-      #         scriptLocation: inlineScript
-      #         workingDirectory: $(Build.SourcesDirectory)
-      #         inlineScript: |
-      #           az storage file download \
-      #           --path run-like-constructiva-flags.sh \
-      #           --share-name $(testingShareName) \
-      #           --account-name $(testingStorageAccountName)
-      #     - task: AzureCLI@2
-      #       displayName: Download files from Azure File Share
-      #       inputs:
-      #         azureSubscription: tm-docker-AzureResourceManager
-      #         scriptType: bash
-      #         scriptLocation: inlineScript
-      #         inlineScript: |
-      #           az storage file download-batch \
-      #           --source $(testingShareName)/user_results \
-      #           --destination $(Build.SourcesDirectory)/user_results \
-      #           --account-name $(testingStorageAccountName)
-      #     - task: AzureCLI@2
-      #       displayName: Download files from Azure File Share
-      #       inputs:
-      #         azureSubscription: tm-docker-AzureResourceManager
-      #         scriptType: bash
-      #         scriptLocation: inlineScript
-      #         inlineScript: |
-      #           az storage file download-batch \
-      #           --source $(testingShareName)/working_dirs \
-      #           --destination $(Build.SourcesDirectory)/working_dirs \
-      #           --account-name $(testingStorageAccountName)
-      #     - script: ls -lR /tmp/user_info/
-      #     - script: echo "I can run inside the container (it starts by default)"
-      #       target:
-      #         container: TMRunner
-      #     - script: ls -lR /bound
-      #       target:
-      #         container: TMRunner
-      #     - script: /bound/bin/run-r-scripts "Test_PA2021NO"
-      #       target:
-      #         container: TMRunner
-      #     - task: Docker@2
-      #       inputs:
-      #         command: stop
-      #         container: TMRunner
+          - task: AzureCLI@2
+            displayName: Download run script from Azure File Share
+            inputs:
+              azureSubscription: tm-docker-AzureResourceManager
+              scriptType: bash
+              scriptLocation: inlineScript
+              workingDirectory: $(Build.SourcesDirectory)
+              inlineScript: |
+                az storage file download \
+                --path run-like-constructiva-flags.sh \
+                --share-name $(testingShareName) \
+                --account-name $(testingStorageAccountName)
+          - task: AzureCLI@2
+            displayName: Download files from Azure File Share
+            inputs:
+              azureSubscription: tm-docker-AzureResourceManager
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+                az storage file download-batch \
+                --source $(testingShareName)/user_results \
+                --destination $(Build.SourcesDirectory)/user_results \
+                --account-name $(testingStorageAccountName)
+          - task: AzureCLI@2
+            displayName: Download files from Azure File Share
+            inputs:
+              azureSubscription: tm-docker-AzureResourceManager
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+                az storage file download-batch \
+                --source $(testingShareName)/working_dirs \
+                --destination $(Build.SourcesDirectory)/working_dirs \
+                --account-name $(testingStorageAccountName)
 
-          # - task: Bash@3
-          #   displayName: Run PA2021NO Portfolio
-          #   inputs:
-          #     filePath: run-like-wim-PA2021NO.sh
-          #     workingDirectory: $(Build.SourcesDirectory)
-          #     arguments: |
-          #       "-u 4"
-          #       "-p Test_PA2021NO"
-          #       "-t $(Build.BuildNumber)"
+          - task: Bash@3
+            displayName: Run PA2021NO Portfolio
+            inputs:
+              filePath: run-like-wim-PA2021NO.sh
+              workingDirectory: $(Build.SourcesDirectory)
+              arguments: |
+                "-u 4"
+                "-p Test_PA2021NO"
+                "-t $(Build.BuildNumber)"
