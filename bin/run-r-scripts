@@ -3,7 +3,7 @@
 # Set permissions so that new files can be deleted/overwritten outside docker
 umask 000
 
-cd /bound
+cd bound
 
 Rscript --vanilla web_tool_script_1.R "${1:-TestPortfolio_Input}" \
   && Rscript --vanilla web_tool_script_2.R "${1:-TestPortfolio_Input}" \
