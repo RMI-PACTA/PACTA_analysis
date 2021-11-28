@@ -160,9 +160,9 @@ stages:
               # filePath: run-like-constructiva-flags.sh
               workingDirectory: $(Build.SourcesDirectory)
               script: |
-                ./run-like-constructiva-flags.sh
-                "-u 4"
-                "-p Test_PA2021NO"
-                "-t 20211115.22"
+                ./run-like-constructiva-flags.sh \
+                -u 4 \
+                -p Test_PA2021NO \
+                -t 20211115.22
 
 # "-t $(Build.BuildNumber)"
