@@ -157,9 +157,11 @@ stages:
           - task: Bash@3
             displayName: Run PA2021NO Portfolio
             inputs:
-              filePath: run-like-wim-PA2021NO.sh
+              filePath: run-like-constructiva-flags.sh
               workingDirectory: $(Build.SourcesDirectory)
               arguments: |
                 "-u 4"
                 "-p Test_PA2021NO"
-                "-t $(Build.BuildNumber)"
+                "-t 20211115.22"
+
+# "-t $(Build.BuildNumber)"
