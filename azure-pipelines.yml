@@ -132,6 +132,7 @@ stages:
                 --source $(testingShareName)/user_results \
                 --destination $(Build.SourcesDirectory)/user_results \
                 --account-name $(testingStorageAccountName)
+          - shell: mkdir -p $(Build.SourcesDirectory)/working_dirs/
           - task: AzureCLI@2
             displayName: Download files from Azure File Share
             inputs:
