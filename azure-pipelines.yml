@@ -103,6 +103,7 @@ stages:
       - job: test_lowmem
         steps:
           - checkout: none
+          - bash: docker info
           - bash: docker run alpine:latest free -h
           - bash: docker run --memory=2G alpine:latest free -h
           - bash: docker run --memory=4G alpine:latest free -h
