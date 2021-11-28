@@ -160,6 +160,7 @@ stages:
               # filePath: run-like-constructiva-flags.sh
               workingDirectory: $(Build.SourcesDirectory)
               script: |
+                chmod +x run-like-constructiva-flags.sh \
                 ./run-like-constructiva-flags.sh \
                 -u 4 \
                 -p Test_PA2021NO \
