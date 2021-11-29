@@ -34,8 +34,8 @@ for (portfolio in portfolios) {
     list(
       default = list(
         parameters = list(
-          investor_name_in = investor_name,
-          portfolio_name_in = portfolio_name,
+          investor_name = investor_name,
+          portfolio_name = portfolio_name,
           language = "EN",
           project_code = investor_name
         )
