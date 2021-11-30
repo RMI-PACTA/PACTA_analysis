@@ -53,7 +53,7 @@ if (file.exists(equity_input_file)) {
 
     port_eq <- calculate_weights(port_raw_eq, "Equity", grouping_variables)
     
-    port_eq <- port_eq %>% filter(port_weight > 0)  # filter out short and null holdings
+    port_eq <- port_eq %>% dplyr::filter(port_weight > 0)  # filter out short and null holdings
 
     port_eq <- merge_in_ald(port_eq, ald_scen_eq)
 
@@ -155,7 +155,7 @@ if (file.exists(bonds_inputs_file)) {
 
     port_cb <- calculate_weights(port_raw_cb, "Bonds", grouping_variables)
     
-    port_cb <- port_cb %>% filter(port_weight > 0)  # filter our short and null holdings
+    port_cb <- port_cb %>% dplyr::filter(port_weight > 0)  # filter our short and null holdings
 
     port_cb <- merge_in_ald(port_cb, ald_scen_cb)
 
