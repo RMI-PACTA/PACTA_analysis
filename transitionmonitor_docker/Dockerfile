@@ -4,6 +4,7 @@
 
 FROM rocker/verse:4.1.2
 
+ARG image_tag
 ENV build_version=$image_tag
 
 ARG CRAN
