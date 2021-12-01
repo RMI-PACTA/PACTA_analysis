@@ -4,6 +4,8 @@
 
 FROM rocker/verse:4.1.2
 
+ENV build_version=$image_tag
+
 ARG CRAN
 ENV CRAN=${CRAN:-https://packagemanager.rstudio.com/all/__linux__/focal/2021-11-17+Y3JhbiwyOjQ1MjYyMTU7MzM5RjM4RjI}
 RUN echo "options(repos = c(CRAN='$CRAN'), download.file.method = 'libcurl')" >> /usr/local/lib/R/etc/Rprofile.site
