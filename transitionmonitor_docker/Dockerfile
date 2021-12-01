@@ -1,5 +1,6 @@
 FROM 2dii/r-packages@sha256:2e99aaf36141cade6bc6f51023dfdf6dba87c464ee17a062207a37707553d69a
 
+ARG image_tag
 ENV build_version=$image_tag
 
 COPY PACTA_analysis /bound
