@@ -54,7 +54,7 @@ check_grouped_portfolio_years <- function(
     # fails if docker container exits with anything other than a 0 status
     # code
     message("port_holdings_date contains multiple distinct values")
-    quit(status = 0L)
+    quit(save = "no", status = 0L, runLast = FALSE)
   }
   return(invisible(port_holdings_date))
 }
