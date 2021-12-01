@@ -156,3 +156,8 @@ mark_end <- function() {
 expect_no_message <- function(object, regexp = NA, ...) {
   testthat::expect_message(object = object, regexp = regexp, ...)
 }
+
+get_build_version <- function(env_var = "$build_version") {
+  build_version <- system2("echo", args = env_var, stdout = TRUE)
+  ifelse(nzchar(build_version), paste0("v", build_version), NA_character_)
+}
