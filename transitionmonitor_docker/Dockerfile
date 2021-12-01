@@ -22,7 +22,6 @@ RUN install2.r --skipinstalled --error \
     highcharter here janitor jsonlite knitr plyr purrr readr readxl \
     renv reshape2 rlang rmarkdown rstudioapi scales snakecase stringr \
     testthat tibble tidyr tidyselect tidyverse usethis withr writexl yaml zoo
-RUN Rscript -e 'devtools::install_github("2DegreesInvesting/r2dii.utils")'
 
 COPY PACTA_analysis /bound
 COPY create_interactive_report /create_interactive_report
