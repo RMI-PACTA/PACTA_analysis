@@ -1,4 +1,7 @@
-cli::cli_h1("web_tool_script_1.R")
+build_version <- system2("echo", args = "$build_version", stdout = TRUE)
+if (nchar(build_version) > 0) build_version <- paste0(" - running in Docker build v", build_version)
+
+cli::cli_h1(paste0("web_tool_script_1.R", build_version))
 
 devtools::load_all(quiet = TRUE)
 use_r_packages()
