@@ -43,7 +43,10 @@ It is recommended to clone both repositories into the **same local directory**.
 To launch RStudio with the PACTA_analysis files:
 * From your local directory open` PACTA_analysis > R > PACTA_analysis.rproj `
 
-### Step 3 — Running web_tool_script1 and web_tool_script2:
+### Step 3 — Install the required packages
+Install all the required packages listed in Getting Started.
+
+### Step 4 — Running web_tool_script1 and web_tool_script2:
 The scripts use the following example files located in `working_directory`:
 * `20_Raw_Inputs > TestPortolio_Input.csv`
 * `10_Parameter_File > TestPortfolio_Input_PortfolioParameters.yml`
@@ -73,7 +76,6 @@ The scripts use the following example files located in `working_directory`:
 > To open the `.rda` files: `R> readRDS(“”) `
 > ***This is a specific method to this application only `.rda` files are click to open in all other cases.***
 
-—placeholder for a section on what the user has conceptually accomplished in this section and how—
 - - -
 # Next Steps:
 If the scripts were successful with the test data, you are ready to run the analysis using your own files and generate interactive reports.
@@ -112,3 +114,24 @@ If the scripts were successful with the test data, you are ready to run the anal
 > To Note: The `web_tools_scripts` cannot be run out of order, i.e., you can’t run #3 before you run #2. They must be run successively and depend on the files each script generates.
 
 ## Generating an Interactive Report:
+### Step 1 — Create a local copy of the repositories:
+It is recommended to clone both repositories into the **same local directory**.
+
+1. From your Git software [fork](https://docs.github.com/en/get-started/quickstart/fork-a-repo) and [clone](https://docs.github.com/en/get-started/quickstart/fork-a-repo#cloning-your-forked-repository) the [create_interactive_report](https://github.com/2DegreesInvesting/create_interactive_report), [2dii.climate.stress.test.data](https://github.com/2DegreesInvesting/r2dii.climate.stress.test) and 2dii.stress.test repositories.
+
+> Every time you work with the local copy, [pull](https://docs.github.com/en/get-started/using-git/getting-changes-from-a-remote-repository) updates through your method of Git to ensure you’re working with the most recent version. Check that the branch you’re working on is the master branch—unless otherwise required.
+
+### Step 2: Run web_tool_script_3.r
+1. Open `web_tool_script_3.r` in RStudio
+2. Edit line line 9 `{portfolio_name_ref_all “PORTFOLIONAME”}`
+3. Click save
+4. Click Source to run the script
+5. Check the results in `working_directory > 50_Outputs > PortfolioName > Report > index.html`
+
+> All the outputs in the folder are required for the `.html `file to display properly; zip the folder  to send out if required.
+
+If something goes wrong with `web_tool_script_3.r`, take the following steps to ensure you're working from a clean copy:
+1. Quit R
+2. Re-open the `.rproj` directory
+3. Delete all previously generated outputs
+4. Delete the interactive report repository and clone it fresh
