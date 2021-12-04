@@ -1,7 +1,7 @@
 prepare_error_report <- function(
   report_template = file.path("inst", "rmd", "user_errors.Rmd"),
   error_file = file.path(html_directory, "user_errors.json"),
-  html_directory = file.path(outputs_path, portfolio_name, "report"),
+  html_directory = file.path(outputs_path, portfolio_name_ref_all, "report"),
   file_name = "index.html"
   ) {
   if (file.exists(error_file)) {
@@ -26,7 +26,7 @@ log_user_errors <- function(
   description = "",
   error_file = file.path(
     outputs_path,
-    portfolio_name,
+    portfolio_name_ref_all,
     "report",
     "user_errors.json"
     ),
