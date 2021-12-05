@@ -152,7 +152,7 @@ stages:
               workingDirectory: $(Build.SourcesDirectory)
               script: |
                 docker pull \
-                  $(containerRegistry)/$(imageRepository):latest
+                  $(containerRegistry)/$(imageRepository):20211205.3
           - task: Bash@3
             displayName: rename Docker image
             inputs:
@@ -161,7 +161,7 @@ stages:
               workingDirectory: $(Build.SourcesDirectory)
               script: |
                 docker tag \
-                  $(containerRegistry)/$(imageRepository):latest \
+                  $(containerRegistry)/$(imageRepository):20211205.3 \
                   $(imageRepository):$(Build.BuildNumber)
           - task: Bash@3
             displayName: Inspect Docker image
