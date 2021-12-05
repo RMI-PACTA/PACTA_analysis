@@ -80,9 +80,11 @@ stages:
 
   - stage: test_image
     displayName: Test Docker Image
+    variables:
+      portfolioName: "general2020Q4"
     jobs:
       - job: test_PA2021NO
-        displayName: Test PA2021NO
+        displayName: Test $(portfolioName)
         steps:
           - task: Docker@2
             displayName: Login to ACR
@@ -170,7 +172,7 @@ stages:
               script: |
                 docker images
           - task: Bash@3
-            displayName: Run PA2021NO Portfolio
+            displayName: Run $(portfolioName) Portfolio
             inputs:
               targetType: inline
               # filePath: run-like-constructiva-flags.sh
@@ -178,7 +180,7 @@ stages:
               script: |
                 ./run-like-constructiva-flags.sh \
                 -u 4 \
-                -p Test_PA2021NO \
+                -p $(portfolioName) \
                 -t $(Build.BuildNumber)
 
 # "-t $(Build.BuildNumber)"
