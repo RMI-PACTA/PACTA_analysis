@@ -1,5 +1,5 @@
 # using R 4.1.2 and CRAN packages available as of 2021.11.18
-# https://hub.docker.com/layers/rocker/verse/4.1.2/images/sha256-1e639ca754d1963cfb259c23341fef17858b8de2766f46a16095e8807cda83f9?context=explore
+# https://hub.docker.com/r/rocker/verse/tags?name=4.1.2
 # https://packagemanager.rstudio.com/client/#/repos/1/overview
 
 FROM rocker/verse:4.1.2
