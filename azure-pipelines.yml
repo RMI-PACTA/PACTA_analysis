@@ -104,27 +104,11 @@ stages:
                 --path run-like-constructiva-flags.sh \
                 --share-name $(testingShareName) \
                 --account-name $(testingStorageAccountName)
-          # - task: Bash@3
-          #   displayName: Create working_dirs/
-          #   inputs:
-          #     targetType: inline
-          #     script: mkdir -p $(Build.SourcesDirectory)/working_dirs/
-          # - task: Bash@3
-          #   displayName: Create user_results/
-          #   inputs:
-          #     targetType: inline
-          #     script: mkdir -p $(Build.SourcesDirectory)/user_results/
-          # - task: AzureCLI@2
-          #   displayName: Download User Results files from Azure File Share
-          #   inputs:
-          #     azureSubscription: tm-docker-AzureResourceManager
-          #     scriptType: bash
-          #     scriptLocation: inlineScript
-          #     inlineScript: |
-          #       az storage file download-batch \
-          #       --source $(testingShareName)/user_results \
-          #       --destination $(Build.SourcesDirectory)/user_results \
-          #       --account-name $(testingStorageAccountName)
+          - task: Bash@3
+            displayName: Create portfolio directory
+            inputs:
+              targetType: inline
+              script: mkdir -p $(Build.SourcesDirectory)/$(portfolioName)/
           - task: AzureCLI@2
             displayName: Download Portfolio files from Azure File Share
             inputs:
@@ -134,7 +118,7 @@ stages:
               inlineScript: |
                 az storage file download-batch \
                 --source $(testingShareName)/$(portfolioName) \
-                --destination $(Build.SourcesDirectory) \
+                --destination $(Build.SourcesDirectory)/$(portfolioName) \
                 --account-name $(testingStorageAccountName)
           - task: Bash@3
             displayName: Inspect file structure
@@ -143,7 +127,7 @@ stages:
               # filePath: run-like-constructiva-flags.sh
               workingDirectory: $(Build.SourcesDirectory)
               script: |
-                ls -ladR
+                ls -laR
           - task: Bash@3
             displayName: Change file permissions
             inputs:
