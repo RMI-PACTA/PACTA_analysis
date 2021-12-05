@@ -84,7 +84,7 @@ stages:
       portfolioName: "general2020Q4"
     jobs:
       - job: test_PA2021NO
-        displayName: Test $(portfolioName)
+        displayName: "Test ${{ portfolioName }}"
         steps:
           - task: Docker@2
             displayName: Login to ACR
@@ -137,6 +137,14 @@ stages:
                 --destination $(Build.SourcesDirectory) \
                 --account-name $(testingStorageAccountName)
           - task: Bash@3
+            displayName: Inspect file structure
+            inputs:
+              targetType: inline
+              # filePath: run-like-constructiva-flags.sh
+              workingDirectory: $(Build.SourcesDirectory)
+              script: |
+                ls -laR
+          - task: Bash@3
             displayName: Change file permissions
             inputs:
               targetType: inline
@@ -179,8 +187,7 @@ stages:
               workingDirectory: $(Build.SourcesDirectory)
               script: |
                 ./run-like-constructiva-flags.sh \
+                -v \
                 -u 4 \
                 -p $(portfolioName) \
                 -t $(Build.BuildNumber)
-
-# "-t $(Build.BuildNumber)"
