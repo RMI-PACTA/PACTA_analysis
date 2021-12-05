@@ -143,7 +143,7 @@ stages:
               # filePath: run-like-constructiva-flags.sh
               workingDirectory: $(Build.SourcesDirectory)
               script: |
-                ls -laR
+                ls -ladR
           - task: Bash@3
             displayName: Change file permissions
             inputs:
