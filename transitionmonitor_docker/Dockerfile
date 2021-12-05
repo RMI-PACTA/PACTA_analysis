@@ -12,12 +12,12 @@ ENV CRAN=${CRAN:-https://packagemanager.rstudio.com/all/__linux__/focal/2021-11-
 RUN echo "options(repos = c(CRAN='$CRAN'), download.file.method = 'libcurl')" >> /usr/local/lib/R/etc/Rprofile.site
 
 RUN tlmgr install \
-    caption mathspec sectsty sourcesanspro wrapfig fancyhdr xcolor blindtext \
-    titlesec lipsum amsmath iftex euenc fontspec tipa unicode-math xunicode \
-    kvoptions ltxcmds kvsetkeys etoolbox auxhook bigintcalc bitset etexcmds \
-    gettitlestring hycolor hyperref intcalc kvdefinekeys letltxmacro pdfescape \
-    refcount rerunfilecheck stringenc uniquecounter zapfding pdftexcmds \
-    infwarerr texlive-scripts geometry
+    amsmath auxhook bigintcalc bitset blindtext caption etexcmds etoolbox \
+    euenc fancyhdr fontspec geometry gettitlestring hycolor hyperref iftex \
+    infwarerr intcalc kvdefinekeys kvoptions kvsetkeys letltxmacro lipsum \
+    ltxcmds mathspec pdfescape pdftexcmds refcount rerunfilecheck sectsty \
+    sourcesanspro stringenc texlive-scripts tipa titlesec unicode-math \
+    uniquecounter wrapfig xcolor xunicode zapfding 
 
 RUN install2.r --skipinstalled --error \
     assertthat bookdown config conflicted countrycode crayon \
