@@ -26,14 +26,6 @@ variables:
     dockerTag: '$(Build.SourceBranchName)'
   ${{ else }}:
     dockerTag: '$(Build.Reason)'
-    dockerRunFlags: |
-      --rm \
-      --platform linux/x86_64 \
-      --pull=never \
-      --network none \
-      --user 1000:1000 \
-      --memory=8g \
-      --memory-swappiness=0
 
 resources:
   repositories:
@@ -57,45 +49,34 @@ resources:
       endpoint: 2DegreesInvesting  # Servce connection name
       name: 2DegreesInvesting/pacta-data
       ref: master
-  # containers:
-  #   - container: builder
-  #     image: ubuntu:18.04
-  #   - container: TMRunner
-  #     image: $(imageRepository):20211115.22
-  #     # image: $(imageRepository):$(Build.BuildNumber)
-  #     endpoint: TransitionMonitorDockerRegistry
-  #     # options: $(dockerRunFlags)
-  #     volumes:
-  #       - "/home/vsts/work/1/s/working_dirs:/bound/working_dir"
-  #       - "/home/vsts/work/1/s/user_results/4:/user_results"
 
 stages:
 
-  # - stage: build_image
-  #   displayName: Build and Push Docker Image
-  #   jobs:
-  #     - job: Build
-  #       displayName: Checkout Repos & Build
-  #       steps:
-  #         - checkout: self  # PACTA_analysis repo
-  #         - checkout: create_interactive_report
-  #         - checkout: r2dii.climate.stress.test
-  #         - checkout: r2dii.stress.test.data
-  #         - checkout: pacta-data
-  #         # TODO: Add Tagging steps job
-  #         - task: Docker@2
-  #           displayName: Build Transition Monitor Docker image
-  #           inputs:
-  #             command: buildAndPush
-  #             repository: $(imageRepository)
-  #             dockerfile: $(dockerfilePath)
-  #             buildContext: $(Build.SourcesDirectory)
-  #             containerRegistry: $(dockerRegistryServiceConnection)
-  #             addPipelineData: false
-  #             tags: |
-  #               $(dockerTag)
-  #               $(Build.BuildNumber)
-  #               $(Build.SourceVersion)
+  - stage: build_image
+    displayName: Build and Push Docker Image
+    jobs:
+      - job: Build
+        displayName: Checkout Repos & Build
+        steps:
+          - checkout: self  # PACTA_analysis repo
+          - checkout: create_interactive_report
+          - checkout: r2dii.climate.stress.test
+          - checkout: r2dii.stress.test.data
+          - checkout: pacta-data
+          # TODO: Add Tagging steps job
+          - task: Docker@2
+            displayName: Build Transition Monitor Docker image
+            inputs:
+              command: buildAndPush
+              repository: $(imageRepository)
+              dockerfile: $(dockerfilePath)
+              buildContext: $(Build.SourcesDirectory)
+              containerRegistry: $(dockerRegistryServiceConnection)
+              addPipelineData: false
+              tags: |
+                $(dockerTag)
+                $(Build.BuildNumber)
+                $(Build.SourceVersion)
 
   - stage: test_image
     displayName: Test Docker Image
@@ -168,7 +149,8 @@ stages:
               # filePath: run-like-constructiva-flags.sh
               workingDirectory: $(Build.SourcesDirectory)
               script: |
-                docker pull transitionmonitordockerregistry.azurecr.io/2dii_pacta:20211115.22
+                docker pull \
+                  $(containerRegistry)/$(imageRepository):$(Build.BuildNumber)
           - task: Bash@3
             displayName: rename Docker image
             inputs:
@@ -176,7 +158,9 @@ stages:
               # filePath: run-like-constructiva-flags.sh
               workingDirectory: $(Build.SourcesDirectory)
               script: |
-                docker tag transitionmonitordockerregistry.azurecr.io/2dii_pacta:20211115.22 $(imageRepository):20211115.22
+                docker tag \
+                  $(containerRegistry)/$(imageRepository):$(Build.BuildNumber) \
+                  $(imageRepository):$(Build.BuildNumber)
           - task: Bash@3
             displayName: Inspect Docker image
             inputs:
@@ -195,6 +179,6 @@ stages:
                 ./run-like-constructiva-flags.sh \
                 -u 4 \
                 -p Test_PA2021NO \
-                -t 20211115.22
+                -t $(Build.BuildNumber)
 
 # "-t $(Build.BuildNumber)"
