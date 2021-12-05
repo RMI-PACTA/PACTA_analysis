@@ -23,9 +23,10 @@ RUN install2.r --skipinstalled --error \
     assertr assertthat bookdown cli config conflicted countrycode crayon \
     devtools dplyr DT forcats fs fst ggplot2 gh git2r glue here ISOcodes \
     janitor jsonlite knitr magrittr pkgdown plyr purrr r2dii.analysis r2dii.data \
-    r2dii.plot r2dii.utils readr readxl renv rlang rmarkdown rstudioapi \
-    rworldmap scales snakecase spelling stringi stringr testthat tibble tidyr \
-    tidyselect tidyverse usethis utils viridis withr writexl yaml zoo
+    r2dii.plot readr readxl renv rlang rmarkdown rstudioapi rworldmap scales \
+    snakecase spelling stringi stringr testthat tibble tidyr tidyselect \
+    tidyverse usethis utils viridis withr writexl yaml zoo
+RUN Rscript -e 'devtools::install_github("2DegreesInvesting/r2dii.utils")'
 
 COPY PACTA_analysis /bound
 COPY create_interactive_report /create_interactive_report
