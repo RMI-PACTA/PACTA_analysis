@@ -1,8 +1,11 @@
-# using R 4.1.2 and CRAN packages available as of 2021.11.18
+# using R 4.1.2, and CTAN and CRAN packages available as of 2021.11.18
 # https://hub.docker.com/r/rocker/verse/tags?name=4.1.2
 # https://packagemanager.rstudio.com/client/#/repos/1/overview
 
 FROM rocker/verse:4.1.2
+
+ARG CTAN_REPO=${CTAN_REPO:-https://www.texlive.info/tlnet-archive/2021/11/18/tlnet}
+ENV CTAN_REPO=${CTAN_REPO}
 
 RUN tlmgr install \
     amsmath auxhook bigintcalc bitset blindtext caption etexcmds etoolbox \
