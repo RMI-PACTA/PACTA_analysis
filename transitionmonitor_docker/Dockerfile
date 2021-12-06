@@ -4,6 +4,9 @@
 
 FROM rocker/verse:4.1.2
 
+ARG RSTUDIO_PANDOC
+ENV RSTUDIO_PANDOC='/usr/local/bin/pandoc'
+
 ARG CTAN_REPO=${CTAN_REPO:-https://www.texlive.info/tlnet-archive/2021/11/18/tlnet}
 ENV CTAN_REPO=${CTAN_REPO}
 
