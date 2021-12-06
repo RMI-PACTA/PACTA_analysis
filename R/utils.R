@@ -30,7 +30,6 @@ required_packages_vec <- function() {
     "purrr",
     "readr",
     "readxl",
-    "renv",
     "rlang",
     "rmarkdown",
     "rstudioapi",
