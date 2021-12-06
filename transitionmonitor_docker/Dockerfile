@@ -13,7 +13,7 @@ RUN tlmgr install \
     infwarerr intcalc kvdefinekeys kvoptions kvsetkeys letltxmacro lipsum \
     ltxcmds mathspec pdfescape pdftexcmds refcount rerunfilecheck sectsty \
     sourcesanspro stringenc texlive-scripts tipa titlesec unicode-math \
-    uniquecounter wrapfig xcolor xunicode zapfding 
+    uniquecounter wrapfig xcolor xunicode zapfding
 
 ARG CRAN
 ENV CRAN=${CRAN:-https://packagemanager.rstudio.com/all/__linux__/focal/2021-11-17+Y3JhbiwyOjQ1MjYyMTU7MzM5RjM4RjI}
