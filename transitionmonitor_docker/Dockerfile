@@ -20,7 +20,7 @@ RUN tlmgr install \
 
 ARG CRAN
 ENV CRAN=${CRAN:-https://packagemanager.rstudio.com/all/__linux__/focal/2021-11-17+Y3JhbiwyOjQ1MjYyMTU7MzM5RjM4RjI}
-RUN echo 'options(repos = c(CRAN="$CRAN"), download.file.method = "libcurl")' >> /usr/local/lib/R/etc/Rprofile.site
+RUN echo "options(repos = c(CRAN='$CRAN'), download.file.method = 'libcurl')" >> /usr/local/lib/R/etc/Rprofile.site
 
 RUN install2.r --skipinstalled --error \
     assertr assertthat bookdown cli config conflicted countrycode crayon \
