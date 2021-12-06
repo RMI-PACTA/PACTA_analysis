@@ -28,6 +28,9 @@ RUN install2.r --skipinstalled --error \
     tidyverse usethis utils viridis withr writexl yaml zoo
 RUN Rscript -e 'devtools::install_github("2DegreesInvesting/r2dii.utils")'
 
+ARG image_tag
+ENV build_version=$image_tag
+
 COPY PACTA_analysis /bound
 COPY create_interactive_report /create_interactive_report
 COPY pacta-data /pacta-data

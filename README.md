@@ -38,7 +38,7 @@ Further, the evaluation will require a bunch of package. It is recommanded insta
 
 Necessary packages are: 
 assertthat, config, conflicted, devtools, DT, fs, fst, glue, here, janitor, 
-knitr, plyr, r2dii.utils, renv, rmarkdown, snakecase, testthat, tidyverse, 
+knitr, plyr, renv, rmarkdown, snakecase, testthat, tidyverse, 
 withr, yaml
     
 **For report generation:**
