@@ -6,7 +6,7 @@ default:
     reporting:
         project_report_name: norway
         display_currency: NOK
-        currency_exchange_value: 0.11
+        currency_exchange_value: 0.1172333
 
     parameters:
         timestamp: 2020Q4
