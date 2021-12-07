@@ -55,9 +55,8 @@ RUN tlmgr install \
 
 ARG CRAN
 ENV CRAN=${CRAN:-https://packagemanager.rstudio.com/all/__linux__/focal/2021-11-17+Y3JhbiwyOjQ1MjYyMTU7MzM5RjM4RjI}
-RUN echo "options(repos = c(CRAN='$CRAN'), download.file.method = 'libcurl')" >> /usr/local/lib/R/etc/Rprofile.site
-
-RUN install2.r --skipinstalled --error \
+RUN echo "options(repos = c(CRAN='$CRAN'), download.file.method = 'libcurl')" >> /usr/local/lib/R/etc/Rprofile.site \
+    && install2.r --skipinstalled --error \
     assertr \
     assertthat \
     bookdown \
@@ -106,8 +105,8 @@ RUN install2.r --skipinstalled --error \
     withr \
     writexl \
     yaml \
-    zoo
-RUN Rscript -e 'devtools::install_github("2DegreesInvesting/r2dii.utils")'
+    zoo \
+    && Rscript -e 'devtools::install_github("2DegreesInvesting/r2dii.utils")'
 
 COPY PACTA_analysis /bound
 COPY create_interactive_report /create_interactive_report
@@ -115,11 +114,11 @@ COPY pacta-data /pacta-data
 COPY r2dii.climate.stress.test /r2dii.climate.stress.test
 COPY r2dii.stress.test.data /r2dii.stress.test.data
 
-RUN chmod -R a+rwX /bound
-RUN chmod -R a+rwX /create_interactive_report
-RUN chmod -R a+rwX /pacta-data
-RUN chmod -R a+rwX /r2dii.climate.stress.test
-RUN chmod -R a+rwX /r2dii.stress.test.data
+RUN chmod -R a+rwX /bound \
+    && chmod -R a+rwX /create_interactive_report \
+    && chmod -R a+rwX /pacta-data \
+    && chmod -R a+rwX /r2dii.climate.stress.test \
+    && chmod -R a+rwX /r2dii.stress.test.data
 
 ARG image_tag
 ENV build_version=$image_tag
