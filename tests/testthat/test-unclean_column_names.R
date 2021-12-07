@@ -55,10 +55,11 @@ test_that("reflects ungrouping of some but not all variables", {
 
 test_that("preserves groups behaviour of dplyr::select", {
   unclean <- group_by(tibble(x.x = 1, y.y = 1, z.z = 1), x.x, y.y)
-  data <- unclean %>%
-    clean_column_names() %>%
-    select(x_x)
-  # select() re-adds dropped grouping variables to the left
+  suppressMessages({
+    data <- unclean %>%
+      clean_column_names() %>%
+      select(x_x)  # select() re-adds dropped grouping variables to the left
+  })
   out <- unclean_column_names(data, unclean)
   expect_equal(names(out), c("y.y", "x.x"))
   expect_equal(group_vars(out), group_vars(unclean))
