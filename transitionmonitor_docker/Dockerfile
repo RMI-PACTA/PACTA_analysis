@@ -55,8 +55,8 @@ RUN tlmgr install \
 
 ARG CRAN
 ENV CRAN=${CRAN:-https://packagemanager.rstudio.com/all/__linux__/focal/2021-11-17+Y3JhbiwyOjQ1MjYyMTU7MzM5RjM4RjI}
-RUN echo "options(repos = c(CRAN='$CRAN'), download.file.method = 'libcurl')" >> /usr/local/lib/R/etc/Rprofile.site \
-    && install2.r --skipinstalled --error \
+ARG PKG_DEPS
+ENV PKG_DEPS='\
     assertr \
     assertthat \
     bookdown \
@@ -106,6 +106,10 @@ RUN echo "options(repos = c(CRAN='$CRAN'), download.file.method = 'libcurl')" >>
     writexl \
     yaml \
     zoo \
+    '
+RUN echo "options(repos = c(CRAN='$CRAN'), download.file.method = 'libcurl')" >> /usr/local/lib/R/etc/Rprofile.site \
+    && Rscript -e 'install.packages("remotes")' \
+    && Rscript -e "remotes::install_cran(strsplit('$PKG_DEPS', '[[:space:],]+')[[1]])" \
     && Rscript -e 'devtools::install_github("2DegreesInvesting/r2dii.utils")'
 
 COPY pacta-data /pacta-data
