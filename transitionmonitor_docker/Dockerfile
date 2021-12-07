@@ -108,11 +108,11 @@ RUN echo "options(repos = c(CRAN='$CRAN'), download.file.method = 'libcurl')" >>
     zoo \
     && Rscript -e 'devtools::install_github("2DegreesInvesting/r2dii.utils")'
 
+COPY pacta-data /pacta-data
+COPY r2dii.stress.test.data /r2dii.stress.test.data
 COPY PACTA_analysis /bound
 COPY create_interactive_report /create_interactive_report
-COPY pacta-data /pacta-data
 COPY r2dii.climate.stress.test /r2dii.climate.stress.test
-COPY r2dii.stress.test.data /r2dii.stress.test.data
 
 RUN chmod -R a+rwX /bound \
     && chmod -R a+rwX /create_interactive_report \
