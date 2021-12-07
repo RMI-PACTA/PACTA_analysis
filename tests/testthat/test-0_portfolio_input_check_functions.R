@@ -1,5 +1,3 @@
-source("../../0_portfolio_input_check_functions.R")
-
 portfolio <- tibble::tribble(
   ~isin,          ~market_value, ~currency, ~portfolio_name,       ~investor_name,
   "JP3868400007", 50000,         "GBP",     "TestPortfolio_Input", "Test",
@@ -13,6 +11,10 @@ fin_data <- tibble::tribble(
 
 
 test_that("`add_fin_data()` works as expected", {
+  skip_if(nzchar(Sys.getenv("R_CMD")))
+
+  source("../../0_portfolio_input_check_functions.R")
+
   result <- add_fin_data(portfolio, fin_data)
   expect_equal(result$isin, portfolio$isin)
   expect_equal(result$market_value, portfolio$market_value)
