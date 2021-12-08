@@ -43,7 +43,8 @@ Imports:
     withr
 Suggests: 
     knitr,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    yaml
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
