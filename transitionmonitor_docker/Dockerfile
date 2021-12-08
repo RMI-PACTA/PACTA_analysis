@@ -7,8 +7,11 @@ FROM rocker/verse:4.1.2
 ARG RSTUDIO_PANDOC
 ENV RSTUDIO_PANDOC='/usr/local/bin'
 
-ARG CTAN_REPO=${CTAN_REPO:-https://www.texlive.info/tlnet-archive/2021/11/18/tlnet}
-ENV CTAN_REPO=${CTAN_REPO}
+ARG CTAN_REPO
+ENV CTAN_REPO=https://www.texlive.info/tlnet-archive/2021/11/18/tlnet
+
+ARG CRAN
+ENV CRAN=https://packagemanager.rstudio.com/all/__linux__/focal/2021-11-17+Y3JhbiwyOjQ1MjYyMTU7MzM5RjM4RjI
 
 RUN tlmgr install \
     amsmath \
@@ -53,8 +56,6 @@ RUN tlmgr install \
     xunicode \
     zapfding
 
-ARG CRAN
-ENV CRAN=${CRAN:-https://packagemanager.rstudio.com/all/__linux__/focal/2021-11-17+Y3JhbiwyOjQ1MjYyMTU7MzM5RjM4RjI}
 ARG PKG_DEPS
 ENV PKG_DEPS='\
     assertr \
@@ -107,6 +108,7 @@ ENV PKG_DEPS='\
     yaml \
     zoo \
     '
+
 RUN echo "options(repos = c(CRAN='$CRAN'), download.file.method = 'libcurl')" >> /usr/local/lib/R/etc/Rprofile.site \
     && Rscript -e 'install.packages("remotes")' \
     && Rscript -e "remotes::install_cran(strsplit('$PKG_DEPS', '[[:space:],]+')[[1]])" \
