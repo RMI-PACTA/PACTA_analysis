@@ -3,11 +3,12 @@ test_that("`set_portfolio_parameters()` works as expected", {
 
   source("../../0_web_functions.R")
 
-  local_yaml <- function(parameters,
-                         filename = "portfolio_config.yml",
-                         env = parent.frame()) {
-    yaml::write_yaml(list(default = list(parameters = parameters)), filename)
-    withr::defer(unlink(filename, recursive = TRUE), envir = env)
+  local_yaml <- function(.params,
+                         .file = "portfolio_config.yml",
+                         .local_envir = parent.frame()) {
+    withr::local_file(.file = .file, .local_envir = .local_envir)
+    yaml::write_yaml(list(default = list(parameters = .params)), .file)
+    invisible(.file)
   }
 
   # test that standard parameter names are read in to
@@ -15,17 +16,19 @@ test_that("`set_portfolio_parameters()` works as expected", {
   withr::with_environment(
     emptyenv(),
     {
-      local_yaml(parameters = list(
-        portfolio_name = "TestPortfolio",
-        investor_name = "TestInvestor",
-        peer_group = "test_group",
-        language = "DE",
-        user_id = "2345",
-        project_code = "GENERAL",
-        holdings_date = "2020Q4"
-      ))
+      parameters <-
+        list(
+          portfolio_name = "TestPortfolio",
+          investor_name = "TestInvestor",
+          peer_group = "test_group",
+          language = "DE",
+          user_id = "2345",
+          project_code = "GENERAL",
+          holdings_date = "2020Q4"
+        )
+      filename <- local_yaml(parameters)
 
-      set_portfolio_parameters("portfolio_config.yml")
+      set_portfolio_parameters(filename)
       expect_equal(portfolio_name, "TestPortfolio")
       expect_equal(investor_name, "TestInvestor")
       expect_equal(peer_group, "test_group")
@@ -41,12 +44,13 @@ test_that("`set_portfolio_parameters()` works as expected", {
   withr::with_environment(
     emptyenv(),
     {
-      local_yaml(parameters = list(
+      parameters <- list(
         portfolio_name_in = "TestPortfolio",
         investor_name_in = "TestInvestor"
-      ))
+      )
+      filename <- local_yaml(parameters)
 
-      set_portfolio_parameters("portfolio_config.yml")
+      set_portfolio_parameters(filename)
       expect_equal(portfolio_name, "TestPortfolio")
       expect_equal(investor_name, "TestInvestor")
     }
@@ -57,9 +61,10 @@ test_that("`set_portfolio_parameters()` works as expected", {
   withr::with_environment(
     emptyenv(),
     {
-      local_yaml(parameters = list())
+      parameters <- list()
+      filename <- local_yaml(parameters)
 
-      set_portfolio_parameters("portfolio_config.yml")
+      set_portfolio_parameters(filename)
       expect_null(portfolio_name)
       expect_null(investor_name)
       expect_null(peer_group)
@@ -76,9 +81,10 @@ test_that("`set_portfolio_parameters()` works as expected", {
   withr::with_environment(
     emptyenv(),
     {
-      local_yaml(parameters = list(holdings_date = c("2020Q4", "2020Q4")))
+      parameters <- list(holdings_date = c("2020Q4", "2020Q4"))
+      filename <- local_yaml(parameters)
 
-      set_portfolio_parameters("portfolio_config.yml")
+      set_portfolio_parameters(filename)
       expect_equal(port_holdings_date, c("2020Q4", "2020Q4"))
     }
   )
@@ -89,9 +95,10 @@ test_that("`set_portfolio_parameters()` works as expected", {
   withr::with_environment(
     emptyenv(),
     {
-      local_yaml(parameters = list(holdings_date = c("2019Q4", "2020Q4")))
+      parameters <- list(holdings_date = c("2019Q4", "2020Q4"))
+      filename <- local_yaml(parameters)
 
-      set_portfolio_parameters("portfolio_config.yml")
+      set_portfolio_parameters(filename)
       expect_equal(port_holdings_date, c("2019Q4", "2020Q4"))
     }
   )
