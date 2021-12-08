@@ -3,23 +3,28 @@ test_that("`set_portfolio_parameters()` works as expected", {
 
   source("../../0_web_functions.R")
 
+  local_yaml <- function(parameters,
+                         filename = "portfolio_config.yml",
+                         env = parent.frame()) {
+    yaml::write_yaml(list(default = list(parameters = parameters)), filename)
+    withr::defer(unlink(filename, recursive = TRUE), envir = env)
+  }
+
   # test that standard parameter names are read in to
   # the proper object names in the global environment
   withr::with_environment(
     emptyenv(),
     {
-      withr::local_file("portfolio_config.yml")
-        yaml::write_yaml(list(default = list(parameters = list(
-          portfolio_name = "TestPortfolio",
-          investor_name = "TestInvestor",
-          peer_group = "test_group",
-          language = "DE",
-          user_id = "2345",
-          project_code = "GENERAL",
-          holdings_date = "2020Q4"
-        ))),
-        "portfolio_config.yml"
-      )
+      local_yaml(parameters = list(
+        portfolio_name = "TestPortfolio",
+        investor_name = "TestInvestor",
+        peer_group = "test_group",
+        language = "DE",
+        user_id = "2345",
+        project_code = "GENERAL",
+        holdings_date = "2020Q4"
+      ))
+
       set_portfolio_parameters("portfolio_config.yml")
       expect_equal(portfolio_name, "TestPortfolio")
       expect_equal(investor_name, "TestInvestor")
@@ -36,13 +41,11 @@ test_that("`set_portfolio_parameters()` works as expected", {
   withr::with_environment(
     emptyenv(),
     {
-      withr::local_file("portfolio_config.yml")
-      yaml::write_yaml(list(default = list(parameters = list(
+      local_yaml(parameters = list(
         portfolio_name_in = "TestPortfolio",
         investor_name_in = "TestInvestor"
-      ))),
-      "portfolio_config.yml"
-      )
+      ))
+
       set_portfolio_parameters("portfolio_config.yml")
       expect_equal(portfolio_name, "TestPortfolio")
       expect_equal(investor_name, "TestInvestor")
@@ -54,11 +57,8 @@ test_that("`set_portfolio_parameters()` works as expected", {
   withr::with_environment(
     emptyenv(),
     {
-      withr::local_file("portfolio_config.yml")
-      yaml::write_yaml(list(default = list(parameters = list(
-        ))),
-        "portfolio_config.yml"
-      )
+      local_yaml(parameters = list())
+
       set_portfolio_parameters("portfolio_config.yml")
       expect_null(portfolio_name)
       expect_null(investor_name)
@@ -76,12 +76,8 @@ test_that("`set_portfolio_parameters()` works as expected", {
   withr::with_environment(
     emptyenv(),
     {
-      withr::local_file("portfolio_config.yml")
-      yaml::write_yaml(list(default = list(parameters = list(
-          holdings_date = c("2020Q4", "2020Q4")
-        ))),
-        "portfolio_config.yml"
-      )
+      local_yaml(parameters = list(holdings_date = c("2020Q4", "2020Q4")))
+
       set_portfolio_parameters("portfolio_config.yml")
       expect_equal(port_holdings_date, c("2020Q4", "2020Q4"))
     }
@@ -93,12 +89,8 @@ test_that("`set_portfolio_parameters()` works as expected", {
   withr::with_environment(
     emptyenv(),
     {
-      withr::local_file("portfolio_config.yml")
-      yaml::write_yaml(list(default = list(parameters = list(
-          holdings_date = c("2019Q4", "2020Q4")
-        ))),
-        "portfolio_config.yml"
-      )
+      local_yaml(parameters = list(holdings_date = c("2019Q4", "2020Q4")))
+
       set_portfolio_parameters("portfolio_config.yml")
       expect_equal(port_holdings_date, c("2019Q4", "2020Q4"))
     }
