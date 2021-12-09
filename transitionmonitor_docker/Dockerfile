@@ -4,11 +4,11 @@ RUN echo "options(tinytex.tlmgr.path = '/root/.TinyTeX/bin/x86_64-linux/tlmgr')"
     && chmod -R a+rwX /root \
     && /root/.TinyTeX/bin/*/tlmgr path add
 
-COPY PACTA_analysis /bound
-COPY create_interactive_report /create_interactive_report
 COPY pacta-data /pacta-data
 COPY r2dii.climate.stress.test /r2dii.climate.stress.test
 COPY r2dii.stress.test.data /r2dii.stress.test.data
+COPY create_interactive_report /create_interactive_report
+COPY PACTA_analysis /bound
 
 RUN chmod -R a+rwX /bound \
     /create_interactive_report \
