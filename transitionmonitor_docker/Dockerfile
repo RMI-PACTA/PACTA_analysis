@@ -111,9 +111,9 @@ ENV PKG_DEPS='\
 
 RUN echo "options(repos = c(CRAN='$CRAN'), download.file.method = 'libcurl')" >> /usr/local/lib/R/etc/Rprofile.site \
     && Rscript -e " \
-         install.packages('remotes'); \
-         pkg_deps <- strsplit('$PKG_DEPS', '[[:space:],]+')[[1]]; \
-         remotes::install_cran(pkg_deps); \
+         pkg_deps <- strsplit(trimws(gsub('[\\\]+', '', '$PKG_DEPS')), '[[:space:]]+')[[1]]; \
+         install.packages('pak', repos = 'https://r-lib.github.io/p/pak/dev/'); \
+         pak::pkg_install(pkg_deps, lib = .Library, upgrade = TRUE); \
          devtools::install_github('2DegreesInvesting/r2dii.utils'); \
          "
 
