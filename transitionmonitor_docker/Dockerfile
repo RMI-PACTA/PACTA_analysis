@@ -11,10 +11,10 @@ COPY r2dii.climate.stress.test /r2dii.climate.stress.test
 COPY r2dii.stress.test.data /r2dii.stress.test.data
 
 RUN chmod -R a+rwX /bound \
-    && chmod -R a+rwX /create_interactive_report \
-    && chmod -R a+rwX /pacta-data \
-    && chmod -R a+rwX /r2dii.climate.stress.test \
-    && chmod -R a+rwX /r2dii.stress.test.data
+    /create_interactive_report \
+    /pacta-data \
+    /r2dii.climate.stress.test \
+    /r2dii.stress.test.data
 
 ARG image_tag
 ENV build_version=$image_tag
