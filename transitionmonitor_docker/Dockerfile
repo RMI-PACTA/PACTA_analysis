@@ -10,7 +10,8 @@ COPY r2dii.climate.stress.test /r2dii.climate.stress.test
 COPY create_interactive_report /create_interactive_report
 COPY PACTA_analysis /bound
 
-RUN chmod -R a+rwX /bound \
+RUN chmod -R a+rwX \
+    /bound \
     /create_interactive_report \
     /pacta-data \
     /r2dii.climate.stress.test \
