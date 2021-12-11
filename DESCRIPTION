@@ -42,6 +42,7 @@ Imports:
     tibble,
     withr
 Suggests: 
+    callr,
     knitr,
     testthat (>= 3.0.0),
     yaml
