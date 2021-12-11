@@ -17,6 +17,10 @@ test_that("`clean_unmatched_holdings()` works as expected", {
   source(here::here("0_global_functions.R"))  # for data_check()
   source(here::here("0_portfolio_input_check_functions.R"))
 
+  result <- clean_unmatched_holdings(portfolio)
+
+  expect_s3_class(result, "data.frame")
+
   # test that clean_unmatched_holdings() does not add any rows, that the number
   # of `security_mapped_sector` values that are NA in the result is equal to the
   # number of `security_mapped_sector` values that are NA in the portfolio, and
@@ -24,7 +28,6 @@ test_that("`clean_unmatched_holdings()` works as expected", {
   # greater than (because it may have had additional NAs on different rows than
   # in `security_mapped_sector` before the cleanup) to the number of
   # `security_mapped_sector` values that are NA in the portfolio
-  result <- clean_unmatched_holdings(portfolio)
   expect_equal(nrow(result), nrow(portfolio))
   expect_equal(
     sum(result$security_mapped_sector == "Unclassifiable"),
