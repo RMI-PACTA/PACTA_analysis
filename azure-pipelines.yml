@@ -187,4 +187,4 @@ stages:
                 -v \
                 -u 4 \
                 -p $(portfolioName) \
-                -t i(Build.BuildNumber)
+                -t (Build.BuildNumber)
