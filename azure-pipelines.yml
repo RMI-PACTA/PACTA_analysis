@@ -55,7 +55,7 @@ stages:
   - stage: build_image
     displayName: Build and Push Docker Image
     jobs:
-      - job: Build and Push docker image
+      - job: BuildAndPushDockerImage
         displayName: Checkout Repos & Build
         steps:
           - checkout: self  # PACTA_analysis repo
