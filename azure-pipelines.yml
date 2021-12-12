@@ -68,6 +68,7 @@ stages:
             inputs:
               command: build
               repository: $(imageRepository)
+              containerRegistry: $(dockerRegistryServiceConnection)
               dockerfile: $(dockerfilePath)
               buildContext: $(Build.SourcesDirectory)
               addPipelineData: false
@@ -81,8 +82,8 @@ stages:
             displayName: Push Transition Monitor Docker image to Registry
             inputs:
               command: push
-              # repository: $(imageRepository)
-              repoositry: $(containerRegistry)/$(imageRepository)
+              repository: $(imageRepository)
+              # repositry: $(containerRegistry)/$(imageRepository)
               containerRegistry: $(dockerRegistryServiceConnection)
               addPipelineData: false
               tags: |
