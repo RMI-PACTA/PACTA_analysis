@@ -1,8 +1,0 @@
-default:
-    parameters:
-        portfolio_name_in: Portfolio 2
-        investor_name_in: Sample Investor
-        peergroup: pensionfund
-        user_id: 100
-        language: EN
-

@@ -487,8 +487,8 @@ yaml_data <-
   list(default = list(
     parameters =
       list(
-        portfolio_name_in = portfolio_name,
-        investor_name_in = investor_name,
+        portfolio_name = portfolio_name,
+        investor_name = investor_name,
         peer_group = peer_group_type,
         language = language_to_print,
         project_code = project_code

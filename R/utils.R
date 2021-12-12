@@ -17,7 +17,6 @@ required_packages_vec <- function() {
     "config",
     "conflicted",
     "countrycode",
-    "data.table",
     "devtools",
     "dplyr",
     "fs",
@@ -31,8 +30,6 @@ required_packages_vec <- function() {
     "purrr",
     "readr",
     "readxl",
-    "renv",
-    "reshape2",
     "rlang",
     "rmarkdown",
     "rstudioapi",
@@ -113,6 +110,7 @@ dockerfile_tail <- function(dockerfile = read_dockerfile()) {
   dockerfile[end_of_packages_on_dockerfile(dockerfile):length(dockerfile)]
 }
 
+# styler: off
 dockerfile_packages <- function() {
   pkg <- required_packages_vec()
 
@@ -122,12 +120,15 @@ dockerfile_packages <- function() {
     '           )" \\'
   )
 }
+# styler: on
 
+# styler: off
 format_as_vector <- function(string) {
   x <- glue("'{string}',")
   x[length(x)] <- sub(",$", "", x[length(x)])
   c('c(', glue("  {x}"), ')' )
 }
+# styler: on
 
 dockerfile_path <- function() {
   file.path("docker", "2diirunner-with-packages", "Dockerfile")
@@ -147,4 +148,13 @@ mark_start <- function() {
 
 mark_end <- function() {
   "# update-dockerfile-packages-end"
+}
+
+expect_no_message <- function(object, regexp = NA, ...) {
+  testthat::expect_message(object = object, regexp = regexp, ...)
+}
+
+get_build_version <- function(env_var = "build_version") {
+  build_version <- Sys.getenv(env_var)
+  ifelse(nzchar(build_version), paste0("v", build_version), NA_character_)
 }

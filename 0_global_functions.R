@@ -13,6 +13,14 @@ data_check <- function(df) {
   return(check)
 }
 
+# reimplement r2dii.utils' path_dropbox_2dii() so r2dii.utils is not a dependency
+path_dropbox_2dii <- function(...) {
+  custom <- getOption("r2dii_dropbox")
+  default <- "Dropbox (2\u00B0 Investing)"
+  path <- ifelse(is.null(custom), default, custom)
+  path.expand(file.path("~", path, ...))
+}
+
 # Checks whether a value is null or blank
 is_blank_na <- function(x) {
   if (is.na(x) | x == "") {
@@ -46,9 +54,7 @@ set_col_types <- function(grouping_variables, fixed_col_types) {
 set_project_parameters <- function(file_path){
   cfg <- config::get(file = file_path)
 
-  if (!is.null(cfg$paths$data_location_ext)) {
-    data_location_ext <<- cfg$paths$data_location_ext
-  }
+  proj_data_location_ext <<- cfg$paths$data_location_ext
 
   project_report_name <<- cfg$reporting$project_report_name
   display_currency <<- cfg$reporting$display_currency
@@ -57,7 +63,21 @@ set_project_parameters <- function(file_path){
   financial_timestamp <<- cfg$parameters$timestamp
   dataprep_timestamp <<- cfg$parameters$dataprep_timestamp
 
-  start_year <<- as.numeric(cfg$parameters$start_year)
+  if (!is.null(cfg$parameters$start_year)) {
+    start_year <<- as.numeric(cfg$parameters$start_year)
+  } else if (!is.null(port_holdings_date)) {
+    start_year <- convert_quarter_to_year(port_holdings_date)
+    # if holdings date is Q4 (not 1, 2, or 3), start year is next year
+    if (grepl(pattern = "Q4$", x = port_holdings_date, ignore.case = TRUE)) {
+      start_year <- start_year + 1L
+    }
+    start_year <<- start_year
+  } else {
+    # if everything else is gone, 2020 is the only valid year we ran projects
+    # without setting holdings_date in the portfolio parameters
+    start_year <<- 2020L
+  }
+
   time_horizon <<- as.numeric(cfg$parameters$horizon_year)
 
   select_scenario <<- cfg$parameters$select_scenario
@@ -229,7 +249,7 @@ set_project_paths <- function(project_name, twodii_internal, project_location_ex
 
   # portcheck_v2_path <<- path_dropbox_2dii("PortCheck_v2")
   project_location <<- ifelse(twodii_internal,
-    r2dii.utils::path_dropbox_2dii("PortCheck_v2", "10_Projects", project_name),
+    path_dropbox_2dii("PortCheck_v2", "10_Projects", project_name),
     paste0(project_location_ext, "/", project_name)
   )
 
@@ -257,22 +277,31 @@ set_git_path <- function() {
 set_analysis_inputs_path <- function(twodii_internal, data_location_ext, dataprep_ref = datastore_timestamp) {
 
   if (twodii_internal) {
-    analysis_inputs_path <- r2dii.utils::path_dropbox_2dii("PortCheck", "00_Data", "07_AnalysisInputs", dataprep_ref)
+    analysis_inputs_path <- path_dropbox_2dii("PortCheck", "00_Data", "07_AnalysisInputs", dataprep_ref)
     analysis_inputs_path <- file.path(analysis_inputs_path)
   } else {
-    analysis_inputs_path <- data_location_ext
+    # project level setting takes precedence, portfolio level second, else what
+    # set_webtool_paths() sets for data_location_ext
+    if (!is.null(proj_data_location_ext)) {
+      analysis_inputs_path <- proj_data_location_ext
+    } else if (!is.null(port_holdings_date)) {
+      analysis_inputs_path <- file.path("..", "pacta-data", port_holdings_date)
+    } else {
+      analysis_inputs_path <- data_location_ext
+    }
+
   }
 
   return(analysis_inputs_path)
 }
 
 set_data_paths <- function(financial_timestamp = financial_timestamp, dataprep_timestamp = dataprep_timestamp, ald_timestamp = ald_timestamp) {
-  data_path <<- r2dii.utils::path_dropbox_2dii("PortCheck", "00_Data")
-  data_store_path <<- r2dii.utils::path_dropbox_2dii("PortCheck", "00_Data", "06_DataStore", datastore_timestamp, ald_timestamp)
-  scenario_data_path <<- r2dii.utils::path_dropbox_2dii("PortCheck", "00_Data", "01_ProcessedData", "03_ScenarioData")
-  master_data_path <<- r2dii.utils::path_dropbox_2dii("PortCheck", "00_Data", "01_ProcessedData", "01_SectorMasters", ald_timestamp)
-  general_fin_path <<- r2dii.utils::path_dropbox_2dii("PortCheck", "00_Data", "02_FinancialData")
-  sb_data_path <<- r2dii.utils::path_dropbox_2dii("PortCheck", "00_Data", "04_Other", "1_SovereignBonds")
+  data_path <<- path_dropbox_2dii("PortCheck", "00_Data")
+  data_store_path <<- path_dropbox_2dii("PortCheck", "00_Data", "06_DataStore", datastore_timestamp, ald_timestamp)
+  scenario_data_path <<- path_dropbox_2dii("PortCheck", "00_Data", "01_ProcessedData", "03_ScenarioData")
+  master_data_path <<- path_dropbox_2dii("PortCheck", "00_Data", "01_ProcessedData", "01_SectorMasters", ald_timestamp)
+  general_fin_path <<- path_dropbox_2dii("PortCheck", "00_Data", "02_FinancialData")
+  sb_data_path <<- path_dropbox_2dii("PortCheck", "00_Data", "04_Other", "1_SovereignBonds")
 }
 
 copy_files <- function(project_name) {
@@ -297,7 +326,7 @@ copy_files <- function(project_name) {
 
 create_project_folder <- function(project_name, twodii_internal, project_location_ext, working_location = working_location) {
   project_location <- ifelse(twodii_internal,
-    r2dii.utils::path_dropbox_2dii("PortCheck_v2", "10_Projects", project_name),
+    path_dropbox_2dii("PortCheck_v2", "10_Projects", project_name),
     paste0(project_location_ext, "/", project_name)
   )
 
@@ -368,6 +397,35 @@ write_log <- function(msg, file_path = log_path, ...) {
     as.character(msg),
     ...
   )
+  if (!dir.exists(file_path)) {
+    dir.create(file_path, recursive = TRUE)
+  }
   write(composed, file = file.path(file_path,"error_messages.txt"), append = TRUE)
 }
 
+convert_quarter_to_year <- function(quarter_string){
+  # extract unique values, so that even if an array is passed in with all
+  # same values, we still accept it, if all values are the same.
+  quarter_string <- unique(quarter_string)
+  # see definition of check_grouped_portfolio_years for more info, but
+  # this give the user a useful error if length > 1 (grouped portfolio
+  # from multiple timestamps)
+  check_grouped_portfolio_years(quarter_string)
+  # check that it's a valid timestamp xxxxQy
+  stopifnot(
+    grepl(
+      pattern = "^[[:digit:]]{4}Q[1-4]$",
+      x = quarter_string,
+      ignore.case = TRUE
+      )
+    )
+  year_string <- gsub(
+    pattern = "Q[[:digit:]]",
+    replacement = "",
+    x = port_holdings_date,
+    ignore.case = TRUE
+    )
+  # coerce to integer
+  year_int <- as.integer(year_string)
+  return(year_int)
+}

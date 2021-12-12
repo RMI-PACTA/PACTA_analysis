@@ -1,8 +1,9 @@
 default:
     parameters:
-        portfolio_name_in: TestPortfolio_Input
-        investor_name_in: Test
+        portfolio_name: TestPortfolio_Input
+        investor_name: Test
         peer_group: pensionfund
         language: EN
-        project_code: CHPA2020
-
+        project_code: GENERAL
+        holdings_date:
+            - 2020Q4

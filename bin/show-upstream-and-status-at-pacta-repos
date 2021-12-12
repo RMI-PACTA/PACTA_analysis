@@ -12,17 +12,17 @@ echo "."
 echo "."
 echo "."
 
-./bin/show-upstream-and-status-at ../StressTestingModelDev $1
+./bin/show-upstream-and-status-at ../r2dii.climate.stress.test $1
+echo "."
+echo "."
+echo "."
+
+./bin/show-upstream-and-status-at ../r2dii.stress.test.data $1
 echo "."
 echo "."
 echo "."
 
 ./bin/show-upstream-and-status-at ../pacta-data $1
-echo "."
-echo "."
-echo "."
-
-./bin/show-upstream-and-status-at ../user_results $1
 echo "."
 echo "."
 echo "."
