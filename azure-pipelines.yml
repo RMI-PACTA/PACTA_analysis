@@ -78,9 +78,10 @@ stages:
               arguments:
                 --build-arg image_tag="$(Build.BuildNumber)"
           - task: Docker@2
-            displayName: Build Transition Monitor Docker image
+            displayName: Push Transition Monitor Docker image to Registry
             inputs:
               command: push
+              repository: $(imageRepository)
               containerRegistry: $(dockerRegistryServiceConnection)
               addPipelineData: false
               tags: |
@@ -154,7 +155,7 @@ stages:
               workingDirectory: $(Build.SourcesDirectory)
               script: |
                 docker pull \
-                  $(containerRegistry)/$(imageRepository):20211205.3
+                  $(containerRegistry)/$(imageRepository):$(Build.BuildNumber)
           - task: Bash@3
             displayName: rename Docker image
             inputs:
@@ -163,7 +164,7 @@ stages:
               workingDirectory: $(Build.SourcesDirectory)
               script: |
                 docker tag \
-                  $(containerRegistry)/$(imageRepository):20211205.3 \
+                  $(containerRegistry)/$(imageRepository):$(Build.BuildNumber) \
                   $(imageRepository):$(Build.BuildNumber)
           - task: Bash@3
             displayName: Inspect Docker image
@@ -184,4 +185,4 @@ stages:
                 -v \
                 -u 4 \
                 -p $(portfolioName) \
-                -t $(Build.BuildNumber)
+                -t i(Build.BuildNumber)
