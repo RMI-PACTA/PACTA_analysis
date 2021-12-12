@@ -81,7 +81,8 @@ stages:
             displayName: Push Transition Monitor Docker image to Registry
             inputs:
               command: push
-              repository: $(imageRepository)
+              # repository: $(imageRepository)
+              repoositry: $(containerRegistry)/$(imageRepository)
               containerRegistry: $(dockerRegistryServiceConnection)
               addPipelineData: false
               tags: |
