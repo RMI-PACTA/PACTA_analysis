@@ -52,31 +52,41 @@ resources:
 
 stages:
 
-  # - stage: build_image
-  #   displayName: Build and Push Docker Image
-  #   jobs:
-  #     - job: Build
-  #       displayName: Checkout Repos & Build
-  #       steps:
-  #         - checkout: self  # PACTA_analysis repo
-  #         - checkout: create_interactive_report
-  #         - checkout: r2dii.climate.stress.test
-  #         - checkout: r2dii.stress.test.data
-  #         - checkout: pacta-data
-  #         # TODO: Add Tagging steps job
-  #         - task: Docker@2
-  #           displayName: Build Transition Monitor Docker image
-  #           inputs:
-  #             command: buildAndPush
-  #             repository: $(imageRepository)
-  #             dockerfile: $(dockerfilePath)
-  #             buildContext: $(Build.SourcesDirectory)
-  #             containerRegistry: $(dockerRegistryServiceConnection)
-  #             addPipelineData: false
-  #             tags: |
-  #               $(dockerTag)
-  #               $(Build.BuildNumber)
-  #               $(Build.SourceVersion)
+  - stage: build_image
+    displayName: Build and Push Docker Image
+    jobs:
+      - job: Build and Push docker image
+        displayName: Checkout Repos & Build
+        steps:
+          - checkout: self  # PACTA_analysis repo
+          - checkout: create_interactive_report
+          - checkout: r2dii.climate.stress.test
+          - checkout: r2dii.stress.test.data
+          - checkout: pacta-data
+          - task: Docker@2
+            displayName: Build Transition Monitor Docker image
+            inputs:
+              command: build
+              repository: $(imageRepository)
+              dockerfile: $(dockerfilePath)
+              buildContext: $(Build.SourcesDirectory)
+              addPipelineData: false
+              tags: |
+                $(dockerTag)
+                $(Build.BuildNumber)
+                $(Build.SourceVersion)
+              arguments:
+                --build-arg image_tag="$(Build.BuildNumber)"
+          - task: Docker@2
+            displayName: Build Transition Monitor Docker image
+            inputs:
+              command: push
+              containerRegistry: $(dockerRegistryServiceConnection)
+              addPipelineData: false
+              tags: |
+                $(dockerTag)
+                $(Build.BuildNumber)
+                $(Build.SourceVersion)
 
   - stage: test_image
     displayName: Test Docker Image
