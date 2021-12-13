@@ -1,6 +1,5 @@
 test_that("`clean_unmatched_holdings()` works as expected", {
-  skip_if(nzchar(Sys.getenv("R_CMD")), "In R CMD check")
-  # replace with skip_if_R_CMD_check() when #547 merges
+  skip_if_R_CMD_check()
 
   portfolio <- tibble::tribble(
     ~isin,          ~asset_type, ~security_mapped_sector,
