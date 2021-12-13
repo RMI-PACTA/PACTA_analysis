@@ -164,8 +164,6 @@ portfolio_total <- add_portfolio_flags(portfolio)
 
 portfolio_overview <- portfolio_summary(portfolio_total)
 
-identify_missing_data(portfolio_total)
-
 audit_file <- create_audit_file(portfolio_total)
 
 emissions_totals <- calculate_average_portfolio_emissions(

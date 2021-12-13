@@ -629,35 +629,6 @@ add_fund_portfolio <- function(portfolio, fund_portfolio, cols_of_funds) {
   portfolio_total
 }
 
-check_funds_wo_bbg <- function(fund_data, fin_data) {
-
-  # isin in the fund_data but no bbg data available
-  fin_data_funds <- fin_data %>%
-    filter(asset_type == "Funds") %>%
-    select(isin) %>%
-    distinct()
-
-  fund_isins <- fund_data %>%
-    select(fund_isin) %>%
-    distinct()
-
-  fund_isins_missing_bbg <- fund_isins %>% filter(!fund_isin %in% fin_data_funds$isin)
-
-  known_missing_isins <- read_csv("data/fund_isins_without_bbg_data.csv", col_types = "c")
-
-  known_missing_isins <- known_missing_isins %>%
-    bind_rows(fund_isins_missing_bbg) %>%
-    distinct()
-
-  write_csv_file(fund_isins_missing_bbg, file = "data/fund_isins_without_bbg_data.csv")
-
-  if (data_check(fund_isins_missing_bbg)) {
-    print("Warning: There are funds without bbg data. These are excluded from the analysis.")
-  }
-}
-
-###
-
 # Add Columns for missing or incorrect information
 check_isin_format <- function(portfolio_total) {
   portfolio_total <- portfolio_total %>%
@@ -804,22 +775,6 @@ check_for_ald <- function(portfolio_subset, portfolio_type, relevant_fin_data) {
     portfolio_subset <- portfolio_subset %>% add_column("has_asset_level_data", "sectors_with_assets", "has_ald_in_fin_sector")
   }
   return(portfolio_subset)
-}
-
-identify_missing_data <- function(portfolio_total) {
-  no_bbg_data <- portfolio_total %>%
-    filter(has_bbg_data == FALSE) %>%
-    select("isin") %>%
-    mutate(date = financial_timestamp) %>%
-    distinct()
-
-  if (data_check(no_bbg_data)) {
-    no_bbg_data_all <- read_csv("data/isins_missing_bbg_data.csv", col_types = "cc")
-
-    no_bbg_data_all <- bind_rows(no_bbg_data_all, no_bbg_data) %>% distinct()
-
-    write_csv_file(no_bbg_data, file = "data/isins_missing_bbg_data.csv")
-  }
 }
 
 add_revenue_split <- function(has_revenue, portfolio, revenue_data) {
@@ -1006,11 +961,6 @@ get_and_clean_fin_data <- function(fund_data) {
   if (nrow(fin_data) > nrow(fin_data_raw)) {
     stop("Additional rows added to fin data")
   }
-
-  # updates csv file with missing bloomberg data re funds
-  # if (data_check(fund_data)) {
-  #   check_funds_wo_bbg(fund_data, fin_data)
-  # }
 
   return(fin_data)
 }
