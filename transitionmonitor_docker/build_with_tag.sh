@@ -37,7 +37,13 @@ tag="$1"
 repos="${@:2}"
 if [ -z "$repos" ]
 then
-    repos="PACTA_analysis create_interactive_report r2dii.climate.stress.test r2dii.stress.test.data pacta-data"
+    repos="\
+      PACTA_analysis \
+      create_interactive_report \
+      r2dii.climate.stress.test \
+      r2dii.stress.test.data \
+      pacta-data \
+      "
 fi
 
 if [ -z "$tag" ]
@@ -124,17 +130,56 @@ done
 
 # Copy Dockerfile alongside pacta siblings and build the image
 cp "${dir_start}/Dockerfile" "$dir_temp"
-docker build --platform linux/x86_64 --build-arg image_tag="$tag" --tag 2dii_pacta:"$tag" --tag 2dii_pacta:latest .
+
+image_tar_gz="2dii_pacta_v${tag}.tar.gz"
+image_arm64_tar_gz="2dii_pacta_arm64_v${tag}.tar.gz"
+
+echo
+green "Building 2dii_pacta into $image_tar_gz ..."
+
+docker build \
+  --build-arg image_tag="$tag" \
+  --platform linux/x86_64 \
+  --tag 2dii_pacta:${tag} \
+  --tag 2dii_pacta:latest \
+  .
+
+# docker build \
+#   --build-arg image_tag="$tag" \
+#   --platform linux/arm64 \
+#   --tag 2dii_pacta_arm64:${tag} \
+#   --tag 2dii_pacta_arm64:latest \
+#   .
+
 echo
 
 cd $dir_start
 
-
-
-image_tar_gz="2dii_pacta_v$tag.tar.gz"
-green "Saving 2dii_pacta into $image_tar_gz ..."
-docker save 2dii_pacta | gzip -q > "$image_tar_gz"
 echo
+green "Saving docker image to ${image_tar_gz}..."
 
+docker save 2dii_pacta:${tag} | gzip -q > "$image_tar_gz"
+# docker save 2dii_pacta_arm64:${tag} | gzip -q > "${image_arm64_tar_gz}"
+
+echo
+green "image saved as $image_tar_gz"
+# green "image saved as $image_arm64_tar_gz"
+
+echo
+echo "To load the image from the ${image_tar_gz} file:"
+yellow "docker load --input ${image_tar_gz}"
+# echo "To load the image from the ${image_arm64_tar_gz} file, e.g. for arm64/M1 Mac:"
+# yellow "docker load --input ${image_arm64_tar_gz}"
+
+echo
+echo "To test which architecture the loaded image was built for:"
+yellow "docker run --rm 2dii_pacta uname -m"
+
+echo
+echo "To see the build version of the loaded image was built for, try..."
+yellow "docker run --rm 2dii_pacta echo \$build_version"
+
+echo
 green "Done :-)"
+
 exit 0
