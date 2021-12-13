@@ -11,7 +11,7 @@ fin_data <- tibble::tribble(
 
 
 test_that("`add_fin_data()` works as expected", {
-  skip_if(nzchar(Sys.getenv("R_CMD")), "In R CMD check")
+  skip_if_R_CMD_check()
 
   source("../../0_portfolio_input_check_functions.R")
 
