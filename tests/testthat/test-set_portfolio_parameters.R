@@ -1,6 +1,5 @@
 test_that("`set_portfolio_parameters()` works as expected", {
-  skip_if(nzchar(Sys.getenv("R_CMD")), "In R CMD check")
-  # replace with skip_if_R_CMD_check() when #547 merges
+  skip_if_R_CMD_check()
 
   test_set_portfolio_parameters_in_callr <- function(.param) {
     callr::r(function(.params) {
