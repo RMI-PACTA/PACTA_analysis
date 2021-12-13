@@ -1457,20 +1457,9 @@ create_audit_file <- function(portfolio_total) {
 }
 
 clean_unmatched_holdings <- function(portfolio) {
-  port_na <- portfolio %>% filter(is.na(security_mapped_sector))
-
-  portfolio <- portfolio %>% filter(!is.na(security_mapped_sector))
-
-  if (data_check(port_na)) {
-    port_na <- port_na %>%
-      mutate(
-        asset_type = "Unclassifiable",
-        security_mapped_sector = "Unclassifiable"
-      )
-    portfolio <- rbind(portfolio, port_na)
-  }
-
-  return(portfolio)
+  portfolio %>%
+    mutate(asset_type = ifelse(is.na(security_mapped_sector), "Unclassifiable", asset_type)) %>%
+    mutate(security_mapped_sector = ifelse(is.na(security_mapped_sector), "Unclassifiable", security_mapped_sector))
 }
 
 ### Emissions work
