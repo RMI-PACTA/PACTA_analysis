@@ -4,16 +4,8 @@
 
 FROM rocker/verse:4.1.2
 
-ARG RSTUDIO_PANDOC
-ENV RSTUDIO_PANDOC='/usr/local/bin'
-
-ARG CTAN_REPO
-ENV CTAN_REPO=https://www.texlive.info/tlnet-archive/2021/11/18/tlnet
-
-ARG CRAN
-ENV CRAN=https://packagemanager.rstudio.com/all/__linux__/focal/2021-11-17+Y3JhbiwyOjQ1MjYyMTU7MzM5RjM4RjI
-
-RUN tlmgr install \
+ARG CTAN_REPO=https://www.texlive.info/tlnet-archive/2021/11/18/tlnet
+ARG TEX_DEPS="\
     amsmath \
     auxhook \
     bigintcalc \
@@ -54,10 +46,12 @@ RUN tlmgr install \
     wrapfig \
     xcolor \
     xunicode \
-    zapfding
+    zapfding \
+    "
+RUN tlmgr --repository $CTAN_REPO install $TEX_DEPS
 
-ARG PKG_DEPS
-ENV PKG_DEPS='\
+ARG CRAN=https://packagemanager.rstudio.com/all/__linux__/focal/2021-11-17+Y3JhbiwyOjQ1MjYyMTU7MzM5RjM4RjI
+ARG PKG_DEPS="\
     assertr \
     assertthat \
     bookdown \
@@ -107,8 +101,7 @@ ENV PKG_DEPS='\
     writexl \
     yaml \
     zoo \
-    '
-
+    "
 RUN echo "options(repos = c(CRAN='$CRAN'), download.file.method = 'libcurl')" >> /usr/local/lib/R/etc/Rprofile.site \
     && Rscript -e " \
          pkg_deps <- strsplit(trimws(gsub('[\\\]+', '', '$PKG_DEPS')), '[[:space:]]+')[[1]]; \
@@ -130,6 +123,7 @@ RUN chmod -R a+rwX /bound \
     && chmod -R a+rwX /r2dii.stress.test.data
 
 ARG image_tag
+ARG build_version
 ENV build_version=$image_tag
 
 RUN exit 0
