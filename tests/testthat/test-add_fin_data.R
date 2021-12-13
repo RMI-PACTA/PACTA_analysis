@@ -21,6 +21,7 @@ test_that("`set_portfolio_parameters()` works as expected", {
   # the same except for the new columns merged from the fin data; unmatched rows
   # should have appropriate NA values in the newly merged columns
   result <- add_fin_data(portfolio, fin_data)
+  expect_s3_class(result, "data.frame")
   expect_equal(nrow(portfolio), nrow(result))
   expect_equal(result$isin, portfolio$isin)
   expect_equal(result$market_value, portfolio$market_value)
