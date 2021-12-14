@@ -111,7 +111,7 @@ stages:
               inlineScript: |
                 az storage file upload \
                 --source $(dockerTarFile) \
-                --share-name $(testingShareName) \
+                --share-name $(zipsShareName) \
                 --account-name $(testingStorageAccountName)
 
   - stage: test_image
@@ -119,7 +119,7 @@ stages:
     variables:
       portfolioName: "general2020Q4"
     jobs:
-      - job: test_PA2021NO
+      - job: test_portfolio
         displayName: "Test portfolio"
         steps:
           - task: Docker@2
@@ -156,6 +156,13 @@ stages:
                 --source $(testingShareName)/$(portfolioName) \
                 --destination $(Build.SourcesDirectory)/$(portfolioName) \
                 --account-name $(testingStorageAccountName)
+          - task: Bash@3
+            displayName: Change permissions for Working Directory
+            inputs:
+              targetType: inline
+              workingDirectory: $(Build.SourcesDirectory)
+              script: |
+                chmod -R 777 $(Build.SourcesDirectory)/$(portfolioName)
           - task: Bash@3
             displayName: Inspect file structure
             inputs:
