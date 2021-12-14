@@ -15,6 +15,7 @@ variables:
   # Container registry service connection established during pipeline creation
   dockerRegistryServiceConnection: 'ddd45595-876e-4212-92f0-8196a5c2fe71'
   containerRegistry: 'transitionmonitordockerregistry.azurecr.io'
+  qualifiedRepository: '$(containerRegistry)/$(imageRepository)'
   dockerfileRepoPath: 'PACTA_analysis/transitionmonitor_docker/Dockerfile'
   dockerfilePath: '$(Build.SourcesDirectory)/$(dockerfileRepoPath)'
   testingStorageAccountName: 'tmdockerstorage'
@@ -28,7 +29,7 @@ variables:
     dockerTag: '$(Build.SourceBranchName)'
   ${{ else }}:
     dockerTag: '$(Build.Reason)'
-    dockerTar: '$(imageRepository)_$(Build.BuildNumber).tar.gz'
+    dockerTarFile: '$(imageRepository)_$(Build.BuildNumber).tar.gz'
 
 resources:
   repositories:
@@ -86,7 +87,6 @@ stages:
             inputs:
               command: push
               repository: $(imageRepository)
-              # repositry: $(containerRegistry)/$(imageRepository)
               containerRegistry: $(dockerRegistryServiceConnection)
               addPipelineData: false
               tags: |
@@ -98,7 +98,9 @@ stages:
             inputs:
               targetType: inline
               workingDirectory: $(Build.SourcesDirectory)
-              script: docker save $(imageRepository) | gzip -q > "$(dockerTar)"
+              script: |
+                docker save $(qualifiedRepository) | \
+                gzip -q > "$(dockerTarFile)"
           - task: AzureCLI@2
             displayName: Upload tar file to AFS
             inputs:
@@ -108,7 +110,7 @@ stages:
               workingDirectory: $(Build.SourcesDirectory)
               inlineScript: |
                 az storage file upload \
-                --source $(dockerTar) \
+                --source $(dockerTarFile) \
                 --share-name $(testingShareName) \
                 --account-name $(testingStorageAccountName)
 
@@ -187,7 +189,7 @@ stages:
               workingDirectory: $(Build.SourcesDirectory)
               script: |
                 docker tag \
-                  $(containerRegistry)/$(imageRepository):$(Build.BuildNumber) \
+                  $(qualifiedRepository):$(Build.BuildNumber) \
                   $(imageRepository):$(Build.BuildNumber)
           - task: Bash@3
             displayName: Inspect Docker image
