@@ -45,12 +45,12 @@ options("ST_DATA_PATH" = stress_test_data_location)
 # run 2dii stress test
 tryCatch(
   source(file.path(stress_test_path, "web_tool_stress_test.R")),
-  error = function(e) simpleError("an error in web_tool_stress_test.R occurred")
+  error = function(e) { msg <- "an error in web_tool_stress_test.R occurred"; print(msg); log_user_errors(msg) }
 )
 # run stress test with external scenarios (IPR)
 tryCatch(
   source(file.path(stress_test_path, "web_tool_external_stress_test.R")),
-  error = function(e) simpleError("an error in web_tool_external_stress_test.R occurred")
+  error = function(e) { msg <- "an error in web_tool_external_stress_test.R occurred"; print(msg); log_user_errors(msg) }
 )
 
 
