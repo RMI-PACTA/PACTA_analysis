@@ -7,6 +7,8 @@ working_dir <- "working_dir"
 
 output_dir <- "~/Desktop"
 
+holdings_date <- "2020Q4"
+
 
 # -------------------------------------------------------------------------
 
@@ -37,7 +39,8 @@ for (portfolio in portfolios) {
           investor_name = investor_name,
           portfolio_name = portfolio_name,
           language = "EN",
-          project_code = investor_name
+          project_code = investor_name,
+          holdings_date = holdings_date
         )
       )
     )
