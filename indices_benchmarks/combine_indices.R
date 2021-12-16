@@ -92,3 +92,6 @@ combined %>%
 combined %>%
   filter(grepl("Global Corp Bond", portfolio_name)) %>%
   saveRDS(file.path(output_dir, "Indices_bonds_portfolio.rda"))
+
+file.copy(file.path(output_dir, "Indices_equity_portfolio.rda"), file.path(output_dir, "Indices_equity_portfolio.rds"))
+file.copy(file.path(output_dir, "Indices_bonds_portfolio.rda"), file.path(output_dir, "Indices_bonds_portfolio.rds"))
