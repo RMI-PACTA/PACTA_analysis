@@ -32,7 +32,7 @@ is_blank_na <- function(x) {
 }
 
 set_location <- function() {
-  if (rstudioapi::isAvailable()) {
+  if (require(rstudioapi) && rstudioapi::isAvailable()) {
     working_location <- dirname(rstudioapi::getActiveDocumentContext()$path)
   } else {
     working_location <- getwd()
@@ -262,7 +262,7 @@ set_project_paths <- function(project_name, twodii_internal, project_location_ex
 }
 
 set_git_path <- function() {
-  if (rstudioapi::isAvailable()) {
+  if (require(rstudioapi) && rstudioapi::isAvailable()) {
     git_path <- dirname(rstudioapi::getActiveDocumentContext()$path)
   } else {
     git_path <- getwd()
