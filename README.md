@@ -37,9 +37,8 @@ Ensure you have the required libraries installed on your computer.
 Further, the evaluation will require a bunch of package. It is recommanded install the package during the first run of the code. (assess approx. 30 minutes for the installation process during the first usage of the code).
 
 Necessary packages are: 
-assertthat, config, conflicted, devtools, DT, fs, fst, glue, here, janitor, 
-knitr, plyr, renv, rmarkdown, snakecase, testthat, tidyverse, 
-withr, yaml
+assertthat, config, conflicted, devtools, fs, fst, glue, here, janitor, knitr, 
+plyr, renv, rmarkdown, snakecase, testthat, tidyverse, withr, yaml
     
 **For report generation:**
 
