@@ -36,7 +36,9 @@ export_report_content_variables_json <- function(audit_file__ = audit_file,
     na.rm = T
   )
 
-  assertthat::are_equal(this_investor_name %in% audit_file__$investor_name, T)
+  if (!this_investor_name %in% audit_file__$investor_name) {
+    stop("`this_investor_name` is not found in `audit_file__$investor_name`")
+  }
 
   audit_file__ <- audit_file__ %>%
     filter(
@@ -255,8 +257,10 @@ export_audit_information_data <- function(audit_file_ = audit_file,
                                            project_name_ = NA) {
 
   # Check format
-  assertthat::is.string(folder_path)
-  assertthat::are_equal(is.data.frame(audit_file_), TRUE)
+  if (!(is.character(folder_path) && length(folder_path) == 1)) {
+    stop("`folder_path`` is not a string (a length one character vector).")
+  }
+  if (!is.data.frame(audit_file_)) { stop("`audit_file_` is not a data.frame") }
 
   if ("Meta Investor" %in% audit_file_$investor_name) {
     audit_file_ <- subset(audit_file_, investor_name != "Meta Investor")
@@ -289,8 +293,7 @@ export_audit_graph_json <- function(audit_file__, export_path_full) {
   for (i in 1:length(flags_in_auditfile)) {
     indicator <- indicator & (flags_in_auditfile[i] %in% all_flags)
   }
-  assertthat::are_equal(indicator, TRUE)
-
+  if (!indicator) { stop("`indicator` is not `TRUE`") }
 
   number_of_isin <- length(audit_file__$holding_id)
 
@@ -310,7 +313,9 @@ export_audit_graph_json <- function(audit_file__, export_path_full) {
   number_included_in_analysis <- length(included_in_analysis$holding_id)
 
   all_flags_numbers <- c(number_missing_currency, number_negative_missing_input, number_invalid_input, number_not_in_bloomberg, number_included_in_analysis)
-  assertthat::are_equal(number_of_isin, sum(all_flags_numbers))
+  if (isFALSE(all.equal(number_of_isin, sum(all_flags_numbers)))) {
+    stop("`number_of_isin` and `sum(all_flags_numbers)` are not equal")
+  }
 
   number_all_invalid_input <- sum(c(number_missing_currency, number_negative_missing_input, number_invalid_input))
 
@@ -318,8 +323,12 @@ export_audit_graph_json <- function(audit_file__, export_path_full) {
   keys <- c("\"key_1\"", "\"key_2\"", "\"key_3\"")
   values <- c(number_all_invalid_input, number_not_in_bloomberg, number_included_in_analysis)
 
-  assertthat::are_equal(length(legend), length(keys))
-  assertthat::are_equal(length(values), length(keys))
+  if (isFALSE(all.equal(length(legend), length(keys)))) {
+    stop("`length(legend)` and `length(keys)` are not equal")
+  }
+  if (isFALSE(all.equal(length(values), length(keys)))) {
+    stop("`length(values)` and `length(keys)` are not equal")
+  }
 
   json_head <- "{"
   json_tail <- "}"
