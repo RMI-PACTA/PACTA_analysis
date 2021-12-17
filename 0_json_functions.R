@@ -36,7 +36,7 @@ export_report_content_variables_json <- function(audit_file__ = audit_file,
     na.rm = T
   )
 
-  if (!this_investor_name %in% audit_file__$investor_name) {
+  if (isFALSE(this_investor_name %in% audit_file__$investor_name)) {
     stop("`this_investor_name` is not found in `audit_file__$investor_name`")
   }
 
@@ -257,10 +257,10 @@ export_audit_information_data <- function(audit_file_ = audit_file,
                                            project_name_ = NA) {
 
   # Check format
-  if (!(is.character(folder_path) && length(folder_path) == 1)) {
+  if (isFALSE(is.character(folder_path) && length(folder_path) == 1)) {
     stop("`folder_path`` is not a string (a length one character vector).")
   }
-  if (!is.data.frame(audit_file_)) { stop("`audit_file_` is not a data.frame") }
+  if (isFALSE(is.data.frame(audit_file_))) { stop("`audit_file_` is not a data.frame") }
 
   if ("Meta Investor" %in% audit_file_$investor_name) {
     audit_file_ <- subset(audit_file_, investor_name != "Meta Investor")
@@ -293,7 +293,7 @@ export_audit_graph_json <- function(audit_file__, export_path_full) {
   for (i in 1:length(flags_in_auditfile)) {
     indicator <- indicator & (flags_in_auditfile[i] %in% all_flags)
   }
-  if (!indicator) { stop("`indicator` is not `TRUE`") }
+  if (isFALSE(indicator)) { stop("`indicator` is not `TRUE`") }
 
   number_of_isin <- length(audit_file__$holding_id)
 
