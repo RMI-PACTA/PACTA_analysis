@@ -52,52 +52,35 @@ RUN tlmgr --repository $CTAN_REPO install $TEX_DEPS
 
 ARG CRAN=https://packagemanager.rstudio.com/all/__linux__/focal/2021-11-17+Y3JhbiwyOjQ1MjYyMTU7MzM5RjM4RjI
 ARG PKG_DEPS="\
-    assertr \
     assertthat \
     bookdown \
     cli \
     config \
     conflicted \
     countrycode \
-    crayon \
     devtools \
     dplyr \
-    DT \
     forcats \
     fs \
     fst \
     ggplot2 \
     glue \
     here \
-    ISOcodes \
     janitor \
     jsonlite \
     knitr \
     magrittr \
-    pkgdown \
     purrr \
     r2dii.analysis \
     r2dii.data \
     r2dii.plot \
     readr \
     readxl \
-    rlang \
     rmarkdown \
-    rstudioapi \
-    rworldmap \
     scales \
-    snakecase \
-    spelling \
-    stringi \
     stringr \
-    testthat \
     tibble \
     tidyr \
-    tidyselect \
-    tidyverse \
-    usethis \
-    viridis \
-    withr \
     writexl \
     yaml \
     zoo \
