@@ -31,7 +31,6 @@ required_packages_vec <- function() {
     "readxl",
     "rlang",
     "rmarkdown",
-    "rstudioapi",
     "scales",
     "stringr",
     "testthat",
