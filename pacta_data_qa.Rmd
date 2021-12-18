@@ -18,7 +18,7 @@ output:
 ```{r setup, include=FALSE}
 # set echo = TRUE, for more insight to the code printed in the output
 knitr::opts_chunk$set(echo = FALSE)
-library(tidyverse)
+library(dplyr)
 library(DT)
 
 project_code <- params$project_code
