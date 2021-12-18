@@ -14,7 +14,6 @@ required_packages_vec <- function() {
   c(
     "bookdown",
     "config",
-    "conflicted",
     "countrycode",
     "devtools",
     "dplyr",
@@ -47,18 +46,6 @@ use_r_packages <- function() {
   suppressPackageStartupMessages({
     for (pkg in required_packages_vec()) { library(pkg, character.only = TRUE) }
   })
-
-  resolve_conflicts()
-}
-
-resolve_conflicts <- function() {
-  conflicted::conflict_prefer("filter", "dplyr", quiet = TRUE)
-  conflicted::conflict_prefer("lag", "dplyr", quiet = TRUE)
-  conflicted::conflict_prefer("mutate", "dplyr", quiet = TRUE)
-  conflicted::conflict_prefer("here", "here", quiet = TRUE)
-  conflicted::conflict_prefer("rename", "dplyr", quiet = TRUE)
-  conflicted::conflict_prefer("summarise", "dplyr", quiet = TRUE)
-  conflicted::conflict_prefer("arrange", "dplyr", quiet = TRUE)
 }
 
 #' @examples
