@@ -274,7 +274,7 @@ render("pacta_data_qa.Rmd",
 
 Using the peer group files, it is necessary to check for missing isins. This needs to be obtained and the pacta-data repository updated if necessary. 
 
-Additional missing isins are appended to the file data/isins_missing_bbg_data.csv. This identifies all unique missing isins across all projects.  
+Missing isins can be identified using the `working_dir/30_Processed_Inputs/[PORTFOLIO_NAME]/audit_file.csv` or `working_dir/30_Processed_Inputs/[PORTFOLIO_NAME]/audit_file.rda` files and filtering for rows where `flag == "Holding not in Bloomberg database"`.  
 
 This should be analysed using Bloomberg to obtain any new missing isins and these be added to the financial data, before running this again. 
 

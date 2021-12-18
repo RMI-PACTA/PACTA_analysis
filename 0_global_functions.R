@@ -32,11 +32,7 @@ is_blank_na <- function(x) {
 }
 
 set_location <- function() {
-  if (rstudioapi::isAvailable()) {
-    working_location <- dirname(rstudioapi::getActiveDocumentContext()$path)
-  } else {
-    working_location <- getwd()
-  }
+  working_location <- getwd()
 
   working_location <- paste0(working_location, "/")
 
@@ -262,11 +258,7 @@ set_project_paths <- function(project_name, twodii_internal, project_location_ex
 }
 
 set_git_path <- function() {
-  if (rstudioapi::isAvailable()) {
-    git_path <- dirname(rstudioapi::getActiveDocumentContext()$path)
-  } else {
-    git_path <- getwd()
-  }
+  git_path <- getwd()
 
   git_path <- gsub("?", "", git_path)
   git_path <- paste0(git_path, "/")
