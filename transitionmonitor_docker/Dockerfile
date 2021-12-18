@@ -90,7 +90,6 @@ RUN echo "options(repos = c(CRAN='$CRAN'), download.file.method = 'libcurl')" >>
          pkg_deps <- strsplit(trimws(gsub('[\\\]+', '', '$PKG_DEPS')), '[[:space:]]+')[[1]]; \
          install.packages('pak', repos = 'https://r-lib.github.io/p/pak/dev/'); \
          pak::pkg_install(pkg_deps, lib = .Library, upgrade = TRUE); \
-         devtools::install_github('2DegreesInvesting/r2dii.utils'); \
          "
 
 COPY pacta-data /pacta-data
