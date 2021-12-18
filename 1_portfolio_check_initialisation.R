@@ -9,11 +9,7 @@ use_r_packages()
 ## Project Initialisation
 rm(list = ls())
 
-if (require(rstudioapi) && rstudioapi::isAvailable()) {
-  working_location <- dirname(rstudioapi::getActiveDocumentContext()$path)
-} else {
-  working_location <- getwd()
-}
+working_location <- getwd()
 
 working_location <- paste0(working_location, "/")
 setwd(working_location)
