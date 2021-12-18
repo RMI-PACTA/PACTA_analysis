@@ -12,7 +12,9 @@ holdings_date <- "2020Q4"
 
 # -------------------------------------------------------------------------
 
-library(tidyverse)
+library(readr)
+library(dplyr)
+library(purrr)
 library(fs)
 library(cli)
 library(yaml)
