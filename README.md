@@ -37,9 +37,9 @@ Ensure you have the required libraries installed on your computer.
 Further, the evaluation will require a bunch of package. It is recommanded install the package during the first run of the code. (assess approx. 30 minutes for the installation process during the first usage of the code).
 
 Necessary packages are: 
-config, conflicted, devtools, DT, fs, fst, glue, here, janitor, 
-knitr, plyr, renv, rmarkdown, snakecase, testthat, tidyverse, 
-withr, yaml
+config, conflicted, devtools, dplyr, DT, fs, fst, glue, here, janitor, knitr, 
+plyr, purrr, readr, renv, rmarkdown, snakecase, testthat, tibble, tidyr, withr, 
+yaml
     
 **For report generation:**
 
@@ -47,7 +47,7 @@ MiKTeX - a distribution of the LaTeX typesetting system ; includes TeXworks
 preferably version 2.9
 
 Further R packages needed:
-grid, ggplot2, ggthemes, dplyr, reshape2, gridExtra, scales, stringr, extrafont, tidyr, knitr, RColorBrewer, matrixStats, rworldmap, ggmap, cowplot, ggrepel, readxl, tidyverse, ggforce, sitools , countrycode
+grid, ggplot2, ggthemes, reshape2, gridExtra, scales, stringr, extrafont, knitr, RColorBrewer, matrixStats, rworldmap, ggmap, cowplot, ggrepel, readxl, ggforce, sitools , countrycode
 
 ## How to "download" the code
 
