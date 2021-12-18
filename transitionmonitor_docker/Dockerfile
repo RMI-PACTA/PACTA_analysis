@@ -85,12 +85,12 @@ ARG PKG_DEPS="\
     yaml \
     zoo \
     "
-RUN echo "options(repos = c(CRAN='$CRAN'), download.file.method = 'libcurl')" >> /usr/local/lib/R/etc/Rprofile.site \
-    && Rscript -e " \
-         pkg_deps <- strsplit(trimws(gsub('[\\\]+', '', '$PKG_DEPS')), '[[:space:]]+')[[1]]; \
-         install.packages('pak', repos = 'https://r-lib.github.io/p/pak/dev/'); \
-         pak::pkg_install(pkg_deps, lib = .Library, upgrade = TRUE); \
-         "
+RUN Rscript -e " \
+      options(repos = c(CRAN='$CRAN'), download.file.method = 'libcurl'); \
+      pkg_deps <- strsplit(trimws(gsub('[\\\]+', '', '$PKG_DEPS')), '[[:space:]]+')[[1]]; \
+      install.packages('pak', repos = 'https://r-lib.github.io/p/pak/dev/'); \
+      pak::pkg_install(pkg_deps, lib = .Library, upgrade = TRUE); \
+      "
 
 COPY pacta-data /pacta-data
 COPY r2dii.stress.test.data /r2dii.stress.test.data
