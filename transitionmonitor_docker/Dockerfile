@@ -80,10 +80,9 @@ ARG PKG_DEPS="\
     zoo \
     "
 RUN Rscript -e " \
-      options(repos = c(CRAN='$CRAN'), download.file.method = 'libcurl'); \
       pkg_deps <- strsplit(trimws(gsub('[\\\]+', '', '$PKG_DEPS')), '[[:space:]]+')[[1]]; \
-      install.packages('pak', repos = 'https://r-lib.github.io/p/pak/dev/'); \
-      pak::pkg_install(pkg_deps, lib = .Library, upgrade = TRUE); \
+      install.packages('remotes', repos = '$CRAN'); \
+      remotes::install_cran(pkg_deps, repos = '$CRAN'); \
       "
 
 COPY pacta-data /pacta-data
