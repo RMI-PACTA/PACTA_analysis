@@ -12,7 +12,6 @@ setup_project <- function() {
 
 required_packages_vec <- function() {
   c(
-    "assertthat",
     "bookdown",
     "config",
     "conflicted",
@@ -32,7 +31,6 @@ required_packages_vec <- function() {
     "readxl",
     "rlang",
     "rmarkdown",
-    "rstudioapi",
     "scales",
     "stringr",
     "testthat",

@@ -36,9 +36,7 @@ jobs:
 
       - name: Install dependencies
         shell: Rscript {0}
-        run: |
-          install.packages(c("assertthat", "cli", "config", "conflicted", "countrycode", "devtools", "DT", "fs", "fst", "glue", "here", "janitor", "knitr", "r2dii.utils", "remotes", "renv", "rmarkdown", "snakecase", "testthat", "tidyverse", "withr", "yaml", "zoo"))
-          devtools::install_github("2DegreesInvesting/r2dii.utils")
+        run: install.packages(c("cli", "config", "conflicted", "countrycode", "devtools", "dplyr", "fs", "fst", "glue", "here", "janitor", "knitr", "purrr", "readr", "remotes", "rmarkdown", "testthat", "tibble", "tidyr", "withr", "yaml", "zoo"))
 
       - name: Install system dependencies
         if: runner.os == 'Linux'
