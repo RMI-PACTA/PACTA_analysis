@@ -178,24 +178,24 @@ echo -e "\nTo load the image from the ${image_tar_gz} file:"
 yellow "docker load --input ${image_tar_gz}"
 
 echo -e "\nTo test which operating system the loaded image was built for:"
-yellow "docker run --rm 2dii_pacta cat /etc/os-release"
+yellow "docker run --rm 2dii_pacta:${tag} cat /etc/os-release"
 
 echo -e "\nTo test which architecture the loaded image was built for:"
-yellow "docker run --rm 2dii_pacta dpkg --print-architecture"
+yellow "docker run --rm 2dii_pacta:${tag} dpkg --print-architecture"
 
 echo -e "\nTo see the build version of the loaded image was built for:"
-yellow "docker run --rm -ti 2dii_pacta bash -c 'echo \$build_version'"
+yellow "docker run --rm -ti 2dii_pacta:${tag} bash -c 'echo \$build_version'"
 
 echo -e "\nTo see the R version installed on the loaded image:"
-yellow "docker run --rm 2dii_pacta Rscript -e R.version\$version.string"
+yellow "docker run --rm 2dii_pacta:${tag} Rscript -e R.version\$version.string"
 
 echo -e "\nTo test the new image with our test scripts (from the root directory of the test files) e.g.:"
-yellow "./run-like-constructiva-flags.sh -t latest -p Test_PA2021NO"
+yellow "./run-like-constructiva-flags.sh -t ${tag} -p Test_PA2021NO"
 echo -e "\nor to run all the tests at once:"
 yellow "./run-all-tests.sh"
 
 echo -e "\nTo push the git tags from within the docker image:"
-yellow "docker run --rm -ti -v \"$HOME/.ssh\":/root/.ssh 2dii_pacta:\$tag bash"
+yellow "docker run --rm -ti -v \"\$HOME/.ssh\":/root/.ssh 2dii_pacta:${tag} bash"
 echo -e "\nthen inside the container (for each of the 5 PACTA repos:"
 yellow "cd /bound && git push origin \$tag"
 
