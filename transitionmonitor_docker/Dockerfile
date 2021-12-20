@@ -89,7 +89,6 @@ ARG PKG_DEPS="\
     bookdown \
     cli \
     config \
-    conflicted \
     countrycode \
     devtools \
     dplyr \
