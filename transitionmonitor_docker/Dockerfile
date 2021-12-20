@@ -65,6 +65,7 @@ ARG TEX_DEPS="\
     refcount \
     rerunfilecheck \
     sectsty \
+    silence \
     sourcesanspro \
     stringenc \
     texlive-scripts \
