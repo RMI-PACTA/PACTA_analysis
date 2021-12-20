@@ -66,13 +66,12 @@ consistent tag make the process reproducible.
 To push the tags, start the container with something like
 
 ``` {.bash}
-cd ~
-docker run --rm -ti -v "$(pwd)/.ssh":/root/.ssh 2dii_pacta:latest
+docker run --rm -ti -v "$HOME/.ssh":/root/.ssh 2dii_pacta:latest bash
 ```
 
 This example starts an ephemeral container (`run --rm`) from the image
 `2dii_pacta:latest`, and creates a volume that makes your .ssh key
-available to the container (`-v "$(pwd)/.ssh":/bound/.ssh`), which
+available to the container (`-v "$HOME/.ssh":/root/.ssh`), which
 you'll need to interact with GitHub. If instead of ssh you use https
 protocol, you may omit the volume argument and provide your username and
 password when prompted.
