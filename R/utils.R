@@ -14,7 +14,6 @@ required_packages_vec <- function() {
   c(
     "bookdown",
     "config",
-    "countrycode",
     "devtools",
     "dplyr",
     "fs",

@@ -38,12 +38,12 @@ Imports:
     rlang,
     rmarkdown,
     tidyr,
-    tibble,
-    withr
+    tibble
 Suggests: 
     callr,
     knitr,
     testthat (>= 3.0.0),
+    withr,
     yaml
 Encoding: UTF-8
 LazyData: true

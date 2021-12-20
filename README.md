@@ -46,7 +46,7 @@ MiKTeX - a distribution of the LaTeX typesetting system ; includes TeXworks
 preferably version 2.9
 
 Further R packages needed:
-grid, ggplot2, ggthemes, reshape2, gridExtra, scales, stringr, extrafont, knitr, RColorBrewer, matrixStats, rworldmap, ggmap, cowplot, ggrepel, readxl, ggforce, sitools , countrycode
+grid, ggplot2, ggthemes, reshape2, gridExtra, scales, stringr, extrafont, knitr, RColorBrewer, matrixStats, rworldmap, ggmap, cowplot, ggrepel, readxl, ggforce, sitools
 
 ## How to "download" the code
 
