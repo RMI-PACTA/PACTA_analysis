@@ -1,10 +1,39 @@
 # using R 4.1.2, and CTAN and CRAN packages available as of 2021.11.18
-# https://hub.docker.com/r/rocker/verse/tags?name=4.1.2
+# https://hub.docker.com/_/r-base
+# https://www.texlive.info/tlnet-archive
 # https://packagemanager.rstudio.com/client/#/repos/1/overview
 
-FROM rocker/verse:4.1.2
+FROM r-base:4.1.2
 
+ARG SYS_DEPS="\
+    git \
+    libcurl4-openssl-dev \
+    libfontconfig1-dev \
+    libfreetype6-dev \
+    libfribidi-dev \
+    libgit2-dev \
+    libharfbuzz-dev \
+    libicu-dev \
+    libjpeg-dev \
+    libpng-dev \
+    libssl-dev \
+    libtiff-dev \
+    libxml2-dev \
+    libxt6 \
+    make \
+    pandoc \
+    perl \
+    wget \
+    zlib1g-dev \
+    "
+# install system dependencies
+RUN apt-get update \
+    && apt-get install --assume-yes --no-install-recommends $SYS_DEPS \
+    && apt-get clean
+
+ARG CRAN_REPO=https://packagemanager.rstudio.com/cran/2021-11-17+MTo2MzM5NDY2O0U0MTdGRUE5
 ARG CTAN_REPO=https://www.texlive.info/tlnet-archive/2021/11/18/tlnet
+
 ARG TEX_DEPS="\
     amsmath \
     auxhook \
@@ -48,13 +77,20 @@ ARG TEX_DEPS="\
     xunicode \
     zapfding \
     "
-RUN tlmgr --repository $CTAN_REPO install $TEX_DEPS
+# install LaTeX and tlmgr packages
+RUN Rscript -e " \
+    install.packages('tinytex', repos = '$CRAN_REPO'); \
+    tinytex::install_tinytex(repository = '$CTAN_REPO'); \
+    tex_deps <- strsplit(trimws(gsub('[\\\]+', '', '$TEX_DEPS')), '[[:space:]]+')[[1]]; \
+    tinytex::tlmgr_install(pkgs = tex_deps); \
+    "
 
-ARG CRAN=https://packagemanager.rstudio.com/all/__linux__/focal/2021-11-17+Y3JhbiwyOjQ1MjYyMTU7MzM5RjM4RjI
 ARG PKG_DEPS="\
+    assertthat \
     bookdown \
     cli \
     config \
+    conflicted \
     countrycode \
     devtools \
     dplyr \
@@ -64,6 +100,7 @@ ARG PKG_DEPS="\
     ggplot2 \
     glue \
     here \
+    janitor \
     jsonlite \
     knitr \
     magrittr \
@@ -81,8 +118,8 @@ ARG PKG_DEPS="\
     "
 RUN Rscript -e " \
       pkg_deps <- strsplit(trimws(gsub('[\\\]+', '', '$PKG_DEPS')), '[[:space:]]+')[[1]]; \
-      install.packages('remotes', repos = '$CRAN'); \
-      remotes::install_cran(pkg_deps, repos = '$CRAN'); \
+      install.packages('remotes', repos = '$CRAN_REPO'); \
+      remotes::install_cran(pkg_deps, repos = '$CRAN_REPO'); \
       "
 
 COPY pacta-data /pacta-data
@@ -98,7 +135,6 @@ RUN chmod -R a+rwX /bound \
     && chmod -R a+rwX /r2dii.stress.test.data
 
 ARG image_tag
-ARG build_version
 ENV build_version=$image_tag
 
 RUN exit 0

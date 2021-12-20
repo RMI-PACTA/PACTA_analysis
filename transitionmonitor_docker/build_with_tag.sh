@@ -2,15 +2,44 @@
 
 # Examples:
 # # The tag is enforced
-# build_with_tag 0.0.0.999
-#
-# # Optionally give the names of the repos as trailing arguments
-# build_with_tag 0.0.0.999 PACTA_analysis r2dii.climate.stress.test
-#
-# # With the help of pacta-find, you don't need to know the names
-# # of pacta siblings -- it's enough to know the path to the parent.
-# pacta_siblings="$(basename $(pacta-find ~/git))"
-# ./build_with_tag.sh 0.0.0.999 "$pacta_siblings"
+# ./build_with_tag -t 0.1.1
+
+usage() {
+    echo "Usage: $0  -t <docker image tag>" 1>&2
+    echo "Optional flags:" 1>&2
+    # p for platform
+    echo "[-p <platform string>] (platform string to define the target Docker image platform)" 1>&2
+    # s for save
+    echo "[-s] (export the created Docker image to a tar.gz file)" 1>&2
+    exit 1;
+}
+
+while getopts t:p:s flag
+do
+    case "${flag}" in
+        t) tag=${OPTARG};;
+        p) platform=${OPTARG};;
+        s) save=${OPTARG};;
+    esac
+done
+
+if [ -z "${tag}" ]; then
+    usage
+fi
+
+if [ -z "${platform}" ]; then
+    platform="linux/x86_64"
+fi
+
+if [ -z "${repos}" ]; then
+    repos="\
+        PACTA_analysis \
+        create_interactive_report \
+        r2dii.climate.stress.test \
+        r2dii.stress.test.data \
+        pacta-data \
+        "
+fi
 
 red () {
     printf "\033[31m${1}\033[0m\n"
@@ -27,37 +56,25 @@ green () {
 dir_start="$(pwd)"
 dir_temp="$(mktemp -d)"
 cleanup () {
-  rm -rf $dir_temp
-  cd $dir_start
+    rm -rf $dir_temp
+    cd $dir_start
 }
 trap cleanup EXIT
 
 url="git@github.com:2DegreesInvesting/"
-tag="$1"
-repos="${@:2}"
-if [ -z "$repos" ]
+
+
+# test that SSH authentication to GitHub is possible
+ssh -T git@github.com &>/dev/null
+if [ $? -ne 1 ]
 then
-    repos="\
-      PACTA_analysis \
-      create_interactive_report \
-      r2dii.climate.stress.test \
-      r2dii.stress.test.data \
-      pacta-data \
-      "
+    red "You must have SSH authentication to GitHub setup properly to use this tool." && exit 1
+else
+    green "SSH authentication to GitHub has been verified\n"
 fi
 
-if [ -z "$tag" ]
-then
-    red "Please give a tag."
-    exit 2
-fi
 
-ssh -T git@github.com
-if [ $? -ne 1 ];
-then
-  red "You must have SSH authentication to GitHub setup properly to use this tool." && exit 1
-fi
-
+# check that the specified tag is not already used in any of the repos
 remotes="$(echo $repos | tr ' ' ',')"
 remotes=$(eval "echo $url{$remotes}.git")
 tags=""
@@ -70,114 +87,117 @@ done
 tags="$(echo $tags | tr ' ' '\n' | sort -V | uniq)"
 for i in $tags
 do
-    if [ "$i" == "$tag" ]
-    then
+    if [ "$i" == "$tag" ]; then
         red "Tag '$tag' is taken. Choose a new tag different from these ones:"
         red "$(echo $tags | tr ' ' '\n' | sort -V | uniq)" && exit 1
     fi
 done
-if [ -z "$tags" ]
-then
+if [ -z "$tags" ]; then
     yellow "These remotes returned no tag:"
     yellow "$(echo $remotes | tr ' ' '\n')"
     yellow "Are your SSH keys unset?"
 fi
 
-if (! docker images > /dev/null 2>&1 )
-then
-  red "The docker daemon does not appear to be running." && exit 1
+
+# test that docker is running
+if (! docker images > /dev/null 2>&1 ); then
+    red "The docker daemon does not appear to be running." && exit 1
 fi
 
+
+# test that no existing 2dii_pacta docker image is loaded
 existing_images="$(docker images -q '2dii_pacta' || exit 1)"
-if [ -n "$existing_images" ]
-then
+if [ -n "$existing_images" ]; then
     red "Existing docker images match '2dii_pacta':"
     docker images 2dii_pacta
-    red "E.g.: Remove '2dii_pacta:latest' with: docker rmi 2dii_pacta:latest" && exit 1
+    echo -e "\nremove all 2dii_pacta images with:"
+    yellow "docker rmi --force \$(docker images -q '2dii_pacta' | uniq)" && exit 1
 fi
 
-if [ "$dir_start" == "." ]
-then
+if [ "$dir_start" == "." ]; then
     dir_start="$(pwd)"
 fi
 
 wd="$(basename $dir_start)"
-if [ ! "$wd" == "transitionmonitor_docker" ]
-then
+if [ ! "$wd" == "transitionmonitor_docker" ]; then
     red "Your current working directory is not 'transitionmonitor_docker': $dir_start" && exit 1
 fi
 
 
-
+# clone repos into temp directory
 cd $dir_temp
+
 for repo in $repos
 do
     remote="${url}${repo}.git"
     git clone -b master "$remote" --depth 1 || exit 2
-    echo
+    green "$repo successfully cloned\n"
 done
+green "repos successfully cloned into temp directory\n"
 
-# Tag and log
+
+# set git tag in each repo and log
 for repo in $repos
 do
-    green "Tagging $(basename $repo) with $tag"
     git -C "$repo" tag -a "$tag" -m "Release pacta $tag" HEAD || exit 2
-    echo
-
     green "$(git -C $repo log --pretty='%h %d <%an> (%cr)' | head -n 1)"
-    echo
+    green "$(basename $repo) tagged with $tag"
 done
+green "repos successfully tagged with $tag\n"
+
 
 # Copy Dockerfile alongside pacta siblings and build the image
 cp "${dir_start}/Dockerfile" "$dir_temp"
 
-image_tar_gz="2dii_pacta_v${tag}.tar.gz"
-image_arm64_tar_gz="2dii_pacta_arm64_v${tag}.tar.gz"
 
-echo
-green "Building 2dii_pacta into $image_tar_gz ..."
+# build the docker image
+green "Building 2dii_pacta Docker image...\n"
 
-docker build \
-  --build-arg image_tag="$tag" \
-  --platform linux/x86_64 \
-  --tag 2dii_pacta:${tag} \
-  --tag 2dii_pacta:latest \
-  .
-
-# docker build \
-#   --build-arg image_tag="$tag" \
-#   --platform linux/arm64 \
-#   --tag 2dii_pacta_arm64:${tag} \
-#   --tag 2dii_pacta_arm64:latest \
-#   .
-
-echo
+docker buildx build \
+    --build-arg image_tag=$tag \
+    --platform $platform \
+    --tag 2dii_pacta:$tag \
+    --tag 2dii_pacta:latest \
+    --load \
+    .
 
 cd $dir_start
 
-echo
-green "Saving docker image to ${image_tar_gz}..."
+image_tar_gz="2dii_pacta_v${tag}.tar.gz"
+if [ -z ${save} ]
+then
+    echo -e "\nTo export the image as a tar.gz file:"
+    yellow "docker save 2dii_pacta:${tag} | gzip -q > '$image_tar_gz'"
+else
+    green "\nSaving docker image to ${image_tar_gz}..."
+    docker save 2dii_pacta:${tag} | gzip -q > "$image_tar_gz"
+    green "\nimage saved as $image_tar_gz"
+fi
 
-docker save 2dii_pacta:${tag} | gzip -q > "$image_tar_gz"
-# docker save 2dii_pacta_arm64:${tag} | gzip -q > "${image_arm64_tar_gz}"
-
-echo
-green "image saved as $image_tar_gz"
-# green "image saved as $image_arm64_tar_gz"
-
-echo
-echo "To load the image from the ${image_tar_gz} file:"
+echo -e "\nTo load the image from the ${image_tar_gz} file:"
 yellow "docker load --input ${image_tar_gz}"
-# echo "To load the image from the ${image_arm64_tar_gz} file, e.g. for arm64/M1 Mac:"
-# yellow "docker load --input ${image_arm64_tar_gz}"
 
-echo
-echo "To test which architecture the loaded image was built for:"
-yellow "docker run --rm 2dii_pacta uname -m"
+echo -e "\nTo test which operating system the loaded image was built for:"
+yellow "docker run --rm 2dii_pacta cat /etc/os-release"
 
-echo
-echo "To see the build version of the loaded image was built for, try..."
-yellow "docker run --rm 2dii_pacta echo \$build_version"
+echo -e "\nTo test which architecture the loaded image was built for:"
+yellow "docker run --rm 2dii_pacta dpkg --print-architecture"
+
+echo -e "\nTo see the build version of the loaded image was built for:"
+yellow "docker run --rm -ti 2dii_pacta bash -c 'echo \$build_version'"
+
+echo -e "\nTo see the R version installed on the loaded image:"
+yellow "docker run --rm 2dii_pacta Rscript -e R.version\$version.string"
+
+echo -e "\nTo test the new image with our test scripts (from the root directory of the test files) e.g.:"
+yellow "./run-like-constructiva-flags.sh -t latest -p Test_PA2021NO"
+echo -e "\nor to run all the tests at once:"
+yellow "./run-all-tests.sh"
+
+echo -e "\nTo push the git tags from within the docker image:"
+yellow "docker run --rm -ti -v \"$HOME/.ssh\":/root/.ssh 2dii_pacta:\$tag bash"
+echo -e "\nthen inside the container (for each of the 5 PACTA repos:"
+yellow "cd /bound && git push origin \$tag"
 
 echo
 green "Done :-)"
