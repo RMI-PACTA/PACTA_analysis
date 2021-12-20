@@ -1,7 +1,6 @@
 test_that("`calculate_fund_portfolio()` works as expected", {
   skip_if_R_CMD_check()
 
-  library(dplyr)  # for `dplyr::if_else()`
   source(here::here("0_global_functions.R"))  # for `data_check()`
   source(here::here("0_portfolio_input_check_functions.R"))
 
