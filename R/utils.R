@@ -13,7 +13,6 @@ setup_project <- function() {
 required_packages_vec <- function() {
   c(
     "bookdown",
-    "config",
     "devtools",
     "dplyr",
     "fs",
