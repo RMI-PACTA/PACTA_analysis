@@ -37,7 +37,7 @@ Ensure you have the required libraries installed on your computer.
 Further, the evaluation will require a bunch of package. It is recommanded install the package during the first run of the code. (assess approx. 30 minutes for the installation process during the first usage of the code).
 
 Necessary packages are: 
-config, devtools, dplyr, fs, fst, glue, here, janitor, knitr, plyr, purrr, 
+config, devtools, dplyr, fs, fst, glue, here, janitor, knitr, purrr, 
 readr, renv, rmarkdown, snakecase, testthat, tibble, tidyr, withr, yaml
     
 **For report generation:**
