@@ -25,7 +25,6 @@ Depends:
     R (>= 3.5)
 Imports: 
     config,
-    conflicted,
     dplyr,
     fs,
     fst,
