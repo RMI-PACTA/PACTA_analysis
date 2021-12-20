@@ -86,7 +86,6 @@ RUN Rscript -e " \
     "
 
 ARG PKG_DEPS="\
-    assertthat \
     bookdown \
     cli \
     config \
