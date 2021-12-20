@@ -36,7 +36,7 @@ jobs:
 
       - name: Install dependencies
         shell: Rscript {0}
-        run: install.packages(c("cli", "config", "conflicted", "countrycode", "devtools", "dplyr", "fs", "fst", "glue", "here", "janitor", "knitr", "purrr", "readr", "remotes", "rmarkdown", "testthat", "tibble", "tidyr", "withr", "yaml", "zoo"))
+        run: install.packages(c("cli", "config", "conflicted", "devtools", "dplyr", "fs", "fst", "glue", "here", "janitor", "knitr", "purrr", "readr", "remotes", "rmarkdown", "testthat", "tibble", "tidyr", "withr", "yaml", "zoo"))
 
       - name: Install system dependencies
         if: runner.os == 'Linux'
