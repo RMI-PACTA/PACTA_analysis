@@ -2,7 +2,8 @@ FROM 2dii/r-packages@sha256:2e99aaf36141cade6bc6f51023dfdf6dba87c464ee17a062207a
 
 RUN echo "options(tinytex.tlmgr.path = '/root/.TinyTeX/bin/x86_64-linux/tlmgr')" > .Rprofile \
     && chmod -R a+rwX /root \
-    && /root/.TinyTeX/bin/*/tlmgr path add
+    && /root/.TinyTeX/bin/*/tlmgr path add \
+    && Rscript -e "tinytex::tlmgr_install(pkgs = 'silence')"
 
 COPY pacta-data /pacta-data
 COPY r2dii.stress.test.data /r2dii.stress.test.data
