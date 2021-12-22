@@ -1,10 +1,7 @@
-cli::cli_h1("web_tool_script_3.R")
-
 devtools::load_all(quiet = TRUE)
 use_r_packages()
 
-build_version <- get_build_version()
-if (!is.na(build_version)) cli::cli_h1(paste("Docker build", build_version))
+cli::cli_h1("web_tool_script_3.R{get_build_version_msg()}")
 
 source("0_global_functions.R")
 source("0_web_functions.R")
