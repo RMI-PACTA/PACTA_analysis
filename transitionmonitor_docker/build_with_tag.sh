@@ -110,8 +110,8 @@ existing_images="$(docker images -q '2dii_pacta' || exit 1)"
 if [ -n "$existing_images" ]; then
     red "Existing docker images match '2dii_pacta':"
     docker images 2dii_pacta
-    echo -e "\nremove all 2dii_pacta images with:"
-    yellow "docker rmi --force \$(docker images -q '2dii_pacta' | uniq)" && exit 1
+    # echo -e "\nremove all 2dii_pacta images with:"
+    # yellow "docker rmi --force \$(docker images -q '2dii_pacta' | uniq)" && exit 1
 fi
 
 if [ "$dir_start" == "." ]; then
@@ -140,7 +140,6 @@ green "repos successfully cloned into temp directory\n"
 for repo in $repos
 do
     git -C "$repo" tag -a "$tag" -m "Release pacta $tag" HEAD || exit 2
-    green "$(git -C $repo log --pretty='%h %d <%an> (%cr)' | head -n 1)"
     green "$(basename $repo) tagged with $tag"
 done
 green "repos successfully tagged with $tag\n"
@@ -153,13 +152,19 @@ cp "${dir_start}/Dockerfile" "$dir_temp"
 # build the docker image
 green "Building 2dii_pacta Docker image...\n"
 
-docker buildx build \
+docker build \
     --build-arg image_tag=$tag \
     --platform $platform \
     --tag 2dii_pacta:$tag \
     --tag 2dii_pacta:latest \
-    --load \
     .
+
+if [ $? -ne 0 ]
+then
+    red "The Docker image build failed!" && exit 1
+else
+    green "The Docker image build is complete!"
+fi
 
 cd $dir_start
 
@@ -191,7 +196,7 @@ yellow "docker run --rm 2dii_pacta:${tag} Rscript -e R.version\$version.string"
 
 echo -e "\nTo test the new image with our test scripts (from the root directory of the test files) e.g.:"
 yellow "./run-like-constructiva-flags.sh -t ${tag} -p Test_PA2021NO"
-echo -e "\nor to run all the tests at once:"
+echo -e "\nor to run all the tests at once (from the root directory of the test files):"
 yellow "./run-all-tests.sh"
 
 echo -e "\nTo push the git tags from within the docker image:"
