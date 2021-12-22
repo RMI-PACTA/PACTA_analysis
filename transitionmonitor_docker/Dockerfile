@@ -19,17 +19,14 @@ RUN apt-get update \
 
 # install TeX system and fonts
 ARG TEX_APT="\
-    texlive \
-    texlive-base \
     texlive-xetex \
     texlive-fonts-recommended \
     texlive-fonts-extra \
-    fonts-lmodern \
     lmodern \
     "
 RUN apt-get update \
     && apt-get install -y --no-install-recommends $TEX_APT \
-    && mktexlsr \
+    && tlmgr init-usertree \
     && rm -rf /var/lib/apt/lists/*
 
 # install TeX packages
@@ -55,7 +52,7 @@ ARG TEX_DEPS="\
     xcolor \
     xurl \
     "
-RUN tlmgr init-usertree && tlmgr --repository $CTAN_REPO install $TEX_DEPS
+RUN tlmgr --repository $CTAN_REPO install $TEX_DEPS
 
 # install system dependencies for R packages
 ARG R_PKG_SYS_DEPS="\
