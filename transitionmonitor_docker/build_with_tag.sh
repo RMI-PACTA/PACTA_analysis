@@ -74,6 +74,22 @@ else
 fi
 
 
+# test that docker is running
+if (! docker images > /dev/null 2>&1 ); then
+    red "The docker daemon does not appear to be running." && exit 1
+fi
+
+
+# test that no existing 2dii_pacta docker image using the same tag is loaded
+existing_img_tags="$(docker images 2dii_pacta --format '{{.Tag}}')"
+for i in $existing_img_tags
+do
+    if [ "$i" == "$tag" ]; then
+        red "Tag $i is already in use. Please choose a different tag" && exit 1
+    fi
+done
+
+
 # check that the specified tag is not already used in any of the repos
 remotes="$(echo $repos | tr ' ' ',')"
 remotes=$(eval "echo $url{$remotes}.git")
@@ -96,22 +112,6 @@ if [ -z "$tags" ]; then
     yellow "These remotes returned no tag:"
     yellow "$(echo $remotes | tr ' ' '\n')"
     yellow "Are your SSH keys unset?"
-fi
-
-
-# test that docker is running
-if (! docker images > /dev/null 2>&1 ); then
-    red "The docker daemon does not appear to be running." && exit 1
-fi
-
-
-# test that no existing 2dii_pacta docker image is loaded
-existing_images="$(docker images -q '2dii_pacta' || exit 1)"
-if [ -n "$existing_images" ]; then
-    red "Existing docker images match '2dii_pacta':"
-    docker images 2dii_pacta
-    # echo -e "\nremove all 2dii_pacta images with:"
-    # yellow "docker rmi --force \$(docker images -q '2dii_pacta' | uniq)" && exit 1
 fi
 
 if [ "$dir_start" == "." ]; then
