@@ -1,7 +1,6 @@
 test_that("`add_fund_portfolio()` works as expected", {
   skip_if_R_CMD_check()
 
-  library(tibble)  # for `tibble::as_tibble()`
   source(here::here("0_portfolio_input_check_functions.R"))
 
   portfolio <-
