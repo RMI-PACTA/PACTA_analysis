@@ -16,13 +16,15 @@ usage() {
   echo "[-e <path to local r2dii.stress.test.data repo>] (default docker internal)" 1>&2
   # r for run
   echo "[-r <container command>] (default /bound/bin/run-r-scripts "portfolio name string")" 1>&2
+  # x for architecture?
+  echo "[-p <target platform>] (default linux/x86_64)" 1>&2
   # v for verbose
   echo "[-v] (verbose mode)" 1>&2
   echo "[-i] run container in interactive, tty mode (docker run -it)" 1>&2
   exit 1;
 }
 
-while getopts p:t:u:a:d:c:d:s:e:r:vi flag
+while getopts p:t:u:a:d:c:d:s:e:r:x:vi flag
 do
     case "${flag}" in
         u) userId=${OPTARG};;
@@ -34,6 +36,7 @@ do
         s) st_repo=${OPTARG};;
         e) stdata_repo=${OPTARG};;
         r) docker_command=${OPTARG};;
+        x) target_platform=${OPTARG};;
         v) verbose=1;;
         i) interactive=1;;
         *) usage;;
@@ -46,6 +49,10 @@ fi
 
 if [ -z "${userId}" ]; then
     userId="4"
+fi
+
+if [ -z "${target_platform}" ]; then
+    target_platform="linux/x86_64"
 fi
 
 userFolder="$(pwd)"/working_dirs/"$portfolioIdentifier"
@@ -67,7 +74,7 @@ fi
 
 args=(
   "--rm"
-  --platform linux/x86_64
+  --platform $target_platform
   "--pull=never"
   --network none
   --user 1000:1000
