@@ -17,7 +17,7 @@ usage() {
   # r for run
   echo "[-r <container command>] (default /bound/bin/run-r-scripts "portfolio name string")" 1>&2
   # x for architecture?
-  echo "[-p <target platform>] (default linux/x86_64)" 1>&2
+  echo "[-x <target platform>] (default linux/x86_64)" 1>&2
   # v for verbose
   echo "[-v] (verbose mode)" 1>&2
   echo "[-i] run container in interactive, tty mode (docker run -it)" 1>&2
