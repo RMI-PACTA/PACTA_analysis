@@ -76,20 +76,19 @@ test_that("`set_portfolio_parameters()` works as expected", {
   out <- test_set_portfolio_parameters_in_callr(parameters)
   expect_equal(out$port_holdings_date, c("2019Q4", "2020Q4"))
 
-  # commented out because they will fail until #545 is fixed
-  # # test that when numeric values are in the parameters file they are properly
-  # # converted to characters
-  # parameters <-
-  #   list(
-  #     portfolio_name = 21L,
-  #     investor_name = 2134L,
-  #     peer_group = 52L,
-  #     user_id = 2345L
-  #   )
-  #
-  # out <- test_set_portfolio_parameters_in_callr(parameters)
-  # expect_equal(out$portfolio_name, "21")
-  # expect_equal(out$investor_name, "2134")
-  # expect_equal(out$peer_group, "52")
-  # expect_equal(out$user_id, "2345")
+  # test that when numeric values are in the parameters file they are properly
+  # converted to characters
+  parameters <-
+    list(
+      portfolio_name = 21L,
+      investor_name = 2134L,
+      peer_group = 52L,
+      user_id = 2345L
+    )
+
+  out <- test_set_portfolio_parameters_in_callr(parameters)
+  expect_equal(out$portfolio_name, "21")
+  expect_equal(out$investor_name, "2134")
+  expect_equal(out$peer_group, "52")
+  expect_equal(out$user_id, "2345")
 })

@@ -1,10 +1,7 @@
-cli::cli_h1("web_tool_script_2.R")
-
 devtools::load_all(quiet = TRUE)
 use_r_packages()
 
-build_version <- get_build_version()
-if (!is.na(build_version)) cli::cli_h1(paste("Docker build", build_version))
+cli::cli_h1("web_tool_script_2.R{get_build_version_msg()}")
 
 #########################################################################
 # START RUN ANALYIS
@@ -256,14 +253,14 @@ if (file.exists(bonds_inputs_file)) {
 }
 
 
-rm(port_raw_all_eq)
-rm(port_raw_all_cb)
-rm(port_raw_eq)
-rm(port_raw_cb)
-rm(ald_scen_eq)
-rm(ald_scen_cb)
-rm(company_all_eq)
-rm(company_all_cb)
-rm(port_eq)
-rm(port_cb)
-rm(company_own_eq)
+remove_if_exists(port_raw_all_eq)
+remove_if_exists(port_raw_all_cb)
+remove_if_exists(port_raw_eq)
+remove_if_exists(port_raw_cb)
+remove_if_exists(ald_scen_eq)
+remove_if_exists(ald_scen_cb)
+remove_if_exists(company_all_eq)
+remove_if_exists(company_all_cb)
+remove_if_exists(port_eq)
+remove_if_exists(port_cb)
+remove_if_exists(company_own_eq)

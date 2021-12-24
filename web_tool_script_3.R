@@ -1,10 +1,7 @@
-cli::cli_h1("web_tool_script_3.R")
-
 devtools::load_all(quiet = TRUE)
 use_r_packages()
 
-build_version <- get_build_version()
-if (!is.na(build_version)) cli::cli_h1(paste("Docker build", build_version))
+cli::cli_h1("web_tool_script_3.R{get_build_version_msg()}")
 
 source("0_global_functions.R")
 source("0_web_functions.R")
@@ -43,14 +40,15 @@ invisible(set_portfolio_parameters(file_path = fs::path(par_file_path, paste0(po
 # set environment variable for stress test data path
 options("ST_DATA_PATH" = stress_test_data_location)
 # run 2dii stress test
+failed_stress_test_run <- FALSE
 tryCatch(
   source(file.path(stress_test_path, "web_tool_stress_test.R")),
-  error = function(e) { msg <- "an error in web_tool_stress_test.R occurred"; print(msg); log_user_errors(msg) }
+  error = function(e) { failed_stress_test_run <<- TRUE; msg <- "an error in web_tool_stress_test.R occurred"; print(msg); log_user_errors(msg); }
 )
 # run stress test with external scenarios (IPR)
 tryCatch(
   source(file.path(stress_test_path, "web_tool_external_stress_test.R")),
-  error = function(e) { msg <- "an error in web_tool_external_stress_test.R occurred"; print(msg); log_user_errors(msg) }
+  error = function(e) { failed_stress_test_run <<- TRUE; msg <- "an error in web_tool_external_stress_test.R occurred"; print(msg); log_user_errors(msg); }
 )
 
 
@@ -292,7 +290,8 @@ create_interactive_report(
   sector_order = sector_order,
   equity_tdm = equity_tdm,
   bonds_tdm = bonds_tdm,
-  configs = configs
+  configs = configs,
+  failed_stress_test_run = failed_stress_test_run
 )
 
 if(dir.exists(exec_summary_dir)){
