@@ -17,19 +17,6 @@ set_portfolio_parameters(file_path = fs::path(par_file_path, paste0(portfolio_na
 
 set_project_parameters(file.path(working_location, "parameter_files",paste0("ProjectParameters_", project_code, ".yml")))
 
-if(project_code == "PA2020FL"){
-  peer_group = case_when(
-    peer_group %in% c("other")~ "Others",
-    peer_group %in% c("bank", "assetmanager") ~ "Banks  and  Asset Managers",
-    peer_group %in% c("pensionfund", "insurance") ~ "Pension Funds  and  Insurances"
-  )
-
-}
-
-if(project_code == "GENERAL"){
-  language_select = "EN"
-}
-
 analysis_inputs_path <- set_analysis_inputs_path(twodii_internal, data_location_ext, dataprep_timestamp)
 
 
@@ -50,6 +37,21 @@ tryCatch(
   source(file.path(stress_test_path, "web_tool_external_stress_test.R")),
   error = function(e) { failed_stress_test_run <<- TRUE; msg <- "an error in web_tool_external_stress_test.R occurred"; print(msg); log_user_errors(msg); }
 )
+
+
+# fix parameters ----------------------------------------------------------
+
+if(project_code == "PA2020FL"){
+  peer_group = case_when(
+    peer_group %in% c("other")~ "Others",
+    peer_group %in% c("bank", "assetmanager") ~ "Banks  and  Asset Managers",
+    peer_group %in% c("pensionfund", "insurance") ~ "Pension Funds  and  Insurances"
+  )
+}
+
+if(project_code == "GENERAL"){
+  language_select = "EN"
+}
 
 
 # create interactive report -----------------------------------------------
