@@ -30,12 +30,12 @@ options("ST_DATA_PATH" = stress_test_data_location)
 failed_stress_test_run <- FALSE
 tryCatch(
   source(file.path(stress_test_path, "web_tool_stress_test.R")),
-  error = function(e) { failed_stress_test_run <<- TRUE; msg <- "an error in web_tool_stress_test.R occurred"; print(msg); log_user_errors(msg); }
+  error = function(e) { failed_stress_test_run <<- TRUE; write_log("an error in web_tool_stress_test.R occurred"); }
 )
 # run stress test with external scenarios (IPR)
 tryCatch(
   source(file.path(stress_test_path, "web_tool_external_stress_test.R")),
-  error = function(e) { failed_stress_test_run <<- TRUE; msg <- "an error in web_tool_external_stress_test.R occurred"; print(msg); log_user_errors(msg); }
+  error = function(e) { failed_stress_test_run <<- TRUE; write_log("an error in web_tool_external_stress_test.R occurred"); }
 )
 
 
