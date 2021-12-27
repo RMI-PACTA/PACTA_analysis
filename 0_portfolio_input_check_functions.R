@@ -1289,7 +1289,7 @@ create_portfolio_subset <- function(portfolio, portfolio_type) {
         financial_sector, has_ald_in_fin_sector, bics_sector
       )
   } else {
-    print(paste0("No ", portfolio_type, " in portfolio"))
+    write_log(paste0("No ", portfolio_type, " in portfolio"))
 
     portfolio_subset <- NA
   }
