@@ -30,11 +30,9 @@ required_packages_vec <- function() {
     "rmarkdown",
     "scales",
     "stringr",
-    "testthat",
     "tibble",
     "tidyr",
     "tidyselect",
-    "withr",
     "writexl",
     "zoo"
   )
