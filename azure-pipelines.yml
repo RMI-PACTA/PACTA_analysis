@@ -117,7 +117,6 @@ stages:
               inputs:
                 command: login
                 containerRegistry: $(dockerRegistryServiceConnection)
-            - checkout: none
             - task: AzureCLI@2
               displayName: Download run script from Azure File Share
               inputs:
