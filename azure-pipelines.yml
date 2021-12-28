@@ -142,7 +142,7 @@ stages:
                 scriptLocation: inlineScript
                 inlineScript: |
                   az storage file download-batch \
-                  --source $(testingShareName)/$(portfolioName) \
+                  --source '$(testingShareName)/$(portfolioName)' \
                   --destination $(portfolioDirectory) \
                   --account-name $(testingStorageAccountName)
             - task: Bash@3
@@ -205,7 +205,7 @@ stages:
                   ./run-like-constructiva-flags.sh \
                   -v \
                   -u 4 \
-                  -p $(portfolioName) \
+                  -p '$(portfolioName)' \
                   -t $(Build.BuildNumber)
             - task: AzureCLI@2
               condition: succeededOrFailed()
