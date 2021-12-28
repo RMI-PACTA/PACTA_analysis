@@ -241,7 +241,7 @@ stages:
                 inlineScript: |
                   az storage file upload-batch \
                   --source $(portfolioDirectory) \
-                  --destination $(resultsShareName)/$(resultsDirectory) \
+                  --destination $(resultsShareName) \
                   --account-name $(testingStorageAccountName)
 
 
