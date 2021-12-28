@@ -108,8 +108,9 @@ stages:
         - job: test_portfolio_${{portfolioName}}
           displayName: "Test ${{portfolioName}}"
           variables:
-            portfolioDirectory: '$(Build.SourcesDirectory)/${{portfolioName}}/'
-            resultsDirectory: '$(Build.BuildNumber)/${{portfolioName}}/'
+            resultsDirectory: '$(Build.BuildNumber)/${{portfolioName}}'
+            runDirectory: '$(Build.SourcesDirectory)/$(Build.BuildNumber)'
+            portfolioDirectory: '$(runDirectory)/${{portfolioName}}'
           steps:
             - checkout: none
             - task: Docker@2
@@ -153,14 +154,6 @@ stages:
                 script: |
                   chmod -R 777 $(portfolioDirectory)
             - task: Bash@3
-              displayName: Inspect file structure
-              inputs:
-                targetType: inline
-                # filePath: run-like-constructiva-flags.sh
-                workingDirectory: $(Build.SourcesDirectory)
-                script: |
-                  ls -laR
-            - task: Bash@3
               displayName: Change file permissions
               inputs:
                 targetType: inline
@@ -188,49 +181,41 @@ stages:
                   $(qualifiedRepository):$(Build.BuildNumber) \
                   $(imageRepository):$(Build.BuildNumber)
             - task: Bash@3
-              displayName: Inspect Docker image
-              inputs:
-                targetType: inline
-                # filePath: run-like-constructiva-flags.sh
-                workingDirectory: $(Build.SourcesDirectory)
-                script: |
-                  docker images
-            - task: Bash@3
               displayName: Run ${{portfolioName}} Portfolio
               inputs:
                 targetType: inline
                 # filePath: run-like-constructiva-flags.sh
-                workingDirectory: $(Build.SourcesDirectory)
+                workingDirectory: $(runDirectory)
                 script: |
                   ./run-like-constructiva-flags.sh \
                   -v \
                   -u 4 \
                   -p ${{portfolioName}} \
                   -t $(Build.BuildNumber)
-            - task: AzureCLI@2
-              condition: succeededOrFailed()
-              displayName: Create Build.BuildNumber Directory
-              inputs:
-                azureSubscription: tm-docker-AzureResourceManager
-                scriptType: bash
-                scriptLocation: inlineScript
-                inlineScript: |
-                  az storage directory create \
-                  --name $(Build.BuildNumber) \
-                  --share-name $(resultsShareName) \
-                  --account-name $(testingStorageAccountName)
-            - task: AzureCLI@2
-              condition: succeededOrFailed()
-              displayName: Create Results Directory
-              inputs:
-                azureSubscription: tm-docker-AzureResourceManager
-                scriptType: bash
-                scriptLocation: inlineScript
-                inlineScript: |
-                  az storage directory create \
-                  --name $(resultsDirectory) \
-                  --share-name $(resultsShareName) \
-                  --account-name $(testingStorageAccountName)
+            # - task: AzureCLI@2
+            #   condition: succeededOrFailed()
+            #   displayName: Create Build.BuildNumber Directory
+            #   inputs:
+            #     azureSubscription: tm-docker-AzureResourceManager
+            #     scriptType: bash
+            #     scriptLocation: inlineScript
+            #     inlineScript: |
+            #       az storage directory create \
+            #       --name $(Build.BuildNumber) \
+            #       --share-name $(resultsShareName) \
+            #       --account-name $(testingStorageAccountName)
+            # - task: AzureCLI@2
+            #   condition: succeededOrFailed()
+            #   displayName: Create Results Directory
+            #   inputs:
+            #     azureSubscription: tm-docker-AzureResourceManager
+            #     scriptType: bash
+            #     scriptLocation: inlineScript
+            #     inlineScript: |
+            #       az storage directory create \
+            #       --name $(resultsDirectory) \
+            #       --share-name $(resultsShareName) \
+            #       --account-name $(testingStorageAccountName)
             - task: AzureCLI@2
               condition: succeededOrFailed()
               displayName: Upload Results files to Azure File Share
@@ -240,10 +225,9 @@ stages:
                 scriptLocation: inlineScript
                 inlineScript: |
                   az storage file upload-batch \
-                  --source $(portfolioDirectory) \
+                  --source $(Build.SourcesDirectory) \
                   --destination $(resultsShareName) \
                   --account-name $(testingStorageAccountName)
-
 
   - stage: save_and_upload_tar
     displayName: Save and Upload tar file
