@@ -216,20 +216,8 @@ stages:
                 scriptLocation: inlineScript
                 inlineScript: |
                   az storage directory create \
-                  --fail-on-exist False \
+                  --fail-on-exist false \
                   --name $(Build.BuildNumber) \
-                  --share-name $(resultsShareName) \
-                  --account-name $(testingStorageAccountName)
-            - task: AzureCLI@2
-              condition: succeededOrFailed()
-              displayName: Create Results Directory
-              inputs:
-                azureSubscription: tm-docker-AzureResourceManager
-                scriptType: bash
-                scriptLocation: inlineScript
-                inlineScript: |
-                  az storage directory create \
-                  --name $(resultsDirectory) \
                   --share-name $(resultsShareName) \
                   --account-name $(testingStorageAccountName)
             - task: AzureCLI@2
