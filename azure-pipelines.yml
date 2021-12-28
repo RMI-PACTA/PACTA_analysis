@@ -31,7 +31,16 @@ variables:
     dockerTag: '$(Build.Reason)'
     dockerTarFile: '$(imageRepository)_$(Build.BuildNumber).tar.gz'
 
-resources:
+parameters:
+- name: testingPortfolios
+  type: object
+  default:
+  - TestPortfolio_Input
+  - general2020Q4
+
+steps:
+- ${{ each value in parameters.listOfStrings }}:
+  - script: echo ${{ value }}resources:
   repositories:
     - repository: create_interactive_report
       type: github
@@ -95,9 +104,8 @@ stages:
                 $(Build.SourceVersion)
 
   - stage: test_image
+    - ${{ each portfolioName in parameters.testingPortfolios }}:
     displayName: Test Docker Image
-    variables:
-      portfolioName: "general2020Q4"
     jobs:
       - job: test_portfolio
         displayName: "Test portfolio"
