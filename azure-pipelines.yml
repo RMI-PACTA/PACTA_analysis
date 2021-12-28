@@ -104,22 +104,6 @@ stages:
   - stage: test_image
     displayName: Test Docker Image
     jobs:
-        - job: prepare_results_directory
-          displayName: "Prepare Results Directory"
-          steps:
-            - checkout: none
-            - task: AzureCLI@2
-              condition: succeededOrFailed()
-              displayName: Create Results Directory
-              inputs:
-                azureSubscription: tm-docker-AzureResourceManager
-                scriptType: bash
-                scriptLocation: inlineScript
-                inlineScript: |
-                  az storage directory create \
-                  --name $(Build.BuildNumber) \
-                  --share-name $(resultsShareName) \
-                  --account-name $(testingStorageAccountName)
       - ${{ each portfolioName in parameters.testingPortfolios }}:
         - job: test_portfolio_${{portfolioName}}
           displayName: "Test ${{portfolioName}}"
@@ -223,6 +207,19 @@ stages:
                   -u 4 \
                   -p ${{portfolioName}} \
                   -t $(Build.BuildNumber)
+            - task: AzureCLI@2
+              condition: succeededOrFailed()
+              displayName: Create Build.BuildNumber Directory
+              inputs:
+                azureSubscription: tm-docker-AzureResourceManager
+                scriptType: bash
+                scriptLocation: inlineScript
+                inlineScript: |
+                  az storage directory create \
+                  --fail-on-exist False \
+                  --name $(Build.BuildNumber) \
+                  --share-name $(resultsShareName) \
+                  --account-name $(testingStorageAccountName)
             - task: AzureCLI@2
               condition: succeededOrFailed()
               displayName: Create Results Directory
