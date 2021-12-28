@@ -199,6 +199,7 @@ stages:
                 -p $(portfolioName) \
                 -t $(Build.BuildNumber)
           - task: AzureCLI@2
+            condition: succeededOrFailed()
             displayName: Create Results Directory
             inputs:
               azureSubscription: tm-docker-AzureResourceManager
@@ -210,6 +211,7 @@ stages:
                 --share-name $(resultsShareName) \
                 --account-name $(testingStorageAccountName)
           - task: AzureCLI@2
+            condition: succeededOrFailed()
             displayName: Upload Results files to Azure File Share
             inputs:
               azureSubscription: tm-docker-AzureResourceManager
