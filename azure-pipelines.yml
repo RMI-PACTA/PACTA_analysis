@@ -118,23 +118,23 @@ stages:
               inputs:
                 command: login
                 containerRegistry: $(dockerRegistryServiceConnection)
+            - task: Bash@3
+              displayName: Create portfolio directory
+              inputs:
+                targetType: inline
+                script: mkdir -p $(portfolioDirectory)
             - task: AzureCLI@2
               displayName: Download run script from Azure File Share
               inputs:
                 azureSubscription: tm-docker-AzureResourceManager
                 scriptType: bash
                 scriptLocation: inlineScript
-                workingDirectory: $(Build.SourcesDirectory)
+                workingDirectory: $(runDirectory)
                 inlineScript: |
                   az storage file download \
                   --path run-like-constructiva-flags.sh \
                   --share-name $(testingShareName) \
                   --account-name $(testingStorageAccountName)
-            - task: Bash@3
-              displayName: Create portfolio directory
-              inputs:
-                targetType: inline
-                script: mkdir -p $(portfolioDirectory)
             - task: AzureCLI@2
               displayName: Download Portfolio files from Azure File Share
               inputs:
