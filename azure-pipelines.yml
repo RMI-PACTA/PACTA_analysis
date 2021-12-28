@@ -38,27 +38,28 @@ parameters:
       - TestPortfolio_Input
       - general2020Q4
 
-repositories:
-  - repository: create_interactive_report
-    type: github
-    endpoint: 2DegreesInvesting  # Servce connection name
-    name: 2DegreesInvesting/create_interactive_report
-    ref: master
-  - repository: r2dii.climate.stress.test
-    type: github
-    endpoint: 2DegreesInvesting  # Servce connection name
-    name: 2DegreesInvesting/r2dii.climate.stress.test
-    ref: master
-  - repository: r2dii.stress.test.data
-    type: github
-    endpoint: 2DegreesInvesting  # Servce connection name
-    name: 2DegreesInvesting/r2dii.stress.test.data
-    ref: master
-  - repository: pacta-data
-    type: github
-    endpoint: 2DegreesInvesting  # Servce connection name
-    name: 2DegreesInvesting/pacta-data
-    ref: master
+resources:
+  repositories:
+    - repository: create_interactive_report
+      type: github
+      endpoint: 2DegreesInvesting  # Servce connection name
+      name: 2DegreesInvesting/create_interactive_report
+      ref: master
+    - repository: r2dii.climate.stress.test
+      type: github
+      endpoint: 2DegreesInvesting  # Servce connection name
+      name: 2DegreesInvesting/r2dii.climate.stress.test
+      ref: master
+    - repository: r2dii.stress.test.data
+      type: github
+      endpoint: 2DegreesInvesting  # Servce connection name
+      name: 2DegreesInvesting/r2dii.stress.test.data
+      ref: master
+    - repository: pacta-data
+      type: github
+      endpoint: 2DegreesInvesting  # Servce connection name
+      name: 2DegreesInvesting/pacta-data
+      ref: master
 
 stages:
 
