@@ -328,5 +328,5 @@ if(dir.exists(exec_summary_dir)){
 
   if(!dir.exists(es_dir)){dir.create(es_dir, showWarnings = F, recursive = T)}
   # this is required for the online tool to know that the process has been completed.
-  file.copy(file.path("data", "blank_pdf_do_not_delete.pdf"), es_dir)
+  invisible(file.copy(file.path("data", "blank_pdf_do_not_delete.pdf"), es_dir))
 }
