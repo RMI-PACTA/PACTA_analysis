@@ -32,36 +32,33 @@ variables:
     dockerTarFile: '$(imageRepository)_$(Build.BuildNumber).tar.gz'
 
 parameters:
-- name: testingPortfolios
-  type: object
-  default:
-  - TestPortfolio_Input
-  - general2020Q4
+  - name: testingPortfolios
+    type: object
+    default:
+      - TestPortfolio_Input
+      - general2020Q4
 
-steps:
-- ${{ each value in parameters.listOfStrings }}:
-  - script: echo ${{ value }}resources:
-  repositories:
-    - repository: create_interactive_report
-      type: github
-      endpoint: 2DegreesInvesting  # Servce connection name
-      name: 2DegreesInvesting/create_interactive_report
-      ref: master
-    - repository: r2dii.climate.stress.test
-      type: github
-      endpoint: 2DegreesInvesting  # Servce connection name
-      name: 2DegreesInvesting/r2dii.climate.stress.test
-      ref: master
-    - repository: r2dii.stress.test.data
-      type: github
-      endpoint: 2DegreesInvesting  # Servce connection name
-      name: 2DegreesInvesting/r2dii.stress.test.data
-      ref: master
-    - repository: pacta-data
-      type: github
-      endpoint: 2DegreesInvesting  # Servce connection name
-      name: 2DegreesInvesting/pacta-data
-      ref: master
+repositories:
+  - repository: create_interactive_report
+    type: github
+    endpoint: 2DegreesInvesting  # Servce connection name
+    name: 2DegreesInvesting/create_interactive_report
+    ref: master
+  - repository: r2dii.climate.stress.test
+    type: github
+    endpoint: 2DegreesInvesting  # Servce connection name
+    name: 2DegreesInvesting/r2dii.climate.stress.test
+    ref: master
+  - repository: r2dii.stress.test.data
+    type: github
+    endpoint: 2DegreesInvesting  # Servce connection name
+    name: 2DegreesInvesting/r2dii.stress.test.data
+    ref: master
+  - repository: pacta-data
+    type: github
+    endpoint: 2DegreesInvesting  # Servce connection name
+    name: 2DegreesInvesting/pacta-data
+    ref: master
 
 stages:
 
@@ -104,132 +101,132 @@ stages:
                 $(Build.SourceVersion)
 
   - stage: test_image
-    - ${{ each portfolioName in parameters.testingPortfolios }}:
     displayName: Test Docker Image
     jobs:
-      - job: test_portfolio
-        displayName: "Test portfolio"
-        steps:
-          - task: Docker@2
-            displayName: Login to ACR
-            inputs:
-              command: login
-              containerRegistry: $(dockerRegistryServiceConnection)
-          - checkout: none
-          - task: AzureCLI@2
-            displayName: Download run script from Azure File Share
-            inputs:
-              azureSubscription: tm-docker-AzureResourceManager
-              scriptType: bash
-              scriptLocation: inlineScript
-              workingDirectory: $(Build.SourcesDirectory)
-              inlineScript: |
-                az storage file download \
-                --path run-like-constructiva-flags.sh \
-                --share-name $(testingShareName) \
-                --account-name $(testingStorageAccountName)
-          - task: Bash@3
-            displayName: Create portfolio directory
-            inputs:
-              targetType: inline
-              script: mkdir -p $(Build.SourcesDirectory)/$(portfolioName)/
-          - task: AzureCLI@2
-            displayName: Download Portfolio files from Azure File Share
-            inputs:
-              azureSubscription: tm-docker-AzureResourceManager
-              scriptType: bash
-              scriptLocation: inlineScript
-              inlineScript: |
-                az storage file download-batch \
-                --source $(testingShareName)/$(portfolioName) \
-                --destination $(Build.SourcesDirectory)/$(portfolioName) \
-                --account-name $(testingStorageAccountName)
-          - task: Bash@3
-            displayName: Change permissions for Working Directory
-            inputs:
-              targetType: inline
-              workingDirectory: $(Build.SourcesDirectory)
-              script: |
-                chmod -R 777 $(Build.SourcesDirectory)/$(portfolioName)
-          - task: Bash@3
-            displayName: Inspect file structure
-            inputs:
-              targetType: inline
-              # filePath: run-like-constructiva-flags.sh
-              workingDirectory: $(Build.SourcesDirectory)
-              script: |
-                ls -laR
-          - task: Bash@3
-            displayName: Change file permissions
-            inputs:
-              targetType: inline
-              # filePath: run-like-constructiva-flags.sh
-              workingDirectory: $(Build.SourcesDirectory)
-              script: |
-                chmod +x run-like-constructiva-flags.sh
-          - task: Bash@3
-            displayName: Pull Docker image
-            inputs:
-              targetType: inline
-              # filePath: run-like-constructiva-flags.sh
-              workingDirectory: $(Build.SourcesDirectory)
-              script: |
-                docker pull \
+      - ${{ each portfolioName in parameters.testingPortfolios }}:
+        - job: test_portfolio
+          displayName: "Test portfolio"
+          steps:
+            - task: Docker@2
+              displayName: Login to ACR
+              inputs:
+                command: login
+                containerRegistry: $(dockerRegistryServiceConnection)
+            - checkout: none
+            - task: AzureCLI@2
+              displayName: Download run script from Azure File Share
+              inputs:
+                azureSubscription: tm-docker-AzureResourceManager
+                scriptType: bash
+                scriptLocation: inlineScript
+                workingDirectory: $(Build.SourcesDirectory)
+                inlineScript: |
+                  az storage file download \
+                  --path run-like-constructiva-flags.sh \
+                  --share-name $(testingShareName) \
+                  --account-name $(testingStorageAccountName)
+            - task: Bash@3
+              displayName: Create portfolio directory
+              inputs:
+                targetType: inline
+                script: mkdir -p $(Build.SourcesDirectory)/$(portfolioName)/
+            - task: AzureCLI@2
+              displayName: Download Portfolio files from Azure File Share
+              inputs:
+                azureSubscription: tm-docker-AzureResourceManager
+                scriptType: bash
+                scriptLocation: inlineScript
+                inlineScript: |
+                  az storage file download-batch \
+                  --source $(testingShareName)/$(portfolioName) \
+                  --destination $(Build.SourcesDirectory)/$(portfolioName) \
+                  --account-name $(testingStorageAccountName)
+            - task: Bash@3
+              displayName: Change permissions for Working Directory
+              inputs:
+                targetType: inline
+                workingDirectory: $(Build.SourcesDirectory)
+                script: |
+                  chmod -R 777 $(Build.SourcesDirectory)/$(portfolioName)
+            - task: Bash@3
+              displayName: Inspect file structure
+              inputs:
+                targetType: inline
+                # filePath: run-like-constructiva-flags.sh
+                workingDirectory: $(Build.SourcesDirectory)
+                script: |
+                  ls -laR
+            - task: Bash@3
+              displayName: Change file permissions
+              inputs:
+                targetType: inline
+                # filePath: run-like-constructiva-flags.sh
+                workingDirectory: $(Build.SourcesDirectory)
+                script: |
+                  chmod +x run-like-constructiva-flags.sh
+            - task: Bash@3
+              displayName: Pull Docker image
+              inputs:
+                targetType: inline
+                # filePath: run-like-constructiva-flags.sh
+                workingDirectory: $(Build.SourcesDirectory)
+                script: |
+                  docker pull \
                   $(qualifiedRepository):$(Build.BuildNumber)
-          - task: Bash@3
-            displayName: rename Docker image
-            inputs:
-              targetType: inline
-              # filePath: run-like-constructiva-flags.sh
-              workingDirectory: $(Build.SourcesDirectory)
-              script: |
-                docker tag \
+            - task: Bash@3
+              displayName: rename Docker image
+              inputs:
+                targetType: inline
+                # filePath: run-like-constructiva-flags.sh
+                workingDirectory: $(Build.SourcesDirectory)
+                script: |
+                  docker tag \
                   $(qualifiedRepository):$(Build.BuildNumber) \
                   $(imageRepository):$(Build.BuildNumber)
-          - task: Bash@3
-            displayName: Inspect Docker image
-            inputs:
-              targetType: inline
-              # filePath: run-like-constructiva-flags.sh
-              workingDirectory: $(Build.SourcesDirectory)
-              script: |
-                docker images
-          - task: Bash@3
-            displayName: Run $(portfolioName) Portfolio
-            inputs:
-              targetType: inline
-              # filePath: run-like-constructiva-flags.sh
-              workingDirectory: $(Build.SourcesDirectory)
-              script: |
-                ./run-like-constructiva-flags.sh \
-                -v \
-                -u 4 \
-                -p $(portfolioName) \
-                -t $(Build.BuildNumber)
-          - task: AzureCLI@2
-            condition: succeededOrFailed()
-            displayName: Create Results Directory
-            inputs:
-              azureSubscription: tm-docker-AzureResourceManager
-              scriptType: bash
-              scriptLocation: inlineScript
-              inlineScript: |
-                az storage direement create \
-                --name $(Build.BuildNumber)/$(portfolioName) \
-                --share-name $(resultsShareName) \
-                --account-name $(testingStorageAccountName)
-          - task: AzureCLI@2
-            condition: succeededOrFailed()
-            displayName: Upload Results files to Azure File Share
-            inputs:
-              azureSubscription: tm-docker-AzureResourceManager
-              scriptType: bash
-              scriptLocation: inlineScript
-              inlineScript: |
-                az storage file upload-batch \
-                --source $(Build.SourcesDirectory)/$(portfolioName) \
-                --destination $(resultsShareName)/$(Build.BuildNumber)/$(portfolioName) \
-                --account-name $(testingStorageAccountName)
+            - task: Bash@3
+              displayName: Inspect Docker image
+              inputs:
+                targetType: inline
+                # filePath: run-like-constructiva-flags.sh
+                workingDirectory: $(Build.SourcesDirectory)
+                script: |
+                  docker images
+            - task: Bash@3
+              displayName: Run $(portfolioName) Portfolio
+              inputs:
+                targetType: inline
+                # filePath: run-like-constructiva-flags.sh
+                workingDirectory: $(Build.SourcesDirectory)
+                script: |
+                  ./run-like-constructiva-flags.sh \
+                  -v \
+                  -u 4 \
+                  -p $(portfolioName) \
+                  -t $(Build.BuildNumber)
+            - task: AzureCLI@2
+              condition: succeededOrFailed()
+              displayName: Create Results Directory
+              inputs:
+                azureSubscription: tm-docker-AzureResourceManager
+                scriptType: bash
+                scriptLocation: inlineScript
+                inlineScript: |
+                  az storage direement create \
+                  --name $(Build.BuildNumber)/$(portfolioName) \
+                  --share-name $(resultsShareName) \
+                  --account-name $(testingStorageAccountName)
+            - task: AzureCLI@2
+              condition: succeededOrFailed()
+              displayName: Upload Results files to Azure File Share
+              inputs:
+                azureSubscription: tm-docker-AzureResourceManager
+                scriptType: bash
+                scriptLocation: inlineScript
+                inlineScript: |
+                  az storage file upload-batch \
+                  --source $(Build.SourcesDirectory)/$(portfolioName) \
+                  --destination $(resultsShareName)/$(Build.BuildNumber)/$(portfolioName) \
+                  --account-name $(testingStorageAccountName)
 
 
   - stage: save_and_upload_tar
