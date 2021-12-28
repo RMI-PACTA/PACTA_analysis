@@ -1,7 +1,7 @@
-cli::cli_h1("web_tool_script_3.R")
-
 devtools::load_all(quiet = TRUE)
 use_r_packages()
+
+cli::cli_h1("web_tool_script_3.R{get_build_version_msg()}")
 
 source("0_global_functions.R")
 source("0_web_functions.R")
@@ -17,19 +17,6 @@ set_portfolio_parameters(file_path = fs::path(par_file_path, paste0(portfolio_na
 
 set_project_parameters(file.path(working_location, "parameter_files",paste0("ProjectParameters_", project_code, ".yml")))
 
-if(project_code == "PA2020FL"){
-  peer_group = case_when(
-    peer_group %in% c("other")~ "Others",
-    peer_group %in% c("bank", "assetmanager") ~ "Banks  and  Asset Managers",
-    peer_group %in% c("pensionfund", "insurance") ~ "Pension Funds  and  Insurances"
-  )
-
-}
-
-if(project_code == "GENERAL"){
-  language_select = "EN"
-}
-
 analysis_inputs_path <- set_analysis_inputs_path(twodii_internal, data_location_ext, dataprep_timestamp)
 
 
@@ -40,9 +27,31 @@ invisible(set_portfolio_parameters(file_path = fs::path(par_file_path, paste0(po
 # set environment variable for stress test data path
 options("ST_DATA_PATH" = stress_test_data_location)
 # run 2dii stress test
-source(file.path(stress_test_path, "web_tool_stress_test.R"))
+failed_stress_test_run <- FALSE
+tryCatch(
+  source(file.path(stress_test_path, "web_tool_stress_test.R")),
+  error = function(e) { failed_stress_test_run <<- TRUE; write_log("an error in web_tool_stress_test.R occurred"); }
+)
 # run stress test with external scenarios (IPR)
-source(file.path(stress_test_path, "web_tool_external_stress_test.R"))
+tryCatch(
+  source(file.path(stress_test_path, "web_tool_external_stress_test.R")),
+  error = function(e) { failed_stress_test_run <<- TRUE; write_log("an error in web_tool_external_stress_test.R occurred"); }
+)
+
+
+# fix parameters ----------------------------------------------------------
+
+if(project_code == "PA2020FL"){
+  peer_group = case_when(
+    peer_group %in% c("other")~ "Others",
+    peer_group %in% c("bank", "assetmanager") ~ "Banks  and  Asset Managers",
+    peer_group %in% c("pensionfund", "insurance") ~ "Pension Funds  and  Insurances"
+  )
+}
+
+if(project_code == "GENERAL"){
+  language_select = "EN"
+}
 
 
 # create interactive report -----------------------------------------------
@@ -283,7 +292,8 @@ create_interactive_report(
   sector_order = sector_order,
   equity_tdm = equity_tdm,
   bonds_tdm = bonds_tdm,
-  configs = configs
+  configs = configs,
+  failed_stress_test_run = failed_stress_test_run
 )
 
 if(dir.exists(exec_summary_dir)){
@@ -318,5 +328,5 @@ if(dir.exists(exec_summary_dir)){
 
   if(!dir.exists(es_dir)){dir.create(es_dir, showWarnings = F, recursive = T)}
   # this is required for the online tool to know that the process has been completed.
-  file.copy(file.path("data", "blank_pdf_do_not_delete.pdf"), es_dir)
+  invisible(file.copy(file.path("data", "blank_pdf_do_not_delete.pdf"), es_dir))
 }

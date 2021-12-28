@@ -36,9 +36,7 @@
 ^data/bics_bridge\.csv$
 ^data/currencies\.rda$
 ^data/fin_sector_overrides\.csv$
-^data/fund_isins_without_bbg_data\.csv$
 ^data/index_regions\.rda$
-^data/isins_missing_bbg_data\.csv$
 ^data/sector_bridge\.csv$
 ^data-raw$
 ^LICENSE\.md$

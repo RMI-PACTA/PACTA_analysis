@@ -7,10 +7,14 @@ working_dir <- "working_dir"
 
 output_dir <- "~/Desktop"
 
+holdings_date <- "2020Q4"
+
 
 # -------------------------------------------------------------------------
 
-library(tidyverse)
+library(readr)
+library(dplyr)
+library(purrr)
 library(fs)
 library(cli)
 library(yaml)
@@ -34,10 +38,11 @@ for (portfolio in portfolios) {
     list(
       default = list(
         parameters = list(
-          investor_name_in = investor_name,
-          portfolio_name_in = portfolio_name,
+          investor_name = investor_name,
+          portfolio_name = portfolio_name,
           language = "EN",
-          project_code = investor_name
+          project_code = investor_name,
+          holdings_date = holdings_date
         )
       )
     )
@@ -89,3 +94,6 @@ combined %>%
 combined %>%
   filter(grepl("Global Corp Bond", portfolio_name)) %>%
   saveRDS(file.path(output_dir, "Indices_bonds_portfolio.rda"))
+
+file.copy(file.path(output_dir, "Indices_equity_portfolio.rda"), file.path(output_dir, "Indices_equity_portfolio.rds"))
+file.copy(file.path(output_dir, "Indices_bonds_portfolio.rda"), file.path(output_dir, "Indices_bonds_portfolio.rds"))

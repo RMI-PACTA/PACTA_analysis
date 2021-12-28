@@ -13,6 +13,14 @@ data_check <- function(df) {
   return(check)
 }
 
+# reimplement r2dii.utils' path_dropbox_2dii() so r2dii.utils is not a dependency
+path_dropbox_2dii <- function(...) {
+  custom <- getOption("r2dii_dropbox")
+  default <- "Dropbox (2\u00B0 Investing)"
+  path <- ifelse(is.null(custom), default, custom)
+  path.expand(file.path("~", path, ...))
+}
+
 # Checks whether a value is null or blank
 is_blank_na <- function(x) {
   if (is.na(x) | x == "") {
@@ -24,11 +32,7 @@ is_blank_na <- function(x) {
 }
 
 set_location <- function() {
-  if (rstudioapi::isAvailable()) {
-    working_location <- dirname(rstudioapi::getActiveDocumentContext()$path)
-  } else {
-    working_location <- getwd()
-  }
+  working_location <- getwd()
 
   working_location <- paste0(working_location, "/")
 
@@ -241,7 +245,7 @@ set_project_paths <- function(project_name, twodii_internal, project_location_ex
 
   # portcheck_v2_path <<- path_dropbox_2dii("PortCheck_v2")
   project_location <<- ifelse(twodii_internal,
-    r2dii.utils::path_dropbox_2dii("PortCheck_v2", "10_Projects", project_name),
+    path_dropbox_2dii("PortCheck_v2", "10_Projects", project_name),
     paste0(project_location_ext, "/", project_name)
   )
 
@@ -254,11 +258,7 @@ set_project_paths <- function(project_name, twodii_internal, project_location_ex
 }
 
 set_git_path <- function() {
-  if (rstudioapi::isAvailable()) {
-    git_path <- dirname(rstudioapi::getActiveDocumentContext()$path)
-  } else {
-    git_path <- getwd()
-  }
+  git_path <- getwd()
 
   git_path <- gsub("?", "", git_path)
   git_path <- paste0(git_path, "/")
@@ -269,7 +269,7 @@ set_git_path <- function() {
 set_analysis_inputs_path <- function(twodii_internal, data_location_ext, dataprep_ref = datastore_timestamp) {
 
   if (twodii_internal) {
-    analysis_inputs_path <- r2dii.utils::path_dropbox_2dii("PortCheck", "00_Data", "07_AnalysisInputs", dataprep_ref)
+    analysis_inputs_path <- path_dropbox_2dii("PortCheck", "00_Data", "07_AnalysisInputs", dataprep_ref)
     analysis_inputs_path <- file.path(analysis_inputs_path)
   } else {
     # project level setting takes precedence, portfolio level second, else what
@@ -288,12 +288,12 @@ set_analysis_inputs_path <- function(twodii_internal, data_location_ext, datapre
 }
 
 set_data_paths <- function(financial_timestamp = financial_timestamp, dataprep_timestamp = dataprep_timestamp, ald_timestamp = ald_timestamp) {
-  data_path <<- r2dii.utils::path_dropbox_2dii("PortCheck", "00_Data")
-  data_store_path <<- r2dii.utils::path_dropbox_2dii("PortCheck", "00_Data", "06_DataStore", datastore_timestamp, ald_timestamp)
-  scenario_data_path <<- r2dii.utils::path_dropbox_2dii("PortCheck", "00_Data", "01_ProcessedData", "03_ScenarioData")
-  master_data_path <<- r2dii.utils::path_dropbox_2dii("PortCheck", "00_Data", "01_ProcessedData", "01_SectorMasters", ald_timestamp)
-  general_fin_path <<- r2dii.utils::path_dropbox_2dii("PortCheck", "00_Data", "02_FinancialData")
-  sb_data_path <<- r2dii.utils::path_dropbox_2dii("PortCheck", "00_Data", "04_Other", "1_SovereignBonds")
+  data_path <<- path_dropbox_2dii("PortCheck", "00_Data")
+  data_store_path <<- path_dropbox_2dii("PortCheck", "00_Data", "06_DataStore", datastore_timestamp, ald_timestamp)
+  scenario_data_path <<- path_dropbox_2dii("PortCheck", "00_Data", "01_ProcessedData", "03_ScenarioData")
+  master_data_path <<- path_dropbox_2dii("PortCheck", "00_Data", "01_ProcessedData", "01_SectorMasters", ald_timestamp)
+  general_fin_path <<- path_dropbox_2dii("PortCheck", "00_Data", "02_FinancialData")
+  sb_data_path <<- path_dropbox_2dii("PortCheck", "00_Data", "04_Other", "1_SovereignBonds")
 }
 
 copy_files <- function(project_name) {
@@ -318,7 +318,7 @@ copy_files <- function(project_name) {
 
 create_project_folder <- function(project_name, twodii_internal, project_location_ext, working_location = working_location) {
   project_location <- ifelse(twodii_internal,
-    r2dii.utils::path_dropbox_2dii("PortCheck_v2", "10_Projects", project_name),
+    path_dropbox_2dii("PortCheck_v2", "10_Projects", project_name),
     paste0(project_location_ext, "/", project_name)
   )
 

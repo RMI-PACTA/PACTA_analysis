@@ -25,7 +25,6 @@ Depends:
     R (>= 3.5)
 Imports: 
     config,
-    conflicted,
     dplyr,
     fs,
     fst,
@@ -36,15 +35,16 @@ Imports:
     magrittr,
     purrr,
     readr,
-    renv,
     rlang,
     rmarkdown,
     tidyr,
-    tibble,
-    withr
+    tibble
 Suggests: 
+    callr,
     knitr,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    withr,
+    yaml
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
