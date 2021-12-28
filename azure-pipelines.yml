@@ -10,8 +10,7 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-variables:
-  imageRepository: '2dii_pacta'
+variables: imageRepository: '2dii_pacta'
   # Container registry service connection established during pipeline creation
   dockerRegistryServiceConnection: 'ddd45595-876e-4212-92f0-8196a5c2fe71'
   containerRegistry: 'transitionmonitordockerregistry.azurecr.io'
@@ -36,7 +35,7 @@ parameters:
     type: object
     default:
       - TestPortfolio_Input
-      - general2020Q4
+      # - general2020Q4
 
 resources:
   repositories:
