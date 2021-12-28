@@ -215,7 +215,7 @@ stages:
                 scriptType: bash
                 scriptLocation: inlineScript
                 inlineScript: |
-                  az storage direement create \
+                  az storage directory create \
                   --name $(resultsDirectory) \
                   --share-name $(resultsShareName) \
                   --account-name $(testingStorageAccountName)
