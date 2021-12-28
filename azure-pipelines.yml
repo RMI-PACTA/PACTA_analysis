@@ -104,7 +104,7 @@ stages:
     displayName: Test Docker Image
     jobs:
       - ${{ each portfolioName in parameters.testingPortfolios }}:
-        - job: 'test_portfolio_$(portfolioName))'
+        - job: test_portfolio_${{portfolioName}}
           displayName: "Test $(portfolioName)"
           steps:
             - task: Docker@2
