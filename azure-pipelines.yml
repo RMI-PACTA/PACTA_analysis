@@ -157,15 +157,13 @@ stages:
               displayName: Change file permissions
               inputs:
                 targetType: inline
-                # filePath: run-like-constructiva-flags.sh
-                workingDirectory: $(Build.SourcesDirectory)
+                workingDirectory: $(runDirectory)
                 script: |
                   chmod +x run-like-constructiva-flags.sh
             - task: Bash@3
               displayName: Pull Docker image
               inputs:
                 targetType: inline
-                # filePath: run-like-constructiva-flags.sh
                 workingDirectory: $(Build.SourcesDirectory)
                 script: |
                   docker pull \
