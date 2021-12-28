@@ -216,7 +216,6 @@ stages:
                 scriptLocation: inlineScript
                 inlineScript: |
                   az storage directory create \
-                  --fail-on-exist false \
                   --name $(Build.BuildNumber) \
                   --share-name $(resultsShareName) \
                   --account-name $(testingStorageAccountName)
