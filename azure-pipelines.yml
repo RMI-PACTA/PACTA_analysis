@@ -104,7 +104,6 @@ stages:
   - stage: test_image
     displayName: Test Docker Image
     jobs:
-      - ${{ each portfolioName in parameters.testingPortfolios }}:
         - job: prepare_results_directory
           displayName: "Prepare Results Directory"
           steps:
@@ -121,6 +120,7 @@ stages:
                   --name $(Build.BuildNumber) \
                   --share-name $(resultsShareName) \
                   --account-name $(testingStorageAccountName)
+      - ${{ each portfolioName in parameters.testingPortfolios }}:
         - job: test_portfolio_${{portfolioName}}
           displayName: "Test ${{portfolioName}}"
           variables:
