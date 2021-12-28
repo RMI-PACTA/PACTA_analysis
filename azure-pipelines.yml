@@ -218,3 +218,25 @@ stages:
                 -u 4 \
                 -p $(portfolioName) \
                 -t $(Build.BuildNumber)
+          - task: AzureCLI@2
+            displayName: Create Results Directory
+            inputs:
+              azureSubscription: tm-docker-AzureResourceManager
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+                az storage direement create \
+                --name $(Build.BuildNumber)/$(portfolioName) \
+                --share-name $(resultsShareName) \
+                --account-name $(testingStorageAccountName)
+          - task: AzureCLI@2
+            displayName: Upload Results files to Azure File Share
+            inputs:
+              azureSubscription: tm-docker-AzureResourceManager
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+                az storage file upload-batch \
+                --source $(Build.SourcesDirectory)/$(portfolioName) \
+                --destination $(resultsShareName)/$(Build.BuildNumber)/$(portfolioName) \
+                --account-name $(testingStorageAccountName)
