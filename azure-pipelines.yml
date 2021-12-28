@@ -216,6 +216,7 @@ stages:
                 scriptLocation: inlineScript
                 inlineScript: |
                   az storage directory create \
+                  --debug \
                   --name $(resultsDirectory) \
                   --share-name $(resultsShareName) \
                   --account-name $(testingStorageAccountName)
@@ -228,6 +229,7 @@ stages:
                 scriptLocation: inlineScript
                 inlineScript: |
                   az storage file upload-batch \
+                  --debug \
                   --source $(portfolioDirectory) \
                   --destination $(resultsShareName)/$(resultsDirectory) \
                   --account-name $(testingStorageAccountName)
