@@ -93,26 +93,6 @@ stages:
                 $(dockerTag)
                 $(Build.BuildNumber)
                 $(Build.SourceVersion)
-          - task: Bash@3
-            displayName: Save Docker image as tar
-            inputs:
-              targetType: inline
-              workingDirectory: $(Build.SourcesDirectory)
-              script: |
-                docker save $(qualifiedRepository) | \
-                gzip -q > "$(dockerTarFile)"
-          - task: AzureCLI@2
-            displayName: Upload tar file to AFS
-            inputs:
-              azureSubscription: tm-docker-AzureResourceManager
-              scriptType: bash
-              scriptLocation: inlineScript
-              workingDirectory: $(Build.SourcesDirectory)
-              inlineScript: |
-                az storage file upload \
-                --source $(dockerTarFile) \
-                --share-name $(zipsShareName) \
-                --account-name $(testingStorageAccountName)
 
   - stage: test_image
     displayName: Test Docker Image
@@ -187,7 +167,7 @@ stages:
               workingDirectory: $(Build.SourcesDirectory)
               script: |
                 docker pull \
-                  $(containerRegistry)/$(imageRepository):$(Build.BuildNumber)
+                  $(qualifiedRepository):$(Build.BuildNumber)
           - task: Bash@3
             displayName: rename Docker image
             inputs:
@@ -239,4 +219,47 @@ stages:
                 az storage file upload-batch \
                 --source $(Build.SourcesDirectory)/$(portfolioName) \
                 --destination $(resultsShareName)/$(Build.BuildNumber)/$(portfolioName) \
+                --account-name $(testingStorageAccountName)
+
+
+  - stage: save_and_upload_tar
+    displayName: Save and Upload tar file
+    jobs:
+      - job: save_and_upload_tar
+        displayName: "Save and Upload tar file"
+        steps:
+          - task: Docker@2
+            displayName: Login to ACR
+            inputs:
+              command: login
+              containerRegistry: $(dockerRegistryServiceConnection)
+          - task: Bash@3
+            displayName: Pull Docker image
+            inputs:
+              targetType: inline
+              # filePath: run-like-constructiva-flags.sh
+              workingDirectory: $(Build.SourcesDirectory)
+              script: |
+                docker pull \
+                  $(qualifiedRepository):$(Build.BuildNumber)
+          - checkout: none
+          - task: Bash@3
+            displayName: Save Docker image as tar
+            inputs:
+              targetType: inline
+              workingDirectory: $(Build.SourcesDirectory)
+              script: |
+                docker save $(qualifiedRepository) | \
+                gzip -q > "$(dockerTarFile)"
+          - task: AzureCLI@2
+            displayName: Upload tar file to AFS
+            inputs:
+              azureSubscription: tm-docker-AzureResourceManager
+              scriptType: bash
+              scriptLocation: inlineScript
+              workingDirectory: $(Build.SourcesDirectory)
+              inlineScript: |
+                az storage file upload \
+                --source $(dockerTarFile) \
+                --share-name $(zipsShareName) \
                 --account-name $(testingStorageAccountName)
