@@ -105,6 +105,22 @@ stages:
     displayName: Test Docker Image
     jobs:
       - ${{ each portfolioName in parameters.testingPortfolios }}:
+        - job: prepare_results_directory
+          displayName: "Prepare Results Directory"
+          steps:
+            - checkout: none
+            - task: AzureCLI@2
+              condition: succeededOrFailed()
+              displayName: Create Results Directory
+              inputs:
+                azureSubscription: tm-docker-AzureResourceManager
+                scriptType: bash
+                scriptLocation: inlineScript
+                inlineScript: |
+                  az storage directory create \
+                  --name $(Build.BuildNumber) \
+                  --share-name $(resultsShareName) \
+                  --account-name $(testingStorageAccountName)
         - job: test_portfolio_${{portfolioName}}
           displayName: "Test ${{portfolioName}}"
           variables:
@@ -216,7 +232,18 @@ stages:
                 scriptLocation: inlineScript
                 inlineScript: |
                   az storage directory create \
-                  --debug \
+                  --name $(resultsDirectory) \
+                  --share-name $(resultsShareName) \
+                  --account-name $(testingStorageAccountName)
+            - task: AzureCLI@2
+              condition: succeededOrFailed()
+              displayName: Create Results Directory
+              inputs:
+                azureSubscription: tm-docker-AzureResourceManager
+                scriptType: bash
+                scriptLocation: inlineScript
+                inlineScript: |
+                  az storage directory create \
                   --name $(resultsDirectory) \
                   --share-name $(resultsShareName) \
                   --account-name $(testingStorageAccountName)
@@ -229,7 +256,6 @@ stages:
                 scriptLocation: inlineScript
                 inlineScript: |
                   az storage file upload-batch \
-                  --debug \
                   --source $(portfolioDirectory) \
                   --destination $(resultsShareName)/$(resultsDirectory) \
                   --account-name $(testingStorageAccountName)
