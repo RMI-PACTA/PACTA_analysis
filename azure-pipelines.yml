@@ -196,7 +196,7 @@ stages:
                 script: |
                   docker images
             - task: Bash@3
-              displayName: Run $(portfolioName) Portfolio
+              displayName: Run ${{portfolioName}} Portfolio
               inputs:
                 targetType: inline
                 # filePath: run-like-constructiva-flags.sh
