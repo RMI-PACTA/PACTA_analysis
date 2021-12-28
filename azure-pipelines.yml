@@ -107,13 +107,15 @@ stages:
       - ${{ each portfolioName in parameters.testingPortfolios }}:
         - job: test_portfolio_${{portfolioName}}
           displayName: "Test ${{portfolioName}}"
+          variables:
+            portfolioDirectory: '$(Build.SourcesDirectory)/${{portfolioName}}/'
           steps:
             - checkout: none
             - task: Bash@3
               displayName: Create portfolio directory
               inputs:
                 targetType: inline
-                script: echo $(Build.SourcesDirectory)/${{portfolioName}}/
+                script: echo $(portfolioDirectory)
             # - task: Docker@2
             #   displayName: Login to ACR
             #   inputs:
