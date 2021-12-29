@@ -174,6 +174,8 @@ for (port_id in all_port_ids) {
 
   port_data %>%
     select(investor_name, portfolio_name, isin, market_value, currency) %>%
+    mutate(investor_name = .env$investor_name) %>%
+    mutate(portfolio_name = .env$portfolio_name) %>%
     write_csv(file.path(port_id_output_dir, "20_Raw_Inputs", paste0(project_prefix, "_port_", port_id, ".csv")))
 }
 
