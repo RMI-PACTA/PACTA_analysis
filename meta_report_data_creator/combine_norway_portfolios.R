@@ -100,7 +100,8 @@ data <-
   filter(!is.na(port_id)) %>%
   filter(!is.na(user_id))
 
-write_csv(data, file = file.path(output_dir, paste0(project_prefix, "_full.csv")))
+# `write_csv()` sometimes fails on Windows and is not necessary, so commented out until solved
+# write_csv(data, file = file.path(output_dir, paste0(project_prefix, "_full.csv")))
 saveRDS(data, file.path(output_dir, paste0(project_prefix, "_full.rds")))
 
 
