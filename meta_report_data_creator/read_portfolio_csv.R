@@ -1,4 +1,4 @@
-read_portfolio_csv <- function(filename, col_names = NULL) {
+read_portfolio_csv <- function(filename, col_names = NULL, specs_only = FALSE) {
   stopifnot(require(readr))
   stopifnot(require(stringr))
 
@@ -73,6 +73,19 @@ read_portfolio_csv <- function(filename, col_names = NULL) {
   cust_locale <- locale(decimal_mark = decimal_mark,
                         grouping_mark = grouping_mark,
                         encoding = encoding)
+
+  # if specs_only return only the specs -----------------------------------------
+  if (specs_only) {
+    return(tibble(
+      filename = filename,
+      exists = file.exists(filename),
+      num_of_columns = num_of_columns,
+      file_encoding = encoding,
+      delimiter = delim,
+      decimal_mark = decimal_mark,
+      grouping_mark = grouping_mark
+    ))
+  }
 
   # read in data ---------------------------------------------------------------
 
