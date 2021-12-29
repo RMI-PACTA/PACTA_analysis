@@ -72,8 +72,14 @@ pacta_directories <- c("00_Log_Files", "10_Parameter_File", "20_Raw_Inputs", "30
 
 portfolio_csvs <- list.files(portfolios_path, pattern = "[.]csv$", full.names = TRUE)
 
-# remove bogus CSVs
+
+# remove bogus CSVs ------------------------------------------------------------
 portfolio_csvs <- portfolio_csvs[! tools::file_path_sans_ext(basename(portfolio_csvs)) %in% bogus_csvs_to_be_ignored]
+
+
+# read in all the specs --------------------------------------------------------
+
+specs <- map_dfr(set_names(portfolio_csvs, portfolio_csvs), ~ read_portfolio_csv(.x, specs_only = TRUE), .id = "csv_name")
 
 
 # read in all the CSVs ---------------------------------------------------------
