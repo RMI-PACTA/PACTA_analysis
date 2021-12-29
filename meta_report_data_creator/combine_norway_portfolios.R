@@ -1,12 +1,26 @@
+# load required packages -------------------------------------------------------
+
+library(dplyr, warn.conflicts = FALSE)
+library(purrr)
+library(stringr)
+library(fs)
+library(r2dii.utils)  # must install with # devtools::install_github("2DegreesInvesting/r2dii.utils")
+library(readr)
+library(yaml)
+
 
 # manually set certain values and paths ----------------------------------------
 
-output_dir <- "~/Desktop/norway-5"
+# WARNING!!! These filepaths are easy to mess up. You're much better off
+# copy-pasting them from your filesystem rather than trying to manually edit
+# bits of it. Seriously. Trust me.
+
+output_dir <- "~/Desktop/norway-5"  # this will likely not work on Windows, so change it!
 combined_portfolio_results_output_dir <- file.path(output_dir, "combined", "portfolio_level")
 combined_user_results_output_dir <- file.path(output_dir, "combined", "user_level")
 combined_orgtype_results_output_dir <- file.path(output_dir, "combined", "orgtype_level")
 
-data_path <- r2dii.utils::path_dropbox_2dii("2° Investing Team/1. Research/1. Studies (projects)/PACTA . Regulator Monitoring/PACTA COP/03_Initiative_Level/05_PACTACOP_NO/04_Input_Cleaning")
+data_path <- r2dii.utils::path_dropbox_2dii("2° Investing Team/1. RESEARCH/1. Studies (projects)/PACTA . Regulator Monitoring/PACTA COP/03_Initiative_Level/05_PACTACOP_NO/04_Input_Cleaning")
 portfolios_path <- file.path(data_path, "portfolios")
 portfolios_meta_csv <- file.path(data_path, "portfolios.csv")
 users_meta_csv <- file.path(data_path, "users.csv")
@@ -16,7 +30,7 @@ default_language <- "EN"
 
 project_prefix <- "norway"
 
-bogus_csvs_to_be_ignored <- c("20303", "26102")
+bogus_csvs_to_be_ignored <- c("20303", "26102")  # if none, this should be c()
 
 
 # check paths and directories --------------------------------------------------
@@ -47,14 +61,7 @@ stopifnot(dir.exists(file.path(combined_orgtype_results_output_dir, "30_Processe
 stopifnot(dir.exists(file.path(combined_orgtype_results_output_dir, "40_Results")))
 
 
-# load required packages -------------------------------------------------------
-
-library(dplyr, warn.conflicts = FALSE)
-library(purrr)
-library(stringr)
-library(fs)
-library(readr)
-library(yaml)
+# load needed function and set needed values
 
 source("meta_report_data_creator/read_portfolio_csv.R")
 
