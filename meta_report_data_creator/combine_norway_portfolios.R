@@ -80,6 +80,7 @@ portfolio_csvs <- portfolio_csvs[! tools::file_path_sans_ext(basename(portfolio_
 # read in all the specs --------------------------------------------------------
 
 specs <- map_dfr(set_names(portfolio_csvs, portfolio_csvs), ~ read_portfolio_csv(.x, specs_only = TRUE), .id = "csv_name")
+saveRDS(specs, file.path(output_dir, paste0(project_prefix, "_csv_specs.rds")))
 
 
 # read in all the CSVs ---------------------------------------------------------
