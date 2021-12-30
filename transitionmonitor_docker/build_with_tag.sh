@@ -1,7 +1,7 @@
 #! /bin/bash
 
 # Examples:
-# # The tag is enforced
+# # The tag is mandatory
 # ./build_with_tag -t 0.1.1
 
 usage() {
@@ -203,8 +203,5 @@ echo -e "\nTo push the git tags from within the docker image:"
 yellow "docker run --rm -ti -v \"\$HOME/.ssh\":/root/.ssh 2dii_pacta:${tag} bash"
 echo -e "\nthen inside the container (for each of the 5 PACTA repos:"
 yellow "cd /bound && git push origin \$tag"
-
-echo
-green "Done :-)"
 
 exit 0

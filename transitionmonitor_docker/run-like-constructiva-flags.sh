@@ -142,4 +142,4 @@ echo Running Docker Container
 
 docker run "${args[@]}"
 
-echo "Done :-)"
+exit 0

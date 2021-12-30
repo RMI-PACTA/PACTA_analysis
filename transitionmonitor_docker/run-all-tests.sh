@@ -38,3 +38,4 @@ for path in working_dirs/*/ ; do
     ./run-like-constructiva-flags.sh -t ${dockertag} -p ${portfolioid} -x ${target_platform}
 done
 
+exit 0
