@@ -9,6 +9,14 @@ library(r2dii.utils)  # must install with # devtools::install_github("2DegreesIn
 library(readr)
 library(yaml)
 
+require(tibble)
+require(fs)
+require(cli)
+require(stringi)
+require(R.utils)
+require(wand)
+require(stringr)
+
 devtools::load_all()
 
 
