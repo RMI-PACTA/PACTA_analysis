@@ -7,8 +7,8 @@
 usage() {
     echo "Usage: $0  -t <docker image tag>" 1>&2
     echo "Optional flags:" 1>&2
-    # p for platform
-    echo "[-p <platform string>] (platform string to define the target Docker image platform)" 1>&2
+    # x for architecture?
+    echo "[-x <platform string>] (platform string to define the target Docker image platform)" 1>&2
     # s for save
     echo "[-s] (export the created Docker image to a tar.gz file)" 1>&2
     exit 1;
@@ -18,7 +18,7 @@ while getopts t:p:s flag
 do
     case "${flag}" in
         t) tag=${OPTARG};;
-        p) platform=${OPTARG};;
+        x) platform=${OPTARG};;
         s) save=${OPTARG};;
     esac
 done
