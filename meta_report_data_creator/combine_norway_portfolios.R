@@ -1,7 +1,15 @@
 # load required packages -------------------------------------------------------
 
+require(R.utils, quietly = TRUE, warn.conflicts = FALSE)
+require(tibble, quietly = TRUE)
+require(fs, quietly = TRUE)
+require(cli, quietly = TRUE)
+require(stringi, quietly = TRUE)
+require(wand, quietly = TRUE)
+require(stringr, quietly = TRUE)
+
 library(dplyr, warn.conflicts = FALSE)
-library(devtools)
+library(devtools, quietly = TRUE, warn.conflicts = FALSE)
 library(purrr)
 library(stringr)
 library(fs)
@@ -9,15 +17,7 @@ library(r2dii.utils)  # must install with # devtools::install_github("2DegreesIn
 library(readr)
 library(yaml)
 
-require(tibble)
-require(fs)
-require(cli)
-require(stringi)
-require(R.utils)
-require(wand)
-require(stringr)
-
-devtools::load_all()
+devtools::load_all(quiet = TRUE)
 
 
 # manually set certain values and paths ----------------------------------------
