@@ -14,7 +14,7 @@ usage() {
     exit 1;
 }
 
-while getopts t:p:s flag
+while getopts t:x:s flag
 do
     case "${flag}" in
         t) tag=${OPTARG};;
