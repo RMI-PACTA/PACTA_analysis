@@ -30,13 +30,14 @@
 # - [ ] is currency column all 3 character
 # - [ ] is currency column all alpha strings
 # - [ ] is currency column all uppercase
-# - [ ] is currency column all valid, current ISO 4217 alpha currency codes
+# - [x] is currency column all valid, current ISO 4217 alpha currency codes
 # - [ ] is currency column all currency codes that exist in our currency exchange rate data
 
 # files <- "~/Dropbox (2° Investing)/2° Investing Team/1. RESEARCH/1. Studies (projects)/PACTA . Regulator Monitoring/PACTA COP/03_Initiative_Level/04_PACTACOP_LU/04_Input_Cleaning/portfolios"
 # get_csv_specs("~/Dropbox (2° Investing)/2° Investing Team/1. RESEARCH/1. Studies (projects)/PACTA . Regulator Monitoring/PACTA COP/03_Initiative_Level/04_PACTACOP_LU/04_Input_Cleaning/portfolios")
 # get_csv_specs("~/Dropbox (2° Investing)/2° Investing Team/1. RESEARCH/1. Studies (projects)/PACTA . Regulator Monitoring/PACTA COP/03_Initiative_Level/05_PACTACOP_NO/04_Input_Cleaning/portfolios")
 # get_csv_specs("/Users/cj2dii/Dropbox (2° Investing)/2° Investing Team/1. RESEARCH/1. Studies (projects)/PACTA . Regulator Monitoring/Bafu PACTA Monitoring 2020/05_Countrylevel/01_CH/05_Portfolio_Prep/swiss_portfolio_3")
+# get_csv_specs("/Users/cj2dii/Desktop/real_tests/PA2021NO_2021-12-15/initiativeDownloads/")
 
 # files <- c(list.files("~/Desktop/test/", full.names = TRUE), "XXX")
 # get_csv_specs(c(list.files("~/Desktop/test/", full.names = TRUE), "XXX"))
@@ -232,6 +233,25 @@ get_csv_specs <- function(files) {
     })
   }
 
+  investor_name_colname <- "Investor.Name"
+  portfolio_name_colname <- "Portfolio.Name"
+  isin_colname <- "ISIN"
+  market_value_colname <- "MarketValue"
+  currency_colname <- "Currency"
+
+  test <- purrr::map(seq_along(files_df$filepath), ~ readr::read_delim(files_df$filepath[.x], delim = files_df$delimiter[.x], progress = FALSE, show_col_types = FALSE))
+
+  files_df$investor_name_is_string <- vapply(test, function(x) is.character(x[[investor_name_colname]]), logical(1))
+
+  files_df$portfolio_name_is_string <- vapply(test, function(x) is.character(x[[portfolio_name_colname]]), logical(1))
+
+  files_df$market_value_is_numeric <- vapply(test, function(x) is.numeric(x[[market_value_colname]]), logical(1))
+
+  files_df$market_value_has_negatives <- vapply(test, function(x) any(x[[market_value_colname]] < 0), logical(1))
+
+  files_df$market_value_has_nas <- vapply(test, function(x) any(is.na(x[[market_value_colname]])), logical(1))
+
+  files_df$valid_iso4217c_codes <- validate_iso4217c(lapply(test, function(x) x[[currency_colname]]))
 
   files_df
 }
@@ -377,6 +397,18 @@ guess_num_of_lines <- function(filepaths) {
       length(readr::read_lines(filepath, n_max = -1L, lazy = TRUE, progress = FALSE))
     },
     FUN.VALUE = integer(1)
+  )
+}
+
+
+validate_iso4217c <- function(codes_list) {
+  if (!is.list(codes_list)) codes_list <- list(codes_list)
+  vapply(
+    X = codes_list,
+    FUN = function(codes) {
+      all(toupper(unique(codes)) %in% countrycode::codelist$iso4217c)
+    },
+    FUN.VALUE = logical(1)
   )
 }
 
