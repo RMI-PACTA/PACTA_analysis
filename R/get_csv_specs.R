@@ -211,6 +211,20 @@ get_csv_specs <- function(files, expected_colnames = c("Investor.Name", "Portfol
     })
   }
 
+  files_df$read_without_error <- validate_read_without_error(files_df$filepath, files_df$file_encoding)
+
+  if (all(files_df$read_without_error == TRUE)) {
+    cli::cli_alert_success(paste0("all files can be read without error"))
+  } else if (any(files_df$read_without_error == FALSE)) {
+    alert_files <- files_df$filename[isFALSE(files_df$read_without_error)]
+    cli::cli({
+      cli::cli_alert_danger("the following files can not be read without error and will not be considered further:")
+      cli::cli_bullets(alert_files, class = "file indented")
+    })
+    files_df <- files_df[files_df$read_without_error == TRUE, ]
+  }
+
+
   files_df$num_of_columns <- guess_num_of_columns(files_df$filepath, files_df$file_encoding, files_df$delimiter)
 
   if (all(files_df$num_of_columns == 5L)) {
@@ -284,7 +298,7 @@ get_csv_specs <- function(files, expected_colnames = c("Investor.Name", "Portfol
   isin_colname <- "ISIN"
   market_value_colname <- "MarketValue"
   currency_colname <- "Currency"
-  test <- purrr::map(seq_along(files_df$filepath), ~ readr::read_delim(files_df$filepath[.x], delim = files_df$delimiter[.x], progress = FALSE, show_col_types = FALSE))
+  test <- purrr::map(seq_along(files_df$filepath), ~ suppressMessages(readr::read_delim(files_df$filepath[.x], delim = files_df$delimiter[.x], progress = FALSE, show_col_types = FALSE)))
 
   files_df$investor_name_is_string <- vapply(test, function(x) is.character(x[[investor_name_colname]]), logical(1))
 
@@ -329,15 +343,17 @@ get_column_names <- function(filepaths, encodings, delimiters) {
     FUN = function(i) {
       list(
         names(
-          readr::read_delim(
-            file = filepaths[[i]],
-            delim = delimiters[[i]],
-            locale = readr::locale(encoding = encodings[[i]]),
-            n_max = 1L,
-            trim_ws = TRUE,
-            col_types = readr::cols(.default = "c"),
-            show_col_types = FALSE,
-            progress = FALSE
+          suppressMessages(
+            readr::read_delim(
+              file = filepaths[[i]],
+              delim = delimiters[[i]],
+              locale = readr::locale(encoding = encodings[[i]]),
+              n_max = 1L,
+              trim_ws = TRUE,
+              col_types = readr::cols(.default = "c"),
+              show_col_types = FALSE,
+              progress = FALSE
+            )
           )
         )
       )
@@ -517,6 +533,26 @@ guess_num_of_lines <- function(filepaths) {
 }
 
 
+validate_isins <- function(x) {
+  is_luhn <- function(x) {
+    digits <- as.numeric(rev(unlist(strsplit(x, ""))))
+    odd <- seq_along(digits) %% 2 == 1
+    s1 <- sum(digits[odd])
+    s2 <- digits[!odd] * 2
+    s2 <- sum(s2 %% 10 + s2 %/% 10)
+    sum(s1, s2) %% 10 == 0
+  }
+
+  x <- toupper(x)
+  x <- gsub(pattern = "[[:blank:]]", replacement = "", x)
+  valid_struct <- grepl("^[[:upper:]]{2}[[:alnum:]]{9}[[:digit:]]$", x)
+  x <- stringi::stri_replace_all_fixed(x, LETTERS, seq_along(LETTERS) + 9,
+                                       vectorize_all = FALSE)
+  valid_luhn <- vapply(x, is_luhn, FUN.VALUE = logical(1L), USE.NAMES = FALSE)
+  valid_struct & valid_luhn
+}
+
+
 validate_iso4217c <- function(codes_list) {
   if (!is.list(codes_list)) codes_list <- list(codes_list)
   vapply(
@@ -529,3 +565,22 @@ validate_iso4217c <- function(codes_list) {
 }
 
 
+validate_read_without_error <- function(filepaths, encodings) {
+  vapply(
+    X = seq_along(filepaths),
+    FUN = function(i) {
+      out <- tryCatch(
+        suppressMessages(
+          readr::read_delim(
+            file = filepaths[[i]],
+            locale = readr::locale(encoding = encodings[[i]]),
+            progress = FALSE,
+            show_col_types = FALSE
+          )
+        )
+      )
+      !any(class(out) == "error")
+    },
+    FUN.VALUE = logical(1)
+  )
+}
