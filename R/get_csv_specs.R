@@ -33,16 +33,20 @@
 # - [x] is currency column all valid, current ISO 4217 alpha currency codes
 # - [ ] is currency column all currency codes that exist in our currency exchange rate data
 
-# files <- "~/Dropbox (2° Investing)/2° Investing Team/1. RESEARCH/1. Studies (projects)/PACTA . Regulator Monitoring/PACTA COP/03_Initiative_Level/04_PACTACOP_LU/04_Input_Cleaning/portfolios"
+# get_csv_specs("~/Dropbox (2° Investing)/2° Investing Team/1. RESEARCH/1. Studies (projects)/PACTA . Regulator Monitoring/Bafu PACTA Monitoring 2020/05_Countrylevel/01_CH/05_Portfolio_Prep/swiss_portfolio_3")
+# get_csv_specs("~/Dropbox (2° Investing)/2° Investing Team/1. RESEARCH/1. Studies (projects)/PACTA . Regulator Monitoring/Bafu PACTA Monitoring 2020/05_Countrylevel/02_Liechtenstein/08_input_cleaning/Liechtenstein_Portfolios_original")
 # get_csv_specs("~/Dropbox (2° Investing)/2° Investing Team/1. RESEARCH/1. Studies (projects)/PACTA . Regulator Monitoring/PACTA COP/03_Initiative_Level/04_PACTACOP_LU/04_Input_Cleaning/portfolios")
 # get_csv_specs("~/Dropbox (2° Investing)/2° Investing Team/1. RESEARCH/1. Studies (projects)/PACTA . Regulator Monitoring/PACTA COP/03_Initiative_Level/05_PACTACOP_NO/04_Input_Cleaning/portfolios")
-# get_csv_specs("/Users/cj2dii/Dropbox (2° Investing)/2° Investing Team/1. RESEARCH/1. Studies (projects)/PACTA . Regulator Monitoring/Bafu PACTA Monitoring 2020/05_Countrylevel/01_CH/05_Portfolio_Prep/swiss_portfolio_3")
-# get_csv_specs("/Users/cj2dii/Desktop/real_tests/PA2021NO_2021-12-15/initiativeDownloads/")
+# get_csv_specs("~/Dropbox (2° Investing)/2° Investing Team/1. RESEARCH/1. Studies (projects)/PACTA . Regulator Monitoring/PACTA COP/03_Initiative_Level/06_PACTACOP_CO/042_Input_Cleaning/portfolios")
+# get_csv_specs("~/Dropbox (2° Investing)/2° Investing Team/1. RESEARCH/1. Studies (projects)/PACTA . Regulator Monitoring/PACTA COP/03_Initiative_Level/06_PACTACOP_PE/04_Input_Cleaning/04. Data/portfolios")
+
+# get_csv_specs("~/Desktop/real_tests/PA2021NO_2021-12-15/initiativeDownloads/")
+# get_csv_specs("~/Desktop/real_tests/PA2021CO_2021-12-15/initiativeDownloads/")
 
 # files <- c(list.files("~/Desktop/test/", full.names = TRUE), "XXX")
-# get_csv_specs(c(list.files("~/Desktop/test/", full.names = TRUE), "XXX"))
+# get_csv_specs(files = c(list.files("~/Desktop/test/", full.names = TRUE), "XXX"), expected_colnames = c("investor_name", "portfolio_name", "isin", "market_value", "currency"))
 
-get_csv_specs <- function(files) {
+get_csv_specs <- function(files, expected_colnames = c("Investor.Name", "Portfolio.Name", "ISIN", "MarketValue", "Currency")) {
   if (length(files) == 1 && fs::is_dir(files)) {
     files <- file.path(files, list.files(files))
   }
@@ -211,14 +215,23 @@ get_csv_specs <- function(files) {
 
   if (all(files_df$num_of_columns == 5L)) {
     cli::cli_alert_success(paste0("all files have {.strong 5} columns"))
-  } else {
-    alert_files <- files_df$filename[files_df$num_of_columns != 5L]
+  } else if (any(files_df$num_of_columns > 5L)) {
+    alert_files <- files_df$filename[files_df$num_of_columns > 5L]
     cli::cli({
-      cli::cli_alert_warning(paste0("the following files do not have {.strong 5} columns:"))
-      cli::cli_alert_info("this can be adapted to automatically by the {.fun read_portfolio_csv} function", class = "indented")
+      cli::cli_alert_warning(paste0("the following files have more than {.strong 5} columns:"))
+      cli::cli_alert_info("this can usually be adapted to automatically by the {.fun read_portfolio_csv} function", class = "indented")
       cli::cli_bullets(alert_files, class = "file indented")
     })
+  } else if (any(files_df$num_of_columns < 4L)) {
+    alert_files <- files_df$filename[files_df$num_of_columns < 4L]
+    cli::cli({
+      cli::cli_alert_danger("the following files have less than {.strong 4} columns and will not be considered further:")
+      cli::cli_bullets(alert_files, class = "file indented")
+    })
+    files_df <- files_df[files_df$num_of_columns >= 4L, ]
   }
+
+
 
   files_df$decimal_mark <- guess_decimal_marks(files_df$filepath, files_df$file_encoding, files_df$delimiter)
 
@@ -233,12 +246,44 @@ get_csv_specs <- function(files) {
     })
   }
 
+  files_df$tokenizer <- get_tokenizers(files_df$filepath, files_df$file_encoding, files_df$delimiter)
+
+  files_df$fields_per_line <- get_fields_per_line(files_df$filepath, files_df$tokenizer)
+  files_df$has_consistent_fields_per_line <- vapply(X = files_df$fields_per_line, FUN = function(x) all(x == x[1]), FUN.VALUE = logical(1))
+
+  if (all(files_df$has_consistent_fields_per_line == TRUE)) {
+    cli::cli_alert_success(paste0("all files have a consistent number of fields per line"))
+  } else if (any(files_df$has_consistent_fields_per_line == FALSE)) {
+    alert_files <- files_df$filename[files_df$has_consistent_fields_per_line == FALSE]
+    cli::cli({
+      cli::cli_alert_danger("the following files do not have a consistent number of fields per line and will not be considered further:")
+      cli::cli_bullets(alert_files, class = "file indented")
+    })
+    files_df <- files_df[files_df$has_consistent_fields_per_line == TRUE, ]
+  }
+
+  files_df$column_names <- get_column_names(files_df$filepath, files_df$file_encoding, files_df$delimiter)
+
+  files_df$has_expected_colnames <- vapply(X = files_df$column_names, FUN = function(x) isTRUE(all.equal(target = expected_colnames, current = x)), FUN.VALUE = logical(1))
+
+  if (all(files_df$has_expected_colnames == TRUE)) {
+    cli::cli_alert_success(paste0("all files have the expected column names"))
+  } else if (all(files_df$has_expected_colnames == FALSE)) {
+    cli::cli_alert_warning("none of the files have the expected column names")
+  } else if (any(files_df$has_expected_colnames == FALSE)) {
+    alert_files <- files_df$filename[files_df$has_expected_colnames == FALSE]
+    cli::cli({
+      cli::cli_alert_warning("the following files do not have the expected column names:")
+      cli::cli_bullets(alert_files, class = "file indented")
+    })
+  }
+
+
   investor_name_colname <- "Investor.Name"
   portfolio_name_colname <- "Portfolio.Name"
   isin_colname <- "ISIN"
   market_value_colname <- "MarketValue"
   currency_colname <- "Currency"
-
   test <- purrr::map(seq_along(files_df$filepath), ~ readr::read_delim(files_df$filepath[.x], delim = files_df$delimiter[.x], progress = FALSE, show_col_types = FALSE))
 
   files_df$investor_name_is_string <- vapply(test, function(x) is.character(x[[investor_name_colname]]), logical(1))
@@ -264,6 +309,78 @@ guess_ <- function(filepaths, encodings) {
 
     },
     FUN.VALUE = character(1)
+  )
+}
+
+
+check_column_names <- function(filepaths, encodings, delimiters) {
+  vapply(
+    X = seq_along(filepaths),
+    FUN = function(i) {
+      readr::read_delim(file = filepaths[[i]], locale = readr::locale(encoding = encodings[[i]]), delim = delimiters[[i]], n_max = 1L, col_names = FALSE, show_col_types = FALSE, progress = FALSE)
+    },
+    FUN.VALUE = integer(1)
+  )
+}
+
+get_column_names <- function(filepaths, encodings, delimiters) {
+  vapply(
+    X = seq_along(filepaths),
+    FUN = function(i) {
+      list(
+        names(
+          readr::read_delim(
+            file = filepaths[[i]],
+            delim = delimiters[[i]],
+            locale = readr::locale(encoding = encodings[[i]]),
+            n_max = 1L,
+            trim_ws = TRUE,
+            col_types = readr::cols(.default = "c"),
+            show_col_types = FALSE,
+            progress = FALSE
+          )
+        )
+      )
+    },
+    FUN.VALUE = list(1)
+  )
+}
+
+
+get_fields_per_line <- function(filepaths, tokenizers) {
+  vapply(
+    X = seq_along(filepaths),
+    FUN = function(i) {
+      list(
+        readr::count_fields(
+          file = filepaths[[i]],
+          tokenizer = tokenizers[[i]]
+        )
+      )
+    },
+    FUN.VALUE = list(1)
+  )
+}
+
+get_tokenizers <- function(filepaths, encodings, delimiters) {
+  vapply(
+    X = seq_along(filepaths),
+    FUN = function(i) {
+      list(
+        readr::tokenizer_delim(
+          delim = delimiters[[i]],
+          quote = "\"",
+          na = "NA",
+          quoted_na = TRUE,
+          comment = "",
+          trim_ws = TRUE,
+          escape_double = TRUE,
+          escape_backslash = FALSE,
+          skip_empty_rows = TRUE
+        )
+      )
+    },
+    FUN.VALUE = list(1)
   )
 }
 
@@ -329,7 +446,6 @@ guess_decimal_marks <- function(filepaths, encodings, delimiters) {
           locale = cust_locale,
           trim_ws = TRUE,
           col_types = readr::cols(.default = "c"),
-          skip = 1,
           col_names = FALSE,
           show_col_types = FALSE,
           progress = FALSE
