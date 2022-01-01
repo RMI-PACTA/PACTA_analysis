@@ -312,7 +312,20 @@ get_csv_specs <- function(files, expected_colnames = c("Investor.Name", "Portfol
 
   files_df$valid_iso4217c_codes <- validate_iso4217c(lapply(test, function(x) x[[currency_colname]]))
 
-  files_df
+  files_df$valid_isins <- validate_isins(lapply(test, function(x) x[[isin_colname]]))
+
+  if (all(files_df$valid_isins == TRUE)) {
+    cli::cli_alert_success(paste0("all files have only valid ISINs"))
+  } else if (any(files_df$valid_isins == FALSE)) {
+    alert_files <- files_df$filename[files_df$valid_isins == FALSE]
+    cli::cli({
+      cli::cli_alert_warning("the following files have some invalid ISINs:")
+      cli::cli_bullets(alert_files, class = "file indented")
+    })
+  }
+
+
+  invisible(files_df)
 }
 
 
