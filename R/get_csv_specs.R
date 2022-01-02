@@ -47,6 +47,31 @@
 # get_csv_specs(files = c(list.files("~/Desktop/test/", full.names = TRUE), "XXX"), expected_colnames = c("investor_name", "portfolio_name", "isin", "market_value", "currency"))
 
 get_csv_specs <- function(files, expected_colnames = c("Investor.Name", "Portfolio.Name", "ISIN", "MarketValue", "Currency")) {
+  alert_by_type <- function(type, ...) {
+    switch(
+      type,
+      info = cli::cli_alert_info(...),
+      warning = cli::cli_alert_warning(...),
+      danger = cli::cli_alert_danger(...),
+      success = cli::cli_alert_success(...),
+    )
+  }
+
+  report_alert_files <- function(msg, bullets, type = "info", info = NULL) {
+    cli::cli_div(theme = list(`.indented` = list(`margin-left` = 2), `.file` = list(color = "blue")))
+    on.exit(cli::cli_end(), add = TRUE)
+    alert_by_type(type, msg)
+    if (!is.null(info)) {
+      alert_by_type("info", info, class = "indented")
+    }
+    if (length(bullets) > 10L) {
+      abbreviated <- c(bullets[1:10], paste0("... and ", length(bullets) - 10, " more"))
+      cli::cli_bullets(abbreviated, class = "file indented")
+    } else {
+      cli::cli_bullets(bullets, class = "file indented")
+    }
+  }
+
   if (length(files) == 1 && fs::is_dir(files)) {
     files <- file.path(files, list.files(files))
   }
@@ -57,9 +82,6 @@ get_csv_specs <- function(files, expected_colnames = c("Investor.Name", "Portfol
 
   files_df$filepath <- fs::path_abs(fs::path_expand(files_df$input))
 
-  cli::cli_div(theme = list(`.indented` = list(`margin-left` = 2), `.file` = list(color = "blue")))
-  on.exit(cli::cli_end(), add = TRUE)
-
   files_df$file_exists <- unname(fs::file_exists(files_df$filepath))
 
   if (all(files_df$file_exists)) {
@@ -69,10 +91,7 @@ get_csv_specs <- function(files, expected_colnames = c("Investor.Name", "Portfol
     cli::cli_abort("the {.fun get_csv_specs} function had to stop because none of the files could be used")
   } else {
     alert_files <- files_df$filename[!files_df$file_exists]
-    cli::cli({
-      cli::cli_alert_danger("the following files do not exist and will not be considered further:")
-      cli::cli_bullets(alert_files, class = "file indented")
-    })
+    report_alert_files("the following files do not exist and will not be considered further:", alert_files, type = "danger")
     files_df <- files_df[files_df$file_exists, ]
   }
 
@@ -88,11 +107,7 @@ get_csv_specs <- function(files, expected_colnames = c("Investor.Name", "Portfol
     cli::cli_abort("the {.fun get_csv_specs} function had to stop because none of the files could be used")
   } else {
     alert_files <- files_df$filename[files_df$file_size == 0]
-    cli::cli({
-      cli::cli_alert_danger("the following files have a size of 0 and will not be considered further:")
-      cli::cli_alert_info("this might mean that they are un-downloaded Dropbox files or are empty files", class = "indented")
-      cli::cli_bullets(alert_files, class = "file indented")
-    })
+    report_alert_files("the following files have a size of 0 and will not be considered further:", alert_files, type = "danger", info = "this might mean that they are un-downloaded Dropbox files or are empty files")
     files_df <- files_df[files_df$file_size > 0, ]
   }
 
@@ -106,10 +121,7 @@ get_csv_specs <- function(files, expected_colnames = c("Investor.Name", "Portfol
     cli::cli_abort("the {.fun get_csv_specs} function had to stop because none of the files could be used")
   } else {
     alert_files <- files_df$filename[!files_df$file_read_access]
-    cli::cli({
-      cli::cli_alert_danger("the following files do not have read access and will not be considered further:")
-      cli::cli_bullets(alert_files, class = "file indented")
-    })
+    report_alert_files("the following files do not have read access and will not be considered further:", alert_files, type = "danger")
     files_df <- files_df[files_df$file_read_access, ]
   }
 
@@ -125,10 +137,7 @@ get_csv_specs <- function(files, expected_colnames = c("Investor.Name", "Portfol
     cli::cli_abort("the {.fun get_csv_specs} function had to stop because none of the files could be used")
   } else {
     alert_files <- files_df$filename[files_df$mime_encoding == "binary"]
-    cli::cli({
-      cli::cli_alert_danger("the following files are binary files and will not be considered further:")
-      cli::cli_bullets(alert_files, class = "file indented")
-    })
+    report_alert_files("the following files are binary files and will not be considered further:", alert_files, type = "danger")
     files_df <- files_df[files_df$mime_encoding != "binary", ]
   }
 
@@ -142,10 +151,7 @@ get_csv_specs <- function(files, expected_colnames = c("Investor.Name", "Portfol
     cli::cli_abort("the {.fun get_csv_specs} function had to stop because none of the files could be used")
   } else {
     alert_files <- files_df$filename[!grepl("/csv$|/comma-separated-values$", files_df$content_type)]
-    cli::cli({
-      cli::cli_alert_danger("the following files are not CSV files and will not be considered further:")
-      cli::cli_bullets(alert_files, class = "file indented")
-    })
+    report_alert_files("the following files are not CSV files and will not be considered further:", alert_files, type = "danger")
     files_df <- files_df[grepl("/csv$|/comma-separated-values$", files_df$content_type), ]
   }
 
@@ -176,11 +182,7 @@ get_csv_specs <- function(files, expected_colnames = c("Investor.Name", "Portfol
     cli::cli_alert_success("all files are encoded in ASCII or UTF-8")
   } else {
     alert_files <- files_df$filename[!files_df$file_encoding %in% c("ASCII", "UTF-8")]
-    cli::cli({
-      cli::cli_alert_warning("the following files are not encoded in ASCII or UTF-8:")
-      cli::cli_alert_info("this can be adapted to automatically by the {.fun read_portfolio_csv} function", class = "indented")
-      cli::cli_bullets(alert_files, class = "file indented")
-    })
+    report_alert_files("the following files are not encoded in ASCII or UTF-8:", alert_files, type = "warning", info = "this can be adapted to automatically by the {.fun read_portfolio_csv} function")
   }
 
   files_df$num_of_lines <- guess_num_of_lines(files_df$filepath)
@@ -191,11 +193,7 @@ get_csv_specs <- function(files, expected_colnames = c("Investor.Name", "Portfol
     cli::cli_alert_success("all files have a newline at the end")
   } else {
     alert_files <- files_df$filename[!files_df$last_line_has_newline]
-    cli::cli({
-      cli::cli_alert_warning("the following files do not have a newline at the end:")
-      cli::cli_alert_info("this can be adapted to automatically by the {.fun read_portfolio_csv} function", class = "indented")
-      cli::cli_bullets(alert_files, class = "file indented")
-    })
+    report_alert_files("the following files do not have a newline at the end:", alert_files, type = "warning", info = "this can be adapted to automatically by the {.fun read_portfolio_csv} function")
   }
 
   files_df$delimiter <- guess_delimiters(files_df$filepath, files_df$file_encoding)
@@ -204,23 +202,16 @@ get_csv_specs <- function(files, expected_colnames = c("Investor.Name", "Portfol
     cli::cli_alert_success(paste0("all files use {.strong ", cli::style_inverse(","), "} for a delimiter"))
   } else {
     alert_files <- files_df$filename[files_df$delimiter != ","]
-    cli::cli({
-      cli::cli_alert_warning(paste0("the following files do not use {.strong ", cli::style_inverse(","), "} for a delimiter:"))
-      cli::cli_alert_info("this can be adapted to automatically by the {.fun read_portfolio_csv} function", class = "indented")
-      cli::cli_bullets(alert_files, class = "file indented")
-    })
+    report_alert_files(paste0("the following files do not use {.strong ", cli::style_inverse(","), "} for a delimiter:"), alert_files, type = "warning", info = "this can be adapted to automatically by the {.fun read_portfolio_csv} function")
   }
 
-  files_df$read_without_error <- validate_read_without_error(files_df$filepath, files_df$file_encoding)
+  files_df$read_without_error <- validate_read_without_error(files_df$filepath, files_df$file_encoding, files_df$delimiter)
 
   if (all(files_df$read_without_error == TRUE)) {
     cli::cli_alert_success(paste0("all files can be read without error"))
   } else if (any(files_df$read_without_error == FALSE)) {
     alert_files <- files_df$filename[isFALSE(files_df$read_without_error)]
-    cli::cli({
-      cli::cli_alert_danger("the following files can not be read without error and will not be considered further:")
-      cli::cli_bullets(alert_files, class = "file indented")
-    })
+    report_alert_files("the following files can not be read without error and will not be considered further:", alert_files, type = "danger")
     files_df <- files_df[files_df$read_without_error == TRUE, ]
   }
 
@@ -231,17 +222,10 @@ get_csv_specs <- function(files, expected_colnames = c("Investor.Name", "Portfol
     cli::cli_alert_success(paste0("all files have {.strong 5} columns"))
   } else if (any(files_df$num_of_columns > 5L)) {
     alert_files <- files_df$filename[files_df$num_of_columns > 5L]
-    cli::cli({
-      cli::cli_alert_warning(paste0("the following files have more than {.strong 5} columns:"))
-      cli::cli_alert_info("this can usually be adapted to automatically by the {.fun read_portfolio_csv} function", class = "indented")
-      cli::cli_bullets(alert_files, class = "file indented")
-    })
+    report_alert_files("the following files have more than {.strong 5} columns:", alert_files, type = "warning", info = "this can usually be adapted to automatically by the {.fun read_portfolio_csv} function")
   } else if (any(files_df$num_of_columns < 4L)) {
     alert_files <- files_df$filename[files_df$num_of_columns < 4L]
-    cli::cli({
-      cli::cli_alert_danger("the following files have less than {.strong 4} columns and will not be considered further:")
-      cli::cli_bullets(alert_files, class = "file indented")
-    })
+    report_alert_files("the following files have less than {.strong 4} columns and will not be considered further:", alert_files, type = "danger")
     files_df <- files_df[files_df$num_of_columns >= 4L, ]
   }
 
@@ -253,11 +237,7 @@ get_csv_specs <- function(files, expected_colnames = c("Investor.Name", "Portfol
     cli::cli_alert_success(paste0("all files use {.strong ", cli::style_inverse("."), "} for a decimal mark"))
   } else {
     alert_files <- files_df$filename[files_df$decimal_mark != "."]
-    cli::cli({
-      cli::cli_alert_warning(paste0("the following files do not use {.strong ", cli::style_inverse("."), "} for a decimal mark"))
-      cli::cli_alert_info("this can be adapted to automatically by the {.fun read_portfolio_csv} function", class = "indented")
-      cli::cli_bullets(alert_files, class = "file indented")
-    })
+    report_alert_files(paste0("the following files do not use {.strong ", cli::style_inverse("."), "} for a decimal mark"), alert_files, type = "warning", info = "this can be adapted to automatically by the {.fun read_portfolio_csv} function")
   }
 
   files_df$tokenizer <- get_tokenizers(files_df$filepath, files_df$file_encoding, files_df$delimiter)
@@ -269,10 +249,7 @@ get_csv_specs <- function(files, expected_colnames = c("Investor.Name", "Portfol
     cli::cli_alert_success(paste0("all files have a consistent number of fields per line"))
   } else if (any(files_df$has_consistent_fields_per_line == FALSE)) {
     alert_files <- files_df$filename[files_df$has_consistent_fields_per_line == FALSE]
-    cli::cli({
-      cli::cli_alert_danger("the following files do not have a consistent number of fields per line and will not be considered further:")
-      cli::cli_bullets(alert_files, class = "file indented")
-    })
+    report_alert_files("the following files do not have a consistent number of fields per line and will not be considered further:", alert_files, type = "danger")
     files_df <- files_df[files_df$has_consistent_fields_per_line == TRUE, ]
   }
 
@@ -286,10 +263,7 @@ get_csv_specs <- function(files, expected_colnames = c("Investor.Name", "Portfol
     cli::cli_alert_warning("none of the files have the expected column names")
   } else if (any(files_df$has_expected_colnames == FALSE)) {
     alert_files <- files_df$filename[files_df$has_expected_colnames == FALSE]
-    cli::cli({
-      cli::cli_alert_warning("the following files do not have the expected column names:")
-      cli::cli_bullets(alert_files, class = "file indented")
-    })
+    report_alert_files("the following files do not have the expected column names:", alert_files, type = "warning")
   }
 
 
@@ -312,16 +286,15 @@ get_csv_specs <- function(files, expected_colnames = c("Investor.Name", "Portfol
 
   files_df$valid_iso4217c_codes <- validate_iso4217c(lapply(test, function(x) x[[currency_colname]]))
 
-  files_df$valid_isins <- validate_isins(lapply(test, function(x) x[[isin_colname]]))
+  files_df$valid_isins <- validate_isins_list(lapply(test, function(x) x[[isin_colname]]))
 
-  if (all(files_df$valid_isins == TRUE)) {
+  files_df$has_invalid_isins <- vapply(files_df$valid_isins, function(x) any(x == FALSE), FUN.VALUE = logical(1), USE.NAMES = FALSE)
+
+  if (all(files_df$has_invalid_isins == FALSE)) {
     cli::cli_alert_success(paste0("all files have only valid ISINs"))
-  } else if (any(files_df$valid_isins == FALSE)) {
-    alert_files <- files_df$filename[files_df$valid_isins == FALSE]
-    cli::cli({
-      cli::cli_alert_warning("the following files have some invalid ISINs:")
-      cli::cli_bullets(alert_files, class = "file indented")
-    })
+  } else if (any(files_df$has_invalid_isins == TRUE)) {
+    alert_files <- files_df$filename[files_df$has_invalid_isins == TRUE]
+    report_alert_files("the following files have some invalid ISINs:", alert_files, type = "warning")
   }
 
 
@@ -546,9 +519,9 @@ guess_num_of_lines <- function(filepaths) {
 }
 
 
-validate_isins <- function(x) {
+validate_isins <- function(isins) {
   is_luhn <- function(x) {
-    digits <- as.numeric(rev(unlist(strsplit(x, ""))))
+    digits <- suppressWarnings(as.numeric(rev(unlist(strsplit(x, "")))))
     odd <- seq_along(digits) %% 2 == 1
     s1 <- sum(digits[odd])
     s2 <- digits[!odd] * 2
@@ -556,13 +529,31 @@ validate_isins <- function(x) {
     sum(s1, s2) %% 10 == 0
   }
 
-  x <- toupper(x)
-  x <- gsub(pattern = "[[:blank:]]", replacement = "", x)
-  valid_struct <- grepl("^[[:upper:]]{2}[[:alnum:]]{9}[[:digit:]]$", x)
-  x <- stringi::stri_replace_all_fixed(x, LETTERS, seq_along(LETTERS) + 9,
-                                       vectorize_all = FALSE)
-  valid_luhn <- vapply(x, is_luhn, FUN.VALUE = logical(1L), USE.NAMES = FALSE)
+  isins <- toupper(isins)
+  isins <- gsub(pattern = "[[:blank:]]", replacement = "", isins)
+  valid_struct <- grepl("^[[:upper:]]{2}[[:alnum:]]{9}[[:digit:]]$", isins)
+
+  valid_luhn <-
+    vapply(
+      X = isins,
+      FUN = function(x) {
+        x <- stringi::stri_replace_all_fixed(x, LETTERS, seq_along(LETTERS) + 9L,
+                                             vectorize_all = FALSE)
+        out <- vapply(x, is_luhn, FUN.VALUE = logical(1L), USE.NAMES = FALSE)
+        out[is.na(out)] <- FALSE
+        out
+      },
+      FUN.VALUE = logical(1),
+      USE.NAMES = FALSE
+    )
+
   valid_struct & valid_luhn
+}
+
+
+validate_isins_list <- function(isins_list) {
+  if (class(isins_list) != "list") isins_list <- list(isins_list)
+  lapply(X = isins_list, FUN = validate_isins)
 }
 
 
@@ -578,7 +569,7 @@ validate_iso4217c <- function(codes_list) {
 }
 
 
-validate_read_without_error <- function(filepaths, encodings) {
+validate_read_without_error <- function(filepaths, encodings, delimiters) {
   vapply(
     X = seq_along(filepaths),
     FUN = function(i) {
@@ -586,6 +577,7 @@ validate_read_without_error <- function(filepaths, encodings) {
         suppressMessages(
           readr::read_delim(
             file = filepaths[[i]],
+            delim = delimiters[[i]],
             locale = readr::locale(encoding = encodings[[i]]),
             progress = FALSE,
             show_col_types = FALSE
