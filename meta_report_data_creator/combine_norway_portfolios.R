@@ -92,6 +92,7 @@ portfolio_csvs <- portfolio_csvs[! tools::file_path_sans_ext(basename(portfolio_
 
 specs <- get_csv_specs(portfolio_csvs)
 saveRDS(specs, file.path(output_dir, paste0(project_prefix, "_csv_specs.rds")))
+portfolio_csvs <- specs$filepath
 
 
 # read in all the CSVs ---------------------------------------------------------
@@ -102,7 +103,7 @@ data <- map_dfr(set_names(portfolio_csvs, portfolio_csvs), read_portfolio_csv, .
 # read in meta data CSVs -------------------------------------------------------
 
 portfolios_meta <- read_csv(portfolios_meta_csv, col_types = "nnnccnc")
-users_meta <- read_csv(users_meta_csv, col_types = "ncccccn")
+users_meta <- read_csv(users_meta_csv, col_types = "ncccccn", skip = 1L, col_names = c("id", "email_canonical", "organization_type", "organization_name", "job_title", "country", "has_portfolios"))
 
 
 # add meta data to full data and save it ---------------------------------------
