@@ -100,6 +100,7 @@ ARG PKG_DEPS="\
     readxl \
     rmarkdown \
     scales \
+    stringi \
     stringr \
     tibble \
     tidyr \
