@@ -14,14 +14,14 @@
 # - [ ] determine if best guess encoding is used and then converted to UTF-8 there are non-UTF-8 characters
 # - [X] determine delimiter
 # - [X] determine decimal mark
-# - [ ] determine grouping mark
+# - [X] determine grouping mark
 # - [X] determine number of columns
 # - [ ] determine/guess if a header is included
-# - [ ] determine in column names match expectation
+# - [X] determine if column names match expectation
 # - [ ] is investor_name column all strings
 # - [ ] is portfolio_name column all strings
 # - [ ] is isin column all strings
-# - [ ] is isin column all valid isins (Luhn)
+# - [X] is isin column all valid isins (Luhn)
 # - [ ] is isin column all isins that are in our financial data
 # - [ ] is market_value all numeric
 # - [ ] is market_value all numeric after using determined decimal and grouping mark
