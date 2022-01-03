@@ -214,7 +214,8 @@ stages:
               script: |
                 docker pull \
                   $(qualifiedRepository):$(Build.BuildNumber)
-          - checkout: none
+          - checkout: self
+            path:  $(Build.SourcesDirectory)/pacta_analysis
           - task: Bash@3
             displayName: Save Docker image as tar
             inputs:
