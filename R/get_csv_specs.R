@@ -67,7 +67,7 @@ get_csv_specs <- function(files, expected_colnames = c("Investor.Name", "Portfol
         alert_by_type("info", info, class = "indented")
       }
       if (length(bullets) > 10L) {
-        abbreviated <- c(bullets[1:10], paste0("… and {.strong ", length(bullets) - 10, " more}"))
+        abbreviated <- c(bullets[1:10], paste0("\u2026 and {.strong ", length(bullets) - 10, " more}"))
         cli::cli_bullets(abbreviated, class = "file indented")
       } else {
         cli::cli_bullets(bullets, class = "file indented")
