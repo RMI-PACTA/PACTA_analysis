@@ -153,39 +153,14 @@ stages:
               inputs:
                 targetType: inline
                 # filePath: run-like-constructiva-flags.sh
-                workingDirectory: $(runDirectory)
                 script: |
-                  ./run-like-constructiva-flags.sh \
+                  $(Build.SourceDirectory)/pacta_analysis/transitionmonitor_docker/run-like-constructiva-flags.sh \
                   -v \
                   -u 4 \
                   -p ${{portfolioName}} \
                   -f $(portfolioDirectory) \
                   -m $(qualifiedRepository) \
                   -t $(Build.BuildNumber)
-            # - task: AzureCLI@2
-            #   condition: succeededOrFailed()
-            #   displayName: Create Build.BuildNumber Directory
-            #   inputs:
-            #     azureSubscription: tm-docker-AzureResourceManager
-            #     scriptType: bash
-            #     scriptLocation: inlineScript
-            #     inlineScript: |
-            #       az storage directory create \
-            #       --name $(Build.BuildNumber) \
-            #       --share-name $(resultsShareName) \
-            #       --account-name $(testingStorageAccountName)
-            # - task: AzureCLI@2
-            #   condition: succeededOrFailed()
-            #   displayName: Create Results Directory
-            #   inputs:
-            #     azureSubscription: tm-docker-AzureResourceManager
-            #     scriptType: bash
-            #     scriptLocation: inlineScript
-            #     inlineScript: |
-            #       az storage directory create \
-            #       --name $(resultsDirectory) \
-            #       --share-name $(resultsShareName) \
-            #       --account-name $(testingStorageAccountName)
             - task: AzureCLI@2
               condition: succeededOrFailed()
               displayName: Upload Results files to Azure File Share
