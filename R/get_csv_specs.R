@@ -269,13 +269,15 @@ get_csv_specs <- function(files, expected_colnames = c("Investor.Name", "Portfol
     report_alert_files("the following files do not have the expected column names:", alert_files, type = "warning")
   }
 
+  files_df$grouping_mark <- ifelse(files_df$decimal_mark == ",", ".", ",")
+  files_df$readr_locale <- get_locales(encodings = files_df$file_encoding, decimal_marks = files_df$decimal_mark, grouping_marks = files_df$grouping_mark)
 
   investor_name_colname <- expected_colnames[[1]]
   portfolio_name_colname <- expected_colnames[[2]]
   isin_colname <- expected_colnames[[3]]
   market_value_colname <- expected_colnames[[4]]
   currency_colname <- expected_colnames[[5]]
-  test <- purrr::map(seq_along(files_df$filepath), ~ suppressWarnings(suppressMessages(readr::read_delim(files_df$filepath[.x], delim = files_df$delimiter[.x], progress = FALSE, show_col_types = FALSE))))
+  test <- purrr::map(seq_along(files_df$filepath), ~ suppressWarnings(suppressMessages(readr::read_delim(files_df$filepath[.x], delim = files_df$delimiter[.x], locale = files_df$readr_locale[.x][[1]], progress = FALSE, show_col_types = FALSE))))
 
   files_df$investor_name_is_string <- vapply(test, function(x) is.character(x[[investor_name_colname]]), logical(1))
 
@@ -366,6 +368,24 @@ get_fields_per_line <- function(filepaths, tokenizers) {
     FUN.VALUE = list(1)
   )
 }
+
+
+get_locales <- function(encodings, decimal_marks, grouping_marks) {
+  vapply(
+    X = seq_along(encodings),
+    FUN = function(i) {
+      list(
+        readr::locale(
+          encoding = encodings[[i]],
+          decimal_mark = decimal_marks[[i]],
+          grouping_mark = grouping_marks[[i]]
+        )
+      )
+    },
+    FUN.VALUE = list(1)
+  )
+}
+
 
 get_tokenizers <- function(filepaths, encodings, delimiters) {
   vapply(
