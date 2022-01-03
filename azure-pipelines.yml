@@ -25,7 +25,7 @@ variables:
   # use PR number if it's a PR, otherwise branch name.
   ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
     dockerTag: 'PR$(System.PullRequest.PullRequestNumber)'
-  ${{ elseif eq(variables['Build.Reason'], 'PullRequest') }}:
+  ${{ elseif eq(variables['Build.Reason'], 'IndividualCI') }}:
     dockerTag: '$(Build.SourceBranchName)'
   ${{ else }}:
     dockerTag: '$(Build.Reason)'
@@ -74,6 +74,19 @@ stages:
           - checkout: r2dii.climate.stress.test
           - checkout: r2dii.stress.test.data
           - checkout: pacta-data
+          - task: Docker@2
+            displayName: Login to ACR
+            inputs:
+              command: login
+              containerRegistry: $(dockerRegistryServiceConnection)
+          # - task: Bash@3
+          #   displayName: Pull Docker image
+          #   inputs:
+          #     targetType: inline
+          #     workingDirectory: $(Build.SourcesDirectory)
+          #     script: |
+          #       docker pull \
+          #       $(qualifiedRepository):$(Build.BuildNumber)
           - task: Docker@2
             displayName: Build Transition Monitor Docker image
             inputs:
@@ -140,14 +153,21 @@ stages:
                 workingDirectory: $(Build.SourcesDirectory)
                 script: |
                   chmod -R 777 $(portfolioDirectory)
+            # - task: Bash@3
+            #   displayName: Pull Docker image
+            #   inputs:
+            #     targetType: inline
+            #     workingDirectory: $(Build.SourcesDirectory)
+            #     script: |
+            #       docker pull \
+            #       $(qualifiedRepository):$(Build.BuildNumber)
             - task: Bash@3
               displayName: Pull Docker image
               inputs:
                 targetType: inline
                 workingDirectory: $(Build.SourcesDirectory)
                 script: |
-                  docker pull \
-                  $(qualifiedRepository):$(Build.BuildNumber)
+                  ls -laRh
             - task: Bash@3
               displayName: Run ${{portfolioName}} Portfolio
               inputs:
