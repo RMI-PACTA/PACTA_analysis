@@ -1,3 +1,14 @@
+#' Validate a vector of ISINs
+#'
+#' This function validates that a vector of ISINs are valid codes that conform
+#' to the ISO 6166 specification. It checks the basic structure (2 alpha
+#' characters, 9 alpha-numeric characters, 1 check digit) and also validates
+#' the check digit using the Luhn algorithm.
+#'
+#' @param isins A character vector
+#'
+#' @return A logical vector the same length as `isins`.
+#' @export
 is_valid_isin <- function(isins) {
   if (is.data.frame(isins) && identical(length(isins), 1L)) {
     isins <- isins[[1L]]
