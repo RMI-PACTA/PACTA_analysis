@@ -1,3 +1,14 @@
+#' Validate a vector of filenames or filepaths
+#'
+#' This function validates that a vector of filenames or filepaths are
+#' accessible files that: are a file, exist, have read access, and are not
+#' empty. Dropbox files that are visible but not downloaded locally will be
+#' empty files, and they will not pass this validation.
+#'
+#' @param filepaths A character vector
+#'
+#' @return A logical vector the same length as `filepaths`.
+#' @export
 is_file_accessible <- function(filepaths) {
   if (is.data.frame(filepaths) && identical(length(filepaths), 1L)) {
     filepaths <- filepaths[[1L]]
