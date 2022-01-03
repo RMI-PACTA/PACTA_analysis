@@ -299,6 +299,13 @@ get_csv_specs <- function(files, expected_colnames = c("Investor.Name", "Portfol
 
   files_df$valid_iso4217c_codes <- validate_iso4217c(lapply(test, function(x) x[[currency_colname]]))
 
+  if (all(files_df$valid_iso4217c_codes == TRUE)) {
+    cli::cli_alert_success(paste0("all files have only valid iso4217c currency codes"))
+  } else if (any(files_df$valid_iso4217c_codes == FALSE)) {
+    alert_files <- files_df$filename[files_df$valid_iso4217c_codes == FALSE]
+    report_alert_files("the following files have some invalid iso4217c currency codes:", alert_files, type = "warning")
+  }
+
   files_df$valid_isins <- validate_isins_list(lapply(test, function(x) x[[isin_colname]]))
 
   files_df$has_invalid_isins <- vapply(files_df$valid_isins, function(x) any(x == FALSE), FUN.VALUE = logical(1), USE.NAMES = FALSE)
