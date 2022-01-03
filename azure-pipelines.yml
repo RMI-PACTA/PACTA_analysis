@@ -153,16 +153,16 @@ stages:
                 workingDirectory: $(Build.SourcesDirectory)
                 script: |
                   chmod -R 777 $(portfolioDirectory)
-            # - task: Bash@3
-            #   displayName: Pull Docker image
-            #   inputs:
-            #     targetType: inline
-            #     workingDirectory: $(Build.SourcesDirectory)
-            #     script: |
-            #       docker pull \
-            #       $(qualifiedRepository):$(Build.BuildNumber)
             - task: Bash@3
               displayName: Pull Docker image
+              inputs:
+                targetType: inline
+                workingDirectory: $(Build.SourcesDirectory)
+                script: |
+                  docker pull \
+                  $(qualifiedRepository):$(Build.BuildNumber)
+            - task: Bash@3
+              displayName: Inspect File structure
               inputs:
                 targetType: inline
                 workingDirectory: $(Build.SourcesDirectory)
@@ -174,7 +174,7 @@ stages:
                 targetType: inline
                 # filePath: run-like-constructiva-flags.sh
                 script: |
-                  $(Build.SourcesDirectory)/pacta_analysis/transitionmonitor_docker/run-like-constructiva-flags.sh \
+                  $(Build.SourcesDirectory)/transitionmonitor_docker/run-like-constructiva-flags.sh \
                   -v \
                   -u 4 \
                   -p ${{portfolioName}} \
@@ -215,7 +215,7 @@ stages:
                 docker pull \
                   $(qualifiedRepository):$(Build.BuildNumber)
           - checkout: self
-            path:  $(Build.SourcesDirectory)/pacta_analysis
+            path: $(Build.SourcesDirectory)/pacta_analysis
           - task: Bash@3
             displayName: Save Docker image as tar
             inputs:
