@@ -1,5 +1,7 @@
 #! /bin/bash
 
+set -e
+
 usage() {
   echo "Usage: $0  -p <portfolio name string> -t <docker image tag>" 1>&2
   echo "Optional flags:" 1>&2
@@ -19,23 +21,31 @@ usage() {
   # v for verbose
   echo "[-v] (verbose mode)" 1>&2
   echo "[-i] run container in interactive, tty mode (docker run -it)" 1>&2
+  echo "[-m <docker image name>] (default 2dii_pacta)"
+  echo "[-f <test files directory>] (default \$pwd/<portfolio name>)"
+  echo "  ! Note that <test files directory> should contain 'working_dir' and 'user results'."
+  echo "  ! <test files directory>"
+  echo "  ! |- working_dir"
+  echo "  ! |- user_results"
   exit 1;
 }
 
-while getopts p:t:u:a:d:c:d:s:e:r:vi flag
+while getopts p:t:u:a:d:c:d:s:e:r:m:f:vi flag
 do
     case "${flag}" in
-        u) userId=${OPTARG};;
-        p) portfolioIdentifier=${OPTARG};;
-        t) tag=${OPTARG};;
         a) pa_repo=${OPTARG};;
-        d) data_repo=${OPTARG};;
         c) cir_repo=${OPTARG};;
-        s) st_repo=${OPTARG};;
+        d) data_repo=${OPTARG};;
         e) stdata_repo=${OPTARG};;
-        r) docker_command=${OPTARG};;
-        v) verbose=1;;
+        f) test_files_dir=${OPTARG};;
         i) interactive=1;;
+        m) docker_image=${OPTARG};;
+        p) portfolioIdentifier=${OPTARG};;
+        r) docker_command=${OPTARG};;
+        s) st_repo=${OPTARG};;
+        t) tag=${OPTARG};;
+        u) userId=${OPTARG};;
+        v) verbose=1;;
         *) usage;;
     esac
 done
@@ -48,8 +58,12 @@ if [ -z "${userId}" ]; then
     userId="4"
 fi
 
-userFolder="$(pwd)"/working_dirs/"$portfolioIdentifier"
-resultsFolder="$(pwd)"/user_results/"$userId"
+if [ -z "${test_files_dir}" ]; then
+  test_files_dir="$(pwd)/$portfolioIdentifier"
+fi
+
+userFolder="$test_files_dir/working_dir"
+resultsFolder="$test_files_dir/user_results/$userId"
 
 if [ -n "${verbose}" ]; then
   echo userId="$userId"
@@ -58,6 +72,10 @@ if [ -n "${verbose}" ]; then
   echo userFolder="$userFolder"
   echo resultsFolder="$resultsFolder"
   echo ""
+fi
+
+if [ -z "${docker_image}" ]; then
+  docker_image="2dii_pacta"
 fi
 
 if [ -z "${docker_command}" ]; then
@@ -99,12 +117,11 @@ if [ -n "${stdata_repo}" ]; then
   args+=(--mount "type=bind,source=${stdata_repo},target=/r2dii.stress.test.data")
 fi
 
-
 args+=(
   --mount "type=bind,source=${userFolder},target=/bound/working_dir"
   --mount "type=bind,readonly,source=${resultsFolder},target=/user_results"
 )
-args+=("2dii_pacta:$tag")
+args+=("$docker_image:$tag")
 args+=("${docker_command}")
 
 echo Running Docker Container

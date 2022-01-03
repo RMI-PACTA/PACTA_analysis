@@ -112,7 +112,6 @@ stages:
             runDirectory: '$(Build.SourcesDirectory)/$(Build.BuildNumber)'
             portfolioDirectory: '$(runDirectory)/${{portfolioName}}'
           steps:
-            - checkout: none
             - task: Docker@2
               displayName: Login to ACR
               inputs:
@@ -123,18 +122,6 @@ stages:
               inputs:
                 targetType: inline
                 script: mkdir -p $(portfolioDirectory)
-            - task: AzureCLI@2
-              displayName: Download run script from Azure File Share
-              inputs:
-                azureSubscription: tm-docker-AzureResourceManager
-                scriptType: bash
-                scriptLocation: inlineScript
-                workingDirectory: $(runDirectory)
-                inlineScript: |
-                  az storage file download \
-                  --path run-like-constructiva-flags.sh \
-                  --share-name $(testingShareName) \
-                  --account-name $(testingStorageAccountName)
             - task: AzureCLI@2
               displayName: Download Portfolio files from Azure File Share
               inputs:
@@ -154,13 +141,6 @@ stages:
                 script: |
                   chmod -R 777 $(portfolioDirectory)
             - task: Bash@3
-              displayName: Change file permissions
-              inputs:
-                targetType: inline
-                workingDirectory: $(runDirectory)
-                script: |
-                  chmod +x run-like-constructiva-flags.sh
-            - task: Bash@3
               displayName: Pull Docker image
               inputs:
                 targetType: inline
@@ -168,16 +148,6 @@ stages:
                 script: |
                   docker pull \
                   $(qualifiedRepository):$(Build.BuildNumber)
-            - task: Bash@3
-              displayName: rename Docker image
-              inputs:
-                targetType: inline
-                # filePath: run-like-constructiva-flags.sh
-                workingDirectory: $(Build.SourcesDirectory)
-                script: |
-                  docker tag \
-                  $(qualifiedRepository):$(Build.BuildNumber) \
-                  $(imageRepository):$(Build.BuildNumber)
             - task: Bash@3
               displayName: Run ${{portfolioName}} Portfolio
               inputs:
@@ -189,6 +159,8 @@ stages:
                   -v \
                   -u 4 \
                   -p ${{portfolioName}} \
+                  -f $(portfolioDirectory) \
+                  -m $(qualifiedRepository) \
                   -t $(Build.BuildNumber)
             # - task: AzureCLI@2
             #   condition: succeededOrFailed()
