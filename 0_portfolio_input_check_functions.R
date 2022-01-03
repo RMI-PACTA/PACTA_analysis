@@ -101,7 +101,7 @@ clean_portfolio_col_types <- function(portfolio, grouping_variables) {
       ),
       file_path = log_path)
     }
-    portfolio$number_of_shares <- as.numeric(portfolio$number_of_shares)
+    portfolio$number_of_shares <- suppressWarnings(as.numeric(portfolio$number_of_shares))
 
   }
   if (is.character(portfolio$currency) == FALSE) {
