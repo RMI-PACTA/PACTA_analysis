@@ -154,7 +154,7 @@ stages:
                 targetType: inline
                 # filePath: run-like-constructiva-flags.sh
                 script: |
-                  $(Build.SourceDirectory)/pacta_analysis/transitionmonitor_docker/run-like-constructiva-flags.sh \
+                  $(Build.SourcesDirectory)/pacta_analysis/transitionmonitor_docker/run-like-constructiva-flags.sh \
                   -v \
                   -u 4 \
                   -p ${{portfolioName}} \
