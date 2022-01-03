@@ -1,3 +1,12 @@
+#' Validate a vector of currency codes
+#'
+#' This function validates that a vector of currency codes are valid currency
+#' codes that exist in the ISO 4217 alpha code specification.
+#'
+#' @param currency_codes A character vector
+#'
+#' @return A logical vector the same length as `currency_codes`.
+#' @export
 is_valid_currency_code <- function(currency_codes) {
   if (is.data.frame(currency_codes) && identical(length(currency_codes), 1L)) {
     currency_codes <- currency_codes[[1L]]
