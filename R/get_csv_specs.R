@@ -60,16 +60,19 @@ get_csv_specs <- function(files, expected_colnames = c("Investor.Name", "Portfol
   report_alert_files <- function(msg, bullets, type = "info", info = NULL) {
     cli::cli_div(theme = list(`.indented` = list(`margin-left` = 2), `.file` = list(color = "blue")))
     on.exit(cli::cli_end(), add = TRUE)
-    alert_by_type(type, msg)
-    if (!is.null(info)) {
-      alert_by_type("info", info, class = "indented")
-    }
-    if (length(bullets) > 10L) {
-      abbreviated <- c(bullets[1:10], paste0("... and ", length(bullets) - 10, " more"))
-      cli::cli_bullets(abbreviated, class = "file indented")
-    } else {
-      cli::cli_bullets(bullets, class = "file indented")
-    }
+
+    cli::cli({
+      alert_by_type(type, msg)
+      if (!is.null(info)) {
+        alert_by_type("info", info, class = "indented")
+      }
+      if (length(bullets) > 10L) {
+        abbreviated <- c(bullets[1:10], paste0("… and {.strong ", length(bullets) - 10, " more}"))
+        cli::cli_bullets(abbreviated, class = "file indented")
+      } else {
+        cli::cli_bullets(bullets, class = "file indented")
+      }
+    })
   }
 
   if (length(files) == 1 && fs::is_dir(files)) {
@@ -267,12 +270,12 @@ get_csv_specs <- function(files, expected_colnames = c("Investor.Name", "Portfol
   }
 
 
-  investor_name_colname <- "Investor.Name"
-  portfolio_name_colname <- "Portfolio.Name"
-  isin_colname <- "ISIN"
-  market_value_colname <- "MarketValue"
-  currency_colname <- "Currency"
-  test <- purrr::map(seq_along(files_df$filepath), ~ suppressMessages(readr::read_delim(files_df$filepath[.x], delim = files_df$delimiter[.x], progress = FALSE, show_col_types = FALSE)))
+  investor_name_colname <- expected_colnames[[1]]
+  portfolio_name_colname <- expected_colnames[[2]]
+  isin_colname <- expected_colnames[[3]]
+  market_value_colname <- expected_colnames[[4]]
+  currency_colname <- expected_colnames[[5]]
+  test <- purrr::map(seq_along(files_df$filepath), ~ suppressWarnings(suppressMessages(readr::read_delim(files_df$filepath[.x], delim = files_df$delimiter[.x], progress = FALSE, show_col_types = FALSE))))
 
   files_df$investor_name_is_string <- vapply(test, function(x) is.character(x[[investor_name_colname]]), logical(1))
 
@@ -574,7 +577,7 @@ validate_read_without_error <- function(filepaths, encodings, delimiters) {
     X = seq_along(filepaths),
     FUN = function(i) {
       out <- tryCatch(
-        suppressMessages(
+        suppressWarnings(suppressMessages(
           readr::read_delim(
             file = filepaths[[i]],
             delim = delimiters[[i]],
@@ -582,7 +585,7 @@ validate_read_without_error <- function(filepaths, encodings, delimiters) {
             progress = FALSE,
             show_col_types = FALSE
           )
-        )
+        ))
       )
       !any(class(out) == "error")
     },
