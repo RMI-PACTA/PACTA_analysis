@@ -30,16 +30,16 @@ Imports:
     fst,
     glue,
     here,
-    jsonlite,
     janitor,
+    jsonlite,
     magrittr,
     purrr,
     readr,
     rlang,
     rmarkdown,
-    tidyr,
+    stringi,
     tibble,
-    stringi
+    tidyr
 Suggests: 
     callr,
     knitr,
