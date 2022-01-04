@@ -14,5 +14,6 @@ test_that("outputs logical vector", {
 
   expect_vector(is_valid_currency_code(1L:2L), ptype = logical(), size = 2L)
   expect_vector(is_valid_currency_code(c(TRUE, FALSE)), ptype = logical(), size = 2L)
+  expect_vector(is_valid_currency_code(NA), ptype = logical(), size = 1L)
   expect_vector(is_valid_currency_code(c(NA, NA)), ptype = logical(), size = 2L)
 })
