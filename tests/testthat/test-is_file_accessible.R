@@ -21,7 +21,7 @@ test_that("outputs logical vector", {
   expect_vector(is_file_accessible(files), ptype = logical(), size = 4)
 
   files_df <- data.frame(file = files)
-  expect_vector(mutate(files_df, accessible = is_file_accessible(file))$accessible, ptype = logical(), size = 4)
+  expect_vector(dplyr::mutate(files_df, accessible = is_file_accessible(file))$accessible, ptype = logical(), size = 4)
   expect_vector(is_file_accessible(files_df$file), ptype = logical(), size = 4)
   expect_vector(is_file_accessible(files_df["file"]), ptype = logical(), size = 4)
   expect_vector(is_file_accessible(files_df[1]), ptype = logical(), size = 4)
