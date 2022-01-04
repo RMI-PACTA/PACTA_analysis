@@ -21,7 +21,7 @@ test_that("outputs character vector", {
   expect_vector(guess_file_mime_type(files), ptype = character(), size = 4)
 
   files_df <- data.frame(file = files)
-  expect_vector(mutate(files_df, mime = guess_file_mime_type(file))$mime, ptype = character(), size = 4)
+  expect_vector(dplyr::mutate(files_df, mime = guess_file_mime_type(file))$mime, ptype = character(), size = 4)
   expect_vector(guess_file_mime_type(files_df$file), ptype = character(), size = 4)
   expect_vector(guess_file_mime_type(files_df["file"]), ptype = character(), size = 4)
   expect_vector(guess_file_mime_type(files_df[1]), ptype = character(), size = 4)
