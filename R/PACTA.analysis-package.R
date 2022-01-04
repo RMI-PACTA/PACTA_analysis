@@ -36,7 +36,7 @@
 #' @importFrom tidyr pivot_longer
 #' @importFrom tidyr pivot_wider
 #' @importFrom tidyr unnest
-#' @importFrom wand guess_content_type
+#' @importFrom wand get_content_type
 ## usethis namespace: end
 NULL
 

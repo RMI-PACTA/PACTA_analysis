@@ -2,7 +2,7 @@
 #'
 #' This function will guess the MIME type of a file for a vector of filenames
 #' or filepaths and return the MIME type as a string. It uses a vectorized
-#' version of `wand::guess_content_type()` to guess, and defaults to `NA` if it
+#' version of `wand::get_content_type()` to guess, and defaults to `NA` if it
 #' cannot determine the MIME type. If the file is inaccessible, it will return
 #' `NA` for that element.
 #'
@@ -21,7 +21,7 @@ guess_file_mime_type <- function(filepaths) {
       if (!is_file_accessible(filepath)) {
         return(NA_character_)
       }
-      out <- wand::guess_content_type(filepath)[[1L]]
+      out <- wand::get_content_type(filepath)[[1L]]
       if (identical(out, "???")) {
         return(NA_character_)
       }

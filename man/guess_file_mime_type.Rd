@@ -15,7 +15,7 @@ A character vector the same length as \code{filepaths}.
 \description{
 This function will guess the MIME type of a file for a vector of filenames
 or filepaths and return the MIME type as a string. It uses a vectorized
-version of \code{wand::guess_content_type()} to guess, and defaults to \code{NA} if it
+version of \code{wand::get_content_type()} to guess, and defaults to \code{NA} if it
 cannot determine the MIME type. If the file is inaccessible, it will return
 \code{NA} for that element.
 }
