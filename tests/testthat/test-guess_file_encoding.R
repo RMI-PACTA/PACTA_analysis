@@ -25,7 +25,7 @@ test_that("outputs character vector", {
   expect_vector(guess_file_encoding(files), ptype = character(), size = 5)
 
   files_df <- data.frame(file = files)
-  expect_vector(mutate(files_df, encoding = guess_file_encoding(file))$encoding, ptype = character(), size = 5)
+  expect_vector(dplyr::mutate(files_df, encoding = guess_file_encoding(file))$encoding, ptype = character(), size = 5)
   expect_vector(guess_file_encoding(files_df$file), ptype = character(), size = 5)
   expect_vector(guess_file_encoding(files_df["file"]), ptype = character(), size = 5)
   expect_vector(guess_file_encoding(files_df[1]), ptype = character(), size = 5)
