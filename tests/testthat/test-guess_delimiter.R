@@ -25,7 +25,7 @@ test_that("outputs character vector", {
   expect_vector(guess_delimiter(files), ptype = character(), size = 5L)
 
   files_df <- data.frame(file = files)
-  expect_vector(mutate(files_df, encoding = guess_delimiter(file))$encoding, ptype = character(), size = 5)
+  expect_vector(dplyr::mutate(files_df, encoding = guess_delimiter(file))$encoding, ptype = character(), size = 5)
   expect_vector(guess_delimiter(files_df$file), ptype = character(), size = 5L)
   expect_vector(guess_delimiter(files_df["file"]), ptype = character(), size = 5L)
   expect_vector(guess_delimiter(files_df[1L]), ptype = character(), size = 5L)
