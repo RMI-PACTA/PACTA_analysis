@@ -5,7 +5,7 @@ test_that("outputs logical vector", {
   expect_vector(is_valid_isin(isins), ptype = logical(), size = 2)
 
   isins_df <- data.frame(isin = isins)
-  expect_vector(mutate(isins_df, valid_isin = is_valid_isin(isin))$valid_isin, ptype = logical(), size = 2)
+  expect_vector(dplyr::mutate(isins_df, valid_isin = is_valid_isin(isin))$valid_isin, ptype = logical(), size = 2)
   expect_vector(is_valid_isin(isins_df$isin), ptype = logical(), size = 2)
   expect_vector(is_valid_isin(isins_df["isin"]), ptype = logical(), size = 2)
   expect_vector(is_valid_isin(isins_df[1]), ptype = logical(), size = 2)
