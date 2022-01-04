@@ -30,5 +30,6 @@ test_that("outputs logical vector", {
 
   expect_vector(is_file_accessible(1L:2L), ptype = logical(), size = 2L)
   expect_vector(is_file_accessible(c(TRUE, FALSE)), ptype = logical(), size = 2L)
+  expect_vector(is_file_accessible(NA), ptype = logical(), size = 1L)
   expect_vector(is_file_accessible(c(NA, NA)), ptype = logical(), size = 2L)
 })
