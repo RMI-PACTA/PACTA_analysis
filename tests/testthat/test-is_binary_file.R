@@ -25,7 +25,7 @@ test_that("outputs logical vector", {
   expect_vector(is_binary_file(files), ptype = logical(), size = 5)
 
   files_df <- data.frame(file = files)
-  expect_vector(mutate(files_df, is_binary = is_binary_file(file))$is_binary, ptype = logical(), size = 5)
+  expect_vector(dplyr::mutate(files_df, is_binary = is_binary_file(file))$is_binary, ptype = logical(), size = 5)
   expect_vector(is_binary_file(files_df$file), ptype = logical(), size = 5)
   expect_vector(is_binary_file(files_df["file"]), ptype = logical(), size = 5)
   expect_vector(is_binary_file(files_df[1]), ptype = logical(), size = 5)
