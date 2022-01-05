@@ -14,7 +14,7 @@ A logical vector the same length as \code{isins}.
 }
 \description{
 This function validates that a vector of ISINs are valid codes that conform
-to the ISO 6166 specification. It checks the basic structure (2 alpha
-characters, 9 alpha-numeric characters, 1 check digit) and also validates
-the check digit using the Luhn algorithm.
+to the ISO 6166 specification with \code{TRUE} or \code{FALSE}. It checks the basic
+structure (2 alpha characters, 9 alpha-numeric characters, 1 check digit)
+and also validates the check digit using the Luhn algorithm.
 }
