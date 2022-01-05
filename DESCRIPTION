@@ -38,7 +38,8 @@ Imports:
     rlang,
     rmarkdown,
     tibble,
-    tidyr
+    tidyr,
+    wand
 Suggests: 
     callr,
     knitr,

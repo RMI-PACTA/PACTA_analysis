@@ -14,20 +14,26 @@ is_binary_file <- function(filepaths) {
     filepaths <- filepaths[[1L]]
   }
 
+  content_type <- function(filepath) {
+    file_command <- Sys.which("file")
+    if (fs::file_access(file_command, mode = "execute")) {
+      system2(
+        command = file_command,
+        args = c("-b", "--mime-encoding", shQuote(filepath)),
+        stdout = TRUE
+      )
+    } else {
+      sub("/.*$", "", wand::get_content_type(filepath)[[1L]])
+    }
+  }
+
   vapply(
     X = filepaths,
     FUN = function(filepath) {
       if (!is_file_accessible(filepath)) {
         return(NA)
       }
-      identical(
-        system2(
-          command = "file",
-          args = c("-b", "--mime-encoding", shQuote(filepath)),
-          stdout = TRUE
-        ),
-        "binary"
-      )
+      identical(content_type(filepath), "binary")
     },
     FUN.VALUE = logical(1L),
     USE.NAMES = FALSE
