@@ -104,6 +104,7 @@ ARG PKG_DEPS="\
     stringr \
     tibble \
     tidyr \
+    vroom \
     wand \
     writexl \
     yaml \
