@@ -6,7 +6,10 @@
 #' @param currency_codes A character vector
 #'
 #' @return A logical vector the same length as `currency_codes`.
+#'
+#' @importFrom stats na.omit
 #' @export
+#'
 is_valid_currency_code <- function(currency_codes) {
   if (is.data.frame(currency_codes) && identical(length(currency_codes), 1L)) {
     currency_codes <- currency_codes[[1L]]
