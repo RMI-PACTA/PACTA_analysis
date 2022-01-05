@@ -34,12 +34,6 @@ jobs:
         with:
           r-version: ${{ matrix.config.r }}
 
-      - uses: r-lib/actions/setup-r-dependencies@v1
-
-      - name: Install dependencies
-        shell: Rscript {0}
-        run: install.packages(c("cli", "config", "devtools", "dplyr", "fs", "fst", "glue", "here", "janitor", "knitr", "purrr", "readr", "remotes", "rmarkdown", "testthat", "tibble", "tidyr", "withr", "yaml", "zoo"))
-
       - name: Install system dependencies
         if: runner.os == 'Linux'
         run: |
@@ -47,6 +41,8 @@ jobs:
           do
             eval sudo $cmd
           done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "20.04"))')
+
+      - uses: r-lib/actions/setup-r-dependencies@v1
 
       - name: run testthat::test_local()
         run: testthat::test_local()
