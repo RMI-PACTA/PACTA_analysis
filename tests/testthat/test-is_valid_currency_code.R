@@ -35,3 +35,19 @@ test_that("always outputs a logical vector", {
   expect_vector(is_valid_currency_code(NA), ptype = logical(), size = 1L)
   expect_vector(is_valid_currency_code(c(NA, NA)), ptype = logical(), size = 2L)
 })
+
+test_that("returns expected values", {
+  # typical usage
+  codes <- c(invalid_code = "XXX", valid_code = "USD", na = NA_character_)
+  expect_identical(is_valid_currency_code(codes), c(FALSE, TRUE, FALSE))
+
+  # all valid codes
+  codes <- na.omit(countrycode::codelist$iso4217c)
+  expect_identical(all(is_valid_currency_code(codes)), TRUE)
+
+  # unexpected input types
+  expect_identical(is_valid_currency_code(NA), FALSE)
+  expect_identical(is_valid_currency_code(NA_character_), FALSE)
+  expect_identical(is_valid_currency_code(c(TRUE, FALSE)), c(FALSE, FALSE))
+  expect_identical(is_valid_currency_code(1L:2L), c(FALSE, FALSE))
+})
