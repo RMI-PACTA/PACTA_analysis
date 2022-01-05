@@ -47,9 +47,6 @@ jobs:
       - name: install `{wand}` (a new dependency not in 2dii/r-packages)
         run: install.packages("wand")
         shell: Rscript {0}
-      - name: install newer version of `{cli}` so `{pak}` will work
-        run: install.packages("cli")
-        shell: Rscript {0}
       - name: Setup tinytex
         run: |
           install.packages('tinytex')
