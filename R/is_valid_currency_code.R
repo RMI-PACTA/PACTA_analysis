@@ -15,7 +15,7 @@ is_valid_currency_code <- function(currency_codes) {
   vapply(
     X = currency_codes,
     FUN = function(currency_code) {
-      toupper(currency_code) %in% countrycode::codelist$iso4217c
+      toupper(currency_code) %in% na.omit(countrycode::codelist$iso4217c)
     },
     FUN.VALUE = logical(1L),
     USE.NAMES = FALSE
