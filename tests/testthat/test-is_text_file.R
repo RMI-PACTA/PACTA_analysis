@@ -68,10 +68,11 @@ test_that("uses `wand::get_content_type()` if system's `file` is not available",
   writeLines("XXX", txt_file)
 
   csv_file <- withr::local_tempfile(fileext = ".csv")
-  writeLines("XXX", csv_file)
+  write.csv(data.frame(a = 1, b = 2), file = csv_file)
 
   tsv_file <- withr::local_tempfile(fileext = ".tsv")
-  writeLines("XXX", tsv_file)
+  write.table(data.frame(a = 1, b = 2), sep = "\t", row.names = FALSE,
+              quote = FALSE, file = tsv_file)
 
   tar_file_with_csv_ext <- withr::local_tempfile(fileext = ".csv")
   tar(tar_file_with_csv_ext, csv_file)
