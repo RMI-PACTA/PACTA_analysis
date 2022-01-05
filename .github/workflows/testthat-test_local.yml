@@ -34,6 +34,8 @@ jobs:
         with:
           r-version: ${{ matrix.config.r }}
 
+      - uses: r-lib/actions/setup-r-dependencies@v1
+
       - name: Install dependencies
         shell: Rscript {0}
         run: install.packages(c("cli", "config", "devtools", "dplyr", "fs", "fst", "glue", "here", "janitor", "knitr", "purrr", "readr", "remotes", "rmarkdown", "testthat", "tibble", "tidyr", "withr", "yaml", "zoo"))
