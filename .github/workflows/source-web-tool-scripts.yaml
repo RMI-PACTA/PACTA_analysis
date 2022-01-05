@@ -44,7 +44,12 @@ jobs:
           repository: 2DegreesInvesting/r2dii.stress.test.data
           token: ${{ secrets.MAURO_PAT_FOR_2DII }}
           path: r2dii.stress.test.data
-      - uses: r-lib/actions/setup-r-dependencies@v1
+      - name: install `{wand}` (a new dependency not in 2dii/r-packages)
+        run: install.packages("wand")
+        shell: Rscript {0}
+      - name: install newer version of `{cli}` so `{pak}` will work
+        run: install.packages("cli")
+        shell: Rscript {0}
       - name: Setup tinytex
         run: |
           install.packages('tinytex')
