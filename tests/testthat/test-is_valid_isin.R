@@ -35,3 +35,19 @@ test_that("always outputs a logical vector", {
   expect_vector(is_valid_isin(NA), ptype = logical(), size = 1L)
   expect_vector(is_valid_isin(c(NA, NA)), ptype = logical(), size = 2L)
 })
+
+test_that("returns expected values", {
+  # typical usage
+  codes <- c(invalid_isin = "XXX", valid_isin = "US0378331005", na = NA_character_)
+  expect_identical(is_valid_isin(codes), c(FALSE, TRUE, FALSE))
+
+  # false for invalid codes
+  codes <- c(no_iso2c = "0378331005", wrong_luhn = "US0378331009")
+  expect_identical(is_valid_isin(codes), c(FALSE, FALSE))
+
+  # unexpected input types
+  expect_identical(is_valid_isin(NA), FALSE)
+  expect_identical(is_valid_isin(NA_character_), FALSE)
+  expect_identical(is_valid_isin(c(TRUE, FALSE)), c(FALSE, FALSE))
+  expect_identical(is_valid_isin(1L:2L), c(FALSE, FALSE))
+})
