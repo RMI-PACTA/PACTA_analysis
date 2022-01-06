@@ -25,20 +25,22 @@ Depends:
     R (>= 3.5)
 Imports: 
     config,
+    countrycode,
     dplyr,
     fs,
     fst,
     glue,
     here,
-    jsonlite,
     janitor,
+    jsonlite,
     magrittr,
     purrr,
     readr,
     rlang,
     rmarkdown,
-    tidyr,
-    tibble
+    stringi,
+    tibble,
+    tidyr
 Suggests: 
     callr,
     knitr,
