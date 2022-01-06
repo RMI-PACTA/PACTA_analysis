@@ -31,6 +31,7 @@
 #' @importFrom rlang abort
 #' @importFrom rlang inform
 #' @importFrom rlang warn
+#' @importFrom stringi stri_replace_all_fixed
 #' @importFrom tibble as_tibble
 #' @importFrom tibble tibble
 #' @importFrom tidyr pivot_longer
