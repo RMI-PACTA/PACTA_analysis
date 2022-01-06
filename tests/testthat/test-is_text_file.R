@@ -94,20 +94,16 @@ test_that("returns expected values", {
   empty_file <- withr::local_tempfile()
   invisible(file.create(empty_file))
 
-  no_read_access <- withr::local_tempfile()
-  writeLines("XXX", no_read_access)
-  Sys.chmod(no_read_access, mode = "222")
-
   binary_file <- withr::local_tempfile()
   saveRDS("XXX", binary_file)
 
   text_file <- withr::local_tempfile()
   writeLines("XXX", text_file)
 
-  files <- c(non_existant_file, directory, empty_file, no_read_access,
+  files <- c(non_existant_file, directory, empty_file,
              binary_file, text_file, NA_character_)
 
-  expect_identical(is_text_file(files), c(FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE))
+  expect_identical(is_text_file(files), c(FALSE, FALSE, FALSE, FALSE, TRUE, FALSE))
 
   # unexpected input types
   expect_identical(is_text_file(NA), FALSE)
