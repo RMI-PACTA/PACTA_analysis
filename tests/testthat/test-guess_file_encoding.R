@@ -70,3 +70,48 @@ test_that("always outputs a character vector", {
   expect_vector(guess_file_encoding(NA), ptype = character(), size = 1L)
   expect_vector(guess_file_encoding(c(NA, NA)), ptype = character(), size = 2L)
 })
+
+test_that("returns expected values", {
+  # typical usage
+  non_existant_file <- "xxx"
+
+  directory <- withr::local_tempdir()
+
+  empty_file <- withr::local_tempfile()
+  invisible(file.create(empty_file))
+
+  binary_file <- withr::local_tempfile(fileext = ".rds")
+  saveRDS("XXX", binary_file)
+
+  txt_file <- withr::local_tempfile(fileext = ".txt")
+  writeLines("XXX", txt_file)
+
+  csv_file <- withr::local_tempfile(fileext = ".csv")
+  write.csv(data.frame(a = 1, b = 2), file = csv_file)
+
+  tsv_file <- withr::local_tempfile(fileext = ".tsv")
+  write.table(data.frame(a = 1, b = 2), sep = "\t", row.names = FALSE,
+              quote = FALSE, file = tsv_file)
+
+  tar_file <- withr::local_tempfile(fileext = ".tar")
+  tar(tar_file, csv_file)
+
+  tar_file_with_csv_ext <- withr::local_tempfile(fileext = ".csv")
+  tar(tar_file_with_csv_ext, csv_file)
+
+  files <- c(non_existant_file, directory, empty_file, binary_file, txt_file,
+             csv_file, tsv_file, tar_file, tar_file_with_csv_ext)
+
+  expect_identical(guess_file_encoding(files), c(NA, NA, NA, NA, "ASCII", "ASCII", "ASCII", NA, NA))
+
+  # test various encodings
+  ascii_csv <- withr::local_tempfile(fileext = ".csv")
+  write.csv(data.frame(a = 1, b = 2), file = ascii_csv)
+
+  utf8_csv <- withr::local_tempfile(fileext = ".csv")
+  write.csv(data.frame(a = "\u00b5"), file = utf8_csv, fileEncoding = "UTF-8")
+
+  files <- c(ascii_csv, utf8_csv)
+
+  expect_identical(guess_file_encoding(files), c("ASCII", "UTF-8"))
+})
