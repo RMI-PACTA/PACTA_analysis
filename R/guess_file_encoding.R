@@ -17,6 +17,9 @@ guess_file_encoding <- function(filepaths) {
     filepaths <- filepaths[[1L]]
   }
 
+  filepaths <- as.character(filepaths)
+  filepaths <- fs::path_abs(fs::path_expand(filepaths))
+
   file_encodings <-
     vapply(
       X = filepaths,
