@@ -22,16 +22,16 @@ is_text_file <- function(filepaths) {
 
   mime_type <- function(filepath) {
     file_command <- Sys.which("file")
-    if (fs::file_access(file_command, mode = "execute")) {
+    if (!is_file_accessible(filepath)) {
+      NA_character_
+    } else if (fs::file_access(file_command, mode = "execute")) {
       system2(
         command = "file",
         args = c("-b", "--mime-type", shQuote(filepath)),
         stdout = TRUE
       )
-    } else if (is_file_accessible(filepath)) {
-      wand::get_content_type(filepath)[[1L]]
     } else {
-      NA_character_
+      wand::get_content_type(filepath)[[1L]]
     }
   }
 
