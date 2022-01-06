@@ -13,7 +13,7 @@ name: run testthat::test_local()
 jobs:
   testthat-test_local:
     runs-on: ${{ matrix.config.os }}
-
+    timeout-minutes: 10
     name: ${{ matrix.config.os }} (${{ matrix.config.r }})
 
     strategy:
