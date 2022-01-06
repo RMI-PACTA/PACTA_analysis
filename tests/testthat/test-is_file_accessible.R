@@ -53,3 +53,30 @@ test_that("always outputs a logical vector", {
   expect_vector(is_file_accessible(NA), ptype = logical(), size = 1L)
   expect_vector(is_file_accessible(c(NA, NA)), ptype = logical(), size = 2L)
 })
+
+test_that("returns expected values", {
+  # typical usage
+  non_existant_file <- "xxx"
+
+  directory <- withr::local_tempdir()
+
+  empty_file <- withr::local_tempfile()
+  invisible(file.create(empty_file))
+
+  no_read_access <- withr::local_tempfile()
+  writeLines("XXX", no_read_access)
+  Sys.chmod(no_read_access, mode = "222")
+
+  accessible_file <- withr::local_tempfile()
+  writeLines("XXX", accessible_file)
+
+  files <- c(non_existant_file, directory, empty_file, no_read_access, accessible_file)
+
+  expect_identical(is_file_accessible(files), c(FALSE, FALSE, FALSE, FALSE, TRUE))
+
+  # unexpected input types
+  expect_identical(is_file_accessible(NA), FALSE)
+  expect_identical(is_file_accessible(NA_character_), FALSE)
+  expect_identical(is_file_accessible(c(TRUE, FALSE)), c(FALSE, FALSE))
+  expect_identical(is_file_accessible(1L:2L), c(FALSE, FALSE))
+})
