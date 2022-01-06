@@ -21,7 +21,7 @@ is_file_accessible <- function(filepaths) {
 
   file_is_file <- fs::is_file(filepaths)
   file_exists <- fs::file_exists(filepaths)
-  file_is_readable <- fs::file_access(filepaths, mode = "read")
+  file_is_readable <- is_readable_file(filepaths)
   file_not_empty <- !fs::is_file_empty(filepaths)
 
   unname(file_is_file & file_exists & file_is_readable & file_not_empty)
