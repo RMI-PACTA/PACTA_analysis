@@ -1,34 +1,54 @@
-test_that("outputs logical vector", {
-  directory <- file.path(tempdir(), "directory")
-  dir.create(directory)
+test_that("always outputs a logical vector", {
+  # possible filepaths
+  non_existant_file <- "xxx"
 
-  empty_file <- tempfile()
+  directory <- withr::local_tempdir()
+
+  empty_file <- withr::local_tempfile()
   invisible(file.create(empty_file))
 
-  no_read_access <- tempfile()
+  no_read_access <- withr::local_tempfile()
   writeLines("XXX", no_read_access)
   Sys.chmod(no_read_access, mode = "222")
 
-  accessible_file <- tempfile()
+  accessible_file <- withr::local_tempfile()
   writeLines("XXX", accessible_file)
 
-  files <- c(directory, empty_file, no_read_access, accessible_file)
+  files <- c(non_existant_file, directory, empty_file, no_read_access, accessible_file)
 
   expect_vector(is_file_accessible(files[1L]), ptype = logical(), size = 1L)
   expect_vector(is_file_accessible(files[2L]), ptype = logical(), size = 1L)
   expect_vector(is_file_accessible(files[3L]), ptype = logical(), size = 1L)
   expect_vector(is_file_accessible(files[4L]), ptype = logical(), size = 1L)
-  expect_vector(is_file_accessible(files), ptype = logical(), size = 4L)
+  expect_vector(is_file_accessible(files[5L]), ptype = logical(), size = 1L)
+  expect_vector(is_file_accessible(files), ptype = logical(), size = 5L)
 
+  # expected possible uses
   files_df <- data.frame(file = files)
-  expect_vector(dplyr::mutate(files_df, accessible = is_file_accessible(file))$accessible, ptype = logical(), size = 4L)
-  expect_vector(is_file_accessible(files_df$file), ptype = logical(), size = 4L)
-  expect_vector(is_file_accessible(files_df["file"]), ptype = logical(), size = 4L)
-  expect_vector(is_file_accessible(files_df[1L]), ptype = logical(), size = 4L)
-  expect_vector(is_file_accessible(files_df[["file"]]), ptype = logical(), size = 4L)
-  expect_vector(is_file_accessible(files_df[[1L]]), ptype = logical(), size = 4L)
 
+  out <- dplyr::mutate(files_df, accessible = is_file_accessible(file))$accessible
+  expect_vector(out, ptype = logical(), size = 5L)
+
+  out <- is_file_accessible(files_df$file)
+  expect_vector(out, ptype = logical(), size = 5L)
+
+  out <- is_file_accessible(files_df["file"])
+  expect_vector(out, ptype = logical(), size = 5L)
+
+  out <- is_file_accessible(files_df[1L])
+  expect_vector(out, ptype = logical(), size = 5L)
+
+  out <- is_file_accessible(files_df[["file"]])
+  expect_vector(out, ptype = logical(), size = 5L)
+
+  out <- is_file_accessible(files_df[[1L]])
+  expect_vector(out, ptype = logical(), size = 5L)
+
+  # unexpected input types
+  expect_vector(is_file_accessible(1L), ptype = logical(), size = 1L)
   expect_vector(is_file_accessible(1L:2L), ptype = logical(), size = 2L)
+  expect_vector(is_file_accessible(TRUE), ptype = logical(), size = 1L)
+  expect_vector(is_file_accessible(FALSE), ptype = logical(), size = 1L)
   expect_vector(is_file_accessible(c(TRUE, FALSE)), ptype = logical(), size = 2L)
   expect_vector(is_file_accessible(NA), ptype = logical(), size = 1L)
   expect_vector(is_file_accessible(c(NA, NA)), ptype = logical(), size = 2L)
