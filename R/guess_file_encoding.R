@@ -9,7 +9,9 @@
 #' @param filepaths A character vector
 #'
 #' @return A character vector the same length as `filepaths`.
+#'
 #' @export
+#'
 guess_file_encoding <- function(filepaths) {
   if (is.data.frame(filepaths) && identical(length(filepaths), 1L)) {
     filepaths <- filepaths[[1L]]
@@ -19,7 +21,7 @@ guess_file_encoding <- function(filepaths) {
     vapply(
       X = filepaths,
       FUN = function(filepath) {
-        if (!is_file_accessible(filepath) || is_binary_file(filepath)) {
+        if (!is_file_accessible(filepath) || !is_text_file(filepath)) {
           return(NA_character_)
         }
         readr::guess_encoding(file = filepath, n_max = -1L)$encoding[[1L]]
@@ -32,10 +34,9 @@ guess_file_encoding <- function(filepaths) {
     vapply(
       X = filepaths,
       FUN = function(filepath) {
-        if (!is_file_accessible(filepath) || is_binary_file(filepath)) {
+        if (!is_file_accessible(filepath) || !is_text_file(filepath)) {
           return(FALSE)
         }
-        # ADD TEST FOR BINARY FILES
         raw_lines <-
           readr::read_lines_raw(
             file = filepath,
