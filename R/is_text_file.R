@@ -17,6 +17,9 @@ is_text_file <- function(filepaths) {
     filepaths <- filepaths[[1L]]
   }
 
+  filepaths <- enc2utf8(as.character(filepaths))
+  filepaths <- fs::path_abs(fs::path_expand(filepaths))
+
   mime_type <- function(filepath) {
     file_command <- Sys.which("file")
     if (fs::file_access(file_command, mode = "execute")) {
