@@ -25,8 +25,10 @@ is_text_file <- function(filepaths) {
         args = c("-b", "--mime-type", shQuote(filepath)),
         stdout = TRUE
       )
-    } else {
+    } else if (is_file_accessible(filepath)) {
       wand::get_content_type(filepath)[[1L]]
+    } else {
+      NA_character_
     }
   }
 
