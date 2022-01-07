@@ -1,5 +1,5 @@
 name: check file encodings in PR
-on: [pull_request]
+on: [pull_request, workflow_dispatch]
 jobs:
   file-encoding:
     name: file encooding check
