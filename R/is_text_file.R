@@ -26,7 +26,7 @@ is_text_file <- function(filepaths) {
       NA_character_
     } else if (fs::file_access(file_command, mode = "execute")) {
       system2(
-        command = "file",
+        command = file_command,
         args = c("-b", "--mime-type", shQuote(filepath)),
         stdout = TRUE
       )
