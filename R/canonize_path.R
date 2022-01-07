@@ -4,9 +4,8 @@ canonize_path <- function(path = ".") {
     FUN = function(x) {
       if (!is.character(x)) {
         return(NA_character_)
-      } else {
-        fs::path_abs(fs::path_expand(enc2utf8(x)))
       }
+      fs::path_abs(fs::path_expand(enc2utf8(x)))
     },
     FUN.VALUE = character(1),
     USE.NAMES = FALSE
