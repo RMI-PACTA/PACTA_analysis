@@ -7,7 +7,7 @@ canonize_path <- function(path = ".") {
       }
       fs::path_abs(fs::path_expand(enc2utf8(x)))
     },
-    FUN.VALUE = character(1),
+    FUN.VALUE = character(1L),
     USE.NAMES = FALSE
   )
 }
