@@ -40,8 +40,7 @@ Imports:
     rmarkdown,
     stringi,
     tibble,
-    tidyr,
-    wand
+    tidyr
 Suggests: 
     callr,
     knitr,
