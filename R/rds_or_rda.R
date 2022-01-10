@@ -30,7 +30,7 @@ rds_or_rda <- function(filepaths) {
 
         if (grepl("^RD[ABX][2-9]\n", hdr_char)) {
           return("rda")
-        } else if (grepl("^[AX]\n", hdr_char)) {
+        } else if (grepl("^[AX][\n\r]", hdr_char)) {
           return("rds")
         }
       }
