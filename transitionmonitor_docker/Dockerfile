@@ -105,7 +105,6 @@ ARG PKG_DEPS="\
     tibble \
     tidyr \
     vroom \
-    wand \
     writexl \
     yaml \
     zoo \
