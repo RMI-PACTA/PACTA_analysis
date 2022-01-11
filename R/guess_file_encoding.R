@@ -2,61 +2,51 @@
 #'
 #' This function will guess the file encoding of a vector of filenames or
 #' filepaths and return the file encoding as a string. It primarily uses
-#' `readr::guess_encoding()` with the `n_max = -1L` option so that all lines
-#' are used to guess the encoding. If a file is inaccessible or if it is a
-#' binary file, it will return `NA` for that element.
+#' `stringi::stri_enc_detect()` to guess the encoding. Additionally, it
+#' searches for known CP850 and CP1252 characters and will return the
+#' appropriate encoding if found, because ICU/stringi cannot detect them. If a
+#' file is a binary file, it will return `"binary"`. If a file is inaccessible
+#' it will return `NA` for that element.
 #'
 #' @param filepaths A character vector
+#' @param threshold A single element numeric (minimum confidence level of the guess \[0-1\])
 #'
 #' @return A character vector the same length as `filepaths`.
 #'
 #' @export
 #'
-guess_file_encoding <- function(filepaths) {
-  if (is.data.frame(filepaths) && identical(length(filepaths), 1L)) {
-    filepaths <- filepaths[[1L]]
-  }
+guess_file_encoding <- function(filepaths, threshold = 0.2) {
+  filepaths <- simplify_if_one_col_df(filepaths)
+  stopifnot("`filepaths` must be a character vector" = typeof(filepaths) == "character")
+  filepaths <- canonize_path(filepaths)
 
-  filepaths <- as.character(filepaths)
-  filepaths <- fs::path_abs(fs::path_expand(filepaths))
+  vapply(
+    X = filepaths,
+    FUN = function(filepath) {
+      if (!is_file_accessible(filepath)) { return(NA_character_) }
+      if (!is_text_file(filepath)) { return("binary") }
 
-  file_encodings <-
-    vapply(
-      X = filepaths,
-      FUN = function(filepath) {
-        if (!is_file_accessible(filepath) || !is_text_file(filepath)) {
-          return(NA_character_)
-        }
-        readr::guess_encoding(file = filepath, n_max = -1L)$encoding[[1L]]
-      },
-      FUN.VALUE = character(1L),
-      USE.NAMES = FALSE
-    )
+      lines <- stringi::stri_read_raw(filepath)
 
-  has_cp850_chars <-
-    vapply(
-      X = filepaths,
-      FUN = function(filepath) {
-        if (!is_file_accessible(filepath) || !is_text_file(filepath)) {
-          return(FALSE)
-        }
-        raw_lines <-
-          readr::read_lines_raw(
-            file = filepath,
-            n_max = -1L,
-            progress = FALSE
-          )
-        any(
-          vapply(
-            X = unlist(raw_lines),
-            FUN = function(raw_char) { identical(raw_char, as.raw(0x94)) },
-            FUN.VALUE = logical(1L)
-          )
-        )
-      },
-      FUN.VALUE = logical(1L),
-      USE.NAMES = FALSE
-    )
+      if (all(stringi::stri_enc_isascii(lines))) { return("ascii") }
 
-  ifelse(has_cp850_chars, "cp850", file_encodings)
+      # Swiss - CP850
+      # u-umlaut - 0x81 - "\x81" - iconv("\x81", "cp850", "UTF-8") - validUTF8("\x81")
+      # o-umlaut - 0x94 - "\x94" - iconv("\x94", "cp850", "UTF-8") - validUTF8("\x94")
+      if (any(lines == as.raw(0x81)) || any(lines == as.raw(0x94))) { return("cp850") }
+
+      # Norwegian - CP1252
+      # slashed o - 0xf8 - "\xf8" - iconv("\xf8", "cp1252", "UTF-8") - validUTF8("\xf8")
+      if (any(lines == as.raw(0xf8))) { return("cp1252") }
+
+      guess <- stringi::stri_enc_detect(lines)[[1]]
+      guess <- guess[guess$Confidence > threshold, "Encoding"]
+
+      if (length(guess) == 0) { return("unknown") }
+
+      guess[[1]]
+    },
+    FUN.VALUE = character(1L),
+    USE.NAMES = FALSE
+  )
 }
