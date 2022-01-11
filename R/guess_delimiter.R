@@ -9,7 +9,9 @@
 #' @param filepaths A character vector
 #'
 #' @return A character vector the same length as `filepaths`.
+#'
 #' @export
+#'
 guess_delimiter <- function(filepaths) {
   if (is.data.frame(filepaths) && identical(length(filepaths), 1L)) {
     filepaths <- filepaths[[1L]]
@@ -18,7 +20,7 @@ guess_delimiter <- function(filepaths) {
   vapply(
     X = filepaths,
     FUN = function(filepath) {
-      if (!is_file_accessible(filepath) || is_binary_file(filepath)) {
+      if (!is_file_accessible(filepath) || !is_text_file(filepath)) {
         return(NA_character_)
       }
       lines <-
