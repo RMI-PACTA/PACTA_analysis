@@ -8,24 +8,20 @@ test_that("returns expected values", {
   bar <- withr::local_tempfile()
   writeLines("a|b|c\n1|2|3", bar)
 
-  space <- withr::local_tempfile()
-  writeLines("a b c\n1 2 3", space)
-
   tab <- withr::local_tempfile()
   writeLines("a\tb\tc\n1\t2\t3", tab)
 
-  files <- c(comma, semicolon, bar, space, tab)
+  files <- c(comma, semicolon, bar, tab)
 
   expect_identical(guess_delimiter(comma), ",")
   expect_identical(guess_delimiter(semicolon), ";")
   expect_identical(guess_delimiter(bar), "|")
-  expect_identical(guess_delimiter(space), " ")
   expect_identical(guess_delimiter(tab), "\t")
-  expect_identical(guess_delimiter(files), c(",", ";", "|", " ", "\t"))
+  expect_identical(guess_delimiter(files), c(",", ";", "|", "\t"))
 
   # test expected use cases
   files_df <- data.frame(file = files)
-  expected_output <- c(",", ";", "|", " ", "\t")
+  expected_output <- c(",", ";", "|", "\t")
 
   out <- dplyr::mutate(files_df, delimiter = guess_delimiter(files))$delimiter
   expect_identical(out, expected_output)
@@ -39,6 +35,12 @@ test_that("returns expected values", {
   expect_identical(out, expected_output)
   out <- guess_delimiter(files_df[[1L]])
   expect_identical(out, expected_output)
+})
+
+test_that("returns appropriate value for strange cases", {
+  lots_of_spaces <- withr::local_tempfile()
+  writeLines("a b c d e f g,h,1\na b c d e f g,2,3,4,5,6,7,8", lots_of_spaces)
+  expect_identical(guess_delimiter(lots_of_spaces), ",")
 })
 
 test_that("returns `NA` for filepaths that cannot be used", {

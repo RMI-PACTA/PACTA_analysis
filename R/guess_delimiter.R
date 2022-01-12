@@ -32,7 +32,10 @@ guess_delimiter <- function(filepaths) {
           n_max = -1L,
           progress = FALSE
         )
-      tryCatch(vroom:::guess_delim(lines), error = function(e) ",")
+      tryCatch(
+        vroom:::guess_delim(lines, delims = c(",", "\t", "|", ":", ";")),
+        error = function(e) ","
+      )
     },
     FUN.VALUE = character(1L),
     USE.NAMES = FALSE
