@@ -5,23 +5,27 @@ test_that("returns expected values", {
   semicolon <- withr::local_tempfile()
   writeLines("a;b;c\n1;2;3", semicolon)
 
+  colon <- withr::local_tempfile()
+  writeLines("a:b:c\n1:2:3", colon)
+
   bar <- withr::local_tempfile()
   writeLines("a|b|c\n1|2|3", bar)
 
   tab <- withr::local_tempfile()
   writeLines("a\tb\tc\n1\t2\t3", tab)
 
-  files <- c(comma, semicolon, bar, tab)
+  files <- c(comma, semicolon, colon, bar, tab)
 
   expect_identical(guess_delimiter(comma), ",")
   expect_identical(guess_delimiter(semicolon), ";")
+  expect_identical(guess_delimiter(colon), ":")
   expect_identical(guess_delimiter(bar), "|")
   expect_identical(guess_delimiter(tab), "\t")
-  expect_identical(guess_delimiter(files), c(",", ";", "|", "\t"))
+  expect_identical(guess_delimiter(files), c(",", ";", ":", "|", "\t"))
 
   # test expected use cases
   files_df <- data.frame(file = files)
-  expected_output <- c(",", ";", "|", "\t")
+  expected_output <- c(",", ";", ":", "|", "\t")
 
   out <- dplyr::mutate(files_df, delimiter = guess_delimiter(files))$delimiter
   expect_identical(out, expected_output)
