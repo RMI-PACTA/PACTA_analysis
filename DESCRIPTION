@@ -45,7 +45,8 @@ Imports:
     rmarkdown,
     stringi,
     tibble,
-    tidyr
+    tidyr,
+    vroom
 Suggests: 
     callr,
     knitr,
