@@ -13,9 +13,9 @@
 #' @export
 #'
 guess_delimiter <- function(filepaths) {
-  if (is.data.frame(filepaths) && identical(length(filepaths), 1L)) {
-    filepaths <- filepaths[[1L]]
-  }
+  filepaths <- simplify_if_one_col_df(filepaths)
+  stopifnot("`filepaths` must be a character vector" = typeof(filepaths) == "character")
+  filepaths <- canonize_path(filepaths)
 
   vapply(
     X = filepaths,

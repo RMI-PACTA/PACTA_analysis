@@ -30,11 +30,18 @@ test_that("outputs character vector", {
   expect_vector(guess_delimiter(files_df[1L]), ptype = character(), size = 5L)
   expect_vector(guess_delimiter(files_df[["file"]]), ptype = character(), size = 5L)
   expect_vector(guess_delimiter(files_df[[1L]]), ptype = character(), size = 5L)
+})
 
-  expect_vector(guess_delimiter(1L:2L), ptype = character(), size = 2L)
-  expect_vector(guess_delimiter(c(TRUE, FALSE)), ptype = character(), size = 2L)
-  expect_vector(guess_delimiter(NA), ptype = character(), size = 1L)
-  expect_vector(guess_delimiter(c(NA, NA)), ptype = character(), size = 2L)
+test_that("returns error for unexpected types", {
+  # unexpected input types
+  expect_error(guess_delimiter(1L))
+  expect_error(guess_delimiter(1L:2L))
+  expect_error(guess_delimiter(TRUE))
+  expect_error(guess_delimiter(FALSE))
+  expect_error(guess_delimiter(c(TRUE, FALSE)))
+  expect_error(guess_delimiter(NA))
+  expect_error(guess_delimiter(c(NA, NA)))
+  expect_error(guess_delimiter(data.frame(a = 1, b = 2)))
 })
 
 test_that("returns expected values", {
