@@ -4,7 +4,9 @@
 #' This function will guess the delimiter of a delimited file for a vector of
 #' filenames or filepaths and return the delimiter as a string. It primarily
 #' uses `vroom:::guess_delim()` to guess, and defaults to "," if that fails. If
-#' the file is inaccessible or binary, it will return `NA` for that element.
+#' the file is inaccessible or binary, it will return `NA` for that element.  If
+#' you pass anything that is not a character vector or a single column
+#' `data.frame` to the `filepaths` argument, this function will give an error.
 #'
 #' @param filepaths A character vector
 #'
