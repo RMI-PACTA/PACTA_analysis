@@ -36,3 +36,29 @@ test_that("outputs character vector", {
   expect_vector(guess_delimiter(NA), ptype = character(), size = 1L)
   expect_vector(guess_delimiter(c(NA, NA)), ptype = character(), size = 2L)
 })
+
+test_that("returns expected values", {
+  comma <- withr::local_tempfile()
+  writeLines("a,b,c\n1,2,3", comma)
+
+  semicolon <- withr::local_tempfile()
+  writeLines("a;b;c\n1;2;3", semicolon)
+
+  bar <- withr::local_tempfile()
+  writeLines("a|b|c\n1|2|3", bar)
+
+  space <- withr::local_tempfile()
+  writeLines("a b c\n1 2 3", space)
+
+  tab <- withr::local_tempfile()
+  writeLines("a\tb\tc\n1\t2\t3", tab)
+
+  files <- c(comma, semicolon, bar, space, tab)
+
+  expect_identical(guess_delimiter(comma), ",")
+  expect_identical(guess_delimiter(semicolon), ";")
+  expect_identical(guess_delimiter(bar), "|")
+  expect_identical(guess_delimiter(space), " ")
+  expect_identical(guess_delimiter(tab), "\t")
+  expect_identical(guess_delimiter(files), c(",", ";", "|", " ", "\t"))
+})
