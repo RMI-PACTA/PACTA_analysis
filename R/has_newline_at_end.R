@@ -6,7 +6,7 @@ has_newline_at_end <- function(filepaths) {
   vapply(
     X = filepaths,
     FUN = function(x) {
-      attr(R.utils::countLines.default(x), "lastLineHasNewline")
+      attr(R.utils::countLines(x), "lastLineHasNewline")
     },
     FUN.VALUE = logical(1),
     USE.NAMES = FALSE
