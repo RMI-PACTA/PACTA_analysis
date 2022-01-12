@@ -1,11 +1,10 @@
-name: Source web tool scripts in container r2dii/r-packages
+name: Source web tool scripts in container rocker/verse
 on: push
 jobs:
   Source-web-tool-scripts:
-    container: 2dii/r-packages:latest
+    container: rocker/verse:4.1.2
     runs-on: ubuntu-latest
-    timeout-minutes: 15
-    name: Source web tool scripts in container r2dii/r-packages
+    name: Source web tool scripts in container
     strategy:
       fail-fast: false
     env:
@@ -20,7 +19,7 @@ jobs:
         with:
           repository: 2DegreesInvesting/PACTA_analysis
           token: ${{ secrets.MAURO_PAT_FOR_2DII }}
-          path: PACTA_analysis
+          path: bound
       - name: Checkout pacta-data
         uses: actions/checkout@v2
         with:
@@ -45,17 +44,67 @@ jobs:
           repository: 2DegreesInvesting/r2dii.stress.test.data
           token: ${{ secrets.MAURO_PAT_FOR_2DII }}
           path: r2dii.stress.test.data
-      - name: Setup tinytex
+
+      - name: install Tex packages
         run: |
-          install.packages('tinytex')
-          tinytex::install_tinytex()
+          tlmgr --repository https://www.texlive.info/tlnet-archive/2022/01/01/tlnet install \
+          amsmath \
+          blindtext \
+          bookmark \
+          caption \
+          fancyhdr \
+          geometry \
+          grffile \
+          hyperref \
+          lipsum \
+          microtype \
+          parskip \
+          sectsty \
+          silence \
+          titlesec \
+          unicode-math \
+          upquote \
+          wrapfig \
+          xcolor \
+          xurl
+
+      - name: install package dependencies
+        run: |
+          install2.r --skipinstalled --error \
+          --repos https://packagemanager.rstudio.com/all/2022-01-03+Y3JhbiwyOjQ1MjYyMTU7NTY4Qjk1ODA \
+          bookdown \
+          cli \
+          config \
+          countrycode \
+          devtools \
+          dplyr \
+          forcats \
+          fs \
+          fst \
+          ggplot2 \
+          glue \
+          here \
+          janitor \
+          jsonlite \
+          knitr \
+          magrittr \
+          purrr \
+          readr \
+          readxl \
+          rmarkdown \
+          scales \
+          stringi \
+          stringr \
+          tibble \
+          tidyr \
+          vroom \
+          writexl \
+          yaml \
+          zoo
+
+      - name: install GitHub dev dependencies
         shell: Rscript {0}
-      - name: Install additional R pkg dependencies
-        run: install.packages('vroom')
-        shell: Rscript {0}
+        run: devtools::install_github("2DegreesInvesting/r2dii.utils")
+
       - name: Source web-tool scripts
-        run: |
-          setwd("PACTA_analysis")
-          source("R/source_web_tool_scripts.R")
-          source_web_tool_scripts()
-        shell: Rscript {0}
+        run: bound/bin/run-r-scripts "TestPortfolio_Input"
