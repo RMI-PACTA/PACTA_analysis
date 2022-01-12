@@ -5,8 +5,22 @@ has_newline_at_end <- function(filepaths) {
 
   vapply(
     X = filepaths,
-    FUN = function(x) {
-      attr(R.utils::countLines(x), "lastLineHasNewline")
+    FUN = function(filepath) {
+      if (!is_file_accessible(filepath) || !is_text_file(filepath)) {
+        return(NA)
+      }
+
+      con <- file(filepath, "rb")
+      on.exit(close(con))
+
+      chars <- " "
+      while (nzchar(chars)) {
+        chars <- readChar(con, nchars = 2048L)
+        if (length(chars) == 0L) break
+        last_char <- substring(chars, first = nchar(chars, type = "chars"))
+      }
+
+      grepl("[\n\r]", last_char)
     },
     FUN.VALUE = logical(1),
     USE.NAMES = FALSE
