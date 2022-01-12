@@ -20,6 +20,10 @@ jobs:
           repository: 2DegreesInvesting/PACTA_analysis
           token: ${{ secrets.MAURO_PAT_FOR_2DII }}
           path: bound
+
+      - name: check if repo was put in "bound" directory
+        run: ls -al
+
       - name: Checkout pacta-data
         uses: actions/checkout@v2
         with:
