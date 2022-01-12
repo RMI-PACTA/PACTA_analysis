@@ -3,5 +3,5 @@ skip_if_R_CMD_check <- function() {
     return(invisible(TRUE))
   }
 
-  skip("Not run in R CMD check")
+  testthat::skip("Not run in R CMD check")
 }
