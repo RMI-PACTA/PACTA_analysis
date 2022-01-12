@@ -1,18 +1,17 @@
 test_that("outputs character vector", {
-  directory <- file.path(tempdir(), "directory")
-  dir.create(directory, showWarnings = FALSE)
+  directory <- withr::local_tempdir()
 
-  empty_file <- tempfile()
+  empty_file <- withr::local_tempfile()
   invisible(file.create(empty_file))
 
-  no_read_access <- tempfile()
+  no_read_access <- withr::local_tempfile()
   saveRDS("XXX", no_read_access)
   Sys.chmod(no_read_access, mode = "222")
 
-  binary_file <- tempfile()
+  binary_file <- withr::local_tempfile()
   saveRDS("XXX", binary_file)
 
-  accessible_file <- tempfile()
+  accessible_file <- withr::local_tempfile()
   writeLines("XXX", accessible_file)
 
   files <- c(directory, empty_file, no_read_access, binary_file, accessible_file)
