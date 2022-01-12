@@ -17,5 +17,7 @@ A character vector the same length as \code{filepaths}.
 This function will guess the delimiter of a delimited file for a vector of
 filenames or filepaths and return the delimiter as a string. It primarily
 uses \code{vroom:::guess_delim()} to guess, and defaults to "," if that fails. If
-the file is inaccessible or binary, it will return \code{NA} for that element.
+the file is inaccessible or binary, it will return \code{NA} for that element.  If
+you pass anything that is not a character vector or a single column
+\code{data.frame} to the \code{filepaths} argument, this function will give an error.
 }
