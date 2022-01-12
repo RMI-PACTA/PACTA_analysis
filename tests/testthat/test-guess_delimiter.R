@@ -1,37 +1,3 @@
-test_that("outputs character vector", {
-  directory <- withr::local_tempdir()
-
-  empty_file <- withr::local_tempfile()
-  invisible(file.create(empty_file))
-
-  no_read_access <- withr::local_tempfile()
-  saveRDS("XXX", no_read_access)
-  Sys.chmod(no_read_access, mode = "222")
-
-  binary_file <- withr::local_tempfile()
-  saveRDS("XXX", binary_file)
-
-  accessible_file <- withr::local_tempfile()
-  writeLines("XXX", accessible_file)
-
-  files <- c(directory, empty_file, no_read_access, binary_file, accessible_file)
-
-  expect_vector(guess_delimiter(files[1L]), ptype = character(), size = 1L)
-  expect_vector(guess_delimiter(files[2L]), ptype = character(), size = 1L)
-  expect_vector(guess_delimiter(files[3L]), ptype = character(), size = 1L)
-  expect_vector(guess_delimiter(files[4L]), ptype = character(), size = 1L)
-  expect_vector(guess_delimiter(files[5L]), ptype = character(), size = 1L)
-  expect_vector(guess_delimiter(files), ptype = character(), size = 5L)
-
-  files_df <- data.frame(file = files)
-  expect_vector(dplyr::mutate(files_df, encoding = guess_delimiter(file))$encoding, ptype = character(), size = 5L)
-  expect_vector(guess_delimiter(files_df$file), ptype = character(), size = 5L)
-  expect_vector(guess_delimiter(files_df["file"]), ptype = character(), size = 5L)
-  expect_vector(guess_delimiter(files_df[1L]), ptype = character(), size = 5L)
-  expect_vector(guess_delimiter(files_df[["file"]]), ptype = character(), size = 5L)
-  expect_vector(guess_delimiter(files_df[[1L]]), ptype = character(), size = 5L)
-})
-
 test_that("returns `NA` for filepaths that cannot be used", {
   directory <- withr::local_tempdir()
 
@@ -94,4 +60,21 @@ test_that("returns expected values", {
   expect_identical(guess_delimiter(space), " ")
   expect_identical(guess_delimiter(tab), "\t")
   expect_identical(guess_delimiter(files), c(",", ";", "|", " ", "\t"))
+
+  # test expected use cases
+  files_df <- data.frame(file = files)
+  expected_output <- c(",", ";", "|", " ", "\t")
+
+  out <- dplyr::mutate(files_df, delimiter = guess_delimiter(files))$delimiter
+  expect_identical(out, expected_output)
+  out <- guess_delimiter(files_df$file)
+  expect_identical(out, expected_output)
+  out <- guess_delimiter(files_df["file"])
+  expect_identical(out, expected_output)
+  out <- guess_delimiter(files_df[1L])
+  expect_identical(out, expected_output)
+  out <- guess_delimiter(files_df[["file"]])
+  expect_identical(out, expected_output)
+  out <- guess_delimiter(files_df[[1L]])
+  expect_identical(out, expected_output)
 })
