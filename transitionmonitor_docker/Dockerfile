@@ -1,4 +1,4 @@
-# using R 4.1.2, and CTAN and CRAN packages available as of 2021.11.18
+# using R 4.1.2, and CTAN and CRAN packages available as of 2022.01.01
 # https://hub.docker.com/_/r-base
 # https://www.texlive.info/tlnet-archive
 # https://packagemanager.rstudio.com/client/#/repos/1/overview
@@ -30,7 +30,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # install TeX packages
-ARG CTAN_REPO=https://www.texlive.info/tlnet-archive/2021/11/18/tlnet
+ARG CTAN_REPO=https://www.texlive.info/tlnet-archive/2022/01/01/tlnet
 ARG TEX_DEPS="\
     amsmath \
     blindtext \
@@ -77,7 +77,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # install R package dependencies
-ARG CRAN_REPO=https://packagemanager.rstudio.com/cran/2021-11-17+MTo2MzM5NDY2O0U0MTdGRUE5
+ARG CRAN_REPO=https://packagemanager.rstudio.com/all/2022-01-03+Y3JhbiwyOjQ1MjYyMTU7NTY4Qjk1ODA
 ARG PKG_DEPS="\
     bookdown \
     cli \
