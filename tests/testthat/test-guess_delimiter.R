@@ -32,6 +32,33 @@ test_that("outputs character vector", {
   expect_vector(guess_delimiter(files_df[[1L]]), ptype = character(), size = 5L)
 })
 
+test_that("returns `NA` for filepaths that cannot be used", {
+  directory <- withr::local_tempdir()
+
+  empty_file <- withr::local_tempfile()
+  invisible(file.create(empty_file))
+
+  no_read_access <- withr::local_tempfile()
+  saveRDS("XXX", no_read_access)
+  Sys.chmod(no_read_access, mode = "222")
+
+  binary_file <- withr::local_tempfile()
+  saveRDS("XXX", binary_file)
+
+  files <- c(directory, empty_file, no_read_access, binary_file)
+
+  expect_vector(guess_delimiter(files[1L]), ptype = character(), size = 1L)
+  expect_vector(guess_delimiter(files[2L]), ptype = character(), size = 1L)
+  expect_vector(guess_delimiter(files[3L]), ptype = character(), size = 1L)
+  expect_vector(guess_delimiter(files[4L]), ptype = character(), size = 1L)
+  expect_vector(guess_delimiter(files), ptype = character(), size = 4L)
+
+  expect_identical(guess_delimiter(directory), NA_character_)
+  expect_identical(guess_delimiter(empty_file), NA_character_)
+  expect_identical(guess_delimiter(no_read_access), NA_character_)
+  expect_identical(guess_delimiter(binary_file), NA_character_)
+})
+
 test_that("returns error for unexpected types", {
   expect_error(guess_delimiter(1L))
   expect_error(guess_delimiter(1L:2L))
