@@ -33,7 +33,6 @@ test_that("outputs character vector", {
 })
 
 test_that("returns error for unexpected types", {
-  # unexpected input types
   expect_error(guess_delimiter(1L))
   expect_error(guess_delimiter(1L:2L))
   expect_error(guess_delimiter(TRUE))
