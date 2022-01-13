@@ -30,7 +30,7 @@ jobs:
             wget
         run: |
           apt-get update \
-            && apt-get install -y --no-install-recommends git \
+            && apt-get install -y --no-install-recommends wget \
             && chmod -R a+rwX /root \
             && rm -rf /var/lib/apt/lists/*
 
