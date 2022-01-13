@@ -63,41 +63,43 @@ jobs:
             xurl
         run: tlmgr --repository $CTAN_REPO install $TEX_DEPS
 
-      - name: install package dependencies
+      - name: install R package dependencies
+        env:
+          CRAN_REPO: https://packagemanager.rstudio.com/all/2022-01-03+Y3JhbiwyOjQ1MjYyMTU7NTY4Qjk1ODA
+          PKG_DEPS: |
+            bookdown \
+            cli \
+            config \
+            countrycode \
+            devtools \
+            dplyr \
+            forcats \
+            fs \
+            fst \
+            ggplot2 \
+            glue \
+            here \
+            janitor \
+            jsonlite \
+            knitr \
+            magrittr \
+            purrr \
+            readr \
+            readxl \
+            rmarkdown \
+            scales \
+            stringi \
+            stringr \
+            tibble \
+            tidyr \
+            vroom \
+            writexl \
+            yaml \
+            zoo
         shell: Rscript {0}
         run: |
           install.packages('remotes');
-          pkg_deps <- c(
-            "bookdown",
-            "cli",
-            "config",
-            "countrycode",
-            "devtools",
-            "dplyr",
-            "forcats",
-            "fs",
-            "fst",
-            "ggplot2",
-            "glue",
-            "here",
-            "janitor",
-            "jsonlite",
-            "knitr",
-            "magrittr",
-            "purrr",
-            "readr",
-            "readxl",
-            "rmarkdown",
-            "scales",
-            "stringi",
-            "stringr",
-            "tibble",
-            "tidyr",
-            "vroom",
-            "writexl",
-            "yaml",
-            "zoo"
-          );
+          pkg_deps <- strsplit(trimws(gsub('[\\\]+', '', '$PKG_DEPS')), '[[:space:]]+')[[1]];
           remotes::install_cran(pkg_deps, repos = '$CRAN_REPO');
 
       # When checking out the repository that triggered a workflow, `ref:`
