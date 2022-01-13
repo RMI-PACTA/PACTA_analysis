@@ -44,8 +44,8 @@ tryCatch(
 if(project_code == "PA2020FL"){
   peer_group = case_when(
     peer_group %in% c("other")~ "Others",
-    peer_group %in% c("bank", "assetmanager") ~ "Banks  and  Asset Managers",
-    peer_group %in% c("pensionfund", "insurance") ~ "Pension Funds  and  Insurances"
+    peer_group %in% c("bank", "assetmanager") ~ "Banks and Asset Managers",
+    peer_group %in% c("pensionfund", "insurance") ~ "Pension Funds and Insurances"
   )
 }
 
