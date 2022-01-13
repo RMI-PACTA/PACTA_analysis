@@ -16,8 +16,7 @@ jobs:
         env:
           SYS_DEPS: |
             libcurl4-openssl-dev \
-            libssl-dev \
-            wget
+            libssl-dev
         run: |
           apt-get update \
             && apt-get install -y --no-install-recommends $SYS_DEPS
