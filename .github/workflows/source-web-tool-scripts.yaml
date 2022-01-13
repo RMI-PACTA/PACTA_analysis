@@ -21,6 +21,33 @@ jobs:
           && sudo add-apt-repository restricted \
           && sudo add-apt-repository multiverse
 
+      - name: install git
+        run: apt-get update && apt-get install -y --no-install-recommends git
+
+      - name: install wget
+        run: apt-get update && apt-get install -y --no-install-recommends wget
+
+      - name: install libssl-dev
+        run: apt-get update && apt-get install -y --no-install-recommends libssl-dev
+
+      - name: install libcurl4-openssl-dev
+        run: apt-get update && apt-get install -y --no-install-recommends libcurl4-openssl-dev
+
+      - name: install texlive-xetex
+        run: apt-get update && apt-get install -y --no-install-recommends texlive-xetex
+
+      - name: install texlive-fonts-recommended
+        run: apt-get update && apt-get install -y --no-install-recommends texlive-fonts-recommended
+
+      - name: install texlive-fonts-extra
+        run: apt-get update && apt-get install -y --no-install-recommends texlive-fonts-extra
+
+      - name: install lmodern
+        run: apt-get update && apt-get install -y --no-install-recommends lmodern
+
+      # - name: install XXXXXXXXXX
+      #   run: apt-get update && apt-get install -y --no-install-recommends XXXXXXXXXX
+
       - name: install system dependencies
         env:
           SYS_DEPS: |
