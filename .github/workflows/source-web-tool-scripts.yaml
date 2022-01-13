@@ -28,7 +28,7 @@ jobs:
             libcurl4-openssl-dev \
             libssl-dev \
             wget
-        run: echo $SYS_DEPS
+        run: echo "$SYS_DEPS"
 
       - name: install system dependencies
         env:
