@@ -99,9 +99,11 @@ jobs:
             zoo
         shell: Rscript {0}
         run: |
+          CRAN_REPO <- Sys.getenv('CRAN_REPO');
+          PKG_DEPS <- Sys.getenv('PKG_DEPS');
           install.packages('remotes');
-          pkg_deps <- strsplit(trimws(gsub('[\\]+', '', '${PKG_DEPS}')), '[[:space:]]+')[[1]];
-          remotes::install_cran(pkg_deps, repos = '${CRAN_REPO}');
+          pkg_deps <- strsplit(trimws(gsub('[\\]+', '', PKG_DEPS)), '[[:space:]]+')[[1]];
+          remotes::install_cran(pkg_deps, repos = CRAN_REPO);
 
       # When checking out the repository that triggered a workflow, `ref:`
       # defaults to the reference or SHA for that event. Otherwise, uses the
