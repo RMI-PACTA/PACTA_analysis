@@ -2,8 +2,7 @@ name: Source web tool scripts in container rocker/verse
 on: push
 jobs:
   Source-web-tool-scripts:
-    container: rocker/verse:4.1.2
-    runs-on: ubuntu-latest
+    container: r-base:4.1.2
     name: Source web tool scripts in container
     strategy:
       fail-fast: false
