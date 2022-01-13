@@ -7,7 +7,6 @@ FROM r-base:4.1.2
 
 # install system dependencies
 ARG SYS_DEPS="\
-    git \
     libcurl4-openssl-dev \
     libssl-dev \
     wget \
