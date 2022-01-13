@@ -13,11 +13,7 @@ jobs:
 
     steps:
       - name: add Ubuntu repos
-        run: |
-          add-apt-repository main
-          add-apt-repository universe
-          add-apt-repository restricted
-          add-apt-repository multiverse
+        run: sudo apt-get install software-properties-common
 
       - name: install system dependencies
         env:
