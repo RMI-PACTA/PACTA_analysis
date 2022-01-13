@@ -12,13 +12,26 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
+      - name: add Ubuntu repos
+        run: |
+          sudo add-apt-repository main
+          sudo add-apt-repository universe
+          sudo add-apt-repository restricted
+          sudo add-apt-repository multiverse
+
+    steps:
       - name: install system dependencies
         env:
           SYS_DEPS: |
-            libcurl4-openssl-dev
+            git \
+            libcurl4-openssl-dev \
+            libssl-dev \
+            wget
         run: |
           apt-get update \
-            && apt-get install -y --no-install-recommends nano
+            && apt-get install -y --no-install-recommends $SYS_DEPS \
+            && chmod -R a+rwX /root \
+            && rm -rf /var/lib/apt/lists/*
 
       - name: install TeX system and fonts
         env:
