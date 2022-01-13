@@ -21,15 +21,6 @@ jobs:
       #     && sudo add-apt-repository restricted \
       #     && sudo add-apt-repository multiverse
 
-      - name: test env vars
-        env:
-          SYS_DEPS: |
-            git
-            libcurl4-openssl-dev
-            libssl-dev
-            wget
-        run: echo ${SYS_DEPS}
-
       - name: install system dependencies
         env:
           SYS_DEPS: |
@@ -39,10 +30,12 @@ jobs:
             wget
         run: |
           apt-get update \
-            && apt-get install -y --no-install-recommends ${SYS_DEPS}
+          && apt-get install -y --no-install-recommends $SYS_DEPS \
+          && chmod -R a+rwX /root \
+          && rm -rf /var/lib/apt/lists/*
 
       - name: install texlive-xetex
-        run: apt-get update && apt-get install -y --no-install-recommends texlive-xetex
+        run: apt-get update && apt-get install -y texlive-xetex
 
       - name: install texlive-fonts-recommended
         run: apt-get update && apt-get install -y --no-install-recommends texlive-fonts-recommended
@@ -62,9 +55,9 @@ jobs:
       # - name: install TeX system and fonts
       #   env:
       #     TEX_APT: |
-      #       texlive-xetex \
-      #       texlive-fonts-recommended \
-      #       texlive-fonts-extra \
+      #       texlive-xetex
+      #       texlive-fonts-recommended
+      #       texlive-fonts-extra
       #       lmodern
       #   run: |
       #     apt-get update \
@@ -76,24 +69,24 @@ jobs:
         env:
           CTAN_REPO: https://www.texlive.info/tlnet-archive/2022/01/01/tlnet
           TEX_DEPS: |
-            amsmath \
-            blindtext \
-            bookmark \
-            caption \
-            fancyhdr \
-            geometry \
-            grffile \
-            hyperref \
-            lipsum \
-            microtype \
-            parskip \
-            sectsty \
-            silence \
-            titlesec \
-            unicode-math \
-            upquote \
-            wrapfig \
-            xcolor \
+            amsmath
+            blindtext
+            bookmark
+            caption
+            fancyhdr
+            geometry
+            grffile
+            hyperref
+            lipsum
+            microtype
+            parskip
+            sectsty
+            silence
+            titlesec
+            unicode-math
+            upquote
+            wrapfig
+            xcolor
             xurl
         run: tlmgr --repository $CTAN_REPO install $TEX_DEPS
 
