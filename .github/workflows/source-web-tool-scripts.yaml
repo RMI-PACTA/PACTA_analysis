@@ -15,7 +15,6 @@ jobs:
       - name: install system dependencies
         env:
           SYS_DEPS: |
-            git \
             libcurl4-openssl-dev \
             libssl-dev \
             wget
