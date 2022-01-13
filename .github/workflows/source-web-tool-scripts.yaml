@@ -3,8 +3,8 @@ on: push
 jobs:
   Source-web-tool-scripts:
     name: Source web tool scripts in container
-    container: rocker/verse:4.1.2
     runs-on: ubuntu-latest
+    container: r-base:4.1.2
     strategy:
       fail-fast: false
     env:
