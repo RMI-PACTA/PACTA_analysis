@@ -12,14 +12,14 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
-      - name: add Ubuntu repos
-        run: |
-          apt-get update \
-          && apt-get install -y software-properties-common \
-          && sudo add-apt-repository main \
-          && sudo add-apt-repository universe \
-          && sudo add-apt-repository restricted \
-          && sudo add-apt-repository multiverse
+      # - name: add Ubuntu repos
+      #   run: |
+      #     apt-get update \
+      #     && apt-get install -y software-properties-common \
+      #     && sudo add-apt-repository main \
+      #     && sudo add-apt-repository universe \
+      #     && sudo add-apt-repository restricted \
+      #     && sudo add-apt-repository multiverse
 
       - name: install git
         run: apt-get update && apt-get install -y --no-install-recommends git
@@ -33,6 +33,9 @@ jobs:
       - name: install libcurl4-openssl-dev
         run: apt-get update && apt-get install -y --no-install-recommends libcurl4-openssl-dev
 
+      - name: install a few
+        run: apt-get update && apt-get install -y --no-install-recommends git libcurl4-openssl-dev libssl-dev wget
+
       - name: install texlive-xetex
         run: apt-get update && apt-get install -y --no-install-recommends texlive-xetex
 
@@ -45,34 +48,37 @@ jobs:
       - name: install lmodern
         run: apt-get update && apt-get install -y --no-install-recommends lmodern
 
-      # - name: install XXXXXXXXXX
-      #   run: apt-get update && apt-get install -y --no-install-recommends XXXXXXXXXX
+      - name: setup tlmgr
+        run: tlmgr init-usertree
 
-      - name: install system dependencies
-        env:
-          SYS_DEPS: |
-            git \
-            libcurl4-openssl-dev \
-            libssl-dev \
-            wget
-        run: |
-          apt-get update \
-            && apt-get install -y --no-install-recommends libcurl4-openssl-dev \
-            && chmod -R a+rwX /root \
-            && rm -rf /var/lib/apt/lists/*
+      - name: get rid of apt-get caches
+        run: rm -rf /var/lib/apt/lists/*
 
-      - name: install TeX system and fonts
-        env:
-          TEX_APT: |
-            texlive-xetex \
-            texlive-fonts-recommended \
-            texlive-fonts-extra \
-            lmodern
-        run: |
-          apt-get update \
-            && apt-get install -y --no-install-recommends $TEX_APT \
-            && tlmgr init-usertree \
-            && rm -rf /var/lib/apt/lists/*
+      # - name: install system dependencies
+      #   env:
+      #     SYS_DEPS: |
+      #       git \
+      #       libcurl4-openssl-dev \
+      #       libssl-dev \
+      #       wget
+      #   run: |
+      #     apt-get update \
+      #       && apt-get install -y --no-install-recommends libcurl4-openssl-dev \
+      #       && chmod -R a+rwX /root \
+      #       && rm -rf /var/lib/apt/lists/*
+      #
+      # - name: install TeX system and fonts
+      #   env:
+      #     TEX_APT: |
+      #       texlive-xetex \
+      #       texlive-fonts-recommended \
+      #       texlive-fonts-extra \
+      #       lmodern
+      #   run: |
+      #     apt-get update \
+      #       && apt-get install -y --no-install-recommends $TEX_APT \
+      #       && tlmgr init-usertree \
+      #       && rm -rf /var/lib/apt/lists/*
 
       - name: install TeX packages
         env:
