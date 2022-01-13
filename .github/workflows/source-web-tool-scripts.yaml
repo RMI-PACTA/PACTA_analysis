@@ -24,18 +24,18 @@ jobs:
       - name: test env vars
         env:
           SYS_DEPS: |
-            git \
-            libcurl4-openssl-dev \
-            libssl-dev \
+            git
+            libcurl4-openssl-dev
+            libssl-dev
             wget
         run: echo ${SYS_DEPS}
 
       - name: install system dependencies
         env:
           SYS_DEPS: |
-            git \
-            libcurl4-openssl-dev \
-            libssl-dev \
+            git
+            libcurl4-openssl-dev
+            libssl-dev
             wget
         run: |
           apt-get update \
