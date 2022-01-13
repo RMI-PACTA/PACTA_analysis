@@ -11,39 +11,6 @@ jobs:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      # When checking out the repository that triggered a workflow, `ref:`
-      # defaults to the reference or SHA for that event. Otherwise, uses the
-      # default branch --https://github.com/actions/checkout
-      - name: Checkout PACTA_analysis
-        uses: actions/checkout@v2
-        with:
-          repository: 2DegreesInvesting/PACTA_analysis
-          token: ${{ secrets.MAURO_PAT_FOR_2DII }}
-          path: bound
-      - name: Checkout pacta-data
-        uses: actions/checkout@v2
-        with:
-          repository: 2DegreesInvesting/pacta-data
-          token: ${{ secrets.MAURO_PAT_FOR_2DII }}
-          path: pacta-data
-      - name: Checkout create_interactive_report
-        uses: actions/checkout@v2
-        with:
-          repository: 2DegreesInvesting/create_interactive_report
-          token: ${{ secrets.MAURO_PAT_FOR_2DII }}
-          path: create_interactive_report
-      - name: Checkout r2dii.climate.stress.test
-        uses: actions/checkout@v2
-        with:
-          repository: 2DegreesInvesting/r2dii.climate.stress.test
-          token: ${{ secrets.MAURO_PAT_FOR_2DII }}
-          path: r2dii.climate.stress.test
-      - name: Checkout r2dii.stress.test.data
-        uses: actions/checkout@v2
-        with:
-          repository: 2DegreesInvesting/r2dii.stress.test.data
-          token: ${{ secrets.MAURO_PAT_FOR_2DII }}
-          path: r2dii.stress.test.data
 
       - name: install Tex packages
         run: |
@@ -104,6 +71,40 @@ jobs:
             "zoo"
           );
           remotes::install_cran(pkg_deps, repos = '$CRAN_REPO');
+
+      # When checking out the repository that triggered a workflow, `ref:`
+      # defaults to the reference or SHA for that event. Otherwise, uses the
+      # default branch --https://github.com/actions/checkout
+      - name: Checkout PACTA_analysis
+        uses: actions/checkout@v2
+        with:
+          repository: 2DegreesInvesting/PACTA_analysis
+          token: ${{ secrets.MAURO_PAT_FOR_2DII }}
+          path: bound
+      - name: Checkout pacta-data
+        uses: actions/checkout@v2
+        with:
+          repository: 2DegreesInvesting/pacta-data
+          token: ${{ secrets.MAURO_PAT_FOR_2DII }}
+          path: pacta-data
+      - name: Checkout create_interactive_report
+        uses: actions/checkout@v2
+        with:
+          repository: 2DegreesInvesting/create_interactive_report
+          token: ${{ secrets.MAURO_PAT_FOR_2DII }}
+          path: create_interactive_report
+      - name: Checkout r2dii.climate.stress.test
+        uses: actions/checkout@v2
+        with:
+          repository: 2DegreesInvesting/r2dii.climate.stress.test
+          token: ${{ secrets.MAURO_PAT_FOR_2DII }}
+          path: r2dii.climate.stress.test
+      - name: Checkout r2dii.stress.test.data
+        uses: actions/checkout@v2
+        with:
+          repository: 2DegreesInvesting/r2dii.stress.test.data
+          token: ${{ secrets.MAURO_PAT_FOR_2DII }}
+          path: r2dii.stress.test.data
 
       - name: Source web-tool scripts
         run: ./bound/bin/run-r-scripts "TestPortfolio_Input"
