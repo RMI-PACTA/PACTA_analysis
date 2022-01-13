@@ -105,9 +105,5 @@ jobs:
           );
           remotes::install_cran(pkg_deps, repos = '$CRAN_REPO');
 
-      - name: install GitHub dev dependencies
-        shell: Rscript {0}
-        run: devtools::install_github("2DegreesInvesting/r2dii.utils")
-
       - name: Source web-tool scripts
         run: ./bound/bin/run-r-scripts "TestPortfolio_Input"
