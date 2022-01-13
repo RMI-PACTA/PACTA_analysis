@@ -13,7 +13,13 @@ jobs:
 
     steps:
       - name: add Ubuntu repos
-        run: apt-get update && apt-get install software-properties-common
+        run: |
+          apt-get update \
+          && apt-get install -y software-properties-common \
+          && sudo add-apt-repository main \
+          && sudo add-apt-repository universe \
+          && sudo add-apt-repository restricted \
+          && sudo add-apt-repository multiverse
 
       - name: install system dependencies
         env:
