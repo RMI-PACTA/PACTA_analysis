@@ -20,9 +20,7 @@ jobs:
             wget
         run: |
           apt-get update \
-            && apt-get install -y --no-install-recommends $SYS_DEPS \
-            && chmod -R a+rwX /root \
-            && rm -rf /var/lib/apt/lists/*
+            && apt-get install -y --no-install-recommends $SYS_DEPS
 
       - name: install TeX system and fonts
         env:
