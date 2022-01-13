@@ -73,35 +73,35 @@ jobs:
         run: |
           install.packages('remotes');
           pkg_deps <- c(
-            bookdown
-            cli
-            config
-            countrycode
-            devtools
-            dplyr
-            forcats
-            fs
-            fst
-            ggplot2
-            glue
-            here
-            janitor
-            jsonlite
-            knitr
-            magrittr
-            purrr
-            readr
-            readxl
-            rmarkdown
-            scales
-            stringi
-            stringr
-            tibble
-            tidyr
-            vroom
-            writexl
-            yaml
-            zoo
+            "bookdown",
+            "cli",
+            "config",
+            "countrycode",
+            "devtools",
+            "dplyr",
+            "forcats",
+            "fs",
+            "fst",
+            "ggplot2",
+            "glue",
+            "here",
+            "janitor",
+            "jsonlite",
+            "knitr",
+            "magrittr",
+            "purrr",
+            "readr",
+            "readxl",
+            "rmarkdown",
+            "scales",
+            "stringi",
+            "stringr",
+            "tibble",
+            "tidyr",
+            "vroom",
+            "writexl",
+            "yaml",
+            "zoo"
           );
           remotes::install_cran(pkg_deps, repos = '$CRAN_REPO');
 
