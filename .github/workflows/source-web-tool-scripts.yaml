@@ -12,7 +12,20 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
 
-      - name: install Tex packages
+      - name: install system dependencies
+        env:
+          ARG SYS_DEPS: |
+            git \
+            libcurl4-openssl-dev \
+            libssl-dev \
+            wget
+        run: |
+          apt-get update \
+            && apt-get install -y --no-install-recommends $SYS_DEPS \
+            && chmod -R a+rwX /root \
+            && rm -rf /var/lib/apt/lists/*
+
+      - name: install TeX packages
         env:
           CTAN_REPO: https://www.texlive.info/tlnet-archive/2022/01/01/tlnet
           TEX_DEPS: |
