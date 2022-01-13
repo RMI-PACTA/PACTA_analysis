@@ -3,7 +3,7 @@ on: push
 jobs:
   Source-web-tool-scripts:
     name: Source web tool scripts in container
-    container: r-base:4.1.2
+    container: rocker/verse:4.1.2
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -15,11 +15,14 @@ jobs:
       - name: install system dependencies
         env:
           SYS_DEPS: |
+            git \
             libcurl4-openssl-dev \
             libssl-dev \
             wget
         run: |
-          apt-get install -y --no-install-recommends $SYS_DEPS \
+          apt-get update \
+            && apt-get install -y --no-install-recommends $SYS_DEPS \
+            && chmod -R a+rwX /root \
             && rm -rf /var/lib/apt/lists/*
 
       - name: install TeX system and fonts
