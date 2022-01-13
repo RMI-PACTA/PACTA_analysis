@@ -13,11 +13,7 @@ jobs:
 
     steps:
       - name: add Ubuntu repos
-        run: |
-          sudo add-apt-repository main \
-            && sudo add-apt-repository universe \
-            && sudo add-apt-repository restricted \
-            && sudo add-apt-repository multiverse
+        run: sudo add-apt-repository main
 
     steps:
       - name: install system dependencies
