@@ -21,20 +21,16 @@ jobs:
       #     && sudo add-apt-repository restricted \
       #     && sudo add-apt-repository multiverse
 
-      - name: install git
-        run: apt-get update && apt-get install -y --no-install-recommends git
-
-      - name: install wget
-        run: apt-get update && apt-get install -y --no-install-recommends wget
-
-      - name: install libssl-dev
-        run: apt-get update && apt-get install -y --no-install-recommends libssl-dev
-
-      - name: install libcurl4-openssl-dev
-        run: apt-get update && apt-get install -y --no-install-recommends libcurl4-openssl-dev
-
-      - name: install a few
-        run: apt-get update && apt-get install -y --no-install-recommends git libcurl4-openssl-dev libssl-dev wget
+      - name: install system dependencies
+        env:
+          SYS_DEPS: |
+            git \
+            libcurl4-openssl-dev \
+            libssl-dev \
+            wget
+        run: |
+          apt-get update \
+          && apt-get install -y --no-install-recommends git libcurl4-openssl-dev libssl-dev wget
 
       - name: install texlive-xetex
         run: apt-get update && apt-get install -y --no-install-recommends texlive-xetex
