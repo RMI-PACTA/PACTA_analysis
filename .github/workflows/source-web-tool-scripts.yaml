@@ -12,14 +12,6 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
-      # - name: add Ubuntu repos
-      #   run: |
-      #     apt-get update \
-      #     && apt-get install -y software-properties-common \
-      #     && sudo add-apt-repository main \
-      #     && sudo add-apt-repository universe \
-      #     && sudo add-apt-repository restricted \
-      #     && sudo add-apt-repository multiverse
 
       - name: install system dependencies
         env:
@@ -34,36 +26,18 @@ jobs:
           && chmod -R a+rwX /root \
           && rm -rf /var/lib/apt/lists/*
 
-      - name: install texlive-xetex
-        run: apt-get update && apt-get install -y texlive-xetex
-
-      - name: install texlive-fonts-recommended
-        run: apt-get update && apt-get install -y --no-install-recommends texlive-fonts-recommended
-
-      - name: install texlive-fonts-extra
-        run: apt-get update && apt-get install -y --no-install-recommends texlive-fonts-extra
-
-      - name: install lmodern
-        run: apt-get update && apt-get install -y --no-install-recommends lmodern
-
-      - name: setup tlmgr
-        run: tlmgr init-usertree
-
-      - name: get rid of apt-get caches
-        run: rm -rf /var/lib/apt/lists/*
-
-      # - name: install TeX system and fonts
-      #   env:
-      #     TEX_APT: |
-      #       texlive-xetex
-      #       texlive-fonts-recommended
-      #       texlive-fonts-extra
-      #       lmodern
-      #   run: |
-      #     apt-get update \
-      #       && apt-get install -y --no-install-recommends $TEX_APT \
-      #       && tlmgr init-usertree \
-      #       && rm -rf /var/lib/apt/lists/*
+      - name: install TeX system and fonts
+        env:
+          TEX_APT: |
+            texlive-xetex
+            texlive-fonts-recommended
+            texlive-fonts-extra
+            lmodern
+        run: |
+          apt-get update \
+            && apt-get install -y --no-install-recommends $TEX_APT \
+            && tlmgr init-usertree \
+            && rm -rf /var/lib/apt/lists/*
 
       - name: install TeX packages
         env:
@@ -94,34 +68,34 @@ jobs:
         env:
           CRAN_REPO: https://packagemanager.rstudio.com/all/2022-01-03+Y3JhbiwyOjQ1MjYyMTU7NTY4Qjk1ODA
           PKG_DEPS: |
-            bookdown \
-            cli \
-            config \
-            countrycode \
-            devtools \
-            dplyr \
-            forcats \
-            fs \
-            fst \
-            ggplot2 \
-            glue \
-            here \
-            janitor \
-            jsonlite \
-            knitr \
-            magrittr \
-            purrr \
-            readr \
-            readxl \
-            rmarkdown \
-            scales \
-            stringi \
-            stringr \
-            tibble \
-            tidyr \
-            vroom \
-            writexl \
-            yaml \
+            bookdown
+            cli
+            config
+            countrycode
+            devtools
+            dplyr
+            forcats
+            fs
+            fst
+            ggplot2
+            glue
+            here
+            janitor
+            jsonlite
+            knitr
+            magrittr
+            purrr
+            readr
+            readxl
+            rmarkdown
+            scales
+            stringi
+            stringr
+            tibble
+            tidyr
+            vroom
+            writexl
+            yaml
             zoo
         shell: Rscript {0}
         run: |
