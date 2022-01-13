@@ -69,38 +69,41 @@ jobs:
           xurl
 
       - name: install package dependencies
+        shell: Rscript {0}
         run: |
-          install2.r --skipinstalled --error \
-          --repos https://packagemanager.rstudio.com/all/2022-01-03+Y3JhbiwyOjQ1MjYyMTU7NTY4Qjk1ODA \
-          bookdown \
-          cli \
-          config \
-          countrycode \
-          devtools \
-          dplyr \
-          forcats \
-          fs \
-          fst \
-          ggplot2 \
-          glue \
-          here \
-          janitor \
-          jsonlite \
-          knitr \
-          magrittr \
-          purrr \
-          readr \
-          readxl \
-          rmarkdown \
-          scales \
-          stringi \
-          stringr \
-          tibble \
-          tidyr \
-          vroom \
-          writexl \
-          yaml \
-          zoo
+          install.packages('remotes'); \
+          pkg_deps <- c( \
+            bookdown \
+            cli \
+            config \
+            countrycode \
+            devtools \
+            dplyr \
+            forcats \
+            fs \
+            fst \
+            ggplot2 \
+            glue \
+            here \
+            janitor \
+            jsonlite \
+            knitr \
+            magrittr \
+            purrr \
+            readr \
+            readxl \
+            rmarkdown \
+            scales \
+            stringi \
+            stringr \
+            tibble \
+            tidyr \
+            vroom \
+            writexl \
+            yaml \
+            zoo \
+          ); \
+          remotes::install_cran(pkg_deps, repos = '$CRAN_REPO');
 
       - name: install GitHub dev dependencies
         shell: Rscript {0}
