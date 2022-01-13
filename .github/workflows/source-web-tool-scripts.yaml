@@ -100,7 +100,7 @@ jobs:
         shell: Rscript {0}
         run: |
           install.packages('remotes');
-          pkg_deps <- strsplit(trimws(gsub('[\\\]+', '', '$PKG_DEPS')), '[[:space:]]+')[[1]];
+          pkg_deps <- strsplit(trimws(gsub('[\\]+', '', '$PKG_DEPS')), '[[:space:]]+')[[1]];
           remotes::install_cran(pkg_deps, repos = '$CRAN_REPO');
 
       # When checking out the repository that triggered a workflow, `ref:`
@@ -138,4 +138,6 @@ jobs:
           path: r2dii.stress.test.data
 
       - name: Source web-tool scripts
+        env:
+          build_version: gh.action
         run: ./bound/bin/run-r-scripts "TestPortfolio_Input"
