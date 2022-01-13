@@ -30,7 +30,7 @@ jobs:
             wget
         run: |
           apt-get update \
-            && apt-get install -y --no-install-recommends libssl-dev \
+            && apt-get install -y --no-install-recommends libcurl4-openssl-dev \
             && chmod -R a+rwX /root \
             && rm -rf /var/lib/apt/lists/*
 
