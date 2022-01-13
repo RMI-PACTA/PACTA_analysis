@@ -14,7 +14,7 @@ jobs:
 
       - name: install system dependencies
         env:
-          ARG SYS_DEPS: |
+          SYS_DEPS: |
             git \
             libcurl4-openssl-dev \
             libssl-dev \
@@ -27,7 +27,7 @@ jobs:
 
       - name: install TeX system and fonts
         env:
-          ARG TEX_APT: |
+          TEX_APT: |
             texlive-xetex \
             texlive-fonts-recommended \
             texlive-fonts-extra \
