@@ -19,8 +19,7 @@ jobs:
             libssl-dev \
             wget
         run: |
-          apt-get update \
-            && apt-get install -y --no-install-recommends $SYS_DEPS \
+          apt-get install -y --no-install-recommends $SYS_DEPS \
             && rm -rf /var/lib/apt/lists/*
 
       - name: install TeX system and fonts
