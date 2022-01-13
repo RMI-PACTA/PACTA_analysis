@@ -104,6 +104,7 @@ jobs:
           install.packages('remotes');
           pkg_deps <- strsplit(trimws(gsub('[\\]+', '', PKG_DEPS)), '[[:space:]]+')[[1]];
           remotes::install_cran(pkg_deps, repos = CRAN_REPO);
+          library(devtools);
 
       - name: test that packages installed
         shell: Rscript {0}
