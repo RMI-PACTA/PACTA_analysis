@@ -25,6 +25,19 @@ jobs:
             && chmod -R a+rwX /root \
             && rm -rf /var/lib/apt/lists/*
 
+      - name: install TeX system and fonts
+        env:
+          ARG TEX_APT: |
+            texlive-xetex \
+            texlive-fonts-recommended \
+            texlive-fonts-extra \
+            lmodern
+        run: |
+          apt-get update \
+            && apt-get install -y --no-install-recommends $TEX_APT \
+            && tlmgr init-usertree \
+            && rm -rf /var/lib/apt/lists/*
+
       - name: install TeX packages
         env:
           CTAN_REPO: https://www.texlive.info/tlnet-archive/2022/01/01/tlnet
