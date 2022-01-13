@@ -1,4 +1,4 @@
-name: Source web tool scripts in container rocker/verse
+name: Source web tool scripts in container r-base
 on: push
 jobs:
   Source-web-tool-scripts:
@@ -35,9 +35,9 @@ jobs:
             lmodern
         run: |
           apt-get update \
-            && apt-get install -y --no-install-recommends $TEX_APT \
-            && tlmgr init-usertree \
-            && rm -rf /var/lib/apt/lists/*
+          && apt-get install -y --no-install-recommends $TEX_APT \
+          && tlmgr init-usertree \
+          && rm -rf /var/lib/apt/lists/*
 
       - name: install TeX packages
         env:
@@ -105,6 +105,10 @@ jobs:
           pkg_deps <- strsplit(trimws(gsub('[\\]+', '', PKG_DEPS)), '[[:space:]]+')[[1]];
           remotes::install_cran(pkg_deps, repos = CRAN_REPO);
 
+      - name: test that packages installed
+        shell: Rscript {0}
+        run: library(devtools)
+
       # When checking out the repository that triggered a workflow, `ref:`
       # defaults to the reference or SHA for that event. Otherwise, uses the
       # default branch --https://github.com/actions/checkout
@@ -138,6 +142,16 @@ jobs:
           repository: 2DegreesInvesting/r2dii.stress.test.data
           token: ${{ secrets.MAURO_PAT_FOR_2DII }}
           path: r2dii.stress.test.data
+
+      - name: Source web-tool scripts
+        env:
+          build_version: gh.action
+        shell: Rscript {0}
+        run: |
+          setwd("bound")
+          source("web_tool_script_1.R")
+          source("web_tool_script_2.R")
+          source("web_tool_script_3.R")
 
       - name: Source web-tool scripts
         env:
