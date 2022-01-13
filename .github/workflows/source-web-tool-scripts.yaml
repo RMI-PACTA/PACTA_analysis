@@ -30,7 +30,7 @@ jobs:
             wget
         run: |
           apt-get update \
-          && apt-get install -y --no-install-recommends git libcurl4-openssl-dev libssl-dev wget
+          && apt-get install -y --no-install-recommends SYS_DEPS
 
       - name: install texlive-xetex
         run: apt-get update && apt-get install -y --no-install-recommends texlive-xetex
