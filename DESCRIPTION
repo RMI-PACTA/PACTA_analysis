@@ -39,6 +39,7 @@ Imports:
     janitor,
     jsonlite,
     magrittr,
+    progress,
     purrr,
     readr,
     rlang,
@@ -46,6 +47,7 @@ Imports:
     stringi,
     tibble,
     tidyr,
+    vctrs,
     vroom
 Suggests: 
     callr,
