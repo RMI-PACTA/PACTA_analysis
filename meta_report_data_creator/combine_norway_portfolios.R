@@ -40,8 +40,9 @@ project_code <- "PA2021NO"
 default_language <- "EN"
 
 project_prefix <- "norway"
+holdings_date <- "2020Q4"
 
-bogus_csvs_to_be_ignored <- c("20303", "26102")  # if none, this should be c()
+bogus_csvs_to_be_ignored <- c()  # if none, this should be c()
 
 
 # check paths and directories --------------------------------------------------
@@ -141,11 +142,12 @@ config_list <-
   list(
     default = list(
       parameters = list(
-        portfolio_name_in = "Meta Portfolio",
-        investor_name_in = "Meta Investor",
+        portfolio_name = "Meta Portfolio",
+        investor_name = "Meta Investor",
         peer_group = paste0(project_prefix, "_meta"),
         language = default_language,
-        project_code = project_code
+        project_code = project_code,
+        holdings_date: holdings_date
       )
     )
   )
@@ -178,11 +180,12 @@ for (port_id in all_port_ids) {
     list(
       default = list(
         parameters = list(
-          portfolio_name_in = as.character(portfolio_name),
-          investor_name_in = as.character(investor_name),
+          portfolio_name = as.character(portfolio_name),
+          investor_name = as.character(investor_name),
           peer_group = peer_group,
           language = default_language,
-          project_code = project_code
+          project_code = project_code,
+          holdings_date: holdings_date
         )
       )
     )
@@ -225,11 +228,12 @@ for (user_id in all_user_ids) {
     list(
       default = list(
         parameters = list(
-          portfolio_name_in = as.character(investor_name),
-          investor_name_in = as.character(investor_name),
+          portfolio_name = as.character(investor_name),
+          investor_name = as.character(investor_name),
           peer_group = peer_group,
           language = default_language,
-          project_code = project_code
+          project_code = project_code,
+          holdings_date: holdings_date
         )
       )
     )
@@ -263,11 +267,12 @@ for (org_type in all_org_types) {
     list(
       default = list(
         parameters = list(
-          portfolio_name_in = org_type,
-          investor_name_in = org_type,
+          portfolio_name = org_type,
+          investor_name = org_type,
           peer_group = org_type,
           language = default_language,
-          project_code = project_code
+          project_code = project_code,
+          holdings_date: holdings_date
         )
       )
     )
