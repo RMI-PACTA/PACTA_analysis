@@ -85,6 +85,18 @@ pacta_directories <- c("00_Log_Files", "10_Parameter_File", "20_Raw_Inputs", "30
 portfolio_csvs <- list.files(portfolios_path, pattern = "[.]csv$", full.names = TRUE)
 
 
+# read in meta data CSVs -------------------------------------------------------
+
+portfolios_meta <- read_csv(portfolios_meta_csv, col_types = "nnnccnc")
+users_meta <- read_csv(users_meta_csv, col_types = "ncccccn", skip = 1L, col_names = c("id", "email_canonical", "organization_type", "organization_name", "job_title", "country", "has_portfolios"))
+
+
+# remove unsubmitted CSVs ------------------------------------------------------
+
+unsubmitted_ids <- portfolios_meta$id[portfolios_meta$submitted == 0]
+portfolio_csvs <- portfolio_csvs[!tools::file_path_sans_ext(basename(portfolio_csvs)) %in% unsubmitted_ids]
+
+
 # remove bogus CSVs ------------------------------------------------------------
 portfolio_csvs <- portfolio_csvs[! tools::file_path_sans_ext(basename(portfolio_csvs)) %in% bogus_csvs_to_be_ignored]
 
@@ -99,12 +111,6 @@ portfolio_csvs <- specs$filepath
 # read in all the CSVs ---------------------------------------------------------
 
 data <- map_dfr(set_names(portfolio_csvs, portfolio_csvs), read_portfolio_csv, .id = "csv_name")
-
-
-# read in meta data CSVs -------------------------------------------------------
-
-portfolios_meta <- read_csv(portfolios_meta_csv, col_types = "nnnccnc")
-users_meta <- read_csv(users_meta_csv, col_types = "ncccccn", skip = 1L, col_names = c("id", "email_canonical", "organization_type", "organization_name", "job_title", "country", "has_portfolios"))
 
 
 # add meta data to full data and save it ---------------------------------------
