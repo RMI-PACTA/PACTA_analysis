@@ -1,16 +1,133 @@
-name: Source web tool scripts in container r2dii/r-packages
+name: Source web tool scripts in container r-base
 on: push
 jobs:
   Source-web-tool-scripts:
-    container: 2dii/r-packages:latest
+    name: Source web tool scripts in container
     runs-on: ubuntu-latest
-    name: Source web tool scripts in container r2dii/r-packages
+    container: r-base:4.1.2
     strategy:
       fail-fast: false
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+
     steps:
+
+      - name: install system dependencies
+        env:
+          SYS_DEPS: |
+            git
+            libcurl4-openssl-dev
+            libssl-dev
+            wget
+        run: |
+          apt-get update \
+          && apt-get install -y --no-install-recommends $SYS_DEPS \
+          && chmod -R a+rwX /root \
+          && rm -rf /var/lib/apt/lists/*
+
+      - name: install TeX system and fonts
+        env:
+          TEX_APT: |
+            texlive-xetex
+            texlive-fonts-recommended
+            texlive-fonts-extra
+            lmodern
+        run: |
+          apt-get update \
+          && apt-get install -y --no-install-recommends $TEX_APT \
+          && tlmgr init-usertree \
+          && rm -rf /var/lib/apt/lists/*
+
+      - name: install TeX packages
+        env:
+          CTAN_REPO: https://www.texlive.info/tlnet-archive/2022/01/01/tlnet
+          TEX_DEPS: |
+            amsmath
+            blindtext
+            bookmark
+            caption
+            fancyhdr
+            geometry
+            grffile
+            hyperref
+            lipsum
+            microtype
+            parskip
+            sectsty
+            silence
+            titlesec
+            unicode-math
+            upquote
+            wrapfig
+            xcolor
+            xurl
+        run: tlmgr --repository $CTAN_REPO install $TEX_DEPS
+
+      - name: install system dependencies for R packages
+        env:
+          R_PKG_SYS_DEPS: |
+            libfontconfig1-dev
+            libfreetype6-dev
+            libfribidi-dev
+            libgit2-dev
+            libharfbuzz-dev
+            libicu-dev
+            libjpeg-dev
+            libpng-dev
+            libtiff-dev
+            libxml2-dev
+            libxt6
+            make
+            pandoc
+            perl
+            zlib1g-dev
+        run: |
+          apt-get update \
+          && apt-get install -y --no-install-recommends $R_PKG_SYS_DEPS \
+          && rm -rf /var/lib/apt/lists/*
+
+      - name: install R package dependencies
+        env:
+          CRAN_REPO: https://packagemanager.rstudio.com/all/2022-01-03+Y3JhbiwyOjQ1MjYyMTU7NTY4Qjk1ODA
+          PKG_DEPS: |
+            bookdown
+            cli
+            config
+            countrycode
+            devtools
+            dplyr
+            forcats
+            fs
+            fst
+            ggplot2
+            glue
+            here
+            janitor
+            jsonlite
+            knitr
+            magrittr
+            purrr
+            readr
+            readxl
+            rmarkdown
+            scales
+            stringi
+            stringr
+            tibble
+            tidyr
+            vroom
+            writexl
+            yaml
+            zoo
+        shell: Rscript {0}
+        run: |
+          CRAN_REPO <- Sys.getenv('CRAN_REPO');
+          PKG_DEPS <- Sys.getenv('PKG_DEPS');
+          install.packages('remotes');
+          pkg_deps <- strsplit(trimws(gsub('[\\]+', '', PKG_DEPS)), '[[:space:]]+')[[1]];
+          remotes::install_cran(pkg_deps, repos = CRAN_REPO);
+
       # When checking out the repository that triggered a workflow, `ref:`
       # defaults to the reference or SHA for that event. Otherwise, uses the
       # default branch --https://github.com/actions/checkout
@@ -19,7 +136,7 @@ jobs:
         with:
           repository: 2DegreesInvesting/PACTA_analysis
           token: ${{ secrets.MAURO_PAT_FOR_2DII }}
-          path: PACTA_analysis
+          path: bound
       - name: Checkout pacta-data
         uses: actions/checkout@v2
         with:
@@ -44,14 +161,8 @@ jobs:
           repository: 2DegreesInvesting/r2dii.stress.test.data
           token: ${{ secrets.MAURO_PAT_FOR_2DII }}
           path: r2dii.stress.test.data
-      - name: Setup tinytex
-        run: |
-          install.packages('tinytex')
-          tinytex::install_tinytex()
-        shell: Rscript {0}
+
       - name: Source web-tool scripts
-        run: |
-          setwd("PACTA_analysis")
-          source("R/source_web_tool_scripts.R")
-          source_web_tool_scripts()
-        shell: Rscript {0}
+        env:
+          build_version: gh.action
+        run: ./bound/bin/run-r-scripts "TestPortfolio_Input"
