@@ -147,7 +147,7 @@ config_list <-
         peer_group = paste0(project_prefix, "_meta"),
         language = default_language,
         project_code = project_code,
-        holdings_date: holdings_date
+        holdings_date = holdings_date
       )
     )
   )
@@ -185,7 +185,7 @@ for (port_id in all_port_ids) {
           peer_group = peer_group,
           language = default_language,
           project_code = project_code,
-          holdings_date: holdings_date
+          holdings_date = holdings_date
         )
       )
     )
@@ -233,7 +233,7 @@ for (user_id in all_user_ids) {
           peer_group = peer_group,
           language = default_language,
           project_code = project_code,
-          holdings_date: holdings_date
+          holdings_date = holdings_date
         )
       )
     )
@@ -272,7 +272,7 @@ for (org_type in all_org_types) {
           peer_group = org_type,
           language = default_language,
           project_code = project_code,
-          holdings_date: holdings_date
+          holdings_date = holdings_date
         )
       )
     )
