@@ -484,7 +484,7 @@ data_filenames <-
   )
 
 lapply(data_filenames, function(data_filename) {
-  portfolio_result_filepaths <- list.files(org_type_output_dir, pattern = data_filename, recursive = TRUE, full.names = TRUE)
+  portfolio_result_filepaths <- list.files(orgs_output_dir, pattern = data_filename, recursive = TRUE, full.names = TRUE)
   meta_result_filepaths <- list.files(meta_output_dir, pattern = data_filename, recursive = TRUE, full.names = TRUE)
   all_result_filepaths <- c(portfolio_result_filepaths, meta_result_filepaths)
 
@@ -500,7 +500,7 @@ data_filenames <-
   )
 
 lapply(data_filenames, function(data_filename) {
-  portfolio_result_filepaths <- list.files(org_type_output_dir, pattern = data_filename, recursive = TRUE, full.names = TRUE)
+  portfolio_result_filepaths <- list.files(orgs_output_dir, pattern = data_filename, recursive = TRUE, full.names = TRUE)
   meta_result_filepaths <- list.files(meta_output_dir, pattern = data_filename, recursive = TRUE, full.names = TRUE)
   all_result_filepaths <- c(portfolio_result_filepaths, meta_result_filepaths)
 
