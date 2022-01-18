@@ -5,7 +5,12 @@
 
 trigger:
   - master
-  - azure-pipelines
+  - release/*
+
+pr:
+  - master
+  - develop
+  - release/*
 
 pool:
   vmImage: ubuntu-latest
@@ -113,86 +118,6 @@ stages:
                 $(dockerTag)
                 $(Build.BuildNumber)
                 $(Build.SourceVersion)
-
-  - stage: test_image
-    displayName: Test Docker Image
-    jobs:
-      - ${{ each portfolioName in parameters.testingPortfolios }}:
-        - job: test_portfolio_${{portfolioName}}
-          displayName: "Test ${{portfolioName}}"
-          variables:
-            resultsDirectory: '$(Build.BuildNumber)/${{portfolioName}}'
-            runDirectory: '$(Build.SourcesDirectory)/$(Build.BuildNumber)'
-            portfolioDirectory: '$(runDirectory)/${{portfolioName}}'
-          steps:
-            - task: Docker@2
-              displayName: Login to ACR
-              inputs:
-                command: login
-                containerRegistry: $(dockerRegistryServiceConnection)
-            - task: Bash@3
-              displayName: Create portfolio directory
-              inputs:
-                targetType: inline
-                script: mkdir -p $(portfolioDirectory)
-            - task: AzureCLI@2
-              displayName: Download Portfolio files from Azure File Share
-              inputs:
-                azureSubscription: tm-docker-AzureResourceManager
-                scriptType: bash
-                scriptLocation: inlineScript
-                inlineScript: |
-                  az storage file download-batch \
-                  --source $(testingShareName)/${{portfolioName}} \
-                  --destination $(portfolioDirectory) \
-                  --account-name $(testingStorageAccountName)
-            - task: Bash@3
-              displayName: Change permissions for Working Directory
-              inputs:
-                targetType: inline
-                workingDirectory: $(Build.SourcesDirectory)
-                script: |
-                  chmod -R 777 $(portfolioDirectory)
-            - task: Bash@3
-              displayName: Pull Docker image
-              inputs:
-                targetType: inline
-                workingDirectory: $(Build.SourcesDirectory)
-                script: |
-                  docker pull \
-                  $(qualifiedRepository):$(Build.BuildNumber)
-            - task: Bash@3
-              displayName: Inspect File structure
-              inputs:
-                targetType: inline
-                workingDirectory: $(Build.SourcesDirectory)
-                script: |
-                  ls -laRh
-            - task: Bash@3
-              displayName: Run ${{portfolioName}} Portfolio
-              inputs:
-                targetType: inline
-                # filePath: run-like-constructiva-flags.sh
-                script: |
-                  $(Build.SourcesDirectory)/transitionmonitor_docker/run-like-constructiva-flags.sh \
-                  -v \
-                  -u 4 \
-                  -p ${{portfolioName}} \
-                  -f $(portfolioDirectory) \
-                  -m $(qualifiedRepository) \
-                  -t $(Build.BuildNumber)
-            - task: AzureCLI@2
-              condition: succeededOrFailed()
-              displayName: Upload Results files to Azure File Share
-              inputs:
-                azureSubscription: tm-docker-AzureResourceManager
-                scriptType: bash
-                scriptLocation: inlineScript
-                inlineScript: |
-                  az storage file upload-batch \
-                  --source $(Build.SourcesDirectory) \
-                  --destination $(resultsShareName) \
-                  --account-name $(testingStorageAccountName)
 
   - stage: save_and_upload_tar
     displayName: Save and Upload tar file
