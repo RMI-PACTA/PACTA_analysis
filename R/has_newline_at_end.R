@@ -13,14 +13,15 @@ has_newline_at_end <- function(filepaths) {
       con <- file(filepath, "rb")
       on.exit(close(con))
 
-      chars <- " "
-      while (nzchar(chars)) {
-        chars <- readChar(con, nchars = 2048L)
-        if (length(chars) == 0L) break
-        last_char <- substring(chars, first = nchar(chars, type = "chars"))
+      not_at_end <- TRUE
+      chars <- ""
+      while (not_at_end) {
+        prev_chars <- chars
+        chars <- readChar(con, nchars = 2048L, useBytes = TRUE)
+        if (length(chars) == 0L) { not_at_end <- FALSE }
       }
 
-      grepl("[\n\r]", last_char)
+      grepl("[\n\r]$", prev_chars)
     },
     FUN.VALUE = logical(1),
     USE.NAMES = FALSE
