@@ -1,10 +1,7 @@
-cli::cli_h1("web_tool_script_1.R")
-
 devtools::load_all(quiet = TRUE)
 use_r_packages()
 
-build_version <- get_build_version()
-if (!is.na(build_version)) cli::cli_h1(paste("Docker build", build_version))
+cli::cli_h1("web_tool_script_1.R{get_build_version_msg()}")
 
 source("0_portfolio_input_check_functions.R")
 source("0_global_functions.R")
@@ -164,8 +161,6 @@ portfolio_total <- add_portfolio_flags(portfolio)
 
 portfolio_overview <- portfolio_summary(portfolio_total)
 
-identify_missing_data(portfolio_total)
-
 audit_file <- create_audit_file(portfolio_total)
 
 emissions_totals <- calculate_average_portfolio_emissions(
@@ -203,11 +198,11 @@ if(data_check(port_weights)){
   write(x = port_weights, file = file.path(proc_input_path_,"portfolio_weights.json"))
   }
 
-rm(portfolio_total)
-rm(portfolio)
-rm(audit_file)
-rm(eq_portfolio)
-rm(cb_portfolio)
-rm(fund_coverage_summary)
-rm(fund_coverage)
-rm(unknown_funds_in_funds)
+remove_if_exists(portfolio_total)
+remove_if_exists(portfolio)
+remove_if_exists(audit_file)
+remove_if_exists(eq_portfolio)
+remove_if_exists(cb_portfolio)
+remove_if_exists(fund_coverage_summary)
+remove_if_exists(fund_coverage)
+remove_if_exists(unknown_funds_in_funds)

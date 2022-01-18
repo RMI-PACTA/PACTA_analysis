@@ -91,13 +91,15 @@ set_web_parameters <- function(file_path) {
 set_portfolio_parameters <- function(file_path) {
   cfg <- config::get(file = file_path)
 
-  portfolio_name <<- cfg$parameters$portfolio_name
-  investor_name <<- cfg$parameters$investor_name
-  peer_group <<- cfg$parameters$peer_group
-  language_select <<- cfg$parameters$language
-  user_id <<- cfg$parameters$user_id
-  project_code <<- cfg$parameters$project_code
-  port_holdings_date <<- cfg$parameters$holdings_date
+  null_or_string <- function(x) if (is.null(x)) { NULL } else { as.character(x) }
+
+  portfolio_name <<- null_or_string(cfg$parameters$portfolio_name)
+  investor_name <<- null_or_string(cfg$parameters$investor_name)
+  peer_group <<- null_or_string(cfg$parameters$peer_group)
+  language_select <<- null_or_string(cfg$parameters$language)
+  user_id <<- null_or_string(cfg$parameters$user_id)
+  project_code <<- null_or_string(cfg$parameters$project_code)
+  port_holdings_date <<- null_or_string(cfg$parameters$holdings_date)
 }
 
 add_naming_to_portfolio <- function(portfolio_raw) {

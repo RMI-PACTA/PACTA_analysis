@@ -12,11 +12,7 @@ setup_project <- function() {
 
 required_packages_vec <- function() {
   c(
-    "assertthat",
     "bookdown",
-    "config",
-    "conflicted",
-    "countrycode",
     "devtools",
     "dplyr",
     "fs",
@@ -32,14 +28,11 @@ required_packages_vec <- function() {
     "readxl",
     "rlang",
     "rmarkdown",
-    "rstudioapi",
     "scales",
     "stringr",
-    "testthat",
     "tibble",
     "tidyr",
     "tidyselect",
-    "withr",
     "writexl",
     "zoo"
   )
@@ -49,18 +42,6 @@ use_r_packages <- function() {
   suppressPackageStartupMessages({
     for (pkg in required_packages_vec()) { library(pkg, character.only = TRUE) }
   })
-
-  resolve_conflicts()
-}
-
-resolve_conflicts <- function() {
-  conflicted::conflict_prefer("filter", "dplyr", quiet = TRUE)
-  conflicted::conflict_prefer("lag", "dplyr", quiet = TRUE)
-  conflicted::conflict_prefer("mutate", "dplyr", quiet = TRUE)
-  conflicted::conflict_prefer("here", "here", quiet = TRUE)
-  conflicted::conflict_prefer("rename", "dplyr", quiet = TRUE)
-  conflicted::conflict_prefer("summarise", "dplyr", quiet = TRUE)
-  conflicted::conflict_prefer("arrange", "dplyr", quiet = TRUE)
 }
 
 #' @examples
@@ -157,4 +138,9 @@ expect_no_message <- function(object, regexp = NA, ...) {
 get_build_version <- function(env_var = "build_version") {
   build_version <- Sys.getenv(env_var)
   ifelse(nzchar(build_version), paste0("v", build_version), NA_character_)
+}
+
+get_build_version_msg <- function() {
+  build_version <- get_build_version()
+  ifelse(is.na(build_version), "", paste0(" (Docker build ", build_version, ")"))
 }

@@ -2,11 +2,11 @@ Package: PACTA.analysis
 Title: Helpers for 'PACTA_analysis'
 Version: 0.0.0.9000
 Authors@R: 
-    c(person(given = "Mauro",
-             family = "Lepore",
-             role = c("aut", "ctr", "cre"),
-             email = "maurolepore@gmail.com",
-             comment = c(ORCID = "0000-0002-1986-7988")),
+    c(person(given = "CJ",
+             family = "Yetman",
+             role = c("aut", "cre"),
+             email = "cj@cjyetman.com",
+             comment = c(ORCID = "0000-0001-5099-9500")),
       person(given = "Clare",
              family = "Murray",
              role = "aut",
@@ -15,6 +15,11 @@ Authors@R:
              family = "Kastl",
              role = "aut",
              email = "jacob.kastl@gmail.com"),
+      person(given = "Mauro",
+             family = "Lepore",
+             role = c("aut"),
+             email = "maurolepore@gmail.com",
+             comment = c(ORCID = "0000-0002-1986-7988")),
       person(given = "2 Degrees Investing Initiative",
              role = c("cph", "fnd"),
              email = "contact@2degrees-investing.org"))
@@ -25,7 +30,7 @@ Depends:
     R (>= 3.5)
 Imports: 
     config,
-    conflicted,
+    countrycode,
     dplyr,
     fs,
     fst,
@@ -33,17 +38,22 @@ Imports:
     here,
     jsonlite,
     janitor,
+    jsonlite,
     magrittr,
     purrr,
-    readr,
+    readr (>= 2.1.0),
     rlang,
     rmarkdown,
-    tidyr,
+    stringi,
     tibble,
-    withr
+    tidyr,
+    vroom
 Suggests: 
+    callr,
     knitr,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    withr,
+    yaml
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)

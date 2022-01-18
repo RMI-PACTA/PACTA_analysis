@@ -1,10 +1,10 @@
 #! /bin/bash
 
-set -e
-
 usage() {
-  echo "Usage: $0  -p <portfolio name string> -t <docker image tag>" 1>&2
+  echo "Usage: $0  -p <portfolio name string>" 1>&2
   echo "Optional flags:" 1>&2
+  # t for tag
+  echo "[-t <docker image tag>] (default latest)" 1>&2
   echo "[-u <userId>] (default 4)" 1>&2
   # a for analysis
   echo "[-a <path to local PACTA_analysis repo>] (default docker internal)" 1>&2
@@ -18,80 +18,86 @@ usage() {
   echo "[-e <path to local r2dii.stress.test.data repo>] (default docker internal)" 1>&2
   # r for run
   echo "[-r <container command>] (default /bound/bin/run-r-scripts "portfolio name string")" 1>&2
+  # x for architecture?
+  echo "[-x <target platform>] (default linux/x86_64)" 1>&2
+  # w for working_dirs
+  echo "[-w <path to directory caontaing the users working directory>] (default ./working_dirs)" 1>&2
+  # y for user_results
+  echo "[-y <path to directory caontaing the user results directory>] (default ./user_results)" 1>&2
   # v for verbose
   echo "[-v] (verbose mode)" 1>&2
   echo "[-i] run container in interactive, tty mode (docker run -it)" 1>&2
-  echo "[-m <docker image name>] (default 2dii_pacta)"
-  echo "[-f <test files directory>] (default \$pwd/<portfolio name>)"
-  echo "  ! Note that <test files directory> should contain 'working_dir' and 'user results'."
-  echo "  ! <test files directory>"
-  echo "  ! |- working_dir"
-  echo "  ! |- user_results"
   exit 1;
 }
 
-while getopts p:t:u:a:d:c:d:s:e:r:m:f:vi flag
+while getopts p:t:u:a:d:c:d:s:e:r:x:w:y:vi flag
 do
-    case "${flag}" in
-        a) pa_repo=${OPTARG};;
-        c) cir_repo=${OPTARG};;
-        d) data_repo=${OPTARG};;
-        e) stdata_repo=${OPTARG};;
-        f) test_files_dir=${OPTARG};;
-        i) interactive=1;;
-        m) docker_image=${OPTARG};;
-        p) portfolioIdentifier=${OPTARG};;
-        r) docker_command=${OPTARG};;
-        s) st_repo=${OPTARG};;
-        t) tag=${OPTARG};;
-        u) userId=${OPTARG};;
-        v) verbose=1;;
-        *) usage;;
-    esac
+  case "${flag}" in
+    u) userId=${OPTARG};;
+    p) portfolioIdentifier=${OPTARG};;
+    t) tag=${OPTARG};;
+    a) pa_repo=${OPTARG};;
+    d) data_repo=${OPTARG};;
+    c) cir_repo=${OPTARG};;
+    s) st_repo=${OPTARG};;
+    e) stdata_repo=${OPTARG};;
+    r) docker_command=${OPTARG};;
+    x) target_platform=${OPTARG};;
+    w) working_dirs=${OPTARG};;
+    y) user_results=${OPTARG};;
+    v) verbose=1;;
+    i) interactive=1;;
+    *) usage;;
+  esac
 done
 
-if [ -z "${portfolioIdentifier}" ] || [ -z "${tag}" ]; then
-    usage
+if [ -z "${portfolioIdentifier}" ]; then
+  usage
+fi
+
+if [ -z "${tag}" ]; then
+  tag="latest"
 fi
 
 if [ -z "${userId}" ]; then
-    userId="4"
+  userId="4"
 fi
 
-if [ -z "${test_files_dir}" ]; then
-  test_files_dir="$(pwd)/$portfolioIdentifier"
+if [ -z "${target_platform}" ]; then
+  target_platform="linux/x86_64"
 fi
 
-userFolder="$test_files_dir/working_dir"
-resultsFolder="$test_files_dir/user_results/$userId"
-
-if [ -n "${verbose}" ]; then
-  echo userId="$userId"
-  echo portfolioIdentifier="$portfolioIdentifier"
-  echo tag="$tag"
-  echo userFolder="$userFolder"
-  echo resultsFolder="$resultsFolder"
-  echo ""
+if [ -z "${working_dirs}" ]; then
+  working_dirs="$(pwd)"/working_dirs
 fi
 
-if [ -z "${docker_image}" ]; then
-  docker_image="2dii_pacta"
+if [ -z "${user_results}" ]; then
+  user_results="$(pwd)/user_results"
 fi
 
 if [ -z "${docker_command}" ]; then
   docker_command="/bound/bin/run-r-scripts"
-  docker_command_args="${portfolioIdentifier}"
 fi
+
+yellow () {
+  printf "\033[33m$1\033[0m\n"
+}
+
+userFolder="$working_dirs"/"$portfolioIdentifier"
+resultsFolder="$user_results"/"$userId"
 
 args=(
   "--rm"
-  --platform linux/x86_64
+  --platform $target_platform
   "--pull=never"
   --network none
   --user 1000:1000
   "--memory=8g"
-  "--memory-swappiness=0"
 )
+
+if [ "${target_platform}" != "linux/arm64" ]; then
+  args+=("--memory-swappiness=0")
+fi
 
 if [ -n "${interactive}" ]; then
   args+=("-it")
@@ -121,23 +127,19 @@ args+=(
   --mount "type=bind,source=${userFolder},target=/bound/working_dir"
   --mount "type=bind,readonly,source=${resultsFolder},target=/user_results"
 )
-args+=("$docker_image:$tag")
-args+=("${docker_command}")
+args+=("2dii_pacta:$tag")
+args+=($docker_command $portfolioIdentifier)
+
+if [ -n "${verbose}" ]; then
+  yellow "docker run \\ "
+  for arg in "${args[@]}"; do
+    yellow "  $arg \\ "
+  done
+  yellow ""
+fi
 
 echo Running Docker Container
 
-if [ -n "${verbose}" ]; then
-  for arg in "${args[@]}"; do
-    echo "$arg"
-  done
-fi
+docker run "${args[@]}"
 
-# I can't finsd a better way to work around however docker is parsing
-# arguments.
-if [ -n "${docker_command_args}" ]; then
-  docker run "${args[@]}" "${docker_command_args}"
-else
-  docker run "${args[@]}"
-fi
-
-echo "Done :-)"
+exit 0
