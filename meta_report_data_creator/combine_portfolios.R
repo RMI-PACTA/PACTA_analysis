@@ -142,6 +142,8 @@ data %>%
   mutate(portfolio_name = "Meta Portfolio") %>%
   mutate(investor_name = "Meta Investor") %>%
   select(investor_name, portfolio_name, isin, market_value, currency) %>%
+  group_by_all() %>% ungroup(market_value) %>%
+  summarise(market_value = sum(market_value, na.rm = TRUE), .groups = "drop") %>%
   write_csv(file = file.path(meta_output_dir, "20_Raw_Inputs", paste0(project_prefix, "_meta.csv")))
 
 config_list <-
