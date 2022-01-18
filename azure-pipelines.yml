@@ -84,14 +84,25 @@ stages:
             inputs:
               command: login
               containerRegistry: $(dockerRegistryServiceConnection)
-          # - task: Bash@3
-          #   displayName: Pull Docker image
-          #   inputs:
-          #     targetType: inline
-          #     workingDirectory: $(Build.SourcesDirectory)
-          #     script: |
-          #       docker pull \
-          #       $(qualifiedRepository):$(Build.BuildNumber)
+          - task: Bash@3
+            displayName: Pull Docker image
+            continueOnError: true 
+            inputs:
+              targetType: inline
+              workingDirectory: $(Build.SourcesDirectory)
+              script: |
+                docker pull \
+                $(qualifiedRepository):$(dockerTag)
+          - task: Bash@3
+            displayName: Pull Docker image - Master
+            continueOnError: true 
+            condition: failed() # only run if prvious pull failed
+            inputs:
+              targetType: inline
+              workingDirectory: $(Build.SourcesDirectory)
+              script: |
+                docker pull \
+                $(qualifiedRepository):master
           - task: Docker@2
             displayName: Build Transition Monitor Docker image
             inputs:
@@ -125,6 +136,7 @@ stages:
       - job: save_and_upload_tar
         displayName: "Save and Upload tar file"
         steps:
+          - checkout: none
           - task: Docker@2
             displayName: Login to ACR
             inputs:
@@ -139,8 +151,6 @@ stages:
               script: |
                 docker pull \
                   $(qualifiedRepository):$(Build.BuildNumber)
-          - checkout: self
-            path: $(Build.SourcesDirectory)/pacta_analysis
           - task: Bash@3
             displayName: Save Docker image as tar
             inputs:
