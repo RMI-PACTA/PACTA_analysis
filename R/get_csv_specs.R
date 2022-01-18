@@ -179,7 +179,7 @@ get_csv_specs <- function(files, expected_colnames = c("Investor.Name", "Portfol
   # }
 
 
-  files_df$file_encoding <- guess_encodings(files_df$filepath)
+  files_df$file_encoding <- guess_file_encoding(files_df$filepath)
 
   if (all(files_df$file_encoding %in% c("ASCII", "UTF-8"))) {
     cli::cli_alert_success("all files are encoded in ASCII or UTF-8")
@@ -190,7 +190,7 @@ get_csv_specs <- function(files, expected_colnames = c("Investor.Name", "Portfol
 
   files_df$num_of_lines <- guess_num_of_lines(files_df$filepath)
 
-  files_df$last_line_has_newline <- vapply(files_df$filepath, function(x) { attr(R.utils::countLines.default(x), "lastLineHasNewline") }, logical(1))
+  files_df$last_line_has_newline <- has_newline_at_end(files_df$filepath)
 
   if (all(files_df$last_line_has_newline)) {
     cli::cli_alert_success("all files have a newline at the end")
@@ -199,7 +199,7 @@ get_csv_specs <- function(files, expected_colnames = c("Investor.Name", "Portfol
     report_alert_files("the following files do not have a newline at the end:", alert_files, type = "warning", info = "this can be adapted to automatically by the {.fun read_portfolio_csv} function")
   }
 
-  files_df$delimiter <- guess_delimiters(files_df$filepath, files_df$file_encoding)
+  files_df$delimiter <- guess_delimiter(files_df$filepath)
 
   if (all(files_df$delimiter == ",")) {
     cli::cli_alert_success(paste0("all files use {.strong ", cli::style_inverse(","), "} for a delimiter"))
@@ -234,7 +234,7 @@ get_csv_specs <- function(files, expected_colnames = c("Investor.Name", "Portfol
 
 
 
-  files_df$decimal_mark <- guess_decimal_marks(files_df$filepath, files_df$file_encoding, files_df$delimiter)
+  files_df$decimal_mark <- guess_decimal_mark(files_df$filepath)
 
   if (all(files_df$decimal_mark == ".")) {
     cli::cli_alert_success(paste0("all files use {.strong ", cli::style_inverse("."), "} for a decimal mark"))
@@ -243,7 +243,7 @@ get_csv_specs <- function(files, expected_colnames = c("Investor.Name", "Portfol
     report_alert_files(paste0("the following files do not use {.strong ", cli::style_inverse("."), "} for a decimal mark"), alert_files, type = "warning", info = "this can be adapted to automatically by the {.fun read_portfolio_csv} function")
   }
 
-  files_df$grouping_mark <- guess_grouping_marks(filepaths = files_df$filepath, encodings = files_df$file_encoding, delimiters = files_df$delimiter)
+  files_df$grouping_mark <- guess_grouping_mark(filepaths = files_df$filepath)
 
   if (all(files_df$grouping_mark == ",")) {
     cli::cli_alert_success(paste0("all files use {.strong ", cli::style_inverse(","), "} for a grouping mark"))
@@ -297,7 +297,7 @@ get_csv_specs <- function(files, expected_colnames = c("Investor.Name", "Portfol
 
   files_df$market_value_has_nas <- vapply(test, function(x) any(is.na(x[[market_value_colname]])), logical(1))
 
-  files_df$valid_iso4217c_codes <- validate_iso4217c(lapply(test, function(x) x[[currency_colname]]))
+  files_df$valid_iso4217c_codes <- vapply(test, function(x) all(is_valid_currency_code(x[[currency_colname]])), FUN.VALUE = logical(1), USE.NAMES = FALSE)
 
   if (all(files_df$valid_iso4217c_codes == TRUE)) {
     cli::cli_alert_success(paste0("all files have only valid iso4217c currency codes"))
@@ -306,9 +306,7 @@ get_csv_specs <- function(files, expected_colnames = c("Investor.Name", "Portfol
     report_alert_files("the following files have some invalid iso4217c currency codes:", alert_files, type = "warning")
   }
 
-  files_df$valid_isins <- validate_isins_list(lapply(test, function(x) x[[isin_colname]]))
-
-  files_df$has_invalid_isins <- vapply(files_df$valid_isins, function(x) any(x == FALSE), FUN.VALUE = logical(1), USE.NAMES = FALSE)
+  files_df$has_invalid_isins <- vapply(test, function(x) any(is_valid_isin(x[[isin_colname]]) == FALSE), FUN.VALUE = logical(1), USE.NAMES = FALSE)
 
   if (all(files_df$has_invalid_isins == FALSE)) {
     cli::cli_alert_success(paste0("all files have only valid ISINs"))
@@ -319,6 +317,37 @@ get_csv_specs <- function(files, expected_colnames = c("Investor.Name", "Portfol
 
 
   invisible(files_df)
+}
+
+
+has_newline_at_end <- function(filepaths) {
+  filepaths <- simplify_if_one_col_df(filepaths)
+  stopifnot("`filepaths` must be a character vector" = typeof(filepaths) == "character")
+  filepaths <- canonize_path(filepaths)
+
+  vapply(
+    X = filepaths,
+    FUN = function(filepath) {
+      if (!is_file_accessible(filepath) || !is_text_file(filepath)) {
+        return(NA)
+      }
+
+      con <- file(filepath, "rb")
+      on.exit(close(con))
+
+      not_at_end <- TRUE
+      chars <- ""
+      while (not_at_end) {
+        prev_chars <- chars
+        chars <- readChar(con, nchars = 2048L, useBytes = TRUE)
+        if (length(chars) == 0L) { not_at_end <- FALSE }
+      }
+
+      grepl("[\n\r]$", prev_chars)
+    },
+    FUN.VALUE = logical(1),
+    USE.NAMES = FALSE
+  )
 }
 
 
@@ -435,183 +464,183 @@ guess_content_types <- function(filepaths) {
 }
 
 
-guess_encodings <- function(filepaths) {
-  file_encodings <-
-    vapply(X = filepaths,
-           FUN = function(x) {
-             readr::guess_encoding(file = x, n_max = -1, threshold = 0)$encoding[[1]]
-           },
-           FUN.VALUE = character(1),
-           USE.NAMES = FALSE)
-
-  raw_lines <- lapply(X = filepaths, FUN = readr::read_lines_raw)
-  has_cp850_chars <-
-    vapply(
-      X = raw_lines,
-      FUN = function(x) {
-        any(
-          vapply(
-            X = x,
-            FUN = function(y) {
-              any(y == as.raw(0x94))
-              },
-            FUN.VALUE = logical(1)
-          )
-        )
-      },
-      FUN.VALUE = logical(1)
-    )
-
-  ifelse(has_cp850_chars, "cp850", file_encodings)
-}
-
-
-guess_decimal_mark <- function(filepath, encoding, delimiter) {
-  decimal_mark <- ifelse(delimiter == ";", ",", ".")
-  grouping_mark <- ifelse(decimal_mark == ",", ".", ",")
-
-  cust_locale <-
-    readr::locale(
-      decimal_mark = decimal_mark,
-      grouping_mark = grouping_mark,
-      encoding = encoding
-    )
-
-  char_data <-
-    readr::read_delim(
-      file = filepath,
-      delim = delimiter,
-      locale = cust_locale,
-      trim_ws = TRUE,
-      col_types = readr::cols(.default = "c"),
-      col_names = TRUE,
-      progress = FALSE
-    )
-
-  all_num_chars <- char_data[[4]]
-
-  grp_mrk_com_regex <- "^((?![,]).)*$|[,][[:digit:]]{3}[^[:digit:]]|[,][[:digit:]]{3}$"
-  grp_mrk_dot_regex <- "^((?![.]).)*$|[.][[:digit:]]{3}[^[:digit:]]|[.][[:digit:]]{3}$"
-
-  has_comma <- any(grepl("[,]", all_num_chars))
-  has_dot <- any(grepl("[.]", all_num_chars))
-
-  comma_only_before_3 <- all(has_comma, grepl(grp_mrk_com_regex, all_num_chars, perl = TRUE))
-  dot_only_before_3 <- all(has_dot, grepl(grp_mrk_dot_regex, all_num_chars, perl = TRUE))
-
-  nums_have_space <- any(grepl(" ", char_data[[4]]))
-
-  if (comma_only_before_3 && !dot_only_before_3) {
-    decimal_mark <- "."
-  } else if (dot_only_before_3 && !comma_only_before_3) {
-    decimal_mark <- ","
-  } else if (has_comma && !comma_only_before_3 && !dot_only_before_3) {
-    decimal_mark <- ","
-  } else if (has_dot && !dot_only_before_3 && !comma_only_before_3) {
-    decimal_mark <- "."
-  }
-
-  decimal_mark
-}
+# guess_encodings <- function(filepaths) {
+#   file_encodings <-
+#     vapply(X = filepaths,
+#            FUN = function(x) {
+#              readr::guess_encoding(file = x, n_max = -1, threshold = 0)$encoding[[1]]
+#            },
+#            FUN.VALUE = character(1),
+#            USE.NAMES = FALSE)
+#
+#   raw_lines <- lapply(X = filepaths, FUN = readr::read_lines_raw)
+#   has_cp850_chars <-
+#     vapply(
+#       X = raw_lines,
+#       FUN = function(x) {
+#         any(
+#           vapply(
+#             X = x,
+#             FUN = function(y) {
+#               any(y == as.raw(0x94))
+#               },
+#             FUN.VALUE = logical(1)
+#           )
+#         )
+#       },
+#       FUN.VALUE = logical(1)
+#     )
+#
+#   ifelse(has_cp850_chars, "cp850", file_encodings)
+# }
 
 
-guess_decimal_marks <- function(filepaths, encodings, delimiters) {
-  vapply(
-    X = seq_along(filepaths),
-    FUN = function(i) {
-      guess_decimal_mark(
-        filepath = filepaths[[i]],
-        encoding = encodings[[i]],
-        delimiter = delimiters[[i]]
-      )
-    },
-    FUN.VALUE = character(1)
-  )
-}
+# guess_decimal_mark <- function(filepath, encoding, delimiter) {
+#   decimal_mark <- ifelse(delimiter == ";", ",", ".")
+#   grouping_mark <- ifelse(decimal_mark == ",", ".", ",")
+#
+#   cust_locale <-
+#     readr::locale(
+#       decimal_mark = decimal_mark,
+#       grouping_mark = grouping_mark,
+#       encoding = encoding
+#     )
+#
+#   char_data <-
+#     readr::read_delim(
+#       file = filepath,
+#       delim = delimiter,
+#       locale = cust_locale,
+#       trim_ws = TRUE,
+#       col_types = readr::cols(.default = "c"),
+#       col_names = TRUE,
+#       progress = FALSE
+#     )
+#
+#   all_num_chars <- char_data[[4]]
+#
+#   grp_mrk_com_regex <- "^((?![,]).)*$|[,][[:digit:]]{3}[^[:digit:]]|[,][[:digit:]]{3}$"
+#   grp_mrk_dot_regex <- "^((?![.]).)*$|[.][[:digit:]]{3}[^[:digit:]]|[.][[:digit:]]{3}$"
+#
+#   has_comma <- any(grepl("[,]", all_num_chars))
+#   has_dot <- any(grepl("[.]", all_num_chars))
+#
+#   comma_only_before_3 <- all(has_comma, grepl(grp_mrk_com_regex, all_num_chars, perl = TRUE))
+#   dot_only_before_3 <- all(has_dot, grepl(grp_mrk_dot_regex, all_num_chars, perl = TRUE))
+#
+#   nums_have_space <- any(grepl(" ", char_data[[4]]))
+#
+#   if (comma_only_before_3 && !dot_only_before_3) {
+#     decimal_mark <- "."
+#   } else if (dot_only_before_3 && !comma_only_before_3) {
+#     decimal_mark <- ","
+#   } else if (has_comma && !comma_only_before_3 && !dot_only_before_3) {
+#     decimal_mark <- ","
+#   } else if (has_dot && !dot_only_before_3 && !comma_only_before_3) {
+#     decimal_mark <- "."
+#   }
+#
+#   decimal_mark
+# }
+#
+#
+# guess_decimal_marks <- function(filepaths, encodings, delimiters) {
+#   vapply(
+#     X = seq_along(filepaths),
+#     FUN = function(i) {
+#       guess_decimal_mark(
+#         filepath = filepaths[[i]],
+#         encoding = encodings[[i]],
+#         delimiter = delimiters[[i]]
+#       )
+#     },
+#     FUN.VALUE = character(1)
+#   )
+# }
 
 
-guess_delimiters <- function(filepaths, encodings) {
-  vapply(
-    X = seq_along(filepaths),
-    FUN = function(i) {
-      line1 <- readr::read_lines(file = filepaths[[i]], locale = readr::locale(encoding = encodings[[i]]), n_max = 1, progress = FALSE)
-      commas <- stringr::str_count(line1, ",")
-      semicolons <- stringr::str_count(line1, ";")
-      delim <- ifelse(commas > semicolons, ",", ";")
-    },
-    FUN.VALUE = character(1)
-  )
-}
+# guess_delimiters <- function(filepaths, encodings) {
+#   vapply(
+#     X = seq_along(filepaths),
+#     FUN = function(i) {
+#       line1 <- readr::read_lines(file = filepaths[[i]], locale = readr::locale(encoding = encodings[[i]]), n_max = 1, progress = FALSE)
+#       commas <- stringr::str_count(line1, ",")
+#       semicolons <- stringr::str_count(line1, ";")
+#       delim <- ifelse(commas > semicolons, ",", ";")
+#     },
+#     FUN.VALUE = character(1)
+#   )
+# }
 
 
-guess_grouping_mark <- function(filepath, encoding, delimiter) {
-  decimal_mark <- ifelse(delimiter == ";", ",", ".")
-  grouping_mark <- ifelse(decimal_mark == ",", ".", ",")
-
-  cust_locale <-
-    readr::locale(
-      decimal_mark = decimal_mark,
-      grouping_mark = grouping_mark,
-      encoding = encoding
-    )
-
-  char_data <-
-    readr::read_delim(
-      file = filepath,
-      delim = delimiter,
-      locale = cust_locale,
-      trim_ws = TRUE,
-      col_types = readr::cols(.default = "c"),
-      col_names = TRUE,
-      progress = FALSE
-    )
-
-  all_num_chars <- char_data[[4]]
-
-  grp_mrk_com_regex <- "^((?![,]).)*$|[,][[:digit:]]{3}[^[:digit:]]|[,][[:digit:]]{3}$"
-  grp_mrk_dot_regex <- "^((?![.]).)*$|[.][[:digit:]]{3}[^[:digit:]]|[.][[:digit:]]{3}$"
-
-  has_comma <- any(grepl("[,]", all_num_chars))
-  has_dot <- any(grepl("[.]", all_num_chars))
-
-  comma_only_before_3 <- all(has_comma, grepl(grp_mrk_com_regex, all_num_chars, perl = TRUE))
-  dot_only_before_3 <- all(has_dot, grepl(grp_mrk_dot_regex, all_num_chars, perl = TRUE))
-
-  nums_have_space <- any(grepl(" ", char_data[[4]]))
-
-  if (comma_only_before_3 && !dot_only_before_3) {
-    grouping_mark <- ","
-    decimal_mark <- "."
-  } else if (dot_only_before_3 && !comma_only_before_3) {
-    grouping_mark <- "."
-    decimal_mark <- ","
-  } else if (has_comma && !comma_only_before_3 && !dot_only_before_3) {
-    grouping_mark <- "."
-    decimal_mark <- ","
-  } else if (has_dot && !dot_only_before_3 && !comma_only_before_3) {
-    grouping_mark <- ","
-    decimal_mark <- "."
-  }
-
-  if (nums_have_space) { grouping_mark <- " " }
-
-  grouping_mark
-}
-
-
-guess_grouping_marks <- function(filepaths, encodings, delimiters) {
-  vapply(
-    X = seq_along(filepaths),
-    FUN = function(i) {
-      guess_grouping_mark(
-        filepath = filepaths[[i]],
-        encoding = encodings[[i]],
-        delimiter = delimiters[[i]]
-      )
-    },
-    FUN.VALUE = character(1)
-  )
-}
+# guess_grouping_mark <- function(filepath, encoding, delimiter) {
+#   decimal_mark <- ifelse(delimiter == ";", ",", ".")
+#   grouping_mark <- ifelse(decimal_mark == ",", ".", ",")
+#
+#   cust_locale <-
+#     readr::locale(
+#       decimal_mark = decimal_mark,
+#       grouping_mark = grouping_mark,
+#       encoding = encoding
+#     )
+#
+#   char_data <-
+#     readr::read_delim(
+#       file = filepath,
+#       delim = delimiter,
+#       locale = cust_locale,
+#       trim_ws = TRUE,
+#       col_types = readr::cols(.default = "c"),
+#       col_names = TRUE,
+#       progress = FALSE
+#     )
+#
+#   all_num_chars <- char_data[[4]]
+#
+#   grp_mrk_com_regex <- "^((?![,]).)*$|[,][[:digit:]]{3}[^[:digit:]]|[,][[:digit:]]{3}$"
+#   grp_mrk_dot_regex <- "^((?![.]).)*$|[.][[:digit:]]{3}[^[:digit:]]|[.][[:digit:]]{3}$"
+#
+#   has_comma <- any(grepl("[,]", all_num_chars))
+#   has_dot <- any(grepl("[.]", all_num_chars))
+#
+#   comma_only_before_3 <- all(has_comma, grepl(grp_mrk_com_regex, all_num_chars, perl = TRUE))
+#   dot_only_before_3 <- all(has_dot, grepl(grp_mrk_dot_regex, all_num_chars, perl = TRUE))
+#
+#   nums_have_space <- any(grepl(" ", char_data[[4]]))
+#
+#   if (comma_only_before_3 && !dot_only_before_3) {
+#     grouping_mark <- ","
+#     decimal_mark <- "."
+#   } else if (dot_only_before_3 && !comma_only_before_3) {
+#     grouping_mark <- "."
+#     decimal_mark <- ","
+#   } else if (has_comma && !comma_only_before_3 && !dot_only_before_3) {
+#     grouping_mark <- "."
+#     decimal_mark <- ","
+#   } else if (has_dot && !dot_only_before_3 && !comma_only_before_3) {
+#     grouping_mark <- ","
+#     decimal_mark <- "."
+#   }
+#
+#   if (nums_have_space) { grouping_mark <- " " }
+#
+#   grouping_mark
+# }
+#
+#
+# guess_grouping_marks <- function(filepaths, encodings, delimiters) {
+#   vapply(
+#     X = seq_along(filepaths),
+#     FUN = function(i) {
+#       guess_grouping_mark(
+#         filepath = filepaths[[i]],
+#         encoding = encodings[[i]],
+#         delimiter = delimiters[[i]]
+#       )
+#     },
+#     FUN.VALUE = character(1)
+#   )
+# }
 
 
 guess_num_of_columns <- function(filepaths, encodings, delimiters) {
@@ -636,54 +665,54 @@ guess_num_of_lines <- function(filepaths) {
 }
 
 
-validate_isins <- function(isins) {
-  is_luhn <- function(x) {
-    digits <- suppressWarnings(as.numeric(rev(unlist(strsplit(x, "")))))
-    odd <- seq_along(digits) %% 2 == 1
-    s1 <- sum(digits[odd])
-    s2 <- digits[!odd] * 2
-    s2 <- sum(s2 %% 10 + s2 %/% 10)
-    sum(s1, s2) %% 10 == 0
-  }
-
-  isins <- toupper(isins)
-  isins <- gsub(pattern = "[[:blank:]]", replacement = "", isins)
-  valid_struct <- grepl("^[[:upper:]]{2}[[:alnum:]]{9}[[:digit:]]$", isins)
-
-  valid_luhn <-
-    vapply(
-      X = isins,
-      FUN = function(x) {
-        x <- stringi::stri_replace_all_fixed(x, LETTERS, seq_along(LETTERS) + 9L,
-                                             vectorize_all = FALSE)
-        out <- vapply(x, is_luhn, FUN.VALUE = logical(1L), USE.NAMES = FALSE)
-        out[is.na(out)] <- FALSE
-        out
-      },
-      FUN.VALUE = logical(1),
-      USE.NAMES = FALSE
-    )
-
-  valid_struct & valid_luhn
-}
-
-
-validate_isins_list <- function(isins_list) {
-  if (class(isins_list) != "list") isins_list <- list(isins_list)
-  lapply(X = isins_list, FUN = validate_isins)
-}
+# validate_isins <- function(isins) {
+#   is_luhn <- function(x) {
+#     digits <- suppressWarnings(as.numeric(rev(unlist(strsplit(x, "")))))
+#     odd <- seq_along(digits) %% 2 == 1
+#     s1 <- sum(digits[odd])
+#     s2 <- digits[!odd] * 2
+#     s2 <- sum(s2 %% 10 + s2 %/% 10)
+#     sum(s1, s2) %% 10 == 0
+#   }
+#
+#   isins <- toupper(isins)
+#   isins <- gsub(pattern = "[[:blank:]]", replacement = "", isins)
+#   valid_struct <- grepl("^[[:upper:]]{2}[[:alnum:]]{9}[[:digit:]]$", isins)
+#
+#   valid_luhn <-
+#     vapply(
+#       X = isins,
+#       FUN = function(x) {
+#         x <- stringi::stri_replace_all_fixed(x, LETTERS, seq_along(LETTERS) + 9L,
+#                                              vectorize_all = FALSE)
+#         out <- vapply(x, is_luhn, FUN.VALUE = logical(1L), USE.NAMES = FALSE)
+#         out[is.na(out)] <- FALSE
+#         out
+#       },
+#       FUN.VALUE = logical(1),
+#       USE.NAMES = FALSE
+#     )
+#
+#   valid_struct & valid_luhn
+# }
 
 
-validate_iso4217c <- function(codes_list) {
-  if (!is.list(codes_list)) codes_list <- list(codes_list)
-  vapply(
-    X = codes_list,
-    FUN = function(codes) {
-      all(toupper(unique(codes)) %in% countrycode::codelist$iso4217c)
-    },
-    FUN.VALUE = logical(1)
-  )
-}
+# validate_isins_list <- function(isins_list) {
+#   if (class(isins_list) != "list") isins_list <- list(isins_list)
+#   lapply(X = isins_list, FUN = validate_isins)
+# }
+#
+#
+# validate_iso4217c <- function(codes_list) {
+#   if (!is.list(codes_list)) codes_list <- list(codes_list)
+#   vapply(
+#     X = codes_list,
+#     FUN = function(codes) {
+#       all(toupper(unique(codes)) %in% countrycode::codelist$iso4217c)
+#     },
+#     FUN.VALUE = logical(1)
+#   )
+# }
 
 
 validate_read_without_error <- function(filepaths, encodings, delimiters) {
