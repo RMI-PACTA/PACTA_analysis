@@ -158,7 +158,7 @@ stages:
               workingDirectory: $(Build.SourcesDirectory)
               script: |
                 docker save $(qualifiedRepository) | \
-                gzip -q > "$(dockerTarFile)"
+                gzip -q > $(dockerTarFile)
           - task: AzureCLI@2
             displayName: Upload tar file to AFS
             inputs:
