@@ -93,16 +93,6 @@ stages:
               script: |
                 docker pull \
                 $(qualifiedRepository):$(dockerTag)
-          - task: Bash@3
-            displayName: Pull Docker image - Master
-            continueOnError: true 
-            condition: failed() # only run if prvious pull failed
-            inputs:
-              targetType: inline
-              workingDirectory: $(Build.SourcesDirectory)
-              script: |
-                docker pull \
-                $(qualifiedRepository):master
           - task: Docker@2
             displayName: Build Transition Monitor Docker image
             inputs:
@@ -118,6 +108,7 @@ stages:
                 $(Build.SourceVersion)
               arguments:
                 --build-arg image_tag="$(Build.BuildNumber)"
+                --cache-from="$(qualifiedRepository):$(dockerTag)"
           - task: Docker@2
             displayName: Push Transition Monitor Docker image to Registry
             inputs:
