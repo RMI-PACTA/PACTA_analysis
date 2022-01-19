@@ -10,6 +10,7 @@ ARG SYS_DEPS="\
     git \
     libcurl4-openssl-dev \
     libssl-dev \
+    openssh-client \
     wget \
     "
 RUN apt-get update \
