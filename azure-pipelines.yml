@@ -86,7 +86,7 @@ stages:
               containerRegistry: $(dockerRegistryServiceConnection)
           - task: Bash@3
             displayName: Pull Docker image
-            continueOnError: true 
+            continueOnError: true
             inputs:
               targetType: inline
               workingDirectory: $(Build.SourcesDirectory)
@@ -148,8 +148,7 @@ stages:
               targetType: inline
               workingDirectory: $(Build.SourcesDirectory)
               script: |
-                docker save $(qualifiedRepository) | \
-                gzip -q > $(dockerTarFile)
+                docker save $(qualifiedRepository) | gzip -q > $(dockerTarFile)
           - task: AzureCLI@2
             displayName: Upload tar file to AFS
             inputs:
