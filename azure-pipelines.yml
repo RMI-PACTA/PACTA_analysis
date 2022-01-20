@@ -34,7 +34,7 @@ variables:
     dockerTag: '$(Build.SourceBranchName)'
   ${{ else }}:
     dockerTag: '$(Build.Reason)'
-    dockerTarFile: '$(imageRepository)_$(Build.BuildNumber).tar.gz'
+  dockerTarFile: '$(imageRepository)_$(Build.BuildNumber).tar.gz'
 
 parameters:
   - name: testingPortfolios
@@ -74,15 +74,6 @@ stages:
       - job: BuildAndPushDockerImage
         displayName: Checkout Repos & Build
         steps:
-          - task: Bash@3
-            displayName: Pull Docker image
-            continueOnError: true
-            inputs:
-              targetType: inline
-              workingDirectory: $(Build.SourcesDirectory)
-              script: |
-                echo \
-                $(dockerTarFile)
           - checkout: self  # PACTA_analysis repo
           - checkout: create_interactive_report
           - checkout: r2dii.climate.stress.test
