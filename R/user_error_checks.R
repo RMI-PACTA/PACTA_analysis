@@ -33,6 +33,7 @@
 #' check_grouped_portfolio_years(c("2019Q4", "2019Q4"))
 #' # produces error
 #' \dontrun{check_grouped_portfolio_years(c("2019Q4", "2020Q4"))}
+#' @noRd
 
 check_grouped_portfolio_years <- function(
   port_holdings_date
