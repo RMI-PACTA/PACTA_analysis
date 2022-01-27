@@ -291,7 +291,7 @@ check_unique_by_year_and_groups <- function(data, groups) {
 
   data <- data %>%
     group_by(!!!rlang::syms(c("year", groups))) %>%
-    dplyr::summarize(rows_by_year_and_group = dplyr::n()) %>%
+    dplyr::summarize(rows_by_year_and_group = dplyr::n(), .groups = "drop") %>%
     mutate(rows_are_unique = .data$rows_by_year_and_group == 1)
 
   ok <- all(data$rows_are_unique)
@@ -307,7 +307,7 @@ check_unique_by_year_and_groups <- function(data, groups) {
         ),
         i = "Are you sure you have included the correct groupings?"
       ),
-      class = "multiple_values_per_year",
+      class = "multiple_values_per_year"
     )
   }
 
@@ -320,7 +320,7 @@ check_crucial_years <- function(data, t0, delta_t1, delta_t2, groups) {
   missing_crucial_years <- crucial_years %>%
     left_join(data, by = c(crucial_years = "year")) %>%
     group_by(!!!rlang::syms(groups)) %>%
-    dplyr::summarize(missing_data = sum(is.na(.data$plan_alloc_wt_tech_prod)))
+    dplyr::summarize(missing_data = sum(is.na(.data$plan_alloc_wt_tech_prod)), .groups = "drop")
 
   ok <- all(missing_crucial_years$missing_data == 0)
 
@@ -336,7 +336,7 @@ check_crucial_years <- function(data, t0, delta_t1, delta_t2, groups) {
         ),
         i = "Are all crucial years present in input data?"
       ),
-      class = "missing_crucial_years",
+      class = "missing_crucial_years"
     )
   }
 }
