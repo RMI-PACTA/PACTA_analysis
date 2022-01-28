@@ -70,7 +70,15 @@ read_portfolio_csv <- function(filepaths) {
           progress = FALSE
         )
 
-      portfolio_df <- dplyr::select(portfolio_df, .data$investor_name, .data$portfolio_name, .data$isin, .data$market_value, .data$currency)
+      portfolio_df <-
+        dplyr::select(
+          portfolio_df,
+          .data$investor_name,
+          .data$portfolio_name,
+          .data$isin,
+          .data$market_value,
+          .data$currency
+        )
 
       guessed_attrs <-
         list(
