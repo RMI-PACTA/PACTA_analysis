@@ -391,7 +391,7 @@ lapply(data_filenames, function(data_filename) {
   all_result_filepaths <- setNames(all_result_filepaths, sub(paste0("^", project_prefix, "_port_"), "", basename(dirname(all_result_filepaths))))
 
   all_results <-
-    map_df(all_result_filepaths, readRDS, .id = "portfolio_id") %>%
+    map_df(all_result_filepaths, function(x) { df <- readRDS(x); df$portfolio_name <- as.character(df$portfolio_name); df}, .id = "portfolio_id") %>%
     mutate(portfolio_name = portfolio_id) %>%
     left_join(mutate(portfolios_meta, id = as.character(id)) %>% select(portfolio_id = id, user_id), by = "portfolio_id") %>%
     mutate(investor_name = user_id) %>%
@@ -412,7 +412,7 @@ lapply(data_filenames, function(data_filename) {
   meta_result_filepaths <- list.files(meta_output_dir, pattern = data_filename, recursive = TRUE, full.names = TRUE)
   all_result_filepaths <- c(portfolio_result_filepaths, meta_result_filepaths)
 
-  all_results <- map_df(all_result_filepaths, readRDS)
+  all_results <- map_df(all_result_filepaths, function(x) { df <- readRDS(x); df$portfolio_name <- as.character(df$portfolio_name); df})
   saveRDS(all_results, file.path(combined_portfolio_results_output_dir, "30_Processed_inputs", data_filename))
 })
 
