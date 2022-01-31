@@ -418,10 +418,14 @@ lapply(data_filenames, function(data_filename) {
   meta_result_filepaths <- list.files(meta_output_dir, pattern = data_filename, recursive = TRUE, full.names = TRUE)
   all_result_filepaths <- c(portfolio_result_filepaths, meta_result_filepaths)
 
-  all_results <- map_df(all_result_filepaths, function(x) { df <- readRDS(x); df$portfolio_name <- as.character(df$portfolio_name); df})
+  all_results <- map_df(all_result_filepaths, function(x) {
+    df <- readRDS(x);
+    df$portfolio_name <- as.character(df$portfolio_name);
+    if("portfolio_name_2" %in% colnames(df)) df$portfolio_name_2 <- as.character(df$portfolio_name_2) # Happens only for total_portfolio
+    df
+  })
   saveRDS(all_results, file.path(combined_portfolio_results_output_dir, "30_Processed_inputs", data_filename))
 })
-# TODO: weird bug with portfolio_name_2
 
 # combine all user level results -----------------------------------------------
 
@@ -525,3 +529,4 @@ lapply(data_filenames, function(data_filename) {
   all_results <- map_df(all_result_filepaths, readRDS)
   saveRDS(all_results, file.path(combined_orgtype_results_output_dir, "30_Processed_inputs", data_filename))
 })
+
