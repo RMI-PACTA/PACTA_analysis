@@ -143,6 +143,7 @@ stages:
                 command: login
                 containerRegistry: $(dockerRegistryServiceConnection)
             - checkout: testing-portfolios
+              path: s/testing-portfolios
             - task: Bash@3
               displayName: Pull Docker image
               inputs:
