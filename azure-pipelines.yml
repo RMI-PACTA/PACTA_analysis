@@ -181,7 +181,8 @@ stages:
                   -v \
                   -u 4 \
                   -p ${{portfolioName}} \
-                  -f $(resultsDirectory) \
+                  -w $(resultsDirectory)/working_dir \
+                  -y $(resultsDirectory)/user_results \
                   -m $(qualifiedRepository) \
                   -t $(Build.BuildNumber)
             - task: AzureCLI@2
