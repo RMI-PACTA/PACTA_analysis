@@ -192,7 +192,7 @@ stages:
                 workingDirectory: $(Build.SourcesDirectory)
                 script: |
                   zip -r \
-                  $(buildNumDirectory)/$(portfolioName).zip \
+                  $(buildNumDirectory)/${{portfolioName}}.zip \
                   $(resultsDirectory)
             - task: AzureCLI@2
               condition: succeededOrFailed()
