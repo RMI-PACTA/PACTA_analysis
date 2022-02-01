@@ -134,7 +134,7 @@ stages:
           displayName: "Test ${{portfolioName}}"
           variables:
             portfolioDirectory: '$(Build.SourcesDirectory)/testing-portfolios/${{portfolioName}}'
-            buildNumDirectory: '$(Build.SourcesDirectory)/$(Build.BuildNumber)'
+            buildNumDirectory: '$(Build.SourcesDirectory)/results/$(Build.BuildNumber)'
             resultsDirectory: '$(buildNumDirectory)/${{portfolioName}}'
           steps:
             - checkout: self
@@ -185,6 +185,15 @@ stages:
                   -y $(resultsDirectory)/user_results \
                   -m $(qualifiedRepository) \
                   -t $(Build.BuildNumber)
+            - task: Bash@3
+              displayName: Zip Results
+              inputs:
+                targetType: inline
+                workingDirectory: $(Build.SourcesDirectory)
+                script: |
+                  zip -r \
+                  $(buildNumDirectory)/$(portfolioName).zip \
+                  $(resultsDirectory)
             - task: AzureCLI@2
               condition: succeededOrFailed()
               displayName: Upload Results files to Azure File Share
@@ -194,7 +203,7 @@ stages:
                 scriptLocation: inlineScript
                 inlineScript: |
                   az storage file upload-batch \
-                  --source $(Build.SourcesDirectory) \
+                  --source $(Build.SourcesDirectory)/results \
                   --destination $(resultsShareName) \
                   --account-name $(testingStorageAccountName)
 
