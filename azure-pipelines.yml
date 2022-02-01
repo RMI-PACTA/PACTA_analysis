@@ -164,7 +164,7 @@ stages:
                 targetType: inline
                 # filePath: run-like-constructiva-flags.sh
                 script: |
-                  $(Build.SourcesDirectory)/transitionmonitor_docker/run-like-constructiva-flags.sh \
+                  $(Build.SourcesDirectory)/testing-portfolios/run-like-constructiva-flags.sh \
                   -v \
                   -u 4 \
                   -p ${{portfolioName}} \
