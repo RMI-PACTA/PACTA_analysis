@@ -125,6 +125,7 @@ stages:
     displayName: Test Docker Image
     jobs:
       - ${{ each portfolioName in parameters.testingPortfolios }}:
+        # yamllint disable-line rule:indentation
         - job: test_portfolio_${{portfolioName}}
           displayName: "Test ${{portfolioName}}"
           variables:
