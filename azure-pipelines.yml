@@ -40,8 +40,7 @@ parameters:
   - name: testingPortfolios
     type: object
     default:
-      - TestPortfolio_Input
-      - general2020Q4
+      - TestPortfolio
 
 resources:
   repositories:
@@ -64,6 +63,11 @@ resources:
       type: github
       endpoint: 2DegreesInvesting  # Servce connection name
       name: 2DegreesInvesting/pacta-data
+      ref: master
+    - repository: testing-portfolios
+      type: github
+      endpoint: 2DegreesInvesting  # Servce connection name
+      name: 2DegreesInvesting/testing-portfolios
       ref: master
 
 stages:
@@ -138,29 +142,7 @@ stages:
               inputs:
                 command: login
                 containerRegistry: $(dockerRegistryServiceConnection)
-            - task: Bash@3
-              displayName: Create portfolio directory
-              inputs:
-                targetType: inline
-                script: mkdir -p $(portfolioDirectory)
-            - task: AzureCLI@2
-              displayName: Download Portfolio files from Azure File Share
-              inputs:
-                azureSubscription: tm-docker-AzureResourceManager
-                scriptType: bash
-                scriptLocation: inlineScript
-                inlineScript: |
-                  az storage file download-batch \
-                  --source $(testingShareName)/${{portfolioName}} \
-                  --destination $(portfolioDirectory) \
-                  --account-name $(testingStorageAccountName)
-            - task: Bash@3
-              displayName: Change permissions for Working Directory
-              inputs:
-                targetType: inline
-                workingDirectory: $(Build.SourcesDirectory)
-                script: |
-                  chmod -R 777 $(portfolioDirectory)
+            - checkout: testing-portfolios
             - task: Bash@3
               displayName: Pull Docker image
               inputs:
