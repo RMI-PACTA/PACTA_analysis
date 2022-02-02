@@ -8,9 +8,12 @@ trigger:
   - release/*
 
 pr:
-  - master
-  - develop
-  - release/*
+  autoCancel: false
+  branches:
+    include:
+      - master
+      - develop
+      - release/*
 
 pool:
   vmImage: ubuntu-latest
