@@ -134,8 +134,9 @@ stages:
           displayName: "Test ${{portfolioName}}"
           variables:
             portfolioDirectory: '$(Build.SourcesDirectory)/testing-portfolios/${{portfolioName}}'
-            buildNumDirectory: '$(Build.SourcesDirectory)/results/$(Build.BuildNumber)'
-            resultsDirectory: '$(buildNumDirectory)/${{portfolioName}}'
+            resultsDirectory: '$(Build.SourcesDirectory)/results/$(Build.BuildNumber)'
+            rawResultsDirectory: '$(resultsDirectory)/${{portfolioName}}'
+            results_zip: '${{portfolioName}}_$(Build.BuildNumber).zip'
           steps:
             - checkout: self
             - checkout: testing-portfolios
@@ -149,13 +150,13 @@ stages:
               inputs:
                 targetType: inline
                 workingDirectory: $(Build.SourcesDirectory)
-                script: mkdir -p $(resultsDirectory)
+                script: mkdir -p $(rawResultsDirectory)
             - task: Bash@3
               displayName: Copy Portfolio to Results Directory
               inputs:
                 targetType: inline
                 workingDirectory: $(Build.SourcesDirectory)
-                script: cp -R $(portfolioDirectory) $(buildNumDirectory)
+                script: cp -R $(portfolioDirectory) $(resultsDirectory)
             - task: Bash@3
               displayName: Inspect File structure
               inputs:
@@ -181,8 +182,8 @@ stages:
                   -v \
                   -u 4 \
                   -p ${{portfolioName}} \
-                  -w $(resultsDirectory)/working_dir \
-                  -y $(resultsDirectory)/user_results \
+                  -w $(rawResultsDirectory)/working_dir \
+                  -y $(rawResultsDirectory)/user_results \
                   -m $(qualifiedRepository) \
                   -t $(Build.BuildNumber)
             - task: Bash@3
@@ -192,8 +193,8 @@ stages:
                 workingDirectory: $(Build.SourcesDirectory)
                 script: |
                   zip -r \
-                  $(buildNumDirectory)/${{portfolioName}}.zip \
-                  $(resultsDirectory)
+                  $(resultsDirectory)/$(results_zip) \
+                  $(rawResultsDirectory)
             - task: AzureCLI@2
               condition: succeededOrFailed()
               displayName: Upload Results files to Azure File Share
