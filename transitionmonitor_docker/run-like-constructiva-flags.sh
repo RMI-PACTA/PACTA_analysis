@@ -6,6 +6,7 @@ usage() {
   # t for tag
   echo "[-t <docker image tag>] (default latest)" 1>&2
   echo "[-u <userId>] (default 4)" 1>&2
+  echo "[-m <docker image>] (default 2dii_pacta)" 1>&2
   # a for analysis
   echo "[-a <path to local PACTA_analysis repo>] (default docker internal)" 1>&2
   # d for data
@@ -30,11 +31,12 @@ usage() {
   exit 1;
 }
 
-while getopts p:t:u:a:d:c:d:s:e:r:x:w:y:vi flag
+while getopts p:t:u:a:d:c:d:s:e:r:x:w:y:m:vi flag
 do
   case "${flag}" in
     u) userId=${OPTARG};;
     p) portfolioIdentifier=${OPTARG};;
+    m) docker_image=${OPTARG};;
     t) tag=${OPTARG};;
     a) pa_repo=${OPTARG};;
     d) data_repo=${OPTARG};;
@@ -75,6 +77,10 @@ if [ -z "${user_results}" ]; then
   user_results="$(pwd)/user_results"
 fi
 
+if [ -z "${docker_image}" ]; then
+  docker_image="2dii_pacta"
+fi
+
 if [ -z "${docker_command}" ]; then
   docker_command="/bound/bin/run-r-scripts"
 fi
@@ -88,7 +94,7 @@ resultsFolder="$user_results"/"$userId"
 
 args=(
   "--rm"
-  --platform $target_platform
+  --platform "$target_platform"
   "--pull=never"
   --network none
   --user 1000:1000
@@ -127,8 +133,8 @@ args+=(
   --mount "type=bind,source=${userFolder},target=/bound/working_dir"
   --mount "type=bind,readonly,source=${resultsFolder},target=/user_results"
 )
-args+=("2dii_pacta:$tag")
-args+=($docker_command $portfolioIdentifier)
+args+=("$docker_image:$tag")
+args+=("$docker_command" "$portfolioIdentifier")
 
 if [ -n "${verbose}" ]; then
   yellow "docker run \\ "
