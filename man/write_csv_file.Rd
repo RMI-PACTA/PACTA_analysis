@@ -13,42 +13,7 @@ write_csv_file(x, file, ...)
 argument is instead \code{path}. This wrapper helps use \code{file} regardless the
 version of readr.}
 
-\item{...}{
-  Arguments passed on to \code{\link[readr:write_delim]{readr::write_csv}}
-  \describe{
-    \item{\code{na}}{String used for missing values. Defaults to NA. Missing values
-will never be quoted; strings with the same value as \code{na} will
-always be quoted.}
-    \item{\code{append}}{If \code{FALSE}, will overwrite existing file. If \code{TRUE},
-will append to existing file. In both cases, if the file does not exist a new
-file is created.}
-    \item{\code{col_names}}{If \code{FALSE}, column names will not be included at the top of the file. If \code{TRUE},
-column names will be included. If not specified, \code{col_names} will take the opposite value given to \code{append}.}
-    \item{\code{quote}}{How to handle fields which contain characters that need to be quoted.
-\itemize{
-\item \code{needed} - Only quote fields which need them.
-\item \code{all} - Quote all fields.
-\item \code{none} - Never quote fields.
-}}
-    \item{\code{escape}}{The type of escape to use when quotes are in the data.
-\itemize{
-\item \code{double} - quotes are escaped by doubling them.
-\item \code{backslash} - quotes are escaped by a preceding backslash.
-\item \code{none} - quotes are not escaped.
-}}
-    \item{\code{eol}}{The end of line character to use. Most commonly either \code{"\n"} for
-Unix style newlines, or \code{"\r\n"} for Windows style newlines.}
-    \item{\code{num_threads}}{Number of threads to use when reading and materializing
-vectors. If your data contains newlines within fields the parser will
-automatically be forced to use a single thread only.}
-    \item{\code{progress}}{Display a progress bar? By default it will only display
-in an interactive session and not while knitting a document. The display
-is updated every 50,000 values and will only display if estimated reading
-time is 5 seconds or more. The automatic progress bar can be disabled by
-setting option \code{readr.show_progress} to \code{FALSE}.}
-    \item{\code{path}}{\Sexpr[results=rd, stage=render]{lifecycle::badge("deprecated")}, use the \code{file} argument instead.}
-    \item{\code{quote_escape}}{\Sexpr[results=rd, stage=render]{lifecycle::badge("deprecated")}, use the \code{escape} argument instead.}
-  }}
+\item{...}{Other arguments passed to readr::write_csv.}
 }
 \description{
 A version of readr::write_csv() where \code{file} falls back to \code{path} if needed
