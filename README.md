@@ -57,7 +57,7 @@ In order to keep track on the latest updates of the codes, we suggest not to dow
  - Do frequent updates of the code by your github desktop
 
 ## Data Requirements
-The evaluation requires input data that is provided by Asset Resoluation (https://asset-resolution.com/). If you are working in a collaboration with the 2DII, the 2DII possibly will allocate the necessary data files as a zip file. Unzip the data and save it a folder, that will later be refered to as data_location 
+The evaluation requires input data that is provided by Asset Resolution (https://asset-resolution.com/). If you are working in a collaboration with the 2DII, the 2DII possibly will allocate the necessary data files as a zip file. Unzip the data and save it a folder, that will later be refered to as data_location 
 
 ## Workflow
 
