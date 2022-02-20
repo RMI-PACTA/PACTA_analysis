@@ -36,7 +36,9 @@ guess_numerical_mark <- function(filepaths, type = "decimal") {
           show_col_types = FALSE
         )
 
-      if (ncol(char_data) < 4) { return(NA_character_) }
+      if (ncol(char_data) < 4) {
+        return(NA_character_)
+      }
 
       all_num_chars <- char_data[[4]]
 
@@ -65,7 +67,9 @@ guess_numerical_mark <- function(filepaths, type = "decimal") {
         grouping_mark <- ","
       }
 
-      if (nums_have_space) { grouping_mark <- " " }
+      if (nums_have_space) {
+        grouping_mark <- " "
+      }
 
       ifelse(type == "decimal", decimal_mark, grouping_mark)
     },
