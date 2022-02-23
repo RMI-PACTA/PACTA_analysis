@@ -18,7 +18,9 @@ has_newline_at_end <- function(filepaths) {
       while (not_at_end) {
         prev_chars <- chars
         chars <- readChar(con, nchars = 2048L, useBytes = TRUE)
-        if (length(chars) == 0L) { not_at_end <- FALSE }
+        if (length(chars) == 0L) {
+          not_at_end <- FALSE
+        }
       }
 
       grepl("[\n\r]$", prev_chars)

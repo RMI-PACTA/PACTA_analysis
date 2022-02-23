@@ -40,7 +40,9 @@ required_packages_vec <- function() {
 
 use_r_packages <- function() {
   suppressPackageStartupMessages({
-    for (pkg in required_packages_vec()) { library(pkg, character.only = TRUE) }
+    for (pkg in required_packages_vec()) {
+      library(pkg, character.only = TRUE)
+    }
   })
 }
 
@@ -97,7 +99,7 @@ dockerfile_packages <- function() {
 
   c(
     '    && Rscript -e "install.packages( \\',
-    paste0('             ', format_as_vector(pkg), ' \\'),
+    paste0("             ", format_as_vector(pkg), " \\"),
     '           )" \\'
   )
 }
@@ -107,7 +109,7 @@ dockerfile_packages <- function() {
 format_as_vector <- function(string) {
   x <- glue("'{string}',")
   x[length(x)] <- sub(",$", "", x[length(x)])
-  c('c(', glue("  {x}"), ')' )
+  c("c(", glue("  {x}"), ")")
 }
 # styler: on
 
