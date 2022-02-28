@@ -202,6 +202,6 @@ yellow "./run-all-tests.sh"
 echo -e "\nTo push the git tags from within the docker image:"
 yellow "docker run --rm -ti -v \"\$HOME/.ssh\":/root/.ssh 2dii_pacta:${tag} bash"
 echo -e "\nthen inside the container (for each of the 5 PACTA repos:"
-yellow "cd /bound && git push origin \$tag"
+yellow "cd /bound && git push origin ${tag}"
 
 exit 0
