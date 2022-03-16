@@ -21,7 +21,7 @@ quit_if_no_pacta_relevant_data <- function(portfolio) {
     if (!interactive()) {
       # using message and quit, rather than stop(), because server silently fails
       # if docker container exits with anything other than a 0 status code
-      message("port_holdings_date contains multiple distinct values")
+      message("Portfolio does not have any holdings with PACTA relevant data")
       quit(save = "no", status = 0L, runLast = FALSE)
     }
 
