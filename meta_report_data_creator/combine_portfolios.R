@@ -91,6 +91,12 @@ portfolios_meta <- read_csv(portfolios_meta_csv, col_types = "nnnccnc")
 users_meta <- read_csv(users_meta_csv, col_types = "ncccccn", skip = 1L, col_names = c("id", "email_canonical", "organization_type", "organization_name", "job_title", "country", "has_portfolios"))
 
 
+# remove child portfolios -------------------------------------------------
+
+child_ids <- portfolios_meta$id[!is.na(portfolios_meta$parent)]
+portfolio_csvs <- portfolio_csvs[!tools::file_path_sans_ext(basename(portfolio_csvs)) %in% child_ids]
+
+
 # remove unsubmitted CSVs ------------------------------------------------------
 
 unsubmitted_ids <- portfolios_meta$id[portfolios_meta$submitted == 0]
@@ -98,6 +104,7 @@ portfolio_csvs <- portfolio_csvs[!tools::file_path_sans_ext(basename(portfolio_c
 
 
 # remove bogus CSVs ------------------------------------------------------------
+
 portfolio_csvs <- portfolio_csvs[! tools::file_path_sans_ext(basename(portfolio_csvs)) %in% bogus_csvs_to_be_ignored]
 
 
