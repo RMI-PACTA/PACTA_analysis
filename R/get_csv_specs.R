@@ -181,10 +181,10 @@ get_csv_specs <- function(files, expected_colnames = c("Investor.Name", "Portfol
 
   files_df$file_encoding <- guess_file_encoding(files_df$filepath)
 
-  if (all(files_df$file_encoding %in% c("ASCII", "UTF-8"))) {
+  if (all(grepl("ascii|utf-8", files_df$file_encoding, ignore.case = TRUE))) {
     cli::cli_alert_success("all files are encoded in ASCII or UTF-8")
   } else {
-    alert_files <- files_df$filename[!files_df$file_encoding %in% c("ASCII", "UTF-8")]
+    alert_files <- files_df$filename[!grepl("ascii|utf-8", files_df$file_encoding, ignore.case = TRUE)]
     report_alert_files("the following files are not encoded in ASCII or UTF-8:", alert_files, type = "warning", info = "this can be adapted to automatically by the {.fun read_portfolio_csv} function")
   }
 
