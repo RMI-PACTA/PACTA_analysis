@@ -236,19 +236,19 @@ get_csv_specs <- function(files, expected_colnames = c("Investor.Name", "Portfol
 
   files_df$decimal_mark <- guess_decimal_mark(files_df$filepath)
 
-  if (all(files_df$decimal_mark == ".")) {
+  if (all(!is.na(files_df$decimal_mark)) && all(files_df$decimal_mark == ".")) {
     cli::cli_alert_success(paste0("all files use {.strong ", cli::style_inverse("."), "} for a decimal mark"))
   } else {
-    alert_files <- files_df$filename[files_df$decimal_mark != "."]
+    alert_files <- files_df$filename[is.na(files_df$decimal_mark) || grepl("^[.]$", files_df$decimal_mark)]
     report_alert_files(paste0("the following files do not use {.strong ", cli::style_inverse("."), "} for a decimal mark"), alert_files, type = "warning", info = "this can be adapted to automatically by the {.fun read_portfolio_csv} function")
   }
 
   files_df$grouping_mark <- guess_grouping_mark(filepaths = files_df$filepath)
 
-  if (all(files_df$grouping_mark == ",")) {
+  if (all(!is.na(files_df$grouping_mark) && files_df$grouping_mark == ",")) {
     cli::cli_alert_success(paste0("all files use {.strong ", cli::style_inverse(","), "} for a grouping mark"))
   } else {
-    alert_files <- files_df$filename[files_df$grouping_mark != ","]
+    alert_files <- files_df$filename[is.na(files_df$grouping_mark) || grepl("^[,]$", files_df$grouping_mark)]
     report_alert_files(paste0("the following files do not use {.strong ", cli::style_inverse(","), "} for a grouping mark"), alert_files, type = "warning", info = "this can be adapted to automatically by the {.fun read_portfolio_csv} function")
   }
 
@@ -418,6 +418,8 @@ get_locales <- function(encodings, decimal_marks, grouping_marks) {
   vapply(
     X = seq_along(encodings),
     FUN = function(i) {
+      if (is.na(decimal_marks[[i]])) { decimal_marks[[i]] <- "."}
+      if (is.na(grouping_marks[[i]])) { grouping_marks[[i]] <- ","}
       list(
         readr::locale(
           encoding = encodings[[i]],
