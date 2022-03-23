@@ -1,4 +1,4 @@
-read_portfolio_csv <- function(filepaths) {
+read_portfolio_csv <- function(filepaths, combine = TRUE) {
   filepaths <- simplify_if_one_col_df(filepaths)
   stopifnot("`filepaths` must be a character vector" = typeof(filepaths) == "character")
 
@@ -101,5 +101,10 @@ read_portfolio_csv <- function(filepaths) {
   )
 
   if (length(portfolio_dfs) == 1L) { return(portfolio_dfs[[1L]]) }
+
+  if (combine) {
+    return(dplyr::bind_rows(portfolio_dfs[!is.na(portfolio_dfs)], .id = "filepath"))
+  }
+
   portfolio_dfs
 }
