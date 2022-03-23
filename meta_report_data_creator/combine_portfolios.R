@@ -87,8 +87,10 @@ portfolio_csvs <- list.files(portfolios_path, pattern = "[.]csv$", full.names = 
 
 # read in meta data CSVs -------------------------------------------------------
 
-portfolios_meta <- read_csv(portfolios_meta_csv, col_types = "nnnccnc")
-users_meta <- read_csv(users_meta_csv, col_types = "ncccccn", skip = 1L, col_names = c("id", "email_canonical", "organization_type", "organization_name", "job_title", "country", "has_portfolios"))
+portfolios_meta <- read_csv(portfolios_meta_csv, show_col_types = FALSE)
+users_meta <-
+  read_csv(users_meta_csv, show_col_types = FALSE) %>%
+  select(id, organization_type = organization_type.id)
 
 
 # remove child portfolios -------------------------------------------------
