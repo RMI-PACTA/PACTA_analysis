@@ -54,7 +54,7 @@ read_portfolio_csv <- function(filepaths) {
           investor_name = readr::col_character(),
           portfolio_name = readr::col_character(),
           isin = readr::col_character(),
-          market_value = readr::col_double(),
+          market_value = readr::col_number(),
           currency = readr::col_character()
         )
 
