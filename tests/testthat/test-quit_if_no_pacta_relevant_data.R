@@ -12,6 +12,7 @@ test_that("`quit_if_no_pacta_relevant_data()` quits if no ABCD in non-interactiv
         log_path <<- outputs_path
         report_path <- file.path(outputs_path, portfolio_name_ref_all, "report")
         dir.create(path = report_path, recursive = TRUE)
+        setwd(here::here())
         quit_if_no_pacta_relevant_data(port_with_no_data)
         TRUE
       },
