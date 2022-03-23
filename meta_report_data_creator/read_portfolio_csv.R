@@ -93,6 +93,22 @@ read_portfolio_csv <- function(filename, col_names = NULL, specs_only = FALSE) {
                      na = c("", "-", "NA"), trim_ws = TRUE,
                      col_types = "cccnc", col_names = col_names, skip = 1)
 
+  # remove excess columns ------------------------------------------------------
+
+  cols_to_keep <- rep(TRUE, 5)
+
+  if (num_of_columns > 5) {
+    for (i in 6:ncol(data)) {
+      if (all(is.na(data[[6]]))) {
+        cols_to_keep[i] <- FALSE
+      } else {
+        cols_to_keep[i] <- TRUE
+      }
+    }
+  }
+
+  data <- data[cols_to_keep]
+
   # add attriubtes to save options ---------------------------------------------
 
   attr(data, "file_encoding") <- encoding
