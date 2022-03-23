@@ -1,4 +1,6 @@
 test_that("`quit_if_no_pacta_relevant_data()` quits if no ABCD in non-interactive", {
+  skip_if_R_CMD_check()
+
   tmp_dir <- withr::local_tempdir()
   port_name <- "TestPort"
   expect_null({
@@ -23,6 +25,8 @@ test_that("`quit_if_no_pacta_relevant_data()` quits if no ABCD in non-interactiv
 })
 
 test_that("`quit_if_no_pacta_relevant_data()` passes if has ABCD in non-interactive", {
+  skip_if_R_CMD_check()
+
   expect_true({
     callr::r(function() {
       devtools::load_all()
