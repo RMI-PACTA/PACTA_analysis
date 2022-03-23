@@ -110,7 +110,7 @@ portfolio_csvs <- portfolio_csvs[!tools::file_path_sans_ext(basename(portfolio_c
 portfolio_csvs <- portfolio_csvs[! tools::file_path_sans_ext(basename(portfolio_csvs)) %in% bogus_csvs_to_be_ignored]
 
 
-# read in all the specs --------------------------------------------------------
+# read in all the specs and remove unusable CSVs -------------------------------
 
 specs <- get_csv_specs(portfolio_csvs)
 saveRDS(specs, file.path(output_dir, paste0(project_prefix, "_csv_specs.rds")))
