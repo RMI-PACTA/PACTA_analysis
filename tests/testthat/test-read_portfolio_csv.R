@@ -131,6 +131,7 @@ test_that("reads a portfolio CSV in a different file encoding correctly", {
   write.csv(portfolio_min, file = csv_file, fileEncoding = "ISO-8859-1")
 
   result <- read_portfolio_csv(csv_file)
+  expect_equal(guess_file_encoding(csv_file), "ISO-8859-1")
   expect_equal(unlist(result), unlist(portfolio_min))
 })
 
