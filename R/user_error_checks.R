@@ -1,30 +1,39 @@
-# This function exists to check if a portfolio has a single holdings
-# date, or multiple. If there is a single date, then everything is good.
-# but on the platform, if a user groups multiple  portfolios, and some of
-# these have different holding dates, then the parameters file will
-# contain a yaml array with the distinct dates from each grouped
-# portfolio.
-# Examples:
-#
-# simple portfolio
-# holdings_date: 2020Q4
-#
-# grouped portfolio with all same date:
-# holdings_date: 2020Q4
-#
-# grouped portfolio with different dates:
-# holdings_date: [2019Q4, 2020Q4]
-#
-# `config` will read this in as a character vector, so all we need to do
-# here is check for length > 1
-#
+#' Check if a portfolio has a single holdings date
+#'
+#' This function exists to check if a portfolio has a single holdings
+#' date, or multiple. If there is a single date, then everything is good.
+#' but on the platform, if a user groups multiple  portfolios, and some of
+#' these have different holding dates, then the parameters file will
+#' contain a yaml array with the distinct dates from each grouped
+#' portfolio.
+#'
+#' Examples:
+#'
+#' simple portfolio
+#' holdings_date: 2020Q4
+#'
+#' grouped portfolio with all same date:
+#' holdings_date: 2020Q4
+#'
+#' grouped portfolio with different dates:
+#' holdings_date: [2019Q4, 2020Q4]
+#'
+#' `config` will read this in as a character vector, so all we need to do
+#' here is check for length > 1
+#'
+#' @param port_holdings_date A character vector.
+#'
+#' @return Invisible `port_holdings_date`, or terminates the R Session with
+#' `status = 0L`
+#'
 #' @examples
 #' # No errors
 #' check_grouped_portfolio_years("2019Q4")
 #' check_grouped_portfolio_years(c("2019Q4"))
 #' check_grouped_portfolio_years(c("2019Q4", "2019Q4"))
 #' # produces error
-#' check_grouped_portfolio_years(c("2019Q4", "2020Q4"))
+#' \dontrun{check_grouped_portfolio_years(c("2019Q4", "2020Q4"))}
+#' @noRd
 
 check_grouped_portfolio_years <- function(
   port_holdings_date

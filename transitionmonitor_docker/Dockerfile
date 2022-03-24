@@ -10,6 +10,7 @@ ARG SYS_DEPS="\
     git \
     libcurl4-openssl-dev \
     libssl-dev \
+    openssh-client \
     wget \
     "
 RUN apt-get update \
@@ -118,9 +119,9 @@ RUN Rscript -e "\
 # copy in PACTA repos
 COPY pacta-data /pacta-data
 COPY r2dii.stress.test.data /r2dii.stress.test.data
-COPY PACTA_analysis /bound
-COPY create_interactive_report /create_interactive_report
 COPY r2dii.climate.stress.test /r2dii.climate.stress.test
+COPY create_interactive_report /create_interactive_report
+COPY PACTA_analysis /bound
 
 # set permissions for PACTA repos
 RUN chmod -R a+rwX /bound \
