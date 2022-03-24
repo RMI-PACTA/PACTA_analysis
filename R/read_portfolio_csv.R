@@ -1,3 +1,21 @@
+#' Read in portfolio CSV/s, working around a number of non-standard issues
+#'
+#' This function will read in one more portfolio CSVs. It works around a number
+#' of common issues, like alternate column names, alternate delimiter,
+#' alternate decimal and grouping marks, file encodings besides ASCII or UTF-8,
+#' etc.
+#'
+#' @param filepaths A character vector or single column data frame (strings
+#'   should be valid file paths to CSV files or a directory that contains CSV
+#'   files)
+#' @param combine A single element logical (default `TRUE`)
+#'
+#' @return If `combine` is `TRUE`, returns a tbl_df with all of the readable
+#'   data from the portfolio CSVs combined. If `combine` is `FALSE`, returns a
+#'   list of tbl_dfs, one for each readable portfolio CSV.
+#'
+#' @export
+
 read_portfolio_csv <- function(filepaths, combine = TRUE) {
   filepaths <- simplify_if_one_col_df(filepaths)
   stopifnot("`filepaths` must be a character vector" = typeof(filepaths) == "character")
