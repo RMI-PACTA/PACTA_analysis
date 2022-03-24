@@ -51,7 +51,9 @@ Imports:
     vroom
 Suggests: 
     callr,
+    devtools,
     knitr,
+    lintr,
     testthat (>= 3.0.0),
     withr,
     yaml

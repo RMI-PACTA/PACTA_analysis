@@ -57,3 +57,5 @@
 ^transitionmonitor_docker$
 ^indices_benchmarks$
 ^vignettes/articles$
+^azure-pipelines\.yml$
+^\.lintr$

@@ -1,0 +1,254 @@
+---
+# Starter pipeline Start with a minimal pipeline that you can customize
+# to build and deploy your code.  Add steps that build, run tests,
+# deploy, and more: https://aka.ms/yaml
+
+trigger:
+  - master
+  - release/*
+
+pr:
+  autoCancel: false
+  branches:
+    include:
+      - master
+      - develop
+      - release/*
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  imageRepository: '2dii_pacta'
+  # Container registry service connection established during pipeline creation
+  dockerRegistryServiceConnection: 'ddd45595-876e-4212-92f0-8196a5c2fe71'
+  containerRegistry: 'transitionmonitordockerregistry.azurecr.io'
+  qualifiedRepository: '$(containerRegistry)/$(imageRepository)'
+  dockerfileRepoPath: 'PACTA_analysis/transitionmonitor_docker/Dockerfile'
+  dockerfilePath: '$(Build.SourcesDirectory)/$(dockerfileRepoPath)'
+  testingStorageAccountName: 'tmdockerstorage'
+  testingShareName: 'testing-data'
+  resultsShareName: 'completed-tests'
+  zipsShareName: 'docker-zips'
+  # use PR number if it's a PR, otherwise branch name.
+  ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+    dockerTag: 'PR$(System.PullRequest.PullRequestNumber)'
+  ${{ elseif eq(variables['Build.Reason'], 'IndividualCI') }}:
+    dockerTag: '$(Build.SourceBranchName)'
+  ${{ else }}:
+    dockerTag: '$(Build.Reason)'
+  dockerTarFile: '$(imageRepository)_$(Build.BuildNumber).tar.gz'
+
+parameters:
+  - name: testingPortfolios
+    type: object
+    default:
+      - TestPortfolio
+
+resources:
+  repositories:
+    - repository: create_interactive_report
+      type: github
+      endpoint: 2DegreesInvesting  # Servce connection name
+      name: 2DegreesInvesting/create_interactive_report
+      ref: master
+    - repository: r2dii.climate.stress.test
+      type: github
+      endpoint: 2DegreesInvesting  # Servce connection name
+      name: 2DegreesInvesting/r2dii.climate.stress.test
+      ref: master
+    - repository: r2dii.stress.test.data
+      type: github
+      endpoint: 2DegreesInvesting  # Servce connection name
+      name: 2DegreesInvesting/r2dii.stress.test.data
+      ref: master
+    - repository: pacta-data
+      type: github
+      endpoint: 2DegreesInvesting  # Servce connection name
+      name: 2DegreesInvesting/pacta-data
+      ref: master
+    - repository: testing-portfolios
+      type: github
+      endpoint: 2DegreesInvesting  # Servce connection name
+      name: 2DegreesInvesting/testing-portfolios
+      ref: main
+
+stages:
+
+  - stage: build_image
+    displayName: Build and Push Docker Image
+    jobs:
+      - job: BuildAndPushDockerImage
+        displayName: Checkout Repos & Build
+        steps:
+          - checkout: self  # PACTA_analysis repo
+          - checkout: create_interactive_report
+          - checkout: r2dii.climate.stress.test
+          - checkout: r2dii.stress.test.data
+          - checkout: pacta-data
+          - task: Docker@2
+            displayName: Login to ACR
+            inputs:
+              command: login
+              containerRegistry: $(dockerRegistryServiceConnection)
+          - task: Bash@3
+            displayName: Pull Docker image
+            continueOnError: true
+            inputs:
+              targetType: inline
+              workingDirectory: $(Build.SourcesDirectory)
+              script: |
+                docker pull \
+                $(qualifiedRepository):$(dockerTag)
+          - task: Docker@2
+            displayName: Build Transition Monitor Docker image
+            inputs:
+              command: build
+              repository: $(imageRepository)
+              containerRegistry: $(dockerRegistryServiceConnection)
+              dockerfile: $(dockerfilePath)
+              buildContext: $(Build.SourcesDirectory)
+              addPipelineData: false
+              tags: |
+                $(dockerTag)
+                $(Build.BuildNumber)
+                $(Build.SourceVersion)
+              arguments:
+                --build-arg image_tag="$(Build.BuildNumber)"
+                --cache-from="$(qualifiedRepository):$(dockerTag)"
+          - task: Docker@2
+            displayName: Push Transition Monitor Docker image to Registry
+            inputs:
+              command: push
+              repository: $(imageRepository)
+              containerRegistry: $(dockerRegistryServiceConnection)
+              addPipelineData: false
+              tags: |
+                $(dockerTag)
+                $(Build.BuildNumber)
+                $(Build.SourceVersion)
+
+  - stage: test_image
+    displayName: Test Docker Image
+    jobs:
+      - ${{ each portfolioName in parameters.testingPortfolios }}:
+        # yamllint disable-line rule:indentation
+        - job: test_portfolio_${{portfolioName}}
+          displayName: "Test ${{portfolioName}}"
+          variables:
+            portfolioDirectory: '$(Build.SourcesDirectory)/testing-portfolios/${{portfolioName}}'
+            resultsDirectory: '$(Build.SourcesDirectory)/results/$(Build.BuildNumber)'
+            rawResultsDirectory: '$(resultsDirectory)/${{portfolioName}}'
+            results_zip: '${{portfolioName}}_$(Build.BuildNumber).zip'
+          steps:
+            - checkout: self
+            - checkout: testing-portfolios
+            - task: Docker@2
+              displayName: Login to ACR
+              inputs:
+                command: login
+                containerRegistry: $(dockerRegistryServiceConnection)
+            - task: Bash@3
+              displayName: Create Results Directory
+              inputs:
+                targetType: inline
+                workingDirectory: $(Build.SourcesDirectory)
+                script: mkdir -p $(rawResultsDirectory)
+            - task: Bash@3
+              displayName: Copy Portfolio to Results Directory
+              inputs:
+                targetType: inline
+                workingDirectory: $(Build.SourcesDirectory)
+                script: cp -R $(portfolioDirectory) $(resultsDirectory)
+            - task: Bash@3
+              displayName: Inspect File structure
+              inputs:
+                targetType: inline
+                workingDirectory: $(Build.SourcesDirectory)
+                script: |
+                  ls -laRh
+            - task: Bash@3
+              displayName: Pull Docker image
+              inputs:
+                targetType: inline
+                workingDirectory: $(Build.SourcesDirectory)
+                script: |
+                  docker pull \
+                  $(qualifiedRepository):$(Build.BuildNumber)
+            - task: Bash@3
+              displayName: Run ${{portfolioName}} Portfolio
+              inputs:
+                targetType: inline
+                # filePath: run-like-constructiva-flags.sh
+                script: |
+                  $(Build.SourcesDirectory)/PACTA_analysis/transitionmonitor_docker/run-like-constructiva-flags.sh \
+                  -v \
+                  -u 4 \
+                  -p ${{portfolioName}} \
+                  -w $(rawResultsDirectory)/working_dir \
+                  -y $(rawResultsDirectory)/user_results \
+                  -m $(qualifiedRepository) \
+                  -t $(Build.BuildNumber)
+            - task: Bash@3
+              displayName: Zip Results
+              inputs:
+                targetType: inline
+                workingDirectory: $(Build.SourcesDirectory)
+                script: |
+                  zip -r \
+                  $(resultsDirectory)/$(results_zip) \
+                  $(rawResultsDirectory)
+            - task: AzureCLI@2
+              condition: succeededOrFailed()
+              displayName: Upload Results files to Azure File Share
+              inputs:
+                azureSubscription: tm-docker-AzureResourceManager
+                scriptType: bash
+                scriptLocation: inlineScript
+                inlineScript: |
+                  az storage file upload-batch \
+                  --source $(Build.SourcesDirectory)/results \
+                  --destination $(resultsShareName) \
+                  --account-name $(testingStorageAccountName)
+
+  - stage: save_and_upload_tar
+    displayName: Save and Upload tar file
+    jobs:
+      - job: save_and_upload_tar
+        displayName: "Save and Upload tar file"
+        steps:
+          - checkout: none
+          - task: Docker@2
+            displayName: Login to ACR
+            inputs:
+              command: login
+              containerRegistry: $(dockerRegistryServiceConnection)
+          - task: Bash@3
+            displayName: Pull Docker image
+            inputs:
+              targetType: inline
+              # filePath: run-like-constructiva-flags.sh
+              workingDirectory: $(Build.SourcesDirectory)
+              script: |
+                docker pull \
+                  $(qualifiedRepository):$(Build.BuildNumber)
+          - task: Bash@3
+            displayName: Save Docker image as tar
+            inputs:
+              targetType: inline
+              workingDirectory: $(Build.SourcesDirectory)
+              script: |
+                docker save $(qualifiedRepository) | \
+                gzip -q > $(dockerTarFile)
+          - task: AzureCLI@2
+            displayName: Upload tar file to AFS
+            inputs:
+              azureSubscription: tm-docker-AzureResourceManager
+              scriptType: bash
+              scriptLocation: inlineScript
+              workingDirectory: $(Build.SourcesDirectory)
+              inlineScript: |
+                az storage file upload \
+                --source $(dockerTarFile) \
+                --share-name $(zipsShareName) \
+                --account-name $(testingStorageAccountName)

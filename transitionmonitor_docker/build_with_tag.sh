@@ -2,7 +2,7 @@
 
 # Examples:
 # # The tag is mandatory
-# ./build_with_tag -t 0.1.1
+# ./build_with_tag.sh -t 0.1.1
 
 usage() {
     echo "Usage: $0  -t <docker image tag>" 1>&2
@@ -19,7 +19,7 @@ do
     case "${flag}" in
         t) tag=${OPTARG};;
         x) platform=${OPTARG};;
-        s) save=${OPTARG};;
+        s) save=1;;
     esac
 done
 
@@ -169,14 +169,14 @@ fi
 cd $dir_start
 
 image_tar_gz="2dii_pacta_v${tag}.tar.gz"
-if [ -z ${save} ]
+if [ -n "${save}" ]
 then
-    echo -e "\nTo export the image as a tar.gz file:"
-    yellow "docker save 2dii_pacta:${tag} | gzip -q > '$image_tar_gz'"
-else
     green "\nSaving docker image to ${image_tar_gz}..."
     docker save 2dii_pacta:${tag} | gzip -q > "$image_tar_gz"
     green "\nimage saved as $image_tar_gz"
+else
+    echo -e "\nTo export the image as a tar.gz file:"
+    yellow "docker save 2dii_pacta:${tag} | gzip -q > '$image_tar_gz'"
 fi
 
 echo -e "\nTo load the image from the ${image_tar_gz} file:"
@@ -202,6 +202,6 @@ yellow "./run-all-tests.sh"
 echo -e "\nTo push the git tags from within the docker image:"
 yellow "docker run --rm -ti -v \"\$HOME/.ssh\":/root/.ssh 2dii_pacta:${tag} bash"
 echo -e "\nthen inside the container (for each of the 5 PACTA repos:"
-yellow "cd /bound && git push origin \$tag"
+yellow "cd /bound && git push origin ${tag}"
 
 exit 0

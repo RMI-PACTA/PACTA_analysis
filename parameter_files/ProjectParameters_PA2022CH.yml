@@ -1,0 +1,92 @@
+default:
+
+    paths:
+        data_location_ext: ../pacta-data/2020Q4/
+
+    reporting:
+        project_report_name: swiss2022
+        display_currency: CHF
+        currency_exchange_value: 1.09
+
+    parameters:
+        timestamp: 2020Q4
+        dataprep_timestamp: 2020Q4_transitionmonitor
+        start_year: 2021
+        horizon_year: 5
+        select_scenario: WEO2019_SDS
+        scenario_auto: ETP2017_B2DS
+        scenario_other: ETP2017_B2DS
+        scenario_shipping: ETP2017_B2DS
+        portfolio_allocation_method: portfolio_weight
+        scenario_geography: Global
+
+    methodology:
+        has_map: TRUE
+        has_sb: FALSE
+        has_revenue: FALSE
+        has_credit: FALSE
+        inc_emissionfactors: TRUE
+        inc_stresstest: TRUE
+
+    sectors:
+        tech_roadmap_sectors:
+            - Power
+            - Automotive
+            - Oil&Gas
+            - Coal
+        pacta_sectors_not_analysed:
+            - Steel
+            - Aviation
+            - Cement
+        green_techs:
+            - RenewablesCap
+            - HydroCap
+            - NuclearCap
+            - Hybrid
+            - Electric
+            - FuelCell
+            - Hybrid_HDV
+            - Electric_HDV
+            - FuelCell_HDV
+            - Dc-Electric Arc Furnace
+            - Ac-Electric Arc Furnace
+        alignment_techs:
+            - RenewablesCap
+            - CoalCap
+            - Coal
+            - Oil
+            - Gas
+            - Electric
+            - ICE
+
+    asset_types:
+        - Equity
+        - Bonds
+        - Others
+        - Funds
+
+    scenario_sources_list:
+        - ETP2017
+        - WEO2019
+        - WEO2020
+        - GECO2019
+
+    scenario_geography_list:
+        - Global
+        - GlobalAggregate
+        - NonOECD
+        - OECD
+
+    equity_market_list:
+        - GlobalMarket
+        - DevelopedMarket
+        - EmergingMarket
+
+    grouping_variables:
+        - investor_name
+        - portfolio_name
+
+    stress_test:
+        shock_year: 2030
+        price_data_version: 2021Q1
+
