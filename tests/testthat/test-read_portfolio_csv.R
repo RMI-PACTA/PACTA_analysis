@@ -9,7 +9,7 @@ portfolio_min <-
 
 test_that("reads a proper portfolio CSV correctly", {
   csv_file <- withr::local_tempfile(fileext = ".csv")
-  readr::write_csv(portfolio_min, file = csv_file, quote = "needed")
+  readr::write_csv(portfolio_min, file = csv_file)
 
   result <- read_portfolio_csv(csv_file)
   expect_equal(unlist(result), unlist(portfolio_min))
@@ -26,7 +26,7 @@ test_that("reads a portfolio CSV with old column names", {
       "Market.Value",
       "Currency")
 
-  readr::write_csv(portfolio_alt, file = csv_file, quote = "needed")
+  readr::write_csv(portfolio_alt, file = csv_file)
 
   result <- read_portfolio_csv(csv_file)
   expect_equal(unlist(result), unlist(portfolio_min))
@@ -38,7 +38,7 @@ test_that("reads a portfolio CSV with upper case column names", {
   portfolio_alt <- portfolio_min
   names(portfolio_alt) <- toupper(names(portfolio_alt))
 
-  readr::write_csv(portfolio_alt, file = csv_file, quote = "needed")
+  readr::write_csv(portfolio_alt, file = csv_file)
 
   result <- read_portfolio_csv(csv_file)
   expect_equal(unlist(result), unlist(portfolio_min))
@@ -50,7 +50,7 @@ test_that("reads a portfolio CSV with a space as the separator in column names",
   portfolio_alt <- portfolio_min
   names(portfolio_alt) <- gsub("_", " ", names(portfolio_alt))
 
-  readr::write_csv(portfolio_alt, file = csv_file, quote = "needed")
+  readr::write_csv(portfolio_alt, file = csv_file)
 
   result <- read_portfolio_csv(csv_file)
   expect_equal(unlist(result), unlist(portfolio_min))
@@ -62,7 +62,7 @@ test_that("reads a portfolio CSV with a dot as the separator in column names", {
   portfolio_alt <- portfolio_min
   names(portfolio_alt) <- gsub("_", ".", names(portfolio_alt))
 
-  readr::write_csv(portfolio_alt, file = csv_file, quote = "needed")
+  readr::write_csv(portfolio_alt, file = csv_file)
 
   result <- read_portfolio_csv(csv_file)
   expect_equal(unlist(result), unlist(portfolio_min))
@@ -74,7 +74,7 @@ test_that("reads a portfolio CSV with no separator in column names", {
   portfolio_alt <- portfolio_min
   names(portfolio_alt) <- gsub("_", "", names(portfolio_alt))
 
-  readr::write_csv(portfolio_alt, file = csv_file, quote = "needed")
+  readr::write_csv(portfolio_alt, file = csv_file)
 
   result <- read_portfolio_csv(csv_file)
   expect_equal(unlist(result), unlist(portfolio_min))
@@ -86,7 +86,7 @@ test_that("reads a portfolio CSV with leading and trailing white space in column
   portfolio_alt <- portfolio_min
   names(portfolio_alt) <- paste0(" ", names(portfolio_alt), " ")
 
-  readr::write_csv(portfolio_alt, file = csv_file, quote = "needed")
+  readr::write_csv(portfolio_alt, file = csv_file)
 
   result <- read_portfolio_csv(csv_file)
   expect_equal(unlist(result), unlist(portfolio_min))
@@ -98,7 +98,7 @@ test_that("reads a portfolio CSV with extra columns correctly", {
   portfolio_alt <- portfolio_min
   portfolio_alt$X <- "XXX"
 
-  readr::write_csv(portfolio_alt, file = csv_file, quote = "needed")
+  readr::write_csv(portfolio_alt, file = csv_file)
 
   result <- read_portfolio_csv(csv_file)
   expect_equal(unlist(result), unlist(portfolio_min))
@@ -110,7 +110,7 @@ test_that("reads a portfolio CSV with a different column order correctly", {
   portfolio_alt <- portfolio_min
   portfolio_alt <- portfolio_alt[, 5:1]
 
-  readr::write_csv(portfolio_alt, file = csv_file, quote = "needed")
+  readr::write_csv(portfolio_alt, file = csv_file)
 
   result <- read_portfolio_csv(csv_file)
   expect_equal(unlist(result), unlist(portfolio_min))
@@ -141,7 +141,7 @@ test_that("reads a portfolio CSV with a grouping marker correctly", {
   portfolio_alt <- portfolio_min
   portfolio_alt$market_value <- "1,000.34"
 
-  readr::write_csv(portfolio_alt, file = csv_file, quote = "needed")
+  readr::write_csv(portfolio_alt, file = csv_file)
 
   result <- read_portfolio_csv(csv_file)
   expect_equal(unlist(result), unlist(portfolio_min))
@@ -153,7 +153,7 @@ test_that("reads a portfolio CSV with an '.' grouping marker correctly", {
   portfolio_alt <- portfolio_min
   portfolio_alt$market_value <- "1.000,34"
 
-  readr::write_csv(portfolio_alt, file = csv_file, quote = "needed")
+  readr::write_csv(portfolio_alt, file = csv_file)
 
   result <- read_portfolio_csv(csv_file)
   expect_equal(unlist(result), unlist(portfolio_min))
@@ -165,7 +165,7 @@ test_that("reads a portfolio CSV with an ' ' grouping marker correctly", {
   portfolio_alt <- portfolio_min
   portfolio_alt$market_value <- "1 000,34"
 
-  readr::write_csv(portfolio_alt, file = csv_file, quote = "needed")
+  readr::write_csv(portfolio_alt, file = csv_file)
 
   result <- read_portfolio_csv(csv_file)
   expect_equal(unlist(result), unlist(portfolio_min))
