@@ -8,7 +8,7 @@ quit_if_no_pacta_relevant_data <- function(portfolio) {
     )
 
     action <- paste(
-      "Try uploading a portfolio with PACTA relavant holdings."
+      "Try uploading a portfolio with PACTA relevant holdings."
     )
 
     log_user_errors(
