@@ -1,21 +1,23 @@
 # load required packages -------------------------------------------------------
 
-require(R.utils, quietly = TRUE, warn.conflicts = FALSE)
-require(tibble, quietly = TRUE)
-require(fs, quietly = TRUE)
-require(cli, quietly = TRUE)
-require(stringi, quietly = TRUE)
-require(wand, quietly = TRUE)
-require(stringr, quietly = TRUE)
+suppressPackageStartupMessages({
+  require(R.utils, quietly = TRUE, warn.conflicts = FALSE)
+  require(tibble, quietly = TRUE)
+  require(fs, quietly = TRUE)
+  require(cli, quietly = TRUE)
+  require(stringi, quietly = TRUE)
+  require(wand, quietly = TRUE)
+  require(stringr, quietly = TRUE)
 
-library(dplyr, warn.conflicts = FALSE)
-library(devtools, quietly = TRUE, warn.conflicts = FALSE)
-library(purrr)
-library(stringr)
-library(fs)
-library(r2dii.utils)  # must install with # devtools::install_github("2DegreesInvesting/r2dii.utils")
-library(readr)
-library(yaml)
+  library(dplyr, warn.conflicts = FALSE)
+  library(devtools, quietly = TRUE, warn.conflicts = FALSE)
+  library(purrr)
+  library(stringr)
+  library(fs)
+  library(r2dii.utils)  # must install with # devtools::install_github("2DegreesInvesting/r2dii.utils")
+  library(readr)
+  library(yaml)
+})
 
 devtools::load_all(quiet = TRUE)
 
