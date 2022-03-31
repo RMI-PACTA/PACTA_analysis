@@ -35,6 +35,18 @@ create_portfolio_subfolders(portfolio_name_ref_all)
 
 port_col_types <- set_col_types(grouping_variables, "ddddccccddclc")
 
+
+# quit if there's no relevant PACTA assets --------------------------------
+
+total_portfolio_path <- file.path(proc_input_path, portfolio_name_ref_all, "total_portfolio.rda")
+if (file.exists(total_portfolio_path)) {
+  total_portfolio <- readRDS(total_portfolio_path)
+  quit_if_no_pacta_relevant_data(total_portfolio)
+} else {
+  warning("This is weird... the `total_portfolio.rda` file does not exist in the `30_Processed_inputs` directory.")
+}
+
+
 ##################
 ##### EQUITY #####
 ##################

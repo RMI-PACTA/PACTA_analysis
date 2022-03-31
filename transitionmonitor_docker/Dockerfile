@@ -96,6 +96,7 @@ ARG PKG_DEPS="\
     jsonlite \
     knitr \
     magrittr \
+    progress \
     purrr \
     readr \
     readxl \
@@ -105,6 +106,7 @@ ARG PKG_DEPS="\
     stringr \
     tibble \
     tidyr \
+    vctrs \
     vroom \
     writexl \
     yaml \
