@@ -75,9 +75,7 @@ stopifnot(dir.exists(file.path(combined_orgtype_results_output_dir, "30_Processe
 stopifnot(dir.exists(file.path(combined_orgtype_results_output_dir, "40_Results")))
 
 
-# load needed function and set needed values
-
-source("meta_report_data_creator/read_portfolio_csv.R")
+# set needed values
 
 pacta_directories <- c("00_Log_Files", "10_Parameter_File", "20_Raw_Inputs", "30_Processed_Inputs", "40_Results", "50_Outputs")
 
@@ -125,14 +123,14 @@ portfolio_csvs <- specs$filepath
 
 # read in all the CSVs ---------------------------------------------------------
 
-data <- map_dfr(set_names(portfolio_csvs, portfolio_csvs), read_portfolio_csv, .id = "csv_name")
+data <- read_portfolio_csv(portfolio_csvs)
 
 
 # add meta data to full data and save it ---------------------------------------
 
 data <-
   data %>%
-  mutate(port_id = suppressWarnings(as.numeric(tools::file_path_sans_ext(basename(csv_name))))) %>%
+  mutate(port_id = suppressWarnings(as.numeric(tools::file_path_sans_ext(basename(filepath))))) %>%
   left_join(portfolios_meta[, c("id", "user_id")], by = c(port_id = "id")) %>%
   left_join(users_meta[, c("id", "organization_type")], by = c(user_id = "id"))
 
