@@ -264,12 +264,13 @@ fin_data <-
   left_join(isin__company_id, by = "isin") %>%
   relocate(company_id)
 
+dbDisconnect(factset_db)
+
 
 
 
 # -------------------------------------------------------------------------
 
-dbDisconnect(factset_db)
 fin_data %>%
   rename(
     company_name = entity_proper_name,
