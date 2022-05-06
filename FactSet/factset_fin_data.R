@@ -6,6 +6,7 @@ library(readr)
 library(readxl)
 library(keyring)
 library(r2dii.utils)
+library(lubridate)
 
 
 
@@ -13,6 +14,7 @@ library(r2dii.utils)
 # -------------------------------------------------------------------------
 
 data_timestamp <- "2021-12-31"
+quarter <- paste0(year(ymd(data_timestamp)), "Q", quarter(ymd(data_timestamp)))
 
 
 
