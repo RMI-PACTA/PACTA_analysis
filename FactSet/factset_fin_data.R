@@ -69,16 +69,22 @@ factset_db <- connect_factset_db()
 
 
 
-# company_name ------------------------------------------------------------
+# fsym_id__factset_entity_id ---------------------------------------------------
 
 # sym_sec_entity::fsym_id
 # sym_sec_entity::factset_entity_id
-# ent_entity_coverage::factset_entity_id
-# ent_entity_coverage::entity_proper_name
 
 fsym_id__factset_entity_id <-
   tbl(factset_db, "sym_v1_sym_sec_entity") %>%
   select(fsym_id, factset_entity_id)
+
+
+
+
+# company_name ------------------------------------------------------------
+
+# ent_entity_coverage::factset_entity_id
+# ent_entity_coverage::entity_proper_name
 
 factset_entity_id__entity_proper_name <-
   tbl(factset_db, "ent_v1_ent_entity_coverage") %>%
@@ -106,14 +112,8 @@ fsym_id__bbg_id <-
 
 # country_of_domicile -----------------------------------------------------
 
-# sym_sec_entity::fsym_id
-# sym_sec_entity::factset_entity_id
 # ent_entity_coverage::factset_entity_id
 # ent_entity_coverage::iso_country
-
-fsym_id__factset_entity_id <-
-  tbl(factset_db, 'sym_v1_sym_sec_entity') %>%
-  select(fsym_id, factset_entity_id)
 
 factset_entity_id__iso_country <-
   tbl(factset_db, "ent_v1_ent_entity_coverage") %>%
@@ -138,16 +138,10 @@ fsym_id__isin <- tbl(factset_db, 'sym_v1_sym_isin')
 
 # bics_sector -------------------------------------------------------------
 
-# sym_sec_entity::fsym_id
-# sym_sec_entity::factset_entity_id
 # ent_entity_coverage::factset_entity_id
 # ent_entity_coverage::sector_code
 # factset_sector_map::factset_sector_code
 # factset_sector_map::factset_sector_desc
-
-fsym_id__factset_entity_id <-
-  tbl(factset_db, 'sym_v1_sym_sec_entity') %>%
-  select(fsym_id, factset_entity_id)
 
 factset_entity_id__sector_code <-
   tbl(factset_db, "ent_v1_ent_entity_coverage") %>%
