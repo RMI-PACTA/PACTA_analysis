@@ -5,6 +5,7 @@ library(dbplyr)
 library(readr)
 library(readxl)
 library(keyring)
+library(r2dii.utils)
 
 
 
@@ -275,7 +276,7 @@ fsym_id__asset_type <-
 
 # AR's company ID - join by ISIN from AR's PAM data
 
-pam_xlsx <- "~/Dropbox (2° Investing)/PortCheck/00_Data/06_DataStore/DataStore_export_02172022/2022-02-17_AR_2021Q4_2DII-PAMS-Data.xlsx"
+pam_xlsx <- path_dropbox_2dii("PortCheck/00_Data/06_DataStore/DataStore_export_02172022/2022-02-17_AR_2021Q4_2DII-PAMS-Data.xlsx")
 
 isin__company_id <-
   read_excel(pam_xlsx, sheet = "Company ISINs") %>%
