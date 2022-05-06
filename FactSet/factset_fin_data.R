@@ -280,7 +280,7 @@ fin_data %>%
     current_shares_outstanding_all_classes = adj_shares_outstanding,
     asset_type = asset_class_desc
   ) %>%
-  saveRDS("fin_data.rds")
+  saveRDS(paste0("fin_data_fs_", quarter, ".rds"))
 
 
 
