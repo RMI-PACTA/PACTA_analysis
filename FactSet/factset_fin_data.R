@@ -76,27 +76,18 @@ factset_db <- connect_factset_db()
 # ent_entity_coverage::factset_entity_id
 # ent_entity_coverage::entity_proper_name
 
-fsym_id__entity_id <-
+fsym_id__factset_entity_id <-
   tbl(factset_db, "sym_v1_sym_sec_entity") %>%
-  select(
-    fsym_id,
-    entity_id = factset_entity_id
-  )
+  select(fsym_id, factset_entity_id)
 
-entity_id__entity_proper_name <-
+factset_entity_id__entity_proper_name <-
   tbl(factset_db, "ent_v1_ent_entity_coverage") %>%
-  select(
-    entity_id = factset_entity_id,
-    entity_proper_name
-  )
+  select(factset_entity_id, entity_proper_name)
 
-fsym_id__company_name <-
-  fsym_id__entity_id %>%
-  left_join(entity_id__entity_proper_name, by = "entity_id") %>%
-  select(
-    fsym_id,
-    company_name = entity_proper_name
-  )
+fsym_id__entity_proper_name <-
+  fsym_id__factset_entity_id %>%
+  left_join(factset_entity_id__entity_proper_name, by = "factset_entity_id") %>%
+  select(fsym_id, entity_proper_name)
 
 
 
@@ -106,12 +97,9 @@ fsym_id__company_name <-
 # sym_bbg::fsym_id
 # sym_bbg::bbg_id
 
-fsym_id__bloomberg_id <-
+fsym_id__bbg_id <-
   tbl(factset_db, "sym_v1_sym_bbg") %>%
-  select(
-    fsym_id,
-    bloomberg_id = bbg_id
-  )
+  select(fsym_id, bbg_id)
 
 
 
@@ -123,27 +111,18 @@ fsym_id__bloomberg_id <-
 # ent_entity_coverage::factset_entity_id
 # ent_entity_coverage::iso_country
 
-fsym_id__entity_id <-
+fsym_id__factset_entity_id <-
   tbl(factset_db, 'sym_v1_sym_sec_entity') %>%
-  select(
-    fsym_id,
-    entity_id = factset_entity_id
-  )
+  select(fsym_id, factset_entity_id)
 
-entity_id__iso_country <-
+factset_entity_id__iso_country <-
   tbl(factset_db, "ent_v1_ent_entity_coverage") %>%
-  select(
-    entity_id = factset_entity_id,
-    iso_country
-  )
+  select(factset_entity_id, iso_country)
 
-fsym_id__country_of_domicile <-
-  fsym_id__entity_id %>%
-  left_join(entity_id__iso_country, by = "entity_id") %>%
-  select(
-    fsym_id,
-    country_of_domicile = iso_country
-  )
+fsym_id__iso_country <-
+  fsym_id__factset_entity_id %>%
+  left_join(factset_entity_id__iso_country, by = "factset_entity_id") %>%
+  select(fsym_id, iso_country)
 
 
 
@@ -166,32 +145,23 @@ fsym_id__isin <- tbl(factset_db, 'sym_v1_sym_isin')
 # factset_sector_map::factset_sector_code
 # factset_sector_map::factset_sector_desc
 
-fsym_id__entity_id <-
-  tbl(factset_db, "sym_v1_sym_sec_entity") %>%
-  select(
-    fsym_id,
-    entity_id = factset_entity_id
-  )
+fsym_id__factset_entity_id <-
+  tbl(factset_db, 'sym_v1_sym_sec_entity') %>%
+  select(fsym_id, factset_entity_id)
 
-entity_id__sector_code <-
+factset_entity_id__sector_code <-
   tbl(factset_db, "ent_v1_ent_entity_coverage") %>%
-  select(
-    entity_id = factset_entity_id,
-    sector_code
-  )
+  select(factset_entity_id, sector_code)
 
-sector_code__sector_desc <-
+factset_sector_code__factset_sector_desc <-
   tbl(factset_db, "ref_v2_factset_sector_map") %>%
-  select(sector_code = factset_sector_code, sector_desc = factset_sector_desc)
+  select(factset_sector_code, factset_sector_desc)
 
-fsym_id__bics_sector <-
-  fsym_id__entity_id %>%
-  left_join(entity_id__sector_code, by = "entity_id") %>%
-  left_join(sector_code__sector_desc, by = "sector_code") %>%
-  select(
-    fsym_id,
-    bics_sector = sector_desc
-  )
+fsym_id__factset_sector_desc <-
+  fsym_id__factset_entity_id %>%
+  left_join(factset_entity_id__sector_code, by = "factset_entity_id") %>%
+  left_join(factset_sector_code__factset_sector_desc, by = c("sector_code" = "factset_sector_code")) %>%
+  select(fsym_id, factset_sector_desc)
 
 
 
@@ -203,13 +173,10 @@ fsym_id__bics_sector <-
 # own_sec_prices::Unadj_Price
 # own_sec_prices::Adj_Price
 
-fsym_id__unit_share_price <-
+fsym_id__adj_price <-
   tbl(factset_db, "own_v5_own_sec_prices") %>%
   dplyr::filter(price_date == data_timestamp) %>%
-  select(
-    fsym_id,
-    unit_share_price = adj_price
-  )
+  select(fsym_id, adj_price)
 
 
 
@@ -221,13 +188,10 @@ fsym_id__unit_share_price <-
 # own_sec_prices::Unadj_Shares_Outstanding
 # own_sec_prices::Adj_Shares_Outstanding
 
-fsym_id__current_shares_outstanding_all_classes <-
+fsym_id__adj_shares_outstanding <-
   tbl(factset_db, "own_v5_own_sec_prices") %>%
   dplyr::filter(price_date == data_timestamp) %>%
-  select(
-    fsym_id,
-    current_shares_outstanding_all_classes = adj_shares_outstanding
-  )
+  select(fsym_id, adj_shares_outstanding)
 
 
 
@@ -250,13 +214,10 @@ issue_type_code__asset_class_desc <-
   left_join(ref_v2_asset_class_map, by = "asset_class_code") %>%
   select(issue_type_code, asset_class_desc)
 
-fsym_id__asset_type <-
+fsym_id__asset_class_desc <-
   tbl(factset_db, "own_v5_own_sec_coverage") %>%
   left_join(issue_type_code__asset_class_desc, by = c("issue_type" = "issue_type_code")) %>%
-  select(
-    fsym_id,
-    asset_type = asset_class_desc
-  )
+  select(fsym_id, asset_class_desc)
 
 
 
@@ -282,10 +243,7 @@ pam_xlsx <- path_dropbox_2dii("PortCheck/00_Data/06_DataStore/DataStore_export_0
 
 isin__company_id <-
   read_excel(pam_xlsx, sheet = "Company ISINs") %>%
-  select(
-    isin = ISIN,
-    company_id = `Company ID`
-  )
+  select(isin = ISIN, company_id = `Company ID`)
 
 
 
@@ -294,13 +252,13 @@ isin__company_id <-
 
 fin_data <-
   fsym_id__isin %>%
-  left_join(fsym_id__bloomberg_id, by = "fsym_id") %>%
-  left_join(fsym_id__company_name, by = "fsym_id") %>%
-  left_join(fsym_id__country_of_domicile, by = "fsym_id") %>%
-  left_join(fsym_id__bics_sector, by = "fsym_id") %>%
-  left_join(fsym_id__unit_share_price, by = "fsym_id") %>%
-  left_join(fsym_id__current_shares_outstanding_all_classes, by = "fsym_id") %>%
-  left_join(fsym_id__asset_type, by = "fsym_id") %>%
+  left_join(fsym_id__bbg_id, by = "fsym_id") %>%
+  left_join(fsym_id__entity_proper_name, by = "fsym_id") %>%
+  left_join(fsym_id__iso_country, by = "fsym_id") %>%
+  left_join(fsym_id__factset_sector_desc, by = "fsym_id") %>%
+  left_join(fsym_id__adj_price, by = "fsym_id") %>%
+  left_join(fsym_id__adj_shares_outstanding, by = "fsym_id") %>%
+  left_join(fsym_id__asset_class_desc, by = "fsym_id") %>%
   # fsym_id__corporate_bond_ticker
   collect() %>%
   left_join(isin__company_id, by = "isin") %>%
@@ -312,7 +270,17 @@ fin_data <-
 # -------------------------------------------------------------------------
 
 dbDisconnect(factset_db)
-saveRDS(fin_data, "fin_data.rds")
+fin_data %>%
+  rename(
+    company_name = entity_proper_name,
+    bloomberg_id = bbg_id,
+    country_of_domicile = iso_country,
+    bics_sector = factset_sector_desc,
+    unit_share_price = adj_price,
+    current_shares_outstanding_all_classes = adj_shares_outstanding,
+    asset_type = asset_class_desc
+  ) %>%
+  saveRDS("fin_data.rds")
 
 
 
