@@ -160,6 +160,30 @@ fsym_id__factset_sector_desc <-
 
 
 
+# sub-sector/industry ----------------------------------------------------------
+
+# ent_entity_coverage::factset_entity_id
+# ent_entity_coverage::industry_code
+# factset_industry_map::factset_industry_code
+# factset_industry_map::factset_industry_desc
+
+factset_entity_id__industry_code <-
+  tbl(factset_db, "ent_v1_ent_entity_coverage") %>%
+  select(factset_entity_id, industry_code)
+
+factset_industry_code_factset_industry_desc <-
+  tbl(factset_db, "ref_v2_factset_industry_map") %>%
+  select(factset_industry_code, factset_industry_desc)
+
+fsym_id__factset_industry_desc <-
+  fsym_id__factset_entity_id %>%
+  left_join(factset_entity_id__industry_code, by = "factset_entity_id") %>%
+  left_join(factset_industry_code_factset_industry_desc, by = c("industry_code" = "factset_industry_code")) %>%
+  select(fsym_id, factset_industry_desc)
+
+
+
+
 # unit_share_price --------------------------------------------------------
 
 # own_sec_prices
@@ -250,6 +274,7 @@ fin_data <-
   left_join(fsym_id__entity_proper_name, by = "fsym_id") %>%
   left_join(fsym_id__iso_country, by = "fsym_id") %>%
   left_join(fsym_id__factset_sector_desc, by = "fsym_id") %>%
+  left_join(fsym_id__factset_industry_desc, by = "fsym_id") %>%
   left_join(fsym_id__adj_price, by = "fsym_id") %>%
   left_join(fsym_id__adj_shares_outstanding, by = "fsym_id") %>%
   left_join(fsym_id__asset_class_desc, by = "fsym_id") %>%
@@ -271,6 +296,7 @@ fin_data %>%
     bloomberg_id = bbg_id,
     country_of_domicile = iso_country,
     bics_sector = factset_sector_desc,
+    security_bics_subgroup = factset_industry_desc,
     unit_share_price = adj_price,
     current_shares_outstanding_all_classes = adj_shares_outstanding,
     asset_type = asset_class_desc
