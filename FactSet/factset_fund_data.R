@@ -71,6 +71,11 @@ sym_isin <- tbl(factset_db, "sym_v1_sym_isin") %>%
 data <- sampled_fund_isins %>%
   left_join(sym_isin, by = c(fund_isin = "isin"))
 
+# all random ISINs have an associated fsym_id (100% coverage in that sense)
+data %>%
+  filter(is.na(fsym_id)) %>%
+  nrow()
+
 # FactSet has a dataset linking their internal fund IDs (factset_fund_id) to
 # another internal identifier (fsym_id). Note there may be multiple fsym_id per
 # fund.
@@ -91,9 +96,8 @@ data <- data %>%
 # factset_fund_id. We can begin to get a sense of coverage here, seeing if there
 # are any ISINs in the Lipper dataset, that don't have a fund_id in FactSet
 data %>%
-  mutate(factset_fund_id_exists = !is.na(factset_fund_id)) %>%
-  group_by(factset_fund_id_exists) %>%
-  summarize(isin_count = n())
+  filter(!is.na(factset_fund_id)) %>%
+  nrow()
 # of the 1000 randomly pulled ISIN funds, 59 are missing altogether from the
 # FactSet dataset (around 94% coverage, by ISIN)
 
@@ -104,15 +108,15 @@ sampled_factset_fund_ids <- unique(data$factset_fund_id)
 own_fund_detail <- tbl(factset_db, "own_v5_own_fund_detail") %>%
   filter(factset_fund_id %in% sampled_factset_fund_ids) %>%
   filter(report_date == data_timestamp) %>%
-  select(factset_fund_id, fsym_id, reported_mv) %>%
+  select(factset_fund_id, holding_fsym_id = fsym_id, reported_mv) %>%
   collect()
 
 # connect all the factset funds (where available) to details containing:
 # - fsym_id associated with each holding in fund
 # - reported market value associated with each holding
 data <- data %>%
-  select(fund_isin, factset_fund_id) %>%
-  left_join(own_fund_detail)
+  select(fund_isin, factset_fund_id, fund_fsym_id = fsym_id) %>%
+  left_join(own_fund_detail, by = "factset_fund_id")
 
 # Sanity Check: all funds for which a factset_fund_id exists has complete
 # coverage on reported_mv (complete in the sense that every security has an
@@ -144,47 +148,59 @@ fsym_id_asset_type <- tbl(factset_db, "own_v5_own_sec_coverage") %>%
 
 # connect asset type to fund data
 data <- data %>%
-  left_join(fsym_id_asset_type) %>%
-  select(fund_isin, reported_mv, asset_type, fsym_id)
+  left_join(fsym_id_asset_type, by = c(holding_fsym_id = "fsym_id"))
 
 # connect ISINs to the fsym_ids containing each
 data <- data %>%
-  left_join(sym_isin) %>%
-  select(fund_isin, holding_isin = isin, reported_mv, asset_type)
+  left_join(sym_isin, by = c(holding_fsym_id = "fsym_id")) %>%
+  select(
+    fund_isin,
+    factset_fund_id,
+    fund_fsym_id,
+    holding_fsym_id,
+    holding_isin = isin,
+    reported_mv,
+    asset_type
+    )
+
+data %>%
+  filter(!is.na(factset_fund_id)) %>%
+  distinct(fund_isin) %>%
+  nrow()
+
+data %>%
+  filter(!is.na(fund_fsym_id)) %>%
+  distinct(fund_isin) %>%
+  nrow()
 
 # It's important to note that each fund may have different types of holdings:
 # Equity, Fixed Income, Private Equity, Cash, Other
 # We don't expect Private Equity, Cash or Other to necessarily have corresponding ISINs
 # However, the Fixed Income class could be an issue.
 
-# Let's look at coverage by asset_type
+# 620 funds have SOME coverage in holding ISIN
 data %>%
-  filter(!is.na(asset_type)) %>%
-  mutate(holding_isin_exists = !is.na(holding_isin)) %>%
-  group_by(fund_isin, asset_type, holding_isin_exists) %>%
-  summarise(reported_mv = sum(reported_mv)) %>%
-  group_by(fund_isin) %>%
-  mutate(total_mv = sum(reported_mv)) %>%
-  group_by(fund_isin, holding_isin_exists) %>%
-  mutate(percent_coverage = reported_mv / total_mv)
+  filter(is.na(holding_isin)) %>%
+  distinct(fund_isin) %>%
+  nrow()
 
 # we can also look at how many funds have above 50% coverage by AuM
 coverage <- data %>%
-  filter(!is.na(asset_type)) %>%
   mutate(has_isin = !is.na(holding_isin)) %>%
   group_by(fund_isin, has_isin) %>%
-  summarise(reported_mv = sum(reported_mv)) %>%
+  summarise(reported_mv = sum(reported_mv, na.rm = TRUE)) %>%
   group_by(fund_isin) %>%
-  mutate(coverage = reported_mv / sum(reported_mv)) %>%
-  filter(has_isin) %>%
-  select(fund_isin, coverage)
+  mutate(coverage = reported_mv / sum(reported_mv, na.rm = TRUE)) %>%
+  select(fund_isin, coverage, has_isin)
 
-# 617 funds by ISIN
-nrow(coverage)
+coverage %>%
+  filter(!is.na(coverage), has_isin) %>%
+  distinct(fund_isin) %>%
+  nrow()
 
 # 430 funds with above 50% coverage
 coverage %>%
-  filter(coverage > 0.5) %>%
+  filter(has_isin, coverage > 0.5) %>%
   nrow()
 
 # format the final FactSet data that can be a place in for fund_data
