@@ -5,7 +5,7 @@
 
 get_ald_scen <- function(portfolio_type) {
   if (portfolio_type == "Equity") {
-    ald <- read_rds(file.path(analysis_inputs_path, "equity_ald_scenario.rda"))
+    ald <- read_rds(file.path(analysis_inputs_path, "equity_abcd_scenario.rds"))
     ald <- ald %>%
       filter(equity_market %in% equity_market_list)
 
@@ -14,7 +14,7 @@ get_ald_scen <- function(portfolio_type) {
     }
   }
   if (portfolio_type == "Bonds") {
-    ald <- read_rds(file.path(analysis_inputs_path, "bonds_ald_scenario.rda"))
+    ald <- read_rds(file.path(analysis_inputs_path, "bonds_abcd_scenario.rds"))
   }
 
   ald <- ald %>%
@@ -35,8 +35,8 @@ get_ald_raw <- function(portfolio_type, supervisor_workflow = FALSE) {
     filename_eq_raw <- "equity_ald_scenario_map.rda"
     filename_cb_raw <- "bonds_ald_scenario_map.rda"
   } else {
-    filename_eq_raw <- "masterdata_ownership_datastore.rda"
-    filename_cb_raw <- "masterdata_debt_datastore.rda"
+    filename_eq_raw <- "masterdata_ownership_datastore.rds"
+    filename_cb_raw <- "masterdata_debt_datastore.rds"
   }
 
   if (portfolio_type == "Equity") {

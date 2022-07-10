@@ -30,83 +30,39 @@ analysis_inputs_path <- set_analysis_inputs_path(twodii_internal, data_location_
 create_portfolio_subfolders(portfolio_name_ref_all = portfolio_name_ref_all, project_location = project_location)
 ######################################################################
 
+
+inc_emission_factors <- FALSE # FIXME: until emissions data is ready
+
+
+
 ####################
 #### DATA FILES ####
 ####################
 
-# Files are first cleaned then saved for a faster read in time.
-# Set parameter to ensure data is reprocessed in "new_data" == TRUE in the parameter file
-file_location <- file.path(analysis_inputs_path, "cleaned_files")
 
+# load necessary input data ----------------------------------------------------
 
+file_location <- file.path(analysis_inputs_path)
 
+currencies <- readRDS(file.path(file_location, "currencies.rds"))
 
-if (new_data == TRUE) {
-  currencies <- get_and_clean_currency_data()
+fund_data <- readRDS(file.path(file_location, "fund_data.rds"))
+fund_data$holding_isin <- as.character(fund_data$holding_isin)
+fund_data$fund_isin <- as.character(fund_data$fund_isin)
 
+total_fund_list <- readRDS(file.path(file_location, "total_fund_list.rds"))
 
-  total_fund_list <- get_and_clean_total_fund_list_data()
+fin_data <- readRDS(file.path(file_location, "financial_data.rds"))
 
-   # fund_data <- get_and_clean_fund_data()
-  fund_data <- data.frame()
+abcd_flags_equity <- readRDS(file.path(file_location, "abcd_flags_equity.rds"))
+abcd_flags_bonds <- readRDS(file.path(file_location, "abcd_flags_bonds.rds"))
 
-  fin_data <- get_and_clean_fin_data(fund_data)
+if (inc_emission_factors) {
+  average_sector_intensity <- readRDS(file.path(file_location, "average_sector_intensity.rds"))
 
-  comp_fin_data <- get_and_clean_company_fin_data()
-
-  debt_fin_data <- get_and_clean_debt_fin_data()
-
-  # revenue_data <- get_and_clean_revenue_data()
-
-  average_sector_intensity <- get_average_emission_data(inc_emission_factors)
-
-  company_emissions <- get_company_emission_data(inc_emission_factors)
-
-  save_cleaned_files(
-    file_location,
-    currencies,
-    fund_data,
-    fin_data,
-    comp_fin_data,
-    debt_fin_data,
-    average_sector_intensity,
-    company_emissions,
-    total_fund_list=total_fund_list
-  )
-} else {
-  currencies <- fst::read_fst(file.path(file_location, "currencies.fst"))
-
-  read_fst_or_return_null <- function(fst_file) {
-    if (!file.exists(fst_file)) {
-      return(NULL)
-    }
-
-    fst::read_fst(fst_file)
-  }
-
-  fund_data_path <- file.path(file_location, "fund_data.fst")
-
-
-  fund_data <- read_fst_or_return_null(fund_data_path)
-
-  fund_data$holding_isin <- as.character(fund_data$holding_isin)
-  fund_data$fund_isin <- as.character(fund_data$fund_isin)
-
-
-  fin_data <- fst::read_fst(file.path(file_location, "fin_data.fst"))
-
-  comp_fin_data <- fst::read_fst(file.path(file_location, "comp_fin_data.fst"))
-
-  debt_fin_data <- fst::read_fst(file.path(file_location, "debt_fin_data.fst"))
-
-  total_fund_list <- fst::read_fst(file.path(file_location, "total_fund_list.fst"))
-
-  if (inc_emission_factors) {
-    average_sector_intensity <- fst::read_fst(file.path(file_location, "average_sector_intensity.fst"))
-
-    company_emissions <- fst::read_fst(file.path(file_location, "company_emissions.fst"))
-  }
+  company_emissions <- readRDS(file.path(file_location, "company_emissions.rds"))
 }
+
 
 
 ####################
@@ -120,12 +76,12 @@ abort_if_file_doesnt_exist(
 portfolio_raw <- get_input_files(portfolio_name_ref_all)
 
 portfolio <- process_raw_portfolio(
-  portfolio_raw,
-  fin_data,
-  fund_data,
-  currencies,
-  grouping_variables,
-  total_fund_list=total_fund_list
+  portfolio_raw = portfolio_raw,
+  fin_data = fin_data,
+  fund_data = fund_data,
+  currencies = currencies,
+  grouping_variables = grouping_variables,
+  total_fund_list = total_fund_list
 )
 
 # information of coverage and coverage loses for all funds in raw_portfolio
@@ -145,7 +101,7 @@ unknown_funds_in_funds <- list_unknown_funds_in_funds(portfolio)
 
 portfolio <- add_revenue_split(has_revenue, portfolio, revenue_data)
 
-portfolio <- create_ald_flag(portfolio, comp_fin_data, debt_fin_data)
+portfolio <- create_ald_flag(portfolio, comp_fin_data = abcd_flags_equity, debt_fin_data = abcd_flags_bonds)
 
 eq_portfolio <- create_portfolio_subset(
   portfolio,
@@ -163,10 +119,13 @@ portfolio_overview <- portfolio_summary(portfolio_total)
 
 audit_file <- create_audit_file(portfolio_total)
 
+if (inc_emission_factors) {
 emissions_totals <- calculate_average_portfolio_emissions(
   portfolio_total,
   comp_fin_data,
   average_sector_intensity)
+}
+
 
 port_weights <- pw_calculations(eq_portfolio, cb_portfolio)
 
@@ -189,9 +148,12 @@ save_if_exists(cb_portfolio, portfolio_name, file.path(proc_input_path_, "bonds_
 save_if_exists(portfolio_overview, portfolio_name, file.path(proc_input_path_, "overview_portfolio.rda"))
 save_if_exists(audit_file, portfolio_name, file.path(proc_input_path_, "audit_file.rda"))
 save_if_exists(audit_file, portfolio_name, file.path(proc_input_path_, "audit_file.csv"), csv_or_rds = "csv")
-save_if_exists(emissions_totals, portfolio_name, file.path(proc_input_path_, "emissions.rda"))
 save_if_exists(fund_coverage_summary, portfolio_name, file.path(proc_input_path_, "fund_coverage_summary.rda"))
 save_if_exists(unknown_funds_in_funds, portfolio_name, file.path(proc_input_path_, "unknown_funds_in_funds.rda"))
+
+if (inc_emission_factors) {
+  save_if_exists(emissions_totals, portfolio_name, file.path(proc_input_path_, "emissions.rda"))
+}
 
 if(data_check(port_weights)){
   port_weights <- jsonlite::toJSON(x=port_weights)
@@ -206,3 +168,4 @@ remove_if_exists(cb_portfolio)
 remove_if_exists(fund_coverage_summary)
 remove_if_exists(fund_coverage)
 remove_if_exists(unknown_funds_in_funds)
+

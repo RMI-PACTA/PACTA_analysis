@@ -688,8 +688,7 @@ check_valid_value_usd <- function(portfolio_total) {
 check_bloomberg_data <- function(portfolio_total) {
   portfolio_total <- portfolio_total %>%
     mutate(has_bbg_data = case_when(
-      (asset_type == "Equity" | asset_type == "Unclassifiable") & (is.na(bloomberg_id) | bloomberg_id == "") ~ FALSE,
-      (asset_type == "Bonds" | asset_type == "Unclassifiable") & (is.na(corporate_bond_ticker) | corporate_bond_ticker == "") ~ FALSE,
+      (asset_type == "Equity" | asset_type == "Unclassifiable") & (is.na(company_id) | company_id == "") ~ FALSE,
       (asset_type == "" | asset_type == "Unclassifiable") ~ FALSE,
       is.na(asset_type) ~ FALSE,
       TRUE ~ TRUE
@@ -743,7 +742,7 @@ create_ald_flag <- function(portfolio, comp_fin_data, debt_fin_data) {
     portfolio_other <- portfolio_other %>% add_column("has_asset_level_data", "sectors_with_assets", "has_ald_in_fin_sector")
   }
 
-  portfolio <- rbind(portfolio_eq, portfolio_cb, portfolio_other)
+  rbind(portfolio_eq, portfolio_cb, portfolio_other)
 }
 
 
