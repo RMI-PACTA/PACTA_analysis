@@ -15,7 +15,7 @@ calculate_tdm(
 }
 \arguments{
 \item{data}{A data.frame (or tibble), with a format similar to the
-\verb{*_results_portfolio.rda} outputs of PACTA.}
+\verb{*_results_portfolio.rds} outputs of PACTA.}
 
 \item{t0}{The start year, from which the TDM value should be calculated. This
 value should coincide with the earliest year in the PACTA results dataset.}

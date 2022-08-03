@@ -42,14 +42,14 @@ For the analysis to be run, the *processed portfolio inputs* as well as the *com
 ```{r}
 # read in if report has been run successfully, but data is not currently in the workspace
 # availability checks
-bonds_available <- c("Bonds_results_company.rda") %in% list.files(results_path)
-equity_available <- c("Equity_results_company.rda") %in% list.files(results_path)
-portfolio_available <- c(paste0(project_name, "_total_portfolio.rda")) %in% list.files(paste0(proc_input_path, "/"))
+bonds_available <- c("Bonds_results_company.rds") %in% list.files(results_path)
+equity_available <- c("Equity_results_company.rds") %in% list.files(results_path)
+portfolio_available <- c(paste0(project_name, "_total_portfolio.rds")) %in% list.files(paste0(proc_input_path, "/"))
 # data paths
 # inconsisten directory with the check (Meta Investor sub dir)
-portfolio_path <- paste0(project_location,"/30_Processed_Inputs/",project_name,"_total_portfolio.rda")
-bonds_path <- paste0(project_location,"/40_Results/Meta Investor/Bonds_results_company.rda")
-equity_path <- paste0(project_location,"/40_Results/Meta Investor/Equity_results_company.rda")
+portfolio_path <- paste0(project_location,"/30_Processed_Inputs/",project_name,"_total_portfolio.rds")
+bonds_path <- paste0(project_location,"/40_Results/Meta Investor/Bonds_results_company.rds")
+equity_path <- paste0(project_location,"/40_Results/Meta Investor/Equity_results_company.rds")
 
 # read in as much asset types as possible
 if (all(bonds_available, equity_available, portfolio_available)) {

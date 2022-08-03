@@ -55,8 +55,8 @@ for (portfolio in portfolios) {
   source("web_tool_script_1.R", local = TRUE)
   source("web_tool_script_2.R", local = TRUE)
 
-  eq_result <- file.path(working_dir, "40_Results", investor_name, "Equity_results_portfolio.rda")
-  bond_result <- file.path(working_dir, "40_Results", investor_name, "Bonds_results_portfolio.rda")
+  eq_result <- file.path(working_dir, "40_Results", investor_name, "Equity_results_portfolio.rds")
+  bond_result <- file.path(working_dir, "40_Results", investor_name, "Bonds_results_portfolio.rds")
 
   eq_out <- file.path(tmp_dir, paste0(portfolio_name, "_", basename(eq_result)))
   bond_out <- file.path(tmp_dir, paste0(portfolio_name, "_", basename(bond_result)))
@@ -89,11 +89,8 @@ combined <-
 
 combined %>%
   filter(!grepl("Global Corp Bond", portfolio_name)) %>%
-  saveRDS(file.path(output_dir, "Indices_equity_portfolio.rda"))
+  saveRDS(file.path(output_dir, "Indices_equity_portfolio.rds"))
 
 combined %>%
   filter(grepl("Global Corp Bond", portfolio_name)) %>%
-  saveRDS(file.path(output_dir, "Indices_bonds_portfolio.rda"))
-
-file.copy(file.path(output_dir, "Indices_equity_portfolio.rda"), file.path(output_dir, "Indices_equity_portfolio.rds"))
-file.copy(file.path(output_dir, "Indices_bonds_portfolio.rda"), file.path(output_dir, "Indices_bonds_portfolio.rds"))
+  saveRDS(file.path(output_dir, "Indices_bonds_portfolio.rds"))

@@ -861,10 +861,10 @@ get_and_clean_currency_data <- function() {
 get_and_clean_fund_data <- function() {
   fund_data <- NA
   # Fund Data
-  if (file.exists(paste0(analysis_inputs_path, "/fund_data_", financial_timestamp, ".rda"))) {
-    fund_data <- readRDS(paste0(analysis_inputs_path, "/fund_data_", financial_timestamp, ".rda"))
-  } else if (file.exists(paste0(analysis_inputs_path, "/fund_data_2018Q4.rda"))) {
-    fund_data <- readRDS(paste0(analysis_inputs_path, "/fund_data_2018Q4.rda"))
+  if (file.exists(paste0(analysis_inputs_path, "/fund_data_", financial_timestamp, ".rds"))) {
+    fund_data <- readRDS(paste0(analysis_inputs_path, "/fund_data_", financial_timestamp, ".rds"))
+  } else if (file.exists(paste0(analysis_inputs_path, "/fund_data_2018Q4.rds"))) {
+    fund_data <- readRDS(paste0(analysis_inputs_path, "/fund_data_2018Q4.rds"))
     print("Old Fund Data being used. Replace FundsData2018Q4 or check name of file.")
   } else if (file.exists(paste0(analysis_inputs_path, "/SFC_26052020_funds.csv"))) {
     fund_data <- read_csv(paste0(analysis_inputs_path, "/SFC_26052020_funds.csv"))
@@ -891,7 +891,7 @@ get_and_clean_fund_data <- function() {
 get_and_clean_fin_data <- function(fund_data) {
 
   # Financial Data
-  fin_data_raw <- read_rda(paste0(analysis_inputs_path, "/security_financial_data.rda")) %>% as_tibble()
+  fin_data_raw <- read_rda(paste0(analysis_inputs_path, "/security_financial_data.rds")) %>% as_tibble()
 
   # remove unclear duplicates from raw financial data. This should be moved to DataStore.
   rm_duplicates <- read_csv("non_distinct_isins.csv")
@@ -974,7 +974,7 @@ get_and_clean_revenue_data <- function() {
   revenue_data <- data.frame()
 
   if (has_revenue) {
-    revenue_data <- read_rda(paste0(analysis_inputs_path, "/revenue_data_member_ticker.rda"))
+    revenue_data <- read_rda(paste0(analysis_inputs_path, "/revenue_data_member_ticker.rds"))
     # col_types = "dcdcclcd")
 
     revenue_data <- revenue_data %>%
@@ -987,7 +987,7 @@ get_and_clean_revenue_data <- function() {
 }
 
 get_and_clean_company_fin_data <- function() {
-  comp_fin_data_raw <- read_rds(paste0(analysis_inputs_path, "/consolidated_financial_data.rda"))
+  comp_fin_data_raw <- read_rds(paste0(analysis_inputs_path, "/consolidated_financial_data.rds"))
 
   comp_fin_data_raw <- comp_fin_data_raw %>% select(
     company_id, company_name, bloomberg_id, country_of_domicile, corporate_bond_ticker, bics_subgroup, bics_sector,
@@ -1003,7 +1003,7 @@ get_and_clean_company_fin_data <- function() {
 }
 
 get_and_clean_debt_fin_data <- function() {
-  debt_fin_data_raw <- read_rds(paste0(analysis_inputs_path, "/debt_financial_data.rda"))
+  debt_fin_data_raw <- read_rds(paste0(analysis_inputs_path, "/debt_financial_data.rds"))
 
   return(debt_fin_data_raw)
 }
@@ -1503,7 +1503,7 @@ get_average_emission_data <- function(inc_emission_factors) {
   average_sector_intensity <- data.frame()
 
   if (inc_emission_factors) {
-    average_sector_intensity <- read_rda(file.path(analysis_inputs_path, "average_sector_intensity.rda"))
+    average_sector_intensity <- read_rda(file.path(analysis_inputs_path, "average_sector_intensity.rds"))
   }
   return(average_sector_intensity)
 }
@@ -1512,7 +1512,7 @@ get_company_emission_data <- function(inc_emission_factors) {
   company_emissions <- data.frame()
 
   if (inc_emission_factors) {
-    company_emissions <- read_rda(file.path(analysis_inputs_path, "company_emissions.rda"))
+    company_emissions <- read_rda(file.path(analysis_inputs_path, "company_emissions.rds"))
   }
   return(company_emissions)
 }

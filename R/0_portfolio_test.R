@@ -32,8 +32,8 @@ get_ald_scen <- function(portfolio_type) {
 
 get_ald_raw <- function(portfolio_type, supervisor_workflow = FALSE) {
   if (supervisor_workflow == TRUE) {
-    filename_eq_raw <- "equity_ald_scenario_map.rda"
-    filename_cb_raw <- "bonds_ald_scenario_map.rda"
+    filename_eq_raw <- "equity_ald_scenario_map.rds"
+    filename_cb_raw <- "bonds_ald_scenario_map.rds"
   } else {
     filename_eq_raw <- "masterdata_ownership_datastore.rds"
     filename_cb_raw <- "masterdata_debt_datastore.rds"
@@ -359,8 +359,8 @@ gather_and_save_project_results <- function(
 
     results_path_investor <- paste0(results_path, "/", investor_name_select, "/")
 
-    if (file.exists(paste0(results_path_investor, "/Equity_results_", aggregation_level, ".rda"))) {
-      results_eq <- as.data.frame(read_rds(paste0(results_path_investor, "/Equity_results_", aggregation_level, ".rda")))
+    if (file.exists(paste0(results_path_investor, "/Equity_results_", aggregation_level, ".rds"))) {
+      results_eq <- as.data.frame(read_rds(paste0(results_path_investor, "/Equity_results_", aggregation_level, ".rds")))
 
       if (typeof(year_filter) %in% c("integer", "double")) {
         results_eq <- results_eq %>% filter(year %in% year_filter)
@@ -379,8 +379,8 @@ gather_and_save_project_results <- function(
       }
     }
 
-    if (file.exists(paste0(results_path_investor, "Bonds_results_", aggregation_level, ".rda"))) {
-      results_cb <- read_rds(paste0(results_path_investor, "Bonds_results_", aggregation_level, ".rda"))
+    if (file.exists(paste0(results_path_investor, "Bonds_results_", aggregation_level, ".rds"))) {
+      results_cb <- read_rds(paste0(results_path_investor, "Bonds_results_", aggregation_level, ".rds"))
 
       if (typeof(year_filter) %in% c("integer", "double")) {
         results_cb <- results_cb %>% filter(year %in% year_filter)
@@ -401,11 +401,11 @@ gather_and_save_project_results <- function(
 
     if (j == portfolios_per_file) {
       if (exists("all_results_cb")) {
-        saveRDS(all_results_cb, paste0(results_path, "/Bonds_results_", aggregation_level, "_", k, ".rda"))
+        saveRDS(all_results_cb, paste0(results_path, "/Bonds_results_", aggregation_level, "_", k, ".rds"))
         rm(all_results_cb)
       }
       if (exists("all_results_eq")) {
-        saveRDS(all_results_eq, paste0(results_path, "/Equity_results_", aggregation_level, "_", k, ".rda"))
+        saveRDS(all_results_eq, paste0(results_path, "/Equity_results_", aggregation_level, "_", k, ".rds"))
         rm(all_results_eq)
       }
       j <- 1
@@ -416,11 +416,11 @@ gather_and_save_project_results <- function(
   }
 
   if (exists("all_results_cb")) {
-    saveRDS(all_results_cb, paste0(results_path, "/Bonds_results_", aggregation_level, ".rda"))
+    saveRDS(all_results_cb, paste0(results_path, "/Bonds_results_", aggregation_level, ".rds"))
     write_csv_file(all_results_cb, file = paste0(results_path, "/Bonds_results_", aggregation_level, ".csv"))
   }
   if (exists("all_results_eq")) {
-    saveRDS(all_results_eq, paste0(results_path, "/Equity_results_", aggregation_level, ".rda"))
+    saveRDS(all_results_eq, paste0(results_path, "/Equity_results_", aggregation_level, ".rds"))
     write_csv_file(all_results_eq, file = paste0(results_path, "/Equity_results_", aggregation_level, ".csv"))
   }
 }

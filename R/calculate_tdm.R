@@ -4,7 +4,7 @@
 #' transition disruption metric.
 #'
 #' @param data A data.frame (or tibble), with a format similar to the
-#'   `*_results_portfolio.rda` outputs of PACTA.
+#'   `*_results_portfolio.rds` outputs of PACTA.
 #' @param t0 The start year, from which the TDM value should be calculated. This
 #'   value should coincide with the earliest year in the PACTA results dataset.
 #' @param delta_t1 The number of years into the future for which there is production
