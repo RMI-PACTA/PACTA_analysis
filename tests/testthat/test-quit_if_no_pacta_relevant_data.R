@@ -7,7 +7,6 @@ test_that("`quit_if_no_pacta_relevant_data()` quits if no ABCD in non-interactiv
     callr::r(
       func = function(tmp_dir, port_name) {
         devtools::load_all()
-        source(here::here("0_global_functions.R"))
         port_with_no_data <- data.frame(has_asset_level_data = FALSE)
         outputs_path <<- tmp_dir
         portfolio_name_ref_all <<- port_name
@@ -30,7 +29,6 @@ test_that("`quit_if_no_pacta_relevant_data()` passes if has ABCD in non-interact
   expect_true({
     callr::r(function() {
       devtools::load_all()
-      source(here::here("0_global_functions.R"))
       port_with_no_data <- data.frame(has_asset_level_data = TRUE)
       outputs_path <<- tempdir()
       portfolio_name_ref_all <<- "TestPort"

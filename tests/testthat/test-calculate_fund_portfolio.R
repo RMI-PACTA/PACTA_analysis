@@ -1,9 +1,6 @@
 test_that("`calculate_fund_portfolio()` works as expected", {
   skip_if_R_CMD_check()
 
-  source(here::here("0_global_functions.R"))  # for `data_check()`
-  source(here::here("0_portfolio_input_check_functions.R"))
-
   fund_portfolio <-
     tibble::tribble(
       ~isin,          ~market_value, ~currency, ~portfolio_name, ~investor_name, ~holding_id, ~number_of_shares, ~exchange_rate, ~value_usd, ~company_id, ~company_name,                   ~bloomberg_id, ~corporate_bond_ticker, ~country_of_domicile, ~unit_share_price, ~exchange_rate_usd, ~asset_type, ~security_type,   ~security_mapped_sector, ~security_icb_subsector, ~security_bics_subgroup, ~bics_sector,  ~maturity_date, ~coupon_value, ~amount_issued, ~current_shares_outstanding_all_classes, ~sector_override, ~sector_boe, ~subsector_boe, ~sector_dnb, ~sector_ipr,   ~subsector_ipr, ~is_sb,

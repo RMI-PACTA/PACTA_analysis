@@ -1,8 +1,6 @@
 test_that("`set_portfolio_parameters()` works as expected", {
   skip_if_R_CMD_check()
 
-  source(here::here("0_portfolio_input_check_functions.R"))
-
   portfolio <- tibble::tribble(
     ~isin,          ~market_value, ~currency, ~portfolio_name,       ~investor_name,
     "JP3868400007", 50000,         "GBP",     "TestPortfolio_Input", "Test",

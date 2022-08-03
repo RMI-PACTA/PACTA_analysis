@@ -1,5 +1,3 @@
-devtools::load_all(quiet = TRUE)
-
 # Convert to JSON functions
 
 to_jsonp <-
