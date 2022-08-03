@@ -1,0 +1,27 @@
+required_packages_vec <- function() {
+  c(
+    "bookdown",
+    "devtools",
+    "dplyr",
+    "fs",
+    "fst",
+    "ggplot2",
+    "glue",
+    "here",
+    "janitor",
+    "jsonlite",
+    "knitr",
+    "purrr",
+    "readr",
+    "readxl",
+    "rlang",
+    "rmarkdown",
+    "scales",
+    "stringr",
+    "tibble",
+    "tidyr",
+    "tidyselect",
+    "writexl",
+    "zoo"
+  )
+}
