@@ -3,11 +3,6 @@ use_r_packages()
 
 cli::cli_h1("web_tool_script_1.R{get_build_version_msg()}")
 
-source("0_portfolio_input_check_functions.R")
-source("0_global_functions.R")
-source("0_web_functions.R")
-source("0_json_functions.R")
-source("0_portfolio_test.R")
 
 if (!exists("portfolio_name_ref_all")) { portfolio_name_ref_all <- "TestPortfolio_Input" }
 if (!exists("portfolio_root_dir")) { portfolio_root_dir <- "working_dir" }
