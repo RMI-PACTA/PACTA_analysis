@@ -3,7 +3,8 @@ process_raw_portfolio <- function(portfolio_raw,
                                   fund_data,
                                   currencies,
                                   grouping_variables,
-                                  total_fund_list = NULL) {
+                                  total_fund_list = NULL,
+                                  isin_to_fund_table = isin_to_fund_table) {
   portfolio <- clean_colnames_portfolio_input_file(portfolio_raw)
 
   portfolio <- clear_portfolio_input_blanks(portfolio)
@@ -22,7 +23,7 @@ process_raw_portfolio <- function(portfolio_raw,
 
   cols_portfolio <- colnames(portfolio)
 
-  cols_of_funds <- c("direct_holding", "fund_isin", "original_value_usd")
+  cols_of_funds <- c("factset_fund_id", "direct_holding", "fund_isin", "original_value_usd")
 
   # Add financial data
   # Merges in the clean data and calculates the marketvalue and number of shares
@@ -40,10 +41,10 @@ process_raw_portfolio <- function(portfolio_raw,
 
   # correct Funds classification by comparing isin to the list of all known funds isins
   if (!is.null(total_fund_list)) {
-    portfolio <- portfolio %>%
-      mutate(asset_type = ifelse(
-        is.element(isin, total_fund_list$fund_isin), "Funds", asset_type
-      ))
+    portfolio <-
+      portfolio %>%
+      left_join(select(isin_to_fund_table, isin, factset_fund_id), by = "isin") %>%
+      mutate(asset_type = if_else(!is.na(factset_fund_id), "Funds", asset_type))
   }
   # identify fund in the portfolio
   fund_portfolio <- identify_fund_portfolio(portfolio)
