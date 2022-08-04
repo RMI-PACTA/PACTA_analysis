@@ -7,10 +7,6 @@ cli::cli_h1("web_tool_script_2.R{get_build_version_msg()}")
 # START RUN ANALYIS
 #########################################################################
 
-source("0_portfolio_test.R")
-source("0_global_functions.R")
-source("0_web_functions.R")
-
 if (!exists("portfolio_name_ref_all")) { portfolio_name_ref_all <- "TestPortfolio_Input" }
 if (!exists("portfolio_root_dir")) { portfolio_root_dir <- "working_dir" }
 
@@ -38,12 +34,12 @@ port_col_types <- set_col_types(grouping_variables, "ddddccccddclc")
 
 # quit if there's no relevant PACTA assets --------------------------------
 
-total_portfolio_path <- file.path(proc_input_path, portfolio_name_ref_all, "total_portfolio.rda")
+total_portfolio_path <- file.path(proc_input_path, portfolio_name_ref_all, "total_portfolio.rds")
 if (file.exists(total_portfolio_path)) {
   total_portfolio <- readRDS(total_portfolio_path)
   quit_if_no_pacta_relevant_data(total_portfolio)
 } else {
-  warning("This is weird... the `total_portfolio.rda` file does not exist in the `30_Processed_inputs` directory.")
+  warning("This is weird... the `total_portfolio.rds` file does not exist in the `30_Processed_inputs` directory.")
 }
 
 
@@ -51,7 +47,7 @@ if (file.exists(total_portfolio_path)) {
 ##### EQUITY #####
 ##################
 
-equity_input_file <- file.path(proc_input_path, portfolio_name_ref_all, "equity_portfolio.rda")
+equity_input_file <- file.path(proc_input_path, portfolio_name_ref_all, "equity_portfolio.rds")
 
 if (file.exists(equity_input_file)) {
   ald_scen_eq <- get_ald_scen("Equity")
@@ -120,7 +116,7 @@ if (file.exists(equity_input_file)) {
     }
 
     if (data_check(company_all_eq)) {
-      write_rds(company_all_eq, file.path(pf_file_results_path, "Equity_results_company.rda"))
+      saveRDS(company_all_eq, file.path(pf_file_results_path, "Equity_results_company.rds"))
     }
     if (data_check(port_all_eq)) {
 
@@ -145,11 +141,11 @@ if (file.exists(equity_input_file)) {
         port_all_eq <- filter(port_all_eq, ! scenario %in% tdm_scenarios())
       }
 
-      saveRDS(port_all_eq, file.path(pf_file_results_path, "Equity_results_portfolio.rda"))
+      saveRDS(port_all_eq, file.path(pf_file_results_path, "Equity_results_portfolio.rds"))
     }
     if (has_map) {
       if (data_check(map_eq)) {
-        write_rds(map_eq, file.path(pf_file_results_path, "Equity_results_map.rda"))
+        saveRDS(map_eq, file.path(pf_file_results_path, "Equity_results_map.rds"))
       }
     }
   }
@@ -160,7 +156,7 @@ if (file.exists(equity_input_file)) {
 ##### BONDS #####
 #################
 
-bonds_inputs_file <- file.path(proc_input_path, portfolio_name_ref_all, "bonds_portfolio.rda")
+bonds_inputs_file <- file.path(proc_input_path, portfolio_name_ref_all, "bonds_portfolio.rds")
 # portfolio_name <- file_names$portfolio_name
 
 if (file.exists(bonds_inputs_file)) {
@@ -230,7 +226,7 @@ if (file.exists(bonds_inputs_file)) {
     }
 
     if (data_check(company_all_cb)) {
-      write_rds(company_all_cb, file.path(pf_file_results_path, "Bonds_results_company.rda"))
+      saveRDS(company_all_cb, file.path(pf_file_results_path, "Bonds_results_company.rds"))
     }
     if (data_check(port_all_cb)) {
       if (tdm_conditions_met(analysis_inputs_path)) {
@@ -254,11 +250,11 @@ if (file.exists(bonds_inputs_file)) {
         port_all_cb <- filter(port_all_cb, ! scenario %in% tdm_scenarios())
       }
 
-      saveRDS(port_all_cb, file.path(pf_file_results_path, "Bonds_results_portfolio.rda"))
+      saveRDS(port_all_cb, file.path(pf_file_results_path, "Bonds_results_portfolio.rds"))
     }
     if (has_map) {
       if (data_check(map_cb)) {
-        write_rds(map_cb, file.path(pf_file_results_path, "Bonds_results_map.rda"))
+        saveRDS(map_cb, file.path(pf_file_results_path, "Bonds_results_map.rds"))
       }
     }
   }

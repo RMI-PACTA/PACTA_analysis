@@ -13,9 +13,6 @@ test_that("`clean_unmatched_holdings()` works as expected", {
     "FR9898439002", "Bond",      NA_character_
   )
 
-  source(here::here("0_global_functions.R"))  # for data_check()
-  source(here::here("0_portfolio_input_check_functions.R"))
-
   result <- clean_unmatched_holdings(portfolio)
 
   expect_s3_class(result, "data.frame")

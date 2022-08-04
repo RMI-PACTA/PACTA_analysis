@@ -3,9 +3,6 @@ use_r_packages()
 
 cli::cli_h1("web_tool_script_3.R{get_build_version_msg()}")
 
-source("0_global_functions.R")
-source("0_web_functions.R")
-
 if (!exists("portfolio_name_ref_all")) { portfolio_name_ref_all <- "TestPortfolio_Input" }
 if (!exists("portfolio_root_dir")) { portfolio_root_dir <- "working_dir" }
 
@@ -75,64 +72,64 @@ real_estate_dir <- path(user_results_path, project_code, "real_estate")
 
 output_dir <- file.path(outputs_path, portfolio_name_ref_all)
 
-if (file.exists(file.path(proc_input_path, portfolio_name_ref_all, "audit_file.rda"))){
-  audit_file <- readRDS(file.path(proc_input_path, portfolio_name_ref_all, "audit_file.rda"))
+if (file.exists(file.path(proc_input_path, portfolio_name_ref_all, "audit_file.rds"))){
+  audit_file <- readRDS(file.path(proc_input_path, portfolio_name_ref_all, "audit_file.rds"))
 }else{
   audit_file <- empty_audit_file()
 
 }
 
 # load portfolio overview
-if (file.exists(file.path(proc_input_path, portfolio_name_ref_all, "overview_portfolio.rda"))) {
-  portfolio_overview <- read_rds(file.path(proc_input_path, portfolio_name_ref_all, "overview_portfolio.rda"))
+if (file.exists(file.path(proc_input_path, portfolio_name_ref_all, "overview_portfolio.rds"))) {
+  portfolio_overview <- read_rds(file.path(proc_input_path, portfolio_name_ref_all, "overview_portfolio.rds"))
 } else {
   portfolio_overview <- empty_portfolio_overview()
 }
 
 
-if (file.exists(file.path(proc_input_path, portfolio_name_ref_all, "emissions.rda"))){
-  emissions <- read_rds(file.path(proc_input_path, portfolio_name_ref_all, "emissions.rda"))
+if (file.exists(file.path(proc_input_path, portfolio_name_ref_all, "emissions.rds"))){
+  emissions <- read_rds(file.path(proc_input_path, portfolio_name_ref_all, "emissions.rds"))
 }else{
   emissions <- empty_emissions_results()}
 
 # load equity portfolio data
-if (file.exists(file.path(results_path, portfolio_name_ref_all, "Equity_results_portfolio.rda"))) {
-  equity_results_portfolio <- read_rds(file.path(results_path, portfolio_name_ref_all, "Equity_results_portfolio.rda"))
+if (file.exists(file.path(results_path, portfolio_name_ref_all, "Equity_results_portfolio.rds"))) {
+  equity_results_portfolio <- read_rds(file.path(results_path, portfolio_name_ref_all, "Equity_results_portfolio.rds"))
 } else {
   equity_results_portfolio <- empty_portfolio_results()
 }
 
 # load bonds portfolio data
-if (file.exists(file.path(results_path, portfolio_name_ref_all, "Bonds_results_portfolio.rda"))) {
-  bonds_results_portfolio <- read_rds(file.path(results_path, portfolio_name_ref_all, "Bonds_results_portfolio.rda"))
+if (file.exists(file.path(results_path, portfolio_name_ref_all, "Bonds_results_portfolio.rds"))) {
+  bonds_results_portfolio <- read_rds(file.path(results_path, portfolio_name_ref_all, "Bonds_results_portfolio.rds"))
 } else {
   bonds_results_portfolio <- empty_portfolio_results()
 }
 
 # load equity company data
-if (file.exists(file.path(results_path, portfolio_name_ref_all, "Equity_results_company.rda"))) {
-  equity_results_company <- read_rds(file.path(results_path, portfolio_name_ref_all, "Equity_results_company.rda"))
+if (file.exists(file.path(results_path, portfolio_name_ref_all, "Equity_results_company.rds"))) {
+  equity_results_company <- read_rds(file.path(results_path, portfolio_name_ref_all, "Equity_results_company.rds"))
 } else {
   equity_results_company <- empty_company_results()
 }
 
 # load bonds company data
-if (file.exists(file.path(results_path, portfolio_name_ref_all, "Bonds_results_company.rda"))) {
-  bonds_results_company <- read_rds(file.path(results_path, portfolio_name_ref_all, "Bonds_results_company.rda"))
+if (file.exists(file.path(results_path, portfolio_name_ref_all, "Bonds_results_company.rds"))) {
+  bonds_results_company <- read_rds(file.path(results_path, portfolio_name_ref_all, "Bonds_results_company.rds"))
 } else {
   bonds_results_company <- empty_company_results()
 }
 
 # load equity map data
-if (file.exists(file.path(results_path, portfolio_name_ref_all, "Equity_results_map.rda"))) {
-  equity_results_map <- read_rds(file.path(results_path, portfolio_name_ref_all, "Equity_results_map.rda"))
+if (file.exists(file.path(results_path, portfolio_name_ref_all, "Equity_results_map.rds"))) {
+  equity_results_map <- read_rds(file.path(results_path, portfolio_name_ref_all, "Equity_results_map.rds"))
 } else {
   equity_results_map <- empty_map_results()
 }
 
 # load bonds map data
-if (file.exists(file.path(results_path, portfolio_name_ref_all, "Bonds_results_map.rda"))) {
-  bonds_results_map <- read_rds(file.path(results_path, portfolio_name_ref_all, "Bonds_results_map.rda"))
+if (file.exists(file.path(results_path, portfolio_name_ref_all, "Bonds_results_map.rds"))) {
+  bonds_results_map <- read_rds(file.path(results_path, portfolio_name_ref_all, "Bonds_results_map.rds"))
 } else {
   bonds_results_map <- empty_map_results()
 }
@@ -152,15 +149,15 @@ if (file.exists(file.path(results_path, portfolio_name_ref_all, "Bonds_tdm.rds")
 }
 
 # load equity stress test data
-if (file.exists(file.path(results_path, portfolio_name_ref_all, "equity_results_stress_test.rda"))) {
-  equity_results_stress_test <- read_rds(file.path(results_path, portfolio_name_ref_all, "equity_results_stress_test.rda"))
+if (file.exists(file.path(results_path, portfolio_name_ref_all, "equity_results_stress_test.rds"))) {
+  equity_results_stress_test <- read_rds(file.path(results_path, portfolio_name_ref_all, "equity_results_stress_test.rds"))
 } else {
   equity_results_stress_test <- empty_st_results()
 }
 
 # load bonds stress test data
-if (file.exists(file.path(results_path, portfolio_name_ref_all, "bonds_results_stress_test.rda"))) {
-  bonds_results_stress_test <- read_rds(file.path(results_path, portfolio_name_ref_all, "bonds_results_stress_test.rda"))
+if (file.exists(file.path(results_path, portfolio_name_ref_all, "bonds_results_stress_test.rds"))) {
+  bonds_results_stress_test <- read_rds(file.path(results_path, portfolio_name_ref_all, "bonds_results_stress_test.rds"))
 } else {
   bonds_results_stress_test <- empty_st_results()
 }
@@ -173,33 +170,33 @@ if (file.exists(file.path(results_path, portfolio_name_ref_all, "Stress_test_res
 }
 
 # load peers results both individual and aggregate
-if (file.exists(file.path(analysis_inputs_path, paste0(project_code, "_peers_equity_results_portfolio.rda")))){
-  peers_equity_results_portfolio <- read_rds(file.path(analysis_inputs_path, paste0(project_code, "_peers_equity_results_portfolio.rda")))
+if (file.exists(file.path(analysis_inputs_path, paste0(project_code, "_peers_equity_results_portfolio.rds")))){
+  peers_equity_results_portfolio <- read_rds(file.path(analysis_inputs_path, paste0(project_code, "_peers_equity_results_portfolio.rds")))
 }else{
   peers_equity_results_portfolio <- empty_portfolio_results()
 }
 
-if(file.exists(file.path(analysis_inputs_path, paste0(project_code, "_peers_bonds_results_portfolio.rda")))){
-  peers_bonds_results_portfolio <- read_rds(file.path(analysis_inputs_path, paste0(project_code, "_peers_bonds_results_portfolio.rda")))
+if(file.exists(file.path(analysis_inputs_path, paste0(project_code, "_peers_bonds_results_portfolio.rds")))){
+  peers_bonds_results_portfolio <- read_rds(file.path(analysis_inputs_path, paste0(project_code, "_peers_bonds_results_portfolio.rds")))
 }else{
   peers_bonds_results_portfolio <- empty_portfolio_results()
 }
 
-if (file.exists(file.path(analysis_inputs_path, paste0(project_code, "_peers_equity_results_portfolio_ind.rda")))){
-  peers_equity_results_user <- read_rds(file.path(analysis_inputs_path, paste0(project_code, "_peers_equity_results_portfolio_ind.rda")))
+if (file.exists(file.path(analysis_inputs_path, paste0(project_code, "_peers_equity_results_portfolio_ind.rds")))){
+  peers_equity_results_user <- read_rds(file.path(analysis_inputs_path, paste0(project_code, "_peers_equity_results_portfolio_ind.rds")))
 }else{
   peers_equity_results_user <- empty_portfolio_results()
 }
 
-if(file.exists(file.path(analysis_inputs_path, paste0(project_code, "_peers_bonds_results_portfolio_ind.rda")))){
-  peers_bonds_results_user <- read_rds(file.path(analysis_inputs_path, paste0(project_code, "_peers_bonds_results_portfolio_ind.rda")))
+if(file.exists(file.path(analysis_inputs_path, paste0(project_code, "_peers_bonds_results_portfolio_ind.rds")))){
+  peers_bonds_results_user <- read_rds(file.path(analysis_inputs_path, paste0(project_code, "_peers_bonds_results_portfolio_ind.rds")))
 }else{
   peers_bonds_results_user <- empty_portfolio_results()
 }
 
-indices_equity_results_portfolio <- read_rds(file.path(analysis_inputs_path, "Indices_equity_portfolio.rda"))
+indices_equity_results_portfolio <- read_rds(file.path(analysis_inputs_path, "Indices_equity_portfolio.rds"))
 
-indices_bonds_results_portfolio <- read_rds(file.path(analysis_inputs_path, "Indices_bonds_portfolio.rda"))
+indices_bonds_results_portfolio <- read_rds(file.path(analysis_inputs_path, "Indices_bonds_portfolio.rds"))
 
 dataframe_translations <- readr::read_csv(
   path(template_path, "data/translation/dataframe_labels.csv"),

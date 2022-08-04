@@ -1,9 +1,9 @@
-#' Minimal explicit PACTA `*_results_portfolio.rda` datasets that allow
+#' Minimal explicit PACTA `*_results_portfolio.rds` datasets that allow
 #' overwriting values
 #'
 #' These functions are developer-oriented. They all call [tibble()] so
 #' you can expect all the goodies that come with that.
-#' * `fake_tdm_data()` fakes the `_results_portfolio.rda` output of PACTA.
+#' * `fake_tdm_data()` fakes the `_results_portfolio.rds` output of PACTA.
 #'
 #' @section Params
 #' The arguments are the column names of the datasets being faked. They all have

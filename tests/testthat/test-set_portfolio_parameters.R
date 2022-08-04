@@ -3,7 +3,7 @@ test_that("`set_portfolio_parameters()` works as expected", {
 
   test_set_portfolio_parameters_in_callr <- function(.param) {
     callr::r(function(.params) {
-      source(here::here("0_web_functions.R"))
+      devtools::load_all(quiet = TRUE)
       filepath <- tempfile(fileext = ".yml")
       yaml::write_yaml(list(default = list(parameters = .params)), filepath)
       set_portfolio_parameters(filepath)

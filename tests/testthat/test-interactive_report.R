@@ -26,14 +26,14 @@
 #
 # test_that("peers file exist",{
 #
-#   expect(file.exists(paste0(analysis_inputs_path, "Peers_equity_results_portfolio.rda")) &
-#            file.exists(paste0(analysis_inputs_path, "Peers_bonds_results_portfolio.rda")))
+#   expect(file.exists(paste0(analysis_inputs_path, "Peers_equity_results_portfolio.rds")) &
+#            file.exists(paste0(analysis_inputs_path, "Peers_bonds_results_portfolio.rds")))
 #
 # })
 #
 # test_that("index file exist",{
 #
-#   expect(file.exists(paste0(analysis_inputs_path, "Indices_bonds_portfolio.rda")) &
-#            file.exists(paste0(analysis_inputs_path, "Indices_equity_portfolio.rda")))
+#   expect(file.exists(paste0(analysis_inputs_path, "Indices_bonds_portfolio.rds")) &
+#            file.exists(paste0(analysis_inputs_path, "Indices_equity_portfolio.rds")))
 #
 # })
