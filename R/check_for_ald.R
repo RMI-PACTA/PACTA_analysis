@@ -5,7 +5,7 @@ check_for_ald <- function(portfolio_subset, portfolio_type, relevant_fin_data) {
     if (portfolio_type == "Equity") {
       joining_id <- "company_id"
     } else if (portfolio_type == "Bonds") {
-      joining_id <- "corporate_bond_ticker"
+      joining_id <- "company_id"
     }
 
     ald_markers <- relevant_fin_data %>%
