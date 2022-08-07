@@ -66,7 +66,7 @@ process_raw_portfolio <- function(portfolio_raw,
 
   portfolio_total <- clean_unmatched_holdings(portfolio_total)
 
-  if (!all.equal(sum(portfolio_total$value_usd, na.rm = TRUE), original_value_usd, tolerance = 1e-3)) {
+  if (!isTRUE(all.equal(sum(portfolio_total$value_usd, na.rm = TRUE), original_value_usd, tolerance = 1e-3))) {
     stop("Fund Portfolio introducing errors in total value")
   }
 
