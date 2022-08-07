@@ -4,7 +4,7 @@ add_flags <- function(portfolio) {
       !has_currency ~ "Missing currency information",
       !has_valid_input ~ "Negative or missing input value",
       !has_valid_isin ~ "Invalid or missing ISIN",
-      !has_bbg_data ~ "Holding not in Bloomberg database",
+      !has_fin_data ~ "Holding not in financial database",
 
       TRUE ~ "Included in analysis"
     ))

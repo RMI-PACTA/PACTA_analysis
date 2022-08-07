@@ -1,7 +1,7 @@
 export_audit_graph_json <- function(audit_file__, export_path_full) {
   audit_file__ <- audit_file__ %>% select("isin", "holding_id", "flag")
 
-  all_flags <- c("Missing currency information", "Negative or missing input value", "Invalid or missing ISIN", "Holding not in Bloomberg database", "Included in analysis")
+  all_flags <- c("Missing currency information", "Negative or missing input value", "Invalid or missing ISIN", "Holding not in financial database", "Included in analysis")
   flags_in_auditfile <- unique(audit_file__$flag)
 
 
@@ -22,13 +22,13 @@ export_audit_graph_json <- function(audit_file__, export_path_full) {
   invalid_input <- audit_file__ %>% subset(flag == "Invalid or missing ISIN")
   number_invalid_input <- length(invalid_input$holding_id)
 
-  not_in_bloomberg <- audit_file__ %>% subset(flag == "Holding not in Bloomberg database")
-  number_not_in_bloomberg <- length(not_in_bloomberg$holding_id)
+  not_in_financial <- audit_file__ %>% subset(flag == "Holding not in financial database")
+  number_not_in_financial <- length(not_in_financial$holding_id)
 
   included_in_analysis <- audit_file__ %>% subset(flag == "Included in analysis")
   number_included_in_analysis <- length(included_in_analysis$holding_id)
 
-  all_flags_numbers <- c(number_missing_currency, number_negative_missing_input, number_invalid_input, number_not_in_bloomberg, number_included_in_analysis)
+  all_flags_numbers <- c(number_missing_currency, number_negative_missing_input, number_invalid_input, number_not_in_financial, number_included_in_analysis)
   if (isFALSE(all.equal(number_of_isin, sum(all_flags_numbers)))) {
     stop("`number_of_isin` and `sum(all_flags_numbers)` are not equal")
   }
@@ -37,7 +37,7 @@ export_audit_graph_json <- function(audit_file__, export_path_full) {
 
   legend <- c("\"Invalid input\"", "\"No data coverage\"", "\"Included in analysis\"")
   keys <- c("\"key_1\"", "\"key_2\"", "\"key_3\"")
-  values <- c(number_all_invalid_input, number_not_in_bloomberg, number_included_in_analysis)
+  values <- c(number_all_invalid_input, number_not_in_financial, number_included_in_analysis)
 
   if (isFALSE(all.equal(length(legend), length(keys)))) {
     stop("`length(legend)` and `length(keys)` are not equal")
