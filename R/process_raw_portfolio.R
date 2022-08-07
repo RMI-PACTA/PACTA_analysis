@@ -41,6 +41,7 @@ process_raw_portfolio <- function(portfolio_raw,
 
   # correct Funds classification by comparing isin to the list of all known funds isins
   if (!is.null(total_fund_list)) {
+    isin_to_fund_table <- isin_to_fund_table %>% filter(!is.na(isin))
     portfolio <-
       portfolio %>%
       left_join(select(isin_to_fund_table, isin, factset_fund_id), by = "isin") %>%
