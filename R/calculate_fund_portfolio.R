@@ -1,10 +1,11 @@
 calculate_fund_portfolio <- function(fund_portfolio, fund_data, cols_portfolio_no_bbg = cols_portfolio, cols_funds = cols_of_funds) {
   if (data_check(fund_portfolio)) {
+    fund_portfolio <- fund_portfolio %>% filter(factset_fund_id %in% fund_data$factset_fund_id)
     fund_portfolio <- left_join(fund_portfolio, fund_data, by = "factset_fund_id")
     fund_portfolio$direct_holding <- FALSE
 
     fund_portfolio$original_value_usd <- fund_portfolio$value_usd
-    fund_portfolio$fund_holding_weight <- fund_portfolio$holding_reported_mv / fund_portfolio$total_reported_mv
+    fund_portfolio$fund_holding_weight <- fund_portfolio$holding_reported_mv / fund_portfolio$fund_reported_mv
     fund_portfolio$value_usd <- fund_portfolio$fund_holding_weight * fund_portfolio$value_usd
     fund_portfolio$fund_isin <- fund_portfolio$isin
     fund_portfolio$isin <- fund_portfolio$holding_isin
