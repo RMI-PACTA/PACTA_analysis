@@ -31,25 +31,6 @@ if (file.exists(total_portfolio_path)) {
 }
 
 
-# stress test -------------------------------------------------------------
-
-# provide parameters for stress test
-invisible(set_portfolio_parameters(file_path = fs::path(par_file_path, paste0(portfolio_name_ref_all, "_PortfolioParameters.yml"))))
-# set environment variable for stress test data path
-options("ST_DATA_PATH" = stress_test_data_location)
-# run 2dii stress test
-failed_stress_test_run <- FALSE
-tryCatch(
-  source(file.path(stress_test_path, "web_tool_stress_test.R")),
-  error = function(e) { failed_stress_test_run <<- TRUE; write_log("an error in web_tool_stress_test.R occurred"); }
-)
-# run stress test with external scenarios (IPR)
-tryCatch(
-  source(file.path(stress_test_path, "web_tool_external_stress_test.R")),
-  error = function(e) { failed_stress_test_run <<- TRUE; write_log("an error in web_tool_external_stress_test.R occurred"); }
-)
-
-
 # fix parameters ----------------------------------------------------------
 
 if(project_code == "PA2020FL"){
@@ -162,27 +143,6 @@ if (file.exists(file.path(results_path, portfolio_name_ref_all, "Bonds_tdm.rds")
   bonds_tdm <- NULL
 }
 
-# load equity stress test data
-if (file.exists(file.path(results_path, portfolio_name_ref_all, "equity_results_stress_test.rda"))) {
-  equity_results_stress_test <- read_rds(file.path(results_path, portfolio_name_ref_all, "equity_results_stress_test.rda"))
-} else {
-  equity_results_stress_test <- empty_st_results()
-}
-
-# load bonds stress test data
-if (file.exists(file.path(results_path, portfolio_name_ref_all, "bonds_results_stress_test.rda"))) {
-  bonds_results_stress_test <- read_rds(file.path(results_path, portfolio_name_ref_all, "bonds_results_stress_test.rda"))
-} else {
-  bonds_results_stress_test <- empty_st_results()
-}
-
-# load IPR stress test results
-if (file.exists(file.path(results_path, portfolio_name_ref_all, "Stress_test_results_IPR.rds"))) {
-  ipr_results_stress_test <- read_rds(file.path(results_path, portfolio_name_ref_all, "Stress_test_results_IPR.rds"))
-} else {
-  ipr_results_stress_test <- empty_ipr_st_results()
-}
-
 # load peers results both individual and aggregate
 if (file.exists(file.path(analysis_inputs_path, paste0(project_code, "_peers_equity_results_portfolio.rda")))){
   peers_equity_results_portfolio <- read_rds(file.path(analysis_inputs_path, paste0(project_code, "_peers_equity_results_portfolio.rda")))
@@ -245,7 +205,6 @@ configs <-
 
 
 # Needed for testing only
-shock <- shock_year # this should come directly from the stress test.. 2030 based on current discussions in CHPA2020 case
 select_scenario_auto = scenario_auto
 select_scenario_other = scenario_other
 select_scenario_shipping = scenario_shipping
@@ -266,7 +225,6 @@ create_interactive_report(
   portfolio_name = portfolio_name,
   peer_group = peer_group,
   start_year = start_year,
-  shock = shock_year,
   select_scenario = select_scenario,
   select_scenario_auto = scenario_auto,
   select_scenario_shipping = scenario_shipping,
@@ -292,11 +250,8 @@ create_interactive_report(
   peers_bonds_results_portfolio = peers_bonds_results_portfolio,
   peers_equity_results_user = peers_equity_results_user,
   peers_bonds_results_user = peers_bonds_results_user,
-  equity_results_stress_test = equity_results_stress_test,
-  bonds_results_stress_test = bonds_results_stress_test,
   dataframe_translations = dataframe_translations,
   js_translations = js_translations,
-  ipr_results_stress_test = ipr_results_stress_test,
   display_currency = display_currency,
   currency_exchange_value = currency_exchange_value,
   header_dictionary = header_dictionary,
@@ -304,7 +259,7 @@ create_interactive_report(
   equity_tdm = equity_tdm,
   bonds_tdm = bonds_tdm,
   configs = configs,
-  failed_stress_test_run = failed_stress_test_run
+  failed_stress_test_run = TRUE
 )
 
 if(dir.exists(exec_summary_dir)){
