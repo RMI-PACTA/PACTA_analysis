@@ -50,17 +50,17 @@ resources:
     - repository: create_interactive_report
       type: github
       endpoint: 2DegreesInvesting  # Servce connection name
-      name: 2DegreesInvesting/create_interactive_report
+      name: RMI-PACTA/create_interactive_report
       ref: master
     - repository: pacta-data
       type: github
       endpoint: 2DegreesInvesting  # Servce connection name
-      name: 2DegreesInvesting/pacta-data
+      name: RMI-PACTA/pacta-data
       ref: master
     - repository: testing-portfolios
       type: github
       endpoint: 2DegreesInvesting  # Servce connection name
-      name: 2DegreesInvesting/testing-portfolios
+      name: RMI-PACTA/testing-portfolios
       ref: main
 
 stages:

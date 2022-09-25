@@ -131,19 +131,19 @@ jobs:
       - name: Checkout PACTA_analysis
         uses: actions/checkout@v2
         with:
-          repository: 2DegreesInvesting/PACTA_analysis
+          repository: RMI-PACTA/PACTA_analysis
           token: ${{ secrets.MAURO_PAT_FOR_2DII }}
           path: bound
       - name: Checkout pacta-data
         uses: actions/checkout@v2
         with:
-          repository: 2DegreesInvesting/pacta-data
+          repository: RMI-PACTA/pacta-data
           token: ${{ secrets.MAURO_PAT_FOR_2DII }}
           path: pacta-data
       - name: Checkout create_interactive_report
         uses: actions/checkout@v2
         with:
-          repository: 2DegreesInvesting/create_interactive_report
+          repository: RMI-PACTA/create_interactive_report
           token: ${{ secrets.MAURO_PAT_FOR_2DII }}
           path: create_interactive_report
 
