@@ -25,7 +25,6 @@ required_packages_vec <- function() {
     "knitr",
     "purrr",
     "readr",
-    "readxl",
     "rlang",
     "rmarkdown",
     "scales",
@@ -33,8 +32,7 @@ required_packages_vec <- function() {
     "tibble",
     "tidyr",
     "tidyselect",
-    "writexl",
-    "zoo"
+    "writexl"
   )
 }
 

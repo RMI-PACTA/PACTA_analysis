@@ -2,7 +2,7 @@ default:
 
     paths:
         data_location_ext: ../pacta-data/2020Q4/
-        
+
     reporting:
         project_report_name: Colombia
         display_currency: USD
@@ -26,7 +26,6 @@ default:
         has_revenue: FALSE
         has_credit: FALSE
         inc_emissionfactors: TRUE
-        inc_stresstest: TRUE
 
     sectors:
         tech_roadmap_sectors:
@@ -85,7 +84,3 @@ default:
     grouping_variables:
         - investor_name
         - portfolio_name
-
-    stress_test:
-        shock_year: 2030
-        price_data_version: 2021Q1

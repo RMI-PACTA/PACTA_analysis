@@ -10,13 +10,11 @@
 ^0_portfolio_test\.R$
 ^0_reporting_functions\.R$
 ^0_sda_approach\.R$
-^0_stress_test_functions\.R$
 ^0_web_functions\.R$
 ^1_portfolio_check_initialisation\.R$
 ^2_project_input_analysis\.R$
 ^3_run_analysis\.R$
 ^4_report_maker\.R$
-^5_boe_stress_test\.R$
 ^README\.md$
 ^_config\.yml$
 ^documentation$

@@ -177,7 +177,7 @@ results - portfolio level and company level.
     ## [1] "Test"
 
 There are options as to where to proceed from here. From this point
-there are options: /item Run the stress testing code /item Print static
+there are options: /item Print static
 graphics and the pdf report (older code) /item Print the interactive
 report (html) and executive summary (pdf)
 

@@ -21,7 +21,6 @@ default:
         has_revenue: FALSE
         has_credit: FALSE
         inc_emissionfactors: TRUE
-        inc_stresstest: TRUE
 
     sectors:
         tech_roadmap_sectors:
@@ -80,8 +79,3 @@ default:
     grouping_variables:
         - investor_name
         - portfolio_name
-
-    stress_test:
-        shock_year: 2030
-        price_data_version: 2021Q1
-

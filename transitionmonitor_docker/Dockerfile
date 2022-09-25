@@ -86,7 +86,6 @@ ARG PKG_DEPS="\
     countrycode \
     devtools \
     dplyr \
-    forcats \
     fs \
     fst \
     ggplot2 \
@@ -99,7 +98,6 @@ ARG PKG_DEPS="\
     progress \
     purrr \
     readr \
-    readxl \
     rmarkdown \
     scales \
     stringi \
@@ -110,7 +108,6 @@ ARG PKG_DEPS="\
     vroom \
     writexl \
     yaml \
-    zoo \
     "
 RUN Rscript -e "\
     install.packages('remotes'); \
@@ -120,17 +117,13 @@ RUN Rscript -e "\
 
 # copy in PACTA repos
 COPY pacta-data /pacta-data
-COPY r2dii.stress.test.data /r2dii.stress.test.data
-COPY r2dii.climate.stress.test /r2dii.climate.stress.test
 COPY create_interactive_report /create_interactive_report
 COPY PACTA_analysis /bound
 
 # set permissions for PACTA repos
 RUN chmod -R a+rwX /bound \
     && chmod -R a+rwX /create_interactive_report \
-    && chmod -R a+rwX /pacta-data \
-    && chmod -R a+rwX /r2dii.climate.stress.test \
-    && chmod -R a+rwX /r2dii.stress.test.data
+    && chmod -R a+rwX /pacta-data
 
 # set the build_version environment variable
 ARG image_tag

@@ -97,7 +97,6 @@ jobs:
             countrycode
             devtools
             dplyr
-            forcats
             fs
             fst
             ggplot2
@@ -109,7 +108,6 @@ jobs:
             magrittr
             purrr
             readr
-            readxl
             rmarkdown
             scales
             stringi
@@ -119,7 +117,6 @@ jobs:
             vroom
             writexl
             yaml
-            zoo
         shell: Rscript {0}
         run: |
           CRAN_REPO <- Sys.getenv('CRAN_REPO');
@@ -149,18 +146,6 @@ jobs:
           repository: 2DegreesInvesting/create_interactive_report
           token: ${{ secrets.MAURO_PAT_FOR_2DII }}
           path: create_interactive_report
-      - name: Checkout r2dii.climate.stress.test
-        uses: actions/checkout@v2
-        with:
-          repository: 2DegreesInvesting/r2dii.climate.stress.test
-          token: ${{ secrets.MAURO_PAT_FOR_2DII }}
-          path: r2dii.climate.stress.test
-      - name: Checkout r2dii.stress.test.data
-        uses: actions/checkout@v2
-        with:
-          repository: 2DegreesInvesting/r2dii.stress.test.data
-          token: ${{ secrets.MAURO_PAT_FOR_2DII }}
-          path: r2dii.stress.test.data
 
       - name: Source web-tool scripts
         env:

@@ -53,7 +53,6 @@ data_location_ext_input <- "C:/Users/clare/Desktop/TestData"
 local_git_dir <- "C:/Users/clare/Desktop/PACTA"
 
 if(!dir.exists(file.path(local_git_dir, "create_interactive_report"))){print("Download create_interactive_report repo")}
-if(!dir.exists(file.path(local_git_dir, "StressTestingModelDev"))){print("Download StressTestingModelDev repo")}
 if(!dir.exists(file.path(local_git_dir, "pacta-data"))){print("Download pacta-data repo")}
 if(!dir.exists(file.path(local_git_dir, "PACTA_analysis"))){print("Download PACTA_analysis repo")}
 if(!dir.exists(file.path(local_git_dir, "user_results"))){print("The repo user_results may be required if bespoke chapters are to be included.")}
@@ -379,25 +378,6 @@ if(file.exists(path_peer_cb_ind)){
 Important: once the checks have been reviewed and the files look reasonable, you now need to make a new branch in pacta-data and create a Pull request with this branch so that the files can be uploaded to github from where they are accessible by the tool. Ask if you need help on this! 
 
 
-
-## Stress Test Parameters
-
-If the stress testing module is going to be included, then ensure that a parameter file with the project parameters exists as well as the transition scenario. 
-
-```{r}
-
-if(file.exists(file.path("..","StressTestingModelDev","model_parameters", paste0("model_parameters_", project_code, ".yml")))){
-  print("Parameter file exists")
-}else{print(paste0("Stress test parameter file does not exist. Go to: ", file.path("StressTestingModelDev","model_parameters"), " for a template file."))}
-
-
-if(file.exists(file.path("..","StressTestingModelDev","data-raw", "project_transition_scenarios", paste0("transition_scenario_", project_code, ".csv")))){
-  print("Transition scenario file exists")
-}else{print(paste0("Stress test parameter file does not exist. Go to: ", file.path("StressTestingModelDev","data-raw", "project_transition_scenarios"), " for a template file."))}
-
-
-```
-
 ## Portfolio report
 
 Customise the portfolio report for you project. Either create new folders for the project, or use the general template. Ensure that you use the latest version of the create_interactive_report repository before creatng a new template. 
@@ -451,8 +431,6 @@ If you have not already done so, download the following repositories into a sing
 - create_interactive_report
 
 - pacta-data
-
-- StressTestingModelDev
 
 
 ```{r}

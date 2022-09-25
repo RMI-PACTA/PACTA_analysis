@@ -97,9 +97,6 @@ set_project_parameters <- function(file_path){
   green_techs <<- cfg$sectors$green_techs
   alignment_techs <<- cfg$sectors$alignment_techs
 
-  shock_year <<- cfg$stress_test$shock_year
-  price_data_version <<- cfg$stress_test$price_data_version
-
 
   # meta_investor_name <<- cfg$ComparisonBenchmarks$MetaInvestorName
   # meta_portfolio_name <<- cfg$ComparisonBenchmarks$MetaPortfolioName
@@ -139,11 +136,7 @@ set_project_parameters <- function(file_path){
     warning("Warning: inc_emission_factors set to standard value (FALSE) as it is not defined in the parameter file")
   }
 
-  inc_stresstest <<- cfg$methodology$inc_stresstest
-  if (is.null(inc_stresstest)) {
-    inc_stresstest <<- FALSE
-    warning("Warning: inc_stresstest set to standard value (FALSE) as it is not defined in the parameter file")
-  }
+  inc_stresstest <<- FALSE
 
 }
 

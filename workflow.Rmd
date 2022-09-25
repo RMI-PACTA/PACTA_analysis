@@ -188,7 +188,6 @@ source("3_run_analysis.R")
 ```
 
 There are options as to where to proceed from here. From this point there are options:
-/item Run the stress testing code
 /item Print static graphics and the pdf report (older code)
 /item Print the interactive report (html) and executive summary (pdf) 
 

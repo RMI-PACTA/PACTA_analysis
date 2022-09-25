@@ -13,10 +13,6 @@ usage() {
   echo "[-d <path to local pacta-data repo>] (default docker internal)" 1>&2
   # c for create
   echo "[-c <path to local create_interactive_report repo>] (default docker internal)" 1>&2
-  # s for stresss test
-  echo "[-s <path to local r2dii.climate.stress.test repo>] (default docker internal)" 1>&2
-  # E because d is already taken for pacta-data
-  echo "[-e <path to local r2dii.stress.test.data repo>] (default docker internal)" 1>&2
   # r for run
   echo "[-r <container command>] (default /bound/bin/run-r-scripts "portfolio name string")" 1>&2
   # x for architecture?
@@ -31,7 +27,7 @@ usage() {
   exit 1;
 }
 
-while getopts p:t:u:a:d:c:d:s:e:r:x:w:y:m:vi flag
+while getopts p:t:u:a:d:c:d:r:x:w:y:m:vi flag
 do
   case "${flag}" in
     u) userId=${OPTARG};;
@@ -41,8 +37,6 @@ do
     a) pa_repo=${OPTARG};;
     d) data_repo=${OPTARG};;
     c) cir_repo=${OPTARG};;
-    s) st_repo=${OPTARG};;
-    e) stdata_repo=${OPTARG};;
     r) docker_command=${OPTARG};;
     x) target_platform=${OPTARG};;
     w) working_dirs=${OPTARG};;
@@ -119,14 +113,6 @@ fi
 
 if [ -n "${cir_repo}" ]; then
   args+=(--mount "type=bind,source=${cir_repo},target=/create_interactive_report")
-fi
-
-if [ -n "${st_repo}" ]; then
-  args+=(--mount "type=bind,source=${st_repo},target=/r2dii.climate.stress.test")
-fi
-
-if [ -n "${stdata_repo}" ]; then
-  args+=(--mount "type=bind,source=${stdata_repo},target=/r2dii.stress.test.data")
 fi
 
 args+=(
