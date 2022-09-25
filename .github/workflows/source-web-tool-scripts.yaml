@@ -132,19 +132,19 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: RMI-PACTA/PACTA_analysis
-          token: ${{ secrets.MAURO_PAT_FOR_2DII }}
+          token: ${{ secrets.REPO_PAT }}
           path: bound
       - name: Checkout pacta-data
         uses: actions/checkout@v2
         with:
           repository: RMI-PACTA/pacta-data
-          token: ${{ secrets.MAURO_PAT_FOR_2DII }}
+          token: ${{ secrets.REPO_PAT }}
           path: pacta-data
       - name: Checkout create_interactive_report
         uses: actions/checkout@v2
         with:
           repository: RMI-PACTA/create_interactive_report
-          token: ${{ secrets.MAURO_PAT_FOR_2DII }}
+          token: ${{ secrets.REPO_PAT }}
           path: create_interactive_report
 
       - name: Source web-tool scripts
