@@ -59,7 +59,7 @@ cleanup () {
 }
 trap cleanup EXIT
 
-url="git@github.com:2DegreesInvesting/"
+url="git@github.com:RMI-PACTA/"
 
 
 # test that SSH authentication to GitHub is possible
@@ -78,8 +78,8 @@ if (! docker images > /dev/null 2>&1 ); then
 fi
 
 
-# test that no existing 2dii_pacta docker image using the same tag is loaded
-existing_img_tags="$(docker images 2dii_pacta --format '{{.Tag}}')"
+# test that no existing rmi_pacta docker image using the same tag is loaded
+existing_img_tags="$(docker images rmi_pacta --format '{{.Tag}}')"
 for i in $existing_img_tags
 do
     if [ "$i" == "$tag" ]; then
@@ -148,13 +148,13 @@ cp "${dir_start}/Dockerfile" "$dir_temp"
 
 
 # build the docker image
-green "Building 2dii_pacta Docker image...\n"
+green "Building rmi_pacta Docker image...\n"
 
 docker build \
     --build-arg image_tag=$tag \
     --platform $platform \
-    --tag 2dii_pacta:$tag \
-    --tag 2dii_pacta:latest \
+    --tag rmi_pacta:$tag \
+    --tag rmi_pacta:latest \
     .
 
 if [ $? -ne 0 ]
@@ -166,31 +166,31 @@ fi
 
 cd $dir_start
 
-image_tar_gz="2dii_pacta_v${tag}.tar.gz"
+image_tar_gz="rmi_pacta_v${tag}.tar.gz"
 if [ -n "${save}" ]
 then
     green "\nSaving docker image to ${image_tar_gz}..."
-    docker save 2dii_pacta:${tag} | gzip -q > "$image_tar_gz"
+    docker save rmi_pacta:${tag} | gzip -q > "$image_tar_gz"
     green "\nimage saved as $image_tar_gz"
 else
     echo -e "\nTo export the image as a tar.gz file:"
-    yellow "docker save 2dii_pacta:${tag} | gzip -q > '$image_tar_gz'"
+    yellow "docker save rmi_pacta:${tag} | gzip -q > '$image_tar_gz'"
 fi
 
 echo -e "\nTo load the image from the ${image_tar_gz} file:"
 yellow "docker load --input ${image_tar_gz}"
 
 echo -e "\nTo test which operating system the loaded image was built for:"
-yellow "docker run --rm 2dii_pacta:${tag} cat /etc/os-release"
+yellow "docker run --rm rmi_pacta:${tag} cat /etc/os-release"
 
 echo -e "\nTo test which architecture the loaded image was built for:"
-yellow "docker run --rm 2dii_pacta:${tag} dpkg --print-architecture"
+yellow "docker run --rm rmi_pacta:${tag} dpkg --print-architecture"
 
 echo -e "\nTo see the build version of the loaded image was built for:"
-yellow "docker run --rm -ti 2dii_pacta:${tag} bash -c 'echo \$build_version'"
+yellow "docker run --rm -ti rmi_pacta:${tag} bash -c 'echo \$build_version'"
 
 echo -e "\nTo see the R version installed on the loaded image:"
-yellow "docker run --rm 2dii_pacta:${tag} Rscript -e R.version\$version.string"
+yellow "docker run --rm rmi_pacta:${tag} Rscript -e R.version\$version.string"
 
 echo -e "\nTo test the new image with our test scripts (from the root directory of the test files) e.g.:"
 yellow "./run-like-constructiva-flags.sh -t ${tag} -p Test_PA2021NO"
@@ -198,7 +198,7 @@ echo -e "\nor to run all the tests at once (from the root directory of the test 
 yellow "./run-all-tests.sh"
 
 echo -e "\nTo push the git tags from within the docker image:"
-yellow "docker run --rm -ti -v \"\$HOME/.ssh\":/root/.ssh 2dii_pacta:${tag} bash"
+yellow "docker run --rm -ti -v \"\$HOME/.ssh\":/root/.ssh rmi_pacta:${tag} bash"
 echo -e "\nthen inside the container (for each of the 5 PACTA repos:"
 yellow "cd /bound && git push origin ${tag}"
 
