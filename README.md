@@ -1,4 +1,8 @@
-# PACTA_analysis
+# PACTA_analysis (DEPRECATED)
+
+This repo is deprecated, with continuing work available at: https://github.com/RMI-PACTA/pacta.portfolio.analysis
+
+----
 
 This set of files is the methodology for running PACTA on EQ and CB portfolios. 
 
